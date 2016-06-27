@@ -1,0 +1,81 @@
+
+<div class="row clearfix" id="Matrix_main_container">
+	<div class="row clearfix" id="Matrix_container"
+		style="margin-top: -20px;">
+		<div class="col-md-12">
+			<table class="table table-bordered table-responsive"
+				id="decision_matrix">
+				<tbody id="MatrixBScore">
+					<tr id="MatrixAScore"></tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="row clearfix" id="Matrix_field_container">
+		<div class="col-md-12" id="add-matrixField-panel"
+			style="display: none;">
+			<span style="color: red; display: block">{{error}}</span>
+			<div class="row clearfix panel_body">
+				<!--   <div class="col-md-3 ">
+															</div> -->
+				<div class="col-md-3 ">
+					<span style="display: inline-block;" id="MFieldCode"></span> <select
+						class="form-control" id="Expression" ng-model="Expression"
+						ng-change="Expression_change()" name="Expression"
+						style="width: 85%; display: inline-block; margin-left: 10px"
+						ng-options="obj.text for obj in ExpressionList track by obj.value">
+						<option ng-repeat="obj in ExpressionList" value="{{obj.value}}">{{obj.text}}</option>
+					</select>
+				</div>
+				<div class="col-md-3 ">
+					<input type="text" class="form-control hiden" id="MFValue1"
+						ng-model="MFValue1" contextmenu="Number"
+						placeholder="Maximum Value" name="Maximum Value" />
+				</div>
+				<div class="col-md-3">
+					<input type="text" class="form-control hiden" id="MFValue2"
+						ng-model="MFValue2" contextmenu="Number"
+						placeholder="Minimum Value" name="Minimum Value" />
+				</div>
+				<div class="col-md-3" style="text-align: right;">
+					<a class="TC_button" id="add-Mfield" ng-hide="UpdateFlag"
+						ng-click="add_MField('add')">Add</a> <a class="TC_button"
+						id="add-Mfield" ng-if="UpdateFlag" ng-click="add_MField('update')">Update</a>
+					<a class="TC_button" id="close_Mfield" ng-click="CloseFieldPanel()">Close</a>
+					<a class="TC_button" id="add-Mfield" ng-if="UpdateFlag"
+						ng-click="add_MField('delete')">Delete</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-12">
+			<div class="col-md-12 " id="BScore-block"
+				style="background-color: #C8E4FE; min-height: 32px; margin-bottom: 5px">
+				<div class="custom-col-100P inline_control">Bureau Score :</div>
+				<div class="custom-col-90 inline_control">
+					<span class="add-button-div matrixBtn"
+						ng-repeat="obj in BScoreList"
+						ng-click="!ViewMode && Open_Add_panel('BScore',obj.Code)">
+						{{obj.Code}} <span class="MBtnValue"><span
+							ng-if="((obj.val1 != '')&&(obj.val2 != ''))">{{obj.val1}} - {{obj.val2}}</span> <span
+							ng-if="((obj.val1 == '')&&(obj.val2 != ''))">{{obj.exp2}} {{obj.val2}}</span></span>
+					</span>
+				</div>
+				<span class="glyphicon glyphicon-plus" id="BScore" ng-if="!ViewMode"></span>
+			</div>
+			<div class="col-md-12" id="AScore-block"
+				style="background-color: #DDD; min-height: 32px; margin-bottom: 5px">
+				<div class="custom-col-100P inline_control">App Score :</div>
+				<div class="custom-col-90 inline_control">
+					<span class="add-button-div matrixBtn" ng-repeat="obj in AScoreList"
+						ng-click="!ViewMode && Open_Add_panel('AScore',obj.Code)">
+						{{obj.Code}} <span class="MBtnValue">
+						<span ng-if="((obj.val1 != '')&&(obj.val2 != ''))">{{obj.val1}} - {{obj.val2}}</span> 
+						<span ng-if="((obj.val1 == '')&&(obj.val2 != ''))">{{obj.exp2}} {{obj.val2}}</span>
+						</span>
+					</span>
+				</div>
+				<span class="glyphicon glyphicon-plus" id="AScore" ng-if="!ViewMode"></span>
+			</div>
+		</div>
+	</div>
+</div>

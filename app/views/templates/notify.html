@@ -1,0 +1,2309 @@
+<style>
+
+.scroll-fixed-top {
+	position: fixed;
+	top: 0px;
+	width: 100%;
+	left: 0px;
+	z-index: 1000;
+}
+
+#rightbar span {
+	margin-left: 0px;
+}
+
+.employment {
+	display: none;
+}
+
+#notification_tmp fieldset {
+	border: 1px solid #CFCFCF;
+	padding: 10px;
+	margin-bottom: 20px;
+	border-radius: 5px;
+	color: #777;
+	background-color: #F0F2F3;
+}
+
+#notification_tmp fieldset label {
+	font-weight: normal;
+	margin: 5px 0px 0px;
+}
+
+#notification_tmp legend {
+	width: auto;
+	min-width: 100px;
+	font-size: 14px;
+	margin: 0px;
+	border: none;
+	color: #777;
+	font-weight: bold;
+}
+
+.Pending {
+	background-color: blue;
+}
+.OnHold {
+	background-color: blue;
+}
+.Approved {
+	background-color: green;
+}
+
+.Declined {
+	background-color: red;
+}
+
+.picked {
+	background-color: #CFCFCF;
+	border: 2px solid #fff;
+}
+
+.picked:hover {
+	background-color: #CFCFCF;
+}
+
+.node ellipse {
+	fill: #fff;
+	stroke: none;
+	/*  stroke-width: 2px; */
+}
+
+.node:hover {
+	cursor: pointer;
+}
+
+.node circle {
+	fill: #fff;
+	stroke: steelblue;
+	stroke-width: 2px;
+}
+
+.node text {
+	font: 12px sans-serif;
+}
+
+.link {
+	fill: none;
+	stroke: green;
+	stroke-width: 1px;
+	z-index: 1000;
+}
+
+svg:not (:root ) {
+	overflow: visible;
+}
+
+#tooltip {
+	position: absolute;
+	height: auto;
+	padding: 10px;
+	background-color: white;
+	border-radius: 10px;
+	-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	z-index: 1;
+}
+
+.tooltipExp {
+	word-spacing: 5px;
+	letter-spacing: 1px;
+	border-bottom: 1px solid rgb(224, 214, 214);
+	padding: 5px;
+}
+
+
+#tooltip.hidden {
+	display: none;
+}
+
+.nhr a {
+	color: #777;
+}
+#rightbar .list-group-item {
+padding: 6px 5px;
+}
+
+.scroll-divs-outer {
+ margin: 5px 13px;
+}
+
+#img_panel{
+padding: 15px;
+}
+
+#prevarrow , #nextarrow{
+height: 58px;
+width: 6%;
+}
+
+#document_preview{
+width: 100%; height: 100%; max-height: 400px;
+}
+
+#cirhtml{
+ width:100%; height:620px;
+ border:none;
+}
+#application-temp-container .input-group-addon{
+    padding: 0px 7px;
+}
+#application-temp-container .input-group.input-group-md, .input-group input {
+    width: 100%;
+}
+#application-temp-container fieldset {
+	border: 1px solid #CFCFCF;
+	padding: 10px;
+	margin-bottom: 20px;
+	border-radius: 5px;
+	color: #777;
+	background-color: rgb(253, 249, 254);
+}
+.processedBy {
+	display: block;
+	min-width: 100px;
+	position: absolute;
+	bottom: 4px;
+	left: 49px;
+	font-size: 13px;
+}
+.modal-title h5{
+font-size:14px;}
+
+</style>
+
+
+<div id="notification_tmp" ng-controller="Maincontroller" ng-cloak>
+	<div class="col-md-12" contextmenu="blur">
+		<div class="col-md-10 col-md-offset-1" style="padding-right: 0px;">
+			<div class="col-md-2" id="application_process" style="min-width: inherit;">
+				<label style="font-size: 20px; padding: 12px 0px 0px;">Notifications</label>
+			</div>
+
+			<div class="col-md-10" style="padding: 0px; float: right;">
+				<div class="row clearfix">
+					<div class="col-md-6 text-left" style="padding-top: 10px">
+						<img src="images/loading.gif" class="LoaderSpinner" />
+						<span ng-if="error" style="color:red">
+						<strong> Warning! &nbsp;&nbsp;</strong>{{error}}</span>
+						<span ng-if="done" style="color:green">
+						<strong> Note! &nbsp;&nbsp;</strong>{{done}}</span>
+					</div>
+					<div class="col-md-6">
+						<ul class="nav navbar-nav navbar-right nhr">
+							<li><span href="" id="ref" ng-show="showrefid"
+								style="margin-top: 13px; display: block;"> <a ng-click="::authenticate('NRPRCS') && newApplication(details.oHeader.sAppID)">{{refID}}</a></span></li>
+							<li><a id="dsa_chat" ng-if="authenticate('NCHAT')">DSA Chat</a></li>
+							<li ><a id="onhold" title="{{refID}}"
+								ng-if="authenticate('NHOLD')"  
+								ng-click='cro_action(applicID, "OnHold")'>OnHold</a><!-- 27 -->
+							</li>
+							<li ><a id="approve" title="{{refID}}"
+								ng-if="authenticate('NAPPROVE')"
+								ng-click='cro_action(applicID, "Approved")'>Approve</a>
+							</li>
+							<li ><a id="decline" title="{{refID}}"
+								ng-if="authenticate('NDECLINE')"
+								ng-click='cro_action(applicID, "Declined")'>Decline</a>
+							</li>
+							<!-- <li ><a id="accept" title="{{refID}}"
+								ng-if="authenticate('NACCEPT')"
+								ng-click='cro_action(applicID, "Approved")'>Accept</a>
+							</li>
+							<li ><a id="reject" title="{{refID}}"
+								ng-if="authenticate('NREJECT')"
+								ng-click='cro_action(applicID, "Declined")'>Reject</a>
+							</li> -->
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-10 col-md-offset-1" contextmenu="blur" style="padding: 0px;">
+		<div class="col-md-12" id="notification-main-container"
+			style="border-top: 1px solid #DADADB;padding: 0px;">
+			
+			<div class="col-md-3 column" id="leftbar" style="padding: 7px 0px 0px 0px;height: 553px;margin-bottom: 55px;"> <!--  overflow: hidden; margin-bottom: 20px; -->
+				
+				<div class="list-group" ng-init="names"
+					style="border: 1px solid rgb(218, 218, 219);overflow: hidden;margin-bottom: 0px "> 
+					<!-- remove overflow hidden -->
+					<input class="form-control" type="text" ng-model="search"
+						placeholder="Search Notification..."
+						style="margin: 0px; max-width: 277px; background-color: white;" />
+					
+					<div class="leftbar_scroll" style="height: 515px;" when-scrolled="loadData()">
+						<div class="list-group-item" ng-if="notifarray.length==0"
+								style="color: red; text-align: center;">Your Queue is Empty</div>
+						<div class="list-group-item" style="padding: 0px;border-bottom: 1px solid #ddd;margin-bottom: 0px;" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" > <!-- ['-refId','-dateTime'] -->
+							<div class="list-group-item" style="border-bottom: 1px solid #ddd;margin-bottom: 0px;border: 0px solid #ddd;"
+								ng-click='load_details(user.sRefID,"true")'
+								ng-class='{picked: user.sRefID==Picked}'>
+								<!-- <img ng-src="img/user.jpg" alt="img"
+									class="img-circle dsa_profile_icon"> -->
+
+								<span class="img-circle dsa_profile_icon" style="box-shadow: 0px 0px 2px #888;" >
+									<h5><i class="fa fa-user"></i></h5>
+								</span>	
+
+								<div class="notify-name">{{user.sDsaName.split("@")[0]}}</div>
+								<div class="status" id="{{user.sAppId}}"
+									ng-class="{Pending: user.sStat.toUpperCase() == 'ONHOLD', Approved: user.sStat.toUpperCase() == 'APPROVED', Declined:user.sStat.toUpperCase()== 'DECLINED'} "style="margin-top: 2px"></div>
+								<div class="notify-time" style="position: absolute;right: 7px;width:32%;margin-right: 3%;font-size: 12px">{{user.dtDateTime | dateFormat }}</div>
+								<div class="property_location" style="font-size: 10px;  min-width: 60px;" ng-if="user.sStage!=null && !authenticate('NCROQUE')">{{user.sStage}}</div>
+								<div class="processedBy" ng-if="!authenticate('NCROQUE') && user.sProcBy.toUpperCase()!='DEFAULT'&& user.sProcBy.toUpperCase()!='ERROR'" style="font-size: 10px;left:105px">{{user.sProcBy.toUpperCase()=='STA'?'STP':user.sProcBy.toUpperCase()}}</div>
+								<div class="property_amount" style="    right: 11%;">{{user.dloanAmt | currency:"&#x20B9; "}}</div>
+<!-- 						extra		margin-right: 3%;font-size: 12px -->
+							</div>
+						</div>
+						<!-- <button style="width:100%; height: 33px;  background-color: transparent;" class="list-group-item " id="loadMoreRecord">
+						<a style="font-family: 'Montserrat', sans-serif;"> Load More Records</a></button> -->
+					</div>
+					
+					<!-- <div class="row clearfix" style="height: 34px;margin: 0px 0px 0px 0px;">
+						<nav>
+							<ul class="pagination" id="pager1" style="margin: 0px;width: 100%; font-family: 'Montserrat', sans-serif;">
+							</ul>
+						</nav>
+					</div> -->
+					
+				</div>
+				<!-- <div class="row clearfix" style="margin-right: 46px;margin-left: 0px;">
+								<span style="display: block">{{reportRange}}</span>
+							</div>
+							<div class="row clearfix" style="margin-right: 46px;margin-left: 0px;margin-bottom: 15px">
+								<nav>
+									<ul class="pagination" id="pager1" style="margin: 0px;    width: 70%;">
+									</ul>
+								</nav>
+							</div> -->
+			</div>
+<!-- 	userid!='37' -->
+			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden;padding-right: 0px; max-height: 640px;" ng-if="authenticate('NCONTAINER')"> <!-- NCONTAINER  ng-show="{{userid != '494'}}"-->
+				<ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;    height: 38px;   width:98%;">
+ 				    <li  class="active" style=" margin-top: 7px;"><a id="applicant" style="padding: 6px 10px;font-weight: bold; font-size: 13px;">Applicant</a></li>
+<!-- 				    <li ng-repeat="temp in coapplicant" style="margin-top: 8px;display: none;"><a id="coapplicants{{$index}}" ng-click="coapplicantdetails([$index])" style="padding: 10px 10px;">Co-Applicant</a></li> -->
+				<select class="form-control" id="dedupe1" ng-if="dedupeArray" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
+                	 ng-change="onchange(countSelected)">
+<!--                 	 ng-options="count as count.ref for count in dedupeArray" -->
+					<option ng-selected="true" value="Select">Dedupe Found</option>
+                	<option ng-repeat="count in dedupeArray" value="{{count}}">{{count}}</option>
+				</select>
+ 				</ul>
+<!-- 				<div class="row clearfix" ng-init="applicant" id="applicant_panel" style=" width: 102%; margin-bottom: 36px;margin-left: -14px;overflow-y:scroll"> -->
+				<div class="row clearfix" ng-init="applicant" id="applicant_panel" style=" width: 102%; margin-bottom: 36px;overflow-y:auto ">
+					<div class="col-md-4 column">
+						<div class="scroll-divs-outer">
+							<label class="div-heading customer">DEMOGRAPHICS</label>
+							<div id="customer" class="scroll-divs" style="height: 158px;">
+								<div class="list-group-item">
+									<span>Name : <span id="keyname">{{applicant.oApplName.sFirstName+"  "+applicant.oApplName.sMiddleName+"  "+applicant.oApplName.sLastName}}
+									</span></span></div>
+								<div class="list-group-item"><span>D.O.B : {{dob}}</span></div>
+<!-- 								<div class="list-group-item" ng-if="applicant==undefined"><span>Mobileas :</span></div> -->
+								<div class="list-group-item" ng-if="applicant.aPhone!=undefined && applicant.aPhone!=null">
+									<span ng-repeat="data in applicant.aPhone" ng-if="data.sPhoneType=='PERSONAL_MOBILE' || data.sPhoneType=='Personal Mobile'">Mobile : {{data.sPhoneNumber}}
+									</span>
+								</div>
+								<div class="list-group-item" ng-if="applicant.aPhone==undefined && applicant.aPhone==null">
+									<span>Mobile :
+									</span>
+								</div>
+								<div class="list-group-item"><span>City : {{applicant.aAddr[0].sCity}}</span></div>
+								<div class="list-group-item"><span>Address Line1 : {{applicant.aAddr[0].sLine1}}</span></div>
+							 	<div class="list-group-item" ng-if="applicant.aAddr[0].sLine2 !=''">
+									<span>Address Line2 : {{applicant.aAddr[0].sLine2}}</span>
+								</div> 
+							</div>
+								<!-- 			 <a href="#treeModal" data-toggle="modal" ></a>	 -->
+								<div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">
+									<div class="col-md-4" ng-if="custPresent" style="padding: 0px">
+										<a><img alt="Preview Not Availeble"  id="custphoto" name="APPLICANT-PHOTO" data-toggle="modal"
+										data-target="#myModalnew" class="custom_img_rounded" title="APPLICANT PHOTO"
+										ng-src="{{custimg}}" usermap="{{custimgId}}" style="float: left; margin: 3px;"></a> 
+										
+									</div>	
+									<div class="col-md-4"  ng-if="panpresent" style="padding: 0px">
+										<a><img alt="Preview Not Availeble"  id="pan_card" name="PAN" data-toggle="modal"
+										data-target="#myModalnew" class="custom_img_rounded arrow" title="PAN"
+										ng-src="{{src_img}}" usermap="{{panimgID}}" style="float: left;margin:3px"></a> 
+									</div>
+									<div class="col-md-4" ng-if="adharpresent" style="padding: 0px">	
+										<a ><img 
+										alt="Preview Not Availeble" title="AADHAAR"
+										id="aadhar_card" name="AADHAAR" data-toggle="modal" data-target="#myModalnew"
+										class="custom_img_rounded arrow" usermap="{{adhrimgID}}"
+										ng-src="{{aadhar}}" style="float:left;margin:3px"></a>
+									</div>
+									<div class="col-md-4"  ng-if="dLPresent" style="padding: 0px">
+										 <a ><img 
+										alt="Preview Not Availeble" title="DRIVING LICENSE"
+										id="driving-license" name="DRIVING-LICENSE" data-toggle="modal" data-target="#myModalnew"
+										class="custom_img_rounded arrow" usermap="{{drvlimgID}}"
+										ng-src="{{dlicense}}" style="float:left;margin:3px"></a>
+									</div>
+										
+									<div class="col-md-4" ng-if="passportPresents" style="padding: 0px">
+										<a ><img  
+										alt="Preview Not Availeble" title="PASSPORT"
+										id="passport" name="PASSPORT" data-toggle="modal" data-target="#myModalnew"
+										class="custom_img_rounded arrow" usermap="{{passimgID}}"
+										ng-src="{{passport}}" style="float:left;margin:3px"></a>
+									</div>	
+								</div>
+							
+						</div>
+					</div>
+					<div class="col-md-4 column">
+						<div class="scroll-divs-outer"  style="margin: 5px 13px;">
+							<label class="div-heading income">ABILITY TO PAY <span class="badge">{{details.APPLICATION.IncomeScore}}</span></label>
+							<div id="income" class="scroll-divs">
+								<div class="list-group-item">
+									<span>Gross Annual : {{ applicant.aEmpl[0].dGrossSal | rupee:"&#x20B9; "}}</span>
+								</div>
+								<div class="list-group-item">
+									<span ng-if="applicant.aEmpl[0].dmonthSal != 0">Monthly Income : {{applicant.aEmpl[0].dmonthSal | rupee:"&#x20B9; "}}</span>
+										<span ng-if="applicant.aEmpl[0].dmonthSal == 0">Yearly Income : {{applicant.aEmpl[0].dGrossSal | rupee:"&#x20B9; "}}</span>
+								</div>
+								<div class="list-group-item">
+									<span>Employer : {{ applicant.aEmpl[0].sEmplName}}</span> 
+								</div>
+								<div class="list-group-item">
+									<span>Since : {{ applicant.aEmpl[0].iTmWithEmplr }}
+										(Months)</span>
+								</div>
+								</div>
+<!-- 								<div class="list-group-item" style="border-bottom: none"> -->
+								<div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">
+								   <div class="col-md-4" ng-if="extraPresent" style="padding: 0px">
+									<a ><img 
+										alt="Preview Not Availeble" title="EXTRA IMAGES"
+										id="addImages" name="{{extraname}}" data-toggle="modal" data-target="#myModalnew"
+										class="custom_img_rounded arrow"
+										ng-src="{{extra}}" usermap="{{extraId}}" style="float:left;margin: 3px;"></a>
+									</div> 
+									<div class="col-md-4" ng-if="income1Present" style="padding: 0px">
+									<a><img  id="income_proof1" data-toggle="modal"
+										data-target="#myModalnew" alt="Preview Not Availeble" name="INCOME-PROOF1"
+										class="custom_img_rounded" title="INCOME-PROOF1"
+										ng-src="{{income1}}" usermap="{{income1Id}}" style="float: left;margin: 3px;"></a>
+									</div>
+									<div class="col-md-4" ng-if="income2Present" style="padding: 0px">
+									<a><img  id="income_proof2"  data-toggle="modal"
+										data-target="#myModalnew" alt="Preview Not Availeble" name="INCOME-PROOF2"
+										class="custom_img_rounded" title="INCOME-PROOF2"
+										ng-src="{{income2}}" usermap="{{income2Id}}" style="float:left;margin: 3px;"></a>
+									</div>
+										<div class="col-md-4" ng-if="evidPresent" style="padding: 0px">
+										  <a><img ng-if="evidPresent" alt="Preview Not Availeble"  id="evidence" name="{{evidencename}}" data-toggle="modal"
+										data-target="#myModalnew" class="custom_img_rounded arrow" title="{{evidencename}}"
+										ng-src="{{evidence}}" usermap="{{evdnId}}" style="float: left;margin: 3px;"></a>
+										</div>
+								</div>	
+<!-- 								</div> -->
+								
+							
+						</div>
+					</div>
+		
+					<div class="col-md-4 column">
+						<div class="scroll-divs-outer"  style="    margin: 5px 13px;">
+							<label class="div-heading cir">SCORE<span
+								class="badge"></span></label>
+							<div id="cir" class="scroll-divs" style="height: 158px;">
+							<div ng-repeat="bureauData in bureau" ng-if="bureau.length != 0">
+								<!-- <div class="list-group-item">
+									<span ng-if="bureauData.sFldName == 'PAN Verification'">{{bureauData.sFldName}}:{{bureauData.sMsg}}<br>{{bureauData.sFldVal}}</span>
+									<span ng-if="bureauData.sFldName !='PAN Verification'">{{bureauData.sFldName}}:{{bureauData.sFldVal}}</span>
+								</div> -->
+								<div class="list-group-item" ng-if="bureauData.sFldName =='Application Score'">
+									<span>Application Score : {{bureauData.sFldVal}}</span>
+								</div>
+								<!-- <div class="list-group-item" ng-if="bureauData.sFldName =='CIBIL Score'">
+									<span>CIBIL Score : {{bureauData.sFldVal}}</span>
+								</div> -->
+								<div class="list-group-item" ng-if="bureauData.sFldName =='Residential Address Score'">
+									<span>Res Addr Score : {{bureauData.sFldVal}}</span>
+								</div> 
+									<div class="list-group-item" ng-if="bureauData.sFldName =='Office Address Score'">
+									<span>Off Addr Score : {{bureauData.sFldVal}}</span>
+								</div>
+							</div>
+							<div class="list-group-item" ng-if="cibilScore.sFldVal">
+									<span>CIBIL Score : {{cibilScore.sFldVal}}</span>
+							</div>
+							<div class="list-group-item">
+									<span>Res Stability : {{resAddrStab == '-1' ?'':resAddrStab}}</span>
+							</div>
+							<div class="list-group-item">
+									<span>Off Stability : {{offAddrStab== '-1' ?'':offAddrStab}}</span>
+							</div>
+							<div class="list-group-item" ng-if="kyc_status.fNameScore">
+									<span >PAN :{{kyc_status.sMsg}}<br>{{kyc_status.sFldVal}}<br>{{kyc_status.fNameScore}}</span>
+							</div>
+							<div class="list-group-item" ng-if="!kyc_status.fNameScore">
+									<span >PAN :{{kyc_status.sMsg}}<br>{{kyc_status.sFldVal}}</span>
+							</div>
+							<div ng-if="bureau.length == 0">
+								<div class="list-group-item">
+									<span>Bureau :</span>
+								</div>
+								<div class="list-group-item">
+									<span>CIBIL Score :</span>
+								</div>
+								<div class="list-group-item">
+									<span>Application Score :</span>
+								</div>
+								<div class="list-group-item">
+									<span>Res Addr Score :</span>
+								</div>
+							</div>
+						</div>
+						<div style="position: absolute; background: #fff; width: 87%; margin: 2px; bottom: 8px;height: 50px;">
+							<a>
+								<img alt="CIBIL CIR" ng-if="pdf"
+										name="{{pdf}}" data-toggle="modal"
+										data-target="#myModalnew" 
+										class="custom_img_rounded Report-Icon"
+										src="img/cibil_logo.png"></a> 
+							<a style="float: right;"><span id="appscore" ng-show="appScore"
+										style="display: block; margin: 13px 8px;"
+										ng-click="scoreTree()"
+										data-toggle="modal" data-target="#treeModal">App Score :
+										{{appScore}}</span></a>
+									<!-- 	<a><img alt="EXPERIAN CIR"
+										name="experian" data-toggle="modal"
+										data-target="#myModalnew" 
+										class="custom_img_rounded Report-Icon" src="img/exp-logo.png"
+										style="border: 1px solid #E7DEDE;display: none;"></a> -->
+							</div>
+						</div>
+					</div>
+					<div class="row clearfix" style="margin-left: 0px; margin-right: 0px;">
+					<div class="col-md-4 column">
+						<div class="scroll-divs-outer">
+							<label class="div-heading property">ASSET <span
+								class="badge"></span></label>
+							<div id="property" class="scroll-divs">
+							<div ng-repeat="asset in assetData" ng-if="assetData.length!=0">
+								<div class="list-group-item" style="border-top: 2px solid rgb(221, 221, 221);">
+									<span>Asset Category : {{asset.sAssetCtg}}</span>
+								</div>
+								<div class="list-group-item">
+									<span>Dealer Name : {{asset.sDlrName}}</span>
+								</div>
+								<div class="list-group-item">
+									<span>Manufacturer : {{asset.sAssetMake}}</span>
+								</div>
+								<div class="list-group-item">
+									<span>Model : {{asset.sModelNo}}</span>
+								</div>
+								<div class="list-group-item">
+									<span>Price : {{asset.sPrice}}</span>
+								</div>
+							</div>
+							<div ng-if="assetData.length==0">
+								<div class="list-group-item" style="border-top: 2px solid rgb(221, 221, 221);">
+									<span>Asset Category : </span>
+								</div>
+								<div class="list-group-item">
+									<span>Dealer Name : </span>
+								</div>
+								<div class="list-group-item">
+									<span>Manufacturer : </span>
+								</div>
+								<div class="list-group-item">
+									<span>Model Number : </span>
+								</div>
+							</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 column">
+						<div class="scroll-divs-outer">
+							<label class="div-heading agent">SOURCING <span
+								class="badge">{{details.APPLICATION.DsaScore}}</span></label>
+							<div id="agent" class="scroll-divs">
+								<div class="list-group-item">
+									<span>Sales Executive : {{details.oHeader.sDsaId.split("@")[0]}}</span>
+								</div>
+								<div class="list-group-item">
+									<span>Dealership : {{dealership}}</span>
+								</div>
+								<div class="list-group-item">
+									<span>Location : {{}}</span>
+								</div>
+								</div>
+								<div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">
+									    <div class="col-md-4" ng-if="otherPresent" style="padding: 0px">
+										<a><img ng-if="otherPresent" alt="Preview Not Availeble"  id="other" name="OTHER" data-toggle="modal"
+										data-target="#myModalnew" class="custom_img_rounded" title="OTHER"
+										ng-src="{{others}}"  usermap="{{otherId}}" style="float: left;margin: 3px;"></a>
+										</div>
+								</div>	
+							
+						</div>
+					</div>
+					<div class="col-md-4 column">
+						<div class="scroll-divs-outer">
+							<label class="div-heading kyc">DECISION</label>
+							<div id="KYC" class="scroll-divs" style="width: 106.5%;">
+								<!-- style="height: 163px;"  <div ng-repeat="kyc in kyc_data['07']" ng-if="kyc_data['07'].length != 0 ">
+									<div class="list-group-item">
+										<span>{{kyc['01']}} NO: {{kyc['02'] }}</span>
+									</div>
+									<div class="list-group-item">
+										<span>{{kyc['01']}} STATUS : {{ kyc['03']}}</span>
+									</div>
+								</div> -->
+								<div class="list-group-item">
+									<span>Applied Amount : {{appldAmount}}</span>
+								</div>
+								<div >
+								 	<div class="list-group-item">
+										<span>Eligibility Amount : {{croDec.dEligibleAmt}}</span>
+									</div>
+									<div class="list-group-item">
+										<span>Approved Amount : {{croDec.dAmtAppr}}</span>
+									</div>
+									<div class="list-group-item">
+										<span>Tenor : {{croDec.iTenor}}</span>
+									</div>
+									<div class="list-group-item">
+										<span>EMI :{{croDec.dEmi}}</span>
+									</div>
+								</div>
+								
+								<div class="list-group-item" ng-if="ElgbltyGrid">
+								    <span>Eligibility Grid : {{ElgbltyGrid}}</span>
+									<span ng-if="Eremark">Remark : {{Eremark}}</span>
+								</div>
+								 <div class="list-group-item"  ng-repeat="dtls in DetailsResp" ng-if="dtls.Outcome!=' '">
+									<span>Criteria {{dtls.CriteriaID}} , Outcome : <b>{{dtls.Outcome}}</b> </span>
+									<span ng-if="dtls.Remark">Remark : {{dtls.Remark}}</span>
+								</div>
+								<!--  <div class="list-group-item" ng-if="supecious">
+									<span>This is an supecious application do not approve it.</span>
+								</div> -->
+							</div>
+								
+							<!-- 	<div ng-if="kyc_data.length == 0 ">
+									<div class="list-group-item">
+										<span>Pan No: </span>
+									</div>
+									<div class="list-group-item">
+										<span>Pan Status : </span>
+									</div>
+									<div class="list-group-item">
+										<span>Aadhaar No: </span>
+									</div>
+									<div class="list-group-item">
+										<span>Aadhaar Status : </span>
+									</div>
+								</div> -->
+<!-- 								<div class="list-group-item" style="border-bottom: none"> -->
+						 <!-- 	<div  style="position: absolute; background: #fff; width: 87%; margin: 2px; bottom: 8px;height: 48px;">
+										<a ><img ng-if="panEvdncPresent"
+										alt="Preview Not Availeble" title="{{panEvdnc}}"
+										id="pan-evidence" name="PANEVIDENCE" data-toggle="modal" data-target="#myModalnew"
+										class="custom_img_rounded arrow"
+										ng-src="{{panEvidence}}" style="float:left;margin: 0px 0px 0px 20px;"></a>
+										
+									
+							</div>	  -->
+						</div>
+					</div>
+				</div>
+		
+			</div>
+			</div>
+<!-- 			scroll form for cro2 -->
+			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden; max-height: 640px;padding-right: 0px;" ng-if="!authenticate('NCONTAINER')"> <!-- 28 --> <!-- NOT NCONTAINER -->
+				<ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;    height: 38px;   width: 98%;">
+ 				    <li  class="active" style=" margin-top: 7px;"><a id="applicant" style="padding: 6px 10px;font-weight: bold; font-size: 13px;">Applicant</a></li>
+<!-- 				    <li ng-repeat="temp in coapplicant" style="margin-top: 8px;display: none;"><a id="coapplicants{{$index}}" ng-click="coapplicantdetails([$index])" style="padding: 10px 10px;">Co-Applicant</a></li> -->
+ 
+				<select class="form-control" id="dedupe" ng-if="dedupeArray" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
+                	  ng-change="onchange(countSelected)">
+<!--                 	 ng-options="count as count.ref for count in dedupeArray" -->
+					<option ng-selected="true" value="Select">Dedupe Found</option>
+                	<option ng-repeat="count in dedupeArray" value="{{count}}">{{count}}</option>
+				</select>
+ 				</ul>
+				<div class="row clearfix" ng-init="applicant" id="applicant_panel" style=" width: 102%;margin-left: 14px;max-height: 515px;margin-right: -14px;overflow-y:scroll">
+				<div id="application-temp-container"style="padding-top: 10px;width: 98%;">
+				<div class="row clearfix">
+				<div class="col-md-9 text-left">
+					<div class="alert alert-danger" id="erro-msg"
+						style="float: none; text-align: left; margin: 0px">
+						<strong>Error ! &nbsp&nbsp&nbsp</strong><span id="error"></span>
+					</div>
+				</div>
+			</div>
+<!-- ****************************************  Common Form *************************** -->
+<!-- <div ng-include="'template/myForm.html'"></div> -->
+		<form id="msform" style="margin-bottom:30px">
+			<fieldset class="formfield" ng-if="!authenticate('NCONTAINER')" style="display: block;">
+					<legend> LOS Information</legend>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">LOS ID</label> <input
+								class="form-control" id="losId" ng-model="losID" type="text" maxlength="10">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">UTR#</label> <input class="form-control"
+								ng-model="utrValue" id="utrData" disabled="disabled" type="text" maxlength="25">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">LOS Status</label> 
+<!-- 							<input id="losStatus" class="form-control" type="text"> -->
+										<!-- ng-change="losStatusChange(losStatus1)" -->			
+								<select class="form-control" id="losStatusId1" name="Los status" ng-model="losStatus1" data-ng-change="losStatusChange(losStatus1)" >
+									<option value="">Please Select LOS Status</option>
+									<option value="LOS_QDE">LOS_QDE</option>
+									<option value="LOS_APRV">LOS_APRV</option>
+									<option value="LOS_DCLN">LOS_DCLN</option>
+									<option value="LOS_DISB">LOS_DISB</option>
+									<option value="DO">DO</option>
+								</select>
+						</div>
+					</div>
+					<div class="row clearfix">
+						<div class="col-md-3" style="float: right;">
+							<a class="add-button-div-notification" ng-click="updateLosData(losStatus1)"
+							style="float: right;margin-top: 7px;margin-bottom: -4px; width: 35%;">Update</a>
+						</div>
+					</div>
+			</fieldset>
+			<fieldset class="formfield" style="display: block;" ng-if="croRemark!='' && croRemark!=undefined ">
+					<legend>CRO Justification</legend>
+					<div class="row clearfix">
+					<div ng-repeat="data in croRemark">
+					<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null">
+							<label class="control-label">CRO NAME</label> <input class="form-control"
+							value="{{data.sCroID}}" disabled="disabled" type="text">
+					</div>
+					<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null">
+							<label class="control-label">Remark</label> <input class="form-control"
+								disabled="disabled" value="{{data.sRemark}}" type="text">
+					</div>
+					<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null ">
+							<label class="control-label">Subject To</label> <input class="form-control"
+								value="{{data.sSubTo}}" disabled="disabled" type="text" >
+					</div>
+					</div>	
+					</div>
+			</fieldset>
+				<fieldset class="formfield" style="display: block;">
+					<legend>Personal Information</legend>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Applicant Name</label> <input
+								class="form-control" ng-model="name" type="text"
+								name="Applicant Name" disabled="disabled">
+						</div>
+						<!-- <div class="col-md-3">
+							<label class="control-label">Mobile</label> <input
+								class="form-control" ng-model="mobile" type="text"
+								name="Mobile No" maxlength="10" disabled="disabled">
+						</div> -->
+						<div class="col-md-3">
+							<label class="control-label">Date of Birth</label> <input
+								id="dob" class="form-control" ng-model="dob" type="text"
+								name="Date Of Birth" disabled="disabled">
+						</div>
+							<div class="col-md-3">
+							<label class="control-label">Gender</label><br /> <input
+								type="radio" name="Gender" checked="checked" value="Male"
+								ng-model="gender" disabled="disabled" /> Male &nbsp; <input type="radio"
+								name="Gender" value="Female" ng-model="gender" disabled="disabled" /> Female
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Marital Status</label><br /> <input
+								type="radio" name="mstatus" checked="checked" value="Married"
+								ng-model="mStatus" disabled="disabled" /> Married &nbsp; <input type="radio"
+								 value="Single" ng-model="mStatus" disabled="disabled" /> Single
+						</div>
+						
+					</div>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Credit Card No</label><input
+								class="form-control" ng-model="credit" type="text" name="PinCode"
+								maxlength="6" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Tenor Applied</label><input
+								class="form-control" ng-model="tenor" type="text" name="PinCode"
+								maxlength="6"  disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Constitution</label><input
+								class="form-control" type="text" name="" ng-model="constitution"
+								maxlength="6"  disabled="disabled">
+						</div>
+					<div class="col-md-3">
+							<label class="control-label">Education</label><input
+								class="form-control" type="text" ng-model="education"
+								 disabled="disabled">
+						</div>
+					</div>
+					<div class="row clearfix">
+					<div class="col-md-3">
+							<label class="control-label">Age</label><input
+								class="form-control" type="text" ng-model="age"
+								 disabled="disabled">
+					</div>
+					<div class="col-md-3">
+						<label class="control-label">Refer To Credit</label><input
+							class="form-control" type="text" ng-model="supecious"
+							disabled="disabled">
+					</div>
+					</div>
+				</fieldset>
+				<fieldset class="formfield" style="display: block;">
+					<legend>Email Information</legend>
+					<div class="row clearfix">
+						<div class="col-md-3" ng-repeat="id in email">
+							<label class="control-label">{{id.sEmailType.charAt(0).toUpperCase()+id.sEmailType.slice(1).toLowerCase()}} Email</label> <input
+								class="form-control" ng-model="id.sEmailAddr" type="text" name="Email" disabled="disabled">
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="formfield" style="display: block;">
+					<legend>Contact Information</legend>
+					<div class="row clearfix">
+					<div  ng-repeat="phone in phn">
+						<div class="col-md-3" ng-if="phone.sPhoneType=='PERSONAL_MOBILE'">
+							<label class="control-label">Personal Mobile</label><input  ng-if="phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+								<input ng-if="!phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+							
+						</div>
+						<div class="col-md-3" ng-if="phone.sPhoneType=='PERSONAL_PHONE'">
+							<label class="control-label">Personal Phone</label><input  ng-if="phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+								<input ng-if="!phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+							
+						</div>
+						<div class="col-md-3" ng-if="phone.sPhoneType=='RESIDENCE_MOBILE'">
+							<label class="control-label">Residence Mobile</label><input  ng-if="phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+								<input ng-if="!phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+							
+						</div>
+						<div class="col-md-3" ng-if="phone.sPhoneType=='RESIDENCE_PHONE'">
+							<label class="control-label">Residence Phone</label><input  ng-if="phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+								<input ng-if="!phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+							
+						</div>
+						<div class="col-md-3" ng-if="phone.sPhoneType=='OFFICE_PHONE'">
+							<label class="control-label">Office Phone</label><input  ng-if="phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+								<input ng-if="!phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+							
+						</div>
+						<div class="col-md-3" ng-if="phone.sPhoneType=='OFFICE_MOBILE'">
+							<label class="control-label">Office Mobile</label><input  ng-if="phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+								<input ng-if="!phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+							
+						</div>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="formfield" style="display: block;">
+					<legend>Address Details</legend>
+					<div class="row clearfix">
+						<div class="col-md-3 column">
+							<label class="control-label">Select Addr Type</label>
+						</div>
+						<div class="col-md-3 column">
+							<select class="form-control" name="Employment Type"
+								id="select_addr" ng-model="addr_type"
+								ng-options="job.name for job in addrType track by job.name"></select>
+						</div>
+					</div>
+					<div id="addr_detail">
+						<div id="Residence" class="employment" style="display: block;">
+						<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Address Line 1</label> <input
+								class="form-control" ng-model="resaddr.sLine1" type="text"
+								name="address1" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Address Line 2</label> <input
+								class="form-control" ng-model="resaddr.sLine2" type="text"
+								name="address2" disabled="disabled" >
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Address Line 3</label> <input
+								class="form-control" ng-model="resaddr.sLine3" type="text"
+								name="address3" disabled="disabled" >
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">City</label> <input
+								class="form-control" value="{{resaddr.sCity}}" type="text" disabled="disabled">
+						</div>
+					</div>
+					<div class="row clearfix">
+					<div class="col-md-3">
+							<label class="control-label" style="float: none;">State </label>
+							 <input
+								id="statelist" class="form-control" ng-model="resaddr.sState" type="text"
+								name="State" disabled="disabled">
+						</div>
+					<div class="col-md-3">
+							<label class="control-label">Pin Code</label> <input
+								class="form-control" value="{{(resaddr.iPinCode!=0 ? resaddr.iPinCode : '')}}" type="text" name="PinCode"
+								maxlength="6"  disabled="disabled">
+						</div>
+					<div class="col-md-3">
+							<label class="control-label">Monthly Rent</label> <input
+								class="form-control" ng-model="resaddr.dRentAmt" type="text" 
+								 disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Resi Addr Type</label> <input
+								class="form-control" ng-model="resaddr.sResAddrType" type="text"
+								 disabled="disabled">
+						</div>
+					</div>
+					<div class="row clearfix">
+					<div class="col-md-3">
+							<label class="control-label">Month at addr</label> <input
+								class="form-control" value="{{resaddr.iMonthAtAddr!=0 ? resaddr.iMonthAtAddr : ''}}" type="text"  disabled="disabled">
+						</div>
+					<div class="col-md-3">
+							<label class="control-label">Month at city</label> <input
+								class="form-control" value="{{resaddr.iMonthAtCity!=0 ? resaddr.iMonthAtCity : ''}}" type="text"
+								 disabled="disabled">
+						</div>
+					</div>
+				</div>
+					<div id="Office" class="employment">
+						<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Address Line 1</label> <input
+								class="form-control" ng-model="officeaddr.sLine1" type="text"
+								name="address" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Address Line 2</label> <input
+								class="form-control" ng-model="officeaddr.sLine2" type="text"
+								name="complete address" disabled="disabled" >
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Address Line 3</label> <input
+								class="form-control" ng-model="officeaddr.sLine3" type="text"
+								name="address3" disabled="disabled" >
+						</div>
+							<div class="col-md-3">
+							<label class="control-label">City</label> <input
+								class="form-control" value="{{officeaddr.sCity}}" type="text" disabled="disabled">
+						</div>
+					
+					</div>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label" style="float: none;">State </label>
+							 <input
+								id="statelist" class="form-control" ng-model="officeaddr.sState" type="text"
+								name="State" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Pin Code</label> <input
+								class="form-control" value="{{(officeaddr.iPinCode!=0 ? officeaddr.iPinCode : '')}}" type="text" name="PinCode"
+								maxlength="6"  disabled="disabled">
+						</div>
+					</div>
+				
+						</div>
+						<div id="Permanent" class="employment">
+							<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Address Line 1</label> <input
+								class="form-control" ng-model="peraddr.sLine1" type="text"
+								name="address" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Address Line 2</label> <input
+								class="form-control" ng-model="peraddr.sLine2" type="text"
+								name="complete address" disabled="disabled" >
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Address Line 3</label> <input
+								class="form-control" ng-model="peraddr.sLine3" type="text"
+								name="address3" disabled="disabled" >
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">City</label> <input
+								class="form-control" value="{{peraddr.sCity}}" type="text" disabled="disabled">
+						</div>
+					</div>
+				<div class="row clearfix">
+				<div class="col-md-3">
+							<label class="control-label" style="float: none;">State </label>
+							 <input	id="statelist" class="form-control" ng-model="peraddr.sState" type="text"
+								name="State" disabled="disabled">
+						</div>
+				<div class="col-md-3">
+							<label class="control-label">Pin Code</label> <input
+								class="form-control" value="{{(peraddr.iPinCode!=0 ? peraddr.iPinCode : '')}}" value="" type="text" name="PinCode"
+								maxlength="6"  disabled="disabled">
+						</div>
+					<div class="col-md-3">
+							<label class="control-label">Monthly Rent</label> <input
+								class="form-control" ng-model="peraddr.dRentAmt" type="text" 
+								maxlength="6"  disabled="disabled">
+					</div>
+					<div class="col-md-3">
+					<label class="control-label">Resi Addr Type</label> <input
+						class="form-control" ng-model="peraddr.sResAddrType" type="text"
+						maxlength="6"  disabled="disabled">
+					</div>
+					</div>
+					<div class="row clearfix">
+					<div class="col-md-3">
+							<label class="control-label">Month at addr</label> <input
+								class="form-control" value="{{peraddr.iMonthAtAddr!=0 ? peraddr.iMonthAtAddr : ''}}" type="text"  disabled="disabled">
+					</div>
+					<div class="col-md-3">
+							<label class="control-label">Month at city</label> <input
+								class="form-control" type="text"  value="{{peraddr.iMonthAtCity!=0 ? peraddr.iMonthAtCity : ''}}"
+								 disabled="disabled">
+						</div>
+					</div>
+						</div>
+					</diV>
+				</fieldset>
+				<fieldset class="formfield" style="display: block;">
+					<legend>Professional Information</legend>
+					<div id="employer_detail">
+						<div id="Job" class="employment">
+							<div class="row clearfix">
+								<div class="col-md-3 column">
+									<label class="control-label">Employment Type</label> <input
+										 class="form-control" ng-model="employment_type"
+										type="text" disabled="disabled">
+								</div>
+								<div class="col-md-3 column">
+									<label class="control-label">Employer</label> <input
+										id="job_compnay_name" class="form-control" ng-model="employer"
+										type="text" name="Company Name" disabled="disabled">
+								</div>
+								<div class="col-md-3 column">
+									<label class="control-label">Time with this Employer</label>
+										 <input
+										 class="form-control" ng-model="time_employer"
+										type="text" name="Time With This Employee" disabled="disabled">
+								</div>
+								<div class="col-md-3" ng-if="constitution.toUpperCase()!='SELF-EMPLOYED'">
+									<label class="control-label">Last Month Salary</label>
+									 <input	class="form-control" ng-model="lastsalary" type="text" 
+										 disabled="disabled">	 
+								</div>
+								<div class="col-md-3" ng-if="constitution.toUpperCase()=='SELF-EMPLOYED'">
+									<label class="control-label">Last Year IT Amount</label>
+									 <input	class="form-control" ng-model="ITamt" type="text" 
+										 disabled="disabled">	 
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-3">
+								<label class="control-label">Total Experience</label>
+								 <input	class="form-control" ng-model="workExp" type="text" 
+									 disabled="disabled">	 
+								</div>
+							</div>
+						</div>
+					</diV>
+				</fieldset>
+				<fieldset class="formfield" style="display: block;">
+					<legend> Product Information</legend>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Dealer Name</label> <input id="dealerName"
+								ng-model="dealer" class="form-control" type="text"
+								name="Dealername" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Asset Category</label> <input id="newcity"
+								ng-model="assetctg" class="form-control" type="text" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Make</label> <input
+								id="projectname" ng-model="project" class="form-control"
+								type="text" name="Project" disabled="disabled">
+						</div>
+							<div class="col-md-3">
+							<label class="control-label">Model</label> <input
+								 ng-model="model" class="form-control"
+								type="text" disabled="disabled">
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="formfield" style="display: block;" ng-if="CureentLoan!=''">
+					<legend>Loan Information</legend>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Current Loan</label> <input
+								ng-model="CureentLoan" class="form-control" type="text"
+								 disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Current Loan EMI</label> <input
+								ng-model="loanEmi" class="form-control" type="text"
+								 disabled="disabled">
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="formfield" style="display: block;">
+					<legend> BRE Information</legend>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">CIBIL Score</label> <input id="cibil_score"
+								ng-model="cibilS" class="form-control" type="text"
+								name="Cibil" disabled="disabled">
+						</div>
+							<div class="col-md-3">
+							<label class="control-label">Office Stability</label> <input
+								class="form-control" ng-model="offAddrRslt" type="text"
+								 disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Resi Stability</label> <input
+								class="form-control" ng-model="resAddrRslt" type="text"
+								 disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Case Status</label> <input
+								class="form-control" ng-model="applctnstatus" type="text"
+								 disabled="disabled">
+						</div>
+						</div>
+						<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Current Stage</label> <input
+								class="form-control" ng-model="currStage" type="text"
+								 disabled="disabled">
+						</div>
+						<div ng-repeat="data in bureau ">
+						<div class="col-md-3">
+							<label class="control-label">{{data.sFldName}}</label> <input ng-if="data.sFldName!='PAN Verification'"
+								ng-model="data.sFldVal" class="form-control" type="text"
+								name="data.sFldName" disabled="disabled">
+								
+								<input ng-if="data.sFldName =='PAN Verification'"
+								ng-model="data.sMsg" class="form-control" type="text"
+								name="data.sFldName" disabled="disabled">
+						</div>
+						<div class="col-md-3" ng-if="data.sFldName =='PAN Verification'">
+							<label class="control-label">PAN Score</label> <input
+								ng-model="data.fNameScore" class="form-control" type="text"
+								name="data.sFldName" disabled="disabled">
+								 
+						</div>
+						</div>
+					</div>
+				</fieldset>
+					<fieldset class="formfield" style="display: block;">
+					<legend>Decision</legend>
+						<div class="row clearfix">
+							<div class="col-md-3">
+							<label class="control-label">Applied Amount </label> 
+							<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span> <input id="project_amount"
+									class="form-control" ng-model="Amount" type="text"
+									name="Amount" accesskey="commas" disabled="disabled">
+							</div>
+							</div>
+							<div class="col-md-3">
+								<label class="control-label">Eligibility Amount</label> 
+								<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span> <input
+									ng-model="croDec.dEligibleAmt" class="form-control" type="text" disabled="disabled">
+							</div>
+								
+							</div>
+							<div class="col-md-3">
+								<label class="control-label">Approved Amount</label> 
+								<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span><input
+									ng-model="croDec.dAmtAppr" class="form-control" type="text" disabled="disabled">
+							</div>
+							</div>
+							<div class="col-md-3">
+								<label class="control-label">Tenor </label> <input
+									ng-model="croDec.iTenor" class="form-control" type="text" disabled="disabled">
+							</div>
+						</div>
+						<div class="row clearfix">
+								<div class="col-md-3">
+									<label class="control-label">EMI </label> <input
+										ng-model="croDec.dEmi" class="form-control" type="text" disabled="disabled">
+								</div>
+							    <div class="col-md-3">
+								 <label class="control-label"> Eligibility Remark</label> <input
+									ng-model="Eremark" class="form-control" type="text"
+									name="eRemark" disabled="disabled">
+							   </div>
+							   <!--  <div class="col-md-3">
+								 <label class="control-label">FOIR Adjusted Amount</label> <input
+									ng-model="FOIR" class="form-control" type="text"
+									 disabled="disabled">
+							   </div> -->
+							   	<div class="col-md-3"  ng-repeat="dtls in DetailsResp" ng-if="dtls.Outcome!=' '">
+									<label class="control-label">Reason </label> <input
+										value="{{dtls.RuleName}} : {{dtls.Remark}}" class="form-control" type="text" disabled="disabled">
+								</div>
+							
+								<div class="col-md-3" ng-repeat="dtls in DetailsResp" ng-if="dtls.Outcome!=' '">
+									<label class="control-label"> Outcome</label> <input
+										value="Criteria {{dtls.CriteriaID}} , Outcome :{{dtls.Outcome}} " class="form-control" type="text"
+										 disabled="disabled">
+								</div>
+						</div>
+				</fieldset>
+				
+				<fieldset class="formfield" style="display: block;">
+					<legend>KYC Information</legend>
+					<div class="row clearfix">
+						<div class="col-md-3" ng-repeat="kyc in details.oReq.oApplicant.aKycDocs">
+							<label class="control-label">{{kyc.sKycName}} NUMBER</label> <input
+								class="form-control" type="text" value="{{kyc.sKycNumber}}" disabled="disabled">
+						</div>
+<!-- 						<div class="col-md-3"> -->
+<!-- 							<label class="control-label">Aadhaar Number</label> <input -->
+<!-- 								class="form-control" ng-model="aadhar" type="text" -->
+<!-- 								name="Aadhar Number" placeholder="XXXX XXXX XXXX"> -->
+<!-- 						</div> -->
+					</div>
+				</fieldset>
+				<fieldset class="formfield" id="kyc_fielset"
+					style="margin-bottom: 40px; display: block;">
+					<legend>KYC Document</legend>
+					<!-- <div class="col-md-4" ng-if="custPresent" style="padding: 0px">
+										<a><img alt="Preview Not Availeble"  id="custphoto" name="APPLICANT-PHOTO" data-toggle="modal"
+										data-target="#myModalnew" class="custom_img_rounded" title="APPLICANT PHOTO"
+										ng-src="{{custimg}}" usermap="{{custimgId}}" style="float: left; margin: 3px;"></a> 
+										
+					</div>	 -->
+					<div class="col-md-3">
+							<a><img alt="Document Not available"  title="APPLICANT-PHOTO" accesskey="{{custimg}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{custimg}}" name="{{custimgId}}" style="border: none;">
+								<label class="control-label">Applicant Photo</label></a> 
+					</div>
+					<div class="col-md-3">
+							<a><img alt="Document Not available"  title="PAN" accesskey="{{src_img}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{src_img}}" name="{{panimgID}}" style="border: none;">
+								<label class="control-label">PAN</label></a> 
+					</div>
+					<div class="col-md-3">
+						<a><img alt="Document Not available"  title="AADHAAR" accesskey="{{aadhar}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{aadhar}}" name="{{adhrimgID}}" style="border: none;">
+								<label class="control-label">Aadhaar Card</label></a>
+					</div>
+					<div class="col-md-3">
+						<a><img alt="Document Not available"  title="DRIVING-LICENSE" accesskey="{{dlicense}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{dlicense}}" name="{{drvlimgID}}" style="border: none;">
+								<label class="control-label">Driving License</label></a>
+					</div>
+					<div class="col-md-3">
+						<a><img alt="Document Not available"  title="PASSPORT" accesskey="{{passport}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{passport}}" name="{{passimgID}}" style="border: none;">
+								<label class="control-label"> Passport</label></a>
+					</div>
+					<div class="col-md-3">
+							<a><img alt="Document Not available"  title="INCOME-PROOF1" accesskey="{{income1}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{income1}}" name="{{income1Id}}" style="border: none;">
+								<label class="control-label">Income Proof 1</label></a> 
+					</div>
+					<div class="col-md-3">
+							<a><img alt="Document Not available"  title="INCOME-PROOF2" accesskey="{{income2}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{income2}}" name="{{income2Id}}" style="border: none;">
+								<label class="control-label">Income Proof 2</label></a> 
+					</div>
+					<div class="col-md-3">
+							<a><img alt="Document Not available"  title="OTHER" accesskey="{{others}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{others}}" name="{{otherId}}" style="border: none;">
+								<label class="control-label">Other</label></a> 
+					</div>
+				</fieldset>
+				<fieldset class="formfield" style="display: block;">
+					<legend>IPA Details</legend>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Approved Amount</label> <input id=""
+								 class="form-control" type="text"
+								name="" ng-model="apprvdAmt" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Scheme</label> <input
+								id=""  class="form-control"
+								type="text" name="" ng-model="scheme" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Total Asset Cost</label>
+							<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span> <input id=""
+									class="form-control"  type="text"
+									name="" accesskey="commas" ng-model="totalAssetCost" disabled="disabled">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Margin Money</label> <input id=""
+								 class="form-control" type="text"
+								name="" ng-model="marginMoney" disabled="disabled">
+						</div>
+					</div>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Margin Money Instrument</label> <input
+								id=""  class="form-control"
+								type="text" name="" ng-model="marginMoneyInst" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label" style="width: 104%;">Margin Money Confirmation</label>
+							<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span> <input id=""
+									class="form-control"  type="text"
+									name="" accesskey="commas" ng-model="marginMoneyConf" disabled="disabled">
+							</div>
+						</div>
+						<div class="col-md-3">
+						<label class="control-label">Advanced EMI</label>
+							<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span> <input id=""
+									class="form-control"  type="text"
+									name="" accesskey="commas" ng-model="addvncEmi" disabled="disabled">
+							</div>
+						</div>
+						<div class="col-md-3">
+						<label class="control-label">Processing Fees</label>
+							<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span> <input id=""
+									class="form-control"  type="text"
+									name="" accesskey="commas" ng-model="processnFee" disabled="disabled">
+							</div>
+						</div>
+					</div>
+						<div class="row clearfix">
+						<div class="col-md-3" ng-repeat="data in asstmodal">
+						<label class="control-label">Asset Model No</label>
+							<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span> <input id=""
+									class="form-control"  type="text"
+									name="" accesskey="commas" value="{{data}}" disabled="disabled">
+							</div>
+						</div>
+						</div>
+				</fieldset>
+				<fieldset class="formfield" id="addtnal_docs"
+					style="margin-bottom: 0px; display: block;">
+					<legend>Additional Documents</legend>
+					<div class="row clearfix">
+					<div class="col-md-3">
+						<a><img alt="Document Not available"  title="{{appFormName}}" accesskey="{{appform}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{appform}}" name="{{appformId}}" style="border: none;">
+								<label class="control-label">Application Form</label></a> 
+					</div>
+					<div class="col-md-3">
+						<a>
+						<img alt="Document Not available" title="{{agreemntName}}" accesskey="{{agreemnt}}" data-toggle="modal"
+							  data-target="#myModalnew" class="preview"	src="{{agreemnt}}" name="{{agrmtId}}" style="border: none;">
+							<br>  <label class="control-label">Agreement</label>
+					</a>
+					</div>
+					<div class="col-md-3">
+						<a>
+						<img alt="Document Not available" title="{{achName}}"  accesskey="{{achdata}}" data-toggle="modal"
+							data-target="#myModalnew" 	class="preview"	src="{{achdata}}" name="{{achId}}" style="border: none;">
+							<label class="control-label">ACH/ECS & Cancelled Cheque</label>
+						</a>
+					</div>
+					<div class="col-md-3">
+						<a>
+							<img alt="Document Not available"  title="{{disbursName}}"	accesskey="{{disburstment}}" data-toggle="modal"
+								data-target="#myModalnew"	class="preview"	src="{{disburstment}}" name="{{disbId}}" style="border: none;">
+								<label class="control-label">Disbursement Kit</label>
+					
+						</a>
+					</div>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-3">
+						<a >
+							<img alt="Document Not available" title="{{addKycName}}" accesskey="{{addKyc}}" data-toggle="modal"
+								data-target="#myModalnew" 	class="preview"	src="{{addKyc}}" name="{{addkycId}}" style="border: none;">
+								<label class="control-label">Additional KYC</label>
+						</a>
+					</div>
+					<div class="col-md-3"  ng-if="extraPresent">
+						<a><img alt="Document Not available" title="{{extraname}}" accesskey="{{extra}}" data-toggle="modal"
+								data-target="#myModalnew" 	class="preview"	src="{{extra}}" name="{{extraId}}" style="border: none;">
+								<br><label class="control-label">Extra Documents</label>
+						</a>
+					</div>
+					<div class="col-md-3" ng-if="evidPresent">
+					<a ><img alt="Document Not available" title="{{evidencename}}" accesskey="{{evidence}}" data-toggle="modal"
+						data-target="#myModalnew" 	class="preview"	src="{{evidence}}" name="{{evdnId}}" style="border: none;">
+						<br><label class="control-label">Evidence Images</label>
+						</a>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+			</div>
+		</div>
+	</div>
+	</div>
+		<div class="row clearfix" id="application-main-container"
+			style="border-top: 1px solid #DADADB; display: none; padding-top: 10px;"
+			ng-if="authenticate('NRPRCS')">
+			<div class="row clearfix">
+				<div class="col-md-9 text-left">
+					<div class="alert alert-danger" id="erro-msg"
+						style="float: none; text-align: left; margin: 0px">
+						<strong>Error ! &nbsp&nbsp&nbsp</strong><span id="error"></span>
+					</div>
+				</div>
+				<div class="col-md-3 text-right" id="top-fixed">
+					<a class="add-button-div-notification"
+						style="width: 100px; display: inline-block;" id="back">Back</a> <!-- <a
+						class="add-button-div-notification"
+						style="width: 100px; display: inline-block;" ng-show="{{InstitutionID==4019 && (userid != '493')}}" id="submit">Submit</a> -->
+				</div>
+			</div>
+<!-- ******************************Second Common Form ************************************************* -->
+<!-- 		<div ng-include="'template/myForm.html'"></div> -->
+		<form id="msform" style="margin-bottom:30px">
+			<fieldset class="formfield" ng-if="!authenticate('NCONTAINER')" style="display: block;">
+					<legend> LOS Information</legend>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">LOS ID</label> <input
+								class="form-control" id="losId" ng-model="losID" type="text" maxlength="10">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">UTR#</label> <input class="form-control"
+								ng-model="utrValue" id="utrData" disabled="disabled" type="text" maxlength="25">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">LOS Status</label> 
+<!-- 							<input id="losStatus" class="form-control" type="text"> -->
+										<!-- ng-change="losStatusChange(losStatus1)" -->			
+								<select class="form-control" id="losStatusId1" name="Los status" ng-model="losStatus1" data-ng-change="losStatusChange(losStatus1)" >
+									<option value="">Please Select LOS Status</option>
+									<option value="LOS_QDE">LOS_QDE</option>
+									<option value="LOS_APRV">LOS_APRV</option>
+									<option value="LOS_DCLN">LOS_DCLN</option>
+									<option value="LOS_DISB">LOS_DISB</option>
+									<option value="DO">DO</option>
+								</select>
+						</div>
+					</div>
+					<div class="row clearfix">
+						<div class="col-md-3" style="float: right;">
+							<a class="add-button-div-notification" ng-click="updateLosData(losStatus1)"
+							style="float: right;margin-top: 7px;margin-bottom: -4px; width: 35%;">Update</a>
+						</div>
+					</div>
+			</fieldset>
+			<fieldset class="formfield" style="display: block;" ng-if="croRemark!='' && croRemark!=undefined ">
+					<legend>CRO Justification</legend>
+					<div class="row clearfix">
+					<div ng-repeat="data in croRemark">
+					<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null">
+							<label class="control-label">CRO NAME</label> <input class="form-control"
+							value="{{data.sCroID}}" disabled="disabled" type="text">
+					</div>
+					<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null">
+							<label class="control-label">Remark</label> <input class="form-control"
+								disabled="disabled" value="{{data.sRemark}}" type="text">
+					</div>
+					<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null">
+							<label class="control-label">Subject To</label> <input class="form-control"
+								value="{{data.sSubTo}}" disabled="disabled" type="text" >
+					</div>
+					</div>	
+					</div>
+			</fieldset>
+				<fieldset class="formfield" style="display: block;">
+					<legend>Personal Information</legend>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Applicant Name</label> <input
+								class="form-control" ng-model="name" type="text"
+								name="Applicant Name" disabled="disabled">
+						</div>
+						<!-- <div class="col-md-3">
+							<label class="control-label">Mobile</label> <input
+								class="form-control" ng-model="mobile" type="text"
+								name="Mobile No" maxlength="10" disabled="disabled">
+						</div> -->
+						<div class="col-md-3">
+							<label class="control-label">Date of Birth</label> <input
+								id="dob" class="form-control" ng-model="dob" type="text"
+								name="Date Of Birth" disabled="disabled">
+						</div>
+							<div class="col-md-3">
+							<label class="control-label">Gender</label><br /> <input
+								type="radio" name="Gender" checked="checked" value="Male"
+								ng-model="gender" disabled="disabled" /> Male &nbsp; <input type="radio"
+								name="Gender" value="Female" ng-model="gender" disabled="disabled" /> Female
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Marital Status</label><br /> <input
+								type="radio" name="mstatus" checked="checked" value="Married"
+								ng-model="mStatus" disabled="disabled" /> Married &nbsp; <input type="radio"
+								 value="Single" ng-model="mStatus" disabled="disabled" /> Single
+						</div>
+						
+					</div>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Credit Card No</label><input
+								class="form-control" ng-model="credit" type="text" name="PinCode"
+								maxlength="6" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Tenor Applied</label><input
+								class="form-control" ng-model="tenor" type="text" name="PinCode"
+								maxlength="6"  disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Constitution</label><input
+								class="form-control" type="text" name="" ng-model="constitution"
+								maxlength="6"  disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Education</label><input
+								class="form-control" type="text" ng-model="education"
+								 disabled="disabled">
+						</div>
+					</div>
+					<div class="row clearfix">
+					<div class="col-md-3">
+							<label class="control-label">Age</label><input
+								class="form-control" type="text" ng-model="age"
+								disabled="disabled">
+					</div>
+					<div class="col-md-3">
+						<label class="control-label">Refer To Credit</label><input
+							class="form-control" type="text" ng-model="supecious"
+							disabled="disabled">
+					</div>
+					</div>
+				</fieldset>
+				<fieldset class="formfield" style="display: block;">
+					<legend>Email Information</legend>
+					<div class="row clearfix">
+						<div class="col-md-3" ng-repeat="id in email">
+							<label class="control-label">{{id.sEmailType.charAt(0).toUpperCase()+id.sEmailType.slice(1).toLowerCase()}} Email</label> <input
+								class="form-control" ng-model="id.sEmailAddr" type="text" name="Email" disabled="disabled">
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="formfield" style="display: block;">
+					<legend>Contact Information</legend>
+					<div class="row clearfix">
+						<!-- <div class="col-md-3" ng-repeat="phone in phn" >
+							<label class="control-label">{{phone.sPhoneType}}</label> <input  ng-if="phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+								<input ng-if="!phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+						</div> -->
+						<div  ng-repeat="phone in phn">
+						<div class="col-md-3" ng-if="phone.sPhoneType=='PERSONAL_MOBILE'">
+							<label class="control-label">Personal Mobile</label><input  ng-if="phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+								<input ng-if="!phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+							
+						</div>
+						<div class="col-md-3" ng-if="phone.sPhoneType=='PERSONAL_PHONE'">
+							<label class="control-label">Personal Phone</label><input  ng-if="phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+								<input ng-if="!phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+							
+						</div>
+						<div class="col-md-3" ng-if="phone.sPhoneType=='RESIDENCE_MOBILE'">
+							<label class="control-label">Residence Mobile</label><input  ng-if="phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+								<input ng-if="!phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+							
+						</div>
+						<div class="col-md-3" ng-if="phone.sPhoneType=='RESIDENCE_PHONE'">
+							<label class="control-label">Residence Phone</label><input  ng-if="phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+								<input ng-if="!phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+							
+						</div>
+						<div class="col-md-3" ng-if="phone.sPhoneType=='OFFICE_PHONE'">
+							<label class="control-label">Office Phone</label><input  ng-if="phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+								<input ng-if="!phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+							
+						</div>
+						<div class="col-md-3" ng-if="phone.sPhoneType=='OFFICE_MOBILE'">
+							<label class="control-label">Office Mobile</label><input  ng-if="phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+								<input ng-if="!phone.sAreaCode"
+								class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+							
+						</div>
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="formfield" style="display: block;">
+					<legend>Address Details</legend>
+					<div class="row clearfix">
+						<div class="col-md-3 column">
+							<label class="control-label">Select Addr Type</label>
+						</div>
+						<div class="col-md-3 column">
+							<select class="form-control" name="Employment Type"
+								id="select_addr" ng-model="addr_type"
+								ng-options="job.name for job in addrType track by job.name"></select>
+						</div>
+					</div>
+					<div id="addr_detail">
+						<div id="Residence" class="employment" style="display: block;">
+						<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Address Line 1</label> <input
+								class="form-control" ng-model="resaddr.sLine1" type="text"
+								name="address1" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Address Line 2</label> <input
+								class="form-control" ng-model="resaddr.sLine2" type="text"
+								name="address2" disabled="disabled" >
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Address Line 3</label> <input
+								class="form-control" ng-model="resaddr.sLine3" type="text"
+								name="address3" disabled="disabled" >
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">City</label> <input
+								class="form-control" value="{{resaddr.sCity}}" type="text" disabled="disabled">
+						</div>
+					</div>
+					<div class="row clearfix">
+					<div class="col-md-3">
+							<label class="control-label" style="float: none;">State </label>
+							 <input
+								id="statelist" class="form-control" ng-model="resaddr.sState" type="text"
+								name="State" disabled="disabled">
+						</div>
+					<div class="col-md-3">
+							<label class="control-label">Pin Code</label> <input
+								class="form-control" value="{{(resaddr.iPinCode!=0 ? resaddr.iPinCode : '')}}" type="text" name="PinCode"
+								maxlength="6"  disabled="disabled">
+						</div>
+					<div class="col-md-3">
+							<label class="control-label">Monthly Rent</label> <input
+								class="form-control" ng-model="resaddr.dRentAmt" type="text" 
+								 disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Resi Addr Type</label> <input
+								class="form-control" ng-model="resaddr.sResAddrType" type="text"
+								 disabled="disabled">
+						</div>
+					</div>
+					<div class="row clearfix">
+					<div class="col-md-3">
+							<label class="control-label">Month at addr</label> <input
+								class="form-control" value="{{resaddr.iMonthAtAddr!=0 ? resaddr.iMonthAtAddr : ''}}" type="text"  disabled="disabled">
+						</div>
+					<div class="col-md-3">
+							<label class="control-label">Month at city</label> <input
+								class="form-control" value="{{resaddr.iMonthAtCity!=0 ? resaddr.iMonthAtCity : ''}}" type="text"
+								 disabled="disabled">
+						</div>
+					</div>
+				</div>
+					<div id="Office" class="employment">
+						<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Address Line 1</label> <input
+								class="form-control" ng-model="officeaddr.sLine1" type="text"
+								name="address" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Address Line 2</label> <input
+								class="form-control" ng-model="officeaddr.sLine2" type="text"
+								name="complete address" disabled="disabled" >
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Address Line 3</label> <input
+								class="form-control" ng-model="officeaddr.sLine3" type="text"
+								name="address3" disabled="disabled" >
+						</div>
+							<div class="col-md-3">
+							<label class="control-label">City</label> <input
+								class="form-control" value="{{officeaddr.sCity}}" type="text" disabled="disabled">
+						</div>
+					
+					</div>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label" style="float: none;">State </label>
+							 <input
+								id="statelist" class="form-control" ng-model="officeaddr.sState" type="text"
+								name="State" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Pin Code</label> <input
+								class="form-control" value="{{(officeaddr.iPinCode!=0 ? officeaddr.iPinCode : '')}}" type="text" name="PinCode"
+								maxlength="6"  disabled="disabled">
+						</div>
+					</div>
+				
+						</div>
+						<div id="Permanent" class="employment">
+							<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Address Line 1</label> <input
+								class="form-control" ng-model="peraddr.sLine1" type="text"
+								name="address" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Address Line 2</label> <input
+								class="form-control" ng-model="peraddr.sLine2" type="text"
+								name="complete address" disabled="disabled" >
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Address Line 3</label> <input
+								class="form-control" ng-model="peraddr.sLine3" type="text"
+								name="address3" disabled="disabled" >
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">City</label> <input
+								class="form-control" value="{{peraddr.sCity}}" type="text" disabled="disabled">
+						</div>
+					</div>
+				<div class="row clearfix">
+				<div class="col-md-3">
+							<label class="control-label" style="float: none;">State </label>
+							 <input	id="statelist" class="form-control" ng-model="peraddr.sState" type="text"
+								name="State" disabled="disabled">
+						</div>
+				<div class="col-md-3">
+							<label class="control-label">Pin Code</label> <input
+								class="form-control" value="{{(peraddr.iPinCode!=0 ? peraddr.iPinCode : '')}}" value="" type="text" name="PinCode"
+								maxlength="6"  disabled="disabled">
+						</div>
+					<div class="col-md-3">
+							<label class="control-label">Monthly Rent</label> <input
+								class="form-control" ng-model="peraddr.dRentAmt" type="text" 
+								maxlength="6"  disabled="disabled">
+					</div>
+					<div class="col-md-3">
+					<label class="control-label">Resi Addr Type</label> <input
+						class="form-control" ng-model="peraddr.sResAddrType" type="text"
+						maxlength="6"  disabled="disabled">
+					</div>
+					</div>
+					<div class="row clearfix">
+					<div class="col-md-3">
+							<label class="control-label">Month at addr</label> <input
+								class="form-control" value="{{peraddr.iMonthAtAddr!=0 ? peraddr.iMonthAtAddr : ''}}" type="text"  disabled="disabled">
+					</div>
+					<div class="col-md-3">
+							<label class="control-label">Month at city</label> <input
+								class="form-control" type="text"  value="{{peraddr.iMonthAtCity!=0 ? peraddr.iMonthAtCity : ''}}"
+								 disabled="disabled">
+						</div>
+					</div>
+						</div>
+					</diV>
+				</fieldset>
+				<fieldset class="formfield" style="display: block;">
+					<legend>Professional Information</legend>
+					<div id="employer_detail">
+						<div id="Job" class="employment">
+							<div class="row clearfix">
+								<div class="col-md-3 column">
+									<label class="control-label">Employment Type</label> <input
+										 class="form-control" ng-model="employment_type"
+										type="text" disabled="disabled">
+								</div>
+								<div class="col-md-3 column">
+									<label class="control-label">Employer</label> <input
+										id="job_compnay_name" class="form-control" ng-model="employer"
+										type="text" name="Company Name" disabled="disabled">
+								</div>
+								<div class="col-md-3 column">
+									<label class="control-label">Time with this Employer</label>
+										 <input
+										 class="form-control" ng-model="time_employer"
+										type="text" name="Time With This Employee" disabled="disabled">
+								</div>
+								<div class="col-md-3" ng-if="constitution.toUpperCase()!='SELF-EMPLOYED'">
+									<label class="control-label">Last Month Salary</label>
+									 <input	class="form-control" ng-model="lastsalary" type="text" 
+										 disabled="disabled">	 
+								</div>
+								<div class="col-md-3" ng-if="constitution.toUpperCase()=='SELF-EMPLOYED'">
+									<label class="control-label">Last Year IT Amount</label>
+									 <input	class="form-control" ng-model="ITamt" type="text" 
+										 disabled="disabled">	 
+								</div>
+							</div>
+							<div class="row clearfix">
+									<div class="col-md-3">
+									<label class="control-label">Total Experience</label>
+									 <input	class="form-control" ng-model="workExp" type="text" 
+										 disabled="disabled">	 
+									</div>
+							</div>
+						</div>
+					</diV>
+				</fieldset>
+				<fieldset class="formfield" style="display: block;">
+					<legend> Product Information</legend>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Dealer Name</label> <input id="dealerName"
+								ng-model="dealer" class="form-control" type="text"
+								name="Dealername" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Asset Category</label> <input id="newcity"
+								ng-model="assetctg" class="form-control" type="text" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Make</label> <input
+								id="projectname" ng-model="project" class="form-control"
+								type="text" name="Project" disabled="disabled">
+						</div>
+							<div class="col-md-3">
+							<label class="control-label">Model</label> <input
+								 ng-model="model" class="form-control"
+								type="text" disabled="disabled">
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="formfield" style="display: block;" ng-if="CureentLoan!=''">
+					<legend>Loan Information</legend>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Current Loan</label> <input
+								ng-model="CureentLoan" class="form-control" type="text"
+								 disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Current Loan EMI</label> <input
+								ng-model="loanEmi" class="form-control" type="text"
+								 disabled="disabled">
+						</div>
+					</div>
+				</fieldset>
+				<fieldset class="formfield" style="display: block;">
+					<legend> BRE Information</legend>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">CIBIL Score</label> <input id="cibil_score"
+								ng-model="cibilS" class="form-control" type="text"
+								name="Cibil" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Office Stability</label> <input
+								class="form-control" ng-model="offAddrRslt" type="text"
+								 disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Resi Stability</label> <input
+								class="form-control" ng-model="resAddrRslt" type="text"
+								 disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Case Status</label> <input
+								class="form-control" ng-model="applctnstatus" type="text"
+								 disabled="disabled">
+						</div>
+						</div>
+						<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Current Stage</label> <input
+								class="form-control" ng-model="currStage" type="text"
+								 disabled="disabled">
+						</div>
+						<div ng-repeat="data in bureau ">
+						<div class="col-md-3">
+							<label class="control-label">{{data.sFldName}}</label> <input ng-if="data.sFldName!='PAN Verification'"
+								ng-model="data.sFldVal" class="form-control" type="text"
+								name="data.sFldName" disabled="disabled">
+								
+								<input ng-if="data.sFldName =='PAN Verification'"
+								ng-model="data.sMsg" class="form-control" type="text"
+								name="data.sFldName" disabled="disabled">
+						</div>
+						<div class="col-md-3" ng-if="data.sFldName =='PAN Verification'">
+							<label class="control-label">PAN Score</label> <input
+								ng-model="data.fNameScore" class="form-control" type="text"
+								name="data.sFldName" disabled="disabled">
+								 
+						</div>
+						</div>
+					</div>
+				</fieldset>
+					<fieldset class="formfield" style="display: block;">
+					<legend>Decision</legend>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Applied Amount </label> 
+							<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span> <input id="project_amount"
+									class="form-control" ng-model="Amount" type="text"
+									name="Amount" accesskey="commas" disabled="disabled">
+							</div>
+						</div>
+							<div class="col-md-3">
+								<label class="control-label">Eligibility Amount</label> 
+								<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span> <input
+									ng-model="croDec.dEligibleAmt" class="form-control" type="text" disabled="disabled">
+							</div>
+								
+							</div>
+							<div class="col-md-3">
+								<label class="control-label">Approved Amount</label> 
+								<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span><input
+									ng-model="croDec.dAmtAppr" class="form-control" type="text" disabled="disabled">
+							</div>
+							</div>
+							<div class="col-md-3">
+								<label class="control-label">Tenor </label> <input
+									ng-model="croDec.iTenor" class="form-control" type="text" disabled="disabled">
+							</div>
+						</div>							
+						<div class="row clearfix">
+							<div class="col-md-3">
+								<label class="control-label">EMI </label> <input
+									ng-model="croDec.dEmi" class="form-control" type="text" disabled="disabled">
+							</div>
+						    <div class="col-md-3">
+							 <label class="control-label"> Eligibility Remark</label> <input
+								ng-model="Eremark" class="form-control" type="text"
+								name="eRemark" disabled="disabled">
+						   </div>
+						  <!--   <div class="col-md-3">
+							 <label class="control-label">FOIR Adjusted Amount</label> <input
+								ng-model="FOIR" class="form-control" type="text"
+								 disabled="disabled">
+						   </div> -->
+						   	<div class="col-md-3"  ng-repeat="dtls in DetailsResp" ng-if="dtls.Outcome!=' '">
+								<label class="control-label">Reason </label> <input
+									value="{{dtls.RuleName}} : {{dtls.Remark}}" class="form-control" type="text" disabled="disabled">
+							</div>
+						
+							<div class="col-md-3" ng-repeat="dtls in DetailsResp" ng-if="dtls.Outcome!=' '">
+								<label class="control-label"> Outcome</label> <input
+									value="Criteria {{dtls.CriteriaID}} , Outcome :{{dtls.Outcome}} " class="form-control" type="text"
+									 disabled="disabled">
+							</div>
+					</div>
+							
+				</fieldset>
+				
+				
+				<fieldset class="formfield" style="display: block;">
+					<legend>KYC Information</legend>
+					<div class="row clearfix">
+						<div class="col-md-3" ng-repeat="kyc in details.oReq.oApplicant.aKycDocs">
+							<label class="control-label">{{kyc.sKycName}} NUMBER</label> <input
+								class="form-control" type="text" value="{{kyc.sKycNumber}}" disabled="disabled">
+						</div>
+<!-- 						<div class="col-md-3"> -->
+<!-- 							<label class="control-label">Aadhaar Number</label> <input -->
+<!-- 								class="form-control" ng-model="aadhar" type="text" -->
+<!-- 								name="Aadhar Number" placeholder="XXXX XXXX XXXX"> -->
+<!-- 						</div> -->
+					</div>
+				</fieldset>
+				<fieldset class="formfield" id="kyc_fielset"
+					style="margin-bottom: 40px; display: block;">
+					<legend>KYC Document</legend>
+					<div class="col-md-3">
+							<a><img alt="Document Not available"  title="APPLICANT-PHOTO" accesskey="{{custimg}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{custimg}}" name="{{custimgId}}" style="border: none;">
+								<label class="control-label">Applicant Photo</label></a> 
+					</div>
+					<div class="col-md-3">
+							<a><img alt="Document Not available"  title="PAN" accesskey="{{src_img}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{src_img}}" name="{{panimgID}}" style="border: none;">
+								<label class="control-label">PAN</label></a> 
+					</div>
+					<div class="col-md-3">
+						<a><img alt="Document Not available"  title="AADHAAR" accesskey="{{aadhar}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{aadhar}}" name="{{adhrimgID}}" style="border: none;">
+								<label class="control-label">Aadhaar Card</label></a>
+					</div>
+					<div class="col-md-3">
+						<a><img alt="Document Not available"  title="DRIVING-LICENSE" accesskey="{{dlicense}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{dlicense}}" name="{{drvlimgID}}" style="border: none;">
+								<label class="control-label">Driving License</label></a>
+					</div>
+					<div class="col-md-3">
+						<a><img alt="Document Not available"  title="PASSPORT" accesskey="{{passport}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{passport}}" name="{{passimgID}}" style="border: none;">
+								<label class="control-label"> Passport</label></a>
+					</div>
+					<div class="col-md-3">
+							<a><img alt="Document Not available"  title="INCOME-PROOF1" accesskey="{{income1}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{income1}}" name="{{income1Id}}" style="border: none;">
+								<label class="control-label">Income Proof 1</label></a> 
+					</div>
+					<div class="col-md-3">
+							<a><img alt="Document Not available"  title="INCOME-PROOF2" accesskey="{{income2}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{income2}}" name="{{income2Id}}" style="border: none;">
+								<label class="control-label">Income Proof 2</label></a> 
+					</div>
+					<div class="col-md-3">
+							<a><img alt="Document Not available"  title="OTHER" accesskey="{{others}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{others}}" name="{{otherId}}" style="border: none;">
+								<label class="control-label">Other</label></a> 
+					</div>
+					
+<!-- 					current change -->
+					
+					
+				</fieldset>
+				<fieldset class="formfield" style="display: block;">
+					<legend>IPA Details</legend>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Approved Amount</label> <input id=""
+								 class="form-control" type="text"
+								name="" ng-model="apprvdAmt" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Scheme</label> <input
+								id=""  class="form-control"
+								type="text" name="" ng-model="scheme" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Total Asset Cost</label>
+							<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span> <input id=""
+									class="form-control"  type="text"
+									name="" accesskey="commas" ng-model="totalAssetCost" disabled="disabled">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Margin Money</label> <input id=""
+								 class="form-control" type="text"
+								name="" ng-model="marginMoney" disabled="disabled">
+						</div>
+					</div>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label">Margin Money Instrument</label> <input
+								id=""  class="form-control"
+								type="text" name="" ng-model="marginMoneyInst" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label" style="width: 104%;">Margin Money Confirmation</label>
+							<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span> <input id=""
+									class="form-control"  type="text"
+									name="" accesskey="commas" ng-model="marginMoneyConf" disabled="disabled">
+							</div>
+						</div>
+						<div class="col-md-3">
+						<label class="control-label">Advanced EMI</label>
+							<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span> <input id=""
+									class="form-control"  type="text"
+									name="" accesskey="commas" ng-model="addvncEmi" disabled="disabled">
+							</div>
+						</div>
+						<div class="col-md-3">
+						<label class="control-label">Processing Fees</label>
+							<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span> <input id=""
+									class="form-control"  type="text"
+									name="" accesskey="commas" ng-model="processnFee" disabled="disabled">
+							</div>
+						</div>
+					</div>
+						<div class="row clearfix">
+						<div class="col-md-3" ng-repeat="data in asstmodal">
+						<label class="control-label">Asset Model No</label>
+							<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span> <input id=""
+									class="form-control"  type="text"
+									name="" accesskey="commas" value="{{data}}" disabled="disabled">
+							</div>
+						</div>
+						</div>
+				</fieldset>
+				<fieldset class="formfield" id="addtnal_docs"
+					style="margin-bottom: 0px; display: block;">
+					<legend>Additional Documents</legend>
+					<div class="row clearfix">
+					<div class="col-md-3">
+						<a><img alt="Document Not available"  title="{{appFormName}}" accesskey="{{appform}}" data-toggle="modal"
+								data-target="#myModalnew" class="preview" src="{{appform}}" name="{{appformId}}" style="border: none;">
+								<label class="control-label">Application Form</label></a> 
+					</div>
+					<div class="col-md-3">
+						<a>
+						<img alt="Document Not available" title="{{agreemntName}}" accesskey="{{agreemnt}}" data-toggle="modal"
+							  data-target="#myModalnew" class="preview"	src="{{agreemnt}}" name="{{agrmtId}}" style="border: none;">
+							<br>  <label class="control-label">Agreement</label>
+					</a>
+					</div>
+					<div class="col-md-3">
+						<a>
+						<img alt="Document Not available" title="{{achName}}"  accesskey="{{achdata}}" data-toggle="modal"
+							data-target="#myModalnew" 	class="preview"	src="{{achdata}}" name="{{achId}}" style="border: none;">
+							<label class="control-label">ACH/ECS & Cancelled Cheque</label>
+						</a>
+					</div>
+					<div class="col-md-3">
+						<a>
+							<img alt="Document Not available"  title="{{disbursName}}"	accesskey="{{disburstment}}" data-toggle="modal"
+								data-target="#myModalnew"	class="preview"	src="{{disburstment}}" name="{{disbId}}" style="border: none;">
+								<label class="control-label">Disbursement Kit</label>
+					
+						</a>
+					</div>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-3">
+						<a>
+							<img alt="Document Not available" title="{{addKycName}}" accesskey="{{addKyc}}" data-toggle="modal"
+								data-target="#myModalnew" 	class="preview"	src="{{addKyc}}" name="{{addkycId}}" style="border: none;">
+								<label class="control-label">Additional KYC</label>
+						</a>
+					</div>
+					<div class="col-md-3"  ng-if="extraPresent">
+						<a><img alt="Document Not available" title="{{extraname}}" accesskey="{{extra}}" data-toggle="modal"
+								data-target="#myModalnew" 	class="preview"	src="{{extra}}" name="{{extraId}}" style="border: none;">
+								<br><label class="control-label">Extra Documents</label>
+						</a>
+					</div>
+					<div class="col-md-3" ng-if="evidPresent">
+					<a><img alt="Document Not available" title="{{evidencename}}" accesskey="{{evidence}}" data-toggle="modal"
+						data-target="#myModalnew" 	class="preview"	src="{{evidence}}" name="{{evdnId}}" style="border: none;">
+						<br><label class="control-label">Evidence Images</label>
+						</a>
+					</div>
+				</div>
+			</fieldset>
+		</form>
+<!-- 		****************************************END  ************************************************* -->
+		</div>
+	</div>
+	</div>
+	<div id="chat_window" class="row clearfix">
+		<div class="chat_header_box" style="font-weight: bold;">
+			<a id="minimize"
+				style="vertical-align: middle; border: 1px solid #fff; color: #fff; padding: 0px 5px 0px 5px; text-decoration: none;">-</a>
+			<a id="maxmize"
+				style="vertical-align: middle; border: 1px solid #fff; color: #fff; padding: 0px 5px 0px 5px; text-decoration: none;">+</a>
+			<a id="" title="{{}}"
+				style="vertical-align: middle; color: #fff; padding: 0px 5px 0px 5px; text-decoration: none;">{{
+				users.DSA.name}}</a> <a
+				style="float: right; padding-right: 10px; color: #fff;"
+				onclick="closeSocket();" id="btn_close">Close</a>
+		</div>
+		<div id="message_container">
+			<ul id="messages">
+			</ul>
+			<div id="input_message_container">
+				<form id="form_send_message" method="post" action="#">
+					<input type="text" id="input_message"
+						placeholder="Type your message here..." /> <input type="submit"
+						id="btn_send" onclick="send('');" value="Send" />
+					<div class="clear"></div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<form id="offrform">
+	<div class="row clearfix" id="OfferPanel"
+		style="position: absolute; display: none; left: 25%; top: 28%;"
+		ng-if="authenticate('NOFRS')">
+		
+		<div class="col-md-12"
+			style="background-color: white; border: 1px solid #C9D7E1;">
+			<div class="row clearfix" id="searchBox">
+				<!-- <span class="glyphicon glyphicon-chevron-left"></span> -->
+				<div class="col-md-2 thumbnail-box" ng-repeat="offer in OfferArrey"
+					id="OfferBox{{$index}}" ng-click="Load_Offer(offer.ID,$event)">
+				<!-- 	<span class="badge">{{offer.Count}}</span>  -->
+				<img
+						ng-src="{{offer.Icon}}" />
+					<div>{{offer.Name}}</div>
+					<div class="active_bar" id="active{{$index}}"></div>
+				</div>
+			</div>
+			<div class="row clearfix offer_box" style="overflow-y: scroll;height: 200px;">
+				<ul>
+					<li ng-repeat="moreoffer in AvailebleOffers">
+						<div class="col-md-2">
+							<img alt="" ng-src="{{moreoffer.Icon}}" width="28px"
+								height="28px">
+						</div>
+						<div class="col-md-8">
+							<span>{{moreoffer.Name}}</span>
+						</div>
+						<div class="col-md-2">
+							<div class="roundedTwo">
+								<input type="checkbox" id="Offer{{$index}}" name="check" class="checkBox"
+									ng-model="offer[moreoffer]" ng-checked={{moreoffer.selected}}
+									autocomplete="off"
+									ng-change="checkboxUpdate(offer[moreoffer],$index)" /> <label
+									for="Offer{{$index}}" style="box-shadow:0px 0px 4px rgba(0, 0, 0, 1);"></label>
+							</div>
+						</div>
+						<!-- <div class="col-md-2">
+						<span class="glyphicon glyphicon-pencil" id="changeActive{{$index}}" title="edit" ng-click="editDescInfo(moreoffer.Code , moreoffer.Name)"style="display: none;">
+						</span>
+							
+						</div> -->
+					</li>
+				</ul>
+			</div>
+			<div class="row clearfix lo" style="background-color: #DADADB;">
+				<div class="col-md-12">
+					<a class="add-button-div-notification" id="SendOffer" style="float: left">Offer</a>
+					<input type="text" id="descReason" maxlength="150" style="margin: 6px 0px; margin-left: 10px;" ng-if="InstitutionID=='4019'">
+<!-- 						ng-click="updateStatus()" style="float: left">Offer</a>  --> 
+					<span  class="text-danger" id="msg"></span>
+						<a	class="add-button-div-notification" id="closeOffer"
+						style="float: right">Close</a>
+				</div>
+			</div>
+		</div>
+<!-- 		required ng-pattern="/^(\D)+$/" -->
+	</div>
+</form>
+	<!--   <div class="row clearfix hiden" id="DescInfo"style="position: absolute; display: none;width: 46%; left: 30%; top: 28%;background-color: white; border: 1px solid #C9D7E1;">
+		<div class="panel_heading"><label>Description </label><span class="text-danger" id="errorheading" style="float:right ;margin-top: 3px"> </span></div>
+		<div class="panel_body">
+		  <div class="row clearfix">
+		   <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
+			  padding: 10px; font-weight: bold" id="descContainer" contenteditable="true"spellcheck="false"> 
+			  </div>
+		  </div>
+		</div>
+		<div class="panel_footer text-right">
+		  <a class="TC_button" ng-click="saveDescData(codeVal,offrName)">Save</a>													
+		  <a class="TC_button" ng-click="closeDescPanel()">Close</a>
+		</div>
+	</div> -->
+	 <div class="row clearfix hiden" id="declinereason"style="position: absolute; display: none;width: 46%; left: 30%; top: 28%;background-color: white; border: 1px solid #C9D7E1;">
+		<div class="panel_heading"><label>Description </label><span class="text-danger" id="errorheading" style="float:right ;margin-top: 3px"> </span></div>
+		<div class="panel_body">
+		 <!--  <div class="row clearfix">
+		   <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
+			  padding: 10px; font-weight: bold" id="reasoncontainer" contenteditable="true"spellcheck="false"> 
+			  </div>
+		  </div> -->
+		  <div class="row clearfix">
+		  <label style="margin-left: 15px">Remark :</label>
+		   <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
+			  padding: 10px; font-weight: bold" id="reason1container" contenteditable="true"spellcheck="false"> 
+			  </div>
+		  </div>
+		   <div class="row clearfix">
+		   <label style="margin-left: 15px">Subject to  :</label>
+		   <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
+			  padding: 10px; font-weight: bold" id="reason2container" contenteditable="true"spellcheck="false"> 
+			  </div>
+		  </div>
+		</div>
+		<div class="panel_footer" style="height: 27px;">	
+			<span id="declinemsg" class="text-danger" style="text-align: left;"></span>
+			<div class="text-right" style=" display: inline; float: right;">
+		  	<a class="TC_button" ng-click="saveDclnData()">Submit</a>	
+		   <a class="TC_button" ng-click="closeDclnData()">Close</a>	
+		   </div>												
+<!-- 		  <a class="TC_button" ng-click="closeDclnPanel()">Close</a> -->
+		</div>
+	</div>
+	 <div class="row clearfix hiden" id="approveReason"style="position: absolute; display: none;width: 46%; left: 30%; top: 28%;background-color: white; border: 1px solid #C9D7E1;">
+		<div class="panel_heading"><label>Description </label><span class="text-danger" id="errorheading" style="float:right ;margin-top: 3px"> </span></div>
+		<div class="panel_body">
+		 <div class="row clearfix" id="enterAmount" style=" margin-top: 5px;">
+		 	<div class="col-md-4"><label>Approve Amount :</label>
+		 <input type="text" class="checkVisible" maxlength="20" ng-model="croDec.dAmtAppr" id="ApprvValue" style="width: 100%;"/></div>
+		 	<div class="col-md-4"><label>EMI :</label>
+		 <input type="text" class="checkVisible" maxlength="20" ng-model="croDec.iTenor" id="emiValue" style="width: 100%;"/></div>
+		 	<div class="col-md-4"><label>Tenor :</label>
+		 <input type="text" class="checkVisible" maxlength="20" ng-model="croDec.dEmi" id="tenorValue" style="width: 100%;"/></div>
+		 
+		 </div>
+		  <div class="row clearfix">
+		  <label style="margin-left: 15px; margin-top: 5px;">Remark :</label>
+		   <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
+			  padding: 10px; font-weight: bold" id="appr1Container" contenteditable="true"spellcheck="false"> 
+			  </div>
+		  </div>
+		   <div class="row clearfix">
+		   <label style="margin-left: 15px">Subject to  :</label>
+		   <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
+			  padding: 10px; font-weight: bold" id="appr2Container" contenteditable="true"spellcheck="false"> 
+			  </div>
+		  </div>
+		</div>
+		<div class="panel_footer" style="height: 27px;">
+			<span id="approvemsg" class="text-danger" style="text-align: left;"></span>
+		
+			<div class="text-right" style=" display: inline; float: right;">
+		   <a class="TC_button" ng-click="saveApprvData()">Submit</a>	
+		   <a class="TC_button" ng-click="closeApprvData()">Close</a>	
+		   </div>							
+		</div>
+	</div>
+	<div id="checkConfirmation" class="modal fade">
+		<div id="confirm-title" class="modal-header btn-danger" style="padding: 6px 12px;">
+			<h4 class="modal-title">Are you Sure...?</h4>
+		</div>
+		<div class="modal-body">
+			<p id="confirm-msg"></p>
+		</div>
+		<div class="modal-footer" style="margin-top: 17px;">
+    		<button type="button" data-dismiss="modal" class="btn btn-danger" id="saveLosData">Ok</button>
+    		<button type="button" data-dismiss="modal" class="btn btn-info">Cancel</button>
+  		</div>
+	</div>

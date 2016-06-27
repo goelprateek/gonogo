@@ -1,0 +1,1013 @@
+body {
+	background-color: #fff;
+}
+a:hover{
+	cursor: pointer;
+}
+ #scoring_main_container .list-group-item {
+padding: 10px 9px;
+height: 47px;
+color: #FFF;
+/* font-weight: bold; */
+border-right: 1px solid #FFF;
+}
+#scoring_main_container .leftbar_scroll {
+	border: none;
+	min-height: 300px;
+	max-height: 492px;
+	margin-bottom: 40px;
+}
+
+
+/* this is for policy and analytics */
+.Name {
+	float: left;
+	width: 85%;
+	font-weight:bold;
+	display: inline-block;
+}
+
+.list-group-item:hover {
+	cursor: pointer;
+	background-color: #fff;
+}
+
+
+
+
+
+
+
+.list-group-item.item {
+	padding: 0px;
+	margin-bottom: 8px;
+	box-shadow: 0px 0px 1px 0px #E6E0E0;
+}
+
+
+.navigation_icon {
+	position: absolute;
+	right: 17px;
+	height: 25px;
+	width: 11px;
+}
+
+.table_panels {
+	padding: 0px;
+	overflow: hidden;
+}
+
+#table_heading {
+	text-align: center;
+	/* padding: 3px; */
+	padding: 10px 0px 5px;
+	/* border-right: 1px solid #DADADB; */
+}
+
+#table_heading label {
+	font-weight: bold;
+}
+
+#scoring_main_container {
+	padding: 0px;
+}
+
+.form-control.weight, .form-control.context_values {
+	width: 60px;
+/* 	padding-right: 6px; */
+/* 	text-align: center; */
+}
+
+
+/* .form-control {
+	padding: 1px;
+	height: 27px;
+} */
+
+.form-control.bullion_values {
+	width: 14%;
+}
+
+
+.logic select {
+	width: 13%;
+	border-bottom: 1px solid grey;
+	background: transparent;
+	border: none;
+	border-bottom: 1px solid grey;
+	border-radius: 0px;
+	float: left;
+	outline: none;
+}
+
+.context select {
+	width: 20%;
+	outline:none;
+	appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+}
+
+
+.logic_feild_name {
+	font-size: 11px;
+	float: left;
+	width: 20%;
+	text-align: center;
+	padding-top: 3%;
+}
+
+.alert-danger {
+	width: auto;
+	float: right;
+	margin: 19px 8.5% 0px 0px;
+	padding: 2px 10px;
+	display: none;
+}
+
+@media ( min-width : 1200px) {
+	.context_score_box {
+		float: right;
+		margin: 0px 11px 0px 0px;
+	}
+	#score_matrix_main_div {
+/* 		width: 57%; for normal and changed for bank*/
+	width: 88%;
+	}
+	#adjustment_main_div {
+		width: 35%;
+		margin-right: -45px;
+	}
+}
+
+#logic_panel, #context_panel {
+	border: 1px solid #D0D8DB;
+	border-radius: 4px;
+	width: 98%;
+	margin-bottom: 20px;
+	display: none;
+	background-color: #fff;
+	/* position: absolute;
+	top: 7%; */
+/* 	margin-top: -10px; */
+}
+
+#logic_panel_heading, #context_panel_heading {
+	border-bottom: 1px solid #DADADB;
+	padding: 4px;
+	font-weight: bold;
+	background-color: #F0F4F6;
+}
+
+#logic_field_type, #context_field_type {
+	margin-top: 9px;
+}
+
+#logic_panel_body, #logic_panel_body1, #context_panel_body {
+	padding: 6px;
+}
+
+#logic_panel_body div, #logic_panel_body1 div, #context_panel_body div {
+	margin: 0px 0px 9px 0px;
+}
+
+#logic_panel_row2, #context_panel_row2 {
+	/* border: 1px solid #DADADB; */
+	padding: 3px;
+	margin-bottom: 9px;
+	/* border-radius: 2px; */
+	display: none;
+}
+
+#logic_panel_row2 div, #context_panel_row2 div {
+	margin: 0px;
+}
+
+#context_logic_expression {
+	padding: 7px 0px;
+}
+
+#logic_panel_row3, #context_panel_row3 {
+	background-color: #F0F4F6;
+	border-top: 1px solid #DADADB;
+	/* margin-top: 25px; */
+}
+
+.logic_matrix {
+	width: 15%;
+	display: inline-block;
+	text-align: left;
+	font-weight: normal;
+	overflow: hidden;
+}
+
+#item_box input, #item_box select {
+/* 	height: 27px; */
+	text-align: center;
+}
+
+#logic_panel_body input, #logic_panel_body select {
+	height: 27px;
+}
+
+#logic_panel_body1 input, #logic_panel_body1 select {
+	height: 27px;
+}
+
+.score {
+	width: 45px;
+/* 	height: 21px; */
+	display: inline-block;
+	text-align: center;
+	margin-right: 12px;
+	font-weight: bold;
+	padding: 0px;
+}
+
+.add_button_div button {
+	float: none;
+}
+
+
+.scoreContainer input[id^="value1"], input[id^="value2"], input[id^="score"] {
+	display: none;
+}
+
+.scoreContainer select.context_value {
+	border: 1px solid #A8A6A6;
+	margin: 3px 15px 0px;
+	width: 45px;
+	border-radius: 4px;
+	color: inherit;
+	padding-right: 6px;
+	text-align: center;
+}
+
+#logic_panel select, #context_panel select {
+	text-align: left;
+	appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	outline: none;
+}
+
+#score_matrix_main_div {
+	padding-left: 0px;
+}
+
+#master_upload_panel {
+/* 	width: 28%; */
+	background-color: #FFF;
+	height: 250px;
+	display: block;
+	left: 29%;
+	top: 35%;
+	position: absolute;
+	border: 1px solid #D0D8DB;
+	border-radius: 9px;
+	box-shadow: 0px 0px 5px 0px rgba(138, 138, 138, 0.6);
+	overflow: hidden;
+	display: none;
+}
+
+#master_file {
+	display: block;
+	height: auto;
+	opacity: 1;
+	width: 100%;
+}
+
+.scoreContainer select.form-inline {
+	margin: 5px 1px;
+}
+
+
+
+.border-row {
+	padding: 5px 0px;
+	border-top: 1px solid #D0D8DB;
+}
+
+.table-panel {
+	margin: 5px 0px 20px 0px;
+	display: none;
+/* 	padding: 5px; */
+}
+/* is commented because giving extra space in each msgs */
+
+/* for add flat panel */
+/* .name { */
+/* 	width: 32%; */
+/* 	display: inline-block; */
+/* } */
+
+
+.float-right {
+	height: 30px;
+	text-align: right;
+	float: right;
+}
+
+/* .table tbody>tr>td {
+	border: none;
+} */
+.table>thead>tr>th {
+	border-bottom: 1px solid #DDD;
+}
+
+.active_bar {
+	width: 80%;
+	display: block;
+	margin: 0px 7px;
+}
+
+.CatError {
+	display: block;
+	color: #F00;
+	margin-top: 50px;
+	text-align: center;
+}
+
+.rule_edit_btn {
+	position: absolute;
+	right: 15px;
+	top: 1px;
+	font-size: 15px;
+	display: none;
+	margin-left:15px;
+}
+
+.rule_delete_btn {
+	position: absolute;
+	right: 51px;
+	top: 1px;
+	font-size: 15px;
+	display: none;
+}
+
+.delete-rule {
+	font-size: 25px;
+	color: #777;
+	opacity: 0.7;
+	display: block;
+	margin: -7px 0px 0px 15px;
+	font-weight: bold;
+}
+
+.fname {
+	padding: 0px 22px 0px 0px;
+	overflow: hidden;
+}
+
+.rule_delete_btn:hover, .delete-rule:hover {
+	color: red;
+	cursor: pointer;
+}
+
+.nospace:hover .rule_delete_btn,.item:hover .rule_delete_btn, .item:hover .rule_edit_btn,.nospace:hover .rule_edit_btn {
+	display: block;
+}
+
+#first_row {
+	border-bottom: 1px dashed #E7DBDB;
+}
+
+.logic_panel_row2 {
+	border-bottom: 1px dashed #D7D2D2;
+}
+
+.modal-footer {
+	padding: 4px 16px 3px;
+	margin-top: 0px;
+}
+
+
+#confirm.modal{
+width: 35%;
+position: fixed;
+top: 28%;
+left: 36%;
+overflow: visible;
+height: 40%;
+background-color: #FFF;
+max-height: 170px;
+border-radius:10px; 
+}
+/* -------------code for radio butioin active deactive----------*/
+
+
+
+/* /*-----------------------------yogesh report page csss-------*/
+.axis path, .axis line {
+	fill: none;
+	stroke: black;
+	shape-rendering: crispEdges;
+}
+
+.axis text {
+	font-family: sans-serif;
+	font-size: 11px;
+}
+
+.dot {
+	stroke: #000;
+}
+
+/* .legend {
+	padding: 5px;
+	font: 10px sans-serif;
+	background: yellow;
+	box-shadow: 2px 2px 1px #888;
+} */
+
+div.tooltip {
+	position: absolute;
+	text-align: center;
+	width: 40px;
+	height: 20px;
+	padding: 2px;
+	font: 12px sans-serif;
+	background: black;
+	color: white;
+	border: 0px;
+	border-radius: 8px;
+	pointer-events: none;
+	margin-top: 3px;
+}
+
+.summary {
+	color: #2ca02c;
+	padding: 10px 10px 10px 36px;
+	margin: 5px;
+	background-color: #99BF94;
+	height: 10px;
+	color: white;
+	margin-bottom: 10px;
+	padding-bottom: 20px;
+}
+
+#scoring_table td {
+	border: none;
+}
+
+.node ellipse {
+	fill: #fff;
+	stroke-width: 2px;
+}
+
+.node:hover {
+	cursor: pointer;
+}
+
+.node circle {
+	fill: #fff;
+	stroke-width: 2px;
+}
+
+.node text {
+	font: 12px sans-serif;
+}
+
+.link {
+	fill: none;
+	stroke: #ccc;
+	stroke-width: 2px;
+	z-index: 1000;
+}
+
+svg:not(:root ){
+	overflow: visible;
+}
+
+
+/*-----------policy -----*/ 
+
+.criteriaRules {
+	position: relative;
+	margin: 10px 0px;
+}
+
+#add-criteria-panel {
+	display: none;
+	margin-bottom: 20px;
+}
+
+.box {
+	border: 1px solid #DADADB;
+	margin: 20px 0px 0px 0px;
+	padding: 10px 10px 5px 10px;
+	position: relative;
+	/* padding: 8px 11px 6px 9px; */
+}
+
+.panel_footer {
+	border-top: 1px solid #DADADB;
+	background-color: #F0F4F6;
+	padding: 2px 10px;
+}
+
+.panel_body {
+	padding: 0px 10px 10px 10px;
+}
+
+/* input.form-control {
+	height: 27px;
+} */
+
+.inline_control {
+	display: inline-block;
+}
+
+.Rulebox {
+	border: 1px solid #DADADB;
+	margin: 20px 50px 0px 0px;
+	position: relative;
+	border-radius: 5px;
+	padding: 0px;
+	float: none;
+	display: inline-block;
+}
+
+.Inner_Operator_block {
+/* 	position: absolute; */
+	font-weight: bold;
+	margin-left: 6px;
+	top: 20px;
+	right: 0px;
+}
+
+.Outer_Operator_block {
+	position: absolute;
+	font-weight: bold;
+	margin-left: 6px;
+	bottom: -23px;
+	left: 45%;
+}
+
+.scoreContainer select.form-control {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	-ms-appearance: none;
+	appearance: none;
+	padding: 2px;
+	outline: none;
+}
+
+
+.btn-group-sm>a.btn {
+	min-width: 93px;
+	font-size: 14px;
+	color: #777;
+	text-align: left;
+	outline: none;
+}
+
+.btn-group-sm .btn:hover, .btn-group-sm > .btn .table-btn:hover {
+	text-decoration: underline;
+	color: #CB151B;
+	font-weight: bold;
+}
+
+.panel_heading {
+	border-bottom: 1px solid #DADADB;
+	padding: 4px;
+	font-weight: bold;
+	background-color: #F0F4F6;
+}
+
+.glyphicon-plus, .glyphicon-minus {
+/* 	position: absolute; */
+/* 	color: #ADA4A4; */
+/* 	right: 0px; */
+	margin-top: 7px;
+}
+
+#BScore, #AScore{
+	float: right;
+}
+	
+.glyphicon-remove {
+	display: none;
+position: absolute;
+right: 1px;
+top: 6px;
+}
+
+.glyphicon:empty {
+	width: 1.5em;
+	color: #656161;
+}
+
+.glyphicon:hover {
+	cursor: pointer;
+	color: red;
+	/* 	border: 1px solid #777; */
+}
+
+#bureau-score-body, #app-score-body {
+	margin-top: 10px;
+}
+
+
+
+
+/* #Tname, #Pname {
+	height: 27px;
+	width: 35%;
+	display: inline-block;
+} */
+.trans-select {
+	width: 100%;
+	border: medium none;
+	text-decoration: none transparent;
+	background: transparent;
+	text-align:center !important;
+/* 	padding-left: 39%; */
+	height: 30px;
+	appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	-ms-appearance: none;
+	outline: none;
+	color: white;
+	height: 30px
+}
+
+.trans-select option {
+	/* 	padding-left: 50%; */
+	text-align: center;
+}
+
+.trans-select:hover {
+	color: #000;
+	background-color: white;
+	outline: none;
+}
+
+.trans-select:FOCUS {
+	outline: none;
+	border: none;
+	appearance: none;
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	-ms-appearance: none;
+}
+
+
+.normal-select {
+	width: 90px;
+	display: inline-block;
+	height: 27px;
+	padding: 1px;
+	outline: none;
+}
+
+
+
+
+
+.custom-col-90 {
+	width: 86%;
+	vertical-align: top;
+}
+
+.custom-col-100P {
+	width: 100px;
+	vertical-align: middle;
+}
+
+.custom-col-110P {
+	width: 110px;
+}
+
+#Matrix_field_container {
+	margin-bottom: 10px;
+}
+
+.logic {
+	color: #4E5665;
+	padding: 2px;
+	border-bottom: 1px solid #E4E1E1;
+}
+
+.logic:nth-child(even) {
+	background-color: #F9FAFB;
+}
+
+
+
+.logic_expression:not(:last-child) {
+	border-bottom: 1px dotted #E6E6E6;
+}
+
+.row.nospace:nth-child(odd) 
+{
+ background-color: #F9FAFB;
+}
+
+/* .box:nth-child(even) { */
+/* 	background-color: #F9FAFB; */
+/* } */
+
+.CriteriaOP {
+	position: absolute;
+	right: -38px;
+	top: 42%;
+	font-weight: bold;
+}
+
+.abs-right {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+}
+
+.nospace {
+	margin: 0px 0px 2px 0px;
+	position: relative;
+}
+
+#scoring_main_container .list-group-item.add_new_box {
+	padding: 0px;
+	height: auto;
+	float: left;
+	width: 100%;
+	display: none;
+}
+
+
+
+.rule_delete_btn:hover, .rule_edit_btn:hover {
+	color: red;
+	cursor: pointer;
+}
+
+.row.nospace:hover .rule_delete_btn, .row.nospace:hover .rule_edit_btn {
+	display: inline-block;
+}
+
+#priority_block input, #priority_block select, #priority_block #radio_div
+	{
+	width: 15%;
+	display: inline-block;
+	margin-left: 10px;
+	outline: none;
+}
+
+
+
+.padding-20 {
+	padding: 0px 22px;
+}
+
+
+.add-button-div {
+	margin: 5px 0px;
+	color: #4E5665;
+	border: 1px solid #C5C6C8;
+	border-radius: 3px;
+	padding: 3px 3px;
+	font-weight: bold;
+	position: relative;
+	cursor: pointer;
+	text-decoration: none;
+	font-size: 13px;
+	background-color: #F6F7F8;
+	min-width: 100px; 
+}
+
+#decision_panel {
+	border: 1px solid #DADADB;
+	display: none;
+	margin: 10px;
+}
+
+
+
+
+.matrixBtn {
+	padding-left: 8px;
+	margin: 5px 10px;
+	min-width: 133px;
+	display: inline-block;
+	border: none;
+}
+
+
+.ruleContainer label {
+	text-align: center;
+	padding-top: 5px;
+}
+
+.ruleContainer input[type='radio'] {
+	display: inline-block;
+	margin: 0px 7px 0px 6px;
+}
+
+
+
+div[id^="radio_div"] {
+	display: inline-block;
+	width: 125px;
+	border: 1px solid #B6AAAA;
+	border-radius: 12px;
+	overflow: hidden;
+	margin: 0px 0px -10px 0px;
+	cursor: pointer;
+	height: 28px;
+}
+
+.radio_inner_div {
+	display: inline-block;
+	width: 100%;
+	position: relative;
+	height: 28px;
+	padding: 5px 10px;
+}
+
+.radiobuttonStatus_Value {
+	width: 23px;
+	height: 26px;
+	background: #0BAE13;
+	border-radius: 26px;
+	position: absolute;
+	bottom: 1px;
+	right: 1px;
+}
+
+.radiobuttonStatus_Field {
+	width: 23px;
+	height: 26px;
+	background: #F22D2D;
+	border-radius: 26px;
+	position: absolute;
+	bottom: 1px;
+	left: 1px;
+}
+
+input.radio {
+	text-align: right;
+	display: none;
+}
+
+
+.equal {
+	width: 15%;
+	display: inline-block;
+	margin-right: 5px;
+	margin-bottom: 2px;
+}
+
+
+.hiden {
+	display: none;
+}
+
+.glyphicon-plus {
+	position: absolute;
+	color: #ADA4A4;
+	margin: 10px;
+	right: 0px;
+}
+
+.glyphicon-plus:hover {
+	color: red;
+	cursor: pointer;
+}
+
+#decision_matrix th, #aggr_table th, #aggr_table{
+	padding: 5px 2px 2px 2px;
+	text-align: center;
+	vertical-align: baseline;
+}
+
+
+
+.scroll-fixed-top{
+	position: fixed;
+	top: 0px;
+	width: 100%;
+	left: 0px;
+	z-index: 1000;
+}
+
+.employment{
+	display: none;
+}
+#notification_tmp fieldset label{
+	font-weight: normal;
+	margin: 5px 0px 0px;
+}
+#notification_tmp legend{
+	width: auto;
+	min-width: 100px;
+	font-size: 14px;
+	margin: 0px;
+	border: none;
+	color: #777;
+	font-weight: bold;
+}
+.Pending{
+	background-color: blue;
+}
+
+.Approved{
+	background-color: green;
+}
+
+.Declined{
+	background-color: red;
+}
+
+.picked {
+	background-color: #CFCFCF;
+	border: 2px solid #fff;
+}	
+
+.picked:hover{
+	background-color: #CFCFCF;
+}
+
+#tooltip {
+	position: absolute;
+	height: auto;       
+	padding: 10px;
+	background-color: white;
+	border-radius: 10px;
+	-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+	z-index: 1;
+}
+
+.tooltipExp{
+	word-spacing: 5px;
+	letter-spacing: 1px;
+	border-bottom: 1px solid rgb(224, 214, 214);
+	padding: 5px;
+}
+ 
+#tooltip.hidden {
+    display: none;
+}
+
+
+
+
+.deleteRule {
+	display: none;
+}
+
+.criteriaRules:hover .deleteRule,.elgbltyRow:hover .deleteRule {
+	display: block;
+}
+
+.logic_expression {
+	border-bottom: 1px dashed #E9E4E4;
+	padding: 0px 5px 0px 10px;
+	position: relative;
+}
+
+.logic_matrix {
+	text-align: left;
+}
+
+.matrixBtn1 {
+	margin: 5px 10px;
+	min-width: 133px;
+	display: inline-block;
+	border: none;
+	background-color: #E3EAF0;
+	font-weight: 400;
+	text-align: center;
+}
+
+.matrixBtn1:hover .glyphicon-remove{
+	display: inline-block;
+}
+
+.MBtnValue {
+	border-left: 1px solid #777;
+	padding: 3px 10px;
+	margin-left: 5px;
+	font-weight: 400;
+}
+
+.MBtnLeft {
+	border-left: 1px solid grey;
+	float: right;
+	padding: 6px 21px 6px 6px;
+	margin: -4px;
+}
+
+.INOperator, .OUTOperator {
+	min-width: 43px;
+}
+
+.small {
+	font-size: 12px;
+	position: absolute;
+	right: 0;  
+	bottom: 0;
+	font-weight: bold;
+}

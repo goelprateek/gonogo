@@ -1,0 +1,1055 @@
+<style>
+select.form-control {
+	width: 100%;
+}
+
+.matrixBtn {
+	padding-left: 8px;
+	margin: 5px 10px;
+	min-width: 133px;
+	display: inline-block;
+	border: medium none;
+}
+#msform fieldset {
+	border: 1px solid #CFCFCF;
+	padding: 10px;
+	margin-bottom: 20px;
+	border-radius: 5px;
+	color: #777;
+	background-color: #F0F2F3;
+}
+
+#msform fieldset label {
+	font-weight: normal;
+	margin: 5px 0px 0px;
+}
+
+#msform legend {
+	width: auto;
+	min-width: 100px;
+	font-size: 14px;
+	margin: 0px;
+	border: none;
+	color: #777;
+	font-weight: bold;
+}
+
+#img_panel{
+padding: 15px;
+}
+
+#prevarrow , #nextarrow{
+height: 58px;
+width: 6%;
+}
+
+#document_preview{
+width: 100%; height: 100%; max-height: 400px;
+}
+
+.modal-title h5{
+font-size:14px;}
+</style>
+ 
+
+<div data-ng-controller="AnalyticsController" id="analyticsContainer"  class="col-md-12 pull-left">
+	<div class="col-md-10 col-md-offset-1"  id="second_row" contextmenu="blur" accesskey={{InstitutionID}}>
+		<!-- <div class="col-md-2" id="application_process">
+			<label style="font-size: 20px; padding: 12px 0px 8px 19px;">
+				Application Analytics
+			</label>
+		</div> -->
+
+		<div class="col-md-8 " style="padding-top: 20px;    padding-right: 0px;">
+			<img src="images/loading.gif" style="width: 25px; display: none;" id="Loader">
+			<div class="btn-group btn-group-sm medium-button" role="group" aria-label="..." style="top: -5px;right: 9px;">
+				<a class="btn table-btn" id="Dashboard"  ng-click="open_tab('Dashboard')" ng-if="authenticate('ANDSHBRD') && InstitutionID!='4019'">Dashboard</a>
+				<div class="col-md-12" style="padding-right: 0px;">
+
+						<select id="dashboardType" class="form-control" ng-model="type" ng-init="type='application'" style="width:107%">
+							<option ng-selected="true" value="application">Application Logs</option>
+						</select>
+					</div>
+				<a class="btn table-btn" id="Simulator" ng-click="open_tab('Simulator')" ng-if="authenticate('ANSIM')">Simulator</a>
+			</div>
+		</div>
+	</div>
+	
+	<div class="col-md-12" contextmenu="blur">
+		<div >
+			<div class="table-panel hiden" id="dashboard_container">
+				<div class="row clearfix" id="btn-row" style="margin-bottom: 20px;display: none;">
+					<div class="col-md-2">
+						<label>Dashboard</label> 
+					</div>
+					<div class="col-md-2" ng-if="authenticate('ANFLTR1')">
+						<label>Scoring Card</label> <select id="tablefilter"
+							class="form-control">
+							<option value="1001" ng-selected="true">1001</option>
+							<option value="1002">1002</option>
+							<option value="1003">1003</option>
+							<option value="all">All Tables</option>
+						</select>
+					</div>
+					<div class="col-md-2" ng-if="authenticate('ANFLTR2')">
+						<label>Duration</label> <select id="duration" class="form-control">
+							<option value="" ng-selected="true">November</option>
+							<option value="">October</option>
+							<option value="">September</option>
+							<option value="">Sep-Nov</option>
+							<option value="">Jun-Nov</option>
+							<option value="">Dec 14-Nov 15</option>
+						</select>
+					</div> 
+					
+					
+					
+					<div class="col-md-6 text-right" id="matrixbtn">
+						<label>Delinquency</label>
+						<div>
+							<button class="btnfltr" id="F30"
+								style="background-color: #AEADA3">30+</button>
+							<button class="btnfltr" id="F60"
+								style="background-color: #0C4EF2">60+</button>
+							<button class="btnfltr" id="F90"
+								style="background-color: #F7931D">90+</button>
+							<div class="btn-group btn-toggle">
+								<button class="btn btn-sm btn-success active">Rate</button>
+								<button class="btn btn-sm btn-default">Value</button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+	<div class="row" >
+		<section class="content-container animate-fade-up" >
+			 <div class="col-md-12 pull-left">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+			 <div class="col-md-12 pull-left" data-ng-if="isTableData ">
+		       <div class="col-md-12 pull-left">
+		       		<button type="button" class="btn btn-link  pull-right" data-ng-click="toggleView()">
+		                <i class="fa fa-table " aria-hidden="true" style="font-size: 18px;" ></i>
+		            </button>
+		       </div>
+				<div class="row" >
+					<div id="mainTable"  gng-stacked-bar-graph data-ng-model="stackedChart1"  graph-data="orignalData" 
+					institution-id="{{InstitutionID}}" test-data="dataFromDirective" isolated-table-data="updateData(parameter)"></div>
+				</div>
+				
+				<div id="legendGroup" class="col-md-8	col-md-offset-4" style="margin-top: 25px">
+					<ul class="legend" >
+						<li><span class="approved"></span> Approved</li>
+						<li><span class="declined"></span> Declined</li>
+						<li><span class="pending"></span>Queue</li>
+					</ul>
+				</div>
+			</div>
+			
+			
+
+			
+			<div class="col-md-12" data-ng-if="!isTableData && !appView" style="padding: 0px;">
+				 <div class="col-md-12 pull-left" >
+					<div class="col-sm-3 col-md-offset-5 col-xs-6"  style="padding: 0px;">
+						<form name="gridsearch" autocomplete="false" >
+							<input type="text" name="searchKeywords" placeholder="Search..." autofocus
+								class="form-control" data-ng-model="searchKeywords"
+								data-ng-keyup="search(searchKeywords)">
+						</form>
+						<span data-ng-show="searchKeywords.length >= 1"> Showing {{filteredStores.length}}/{{stores.length}} entries </span>
+					</div>
+					<!-- <div class="col-sm-3 col-xs-6 filter-result-info">
+						<span> Showing {{filteredStores.length}}/{{stores.length}} entries </span>
+					</div>  -->
+
+					<div class="panel-bttn" style="float:right; margin-top: 0px;">
+						<div class="btn-group">
+						  <button type="button" class="btn  btn-sm btn-default"><i class="fa fa-download"></i></button>
+						  <button type="button" class="btn btn-default  btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						     <span class="caret"></span>
+						  </button>
+						  <ul class="dropdown-menu">
+						    <li><a href="javascript:;" file-name="'fileName.extension'" data-ng-click="getFile()"  file-download="myBlobObject">XLS</a></li>
+						    <li><a href="javascript:;"  data-ng-click="getFile()"  file-download="myBlobObject">CSV</a></li>
+						  </ul>
+						</div>
+							
+		                <button type="button" class="btn btn-link  pull-right" data-ng-click="toggleView()">
+		                	<i class="fa fa-bar-chart" aria-hidden="true" style="font-size: 18px;"></i>
+		                </button>
+        			</div>
+						</div>
+				 <div class="col-md-12 pull-left">
+					<table class="table table-striped table-responsive table-condensed table-hover" style="height: auto;white-space: nowrap;">
+			            <thead>
+			                <tr>
+			                    <th>
+			                        <div class="th">
+			                            Ref Id
+			                        </div>
+			                    </th>
+			                    <th >
+			                    <div class="th ">
+			                        Date
+			                      </div>
+			                    </th>
+			                    <th>
+			                        <div class="th">
+			                           City
+			                        </div>
+			                     </th>
+			                    <th>
+			                        <div class="th">
+			                           Cust Name
+			                        </div>
+			                    </th>
+			                    <th>
+			                        <div class="th">
+			                            Loan Amt
+			                        </div>
+			                    </th>
+			                    <th>
+			                        <div class="th">
+			                           Income
+			                        </div>
+			                    </th>
+			                     <th>
+			                        <div class="th">
+			                          Bureau Score
+			                        </div>
+			                    </th>
+			                     <th>
+			                        <div class="th">
+			                           App Score
+			                        </div>
+			                    </th>
+			                      <th >
+			                        <div class="th">
+			                           App Status
+			                        </div>
+			                    </th>
+			                      <th>
+			                        <div class="th">
+			                          Stage
+			                        </div>
+			                    </th>
+			                       <th >
+			                        <div class="th">
+			                          Dealer
+			                        </div>
+			                    </th>
+			                     <th >
+			                        <div class="th">
+			                           DSA
+			                        </div>
+			                    </th>
+			                </tr>
+			            </thead>
+			            <tbody style="font-size: 12px;">
+			                <tr data-ng-repeat="store in dataSourceCol" sty>
+			                    <td ><a ng-click="viewApplication(store.applicationId,store.applicationStatus)">{{store.applicationId}}</a></td>
+			                    <td>{{store.date | dateFormat}}</td>
+			                    <td>{{store.city.toUpperCase()}}</td>
+			                    <td>{{store.applicantName.split(' ')[0].toUpperCase()}}</td>
+			                    <td>{{store.loanAmount}}</td>
+			                    <td>{{store.income}}</td>
+			                    <td>{{store.bureauScore}}</td>
+			                    <td>{{store.applicationScore}}</td>
+			                    <td><span class="label"  data-ng-class="{'label-danger' : store.applicationStatus == 'Declined', 'label-success' : store.applicationStatus == 'Approved' , 'label-warning' : store.applicationStatus == 'Queue'}"  >{{store.applicationStatus.toUpperCase()}}</span></td>
+			                    <td>{{store.stageID}}</td>
+			                    <td>{{store.dealerId}}</td>
+			                    <td>{{store.dsaId.split("@")[0].toUpperCase()}}</td>
+			                </tr>
+			            </tbody>
+		        </table> 
+		        </div>   
+		        <div class="col-md-12 pull-left" >
+	                <div class="col-md-6 page-num-info">
+	                    <span>
+	                        Show &nbsp;<select data-ng-model="numPerPage"
+	                                data-ng-options="num for num in numPerPageOpt"
+	                                data-ng-change="onNumPerPageChange(numPerPage)"
+	                               >
+	                        </select> 
+	                        entries per page
+	                    </span>
+	                </div>
+		            <div class="col-md-6 text-right pagination-container">
+		                <uib-pagination 
+		                	class="pagination-sm" 
+		                	ng-model="currentPage"
+		                    total-items="filteredStores.length"
+		                    max-size="4"
+                            ng-change="select(currentPage)"
+                            items-per-page="numPerPage"
+                            rotate="false"
+                            previous-text="&lsaquo;" next-text="&rsaquo;"
+                            boundary-links="true"
+		                ></uib-pagination>
+		                   
+		            </div>
+		       </div>  
+			</div>
+			<div data-ng-if="appView" class="row clearfix" style="margin-right: 0px;">
+					<a class="add-button-div-notification"
+						style="width: 100px; display: inline-block;float: right;margin: 0px" ng-click="back()">Back</a> 
+			</div>
+			<div data-ng-if="appView" data-ng-include="'views/templates/app-form.html'"></div>
+		</section>
+		
+		
+	</div>
+				
+				<div class="row clearfix" id="mtd_container" style="display: none;">
+					<div class="col-md-12" style="overflow: hidden;" id="mtd-box">
+						<span class="CatError"></span>
+					</div>
+				</div>
+				<div class="row clearfix hiden" id="ytd_container">
+					<span class="CatError" ng-if="reportList == null">{{error}}
+						<span ng-if="!error">Data is unavailable to generate your reports...!!!</span>
+					</span>
+					<span class="CatError" ng-if="reportList.length == 0">{{error}}
+						<span ng-if="!error">Please wait while we are generating your reports...!!!</span>
+					</span>
+					<div class="col-md-12" ng-if="reportList != null && InstitutionID !='4019'">
+						<table
+							class="table table-striped table-condensed table-hover header"
+							id="report_table" ng-if="InstitutionID!=1002"
+							ng-show="reportList.length != 0">
+							<thead>
+								<tr>
+									<th>App ID</th>
+									<th>App Date</th>
+									<th>Customer Name</th>
+									<th>City</th>
+									<th>Company</th>
+									<th>Loan Amount</th>
+									<th>Income</th>
+									<th>Bureau Score</th>
+									<th>App Score</th>
+									<!-- 								<th>Outcome</th> -->
+								</tr>
+							</thead>
+							<tbody id="report_table_body">
+								<tr
+									ng-repeat="report in reportList | orderBy:'APPLICATION_ID' | filter:reportFilter">
+									<td>{{report.APPLICATION_ID}}</td>
+									<td>{{report.VALUE_MAP.IRP$71}}</td>
+									<td>{{report.VALUE_MAP.IRP$21$01}}</td>
+									<td>{{report.VALUE_MAP.IRP$86}}</td>
+									<td>{{report.VALUE_MAP.IRP$77}}</td>
+									<td>{{report.VALUE_MAP.IRP$04 | rupee:"&#x20B9; "}}</td>
+									<td>{{report.VALUE_MAP.IRP$79 | rupee:"&#x20B9; "}}</td>
+									<td>{{report.VALUE_MAP.CIBIL_RESPONSE$scoreList$score[0] |
+										format:"string"}}</td>
+									<td><a ng-click="draw_treeGraph(report.APPLICATION_ID)">
+										<span data-target="#treeModal" data-toggle="modal">{{report.SCORE_JSON.AppScore}}</span></a>
+										</td>
+									<!-- 									<td>{{report.VALUE_MAP.LOGIN_DATA$OUTCOME}}</td> -->
+								</tr>
+							</tbody>
+						</table>
+						<table
+							class="table table-striped table-condensed table-hover header"
+							id="report_table" ng-if="InstitutionID==1002"
+							ng-show="reportList.length != 0">
+							<thead>
+								<tr>
+									<th>CCID</th>
+									<th>Login Date</th>
+									<th>City Category</th>
+									<th>Customer Type</th>
+									<th>Company Category</th>
+									<th>Loan Amount</th>
+									<th>Income</th>
+									<th>Bureau Score</th>
+									<th>App Score</th>
+									<th>Outcome</th>
+								</tr>
+							</thead>
+							<tbody id="report_table_body">
+								<tr
+									ng-repeat="report in reportList | orderBy:report.CCID | filter:reportFilter">
+									<td>{{report.CCID}}</td>
+									<td>{{report.VALUE_MAP.LOGIN_DATA$LOGIN_DATE}}</td>
+									<td>Tier
+										{{report.VALUE_MAP.CITY_CLASS$TIER_CLASSIFICATION}}</td>
+									<td>{{report.VALUE_MAP.LOGIN_DATA$CUST_TYPE}}</td>
+									<td>{{report.VALUE_MAP.COMP_CATEGORY$CATEGORY}}</td>
+									<td>{{report.VALUE_MAP.LOGIN_DATA$LOAN_AMOUNT_APPLIED |
+										rupee:"&#x20B9; "}}</td>
+									<td>{{report.VALUE_MAP.LOGIN_DATA$INCOME | rupee:"&#x20B9;
+										"}}</td>
+									<td>{{report.VALUE_MAP.LOS_SCR$SCORE | format:"string"}}</td>
+									<td><a ng-click="draw_treeGraph(report.CCID)" >
+										<span datatarget="#treeModal" data-toggle="modal"></span>
+										{{report.SCORE_JSON.AppScore}}</a></td>
+									<td>{{report.VALUE_MAP.LOGIN_DATA$OUTCOME}}</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="row clearfix"
+							style="padding: 20px 0px 20px 0px; border-top: 1px solid #EFEDED">
+							<div class="col-md-2">
+								Records: <select class="form-control" id="pagelimit"
+									style="width: 50px; height: 27px; display: inline-block;">
+									<option value="10">10</option>
+									<option value="20" ng-selected="true">20</option>
+									<option value="40">40</option>
+									<option value="60">60</option>
+								</select>
+							</div>
+							<div class="col-md-2">
+								<input type="text" class="form-control" ng-model="reportFilter"
+									placeholder="Search..." style="height: 27px;">
+							</div>
+							<div class="col-md-2">
+								<span style="display: block">{{reportRange}}</span>
+							</div>
+							<div class="col-md-6">
+								<nav class="text-right">
+									<ul class="pagination" id="pager" style="margin: 0px"></ul>
+								</nav>
+							</div>
+						</div>
+					</div>
+						
+						
+						
+						<div class="col-md-12" ng-if="reportList.length != 0 && InstitutionID=='4019'">
+						<div class="col-md-2" style="padding-left: 0px;">
+								<input type="text" class="form-control" ng-model="reportFilter"
+									placeholder="Search..." style="height: 27px;">
+							</div>
+						<table
+							class="table table-striped table-condensed table-hover header"
+							id="report_table"ng-show="reportList.length != 0 && reportList!=null">
+							<thead>
+								<tr style="font-size: 12px;">
+									<th>Ref Id</th>
+									<th>Date</th>
+									<th style="width: 9%;">City</th>
+									<th style="width: 10%;">Customer Name</th>
+									<th style="width: 6%;">Loan Amt</th>
+									<th style="width: 9%;">Monthly Income</th>
+									<th style="width: 8%;">Bureau Score</th>
+									<th style="width: 7%;">App Score</th>
+									<th style="width: 6%;">App Status</th>
+									<th style="width: 8%;">Dealer Name</th>
+									<th style="width: 6%;">Dsa Name</th>
+									<th>Remark</th>
+<!-- 									<th>Subject To</th> -->
+<!-- 									<th>Income</th> -->
+									<!-- 								<th>Outcome</th> -->
+								</tr>
+							</thead>
+							<tbody id="report_table_body" style="font-size: 12px;">
+								<tr
+									ng-repeat="report in reportList | orderBy:'-date' | filter:reportFilter">
+									<td style=" width: 5%;">{{report.applicationId}}</td>
+									<td style=" width: 10%;">{{report.date | dateFormat}}</td>
+									<td>{{report.city.toUpperCase()}}</td>
+									<td>{{report.applicantName}}</td>
+									<td>{{report.loanAmount | rupee:"&#x20B9; "}}</td>
+									<td>{{report.income | rupee:"&#x20B9; "}}</td>
+									<td>{{report.bureauScore |
+										format:"string"}}</td>
+								<!-- 	<td><a ng-click="draw_treeGraph(report.APPLICATION_ID)">
+										<span data-target="#treeModal" data-toggle="modal">{{report.applicationScore}}</span></a>
+									<span>{{report.applicationScore}}</span></a>
+									</td> -->
+									<td>{{report.applicationScore}}</td>
+									<td>{{report.applicationStatus.toUpperCase()}}</td>
+									<td>{{report.dealerId}}</td>
+									<td>{{report.dsaId.split('@')[0].toUpperCase()}}</td>
+									<td>
+									<button  class="btn btn-secondary btn-sm" ng-click="getRemark(report.croJustificationList)"
+									 ng-if="report.croJustificationList!=''&& report.croJustificationList!=null ">
+									Click Me</button>
+									<!-- <ul>
+									<li ng-repeat="data in report.croJustificationList"  ng-if="data.sRemark!='' && data.sRemark!=null">{{data.sRemark}}
+									</li></ul> -->
+									</td>
+									
+									<!-- <li ng-repeat="data in getRemarks() report.croJustificationList">{{data.sRemark}}
+									</li></ul></td> -->
+									
+									<!-- <td><ul>
+									<li ng-repeat="data in report.croJustificationList" ng-if="data.sSubTo!='' && data.sSubTo!=null">{{data.sSubTo}}
+									</li></ul></td> -->
+<!-- 									<td>{{report.income | rupee:"&#x20B9; "}}</td> -->
+									
+									
+									<!-- <td>{{report.VALUE_MAP.LOGIN_DATA$OUTCOME}}</td> -->
+								</tr>
+							</tbody>
+						</table>
+						<div class="row clearfix"
+							style="padding: 20px 0px 20px 0px; border-top: 1px solid #EFEDED;display: none;" >
+							<div class="col-md-2">
+								Records: <select class="form-control" id="pagelimit1"
+									style="width: 50px; height: 27px; display: inline-block;">
+									<option value="10">10</option>
+									<option value="20" selected="selected">20</option>
+									<option value="40">40</option>
+									<option value="60">60</option>
+								</select>
+							</div>
+							<div class="col-md-2">
+								<input type="text" class="form-control" ng-model="reportFilter"
+									placeholder="Search..." style="height: 27px;">
+							</div>
+							<div class="col-md-2">
+								<span style="display: block">{{reportRange}}</span>
+							</div>
+							<div class="col-md-6">
+								<nav class="text-right">
+									<ul class="pagination" id="pager1" style="margin: 0px">
+									</ul>
+								</nav>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- <div class="row clearfix hiden" id="portfolio_container"
+					ng-controller="sankeyTreeController">
+					<div ng-show="authenticate('ANTRSKY')" ng-include="'port.html'"
+						class="row clearfix"></div>
+					<span class="CatError"></span>
+				</div> -->
+				<div class="table-panel hiden" id="scorecard_container">
+					<div class="col-md-12">
+						<div class="row clearfix" style="">
+							<div class="col-md-5">
+								<label>ROC Curve</label>
+							</div>
+							<div class="col-md-5" style="margin-left: 92px;">
+								<label>PSI Index </label>
+							</div>
+						</div>
+
+						<div class="row clearfix">
+							<div class="col-md-5 imgbox" id="">
+								<a href="#myModal" data-toggle="modal" class="report"></a> <img
+									alt="image not found" id="roc_img" src="img/ROC Curve.png"
+									data-toggle="modal" data-target="#myModalnew" class="report"
+									style="cursor: pointer;" />
+							</div>
+							<div class="col-md-5 col-md-offset-1 imgbox" id="">
+								<a href="#myModal" data-toggle="modal" class="report"></a> <img
+									alt="image not found" src="img/PSI Index.png"
+									data-toggle="modal" data-target="#myModalnew" class="report"
+									style="cursor: pointer;">
+							</div>
+						</div>
+						<div class="row clearfix" style="margin-top: 20px">
+							<div class="col-md-5">
+								<label>GINI Coefficient</label>
+							</div>
+							<div class="col-md-5" style="margin-left: 92px;">
+								<label>KS Curve </label>
+							</div>
+						</div>
+						<div class="row clearfix" style="">
+							<div class="col-md-5 imgbox">
+								<!-- 									 <a href="#myModal" data-toggle="modal" class="report"></a> -->
+								<img alt="image not found" src="img/Gini Coif.png"
+									data-toggle="modal" data-target="#myModalnew" class="report"
+									style="cursor: pointer;">
+							</div>
+							<div class="col-md-5 col-md-offset-1 imgbox" id="ksdiv">
+								<!-- 									 <a href="#myModal" data-toggle="modal" class="report"></a> -->
+								<img alt="image not found" src="img/KS TEST.png"
+									data-toggle="modal" data-target="#myModalnew" class="report"
+									style="cursor: pointer;">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row clearfix hiden" id="matrix-container">
+					<div class="row clearfix" id="Matrix_main_container">
+						<div class="row clearfix" id="Matrix_container"
+							style="margin-top: 10px;">
+							<div class="col-md-12">
+								<table class="table table-bordered table-responsive"
+									id="decision_matrix">
+									<tbody id="MatrixBScore">
+										<tr id="MatrixAScore"></tr>
+									</tbody>
+								</table>
+							</div>
+							<div class="col-md-12">
+								<table class="table table-bordered"
+									style="width: 49%; float: right;">
+									<tbody>
+										<th
+											style="background-color: #43A443; width: 16%; color: white; text-align: center;">Approve</th>
+										<th
+											style="background-color: #E42E28; width: 16%; color: white; text-align: center;">Decline</th>
+										<th
+											style="background-color: #2196F3; width: 16%; color: white; text-align: center;">Queue</th>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="row clearfix" id="Matrix_field_container">
+
+							<div class="col-md-12">
+								<div class="col-md-12 " id="BScore-block"
+									style="background-color: #C8E4FE; min-height: 32px; margin-bottom: 5px">
+									<div class="custom-col-100P inline_control">Bureau Score
+										:</div>
+									<div class="custom-col-90 inline_control">
+										<span class="add-button-div matrixBtn"
+											ng-repeat="obj in BScoreList"> {{obj.Code}} <span
+											class="MBtnValue"><span
+												ng-if="((obj.val1 != '')&&(obj.val2 != ''))">{{obj.val1}}
+													- {{obj.val2}}</span> <span
+												ng-if="((obj.val1 == '')&&(obj.val2 != ''))">{{obj.exp2}}
+													{{obj.val2}}</span></span></span>
+									</div>
+								</div>
+								<!-- 						   					<hr style="margin: 11px 0px"/> -->
+								<div class="col-md-12" id="AScore-block"
+									style="background-color: #DDD; min-height: 32px; margin-bottom: 5px">
+									<div class="custom-col-100P inline_control">App Score :</div>
+									<div class="custom-col-90 inline_control">
+										<span class="add-button-div matrixBtn"
+											ng-repeat="obj in AScoreList"> {{obj.Code}} <span
+											class="MBtnValue"><span
+												ng-if="((obj.val1 != '')&&(obj.val2 != ''))">{{obj.val1}}
+													- {{obj.val2}}</span> <span
+												ng-if="((obj.val1 == '')&&(obj.val2 != ''))">{{obj.exp2}}
+													{{obj.val2}}</span></span></span>
+									</div>
+								</div>
+
+							</div>
+
+							<!-- 											<hr style="margin: 11px 15px"/> -->
+						</div>
+
+					</div>
+				</div>
+				<div class="row clearfix hiden" id="chaid-container">
+					<div class="row clearfix">
+						<!-- 						  <a href="#myModal" data-toggle="modal" class=""> -->
+						<img alt="image not found" id="" style="width: 97%;"
+							src="img/Characteristic Analysis Report.png"></a>
+					</div>
+				</div>
+			</div>
+			<!-- end dashboard container -->
+
+
+
+			<!-- 	    ***************************simulator container **************************************  ng-options="item as item.label for item in creditPolicyList track by item.id"-->
+			<form id="simulator_form">
+				<div class="row clearfix hiden" id="Simulator_container"
+					style="padding: 2%; display: none;">
+					<div class="col-md-4" id="simulator_option">
+						<div class="row clearfix">
+							<div class="col-md-6">
+								<select id="policy" class="form-control"
+									ng-options="item as item.label for item in policyNameList track by item.id"
+									ng-model="selected" name="Policy option"
+									style="width: 100%; text-align: center; padding: 2px"></select>
+								<p class="help"></p>
+							</div>
+							<div class="col-md-6">
+								<select id="creditPolicy" name="Policy option"
+									class="form-control"
+									style="width: 100%; text-align: center; display: none; padding: 2px"></select>
+								<p class="help"></p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="row clearfix">
+							<div class="col-md-6">
+								<input class="form-control" type="text" id="recordFrom"
+									name="Date" placeholder="Date From "
+									style="width: 100%; display: none;" />
+
+							</div>
+							<div class="col-md-6">
+								<input type="text" class="form-control" id="recordTo"
+									placeholder="Date To" name="Date"
+									style="width: 100%; display: none;" ng-model="recordTo" />
+							</div>
+						</div>
+
+					</div>
+					<div class="col-md-4">
+						<div class="row clearfix">
+							<div class="col-md-4" id="recordCountContainer"
+								style="display: none;">
+								<input type="text" class="form-control" id="recordCount"
+									style="width: 100%;" />
+								<p class="help"
+									style="font-size: 12px; color: green; display: none;"
+									id="Total">Records</p>
+							</div>
+							<div class="col-md-4" id="totalRecordContainer"
+								style="display: none;">
+								<select type="text" name="Record" id="totalRecord"
+									class="form-control" style="width: 100%; padding: 2px">
+
+									<option selected="selected" value="100">100%</option>
+									<option value=75>75%</option>
+									<option value=50>50%</option>
+									<option value=25>25%</option>
+								</select>
+							</div>
+							<div class="col-md-4">
+								<button id="find" class="form-control "
+									style="width: 100%; height: 27px; padding: 2px; display: none;"
+									disabled>Simulate</button>
+								<img src="images/loading.gif" id="loading_spinner"
+									style="width: 25px; display: none;">
+
+							</div>
+
+						</div>
+					</div>
+					<div class="clearfix">
+						<span class="CatError" id="simulator-error"></span>
+					</div>
+				</div>
+
+				<!-- 	    ******************************************   Policy Result  *************************************************************	 -->
+
+				<div id="mainContainer" style="display: none">
+
+					<div class="resultContainer row clearfix" id="resultContainer"
+						style="">
+
+						<div class="resultClass col-md-12" id="policyResult "
+							style="border-left: 15px solid #A4A6A8; border-right: 15px solid #A4A6A8; border-top: 2px solid #A4A6A8; border-bottom: 2px solid #A4A6A8; padding-bottom: 0px;">
+							<div class="row clearfix" style="text-align: center;">
+								<div class="col-md-2" id="policyLabel"
+									style="padding-top: 2%; padding-left: 0px; text-align: center; margin-left: -3px;">
+									<b> <span id="timestampDate" class="block"
+										style="color: #777; font-size: 14px; margin-left: 21px;">
+									</span> <span id="timestampTime"
+										style="color: #777; font-size: 14px; margin-left: 21px;">
+									</span></b> <b> <span class="base" id="base"> Base:</span></b> <label
+										id="selectedPolicy" class=" allPolicy " name=""
+										style="cursor: pointer; background-color: #A4A6A8; width: 77%; border-top-right-radius: 10px; border-bottom-right-radius: 10px; color: white; padding: 10px; margin-left: -16%; margin-top: 7px;">
+										edit policy </label>
+								</div>
+								<div class="col-md-5" id="scoreGraphContainer"
+									style="margin-top: 1%; border-right: 5px solid #A4A6A8; margin-bottom: 1%">
+									<a data-toggle="modal" id="" class="report"> <img
+										src="images/score2.jpg" id="scoreGraph" data-toggle="modal"
+										data-target="#myModalnew" style="height: 150px; width: 250px;" />
+									</a>
+
+									<h6 id="Score Spread"
+										style="margin: 2%; display: block; color: #5D6B7E; font-size: 14px; margin-bottom: 0px;">Score
+										Spread</h6>
+								</div>
+								<div class="col-md-5 decisionGraph" id="decisionGraph"
+									style="display: none; padding-top: 6%;">
+									<!-- 					<div class="row clearfix"> -->
+									<div class="col-md-11" style="">
+
+										<label id="approve"
+											style="width: 20%; background-color: #008000; color: white; padding: 15px 0px; text-align: center">20%</label><label
+											id="queue"
+											style="width: 50%; background-color: rgb(87, 87, 191); color: white; padding: 15px 0px; text-align: center">50%</label><label
+											id="decline"
+											style="width: 30%; background-color: #CB151B;; color: white; padding: 15px 0px; text-align: center">30%</label>
+										<h6 id="Score Spread"
+											style="margin-top: 7%; color: #5D6B7E;; display: block;">Decision
+											Spread</h6>
+									</div>
+								</div>
+							</div>
+							<!-- 					</div> -->
+						</div>
+					</div>
+				</div>
+				
+
+				<div class="table-panel" id="policy-container" style="">
+					<!-- 				<div class="row clearfix" > -->
+					<!-- <div class="col-md-12">
+							<table class="table table-striped table-condensed table-hover header" id="policy_table">
+								<thead>
+									<tr><th>Policy ID</th><th>Policy Name</th><th>Priority</th><th>Status</th><th>Created By</th><th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="policy in policyList | orderBy:'-priority' | filter:policyName">
+										<td>{{policy.PolicyID}}</td>
+										<td>{{policy.name}}</td>
+										<td>{{policy.priority}}</td>
+										<td>{{policy.status}}</td>
+										<td>{{policy.createdby}}</td>
+										<td><span class="glyphicon glyphicon-edit" title="edit" ></span>
+										<span class="glyphicon glyphicon-eye-open" title="View" ng-click="load_policy(policy.PolicyID, 'view')"></span>
+										<span class="glyphicon glyphicon-trash" title="Delete" ></span>
+										<span class="glyphicon glyphicon-check" title="Approve" ></span>
+										</td>
+									</tr>	
+									<tr style="position: relative;"><span class="CatError" ng-if="policyList.length == 0"> No Policies has been defined yet...!!!</span></tr>										
+								</tbody>
+							</table>
+						</div> -->
+					<!-- 			****************************** End of policy container table ***************************************************			 -->
+
+					<!-- 				</div> -->
+					<div class="row clearfix" id="policy_main_container"
+						style="margin-bottom: 30px">
+						<div class="col-md-12">
+
+							<hr />
+
+							<!-- 						    ************************************* Policy Div ***************************** -->
+							<policy></policy>
+							<div class="row clearfix" style="margin-top: 15px">
+								<div class="col-md-2">
+									<a id="spy" style="cursor: pointer;">Add Policy</a>
+								</div>
+
+								<div class="col-md-5">
+									<h5 id="in" class="text-success" style="display: none;">Policy
+										Updated...</h5>
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<div class="row clearfix hiden" id="Matrix_main_container_sim">
+					<div class="row clearfix" id="Matrix_container">
+						<div class="col-md-12">
+							<table class="table table-bordered table-responsive"
+								id="decision_matrix1">
+								<tbody id="MatrixBScore">
+									<tr id="MatrixAScore"></tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="row clearfix" id="Matrix_field_container">
+						<div class="col-md-12" id="add-matrixField-panelSim"
+							style="display: none;">
+							<span style="color: red; display: block" id="error">{{error}}</span>
+							<div class="row clearfix panel_body">
+								<!-- <div class="col-md-3 ">
+															</div> -->
+								<div class="col-md-3 ">
+									<span style="display: inline-block;" id="MFieldCodeSim"></span>
+									<select class="form-control" ng-model="Expression"
+										ng-change="Expression_change()" name="Expression"
+										style="width: 85%; display: inline-block; margin-left: 10px"
+										ng-options="obj.text for obj in ExpressionList track by obj.value">
+										<option ng-repeat="obj in ExpressionList"
+											value="{{obj.value}}">{{obj.text}}</option>
+									</select>
+								</div>
+								<div class="col-md-3 ">
+									<input type="text" class="form-control hiden" id="MFValue1Sim"
+										placeholder="Minimum Value" name="Minimum Value" />
+								</div>
+								<div class="col-md-3">
+									<input type="text" class="form-control hiden" id="MFValue2Sim"
+										placeholder="Maximum Value" name="Maximum Value" />
+								</div>
+								<div class="col-md-3" style="text-align: right;">
+									<a class="TC_button" id="add-Mfield" ng-hide="UpdateFlag"
+										ng-click="add_MField('add')">Add</a> <a class="TC_button"
+										id="add-Mfield" ng-if="UpdateFlag"
+										ng-click="add_MField('update')">Update</a> <a
+										class="TC_button" id="close_Mfield"
+										ng-click="CloseFieldPanel()">Close</a> <a class="TC_button"
+										id="add-Mfield" ng-if="UpdateFlag"
+										ng-click="add_MField('delete')">Delete</a>
+								</div>
+							</div>
+
+						</div>
+						<div class="col-md-12 hiden" id="scoreBlock">
+							<div class="col-md-12 " id="BScore-blockSim"
+								style="background-color: #C8E4FE; min-height: 32px; margin-bottom: 5px">
+								<div class="custom-col-100P inline_control">Bureau Score :</div>
+								<div class="custom-col-90 inline_control">
+									<span class="add-button-div matrixBtn"
+										ng-repeat="obj in BScoreList"
+										ng-click="!ViewMode && Open_Add_panel('BScoreSim',obj.Code)">
+										{{obj.Code}} <span class="MBtnValue"><span
+											ng-if="((obj.val1 != '')&&(obj.val2 != ''))">{{obj.val1}}
+												- {{obj.val2}}</span> <span
+											ng-if="((obj.val1 == '')&&(obj.val2 != ''))">{{obj.exp2}}
+												{{obj.val2}}</span></span>
+									</span>
+								</div>
+								<span class="glyphicon glyphicon-plus" id="BScoreSim"
+									ng-if="!ViewMode"></span>
+							</div>
+							<hr style="margin: 11px 0px" />
+							<div class="col-md-12" id="AScore-blockSim"
+								style="background-color: #DDD; min-height: 32px; margin-bottom: 5px">
+								<div class="custom-col-100P inline_control">App Score :</div>
+								<div class="custom-col-90 inline_control">
+									<span class="add-button-div matrixBtn"
+										ng-repeat="obj in AScoreList"
+										ng-click="!ViewMode && Open_Add_panel('AScoreSim',obj.Code)">
+										{{obj.Code}} <span class="MBtnValue"><span
+											ng-if="((obj.val1 != '')&&(obj.val2 != ''))">{{obj.val1}}
+												- {{obj.val2}}</span> <span
+											ng-if="((obj.val1 == '')&&(obj.val2 != ''))">{{obj.exp2}}
+												{{obj.val2}}</span></span>
+									</span>
+								</div>
+								<span class="glyphicon glyphicon-plus" id="AScoreSim"
+									ng-if="!ViewMode"></span>
+							</div>
+
+						</div>
+
+						<hr style="margin: 11px 15px" />
+					</div>
+
+				</div>
+
+				<div class="row clearfix" id="add-criteria-panel">
+					<div style="border: 1px solid #ECDBDB;">
+						<div class="panel_heading">
+							Criteria Panel<span style="float: right; color: red"
+								id="rule_error"></span>
+						</div>
+						<div class="panel_body">
+							<div class="row clearfix box criteria_rule_body"
+								id="criteria_rule_body0">
+								<div class="criteriaRules" id="criteriaRule00">
+									<select class="form-control equal" id="IFF_File_first00">
+										<option value="Select File" selected="selected">Select
+											File</option>
+									</select> <select class="form-control equal" id="IFF_Field_first00">
+										<option value="Select Field" selected="selected">Select
+											Field</option>
+
+									</select>
+									<div id="radio_div00">
+										<div id="btnEnable0" class="radio_inner_div" title="Value">
+											<input type="radio" class="radio" value="Value" name="Value">
+											Value<span class="radiobuttonStatus_Value"></span>
+										</div>
+										<div id="btnDisable00" class="radio_inner_div hiden"
+											style="text-align: right;" title="Field">
+											<span class="radiobuttonStatus_Field"></span> <input
+												type="radio" class="radio" value="Field" name="Value">
+											Field
+										</div>
+									</div>
+									<select class="form-control equal" id="expression00">
+										<option value="Select Expresion" selected="selected">Select
+											Expression</option>
+									</select> <input class="form-control equal hiden" type="text"
+										id="firstValue00" placeholder="Minimum Value" /> <input
+										class="form-control equal hiden" type="text"
+										id="secondValue00" placeholder="Maximum Value" /> <select
+										class="form-control equal hiden" id="IFF_File_second00">
+										<option value="Select File" selected="selected">Select
+											File</option>
+									</select> <select class="form-control equal hiden"
+										id="IFF_Field_second00">
+										<option value="Select Field" selected="selected">Select
+											Field</option>
+									</select> <span class="Inner_Operator_block" id="INOp_Value00"></span>
+								</div>
+								<div class="row clearfix">
+									<div class="col-md-12">
+										<button class="add-button-div INOperator" value="&&">AND</button>
+										<button class="add-button-div INOperator" value="||">OR</button>
+									</div>
+								</div>
+								<span class="Outer_Operator_block" id="OUTOp_Value0"></span>
+							</div>
+							<div class="row clearfix">
+								<div class=" col-md-12 text-right">
+									<button class="add-button-div OUTOperator" value="&&">AND</button>
+									<button class="add-button-div OUTOperator" value="||">OR</button>
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-2">
+									<input class="form-control" type="text" id="criteria_name"
+										placeholder="Criteria Name" />
+								</div>
+								<div class="col-md-2">
+									<input class="form-control" type="text" id="criteria_priority"
+										maxlength="3" placeholder="Criteria Priority" />
+								</div>
+								<div class="col-md-2">
+									<select class="form-control" id="Criteria_outcome">
+										<option value="Approve">Approve</option>
+										<option value="Decline">Decline</option>
+										<option value="Queue" ng-selected="true">Queue</option>
+									</select>
+								</div>
+								<div class="col-md-2">
+									<select class="form-control" id="outcome_queue">
+										<option value="Approve">Queue 1</option>
+										<option value="Decline">Queue 2</option>
+										<option value="Queue" ng-selected="true">Queue 3</option>
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<div class="panel_footer" style="text-align: right;">
+							<a class="TC_button" id="criteria_panel_add"
+								ng-click="createcriteriaRule()">Save</a> <a class="TC_button"
+								id="criteria_panel_close">Close</a>
+						</div>
+					</div>
+				</div>
+
+
+
+				<div class="row clearfix" id="editContainer"
+					style="margin-bottom: 40px; max-height: 30px; display: none;">
+					<div class="col-md-12">
+						<a id="closeSimulate" class="TC_button"
+							style="margin-right: 6%; font-size: 14px;"> Back</a> <a
+							id="createVersion" class="TC_button" style="font-size: 14px;">
+							Simulate</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+ <div class="row clearfix hiden" id="remarkData" style="position:absolute; opacity: 1; width: 30%;top: 30%;
+ left: 37%;background: white;    border: 1px solid #dce2dc;
+    bottom: 40%; height:33%;overflow: hidden;">
+		<div class="panel_heading"><label>Description </label><span class="text-danger" id="errorheading" style="float:right ;margin-top: 3px"> </span></div>
+		<div class="panel_body">
+		<div style="border-top: 1px solid #e5e5e5;">
+			<label >Remak</label>
+			  <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
+			  padding: 10px; font-weight: bold" contenteditable="false" spellcheck="false"> 
+			  </div>
+		</div>
+			<br/>
+		<div style="border-top: 1px solid #e5e5e5;">
+			<label >Subject To</label>
+			  <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
+			  padding: 10px; font-weight: bold" contenteditable="false"spellcheck="false"> 
+			  </div>
+		</div>
+		</div>
+		<div class="panel_footer" style="height: 27px;">	
+			<span id="declinemsg" class="text-danger" style="text-align: left;"></span>
+			<div class="text-right" style=" display: inline; float: right;">
+		   <a class="TC_button" ng-click="clsRemark()">Close</a>	
+		   </div>												
+		</div>
+	</div>

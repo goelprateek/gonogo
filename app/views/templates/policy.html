@@ -1,0 +1,1613 @@
+<style>
+.Cat:hover .edit_btn, .Cat:hover .delete_btn {
+	display: block;
+}
+
+.Attr:hover .edit_btn, .Attr:hover .delete_btn {
+	display: block;
+}
+
+/* #IffFieldPanel .equal { */
+/* 	margin-top: 5px; */
+/* } */
+.AntclINOp, .AntclOUTOp, .cstmOUTOp, .elgbltyOUTOp {
+	min-width: 45px;
+}
+
+.AntclGrpRow, .AntclFltrRow, .cstmRow, .elgbltyRow {
+	position: relative;
+	margin: 2px 0px;
+}
+
+#anltclRulePanel {
+	position: absolute;
+	top: 7%;
+	left: 7%;
+	width: 85%;
+	box-shadow: 0px 0px 5px 0px rgba(138, 138, 138, 0.6);
+	overflow: hidden;
+	background-color: #fff;
+}
+
+span.outopr {
+	position: absolute;
+	left: -48px;
+/* 	bottom: -13px; */
+	font-weight: bold;
+}
+
+span.inopr {
+	position: absolute;
+	top: 20px;
+	font-weight: bold;
+}
+
+.right-braces {
+	padding: 25px 10px;
+	border-radius: 13px;
+	border-left: 2px solid grey;
+}
+
+.left-braces {
+	padding: 6px 10px;
+	border-radius: 13px;
+	border-right: 2px solid grey;
+}
+
+.afname {
+	width: 21%;
+	overflow: hidden;
+	margin-right: 15px;
+}
+
+#AFDisplPanel, #CstmFDisplPanel {
+	position: absolute;
+	background-color: white;
+	top: 18%;
+	left: 5%;
+	width: 90%;
+}
+
+#computePanel {
+	border: 1px solid #ECDBDB;
+	position: absolute;
+	top: 35%;
+	left: 9%;
+	width: 85%;
+	background-color: white;
+}
+
+.fname {
+	/*  	margin:2px -10px 0px -17px; */
+	
+}
+
+#enumfield_list_panel {
+	background-color: #FFF;
+	height: Auto;
+	left: 29%;
+	position: absolute;
+	border: 1px solid #D0D8DB;
+	border-radius: 9px;
+	box-shadow: 0px 0px 5px 0px rgba(138, 138, 138, 0.6);
+	overflow: hidden;
+	display: none;
+	width: 51%;
+	top: 35%;
+}
+
+.add-div {
+	margin: 5px -1px;
+	min-width: 133px;
+	display: inline-block;
+	border: none;
+	background-color: #E3EAF0;
+	font-weight: 400;
+	text-align: center;
+	margin-left: 15px;
+}
+
+button:active {
+	border: 1px inset;
+}
+
+/* .lavel2ValueRow {
+	display: none;
+} */
+</style>
+<div class="policyContainer" ng-controller="PolicyController" contextmenu="blur" ng-cloak>
+	<div class="row clearfix" contextmenu="blur">
+		<div class="col-md-2 col-md-offset-1" id="application_process">
+			<label style="font-size: 20px; padding: 17px 0px 8px 19px;">Application Scoring</label>
+		</div>
+		<div class="alert alert-danger alert-dismissible" role="alert" ng-if="error">
+		 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		 <span aria-hidden="true">&times;</span></button>
+		 <strong> Warning! &nbsp;&nbsp;</strong><span id="main_error"> {{error}}</span>&nbsp;&nbsp;&nbsp;
+		</div>
+	</div>
+	<div class="row clearfix">
+		 <div class="col-md-10 col-md-offset-1 border-row" id="MainBlock">
+			<div class="row clearfix" id="btn-row">
+				<div class="col-md-8">
+					<div class="btn-group btn-group-sm medium-button" role="group" aria-label="...">
+						<a class="btn table-btn" id="Policy" ng-show="authenticate('PPOLICY')" ng-click="open_tab('Policy')">Credit Policy</a> 
+						<a class="btn table-btn" id="Rules"  ng-show="authenticate('PRULE')" ng-click="open_tab('Rules')">Credit Rules</a>       
+						<a class="btn table-btn" id="Scores" ng-show="authenticate('PTABLE')" ng-click="open_tab('Scores')">Scoring Tables</a>
+						<a class="btn table-btn" id="iff_master" ng-show="authenticate('PMASTER')" ng-click="open_tab('Pmaster')">IFF & Masters</a>
+						<a class="btn table-btn" id="Elgblty" ng-show="authenticate('ELGBLTY')" ng-click="open_tab('Elgblty')">Eligibility</a>
+<!-- 						<a class="btn table-btn" ng-show="authenticate('ELGBLTY')" ng-click="uploadtempElgblty()">Temp Elgblty</a>   -->
+					</div>
+				</div>
+				<div class="col-md-4 text-right">
+				         <img src="images/loading.gif" style="width: 25px;margin-top:7px; display: none;" id="T_LoaderSpinner">	
+							<div class="float-right" ng-hide="Table">
+								<form ng-submit="submit_table()" ng-show="ScoreTable && authenticate('PADSCRTBL')">
+									<input type="text" ng-model="tableName" class="form-control name" placeholder="Table Name" required ValueType capitalize>
+									<input type="submit" class="add-button-div" value="Add Table"/>
+								</form>
+								<form ng-submit="submit_Rule()" ng-show="Rule && authenticate('PADCRRUL')">
+									<input type="text" ng-model="rule_name" class="form-control name" placeholder="Rule Name" required capitalize>
+									<select ng-model="rule_type" class="inline_control form-control normal-select" style="width: 50px">
+										<option value="Select" ng-selected="true">Type</option>
+										<option value="Tree" ng-if="authenticate('RTREE')">Tree</option>
+										<option value="Matrix" ng-if="authenticate('RMATRIX')">Matrix</option>
+										<option value="Criteria" ng-if="authenticate('RCRITRIA')">Criteria</option>
+									</select>
+									<input type="submit" class="add-button-div" value="Add Rule"/>
+								</form>
+								<form ng-submit="SaveCreditPolicy()" ng-show="PolicyID && authenticate('PADPLCY')">
+									<input type="text" ng-model="policyName" class="form-control name" placeholder="Policy Name" required capitalize>
+									<input type="text" ng-model="priority" class="form-control name inline" placeholder="Priority" name="Priority" required capitalize
+									 style="width: 50px;">				
+									<input type="submit" class="add-button-div" value="Add Policy"/>
+								</form>
+								<form ng-submit="SaveElgblty()" ng-show="ElgbltyID && authenticate('PADPLCY')" name="ElgbltyForm">
+									<input type="text" ng-model="ElgbltyName" class="form-control name" placeholder="Eligibility Name" required capitalize>
+									<input type="submit" class="add-button-div" value="Add Eligibility"/>
+								</form>
+								<span ng-show="Pmaster">
+								   <input type="text" ng-model="IffName" class="form-control name" placeholder="Search...">
+								   <button class="add-button-div" id="master">Upload IFF</button>
+								</span>
+								<span id="TableError"></span>
+							</div>
+							<div class="float-right" ng-if="Table != 1" ng-show="Table" style="float:right">{{Table}}</div>
+				</div>
+			</div>
+			
+		<div class="table-panel" id="policy-container">
+			<div class="row clearfix">
+				<div class="col-md-12">
+					<span class="CatError" ng-if="policyList.length == 0"> No Policies has been defined yet...!!!</span>
+					<table class="table table-striped table-condensed table-hover header" id="policy_table" ng-show="policyList.length != 0">
+						<thead>
+							<tr><th>Policy ID</th><th>Policy Name</th><th>Priority</th><th>Status</th>
+							<th>Created By</th><th>Updated By</th><th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+						<tr ng-repeat="policy in policyList | orderBy:'priority' | filter:policyName">
+							<td>{{policy.PolicyID}}</td><td>{{policy.name}}</td>
+							<td>{{policy.priority}}</td><td>{{policy.status}}</td>
+							<td>{{policy.createdby}}</td><td>{{policy.updatedby}}</td>
+							<td><span class="glyphicon glyphicon-edit" ng-if="authenticate('PEDIT')" title="edit"
+							    ng-click="load_policy(policy.PolicyID, 'edit')"></span>
+							<span class="glyphicon glyphicon-eye-open" ng-if="authenticate('PVIEW')" title="View" 
+							    ng-click="load_policy(policy.PolicyID, 'view')"></span>
+							<span class="glyphicon glyphicon-trash" ng-if="authenticate('PDLT')" title="Delete" 
+								ng-click="load_policy(policy.PolicyID, 'delete')"></span>
+							<span class="glyphicon glyphicon-check" ng-if="(policy.status=='Pending'||policy.status=='Disabled') && authenticate('PAPRV')" title="Approve"
+								ng-click="load_policy(policy.PolicyID, 'approve')"></span>
+							<span class="glyphicon glyphicon-ban-circle" ng-if="policy.status=='Approved' && authenticate('PAPRV')" title="Disable"
+								ng-click="load_policy(policy.PolicyID, 'disable')"></span>	
+							</td>
+						</tr>											
+						</tbody>
+					</table>
+				</div>
+			</div>
+		
+		<div class="row clearfix" id="policy_main_container" style="display: none; margin-bottom: 30px">					
+		   <div class="col-md-12">
+  		     <div style="background-color: rgb(255, 255, 255); box-shadow: 0px 0px 10px 0px rgb(188, 188, 188); padding:0px 0px 5px 25px; border-radius:10px" >
+			  <div class="panel_heading" style="margin: 0px 0px 5px -25px;"> Policy Selection Parameters</div>
+				   <div id="producttype-container" class="row nospace">
+			  	    <div class="custom-col-100P inline_control">Product </div> 
+					    <div class="custom-col-90 inline_control">
+					       <span class="add-button-div matrixBtn1" ng-repeat="obj in ProductList">{{obj.name}}
+					         <span class="glyphicon glyphicon-remove" ng-click="!ViewMode && UpdateProdList(obj.value)"></span>
+					       </span>
+   					    	<span class="glyphicon glyphicon-plus" id="product" 
+   					    	ng-if="!ViewMode" style="position: relative;"></span>
+   					    </div>
+   					    <div id="product_panel" class="row clearfix hiden" style="margin: 5px 0px; padding: 10px 0px;">
+	   					    <div class="col-md-2 col-md-offset-1 padding-20">
+	   					    	<select class="form-control" id="product_list">
+	   					    	  <option value="Select">Select Product</option>
+	   					    	</select>
+	   					    </div>
+   					    <div class="col-md-4">
+	   					      <a class="TC_button" id="add-Product">Add</a>	
+   					    </div> 
+				    </div>
+	   			  </div>
+   					<div id="apptype-container" class="row nospace">
+				  	    <div class="custom-col-100P inline_control">App Type </div> 
+					    <div class="custom-col-90 inline_control">
+					      <span class="add-button-div matrixBtn1" ng-repeat="obj in AppList">{{obj.name}}
+					        <span class="glyphicon glyphicon-remove" ng-click="!ViewMode && UpdateAppList(obj.value)"></span>
+					      </span>
+	  					      <span class="glyphicon glyphicon-plus" id="AppType" 
+	  					      	ng-if="!ViewMode" style="position: relative;"></span>
+	  					    </div>
+	  					    <div id="AppType_panel" class="row clearfix hiden" style="margin: 5px 0px; padding: 10px 0px;">
+	   					    <div class="col-md-2 col-md-offset-1 padding-20">
+	   					    	<select class="form-control" id="AppType_list">
+	   					    	<option value="Select" ng-selected="true">Select Application Type</option></select>
+	   					    </div>
+	   					    <div class="col-md-4">
+	   					      <a class="TC_button" id="add-AppType">Add</a>	
+	   					    </div> 
+	  					    </div>
+	 					</div>			   				
+					<div id="priority_block" class="row clearfix" style="margin: 5px 0px"> 
+   					 <div class="custom-col-100P inline_control">Priority</div> 
+	   					 <div class="custom-col-90 inline_control">
+			   				<input type="text" class="form-control" placeholder="Priority" maxlength="3" ng-model="Ppriority" ng-disabled="ViewMode"/>					   
+							<div id="radio_div">
+								<div id="btnEnable" class="radio_inner_div" title="Value" style="display: none;">Active
+								     <span class="radiobuttonStatus_Value"></span></div>
+								<div id="btnDisable" class="radio_inner_div" style="text-align: right;" title="Field">
+									<span class="radiobuttonStatus_Field"></span>InActive</div>
+							</div>
+							<select class="form-control" id="valid_status" ng-disabled="ViewMode">
+	   					     <option value="Select" ng-selected="true">Valid Status</option>
+	   					     <option value="from">Valid From</option>
+	   					     <option value="till">Valid Till</option>
+	   					     <option value="between">Valid Between</option>
+			   				</select>
+	   					    <input type="text" id="vfrom" class="form-control" placeholder="Valid From" style="display: none" ng-disabled="ViewMode"/>
+	   					    <input type="text" id="vtill" class="form-control" placeholder="Valid Till" style="display: none;" ng-disabled="ViewMode"/>
+	   					</div>
+   					</div>
+	   				<div id="Criteria-block" class="row clearfix" style="margin: 5px 0px">
+						  	<div class="custom-col-100P inline_control">Criteria </div>							  	 
+		   					<div class="row nospace">
+		   						<div class="col-md-11 col-md-offset-1" id="crit_box"></div>
+		   					</div>	
+		   					<div class="row nospace" id="crule" ng-show="PcriteriaList.length != 0" >
+							   <div class="col-md-11 col-md-offset-1" style="margin-top: -20px;">
+								<div class="col-md-10 Rulebox" >
+								<div class="logic_expression" ng-repeat="rule in PcriteriaList">
+									<span class="logic_matrix" style="width: 15%;text-align: left">{{ rule.val1 | rupee:"&#x20B9; "}}</span>
+									<span class="logic_matrix" style="width: 15%;text-align: left">{{ rule.exp1 }}</span> 
+									<span class="logic_matrix" style="width: 25%;text-align: left">{{ rule.displayname }}</span> 
+									<span class="logic_matrix" style="width: 15%;text-align: left">{{ rule.exp2 }}</span> 
+									<span class="logic_matrix" style="width: 16%;text-align: left">{{ rule.val2 | rupee:"&#x20B9; "}}</span>
+									<span class="logic_matrix score" style="width: 7%;text-align: left; float: right; margin-right:2px">{{rule.operator | operator}}</span>
+								</div>
+								</div>
+		                      </div>	
+					      </div>	
+						     <div class="custom-col-90 inline_control col-md-offset-1" style="padding-left: 7px;" >
+							      <span class="add-button-div matrixBtn1" id="criteria_add" style="background-color: white; border: 1px solid #C5C6C8"
+							       ng-if="PcriteriaList.length == 0 && !ViewMode">Add Criteria</span>
+							      <span class="add-button-div matrixBtn1" id="criteria_edit" style="background-color: white; border: 1px solid #C5C6C8"
+							       ng-if="PcriteriaList.length != 0 && !ViewMode">Edit Criteria</span>
+							  </div>
+		   					</div>
+	   					</div>
+					<hr />
+				 <policy></policy>
+			    <br>		
+			    <div>
+			       <a class="add-button-div" ng-click="savePolicyData()" ng-if="!ViewMode">Update Policy</a>
+			    </div>
+			  </div>
+			</div>
+		</div>				
+		    
+		    <div class="table-panel" id="rules-container" style="display: none;">
+				<div class="row clearfix">
+					<span class="CatError" ng-if="RuleList.length == 0"> No Rules has been defined yet...!!!</span>
+					<div class="col-md-12">
+					  <table class="table table-striped table-condensed table-hover header" id="rules_table" ng-if="RuleList.length != 0">
+						<thead>
+							<tr><th>Rule ID</th><th>Rule Name</th><th>Rule Type</th><th>Status</th>
+							<th>Created By</th><th>Updated By</th><th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="Rule in RuleList | orderBy:'RuleID' | filter:rule_name">
+								<td>{{Rule.RuleID}}</td><td>{{Rule.name}}</td>
+								<td>{{Rule.type}}</td><td>{{Rule.status}}</td>
+								<td>{{Rule.createdby}}</td><td>{{Rule.updatedby}}</td>
+								<td><span class="glyphicon glyphicon-edit" ng-if="authenticate('REDIT')" title="edit" 
+									ng-click="Load_Rules(Rule.RuleID, 'edit',Rule.type)"></span>
+								<span class="glyphicon glyphicon-eye-open" ng-if="authenticate('RVIEW')" title="View" 
+									ng-click="Load_Rules(Rule.RuleID, 'view',Rule.type)"></span>
+								<span class="glyphicon glyphicon-trash" ng-if="authenticate('RDLT')" title="Delete" 
+									ng-click="Load_Rules(Rule.RuleID, 'delete',Rule.type)"></span>
+								<span class="glyphicon glyphicon-check" ng-if="(Rule.status=='Pending'||Rule.status=='Disabled') && authenticate('RAPRV')" title="Approve"
+									ng-click="Load_Rules(Rule.RuleID, 'approve',Rule.type)"></span>
+								<span class="glyphicon glyphicon-ban-circle" ng-if="Rule.status=='Approved' && authenticate('RAPRV')" title="Disable"
+									ng-click="Load_Rules(Rule.RuleID, 'disable',Rule.type)"></span>
+								</td>
+							</tr>	
+						</tbody>
+					</table>
+					<div class="row clearfix" id="rules_main_container" style="display: none;">
+				   	 <div class="col-md-12">
+						  <div class="row clearfix" id="Tree_main_container" style="display: none;overflow: hidden;">
+						    <object id="bargraph" type="text/html" data="tree.html" width="100%" height="600px;" style="border:none;"></object>
+						  </div>
+					
+						<matrix></matrix>
+	
+		<div class="row clearfix" id="Criteria_main_container" style="display: none;">
+		   <div class="col-md-12">		
+			    <div class="clearfix" id="criteria-table-div">
+			    	<span class="CatError" ng-if="RcriteriaList.length == 0"> No Criteria Rules has been defined yet...!!!</span>
+					<div class="row nospace" ng-repeat="obj in RcriteriaList | orderBy:'CriteriaID'" style="margin-bottom: 30px;">
+					    <div class="clearfix text-left" style="border-bottom: 1px solid #ddd; background-color: #E6EEFB;">
+					    <div class="col-md-3" style="padding-left: 0px;"> <label class="form-label">CRITERIA #{{obj.CriteriaID}}</label></div>
+					    <div class="col-md-6"><label class="form-label">{{obj.cname}}</label></div>
+					    <div class="col-md-3 text-right">
+					    <a class="rule_delete_btn" title="Delete" ng-if="!ViewMode" ng-click="deleteCritRules(obj.CriteriaID)">Delete</a>
+                        <a class="rule_edit_btn" title="Edit" ng-if="!ViewMode" ng-click="editCriteriaRule(obj.CriteriaID)">Edit</a>
+	</div> 
+					    </div>
+						<div class="row nospace">
+						<div class="row clearfix Rulebox" ng-repeat="rule in obj.rules" style="display: block; margin: 5px 0px">
+							<div class="logic_expression">
+								<span class="logic_matrix" style="width: 15%;" ng-if="rule.expValue3 == undefined || rule.expValue3 == ''" title="{{ rule.val1}}">{{ rule.val1 | rupee:"&#x20B9; "}}</span>
+								<span class="logic_matrix" style="width: 15%;" ng-if="rule.expValue3 != undefined && rule.expValue3 != ''" title="{{rule.displayname1}}">{{rule.displayname1}}</span>
+	
+								<span class="logic_matrix" style="width: 12%" title="{{ rule.exp1 }}">{{ rule.exp1 }}</span> 
+	
+								<span class="logic_matrix" style="width: 30%;" ng-if="rule.expValue1 == undefined" title="{{rule.displayname}}">{{rule.displayname}}</span>
+								<span class="logic_matrix" style="width: 30%;" ng-if="rule.expValue1 != undefined" title="{{rule.displayname}}">({{rule.expValue1}} %) of {{rule.displayname}}</span> 
+								<span class="logic_matrix" style="width: 12%" title="{{ rule.exp2 }}">{{ rule.exp2 }}</span> 
+								<span class="logic_matrix" style="width: 18%" ng-if="rule.expValue2 == undefined" title="{{ rule.val2}}">{{ rule.val2 | rupee:"&#x20B9; "}}</span>
+								<span class="logic_matrix" style="width: 18%" ng-if="rule.expValue2 != undefined" title="{{rule.displayname1}}">({{rule.expValue2}} %) of {{rule.displayname1}}</span>
+								<span class="inopr" ng-if="rule.operator"><span class="left-braces"></span>{{rule.operator | operator}}</span>
+							</div>
+							
+							<div class="logic_expression" ng-repeat="ref in rule.ref">
+								<span class="logic_matrix" style="width: 15%;" ng-if="ref.expValue3 == undefined || ref.expValue3 == ''" title="{{ref.val1}}">{{ ref.val1 | rupee:"&#x20B9; "}}</span>
+								<span class="logic_matrix" style="width: 15%;" ng-if="ref.expValue3 != undefined && ref.expValue3 != ''" title="{{ref.displayname1}}">{{ref.displayname1}}</span>
+	<!-- 						<span class="logic_matrix" style="width: 15%;" title="{{ ref.val1}}">{{ ref.val1 | rupee:"&#x20B9; "}}</span> -->
+								<span class="logic_matrix" style="width: 12%;" title="{{ ref.exp1 }}">{{ ref.exp1 }}</span> 
+								<span class="logic_matrix" style="width: 30%;" ng-if="ref.expValue1 == undefined" title="{{ref.displayname}}">{{ref.displayname}}</span>
+								<span class="logic_matrix" style="width: 30%;" ng-if="ref.expValue1 != undefined" title="{{ref.displayname}}">({{ref.expValue1}} %) of {{ref.displayname}}</span> 
+								<span class="logic_matrix" style="width: 12%;" title="{{ ref.exp2 }}">{{ ref.exp2 }}</span> 
+								<span class="logic_matrix" style="width: 18%;" ng-if="ref.expValue2 == undefined" title="{{ ref.val2}}">{{ ref.val2 | rupee:"&#x20B9; "}}</span>
+								<span class="logic_matrix" style="width: 18%;" ng-if="ref.expValue2 != undefined" title="{{ref.displayname1}}">({{rule.expValue2}} %) of {{ref.displayname1}}</span>
+								<span class="inopr" ng-if="ref.operator"><span class="left-braces"></span>{{ref.operator | operator}}</span>
+							</div>
+							 <span ng-if='rule.outOperator' class="outopr">{{rule.outOperator | operator}}<span class="right-braces"></span></span>
+							</div>
+
+					<div class="row clearfix" style="margin-top: 20px">
+					 <div class="col-md-3">
+					    <label class="form-label inline">Outcome : </label>
+						<span>{{obj.Outcome}}</span>
+					 </div>
+					 <div class="col-md-4" ng-if="obj.remark">
+					  <label class="form-label inline">Remark : </label>
+					  <span>{{obj.remark}}</span>
+					 </div>
+					</div>		
+				</div>		
+		      </div>							 
+			 <button class="add-button-div" id="add_criteria" ng-if="!ViewMode"> + Add</button>	
+		  </div>
+		  </div>
+		  <div class="col-md-12" id="add-criteria-panel">
+			<div style="border:1px solid #ECDBDB;">
+				<div class="panel_heading"><label class="form-label">Criteria Panel</label>
+				   <span style="float: right;color: red" id="rule_error"></span></div>
+					<div class="panel_body">													     
+						<div class="row clearfix box criteria_rule_body" id="criteria_rule_body0">															
+							<div class="criteriaRules" id="criteriaRule00">
+								<select class="form-control equal IffDrpDwn" id="IFF_File_first00" name="First IFF File">
+									<option value="Select" selected="selected">Select File</option>																												
+								</select> 
+								<input class="form-control hiden equal" type="text" id="ExpValueFirst00" placeholder="X.XX %"
+									 maxlength="4" name="Fraction Value"/>
+									<select class="form-control equal" id="IFF_Field_first00" name="First Field Name">
+										<option value="Select" selected="selected">Select Field</option>		
+									</select>
+									<select class="form-control equal" id="ExpType00">
+										<option value="Value" selected="selected">Value</option>
+										<option value="Field">Field</option>
+										<option value="Fraction">Fraction</option>
+									</select>	
+						             <select class="form-control equal" id="expression00" name="Condition Expression">
+										<option value="Select" selected="selected">Select Expression</option>																			
+									</select> 
+									<input class="form-control equal hiden" type="text" id="firstValue00"
+									name="Minimum Value" placeholder="Minimum Value"/>
+									<input class="form-control equal hiden" type="text" id="secondValue00" 
+									name="Maximum Value" placeholder="Maximum Value"/>
+									<select class="form-control equal hiden IffDrpDwn" id="IFF_File_second00" name="Second IFF File">
+										<option value="Select" selected="selected">Select File</option>																														
+									</select>
+									<input class="form-control hiden equal" type="text" id="ExpValueMin00"
+									name="Min Fraction Value (Field 2)" placeholder="Min X.XX %" maxlength="4"/> 
+									<select class="form-control equal hiden" id="IFF_Field_second00" name="Second IFF Field">
+										<option value="Select" selected="selected">Select Field</option>																			
+									</select>
+									<input class="form-control hiden equal" type="text" id="ExpValueMax00"
+									name="Max Fraction value (Field 2)" placeholder="Max X.XX %" maxlength="4"/> 
+								    <span class="Inner_Operator_block" id="INOp_Value00"></span>
+								    <a class="abs-right deleteRule" title="Delete Rule" role="criteriaRules">Delete</a>
+										</div>
+									 <div class="row clearfix">
+										<div class="col-md-12">
+											<button class="add-button-div INOperator"  value="&&">AND</button>
+											<button class="add-button-div INOperator"  value="||">OR</button>
+										</div>														  
+						  			 </div>
+						  			  <span class="Outer_Operator_block" id="OUTOp_Value0"></span>
+								 </div>
+								  <div class="row clearfix">
+									<div class=" col-md-12 text-right">
+										<button class="add-button-div OUTOperator" value="&&">AND</button>
+										<button class="add-button-div OUTOperator" value="||">OR</button>
+									</div>														  
+					  			 </div>
+					  		 <div class="row clearfix">	
+				  		        <div class="col-md-2">
+									<input class="form-control" type="text" id="criteria_name" placeholder="Criteria Name" />
+								</div> 
+								<div class="col-md-2">
+									<select class="form-control" id="COutcome">
+									<option value="Select" selected="selected">Select Outcome</option>
+									<option value="Approved">Approved</option>
+									<option value="Declined">Decline</option>
+									<option value="Queue">Queue</option>
+									</select>
+								</div>										
+								<div class="col-md-4">
+									<input class="form-control hiden" type="text" id="cRemark" placeholder="Remark" />
+								</div>																								
+							</div>
+					</div>			
+					<div class="panel_footer" style="text-align: right;">
+						<a class="TC_button" ng-if="!CrRuleUpdate" id="criteria_panel_add" ng-click="createcriteriaRule('Create')">Save</a>													
+						<a class="TC_button" ng-if="CrRuleUpdate" ng-click="createcriteriaRule('Update')">Update</a>	
+						<a class="TC_button" id="criteria_panel_close" ng-click="closeCriteriaPanel()">Close</a>
+					</div>
+		     	</div>
+		    </div>							
+		  </div>   							
+         </div>
+	   </div>
+	  </div>
+	 </div>
+  </div>
+		
+		<div class="table-panel" id="scoring-container">
+			<div class="row clearfix">
+			<div class="col-md-12">
+			   <span class="CatError" ng-if="tableList.length == 0"> No Tables has been defined yet...!!!</span>
+				<table class="table table-striped table-condensed table-hover header" id="scoring_table" ng-show="tableList.length != 0">
+					<thead>
+					<tr><th>Table ID</th><th>Table Name</th><th>Status</th><th>Created By</th>
+					<th>Updated By</th><th>Action</th></tr>
+					</thead>
+					<tbody>
+					<tr ng-repeat="table in tableList | orderBy:'TableID' |filter:tableName">
+						<td>{{table.TableID}}</td><td>{{table.name}}</td><td>{{table.status}}</td>
+						<td>{{table.createdby}}</td><td>{{table.updatedby}}</td>
+						<td><span class="glyphicon glyphicon-edit" ng-if="authenticate('STEDIT')" title="edit" 
+							ng-click="load_table(table.TableID, 'edit')"></span>
+						<span class="glyphicon glyphicon-eye-open" ng-if="authenticate('STVIEW')" title="View" 
+							ng-click="load_table(table.TableID, 'view')"></span>
+						<span class="glyphicon glyphicon-trash" ng-if="authenticate('STDLT')" title="Delete" 
+							ng-click="load_table(table.TableID, 'delete')"></span>
+						<span class="glyphicon glyphicon-check" ng-if="(table.status=='Pending'||table.status=='Disabled') && authenticate('STAPRV')" title="Approve" 
+							ng-click="load_table(table.TableID, 'approve')"></span>
+						<span class="glyphicon glyphicon-ban-circle" ng-if="table.status=='Approved' && authenticate('STAPRV')" title="Disable"
+							ng-click="load_table(table.TableID, 'disable')"></span>	
+							</td>
+						</tr>	
+					</tbody>
+				</table>							
+			</div>
+		</div>
+
+<!-- **************************Common in Simulator************************* -->
+			<score></score>
+<!-- ****************************End***************************************** -->
+
+
+		</div>
+		
+		 <div class="table-panel" id="Iff-container" style="display: none;">
+			<div class="row clearfix">
+					<span class="CatError" ng-if="IFFList.length == 0"> No IFF File has been uploaded yet...!!!</span>
+					<div class="col-md-12">
+					 <table class="table table-striped table-condensed table-hover header" id="iff_table"
+					   ng-if="IFFList.length != 0">
+						<thead>
+							<tr>
+							<th>File Name</th><th>File Type</th><th>Status</th>
+							<th>Created By</th><th>Updated By</th><th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="IFF in IFFList | orderBy:['Type','Name'] | filter:IffName">
+								<td>{{IFF.Name}}</td><td>{{IFF.Type}}</td>
+								<td>{{IFF.status}}</td><td>{{IFF.createdby}}</td>
+								<td>{{IFF.updatedby}}</td>
+								<td><span class="glyphicon glyphicon-edit" ng-if="authenticate('PIFFEDIT')" title="edit" 
+									ng-click="Load_Iff(IFF.FileID, 'edit',IFF.Type)"></span>
+								<span class="glyphicon glyphicon-eye-open" ng-if="authenticate('PIFFVIEW')" title="View" 
+									ng-click="Load_Iff(IFF.FileID, 'view',IFF.Type)"></span>
+								<span class="glyphicon glyphicon-trash" ng-if="authenticate('PIFFDLT')" title="Delete" 
+									ng-click="Load_Iff(IFF.FileID, 'delete')"></span>
+								<span class="glyphicon glyphicon-check" ng-if="(IFF.status=='Pending'||IFF.status=='Disabled') && authenticate('PIFFAPRV')" title="Approve"
+									ng-click="Load_Iff(IFF.FileID, 'approve')"></span>
+								<span class="glyphicon glyphicon-ban-circle" ng-if="IFF.status=='Approved' && authenticate('PIFFAPRV')" title="Disable"
+									ng-click="Load_Iff(IFF.FileID, 'disable')"></span>
+								</td>
+							</tr>	
+							
+							<tr ng-repeat="master in Mlist | orderBy:'Name' | filter:IffName">
+								<td>{{master.Name}}</td><td>{{master.Type}}</td>
+								<td>{{master.status}}</td><td>{{master.createdby}}</td>
+								<td>{{master.updatedby}}</td>
+								<td><span class="glyphicon glyphicon-edit"  ng-if="authenticate('PIFFEDIT')" title="edit" 
+									ng-click="mastervalue(master.FileID, 'edit')"></span>
+								<span class="glyphicon glyphicon-eye-open" ng-if="authenticate('PIFFVIEW')" title="View" 
+									ng-click="mastervalue(master.FileID, 'view')"></span>
+								<span class="glyphicon glyphicon-trash" ng-if="authenticate('PIFFDLT')" title="Delete" 
+									ng-click="mastervalue(master.FileID, 'delete')"></span>
+								<span class="glyphicon glyphicon-check" ng-if="(master.status=='Pending'||master.status=='Disabled') && authenticate('PIFFAPRV')" title="Approve" 
+									ng-click="mastervalue(master.FileID, 'approve')"></span>
+								<span class="glyphicon glyphicon-ban-circle" ng-if="master.status=='Approved' && authenticate('PIFFAPRV')" title="Disable" 
+									ng-click="mastervalue(master.FileID, 'disable')"></span>
+								</td>
+							</tr>	
+							
+						</tbody>
+					</table>
+<!-- 					 <span class="CatError" ng-if="IffFieldList.length == 0"> No Fields hase been defined yet...!!!</span> -->
+					 <table class="table table-striped table-condensed table-hover header" id="iff_fields_table"
+					   ng-if="IffFieldList.length != 0">
+						<thead>
+							<tr>
+<!-- 							<th>Field ID</th> -->
+							<th>Field Name</th><th>Data Type</th>
+							<th>Active</th><th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="object in IffFieldList | orderBy:'DISPLAY_NAME'">
+<!-- 								<td>{{object.FIELD_ID}}</td> -->
+								<td>{{object.DISPLAY_NAME}}</td>
+								<td>{{object.FIELD_TYPE=='S'?'String':(object.FIELD_TYPE=='N'?'Number':(object.FIELD_TYPE=='D'?'Date':(object.FIELD_TYPE=='B'?'Boolean':object.FIELD_TYPE)))}}</td>
+								<td>{{object.ACTIVE==1?'Active':'InActive'}}</td>
+								<td>
+								<span class="glyphicon glyphicon-eye-open" title="View"
+									ng-click="iffFieldView(object.FIELD_ID)"></span>
+								<span class="glyphicon glyphicon-ok-circle" title="Active" ng-if="object.ACTIVE==0"
+									ng-click="iffFieldStatus(object.FIELD_ID, 1)"></span>
+								<span class="glyphicon glyphicon-ban-circle" title="InActive" ng-if="object.ACTIVE==1"
+									ng-click="iffFieldStatus(object.FIELD_ID, 0)"></span>
+<!-- 								<span class="glyphicon glyphicon-trash" title="Delete"  -->
+<!-- 									ng-click="iffFieldDelete(object.FIELD_ID)"></span> -->
+								</td>
+							</tr>	
+						</tbody>
+					</table>
+					<div id="MFTable" style="display:none; overflow: auto; width:100%;margin-bottom: 20px">
+					<table class="table table-striped table-condensed table-hover header" id="master_fields_table"
+					   style="display: none;">
+						<thead >
+						<tr>	<th ng-repeat="(key , value) in THead">{{key}}</th>
+ 								</tr> 
+						</thead>
+						<tbody>
+					 	<tr ng-repeat="trow in mfieldlist">
+								<td ng-repeat="(key , value) in trow">{{value}}</td>
+							</tr>	
+						</tbody>
+					</table>
+					</div>
+
+					<a class="add-button-div hiden" id="addIffField">Add New Field</a>			
+					<a class="add-button-div hiden" id="addcstmField">Add New Field</a>
+<!-- 					<a class="add-button-div hiden" id="addnewField">Add Default</a> -->
+				 </div>
+			  </div>
+<!-- 	container for analytical fields start-->
+		 <div class="row clearfix" id="IffFieldPanel" style="margin-bottom: 40px;">
+			<div style="border:1px solid #ECDBDB;">
+				<div class="panel_heading">Analytical Field Panel<span style="float: right;color: red" id="antcl_error"></span></div>
+					<div class="panel_body" style="padding-top: 15px">													     
+						<div class="row clearfix">
+						 <div class="col-md-1"><label class="form-label">Name</label> </div>
+						 <div class="col-md-3">
+						   <input type="text" id="anltclFName" class="form-control" capitalize ng-model="antclName" name="Field Name"/>
+						  </div>
+						 <div class="col-md-4 col-md-offset-4">
+							<div class="btn-group btn-toggle" id="AntclFldType">
+								<button class="btn btn-sm btn-success active" style="width: 100px">Field</button>
+								<button class="btn btn-sm btn-default" style="width: 100px">Ratio</button>
+							</div>
+						 </div>
+						 </div>														
+						<div class="row clearfix box" id="analytical_field_body0">	
+							<div class="row criteriaRules">
+							    <div class="col-md-2"><label class="form-label">Base Field</label></div>
+								<div class="col-md-10">
+								  <select class="form-control inline IffDrpDwn" id="AntclBaseFile" name="IFF File">
+									<option value="Select" selected="selected">Select File</option>																												
+								  </select>
+								  <select class="form-control inline" id="AntclBaseField" name="IFF Field">
+									<option value="Select" selected="selected">Select Field</option>		
+								  </select> 
+								</div>
+							</div>
+							<div class="row criteriaRules">
+							  <div class="col-md-2"><label class="form-label">Aggregation</label></div>
+								<div class="col-md-10">
+								  <select class="form-control inline" id="AntclAggrOprtr" name="Aggrigation Operator">
+									<option value="Select" selected="selected">Select Operator</option>																										
+								  </select>
+								  <select class="form-control equal hiden" id="AntclCType" name="Comparision Type">
+									<option value="Select" selected="selected">Select Type</option>
+									<option value="Value">Value</option>
+									<option value="Field">Field</option>																										
+								  </select>
+								   <select class="form-control equal hiden IffDrpDwn" id="AntclCmprFile" name="IFF File">
+									<option value="Select" selected="selected">Select File</option>																												
+								  </select>
+								  <select class="form-control equal hiden" id="AntclCmprField" name="IFF Field" contextmenu="D">
+									<option value="Select" selected="selected">Select Field</option>		
+								  </select> 
+								   <input type="text" id="AnltclCmprValue" class="form-control hiden" name="Compare Value"/>
+								</div>
+							</div>
+							<div class="row criteriaRules">
+							  <div class="col-md-2"><label class="form-label">Selection Filters</label></div>
+								<div class="col-md-10">
+								  <div class="row box nospace AntclFltrBody" id="f0">
+								    <div class="AntclFltrRow" id="0">
+									  <select class="form-control inline IffDrpDwn" id="AntclFltrFile00" name="IFF File">
+										<option value="Select" selected="selected">Select File</option>																												
+									  </select>
+									  <select class="form-control inline" id="AntclFltrField00" name="IFF Field">
+										<option value="Select" selected="selected">Select Field</option>																												
+									  </select>
+								  </div>
+								  <span>
+								    <button class="add-button-div inline AntclINOp"  value="&&">AND</button>
+								    <button class="add-button-div inline AntclINOp"  value="||">OR</button>
+								    </span>
+								 </div>
+								 <div class="row nospace text-right">
+								  <button class="add-button-div inline AntclOUTOp"  value="&&">AND</button>
+								  <button class="add-button-div inline AntclOUTOp"  value="||">OR</button>
+								 </div>
+								</div>
+							</div>
+							<div class="row criteriaRules">
+							  <div class="col-md-2"><label class="form-label">Grouping Parameters</label></div>
+								<div class="col-md-10">
+								  <div class="row box nospace AntclGrpBody" id="g0">
+								  <div class="AntclGrpRow" id="0">
+									  <select class="form-control inline IffDrpDwn" id="AntclGrpFile00" name="IFF File">
+										<option value="Select" selected="selected">Select File</option>																												
+									  </select>
+									  <select class="form-control inline" id="AntclGrpField00" name="IFF Field" contextmenu="Number">
+										<option value="Select" selected="selected">Select Field</option>																												
+									  </select>
+								  </div>
+								  <sapn>
+								    <button class="add-button-div inline AntclINOp"  value="&&">AND</button>
+								    <button class="add-button-div inline AntclINOp"  value="||">OR</button>
+								   </span>
+								</div>
+								 <div class="row nospace text-right">
+								  <button class="add-button-div inline AntclOUTOp"  value="&&">AND</button>
+								  <button class="add-button-div inline AntclOUTOp"  value="||">OR</button>
+								 </div>
+								</div>
+							</div>
+						</div>
+						<div class="row clearfix box hiden" id="analytical_field_body1">	
+							<div class="row criteriaRules">
+							  <div class="col-md-2"><label class="form-label">Field 1</label></div>
+								<div class="col-md-10 AntclRatioBody">
+								 <div class="AntclRatioRow" id="0">
+								  <select class="form-control equal IffDrpDwn" id="AntclRatioFile0" name="IFF File">
+									<option value="Select" selected="selected">Select File</option>																												
+								  </select>
+								  <select class="form-control equal" id="AntclRatioField0" name="IFF Field" contextmenu="N">
+									<option value="Select" selected="selected">Select Field</option>																												
+								  </select>								  
+								 </div>								 
+<!-- 								<button class="add-button-div inline AntclINOp"  value="&&">AND</button> -->
+								</div>
+							</div>
+							<div class="row criteriaRules">
+							  <div class="col-md-2"><label class="form-label">Field 2</label></div>
+								<div class="col-md-10">
+								 <div class="AntclRatioRow" id="1">
+								  <select class="form-control equal IffDrpDwn" id="AntclRatioFile1" name="IFF File">
+									<option value="Select" selected="selected">Select File</option>																												
+								  </select>
+								  <select class="form-control equal" id="AntclRatioField1" name="IFF Field" contextmenu="N">
+									<option value="Select" selected="selected">Select Field</option>																												
+								  </select>
+								  </div>
+<!-- 								<button class="add-button-div inline AntclINOp"  value="&&">AND</button> -->
+								</div>
+							</div>
+						</div>	
+						</div>		
+					<div class="panel_footer" style="text-align: right;">
+						<a class="TC_button" ng-click="addNewAntclField()">Save</a>													
+						<a class="TC_button" ng-click="closeAntclDefPnl()">Close</a>
+					</div>
+		       </div>		
+		       </div>    
+<!-- 	iff field add panel end -->
+
+<!-- 			</div> -->
+	 <div class="row clearfix" id="customFieldPanel" style="margin-bottom: 40px;display: none;">
+			<div style="border:1px solid #ECDBDB;">
+				<div class="panel_heading">Custom Field Panel<span style="float: right;color: red" id="custom_error"></span></div>
+					<form id="customForm">
+					<div class="panel_body" style="padding-top: 15px">													     
+						<div class="row clearfix">
+						 <div class="col-md-1"><label class="form-label">Name : </label> </div>
+						 <div class="col-md-2">
+						   <input type="text" class="form-control" ng-model="cstmName" name="Field Name" capitalize/>
+						  </div>
+						  <div class="col-md-2 col-md-offset-1">
+						 	 <button class="add-button-div" id="cstmdfltval" style="margin: 0px"> Default value </button>
+						  </div>
+						   <div class="col-md-3">
+						 	<div class="btn-group btn-toggle" id="CstmLavel">
+								<button class="btn btn-sm btn-success active" style="width: 100px">Trade</button>
+								<button class="btn btn-sm btn-default" style="width: 100px">Summary</button>
+							</div>
+						   </div>
+							<div class="col-md-3">
+							 <label class="form-label">Data Type : </label>
+							 <select class="form-control inline" id="cstmDataType" name="Data type" style="width: 65%">
+								<option value="S" selected="selected">String</option>																												
+								<option value="N">Number</option>																												
+								<option value="B">Boolean</option>																												
+								<option value="D">Date</option>														
+							  </select>
+							</div>
+						</div>
+						<div class="row clearfix box cstm_rule_body" id="0">	
+							<div class="col-md-7" id="cndtnOtrdiv"><label class="form-label">Condition</label>
+							    <div class="row clearfix box nospace cstmFieldRule" id="cstmbody0">
+								  <div class="cstmRow" id="0">
+									  <select class="form-control equal IffDrpDwn" id="cstmFileOne000" name="IFF File">
+										<option value="Select" selected="selected">Select File</option>																												
+									  </select>
+									   <select class="form-control equal" id="cstmFieldOne000" name="IFF Field">
+										<option value="Select" selected="selected">Select Field</option>																												
+									  </select>
+									   <select class="form-control equal hiden" id="cstmDPDTYPE000" name="DPD Action Type">
+										<option value="Select">Select</option>
+										<option value="DPD-VALUE">DPD Value</option>
+										<option value="DPD-DATE">DPD Date</option>																												
+									  </select>
+									   <select class="form-control equal" id="cstmExp000" name="Expression">
+										<option value="Select">Expression</option>																												
+									  </select>
+									  <select class="form-control equal" id="cstmCType000" name="OPeration Type">
+										<option value="Select" selected="selected">Type</option>
+										<option value="Value">Value</option>
+										<option value="Field">Field</option>																												
+									  </select>
+									  <input type="text" class="form-control equal hiden" id="cstmValue1000"/>
+	  								  <input type="text" class="form-control equal hiden" id="cstmValue2000"/>
+	  								  <select class="form-control equal IffDrpDwn hiden" id="cstmFileTwo000" name="IFF File">
+										<option value="Select">Select File</option>																												
+									  </select>
+									  <select class="form-control equal hiden" id="cstmFieldTwo000" name="IFF Field">
+										<option value="Select">Select Field</option>																												
+									  </select>
+									   <select class="form-control equal hiden" id="cstmCmprExp000" name="Expression">
+										<option value="Select">Expression</option>
+										<option value="<"> &lt; </option>
+										<option value="<="> &lt;= </option>
+										<option value="=="> == </option>
+										<option value="<"> &gt; </option>
+										<option value=">="> &lt;= </option>																												
+									  </select>
+									   <input type="text" class="form-control equal hiden" id="cstmCmprValue1000" contextmenu="Number"/>
+								  </div>
+								  <span>
+								    <button class="add-button-div inline AntclINOp"  value="&&">AND</button>
+								    <button class="add-button-div inline AntclINOp"  value="||">OR</button>
+								   </span>
+								</div>
+							     <div class="row nospace text-right">
+								    <button class="add-button-div inline cstmOUTOp"  value="&&">AND</button>
+								    <button class="add-button-div inline cstmOUTOp"  value="||">OR</button>
+								 </div>
+							</div>
+							<div class="col-md-5">
+							<label class="form-label">Outcome</label>
+							<div class="box nospace outcomeContainer">
+							 <div class="row criteriaRules">
+							    <div class="col-md-3" style="padding: 0px"><label class="form-label">Outcome Type</label></div>
+								<div class="col-md-9">
+								  <select class="form-control" id="cstmOutType0" name="OutCome Type">
+									<option value="Field" selected="selected">Field</option>
+									<option value="Value">Value</option>																												
+								  </select>
+								</div>
+							</div> 
+							 <div class="row criteriaRules" id="BaseContainer">
+							    <div class="col-md-3" style="padding: 0px"><label class="form-label">Base Field</label></div>
+								<div class="col-md-9">
+								  <select class="form-control equal IffDrpDwn" id="cstmOutBaseFile0" name="IFF File" style="width: 45%">
+									<option value="Select">Select File</option>																												
+								  </select>
+								  <select class="form-control equal" id="cstmOutBaseField0" name="IFF Field"style="width: 45%">
+									<option value="Select">Select Field</option>		
+								  </select> 
+								</div>
+							</div> 
+							 <div class="row criteriaRules" id="AggregationContainer">
+							  <div class="col-md-3" style="padding: 0px"><label class="form-label">Aggregation</label></div>
+								<div class="col-md-9">
+								  <select class="form-control" id="cstmOutAggrOprtr0" name="Aggrigation Operator">
+									<option value="Select">Select Operator</option>																										
+								  </select>
+								  <select class="form-control hiden" id="cstmOutCType0" name="Comparision Type">
+									<option value="Select">Type</option>
+									<option value="Value">Value</option>
+									<option value="Field">Field</option>																										
+								  </select>
+								   <select class="form-control equal hiden IffDrpDwn" id="cstmOutCmprFile0" name="IFF File"style="width: 45%">
+									<option value="Select">Select File</option>																												
+								  </select>
+								  <select class="form-control equal hiden" id="cstmOutCmprField0" name="IFF Field" contextmenu="D"style="width: 45%">
+									<option value="Select">Select Field</option>		
+								  </select> 
+								   <input type="text" id="AnltclOutCmprValue0" class="form-control hiden" name="Compare Value"/>
+								</div>
+							</div>
+							 <div class="row criteriaRules hiden" id="valueContainer">
+							    <div class="col-md-3" style="padding: 0px"><label class="form-label">Value</label></div>
+								<div class="col-md-9">
+								<input class="form-control" id="cstmOutcmValue0" name="cstmOutval0" placeholder="Outcome Value"/>
+								</div>
+							 </div>							
+							</div>
+						  </div>
+						</div>
+						<div class="row clearfix box hiden" id="cstm_field_default">	
+							<div class="col-md-7">
+							<label class="form-label">Default Outcome</label>
+							<div id="outcomeContainer" class="box nospace">
+							 <div class="row criteriaRules">
+							    <div class="col-md-3" style="padding: 0px"><label class="form-label">Outcome Type</label></div>
+								<div class="col-md-9">
+								  <select class="form-control inline" id="cstmDfltOutType" name="OutCome Type" style="width: 48%">
+									<option value="Field" selected="selected">Field</option>
+									<option value="Value">Value</option>																												
+								  </select>
+								</div>
+							</div> 
+							 <div class="row criteriaRules" id="BaseContainer">
+							    <div class="col-md-3" style="padding: 0px"><label class="form-label">Base Field</label></div>
+								<div class="col-md-9">
+								  <select class="form-control inline IffDrpDwn" id="cstmDfltOutBaseFile" name="IFF File" style="width: 48%">
+									<option value="Select" selected="selected">Select File</option>																												
+								  </select>
+								  <select class="form-control inline" id="cstmDfltOutBaseField" name="IFF Field"style="width: 48%">
+									<option value="Select" selected="selected">Select Field</option>		
+								  </select> 
+								</div>
+							</div> 
+							 <div class="row criteriaRules" id="AggregationContainer">
+							  <div class="col-md-3" style="padding: 0px"><label class="form-label">Aggregation</label></div>
+								<div class="col-md-9">
+								  <select class="form-control inline" id="cstmDfltOutAggrOprtr" name="Aggrigation Operator">
+									<option value="Select" selected="selected">Select Operator</option>																										
+								  </select>
+								  <select class="form-control equal hiden" id="cstmDfltOutCType" name="Comparision Type" style="width: 48%">
+									<option value="Select" selected="selected">Type</option>
+									<option value="Value">Value</option>
+									<option value="Field">Field</option>																										
+								  </select>
+								   <select class="form-control equal hiden IffDrpDwn" id="cstmDfltOutCmprFile" name="IFF File"style="width: 48%">
+									<option value="Select" selected="selected">Select File</option>																												
+								  </select>
+								  <select class="form-control equal hiden" id="cstmDfltOutCmprField" name="IFF Field" contextmenu="D"style="width: 48%">
+									<option value="Select" selected="selected">Select Field</option>		
+								  </select> 								
+								</div>
+							</div>
+							 <div class="row criteriaRules hiden" id="valueContainer">
+							    <div class="col-md-3" style="padding: 0px"><label class="form-label">Value</label></div>
+								<div class="col-md-9">
+								<input class="form-control" id="cstmDfltOutcmValue" name="cstmDefOutval" placeholder="Outcome Value"/>
+								</div>
+							</div> 
+							
+							</div></div>
+						</div>
+						  <div class="row nospace text-right">
+							  <button class="add-button-div inline" id="addCstmRange">ADD RANGE</button>
+						  </div>
+						</div>
+						</form>
+					<div class="panel_footer" style="text-align: right;">
+						<a class="TC_button" id="savecstm">Save</a>													
+						<a class="TC_button" ng-click="closeCstmPanel()">Close</a>
+					</div>
+		       </div>		
+		 </div>
+	 </div>
+		
+<!-- 		elegibility screen for bank -->
+     <div class="table-panel hiden" id="elgblty-container">
+		<div class="col-md-12">
+		 <div class="row clearfix" id="elgbltyTables">
+		   <span class="CatError" ng-if="ElgbltyList.length == 0"> No Eligibility has been defined yet...!!!</span>
+		      <table class="table table-striped table-condensed table-hover header"  ng-if="ElgbltyList.length != 0">
+				<thead>
+					<tr><th>Eligibilty ID</th><th>Name</th><th>Status</th>
+					<th>Created By</th><th>Updated By</th><th>Action</th></tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="elgblty in ElgbltyList | orderBy:['ElgbltyID','Name'] | filter:ElgbltyName">
+						<td>{{elgblty.ElgbltyID}}</td><td>{{elgblty.name}}</td>
+						<td>{{elgblty.status}}</td><td>{{elgblty.createdby}}</td>
+						<td>{{elgblty.updatedby}}</td>
+						<td><span class="glyphicon glyphicon-edit" ng-if="authenticate('PIFFEDIT')" title="edit" 
+							ng-click="Load_Elgblty(elgblty.ElgbltyID, 'edit')"></span>
+						<span class="glyphicon glyphicon-eye-open" ng-if="authenticate('PIFFVIEW')" title="View" 
+							ng-click="Load_Elgblty(elgblty.ElgbltyID,'view')"></span>
+						<span class="glyphicon glyphicon-trash" ng-if="authenticate('PIFFDLT')" title="Delete" 
+							ng-click="Load_Elgblty(elgblty.ElgbltyID,'delete')"></span>
+						<span class="glyphicon glyphicon-check" ng-if="(elgblty.status=='Pending'||elgblty.status=='Disabled') && authenticate('PIFFAPRV')" title="Approve"
+							ng-click="Load_Elgblty(elgblty.ElgbltyID, 'approve')"></span>
+						<span class="glyphicon glyphicon-ban-circle" ng-if="elgblty.status=='Approved' && authenticate('PIFFAPRV')" title="Disable"
+							ng-click="Load_Elgblty(elgblty.ElgbltyID, 'disable')"></span>
+						</td>
+					</tr>
+					</tbody>
+				</table>	
+		    </div>
+		    <div class="row clearfix hiden" id="ElgbltyDisplay">
+		    <div class="col-md-12">
+		     <div class="row clearfix">
+		     <label>CONDITION RULES</label>
+		     <span class="CatError" ng-if="!(Eligibility.RULES && Eligibility.RULES.length!=0)"> No Eligibilty rules has been defined yet...!!!</span>
+		      <div class="row clearfix nospace" ng-repeat="object in Eligibility.RULES | orderBy:['GridID']" style="margin-bottom: 10px">
+		        <div class="clearfix text-left" style="border-bottom: 1px solid #ddd; background-color: #E6EEFB;">
+				    <div class="col-md-9"> <label class="form-label">GRID #{{ElgbltyID}}.{{object.GridID}}</label></div>
+				    <div class="col-md-3 text-right">
+				     <a class="rule_delete_btn" title="Delete" ng-if="!ViewMode" ng-click="deleteElgbltyGrid(object.GridID,'DeleteGrid')">Delete</a>
+                     <a class="rule_edit_btn" title="Edit" ng-if="!ViewMode" ng-click="editElgbltyGrid(object.GridID)">Edit</a>
+                    </div>
+			   </div>
+			   <div class="clearfix box nospace">
+			    <div class="col-md-8" style="border-right: 2px dotted #F5DFDF">	
+<!-- 			    border-bottom: 1px dashed #F5DFDF;		  -->
+				  <div class="row clearfix Rulebox" ng-repeat="rule in object.Condition" style="display: block; margin: 5px 0px">
+				  <div class="logic_expression">
+					<span class="logic_matrix" style="width: 15%" title="{{ rule.val1}}">{{ rule.val1 | rupee:"&#x20B9; "}}</span>
+					<span class="logic_matrix" style="width: 12%" title="{{ rule.exp1 }}">{{ rule.exp1 }}</span> 
+					<span class="logic_matrix" style="width: 30%" title="{{rule.displayname}}">{{rule.displayname}}</span>
+					<span class="logic_matrix" style="width: 12%" title="{{ rule.exp2 }}">{{ rule.exp2 }}</span> 
+					<span class="logic_matrix" style="width: 18%" title="{{ rule.val2}}">{{ rule.val2 | rupee:"&#x20B9; "}}</span>
+					<span class="inopr" ng-if="rule.operator"><span class="left-braces"></span>{{rule.operator | operator}}</span>
+				   </div>			
+				  <div class="logic_expression" ng-repeat="ref in rule.ref">
+					<span class="logic_matrix" style="width: 15%;" title="{{ref.val1}}">{{ ref.val1 | rupee:"&#x20B9; "}}</span>
+					<span class="logic_matrix" style="width: 12%;" title="{{ ref.exp1 }}">{{ ref.exp1 }}</span> 
+					<span class="logic_matrix" style="width: 30%;" title="{{ref.displayname}}">{{ref.displayname}}</span>
+					<span class="logic_matrix" style="width: 12%;" title="{{ ref.exp2 }}">{{ ref.exp2 }}</span> 
+					<span class="logic_matrix" style="width: 18%;" title="{{ ref.val2}}">{{ ref.val2 | rupee:"&#x20B9; "}}</span>
+					<span class="inopr" ng-if="ref.operator"><span class="left-braces"></span>{{ref.operator | operator}}</span>
+				  </div>
+				  <span ng-if='rule.outOperator' class="outopr">{{rule.outOperator | operator}}<span class="right-braces"></span></span>
+				 </div> 
+				 </div>
+				  <div class="col-md-4" style="padding-right: 2px">
+				    <div class="logic_expression" style="padding-bottom: 2px">Decision : {{ object.Outcome.DECISION}}</div>
+				    <div class="logic_expression" style="padding-bottom: 2px" ng-if="object.Outcome.COMPUTE_DISP">Compute : {{ object.Outcome.COMPUTE_DISP}}</div>
+				    <div class="logic_expression" style="padding-bottom: 2px" ng-if="object.Outcome.MAX_AMOUNT">Max Amount : {{ object.Outcome.MAX_AMOUNT | rupee:"&#x20B9; "}}</div>
+				    <div class="logic_expression" style="padding-bottom: 2px" ng-if="object.Outcome.MIN_AMOUNT">Min Amount : {{ object.Outcome.MIN_AMOUNT | rupee:"&#x20B9; "}}</div>
+				    <div class="logic_expression" style="padding-bottom: 2px" ng-if="object.Outcome.DP">DP : {{ object.Outcome.DP}}</div>
+				    <div class="logic_expression" style="padding-bottom: 2px" ng-if="object.Outcome.MAX_TENOR">Max Tenor : {{ object.Outcome.MAX_TENOR}}</div>
+				    <div class="logic_expression" style="padding-bottom: 2px" ng-if="object.Outcome.REMARK">Remark : {{ object.Outcome.REMARK}}</div>
+				  </div>
+				  </div>
+				 </div>
+			  </div>
+			  <div class="row clearfix">
+				  <label>SUMMARY OUTCOME</label>
+				  <span class="CatError" ng-if="!Eligibility.AGRTD_VALUES || Eligibility.AGRTD_VALUES.length==0"> Summary Level Aggrigation has not been defined</span>
+				  <div class="row clearfix box nospace" ng-if="Eligibility.AGRTD_VALUES && Eligibility.AGRTD_VALUES.length!=0">
+				     <a class="rule_delete_btn" title="Delete" ng-if="!ViewMode" ng-click="deleteElgbltyGrid('temp','DeleteSmry')">Delete</a>
+                     <a class="rule_edit_btn" title="Edit" ng-if="!ViewMode" ng-click="editElgbltySmry()">Edit</a>
+   				    <div class="col-md-3" ng-repeat="obj in Eligibility.AGRTD_VALUES" style="border-right:1px solid #F5DFDF">
+				      <div class="clearfix">Field : <label>{{obj.DISP_NAME}}</label></div>
+				      <div class="clearfix">Aggrigation : <label> {{obj.AGGRTN}}</label></div>
+				      <div class="clearfix">Max : <label> {{obj.MAX | rupee:"&#x20B9; "}}</label></div>
+				      <div class="clearfix">Min : <label> {{obj.MIN | rupee:"&#x20B9; "}}</label></div>
+				    </div>				   		   
+				  </div>
+				   <div class="row clearfix box" ng-if="Eligibility.DEC_PRRTY && Eligibility.DEC_PRRTY.length!=0">
+   				    <div class="row clearfix logic_expression">
+   				      <div class="col-md-3">Decision Priority : </div>
+				      <div class="col-md-2 add-button-div matrixBtn1" ng-repeat="obj in Eligibility.DEC_PRRTY"><label>{{obj}}</label></div>				    
+				    </div>				   		   
+				  </div>
+			  </div>
+			  <div class="row clearfix" ng-show="!ViewMode">
+			    <button class="add-button-div" ng-click="openElgbltyPanel('GRID')" ng-if="!ElgbltyPanel.AddGrid">Add Grid</button>
+			    <button class="add-button-div" ng-click="openElgbltyPanel('SMRY')" ng-if="!ElgbltyPanel.AddSmry">Add Summary</button>
+			  </div>
+			</div>
+		  </div>
+		<div class="row clearfix hiden" id="elegbltyPanel" style="border:1px solid #ECDBDB;">
+			<div class="panel_heading">Eligibiltiy Panel<span style="float: right;color: red" id="elgblty_error"></span></div>
+				<div class="panel_body" style="padding-top: 15px">
+				 <form id="elgbltyPnlForm">													     
+				  <div class="row clearfix" ng-show="ElgbltyPanel.AddGrid">				 
+					<div class="col-md-12">
+					<label>L1 - Trade Level Rules</label>	
+					 <div class="row clearfix box elgbltyBody" id="elgbltyBody0" style="margin: 0px">												 
+						<div class="col-md-9" style="border-right: 2px solid #CCC">
+							 <div class="row clearfix box nospace elgbltyFieldRule" id="elgbltyRule0">
+								  <div class="elgbltyRow" id="0">
+									  <select class="form-control equal IffDrpDwn" id="elgbltyFileOne000" name="IFF File">
+										<option value="Select" selected="selected">Select File</option>																												
+									  </select>
+									   <select class="form-control equal" id="elgbltyFieldOne000" name="IFF Field">
+										<option value="Select" selected="selected">Select Field</option>																												
+									  </select>
+									   <select class="form-control equal hiden" id="elgbltyDPDTYPE000" name="DPD Action Type">
+										<option value="DPD-VALUE">DPD Value</option>
+										<option value="DPD-DATE">DPD Date</option>																												
+									  </select>
+									   <select class="form-control equal" id="elgbltyExp000" name="Expression Operator">
+										<option value="Select">Expression</option>																												
+									  </select>
+									  <select class="form-control equal hiden" id="elgbltyCType000" name="OPeration Type">
+										<option value="Select" selected="selected">Type</option>
+										<option value="Value">Value</option>
+										<option value="Field">Field</option>																												
+									  </select>
+									  <input type="text" class="form-control equal hiden" id="elgbltyValue1000" name="Value 1"/>
+	  								  <input type="text" class="form-control equal hiden" id="elgbltyValue2000" name="Value 2"/>
+	  								  <select class="form-control equal IffDrpDwn hiden" id="elgbltyFileTwo000" name="IFF File">
+										<option value="Select">Select File</option>																												
+									  </select>
+									  <select class="form-control equal hiden" id="elgbltyFieldTwo000" name="IFF Field">
+										<option value="Select">Select Field</option>																												
+									  </select>
+									   <select class="form-control equal hiden" id="elgbltyCmprExp000" name="Compare Expression">
+										<option value="Select">Expression</option>
+										<option value="<"> &l; </option>
+										<option value="<="> &lt;= </option>
+										<option value="=="> == </option>
+										<option value="<"> &gt; </option>
+										<option value=">="> &gt;= </option>																												
+									  </select>
+									   <input type="text" class="form-control equal hiden" id="elgbltyCmprValue1000" contextmenu="Number" name="Compare value"/>
+								   <a class="abs-right deleteRule" title="Delete Rule" role="elgbltyRow">Delete</a>
+								  </div>
+								  <span>
+								    <button class="add-button-div inline AntclINOp"  value="&&">AND</button>
+								    <button class="add-button-div inline AntclINOp"  value="||">OR</button>
+								   </span>
+								</div>
+							     <div class="text-right">
+								    <button class="add-button-div inline elgbltyOUTOp"  value="&&">AND</button>
+								    <button class="add-button-div inline elgbltyOUTOp"  value="||">OR</button>
+								 </div>				  
+							</div>
+							<div class="col-md-3 outcomeContainer">
+								<div class="row clearfix">
+								 <div class="col-md-6">
+								  <select class="form-control" id="elgbltyOutcome0" name="Outcome Type">
+									<option value="Select" selected="selected">Select Outcome</option>
+									<option value="Approved">Approve</option>
+									<option value="Declined">Decline</option>
+									<option value="Queue">Queue</option>																												
+								  </select>
+								  </div>
+  								 <div class="col-md-6">
+   								 <input type="hidden" id="formula0" />
+  								 <input type="hidden" id="Dispformula0" />
+								 <button class="add-button-div" id="compute0" style="background-color: #CCC;margin-top: 0px" disabled="disabled">Compute</button>
+								</div>
+								</div>
+								 <div class="row clearfix outapprv">
+								     <div class="col-md-6">
+									   <label class="form-label">Max</label>
+									   <input type="text" id="maxAmount0" class="form-control" style="padding: 2px" contextmenu="Number" name="Max Amount"/>
+									 </div>
+									 <div class="col-md-6">
+									   <label class="form-label">Min</label>
+									   <input type="text" id="minAmount0" class="form-control" style="padding: 2px" contextmenu="Number" name="Min Amount"/>
+									 </div>
+								 </div>
+								  <div class="row clearfix outapprv">
+								     <div class="col-md-6">
+									   <label class="form-label">DP</label>
+									   <input type="text" id="dpAmount0" class="form-control" style="padding: 2px" contextmenu="Number" name="DP Percent"/>
+									 </div>
+									 <div class="col-md-6">
+									   <label class="form-label">Max Tenor</label>
+									   <input type="text" id="maxTenor0" class="form-control" style="padding: 2px" contextmenu="Number" name="Max Tenor"/>
+									 </div>
+								 </div>
+								  <div class="row clearfix hiden" id="remarkDiv">
+								     <div class="col-md-12">									 
+									   <label class="form-label">Remark </label>
+									   <input type="text" id="remark0" class="form-control" style="padding: 2px" name="Remark"/>
+									 </div>
+								 </div>
+							</div>
+					</div>						
+					<div class="text-right">
+					    <button class="add-button-div" ng-if="!ElgbltyPanel.update" id="copyElgbltyRange">COPY RANGE</button>
+					    <button class="add-button-div" ng-if="!ElgbltyPanel.update" id="addElgbltyRange">ADD RANGE</button>
+					</div>
+  				  </div>	  			 
+	  			</div>
+<!-- 	  			<hr style="margin: 3px;border-width: 2px" /> -->
+<!-- 	lavel2ValueRow : to iterate level2 rules -->
+	  			<div class="row clearfix" ng-show="ElgbltyPanel.AddSmry">
+	  				  <div class="col-md-12"><label>L2 - Summary</label>	 														
+					   <div class="row clearfix box lavel2ValueRow" style="margin: 0px" name="ELGBLTY" title="Eligibility">
+					    <div class="col-md-5">
+						    <div class="row clearfix">
+							    <div class="col-md-4"><label class="form-label">Eligibility :</label></div>
+							    <div class="col-md-8">
+								    <select class="form-control inline" style="width:100%" id="aggrFinal0">
+								     <option>MINIMUM</option><option>MAXIMUM</option><option>AVERAGE</option>
+								    </select>
+							    </div>
+						    </div>
+					     </div>
+					     <div class="col-md-3">
+					      <label class="form-label">Max :</label>
+					      <input type="text" id="maxFinal0" class="form-control inline" style="width: 70%" contextmenu="Number" name="Max Amount"/>
+					     </div>
+ 						 <div class="col-md-3">
+						   <label class="form-label">Min :</label>
+						   <input type="text" id="minFinal0" class="form-control inline" style="width: 70%" contextmenu="Number" name="Min Amount"/>	
+					     </div>
+<!-- 					     <div class="col-md-3"></div> -->
+					   </div>
+				
+					<div class="row clearfix box lavel2ValueRow" style="margin: 0px" name="LOAN_AMOUNT" title="Loan Amount">
+					  <div class="col-md-5">
+					   <div class="row clearfix">
+					    <div class="col-md-4"> <label class="form-label">Loan Amount :</label></div>
+					    <div class="col-md-8">
+					      <select class="form-control" style="width: 100%" name="Loan Aggrigation" id="aggrFinal1">
+						     <option>MINIMUM</option><option>MAXIMUM</option><option>AVERAGE</option>
+						    </select>
+					    </div>						
+						</div>	
+					   </div>
+					       <div class="col-md-3">
+					      <label class="form-label">Max :</label>
+					      <input type="text" id="maxFinal1" class="form-control inline" style="width: 70%" contextmenu="Number" name="Max Amount"/>
+					     </div>
+ 						 <div class="col-md-3">
+						   <label class="form-label">Min :</label>
+						   <input type="text" id="minFinal1" class="form-control inline" style="width: 70%" contextmenu="Number" name="Min Amount"/>	
+					     </div>
+				   </div>
+				   <div class="row clearfix box lavel2ValueRow" style="margin: 0px" name="DP" title="DP">
+					    <div class="col-md-5">
+					    <div class="row clearfix">
+					    <div class="col-md-4">   <label class="form-label">DP :</label></div>
+					    <div class="col-md-8">
+					    <select class="form-control" style="width: 100%" name="DP Aggrigation" id="aggrFinal2">
+						     <option>MINIMUM</option><option>MAXIMUM</option><option>AVERAGE</option>
+						    </select></div>
+						 </div>						    
+					     </div>
+					     <div class="col-md-3">
+					      <label class="form-label">Max :</label>
+					      <input type="text" id="maxFinal2" class="form-control inline" style="width: 70%" contextmenu="Number" name="Max Amount"/>
+					     </div>
+ 						 <div class="col-md-3">
+						   <label class="form-label">Min :</label>
+						   <input type="text" id="minFinal0" class="form-control inline" style="width: 70%" contextmenu="Number" name="Min Amount"/>	
+					     </div>
+<!-- 					     <div class="col-md-2"></div> -->
+					   </div>
+			
+				   <div class="row clearfix box lavel2ValueRow" style="margin: 0px" name="MAX_TENOR" title="Max Tenor">
+					    <div class="col-md-5">
+					    <div class="row clearfix">
+					    <div class="col-md-4"><label class="form-label">MAX Tenor :</label></div>
+					    <div class="col-md-8">
+					    <select class="form-control inline" style="width: 100%" name="Tenor Aggrigation" id="aggrFinal3">
+						     <option>MINIMUM</option><option>MAXIMUM</option><option>AVERAGE</option>
+						    </select></div>						  
+						    </div>
+					     </div>
+					     <div class="col-md-3">
+					      <label class="form-label">Max :</label>
+					      <input type="text" id="maxFinal3" class="form-control inline" style="width: 70%" contextmenu="Number" name="Max Amount"/>
+					     </div>
+ 						 <div class="col-md-3">
+						   <label class="form-label">Min :</label>
+						   <input type="text" id="minFinal3" class="form-control inline" style="width: 70%" contextmenu="Number" name="Min Amount"/>	
+					     </div>
+			      </div>				
+				 <div class="row clearfix box" style="margin: 0px" id="dcsnContainer">				 
+					<div class="col-md-2"><label class="form-label">Decision Priorty :</label></div>				  				  
+			      <div id="prirorty-container" class="col-md-8">			  	
+				     <span class="add-button-div matrixBtn1" ng-repeat="obj in dcsnList">{{obj.name}}
+				       <span class="glyphicon glyphicon-remove" ng-click="removeDcsnPrty(obj.value)"></span>
+				     </span>
+					<span class="glyphicon glyphicon-plus" id="decisionPrty" style="position: relative;"></span>
+   			      </div>
+				    <div id="dcsn_panel" class="row clearfix hiden">
+				     <div class="col-md-2 col-md-offset-2 padding-20">
+				    	<select class="form-control" id="decision_list">
+					    	<option value="Approved" selected="selected">Approve</option>
+					    	<option value="Declined">Decline</option>
+					    	<option value="Queue">Queue</option>
+				    	</select>
+				     </div>
+				    <div class="col-md-1">
+					    <a class="TC_button" id="add-Decision">ADD</a>	
+				    </div> 
+			      </div>	   			 		  
+			     </div>
+			      <!-- <div class="col-md-12">
+			        <button class="add-button-div" id="addElgSumRule">Add Rules</button> 
+			        <button class="add-button-div hiden" id="rmvElgSumRule">Remove Rules</button> </div> -->
+			     </div>
+			     </div>
+			      </form>				
+				</div>
+				<div class="panel_footer text-right">
+					<a class="TC_button" ng-if="ElgbltyPanel.update" ng-click="saveElgbltyRules('Update')">Update</a>	
+					<a class="TC_button" ng-if="ElgbltyPanel.save" ng-click="saveElgbltyRules('Save')">Save</a>													
+					<a class="TC_button" ng-click="closeElgbltyPanel()">Close</a>
+				</div>
+			 </div>
+<!--    eligibility panel ends -->
+	</div>
+</div>
+  </div>
+  </div>
+<!-- 	compute panel start 	-->
+      <div class="row clearfix hiden" id="computePanel">
+       <form id="computeForm">
+		<div class="panel_heading"><label>Compute Panel</label><span class="text-danger" id="computeError" style="float:right ;margin-top: 3px"> </span></div>
+		<div class="panel_body">
+		  <div class="row clearfix">
+		   <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
+			  padding: 10px; font-weight: bold" id="prvwContainer" contenteditable="true"spellcheck="false"> 
+			  </div>
+			 <div style="border: 1px dashed grey; min-height: 90px; margin:10px 15px;
+			  padding: 10px;" id="resultContainer">			 
+			  </div>
+		  </div>
+		  <div class="row clearfix box" style="margin: 0">
+		   <div class="col-md-2"><button class="add-button-div" id="variable">Variable</button></div>
+   		   <div class="col-md-2"><button class="add-button-div" id="constant">Constant</button></div>
+   		   <div class="col-md-2">
+   		     <select class="form-control" style="margin-top: 5px" id="ObjectExp">
+   		       <option value="Select">Expression</option>
+   		       <option value="+">Add (+)</option>
+   		       <option value="-">Subtract (-)</option>
+   		       <option value="*">Multiply (*)</option>
+   		       <option value="/">Devide (/)</option>
+   		     </select> 
+   		   </div>
+   		   <div class="col-md-2">
+   		    <button class="add-button-div comma" id="openBracket" style="min-width: 50px">(</button>
+   		    <button class="add-button-div comma" id="closeBracket" style="min-width: 50px">)</button>
+   		   </div>				
+		  </div>
+		  <div class="row clearfix box hiden" style="margin: 0">
+		    <div class="col-md-3"><label class="form-label">Min Score : </label> 
+		    <input type="text" class="form-control inline" style="width: 100px"/></div>
+   		    <div class="col-md-3"><label class="form-label">Max Score : </label> 
+   		    <input type="text" class="form-control inline" style="width: 100px"/></div>				
+		  </div>
+		</div>
+		</form>
+		<div class="panel_footer text-right">
+         <a class="TC_button" id="evaluateEXP">Evaluate</a>	
+		  <a class="TC_button" id="clearCompute">Clear</a>	
+		  <a class="TC_button" id="saveCompute">Save</a>													
+		  <a class="TC_button" id="closeComputePanel">Close</a>
+		</div>
+	</div>
+<!-- 	compute panel ends -->
+		<!-- analytical field display panel	start   -->
+    <div class="clearfix hiden" id="AFDisplPanel" style="border:1px solid #ECDBDB;">
+	    <div class="row nospace" style="border-bottom: 1px solid #ddd; background-color: #E6EEFB;">
+		    <div class="col-md-7"><label>Field Name : </label> <span id="afieldname"></span> </div>
+		    <div class="col-md-5"><label>Definition Type : </label> <span id="deffname"></span></div>
+	    </div>
+		<div class="row clearfix criteriaRules">
+			 <div>
+			   <div class="col-md-6"><label>Base Field : </label> <span id="bsname"></span></div>
+			   <div class="col-md-3"><label>Operator : </label> <span id="aggroprtr"></span></div>
+			   <div class="col-md-3"><label>Compare : </label> <span id="cmprValue"></span></div>
+			 </div>
+		 </div>
+		 <div class="row clearfix box">
+			 <div class="row clearfix" ng-if="Filters.length!=0">
+			  <div class="col-md-2"><label> Filters : </label></div>
+			    <div class="col-md-10">
+				 <div ng-repeat="rule in Filters" class="box">
+				  <div class="logic_expression">
+					<span class="logic_matrix" style="width: 15%" title="{{ rule.val1}}">{{ rule.val1 | rupee:"&#x20B9; "}}</span>
+					<span class="logic_matrix" style="width: 12%" title="{{ rule.exp1 }}">{{ rule.exp1 }}</span> 
+					<span class="logic_matrix" style="width: 30%" title="{{rule.displayname}}">{{rule.displayname}}</span>
+					<span class="logic_matrix" style="width: 12%" title="{{ rule.exp2 }}">{{ rule.exp2 }}</span> 
+					<span class="logic_matrix" style="width: 18%" title="{{ rule.val2}}">{{ rule.val2 | rupee:"&#x20B9; "}}</span>
+					<span class="inopr" ng-if="rule.operator"><span class="left-braces"></span>{{rule.operator | operator}}</span>
+				 </div>
+			
+				  <div class="logic_expression" ng-repeat="ref in rule.ref">
+					<span class="logic_matrix" style="width: 15%;" title="{{ref.val1}}">{{ ref.val1 | rupee:"&#x20B9; "}}</span>
+					<span class="logic_matrix" style="width: 12%;" title="{{ ref.exp1 }}">{{ ref.exp1 }}</span> 
+					<span class="logic_matrix" style="width: 30%;" title="{{ref.displayname}}">{{ref.displayname}}</span>
+					<span class="logic_matrix" style="width: 12%;" title="{{ ref.exp2 }}">{{ ref.exp2 }}</span> 
+					<span class="logic_matrix" style="width: 18%;" title="{{ ref.val2}}">{{ ref.val2 | rupee:"&#x20B9; "}}</span>
+					<span class="inopr" ng-if="ref.operator"><span class="left-braces"></span>{{ref.operator | operator}}</span>
+				 </div>
+				 <span ng-if='rule.outOperator' class="outopr">{{rule.outOperator | operator}}<span class="right-braces"></span></span>
+				</div> 
+			</div>
+	    	</div>
+		     <div class="row clearfix" ng-if="Groups.length!=0">
+				 <div class="col-md-2"> <label>Groups : </label></div>
+				 <div class="col-md-10">
+				 <div ng-repeat="rule in Groups" class="box">
+				  <div class="logic_expression">
+					<span class="logic_matrix" style="width: 15%" title="{{ rule.val1}}">{{ rule.val1 | rupee:"&#x20B9; "}}</span>
+					<span class="logic_matrix" style="width: 12%" title="{{ rule.exp1 }}">{{ rule.exp1 }}</span> 
+					<span class="logic_matrix" style="width: 30%" title="{{rule.displayname}}">{{rule.displayname}}</span>
+					<span class="logic_matrix" style="width: 12%" title="{{ rule.exp2 }}">{{ rule.exp2 }}</span> 
+					<span class="logic_matrix" style="width: 18%" title="{{ rule.val2}}">{{ rule.val2 | rupee:"&#x20B9; "}}</span>
+					<span class="inopr" ng-if="rule.operator"><span class="left-braces"></span>{{rule.operator | operator}}</span>
+				 </div>
+				
+				  <div class="logic_expression" ng-repeat="ref in rule.ref">
+					<span class="logic_matrix" style="width: 15%;" title="{{ref.val1}}">{{ ref.val1 | rupee:"&#x20B9; "}}</span>
+					<span class="logic_matrix" style="width: 12%;" title="{{ ref.exp1 }}">{{ ref.exp1 }}</span> 
+					<span class="logic_matrix" style="width: 30%;" title="{{ref.displayname}}">{{ref.displayname}}</span>
+					<span class="logic_matrix" style="width: 12%;" title="{{ ref.exp2 }}">{{ ref.exp2 }}</span> 
+					<span class="logic_matrix" style="width: 18%;" title="{{ ref.val2}}">{{ ref.val2 | rupee:"&#x20B9; "}}</span>
+					<span class="inopr" ng-if="ref.operator"><span class="left-braces"></span> {{ref.operator | operator}}</span>
+				 </div>
+				 <span class="outopr" ng-if='rule.outOperator'>{{rule.outOperator | operator}}<span class="right-braces"></span></span>
+				</div> 
+			</div>
+		    </div>
+		     <div class="row clearfix" ng-if="Ratio.length!=0">
+			 <div class="col-md-2"> <label>Ratio : </label></div>
+			 <div class="col-md-10">
+			 <div ng-repeat="rule in Ratio" class="box">
+			  <div class="logic_expression">
+				<span class="logic_matrix" style="width: 15%" title="{{ rule.val1}}">{{ rule.val1 | rupee:"&#x20B9; "}}</span>
+				<span class="logic_matrix" style="width: 12%" title="{{ rule.exp1 }}">{{ rule.exp1 }}</span> 
+				<span class="logic_matrix" style="width: 30%" title="{{rule.displayname}}">{{rule.displayname}}</span>
+				<span class="logic_matrix" style="width: 12%" title="{{ rule.exp2 }}">{{ rule.exp2 }}</span> 
+				<span class="logic_matrix" style="width: 18%" title="{{ rule.val2}}">{{ rule.val2 | rupee:"&#x20B9; "}}</span>
+				<span class="inopr" ng-if="rule.operator"><span class="left-braces"></span>{{rule.operator | operator}}</span>
+			 </div>
+			
+			  <div class="logic_expression" ng-repeat="ref in rule.ref">
+				<span class="logic_matrix" style="width: 15%;" title="{{ref.val1}}">{{ ref.val1 | rupee:"&#x20B9; "}}</span>
+				<span class="logic_matrix" style="width: 12%;" title="{{ ref.exp1 }}">{{ ref.exp1 }}</span> 
+				<span class="logic_matrix" style="width: 30%;" title="{{ref.displayname}}">{{ref.displayname}}</span>
+				<span class="logic_matrix" style="width: 12%;" title="{{ ref.exp2 }}">{{ ref.exp2 }}</span> 
+				<span class="logic_matrix" style="width: 18%;" title="{{ ref.val2}}">{{ ref.val2 | rupee:"&#x20B9; "}}</span>
+				<span class="inopr" ng-if="ref.operator"><span class="left-braces"></span> {{ref.operator | operator}}</span>
+			 </div>
+			 <span class="outopr" ng-if='rule.outOperator'>{{rule.outOperator | operator}}<span class="right-braces"></span></span>
+			</div> 
+		</div>
+	    </div>
+	     </div>	
+	  <div class="panel_footer" style="text-align: right;">
+			<a class="TC_button" ng-click="closeAdefPanel()">Close</a>
+		</div>	
+   </div>
+<!-- 	 display block end -->
+<!-- 	 </div> -->
+
+<!--  custom field display panel -->
+      <div class="clearfix hiden" id="CstmFDisplPanel" style="border:1px solid #ECDBDB;">
+	    <div class="row nospace" style="border-bottom: 1px solid #ddd; background-color: #E6EEFB;">
+	    	<div class="col-md-9"><label>Custom Field Deffinition</label></div>
+		    <div class="col-md-3 text-right"><a class="TC_button" ng-click="closeCstmDsplPanel()">Close</a></div>
+	    </div>
+		<div class="row clearfix criteriaRules">
+			 <div>
+			   <div class="col-md-4"><label>Field Name : </label> {{ CstmField.FIELD_NAME}}</div>
+			   <div class="col-md-2"><label>DataType : </label> {{ CstmField.FIELD_TYPE}}</div>
+			   <div class="col-md-2"><label>Level : </label> {{ CstmField.LEVEL}}</div>
+			   <div class="col-md-4"><label>Default Value : </label> {{ CstmField.DEFAULT_VALUE.TYPE=="Value"?CstmField.DEFAULT_VALUE.OUTCM_VALUE:CstmField.DEFAULT_VALUE.BASE_FNAME}}</div>
+			 </div>
+		 </div>
+			 <div class="row clearfix box" style="overflow-y: scroll; height: 55vh; padding-left: 45px;">
+				 <div class="row clearfix" style="border-bottom: 1px solid #ddd;">			 
+				   <div class="col-md-8"><label>Condition : </label></div>
+	   			   <div class="col-md-4"><label>Outcome : </label></div>
+	   			 </div>
+			  <div class="row clearfix box" ng-repeat="object in CstmField.RULES">
+			  <div class="col-md-8">
+			    <div class="row clearix" style="border-right: 2px dotted #F5DFDF" ng-repeat="rule in object.Condition">			 
+				  <div class="logic_expression">
+					<span class="logic_matrix" style="width: 15%" title="{{ rule.val1}}">{{ rule.val1 | rupee:"&#x20B9; "}}</span>
+					<span class="logic_matrix" style="width: 12%" title="{{ rule.exp1 }}">{{ rule.exp1 }}</span> 
+					<span class="logic_matrix" style="width: 30%" title="{{rule.displayname}}">{{rule.displayname}}</span>
+					<span class="logic_matrix" style="width: 12%" title="{{ rule.exp2 }}">{{ rule.exp2 }}</span> 
+					<span class="logic_matrix" style="width: 18%" title="{{ rule.val2}}">{{ rule.val2 | rupee:"&#x20B9; "}}</span>
+					<span class="inopr" ng-if="rule.operator"><span class="left-braces"></span>{{rule.operator | operator}}</span>
+				   </div>			
+				  <div class="logic_expression" ng-repeat="ref in rule.ref">
+					<span class="logic_matrix" style="width: 15%;" title="{{ref.val1}}">{{ ref.val1 | rupee:"&#x20B9; "}}</span>
+					<span class="logic_matrix" style="width: 12%;" title="{{ ref.exp1 }}">{{ ref.exp1 }}</span> 
+					<span class="logic_matrix" style="width: 30%;" title="{{ref.displayname}}">{{ref.displayname}}</span>
+					<span class="logic_matrix" style="width: 12%;" title="{{ ref.exp2 }}">{{ ref.exp2 }}</span> 
+					<span class="logic_matrix" style="width: 18%;" title="{{ ref.val2}}">{{ ref.val2 | rupee:"&#x20B9; "}}</span>
+					<span class="inopr" ng-if="ref.operator"><span class="left-braces"></span>{{ref.operator | operator}}</span>
+				  </div>
+				  <span ng-if='rule.outOperator' class="outopr">{{rule.outOperator | operator}}<span class="right-braces"></span></span>
+				 </div>
+			  </div> 
+			  <div class="col-md-4" style="padding-right: 2px">
+			    <div class="logic_expression" style="padding-bottom: 2px">Outcome Type : {{ object.Outcome.TYPE}}</div>
+			    <div class="logic_expression"style="padding-bottom: 2px" ng-if="object.Outcome.BASE_FNAME!='Select Field'">Base Field : {{ object.Outcome.BASE_FNAME}}</div>
+			    <div class="logic_expression" style="padding-bottom: 2px" ng-if="object.Outcome.AGGR_OPRTR!='Select'">Aggrigation : {{ object.Outcome.AGGR_OPRTR}}</div>
+			    <div class="logic_expression" style="padding-bottom: 2px" ng-if="object.Outcome.AGGR_TYPE=='Field'">Compare Field : {{ object.Outcome.COMPR_FNAME}}</div>
+			    <div class="logic_expression" style="padding-bottom: 2px" ng-if="object.Outcome.AGGR_TYPE=='Value'">Compare Value : {{ object.Outcome.COMPR_VALUE}}</div>
+			    <div class="logic_expression" style="padding-bottom: 2px" ng-if="object.Outcome.OUTCM_VALUE">Outcome : {{ object.Outcome.OUTCM_VALUE}}</div>
+			  </div>
+			 </div>
+	    </div>    
+	  <div class="panel_footer text-right" >
+			<a class="TC_button" ng-click="closeCstmDsplPanel()">Close</a>
+		</div>	
+   </div>
+<!--  custom field display panel end -->
+ 
+	<div class="row clearfix" id="master_upload_panel">
+			<div class="panel_heading">
+				<label>IFF & Master Panel</label>
+			</div>
+			<table>
+				<tbody></tbody>
+			</table>
+			<div class="panel_body" style="padding-top: 15px">
+				<div class="row clearfix">
+					<div class="col-md-4">
+						<select class="form-control" id="IffFileType" name="File Type">
+						  <option value="Select" selected="selected">Select File Type</option>
+						  <option value="IFF STRUCTURE">IFF STRUCTURE</option>
+						  <option value="MASTER STRUCTURE">MASTER STRUCTURE</option>
+						  <option value="MASTER DATA">MASTER DATA</option>
+				  		</select>
+					</div>
+					<div class="col-md-4" id="MstrNmeClmn">
+						<input type="text" class="form-control" id="master_name"
+							autocomplete="off" placeholder="Enter Master Name"
+							style="font-weight: bold; height: 28px" required="required"
+							ng-model="iff_file_name" capital name="File Name">
+							
+						<select class="form-control" id="masterFileName" ng-model="selectMaster" name="Master File Name" style="display: none;">
+						 <option value="selectMaster" selected="selected">Select Master File</option>	
+						 <option ng-repeat="item in IFFList" value="{{item.Name}}" ng-if="item.Type == 'MASTER STRUCTURE'">
+						 {{item.Name}}</option>																								
+				  		</select>
+					</div>
+					<div class="col-md-4">
+						<input type="file" class="form-control" id="master_file"
+							dropzone="FileDropZone"
+							ng-file-select="onFileSelect($files);"
+							style="padding: 1px; margin: 0px" name="File"/>
+					</div>
+				</div>
+			 <div id="FileDropZone" style="border: 1px dashed grey; height: 90px; margin: 22px;
+			  text-align: center; padding-top: 10px;">
+			 </div>
+			</div>
+			<!-- <div class="row clearfix" id="logic_panel_row3"	style="padding: 0px 10px 0px 10px">
+				<button class="add-button-div" id="Upload_Master_File">Upload</button>
+				<button class="add-button-div" id="CloseUploadMaster"style="float: right;">Close</button>
+			</div> -->
+			<div class="panel_footer text-right">
+				<a class="TC_button" id="Upload_Master_File">Upload</a>													
+				<a class="TC_button" id="CloseUploadMaster">Close</a>
+			</div>
+	</div>
+<!--  master upload panel code end	 -->
+
+<!--  container for analytical fields rule (at scoring rule) start-->
+	<div class="row clearfix hiden" id="anltclRulePanel">
+			<div style="border:1px solid #ECDBDB;">
+				<div class="panel_heading">Analytical Field Rule
+				<span style="float: right;color: red" id="antclRuleErr"></span></div>
+					<div class="panel_body" style="padding-top: 15px">													     
+						<div class="row clearfix criteriaRules">
+						 <div class="col-md-3">
+						 	<label class="form-label inline" >Field Name :</label> 
+						 	<span id="ARField" style="overflow: hidden;"></span>
+						 </div>
+						 <div class="col-md-3">
+						  	<label class="form-label inline">Operator :</label> 
+						  	<span id="AROptr"></span>
+						</div>
+						<div class="col-md-3">
+						 	<label class="form-label inline">Base Field :</label>
+						 	<span id="ARBSField" style="overflow: hidden;"></span>
+						 </div>
+						 <div class="col-md-3">
+						 	<label class="form-label inline">Compare Field :</label>
+						 	<span id="ARCMPField" style="overflow: hidden;"></span>
+						 </div>
+						 
+						</div>							
+						<div class="row criteriaRules box">							
+						  <div class="row criteriaRules" ng-if="Filters.length!=0">
+						    <div class="col-md-1" style="padding: 0px"><label class="form-label inline">Filters : </label></div>
+							<div class="col-md-11" id="AntclRuleFltr">							 
+							</div>
+						  </div>
+						 <div class="row criteriaRules" ng-if="Groups.length!=0">
+						  <div class="col-md-1" style="padding: 0px"><label class="form-label inline">Groups : </label></div>
+							<div class="col-md-11" id="AntclRuleGrp">
+							</div>
+						 </div>
+						  <div class="row criteriaRules" ng-if="Ratio.length!=0">
+						  <div class="col-md-1" style="padding: 0px"><label class="form-label inline">Ratio : </label></div>
+							<div class="col-md-11" id="AntclRuleRatio">
+							</div>
+						 </div>
+						</div>
+					</div>		
+					<div class="panel_footer" style="text-align: right;">
+						<a class="TC_button" ng-click="saveAntclFieldRule()">Save</a>													
+						<a class="TC_button" ng-click="closeAmtclRulePnl()">Close</a>
+					</div>
+		    </div>	
+		 </div>
+<!--  iff field rule (at scoring panel) add panel end -->
+
+<!--  dialog box for confirmation delete and apporve	 -->
+	<div id="confirm" class="modal fade">
+		<div id="confirm-title" class="modal-header btn-danger" style="padding: 6px 12px;">
+			<h4 class="modal-title">Are you Sure...?</h4>
+		</div>
+		<div class="modal-body">
+			<p id="confirm-msg"></p>
+		</div>
+		<div class="modal-footer" style="margin-top: 17px;">
+    		<button type="button" data-dismiss="modal" class="btn btn-danger" id="delete"></button>
+    		<button type="button" data-dismiss="modal" class="btn btn-info">Cancel</button>
+  		</div>
+	</div>
+</div>
+	

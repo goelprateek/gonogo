@@ -1,0 +1,934 @@
+p	
+	<link href="css/DmiApp.css" rel="stylesheet">
+	<style>
+	select
+	{
+	 margin-right: 0px;
+     margin-left: 3px;
+     display: inline-block;
+     -moz-appearance: none;
+	}
+	</style>
+	<div class="DMIApplicationMainContainer" ng-controller="DMIApplicationController" ng-cloak>
+			<div class="row clearfix" contextmenu="blur">
+			<div class="col-md-2 col-md-offset-1" id="application_process">				
+				<label style="font-size: 20px; padding: 13px 0px 12px 21px;">Application Process</label>			
+			</div>
+			<div class="col-md-5 hiden" id="progerssbar-div" style="text-align: center; padding-top: 16px;">
+				<ul id="progressbar">
+					<li class="active">PRODUCT</li>
+					<li>LOAN INFO</li>
+					<li>PROOF</li>
+					<li>KYC</li>
+					<li>PROFILE</li>
+					<li>EMPLOYER</li>
+				</ul>
+			</div>
+			<div class="col-md-2" id="search-container" ng-show="authenticate('ASRCHAP')"  style="float: right; margin: 15px 68px;">
+				<form ng-submit="searchApp()">			
+				<div class="input-group" style="width: 220px;">
+					<input type="text" class="search-container" id="appno" ng-model="appno" autocomplete="off" placeholder="Application Reference No...">
+					<span class="glyphicon glyphicon-search" id="search-icon" style="right: 10px; color: #A49999; cursor: pointer;" ng-click=searchApp()></span>
+					<img src="images/loading.gif" class="LoaderSpinner"/>
+				</div>
+				</form>
+			</div>
+		</div>
+		<div class="row clearfix" id="findHeight" contextmenu="blur" style="height:70%">
+			<div class="col-md-12 column" style="height: 100%;">
+				<div class="col-md-8 col-md-offset-1" id="leftbar">
+				<div style="overflow: hidden;">
+					<div style="overflow-y:scroll; overflow-x:hidden; margin-right: -15px;">
+					<form id="msform" class="col-md-11 col-md-offset-2">
+						<div class="row" id="first_div">
+							<div class="row clearfix">
+								<div class="col-md-12 col-md-3">
+									<label class="control-label right">Name</label>
+								</div>
+								<div class="col-md-12 col-md-7">
+									<input id="name" ng-model="name" name="Name"
+										class="form-control" type="text" capitalize>
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-12 col-md-3">
+									<label class="control-label right">Mobile </label>
+								</div>
+								<div class="col-md-12 col-md-7">
+									<input ng-model="mobile" class="form-control" id="mobile" name="Mobile"
+										type="text" maxlength="10">
+								</div>
+							</div>
+							
+							<div class="row clearfix">
+								<div class="col-md-6 col-md-offset-2">
+									<div id="TnC" class="hiden">
+<!-- 										<div style="margin-bottom: 10px; height: 193px; overflow: hidden" ng-if="Auth.Application.terms">
+											<h4 style="text-align: center; font-weight: bold;">Terms
+												& Conditions</h4>
+											I have read the Terms & Conditions and agree to indemnify
+											HDFC Limited and its officials from any disputes arising out
+											of the use of any particular image or document on the GO NO
+											GO enquiry. I undertake full responsibility that the
+											documents provided by me are correct to the best of my
+											knowledge. I understand that the instant decision by HDFC
+											limited is subject to approval of the paper application which
+											might be rejected in case proofs or field verifications does
+											not match with documents proof submitted for KYC. Further, by
+											providing the OTP I have given my consent to seek a GO NO GO
+											decision from HDFC Limited. <a href="#"
+												style="text-align: center; display: block;">Click to
+												Read More</a>
+										</div> -->
+										<div style="margin-bottom: 10px;" ng-if="authenticate('ATERMS')">
+										<div class="alert alert-info" role="alert">By clicking Accept, you agree to our <i>Terms and Policy</i>,
+										 including our Cookie Use.</div>
+										</div>
+									</div>
+									<a id="cancel" class="TC_button hiden">Cancel</a> 
+									<a id="accept" class="TC_button hiden" style="float:right;">Accept</a>
+								</div>
+								<div class="row clearfix">
+									<div class="col-md-5 col-md-offset-3">
+										<div id="addresses">
+											<a id="verify" style="float: right; margin-top: 6px;"
+												class="TC_button hiden" ng-click="verifyMobile()">Verify</a>
+										</div>
+										<div id="address"">
+											<input class="form-control otp center" id='txt1' type="password" maxlength="1" name="OTP" >
+											<input class="form-control otp center" id='txt2' type="password" maxlength="1" name="OTP">
+											<input class="form-control otp center" id='txt3' type="password" maxlength="1" name="OTP">
+											<input class="form-control otp center" id='txt4' type="password" maxlength="1" name="OTP">
+											<input class="form-control otp center" id='txt5' type="password" maxlength="1" name="OTP">
+										</div>
+									</div>
+								</div>
+								<div class="col-md-5 col-md-offset-3" style="width: 283px">
+									<a id="add-address" class="TC_button" style="float: right;" ng-click="getOTP(mobile)">Get
+										OTP</a>
+								</div>
+							</div>
+								<div class="row clearfix" id="otp-msg" ng-if="otpMSG">
+									<div class="col-md-7 col-md-offset-1">
+									<div class="alert alert-success alert-dismissible" role="alert" style="padding: 10px; margin-top: 25px">
+											<strong> Note.. &nbsp;&nbsp;</strong>
+											<span id="main_error">{{otpMSG}}</span>
+										</div>
+									</div>
+								</div>
+						</div>
+
+
+<!-- 						fieldset for Product information -->
+						<fieldset class="formfield">
+						<div class="parentScroll">
+						<div class="childScroll">
+						<div class="row clearfix">
+						<div class="col-md-4">
+							<label class="control-label">Application For</label>
+								</div>
+							<!-- <div class="col-md-2">
+							  <button class="btn LoanType btn-success" value="Housing Loan">Housing Loan</button>
+							</div>
+							<div class="col-md-4">
+							  <button class="btn LoanType btn-default" value="Personal Loan">Personal Loan</button>
+							</div> -->
+							<div class="col-md-5 column">
+							<select class="form-control" name="Application For" ng-model="ProductType" style="width: 100%" 
+									ng-options="prod as prod.name for prod in ProductTypeArr track by prod.value">	
+										</select>	
+					       </div>
+						</div>
+						<div id="HousingLoan">
+							<div class="row clearfix">
+								<div class="col-md-4">
+									<label class="control-label">Property Status</label>
+								</div>
+								<div class="col-md-5 column">
+<!-- 									<input id="city" ng-model="Property.Status" class="form-control" -->
+<!-- 										type="text" name="Property Status" capitalize> -->
+									<select class="form-control" name="Property Status" ng-model="PStatus" style="width: 100%" 
+									ng-options="status as status.name for status in PropertyStatus track by status.value">	
+										</select>
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-4">
+									<label class="control-label">Property Type</label>
+								</div>
+								<div class="col-md-5 column" >
+<!-- 									<input id="city" ng-model="Property.Type" class="form-control" -->
+<!-- 										type="text" name="Property Type" capitalize> -->
+					    <select class="form-control" name="Property Type" ng-model="PType" style="width: 100%" 
+									ng-options="type as type.name for type in PropertyType track by type.value">	
+										</select>
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-4">
+									<label class="control-label">Property Name</label>
+								</div>
+								<div class="col-md-5 column">
+									<input id="PName" ng-model="PropertyName" class="form-control"
+										type="text" name="Property Name" capitalize>
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-4">
+									<label class="control-label">Property Value</label>
+								</div>
+								<div class="col-md-5 column">
+								<div class="input-group input-group-md">
+									<span class="input-group-addon" id="sizing-addon3"><i class="fa fa-inr"></i></span> 
+									<input id="PValue" ng-model="PropertyValue" class="form-control rupee"
+										type="text" name="Property Value" contextmenu="Rupee">
+									</div>
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-4">
+									<label class="control-label">Property Address</label>
+								</div>
+								<div class="col-md-5 column">
+									<input id="PAddress1" ng-model="PropertyAddress" class="form-control" type="text" name="Property Address" capitalize>
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-4">
+									<label class="control-label">Age Of Property</label>
+								</div>
+								<div class="col-md-5 column">
+									<input id="PAge" ng-model="PropertyAge" class="form-control"
+										type="text" name="Age of Property" placeholder="In Months" maxlength="3">
+								</div>
+							</div>
+							<div class="row clearfix" style="margin-bottom: 4px">
+								<div class="col-md-4">
+									<label class="control-label">Property Location</label>
+								</div>
+								<div class="col-md-5 column">
+									<input id="PLocation" ng-model="PropertyLocation" class="form-control"
+										type="text" name="Property Location" placeholder="City Name" capitalize>
+								</div>
+							</div>
+							</div>
+						<div id="HousingLoan" ng-if="false">
+							<div class="row clearfix">								
+								<div class="col-md-5 col-md-offset-3" style="margin-top: 25px;">
+									<label class="control-label">Please Click Next To Continue</label>
+								</div>
+							 </div>
+							</div>
+							
+							</div></div>
+							<div class="row clearfix" id="button-row">							
+								<div class="col-sm-6 col-sm-offset-4">
+<!-- 									<input type="button" name="previous" class="previous action-button" value="Previous"/>								 -->
+									<input type="button" name="next" class="next action-button"	value="Next"
+									 style="float: right;margin-right:-15px" />									
+								</div>								
+							</div>							
+						</fieldset>
+						
+<!-- 						fieldset for loan infooramtion -->
+						<fieldset class="formfield" > 
+						<div class="parentScroll">
+						<div class="childScroll">
+							<div class="row clearfix">
+								<div class="col-md-4 column">
+									<label class="control-label">Loan Applied For</label>
+								</div>
+								<div class="col-md-5 column">
+ 							<select class="form-control" name="Loan Applied For" ng-model="LoanFor" style="width: 100%" 
+									ng-options="loan as loan.name for loan in LoanApFor track by loan.value">	
+										</select>
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-4 column">
+									<label class="control-label">Loan Amount</label>
+								</div>
+								<div class="col-md-5 column">
+								<div class="input-group input-group-md">
+									<span class="input-group-addon" id="sizing-addon3"><i class="fa fa-inr"></i></span> 
+									<input class="form-control" ng-model="LoanAmount" type="text" name="Loan Amount" contextmenu="Rupee">
+									</div>
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-4 column">
+									<label class="control-label">Loan Tenor</label>
+								</div>
+								<div class="col-md-5 column">
+									<input class="form-control" ng-model="LoanTenor" type="text" placeholder="In Years" name="Loan Tenor" maxlength="2">
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-4 column">
+									<label class="control-label">Existing EMI</label>
+								</div>
+								<div class="col-md-5 column">
+								<div class="input-group input-group-md">
+										<span class="input-group-addon" id="sizing-addon3"><i class="fa fa-inr"></i></span> 
+									<input class="form-control" ng-model="ExistingEmi" type="text" name="Existing EMI" contextmenu="Rupee">
+								</div>
+								</div>
+							</div>
+							</div></div>
+							
+							<div class="row clearfix" id="button-row">
+								<div class="col-sm-6 col-sm-offset-4">
+									<input type="button" name="previous" class="previous action-button" value="Previous"/>
+								
+									<input type="button" name="next" class="next action-button"	value="Next"
+										style="float: right;margin-right:-15px" />
+										 <br><br>
+								</div>
+							</div>
+						</fieldset>
+						
+<!-- 						fieldset for kyc proofs -->
+						<fieldset class="formfield" ng-controller="kyc_controller" id="kyc_fielset">
+						<div class="parentScroll">
+						<div class="childScroll">
+							<div class="row clearfix">
+								<div class="col-md-10 col-md-offset-2">
+									<div class="row clearfix">									
+										<div class="col-md-5">
+											<div class="preview" id="preview" 
+												ng-style="{'background-image':'url('+image_url2+')'}">
+												<input id="pan_card" type="file" name="Pan Card" ng-file-select="onFileSelect($files,'Pan_Card','2')">
+													<label for="pan_card" ng-hide="image_url2">
+													     <img alt="" src="img/camera-128.png" class="img_icon">    
+													    </label><label ng-hide="image_url2"> Pan Card</label>
+											</div>											<div style="height: 20px">
+											<small ng-show="image_url2" class="size">{{file_size2}}</small>
+											<a class="remove_image" ng-show="image_url2" ng-click="remove_file('Pan_Card','2',image_url2)">Remove</a>
+										</div>
+										</div>
+										<div class="col-md-5">
+											<div class="preview" ng-style="{'background-image':'url('+image_url3+')'}">
+												<input type="file" id="aadhar_card" name="Aadhar Card"	ng-file-select="onFileSelect($files,'Aadhar_Card','3')">
+													<label for="aadhar_card" ng-hide="image_url3">
+												     <img alt="" src="img/camera-128.png" class="img_icon">
+												    </label>
+												    <label ng-hide="image_url3">Aadhaar Card</label>
+											</div>											<div style="height: 20px">
+											<small class="size" ng-show="image_url3">{{file_size3}}</small>
+											<a class="remove_image" ng-show="image_url3" ng-click="remove_file('Aadhar_Card','2',image_url3)">Remove</a>
+										</div>		
+						</div>
+									   <div class="col-md-5">											
+											<div class="preview" ng-style="{'background-image':'url('+image_url4+')'}">
+												<input type="file" id="proof1" name="Income Proof1"	ng-file-select="onFileSelect($files,'Income_proof1','4')">
+													<label for="proof1" ng-hide="image_url4">
+												     <img alt="" src="img/camera-128.png" class="img_icon">    
+												    </label><label ng-hide="image_url4"> Income Proof 1</label>
+											</div>											<div style="height: 20px">
+											<small class="size" ng-show="image_url4">{{file_size4}}</small>
+											<a class="remove_image" ng-show="image_url4"ng-click="remove_file('Income_proof1','4',image_url4)">Remove</a>
+										</div>
+										</div>
+										<div class="col-md-5">											
+											<div class="preview" ng-style="{'background-image':'url('+image_url5+')'}">
+												<input type="file" id="proof2" name="Income proof2"	ng-file-select="onFileSelect($files,'Income_proof2','5')">
+													<label for="proof2" ng-hide="image_url5">
+												     <img alt="" src="img/camera-128.png" class="img_icon">    
+												    </label><label ng-hide="image_url5"> Income Proof 2</label>
+											</div>
+																						<div style="height: 20px">
+											<small class="size" ng-show="image_url5">{{file_size5}}</small>
+											<a class="remove_image" ng-show="image_url5" ng-click="remove_file('Income_proof2','5',image_url5)">Remove</a>
+										</div></div>
+									
+										<div class="col-md-5" ng-if="ApplicantImg">
+											<div class="preview" id="preview" ng-style="{'background-image':'url('+image_url1+')'}">
+												<input id="applicant_image" type="file" name="Applicant Image" ng-file-select="onFileSelect($files,'Applicant_Image','1')">
+													<label for="applicant_image" ng-hide="image_url1">
+													     <img alt="" src="img/camera-128.png" class="img_icon">    
+													    </label><label ng-hide="image_url1">Applicant Image</label>
+											</div>											<div style="height: 20px">
+											<small ng-show="image_url1" class="size">{{file_size1}}</small>
+											<a class="remove_image" ng-show="image_url1" ng-click="remove_file('Applicant_Image','1',image_url1)">Remove</a>
+										</div>
+										</div>
+										<!-- <div class="col-md-5" ng-if="AddressImg">
+											<div class="preview" ng-style="{'background-image':'url('+image_url6+')'}">
+												<input type="file" id="Address_Proof" name="Address Proof" ng-file-select="onFileSelect($files,'Address_Proof','6')">
+													<label for="Address_Proof" ng-hide="image_url6">
+												     <img alt="" src="img/camera-128.png" class="img_icon">
+												    </label>
+												    <label ng-hide="image_url6">Address Proof</label>
+											</div>
+											<small class="size" ng-show="image_url6">{{file_size6}}</small>
+											<a class="remove_image" ng-show="image_url6" ng-click="remove_file('Address_proof','6',image_url6)">Remove</a>
+										</div> -->
+	
+										<div class="col-md-5" ng-if="Form16Img">
+											<div class="preview" id="preview" 
+												ng-style="{'background-image':'url('+image_url7+')'}">
+												<input id="Form16_Proof" type="file" name="Form16 Proof" ng-file-select="onFileSelect($files,'Form16_Proof','7')">
+													<label for="Form16_Proof" ng-hide="image_url7">
+													     <img alt="" src="img/camera-128.png" class="img_icon">    
+													    </label><label ng-hide="image_url7">Form16 Proof</label>
+											</div>
+																						<div style="height: 20px">
+											<small ng-show="image_url7" class="size">{{file_size7}}</small>
+											<a class="remove_image" ng-show="image_url7" ng-click="remove_file('Form16_Proof','7',image_url7)">Remove</a>
+										</div>
+										</div>
+										<div class="col-md-5" ng-if="PassportImg">
+											<div class="preview" id="preview" 
+												ng-style="{'background-image':'url('+image_url8+')'}">
+												<input id="Passport_Proof" type="file" name="Age Proof" ng-file-select="onFileSelect($files,'Passport_Proof','8')">
+													<label for="Passport_Proof" ng-hide="image_url8">
+													     <img alt="" src="img/camera-128.png" class="img_icon">    
+													    </label><label ng-hide="image_url8">Passport Proof</label>
+											</div>
+											<div style="height: 20px">
+											<small ng-show="image_url8" class="size">{{file_size8}}</small>
+											<a class="remove_image" ng-show="image_url8" ng-click="remove_file('Passport_Proof','8',image_url8)">Remove</a>
+											</div>
+										</div>
+										<div class="col-md-5" ng-if="DlImg">
+											<div class="preview" ng-style="{'background-image':'url('+image_url9+')'}">
+												<input type="file" id="DL_Proof" name="Driving License Proof" ng-file-select="onFileSelect($files,'DL_Proof','9')">
+													<label for="DL_Proof" ng-hide="image_url9">
+												     <img alt="" src="img/camera-128.png" class="img_icon">
+												    </label>
+												    <label ng-hide="image_url9">Driving License</label>
+											</div>											<div style="height: 20px">
+											<small class="size" ng-show="image_url9">{{file_size9}}</small>
+											<a class="remove_image" ng-show="image_url9" ng-click="remove_file('DL_Proof','9',image_url9)">Remove</a>
+										</div>
+										</div>
+										<div class="col-md-5" ng-if="RationImg">
+											<div class="preview" ng-style="{'background-image':'url('+image_url10+')'}">
+												<input type="file" id="Ration_Proof" name="Ration Card Proof" ng-file-select="onFileSelect($files,'Ration_Proof','10')">
+													<label for="Ration_Proof" ng-hide="image_url10">
+												     <img alt="" src="img/camera-128.png" class="img_icon">
+												    </label>
+												    <label ng-hide="image_url10">Ration Card Proof</label>
+											</div>											<div style="height: 20px">
+											<small class="size" ng-show="image_url10">{{file_size10}}</small>
+											<a class="remove_image" ng-show="image_url10" ng-click="remove_file('Ration_Proof','10',image_url10)">Remove</a>
+										</div>
+										</div>
+										<div class="col-md-5" ng-if="ElectionImg">
+											<div class="preview" ng-style="{'background-image':'url('+image_url11+')'}">
+												<input type="file" id="Election_Proof" name="Election Card Proof" ng-file-select="onFileSelect($files,'VoterID_Proof','11')">
+													<label for="Election_Proof" ng-hide="image_url11">
+												     <img alt="" src="img/camera-128.png" class="img_icon">
+												    </label>
+												    <label ng-hide="image_url11">Voter ID Card</label>
+											</div>											<div style="height: 20px">
+											<small class="size" ng-show="image_url11">{{file_size11}}</small>
+											<a class="remove_image" ng-show="image_url11" ng-click="remove_file('VoterID_Proof','11',image_url11)">Remove</a>
+										</div>
+										</div>
+										<div class="col-md-5" ng-if="BirthImg">
+											<div class="preview" ng-style="{'background-image':'url('+image_url12+')'}">
+												<input type="file" id="Birth_Proof" name="Birth Certificate" ng-file-select="onFileSelect($files,'Birth_Proof','12')">
+													<label for="Birth_Proof" ng-hide="image_url12">
+												     <img alt="" src="img/camera-128.png" class="img_icon">
+												    </label>
+												    <label ng-hide="image_url12">Birth Certificate</label>
+											</div>											<div style="height: 20px">
+											<small class="size" ng-show="image_url12">{{file_size12}}</small>
+											<a class="remove_image" ng-show="image_url12" ng-click="remove_file('Birth_Proof','12',image_url12)">Remove</a>
+										</div>
+										</div>
+										<div class="col-md-5" ng-if="EmpCardImg">
+											<div class="preview" ng-style="{'background-image':'url('+image_url13+')'}">
+												<input type="file" id="Emp_Proof" name="Employee ID" ng-file-select="onFileSelect($files,'Employee_Proof','13')">
+													<label for="Emp_Proof" ng-hide="image_url13">
+												     <img alt="" src="img/camera-128.png" class="img_icon">
+												    </label>
+												    <label ng-hide="image_url13">Employer ID Card</label>
+											</div>											<div style="height: 20px">
+											<small class="size" ng-show="image_url13">{{file_size13}}</small>
+											<a class="remove_image" ng-show="image_url13" ng-click="remove_file('Employee_Proof','13',image_url13)">Remove</a>
+										</div>
+										</div>
+										<div class="col-md-5" ng-if="SSCImg">
+											<div class="preview" ng-style="{'background-image':'url('+image_url14+')'}">
+												<input type="file" id="SSC_Proof" name="SSC Certificate" ng-file-select="onFileSelect($files,'SSC_Proof','14')">
+													<label for="SSC_Proof" ng-hide="image_url14">
+												     <img alt="" src="img/camera-128.png" class="img_icon">
+												    </label>
+												    <label ng-hide="image_url14">SSC Certificate</label>
+											</div>											<div style="height: 20px">
+											<small class="size" ng-show="image_url14">{{file_size14}}</small>
+											<a class="remove_image" ng-show="image_url14" ng-click="remove_file('SSC_Proof','14',image_url14)">Remove</a>
+										</div>
+										</div>
+										<div class="col-md-5" ng-if="HSCImg">
+											<div class="preview" ng-style="{'background-image':'url('+image_url15+')'}">
+												<input type="file" id="HSC_Proof" name="HSC Certificate" ng-file-select="onFileSelect($files,'HSC_Proof','15')">
+													<label for="HSC_Proof" ng-hide="image_url15">
+												     <img alt="" src="img/camera-128.png" class="img_icon">
+												    </label>
+												    <label ng-hide="image_url15">HSC Certificate</label>
+											</div>											<div style="height: 20px">
+											<small class="size" ng-show="image_url15">{{file_size15}}</small>
+											<a class="remove_image" ng-show="image_url15" ng-click="remove_file('HSC_Proof','15',image_url15)">Remove</a>
+										</div>
+										</div>
+										<div class="col-md-5" ng-if="PassbookImg">
+											<div class="preview" ng-style="{'background-image':'url('+image_url16+')'}">
+												<input type="file" id="Passbook_Proof" name="Passbook Proof" ng-file-select="onFileSelect($files,'Passbook_Proof','16')">
+													<label for="Passbook_Proof" ng-hide="image_url16">
+												     <img alt="" src="img/camera-128.png" class="img_icon">
+												    </label>
+												    <label ng-hide="image_url16">Passbook Proof</label>
+											</div><div style="height: 20px">
+											<small class="size" ng-show="image_url16">{{file_size16}}</small>
+											<a class="remove_image" ng-show="image_url16" ng-click="remove_file('Passbook_Proof','16',image_url16)">Remove</a>
+										</div>
+										</div>
+									</div>
+									<div class="row clearfix">
+									 							
+									</div>
+								</div>
+							</div>
+							</div></div>
+							<div class="row clearfix" id="button-row">
+								<div class="col-sm-6 col-sm-offset-2">
+								 <div class="col-md-3" style="z-index: 10000; margin-left:11px" ng-show="authenticate('AIDPRF')">
+									  <span class="Add-Icon" title="Add More Proofs"><b>+</b></span>
+									   <select id="AddMoreKyc" class="form-control" style="width: 100%; opacity:0.01">
+										 <option value="Applicant">Applicant Photo</option>
+<!-- 										 <option value="Election">Election ID Card</option> -->
+										 <option value="Birth">Birth Certificate</option>
+										 <option value="Driving">Driving License</option>
+										 <option value="Passport">Passport</option>
+										 <option value="Ration">Ration Card</option>
+										 <option value="EmpCard">Employee ID Card</option>
+										 <option value="SSC">SSC Certificate</option>
+										 <option value="HSC">HSC Certificate</option>
+										 <option value="Passbook">Bank Passbook</option>
+										 <option value="Form16">Form 16 (Latest)</option>
+									 </select>
+								</div>		
+								<input type="button" name="previous" class="previous action-button" value="Previous"/>
+								<input type="button" name="next" class="next action-button" value="Next" 
+									style="float: right;margin-right:-111px" />
+									 <br><br>
+								</div>
+							</div>
+						</fieldset>
+						
+						<!-- 						kyc section -->
+						<fieldset class="formfield">
+						<div class="parentScroll">
+						<div class="childScroll">
+							<div class="row clearfix">
+								<div class="col-md-4 column">
+									<label class="control-label">Pan Number</label>
+								</div>
+								<div class="col-md-5 column">
+									<input class="form-control" ng-model="pan" type="text"
+										name="Pan Number" placeholder="AAAAA 1236 P" maxlength="12">
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-4 column">
+									<label class="control-label">Aadhaar Number</label>
+								</div>
+								<div class="col-md-5 column">
+									<input class="form-control" ng-model="aadhar" type="text"
+										name="Aadhar Number"  placeholder="XXXX XXXX XXXX" maxlength="14">
+								</div>
+							</div>
+							<div class="row clearfix" ng-show="PassportNo">
+								<div class="col-md-4 column">
+									<label class="control-label">Passport Number</label>
+								</div>
+								<div class="col-md-5 column">
+									<input class="form-control" ng-model="passport" type="text"
+										name="Passport Number"  placeholder="XXXXXX" maxlength="8">
+								</div>
+							</div>
+							<div class="row clearfix" ng-show="DlNo">
+								<div class="col-md-4 column">
+									<label class="control-label">Driving License</label>
+								</div>
+								<div class="col-md-5 column">
+									<input class="form-control" id="dlicense" ng-model="dlicense" type="text"
+										name="dlicense"  placeholder="XXXX XXXX" maxlength="10">
+								</div>
+							</div>
+							<div class="row clearfix" ng-show="RationNo">
+								<div class="col-md-4 column">
+									<label class="control-label">Ration Card Number</label>
+								</div>
+								<div class="col-md-5 column">
+									<input class="form-control" ng-model="rationCardNo" type="text"
+										name="Ration Card Number"  placeholder="XXXX XXXX" maxlength="10">
+								</div>
+							</div>
+							<div class="row clearfix" ng-show="VoterNo">
+								<div class="col-md-4 column">
+									<label class="control-label">Voter ID</label>
+								</div>
+								<div class="col-md-5 column">
+									<input class="form-control" ng-model="VoterID" type="text"
+										name="Election Voter ID"  placeholder="XXXX XXXX" maxlength="10">
+								</div>
+							</div>
+							<div class="row clearfix" ng-show="authenticate('AKYC')">
+									  <div class="col-md-2 col-md-offset-8 ">
+									  <span class="Add-Icon"><b>+</b></span>
+									 <select id="AddMoreKycNo" class="form-control" style="width: 70px; opacity:0.01">
+										 <option value="check">Select KYC</option>									 
+										 <option value="Driving">Driving License</option>
+										 <option value="Election">Election ID</option>
+										 <option value="Passport">Passport</option>
+										 <option value="Ration">Ration Card</option>
+									 </select>
+									  </div>									 
+									</div>
+							</div></div>
+							<div class="row clearfix" id="button-row">
+								<div class="col-sm-6 col-sm-offset-4">
+									<input type="button" name="previous" class="previous action-button" value="Previous"/>								
+									<input type="button" name="next" class="next action-button"
+										value="Next" style="float: right;margin-right:-15px" />
+										 <br><br>
+								</div>
+							</div>
+						</fieldset> 
+						
+<!-- 						fieldset for profile section -->
+						<fieldset class="formfield">
+						<div class="parentScroll">
+						<div class="childScroll">
+							<div class="row clearfix" ng-show="ProductType.value=='Personal Loan'">
+								<div class="col-md-4">
+									<label class="control-label">Co-Borrower Name</label>
+								</div>
+								<div class="col-md-5">
+									<input class="form-control" ng-model="CoBorowerName" type="text" name="Co Borrower Name">
+								</div>
+							</div>
+							<div class="row clearfix" ng-show="ProductType.value=='Personal Loan'">
+								<div class="col-md-4">
+									<label class="control-label">No of Dependants</label>
+								</div>
+								<div class="col-md-5 column">
+									<input class="form-control" ng-model="NoDependant" type="text" name="No of Dependants" maxlength="3">
+								</div>
+							</div>
+							<div class="row clearfix" ng-show="ProductType.value=='Personal Loan'">
+								<div class="col-md-4">
+									<label class="control-label">No of Earning Members</label>
+								</div>
+								<div class="col-md-5 column">
+									<input class="form-control" ng-model="NoEarningMember"
+										type="text" name="No of Earning Members" maxlength="3">
+								</div>
+							</div>
+							<div class="row clearfix" ng-show="ProductType.value=='Personal Loan'"> 
+								<div class="col-md-4">
+									<label class="control-label">No of Family Members</label>
+								</div>
+								<div class="col-md-5 column">
+									<input class="form-control" ng-model="NoFamilyMember"
+										type="text" name="No of Family Member" maxlength="3">
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-4">
+									<label class="control-label">Email</label>
+								</div>
+								<div class="col-md-5 column">
+									<input class="form-control" ng-model="email"
+										type="text" name="Email">
+								</div>
+							</div>
+
+							<div class="row clearfix">
+								<div class="col-md-4">
+									<label class="control-label">Date of Birth</label>
+								</div>
+								<div class="col-md-5 column">
+									<input id="dmiDOB" class="form-control" ng-model="dob" type="text" name="Date Of Birth" style="width: 40%; display: inline-block;">
+									<label class="control-label" style="float: none;">Gender</label>&nbsp;&nbsp;
+									<label  style="float: none;"><input type="radio" name="Gender" ng-checked="true" value="Male" ng-model="gender"/> M </label>&nbsp;
+									<label  style="float: none;"><input type="radio" name="Gender" value="Female" ng-model="gender"/> F</label>									
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-4">
+									<label class="control-label">Address Line 1</label>
+								</div>
+								<div class="col-md-5 column">
+									<input class="form-control" ng-model="address1"
+										type="text" name="address" placeholder="25/7 Mumbai-Pune Highway" capitalize>
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-4">
+									<label class="control-label">Address Line 2</label>
+								</div>
+								<div class="col-md-5 column">
+									<input class="form-control"
+										ng-model="address2" type="text" placeholder="Wakdewadi, Shivaginagar" name="complete address" capitalize>
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-4">
+									<label class="control-label">Pin Code</label>
+								</div>
+								<div class="col-md-5 column">
+									<input class="form-control" ng-model="pin"
+										type="text" name="PinCode" maxlength="6" style="width: 31%; display: inline-block;">
+										<label class="control-label" style="float: none;">State </label>
+										<select id="state" class="form-control" name="State" ng-model="state" style="width: 41%">
+										<option ng-selected="true" value="Select">Select State</option>
+										</select>
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-4">
+									<label class="control-label">Time At this Address</label>
+								</div>
+								<div class="col-md-5 column">
+										<select class="form-control" name="TimeAdr" ng-model="time_address" style="width: 31%" 
+										ng-options="time as time.name for time in timeataddress track by time.value">	
+										</select>
+										<label class="control-label" style="float: none;margin-left: 11px">City </label>
+											<input id="userCity" ng-model="custCity" class="form-control"
+										type="text" name="Location" capitalize style="width: 41%; display: inline;" >
+								</div>
+							</div>
+							<div class="row clearfix">
+								<div class="col-md-4">
+									<label class="control-label">Marital Status</label>
+								</div>
+								<div class="col-md-5 column">
+									<label  style="float: none;"><input type="radio" name="Marital Status" ng-checked="true" value="Single" ng-model="maritalStatus"/> Single</label>&nbsp;&nbsp;&nbsp;&nbsp;
+									<label  style="float: none;"><input type="radio" name="Marital Status" value="Married" ng-model="maritalStatus"/> Married</label>									
+								</div>
+							</div>
+							</div></div>
+							<div class="row clearfix" id="button-row">
+								<div class="col-sm-6 col-sm-offset-4">
+									<input type="button" name="previous" class="previous action-button" value="Previous"/>
+								
+									<input type="button" name="next" class="next action-button"
+										value="Next" style="float: right;margin-right:-15px" />
+										 <br><br>
+								</div>
+							</div>
+						</fieldset>
+						
+
+						<fieldset class="formfield">
+						<div class="parentScroll">
+						<div class="childScroll">
+							<div class="row clearfix">
+								<div class="col-md-4 column">
+									<label class="control-label">Employment Type</label>
+								</div>
+								<div class="col-md-5 column">
+<!-- 									<select class="form-control" name="Employment Type" id="select_employment"	style="width: 100%">  -->
+<!-- 									<option ng-repeat="job in jobType" value="{{job.value}}" ng-selected="{{job.value=='select'}}">{{job.name}}</option>										 -->
+<!-- 									</select> -->
+									<select class="form-control" name="Employment Type" ng-model="Employment" style="width: 100%" 
+									ng-options="emp as emp.name for emp in EmploymentTypes track by emp.value">	
+										</select>
+								</div>
+							</div>
+<!-- 							<div class="row clearfix"> -->
+<!-- 									<div id="Job" class="employment"> -->
+									<div class="row clearfix">
+										<div class="col-md-4 column">
+											<label class="control-label">Employer Name</label>
+										</div>
+										<div class="col-md-5 column">
+											<input id="job_compnay_name" class="form-control" ng-model="employer" type="text" name="Company Name" capitalize>
+										</div>
+									</div>
+									<div class="row clearfix">
+										<div class="col-md-4 column">
+											<label class="control-label" style="text-align: right;">Time with this Employer</label>
+										</div>
+										<div class="col-md-5 column">									
+										<select class="form-control" name="Time With This Employer" ng-model="time_employer"
+										 style="width: 100%" ng-options="time as time.name for time in timeataddress track by time.value"></select>
+										</div>
+									</div>
+
+									<div class="row clearfix">
+										<div class="col-md-4 column">
+											<label class="control-label">Gross Annual</label>
+										</div>                                                           
+										<div class="col-md-5 column">
+											<div class="input-group input-group-md">
+												<span class="input-group-addon" id="sizing-addon3"><i
+													class="fa fa-inr"></i></span> <input id="gross_annual" class="form-control" contextmenu="Rupee"
+													ng-model="gross_annual" type="text" name="Gross Annual"	aria-describedby="sizing-addon3">
+											</div>
+										</div>
+									</div>
+									<div class="row clearfix">
+										<div class="col-md-4 column">
+											<label class="control-label">{{lastmonth | date:'MMMM'}} Take Home</label>
+										</div>
+										<div class="col-md-5 column">
+											<div class="input-group input-group-md">
+												<span class="input-group-addon" id="sizing-addon3"><i
+													class="fa fa-inr"></i></span> <input class="form-control" contextmenu="Rupee"
+													ng-model="lmth" type="text" name="last month take home"	aria-describedby="sizing-addon3">
+											</div>
+										</div>
+									</div>
+									<div class="row clearfix">
+										<div class="col-md-4 column">
+											<label class="control-label">{{last_lastmonth | date:'MMMM'}} Take Home</label>
+										</div>
+										<div class="col-md-5 column">
+											<div class="input-group input-group-md">
+												<span class="input-group-addon" id="sizing-addon3"><i
+													class="fa fa-inr"></i></span> <input class="form-control" contextmenu="Rupee"
+													ng-model="llmth" type="text" name="last to Last month take home"
+													aria-describedby="sizing-addon3">
+											</div>
+										</div>
+									</div>
+								</div>
+							</diV>
+							<!-- end employment detail -->
+							<div class="row clearfix" id="button-row">
+								<div class="col-sm-6 col-sm-offset-4">
+									<input type="button" name="previous" class="previous action-button" value="Previous"/>								
+									<input type="submit" name="submit" id="start_counter"
+										class="submit action-button" value="Submit"	style="float: right;margin-right:-15px"
+										ng-click="submit()" ng-disabled="button" />
+										 <br><br>
+								</div>
+							</div>
+						</fieldset>
+						<input ng-model="valid_form" style="display: none;" />
+						<!-- form validator checker hidden-->
+					</form>
+							</div>
+							</div>
+					<!-- 	show after submit button click		 -->
+					<div class="row clearfix">
+						<div class="col-md-8 col-md-offset-2 hiden" id="result_panel">
+						<div class="row clearfix">
+							<div class="col-md-8 col-md-offset-2">
+								<div class="row clearfix" id="result_message">								
+									<h4>{{gonogo_status}}</h4>
+								<!-- 	<h5 ng-show="RefID">Your Reference ID is : <a ng-click="Auth.Application.reprocess && newApplication(RefID)">{{RefID}}</a></h5>
+									<h5>{{detail}}</h5>	 -->		
+									<h5 >Your Reference ID is : <a ng-click="authenticate('ARPRCS') && newApplication(RefID)">{{RefID}}</a></h5>
+									<h5>{{detail}}</h5>							
+								</div>
+							</div>
+							</div>
+							<div class="row clearfix" style="text-align: center;" id="timer_box">
+								<div class="col-md-8 col-md-offset-2">
+									<div class="sui-progressbar sui-progressbar-circular"
+										id="progress"></div>
+								</div>
+							</div>
+							<div class="row clearfix" id="offer_panel" style="display: none;color: #5D6B7E;">
+							<div ng-if="Message1" style="text-align: center; margin: 6px 0px 25px;">{{Message1}}</div>									
+										<div class="col-md-12 offer_box" style="padding: 0px" ng-if="Auth.Application.offers">										
+											<ul>
+												<li ng-repeat="offer in OfferArray">
+													<div class="col-md-2"><img ng-src="{{offer.Icon}}" width="100%" height="28px"></div>
+													<div class="col-md-9"><span>{{offer.Name}}</span></div>
+													<div class="col-md-1">
+													  <div class="roundedTwo">
+																<input type="checkbox" value="None" id="Offer{{$index}}"	name="check" autocomplete="off"/>
+																<label for="Offer{{$index}}"></label>
+															</div>		
+													</div>
+												</li>												
+											</ul>
+										</div>	
+									<div ng-if="authenticate('ACNTNUE')" style="text-align: center; margin: 25px 0px 15px; color: #5D6B7E;">{{Message2}}</div>							
+							</div>
+							
+							<div class="row clearfix" id="continue_button" ng-if="authenticate('ACNTNUE')">
+							<div class="col-md-3 col-md-offset-8">
+							   <input type="submit" class="action-button" value="Continue" id="continue"/>							
+							</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+				<!-- 			<div class="col-md-12 col-md-2"></div> -->
+				<div class="col-md-12 col-md-3" id="rightbar">
+					<div class="row clearfix">
+						<div ng-show="show_error_header" class="media well"
+							ng-class="message_class" id="message">
+							<h4 class="media-heading">{{message_head}}</h4>
+							<section>{{message}}</section>
+							<br>
+
+						</div>
+						<div ng-hide="show_error_header" class="media well"
+							ng-class="message_class" id="message">
+							<div ng-hide="currency">
+								<h4 id="error_head" class="media-heading"></h4>
+								<section id="error"></section>
+								<br>
+							</div>
+							<div ng-show="currency" id="curr">
+								<h4 class="media-heading">{{currency_head}}</h4>
+								{{currency}}
+							</div>
+						</div>
+						<table>
+						<tbody></tbody>
+					</table>
+					
+						</div>
+				<div class="row clearfix hiden" id="right_progerssbar_div" style=" padding-top: 12px;">
+				<ul id="rightprogressbar">
+					<li id="doccheck"><span>Verify ID</span>
+					<span class="doc" id="pancheck" ng-show="authenticate('APAN')" 
+					 style="position: absolute; display:none; top: 16px; margin-left: 60px; font-size: 12px;"> 
+					 <input type="checkbox" class="large" checked="checked"/> Pan Unverified</span>
+					<span class="doc" id="aadharcheck" ng-show="authenticate('AAADHAR')"
+					style="position: absolute; display:none; top: 35px; margin-left: 60px; font-size: 12px;"> 
+					<input type="checkbox" class="large" checked="checked"/> Aadhaar Unverified</span>
+					</li>
+						
+					<li id="bureaucheck"><span>Bureau Score</span>
+					 <span id="mbstatus"  style="position: absolute; top: 16px;display:none; margin-left: 60px; font-size: 12px;" >{{MBStatus}}</span>
+					 <span id="cibil" style="position: absolute; top: 16px; margin-left: 60px; font-size: 12px;" ng-if="BScore && authenticate('ACIBIL')">Cibil : {{BScore}}</span>
+					 <span id="experian" style="position: absolute; top: 34px; margin-left: 60px; font-size: 12px;" ng-if="BScore1 && authenticate('AEXPRIAN')">Experian : {{BScore1}}</span>
+					</li>
+					
+					<li id="appcheck"><span>Application Score</span>
+					<span id="application" style="position: absolute;display:none; top: 16px; margin-left: 60px; font-size: 12px;">{{AppScore}}</span>
+					</li>
+						
+					<li id="crocheck" style="display:none;"><span>CRO Identified</span>
+					<span id="croid" title="{{croname}}" style="position: absolute;top: 16px; margin-left: 50px; font-size: 12px;width: 150px">
+						<img ng-src="{{croimage}}"  alt="CRO Icon" class="img-circle user_thumb" height="35px" style="width: 35px">
+						<span style="display: inline-block; position: absolute;left:42px; top: 2px; margin: 0px 3px;">{{croname}}</span>
+						<span style="display: inline-block; position: absolute;left:42px; top: 18px; margin: 0px 6px;">
+						<a id="dsa_chat" title="{{crouserid}}" ng-show="authenticate('ACHAT')">Chat Link</a></span>
+						</span>
+					</li>
+					<li id="decisioncheck"><span>Decision<span style="margin-left: 20px">{{decision}}</span></span></li>
+				</ul>
+			</div>
+			</div>
+		</div>
+	</div>
+</div>	
+<!-- <script type="text/javascript" src="angular_lib/angular-file-upload.js"></script>
+<script type="text/javascript" src="angular_lib/angular-file-upload-shim.min.js"></script>
+<script src="JqueryLib/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="JqueryLib/jquery-ui.min.css"> 
+ -->
