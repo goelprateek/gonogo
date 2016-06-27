@@ -52,6 +52,76 @@
 		   };
 		});
 
+	app.directive('initcap', function () {
+	return {
+		require: 'ngModel',
+		link: function(scope, element, attrs, modelCtrl) {
+			var capitalize = function(inputValue) {
+				if(inputValue == undefined) inputValue = '';
+				var capitalized = inputValue.replace(/^(.)|\s(.)/g, function(v){ return v.toUpperCase( ); });
+				if(capitalized !== inputValue) {
+					modelCtrl.$setViewValue(capitalized);
+					modelCtrl.$render();
+				}         
+				return capitalized;
+				}
+				modelCtrl.$parsers.push(capitalize);
+				capitalize(scope[attrs.ngModel]);  // capitalize initial value
+			}
+		};
+	});
+
+	app.directive('rupees', function() {
+		return {
+			require: 'ngModel',
+			link: function(scope, element, attrs, modelCtrl) {
+				var formate = function(inputValue) {
+					if (inputValue == undefined) inputValue = '';
+					var rupee = torupee(inputValue);
+					if (rupee !== inputValue) {
+						modelCtrl.$setViewValue(rupee);
+						modelCtrl.$render();
+					}
+					return rupee;
+				}
+				function torupee(x) {
+					x=x.toString().replace(/,/g,'');
+					if(x.length > 3)
+					{ var lastThree = x.substring(x.length-3);
+					var otherNumbers = x.substring(0,x.length-3);
+					if(otherNumbers != '')
+					{ lastThree = ',' + lastThree; }
+					var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree;
+					return res;
+					}else{
+						return x;
+					}
+				}
+				modelCtrl.$parsers.push(formate);
+				formate(scope[attrs.ngModel]); // capitalize initial value
+			}
+		   };	
+	});
+
+	app.directive('contentItem', function ($compile) {
+		var linker = function(scope, element, attrs) {
+			var template = '<div class="row clearfix" style="padding: 8px;">';
+			template=template+'<div class="preview" id="{{item.value}}{{item.index}}">';
+			template=template+'<input id="{{item.value}}l{{item.index}}" type="file" ng-file-select="onselectImg($files,'+"'{{item.value}}'"+','+"'{{item.index}}'"+')">';
+			template=template+'<label for="{{item.value}}l{{item.index}}" id="{{item.value}}{{item.index}}label">';
+			template=template+'<img alt="" src="../img/camera-128.png" class="img_icon"></label></div>';
+			template=template+'<small id="{{item.value}}{{item.index}}size" class="size"></small>';
+			template=template+'<div style="height:20px;"><a class="remove_image" id="{{item.value}}{{item.index}}remove" name="{{item.value}}{{item.index}}" style="display:none">Remove</a></div></div>';
+			element.html(template); 
+			$compile(element.contents())(scope);
+		};
+		return {
+			restrict : 'E',
+			link : linker,
+			scope : false
+		};
+	});
+
 	// directives from simdirecctive.js (Piyush) (need to disccuss why need all these)
 	app.directive('policy', function() {
 	    var directive = {};
@@ -152,7 +222,7 @@
 	        	});	
 	        }
 		}
-	})
+	});
 	
 	
 }).call(this)

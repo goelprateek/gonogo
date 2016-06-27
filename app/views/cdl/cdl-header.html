@@ -1,0 +1,56 @@
+<div class="row clearfix header " style="background-color: #24A1ED;">
+			<div class="col-xs-6 col-sm-3 col-md-3" style="text-align: center;">
+				<img alt="" src="images/gonogo.png" class="gngimg" />
+			</div>
+			<div class="col-sm-6 col-md-5 hidden-xs" id="msgHdr">
+				<a href="#apply"><img alt="Application" class="linkIcons"id="application"
+					src="images/apply.png"></a> <a href="#dashboard"><img
+					alt="Dashboard" class="linkIcons" src="images/dashboard.png"
+					style="width: 66px"></a> <a href="#assetMaster"><img
+					alt="AssetMaster" class="linkIcons" src="images/asset.png"
+					style="width: 80px"></a>
+			</div>
+			<div class="col-xs-6 col-sm-3 col-md-2 col-md-offset-2">
+				<!-- <img alt="" src="../img/user.png" class="usrimg" data-toggle="dropdown" /> -->
+				<ul class="nav navbar-nav">
+					<li class="dropdown">
+						<p data-toggle="dropdown" class="open_tab" id="openBox"
+							style="margin-bottom: 0px;">
+							<img src="{{image}}" alt="User Icon" class=" user_thumb"
+								style="height: 60px; margin: 0px;">
+						</p>
+
+						<div class="dropdown-menu " id="logout_dropdown_panel"
+							style="background-color: rgb(36, 161, 237); padding: 1px; margin-top: 10px; position: absolute; top: 65px; left: -290%;">
+							<p class="logoutPanel" style="margin: 0px 0px 0px;"></p>
+							<div class="row clearfix">
+								<div class="col-md-3">
+									<div class="profile_icon user"
+										style="background-image: url('{{image}}');">
+										<!-- 										<div id="change_thumb">Change photo</div> -->
+									</div>
+								</div>
+								<div class="user_data col-md-8" style="text-align: initial">
+									<div class="row clearfix">
+										<div class="col-md-12" style="margin-top: 4%;">
+											<label id="user_name" title="{{userid}}"
+												style="text-align: left; color: #fff">{{username}}</label>
+											<!--  -->
+											<div class="copyright"
+												style="text-align: left; margin-top: 7px; color: #fff">{{useremail}}</div>
+											<!-- 										<a id="view_profile" style="margin-top: 11px;background-color: initial;border:1px solid #fff;font-weight: inherit;color:white">View profile</a> -->
+											<div class="copyright"
+												style="text-align: left; margin-top: 7px; color: #fff">{{dealerName}}</div>
+											
+											<a class="btn-primary" ng-click="logout()"
+												style="padding: 4px 13px; background-color: initial; border: 1px solid #fff; position: absolute; bottom: -47px; right: 25px;">LogOut</a>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-1"></div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>

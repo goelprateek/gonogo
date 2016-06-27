@@ -1,0 +1,79 @@
+<div class="col-md-12">
+	<div style="margin-top:50px;" class="row clearfix" >
+		<div class="form-group col-md-4">
+			<select id="DisplayType" name="ApplicationList" ng-model="applicationList" class="form-control control-select inputMaterial">
+				<option value="ApplicationList">Application List</option>
+				<option value="ApplicationSummary">Application Summary</option>
+			</select>
+			<label>Type</label>
+		</div>
+		<div class="form-group col-md-4" ng-if="applicationList=='ApplicationList'">			
+			<select id="Duration" name="Duration" ng-model="$parent.duration" class="form-control control-select inputMaterial" ng-change="fetchDashboardList()">
+				<option value="LastWeek">Last Week</option>
+				<option value="LastMonth">Last Month</option>
+				<option value="LastYear">Last Year</option>
+			</select>
+			<label>Duration</label>
+		</div>
+		<div class="form-group col-md-4" ng-if="applicationList=='ApplicationList'"><!--  -->
+			<input type="text" name="search" id="search" ng-model-onblur fetch-dashboard="fetchDashboardList()" class="form-control inputMaterial" ng-model="$parent.searchText" duration-selected="duration" required >
+			<label>Search</label>
+		</div>
+	</div>	
+	<div class="row clearfix" id="mtd_container" ng-controller="BarGraphController" ng-if="applicationList=='ApplicationSummary'">
+		<div class="col-md-12" style="overflow: hidden;" id="mtd-box">
+			<span class="CatError"></span>
+		</div>
+	</div>
+	<div class="form-group" style="height:430px;overflow-y: auto;" ng-if="applicationList=='ApplicationList'">
+		<table class="table table-striped" style="margin-top:30px;overflow-x:auto;">
+			<thead>
+				<tr>
+					<th style="width: 10%" ng-click="sortType = 'sRefID'; sortDesc = !sortDesc">
+						Ref ID
+						<span ng-if="sortType == 'sRefID' && sortDesc" class="fa fa-caret-down"></span>
+        				<span ng-if="sortType == 'sRefID' && !sortDesc" class="fa fa-caret-up"></span>
+        			</th>
+					<th style="width: 20%" ng-click="sortType = 'dDate'; sortDesc = !sortDesc">
+						Date
+						<span ng-if="sortType == 'dDate' && sortDesc" class="fa fa-caret-down"></span>
+        				<span ng-if="sortType == 'dDate' && !sortDesc" class="fa fa-caret-up"></span>
+        			</th>
+					<th style="width: 20%" ng-click="sortType = 'sName'; sortDesc = !sortDesc">
+						Name
+						<span ng-if="sortType == 'sName' && sortDesc" class="fa fa-caret-down"></span>
+        				<span ng-if="sortType == 'sName' && !sortDesc" class="fa fa-caret-up"></span>
+					</th>
+					<th style="width: 10%" ng-click="sortType = 'sScheme'; sortDesc = !sortDesc">
+						Scheme
+						<span ng-if="sortType == 'sScheme' && sortDesc" class="fa fa-caret-down"></span>
+	       				<span ng-if="sortType == 'sScheme' && !sortDesc" class="fa fa-caret-up"></span>
+					</th>
+					<th style="width: 20%" ng-click="sortType = 'dAmtApprvd'; sortDesc = !sortDesc">
+						Amount
+						<span ng-if="sortType == 'dAmtApprvd' && sortDesc" class="fa fa-caret-down"></span>
+	      				<span ng-if="sortType == 'dAmtApprvd' && !sortDesc" class="fa fa-caret-up"></span>
+					</th>
+					<th style="width: 10%" ng-click="sortType = 'sStages'; sortDesc = !sortDesc">
+						Stage
+						<span ng-if="sortType == 'sStages' && sortDesc" class="fa fa-caret-down"></span>
+	       				<span ng-if="sortType == 'sStages' && !sortDesc" class="fa fa-caret-up"></span>
+					</th>
+					<th style="width: 10%">						
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="result in dashboardResult | orderBy:sortType:sortDesc | filter: search" ng-click="loadCDLForm(result.sRefId,result.sStatus)">
+					<td>{{result.sRefId}}</td>
+					<td>{{result.dDate | date:'medium'}}</td>
+					<td>{{result.sName}}</td>
+					<td>{{result.sScheme}}</td>
+					<td>{{result.dAmtApprvd}}</td>
+					<td>{{result.sStages}}</td>
+					<td><button class="customButton" ng-if="result.aCroJustification" ng-click="moreClicked(result.aCroJustification[0].sCase,result.aCroJustification[0].sRemark,result.aCroJustification[0].sSubTo);$event.stopPropagation();">More</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

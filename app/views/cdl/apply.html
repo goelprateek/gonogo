@@ -1,0 +1,1467 @@
+			<style>
+			.afterSubmit{
+				text-align: center;
+				border: 01px solid rgb(36, 161, 237);
+				margin-top: 5%;
+				width: 96%;
+				margin-left: 2%;
+				border-radius: 17px;
+			}
+			.approveSec{
+			color: rgb(36, 161, 237);
+			font-size: 20px;
+			margin: 4px 0px;
+			}
+			.emiSec{
+			margin-bottom: 5px;
+			font-size: 16px;
+			}
+			.rmrkCr
+			{
+			margin: 2%;
+			border-bottom: 01px solid #eae1e1;;
+			}
+			.rmrk
+			{
+				font-size: 18px;
+			}
+			.sbjt
+			{
+				font-size: 16px;
+				color: gray;
+				margin-bottom: 5px;
+			}
+			.holdTmplt{
+			padding:0px;
+			}
+			</style>
+			
+			<!-- <div class="row clearfix" style="margin-top: 4%;" id="dlrContainer" >
+				<div class="col-md-8 col-md-offset-2">
+					<div class="panel panel-default">
+						<div class="panel-heading "
+							style="text-align: center; font-size: 16px">Dealer Name</div>
+						<div class="panel-body" style="height: 185px; overflow-y: scroll;">
+							<table class="table table-striped table-hover">
+								<tbody>
+									<tr ng-repeat="object in dealerArr">
+										<td><label style="width: 100%" for="delr{{$index}}">
+												<input id="delr{{$index}}" type="radio"
+												ng-model="$parent.currentDealer" name="name" value="{{object}}" />
+												{{object.DEALER_NAME}}
+										</label></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="panel-footer" style="text-align: center;">
+							<button class="customButton" id="slcDlr" ng-click="onDealerSelected(currentDealer)">Continue</button>
+						</div>
+					</div>
+				</div>
+			</div> -->
+			<div data-ng-controller="ApplyController">
+			<div class="row clearfix" id="nmCntnr">
+				<div class="col-md-8 col-md-offset-2" id="middleContainer">
+					<div class="row clearfix containerBorder">
+						<div class="col-md-10 col-md-offset-2">
+							<div id="basicInfo" style="margin-top: 25%;">
+								<div class="row clearfix customRow">
+									<!-- <div class="col-md-5 customDiv"><label  > First Name</label></div>
+									<div class="col-md-7"><input type="text" class="customInput" /> </div> -->
+									<div class="col-md-4 height">
+										<help>First Name*</help>
+										<input id="fname" ng-model="fname" type="text"
+											class="customInput" placeholder="First Name*" capitalize />
+									</div>
+									<div class="col-md-4 height">
+										<help>Middle Name</help>
+										<input id="mname" ng-model="mname" type="text"
+											class="customInput" placeholder="Middle Name" capitalize />
+									</div>
+									<div class="col-md-4 height">
+										<help>Last Name*</help>
+										<input id="lname" ng-model="lname" type="text"
+											class="customInput" placeholder="Last Name*" capitalize />
+									</div>
+								</div>
+
+								<div class="row clearfix customRow">
+									<div class="col-md-4 height">
+										<help>Mobile Number*</help>
+										<input type="text" id="tmob" ng-model="tmob"
+											class="customInput" placeholder="Mobile Number*"
+											maxlength="10" />
+									</div>
+									<div class="col-md-4 height">
+										<help>Aadhar Number</help>
+										<input type="text" id="aadhar" name="Aadhar Number"
+											ng-model="aadhar" class="customInput aadhaar"
+											placeholder="Aadhar Number" maxlength="12" />
+									</div>
+									<div class="col-md-4 height">
+										<help>Pan</help>
+										<input type="text" id="pan" ng-model="pan" name="Pan Number"
+											class="customInput pan" placeholder="Pan" maxlength="10"
+											capitalize />
+									</div>
+								</div>
+
+								<div class="row clearfix customRow">
+									<div class="col-md-4 height">
+										<help>Product Type*</help>
+										<select class="customSelect" id="cdl" ng-model="productType">
+											<option selected="selected" value="">Select
+												Product Type</option>
+											<option value="Consumer Durables">Consumer Durables</option>
+										</select> <img alt="" src="../img/selArrow.png" class="customarrow" />
+									</div>
+								</div>
+								<div class="row clearfix" style="margin-bottom: 15px">
+									<div class="col-md-5 "></div>
+									<div class="col-md-7" style="text-align: right;">
+										<button id="getOTP" class="customButton" style="float: right;"
+											ng-click="clickEvent('getOTP')">Get OTP</button>
+										<div id="otpContainer" style="display: none;">
+											<input class="form-control otp" id='txt1' type="password"
+												maxlength="1" name="OTP"> <input
+												class="form-control otp" id='txt2' type="password"
+												maxlength="1" name="OTP"> <input
+												class="form-control otp" id='txt3' type="password"
+												maxlength="1" name="OTP"> <input
+												class="form-control otp" id='txt4' type="password"
+												maxlength="1" name="OTP"> <input
+												class="form-control otp" id='txt5' type="password"
+												maxlength="1" name="OTP">
+											<button id="verifybtn" class="customButton"
+												ng-click="clickEvent('verifybtn')">Verify</button>
+										</div>
+									</div>
+								</div>
+
+								<div class="row clearfix" style="margin-bottom: 15px">
+									<div class="col-md-5 "></div>
+									<div class="col-md-7" style="text-align: right;">
+										<div id="ResendCntnr" style="display: none;">
+											<button id="Resend" class="customButton"
+												ng-click="clickEvent('Resend')" style="padding: 4px 11px;">Resend
+											</button>
+											<button id="Skip" class="customButton"
+												ng-click="clickEvent('Skip')"
+												style="padding: 4px 20px; display: none;">Skip</button>
+										</div>
+									</div>
+								</div>
+
+								<div class="row clearfix" style="margin-bottom: 15px">
+									<div class="col-md-12"></div>
+								</div>
+							</div>
+							<!-- End of basic info container -->
+						</div>
+					</div>
+				</div>
+				<div class="col-md-2" id="rightbarContainer"
+					style="text-align: center;"></div>
+
+			</div>
+			<!-- end of first page -->
+
+			<div class="row clearfix" id="infoContainer" style="padding-top: 20px;">
+
+				<div class="col-sm-4 col-md-3" id="progressDiv"
+					style="border-right: 01px solid #24a1ed; padding-right: 0px; display: none;padding-top: 22px;">
+					<div id="responsive">
+						<div style="padding-left: 30%">
+							<div style="display: inline-block; color: #24a1ed; float: left;">Name
+								: </div>
+							<div style="display: inline-block; width: 75%;"> {{ fname +"
+								"+ mname +" "+ lname}}</div>
+						</div>
+						<div style="margin-top: 10px; padding-left: 30%">
+							<div style="display: inline-block; color: #24a1ed; float: left;">Ref ID: </div>
+							<div style="display: inline-block; width: 75%;"> {{ REFID }}</div>
+						</div>
+						<!-- <div style="margin-top: 10px; padding-left: 30%">
+							<div style="display: inline-block; color: #24a1ed; float: left;">Dealer Name: </div>
+							<div style="display: inline-block; width: 75%;"> {{dlrName}}</div>
+						</div> -->
+						<div style="margin-top: 10px; padding-left: 30%">
+							<div style="display: inline-block; color: #24a1ed; float: left;">Product: </div>
+							<div style="display: inline-block; width: 75%;"> {{productType}}</div>
+						</div>
+						<div style="margin-top: 18%;">
+							<ul class="progressbar">
+								<li id="KYCList" class="active">PERSONAL DETAILS</li>
+								<li id="personalList">ADDRESS DETAILS</li>
+								<li id="employmentList">WORK DETAILS</li>
+								<li id="IncomeList">ASSET DETAILS</li>
+								<li id="BankingList">PROOF</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class=" col-sm-8 col-md-9">
+
+		<fieldset id="kyccontainer" style="display: none;">
+
+			<div class="getheight" id="kycHeight">
+				<div class="row clearfix ">
+					<!-- <div class="col-sm-8 col-md-8" id="kycDataContainer" style="margin-left: 5%"></div>   end odf col-md-8 -->
+					<div class="col-md-10 col-md-offset-1">
+
+						<div class="row clearfix">
+							<help style="display:block;margin:15px;">Applicant Photo</help>
+							<div class="preview" ng-if="!profileImage"
+								ng-style="{'background-image':'url('+selectImgInit+')'}"
+								style="width: 17%; height: 113px; margin-left: 3%">
+								<input id="addrIP" type="file" ng-model="addrIP"
+									ng-file-select="onselectImg($files,'APPLICANT-PHOTO')"> <label
+									for="addrIP" ng-hide="selectImgInit" style="display: block;">
+									<img id="selectImgInit" alt="" src="../img/camera-128.png" class="img_icon"
+									style="margin-top: 17%">
+								</label>
+								<!-- <label ng-hide="image_url2">Present Address</label> -->
+							</div>
+
+							<img ng-model="profileImg" id="selectImgInit" alt="" ng-src="{{profileData}}"
+								ng-if="profileImage" style="width: 17%; height: 113px; margin-left: 3%">
+							<div style="height: 20px">
+								<small ng-show="image_url2" class="size">{{file_size2}}</small>
+								<a class="remove_image" ng-show="selectImgInit || profileImage"
+									ng-click="remove_file('ResidenceProof','0',selectImgInit)">Remove</a>
+							</div>
+						</div>
+
+						<div class="row clearfix customRow">
+							<div class="col-md-6 height">
+								<help>Suspected Activity</help>
+								<select class="customSelect" id="susPctdFrd" ng-model="suspAct">
+									<option selected="selected" value="No">Refer to Credit</option>
+									<option value="Suspected fraud">Suspected fraud</option>
+									<option value="Confirmed fraud">Confirmed fraud</option>
+								</select> <img alt="" src="../img/selArrow.png" class="customarrow" />
+							</div>
+						</div>
+						<div class="row clearfix customRow">
+							<div class="col-md-6 height">
+								<help>Credit Card No</help>
+								<input type="text" id="cr" ng-model="creditCardNumber"
+									class="customInput" placeholder="Credit Card No" maxlength="6" />
+							</div>
+							<div class="col-md-6 height">
+								<help>Gender*</help>
+								<div class="rc" style="color: inherit;">
+									<label class="control-label rlabel" style="color: inherit;">Gender*</label>&nbsp;&nbsp;
+									<label class="r1" style="float: none; color: inherit;"><input
+										type="radio" name="Gender" checked="checked" value="Male"
+										ng-model="gender" /> Male </label> <label class="r2"
+										style="float: none; color: inherit;"><input
+										type="radio" name="Gender" value="Female" ng-model="gender" />
+										Female </label>
+								</div>
+							</div>
+						</div>
+
+						<div class="row clearfix customRow">
+							<div class="col-md-6 height">
+								<help>Education Qualification*</help>
+								<select class="customSelect" id="edu" ng-model="edu">
+									<option selected="selected" value="">Select
+										Qualification*</option>
+									<option value="DOCTORATE">DOCTORATE</option>
+									<option value="GRADUATE">GRADUATE</option>
+									<option value="POST-GRADUATE">POST-GRADUATE</option>
+									<option value="PROFESSIONAL">PROFESSIONAL</option>
+									<option value="UNDER GRADUATE">UNDER GRADUATE</option>
+									<option value="OTHERS">OTHERS</option>
+								</select> <img alt="" src="../img/selArrow.png" class="customarrow" />
+							</div>
+							<div class="col-md-6 height">
+								<div class="rc">
+									<label class="control-label rlabel" style="color: inherit;">Marital
+										Status*</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label class="r1"
+										style="float: none; color: inherit;"><input
+										type="radio" name="Mstatus" ng-model="mstatus"
+										checked="checked" value="Single" /> Single </label> <label class="r2"
+										style="float: none; color: inherit;"><input
+										type="radio" name="Mstatus" ng-model="mstatus" value="Married" />
+										Married </label>
+								</div>
+							</div>
+						</div>
+
+						<div class="row clearfix customRow">
+							<div class="col-md-6 height">
+								<help>Date of Birth*</help>
+								<input type="text" id="dob" class="customInput" ng-model="dob"
+									placeholder="Date of Birth*" />
+							</div>
+							<div class="col-md-6 height">
+								<help>Constitution*</help>
+								<select class="customSelect" id="constitution"
+									ng-model="constitution"
+									ng-change="changeEvent('CONSTITN',constitution)">
+									<option ng-selected="true" value="">Select Constitution*</option>
+									<option value="TRUST">TRUST</option>
+									<option value="SELF-EMPLOYED">SELF-EMPLOYED</option>
+									<option value="SALARIED">SALARIED</option>
+									<option value="PARTNERSHIP">PARTNERSHIP</option>
+									<option value="PRIVATE LIMITED COMPANY">PRIVATE
+										LIMITED COMPANY</option>
+								</select> <img alt="" src="../img/selArrow.png" class="customarrow" />
+							</div>
+						</div>
+
+						<div class="row clearfix customRow">
+							<div class="col-md-6 height">
+								<help>Loan Amount*</help>
+								<i class="fa fa-rupee"></i><input type="text" id="lamt"
+									ng-model="lamt" class="customInput" placeholder="Loan Amount*"
+									maxlength="10" style="padding-left: 4%" rupees />
+							</div>
+							<div class="col-md-6 height">
+								<help>Tenure in Months*</help>
+								<input type="text" id="tim" class="customInput"
+									ng-model="loanTenure" placeholder="Tenure in Months*"
+									maxlength="3" />
+							</div>
+						</div>
+					</div>
+
+				</div>
+
+			</div>
+			<div class="row clearfix ">
+				<div class="col-md-10 col-md-offset-1">
+					<button class="customButton next" id="fromKYC">Next</button>
+					<button class="customButton save" id="save"
+						ng-click="submitApplication('step3')">Save</button>
+				</div>
+			</div>
+
+		</fieldset>
+
+		<fieldset id="personalInfo" style="display: none;">
+						<div class="row clearfix getheight" id="kycHeight">
+							<!-- <div class="col-sm-8 col-md-8" id="kycDataContainer" style="margin-left: 5%"></div>   end odf col-md-8 -->
+							<div class="col-md-10 col-md-offset-1">
+								<div id="residenceAddr">
+									<div class="row clearfix customRow">
+										<div class="col-md-6 height">
+											<help>Residence Address Type*</help>
+											<select id="addressType" class="customSelect"
+												ng-model="addressType">
+												<option value="" ng-selected="true">Select
+													Address Type*</option>
+												<option value="OWNED-BUNGLOW">OWNED-BUNGLOW</option>
+												<option value="OWNED-CHAWL">OWNED-CHAWL</option>
+												<option value="OWNED-FLAT">OWNED-FLAT</option>
+												<option value="OWNED-PENTHOUSE">OWNED-PENTHOUSE</option>
+												<option value="OWNED-ROWHOUSE">OWNED-ROWHOUSE</option>
+												<option value="RENTED-BUNGLOW">RENTED-BUNGLOW</option>
+												<option value="RENTED-CHAWL">RENTED-CHAWL</option>
+												<option value="RENTED-FLAT">RENTED-FLAT</option>
+												<option value="RENTED-PENTHOUSE">RENTED-PENTHOUSE</option>
+												<option value="RENTED-ROWHOUSE">RENTED-ROWHOUSE</option>
+												<option value="RENTED-BACHELOR ACCOMODATION">RENTED-BACHELOR
+													ACCOMODATION</option>
+												<option value="COMPANY PROVIDED-FLAT">COMPANY
+													PROVIDED-FLAT</option>
+												<option value="PARENT OWNED-HOUSE">PARENT
+													OWNED-HOUSE</option>
+												<option value="PARENT OWNED-FLAT">PARENT OWNED-FLAT</option>
+												<option value="COMPANY PROVIDED-HOUSE">COMPANY
+													PROVIDED-HOUSE</option>
+											</select> <img alt="" src="../img/selArrow.png" class="customarrow" />
+										</div>
+										<div class="col-md-6 height" id="ac" ng-if="addressType.indexOf('RENTED') != -1">
+											<help>Rent Per Month*</help>
+											<i class="fa fa-rupee"></i><input type='text' id='rent'
+												ng-model="rent" class='customInput'
+												placeholder='Rent Per Month*' style="padding-left: 4%"
+												rupees />
+										</div>
+
+									</div>
+
+									<div class="row clearfix customRow">
+										<div class="col-md-12 height">
+											<help>Address Line 1*</help>
+											<input type="text" id="a1" ng-model="a1" class="customInput"
+												placeholder="Address Line 1*" style="width: 93%" capitalize />
+										</div>
+									</div>
+
+									<div id="owned">
+										<div class="row clearfix customRow">
+											<div class="col-md-6 height">
+												<help>Address Line 2</help>
+												<input type="text" id="a2" ng-model="a2" class="customInput"
+													placeholder="Address Line 2" capitalize />
+											</div>
+											<div class="col-md-6 height">
+												<help>Address Line 3</help>
+												<input type="text" id="a3" ng-model="a3" class="customInput"
+													placeholder="Address Line 3" capitalize />
+											</div>
+										</div>
+
+										<div class="row clearfix customRow">
+											<div class="col-md-6 height">
+												<help>Pincode*</help>
+												<input type="text" id="perpin" class="customInput" ng-model="residencePincode"
+													placeholder="Pincode*" maxlength="6" />
+											</div>
+											<div class="col-md-6 height">
+												<span>
+													<help>City*</help>
+													<input type="text" class="customInput city" id="percity"
+														disabled="disabled" placeholder="City*" style="width: 45%;" ng-model="residenceCity" />
+												</span>
+												<span>
+													<help class="margin_state">State*</help>
+													<input type="text" id="perstate" disabled="disabled"
+														class="customInput state" placeholder="State" ng-model="residenceState" />
+												</span>
+											</div>
+										</div>
+
+										<div class="row clearfix customRow">
+											<div class="col-md-2 height">
+												<help>STD Code*</help>
+												<input type="text" id="perstdCode" class="customInput" ng-model="residenceStd"
+													placeholder="STD Code*" maxlength="5" />
+											</div>
+											<div class="col-md-4 height">
+												<help>Landline Number</help>
+												<input type="text" id="perphone" class="customInput" ng-model="residencePhone"
+													placeholder="Phone" maxlength="10" style="width: 78%;" />
+											</div>
+											<div class="col-md-6 height">
+												<help>Personal Mobile*</help>
+												<input type="text" id="permobile" ng-model="tmob"
+													class="customInput" placeholder="Mobile*" maxlength="10"
+													disabled="disabled" />
+											</div>
+										</div>
+
+
+										<div class="row clearfix customRow">
+											<div class="col-md-12 height">
+												<help>Email*</help>
+												<input type="text" id="peremail" class="customInput" ng-model="residenceEmail"
+													placeholder="Email*" style="width: 93%;" />
+											</div>
+										</div>
+
+										<div class="row clearfix customRow">
+											<div class="col-md-6 height">
+												<help>Months at current address*</help>
+												<input type="text" id="pertadd" class="customInput"
+													placeholder="Months at current address*" maxlength="3" ng-model="residenceAddrStay"/>
+											</div>
+											<div class="col-md-6 height">
+												<help>Months at City*</help>
+												<input type="text" class="customInput city" id="mcity" ng-model="residenceCityStay"
+													placeholder="Months at City*" maxlength="3" />
+											</div>
+										</div>
+									</div>
+								</div>
+								<div id="permanentAddr">
+
+									<div class="row clearfix alert-info">
+										<div class="col-md-6">
+											<strong>Permanent Address</strong>
+										</div>
+										<div class="col-md-6">
+											<label for="same"> <input type="checkbox" id="same"
+												ng-model="same" ng-change="stateChanged(same)" /> Same as Above
+											</label>
+										</div>
+									</div>
+									<!-- 			 <form id="permanentAddr"> -->
+									<div class="row clearfix customRow">
+										<div class="col-md-6 height">
+											<help>Permanent Address Type*</help>
+											<select id="prmnt_addressType" class="customSelect"
+												ng-model="prmnt_addressType">
+												<option value="" ng-selected="true">Select
+													Address Type*</option>
+												<option value="OWNED-BUNGLOW">OWNED-BUNGLOW</option>
+												<option value="OWNED-CHAWL">OWNED-CHAWL</option>
+												<option value="OWNED-FLAT">OWNED-FLAT</option>
+												<option value="OWNED-PENTHOUSE">OWNED-PENTHOUSE</option>
+												<option value="OWNED-ROWHOUSE">OWNED-ROWHOUSE</option>
+												<option value="RENTED-BUNGLOW">RENTED-BUNGLOW</option>
+												<option value="RENTED-CHAWL">RENTED-CHAWL</option>
+												<option value="RENTED-FLAT">RENTED-FLAT</option>
+												<option value="RENTED-PENTHOUSE">RENTED-PENTHOUSE</option>
+												<option value="RENTED-ROWHOUSE">RENTED-ROWHOUSE</option>
+												<option value="RENTED-BACHELOR ACCOMODATION">RENTED-BACHELOR
+													ACCOMODATION</option>
+												<option value="COMPANY PROVIDED-FLAT">COMPANY
+													PROVIDED-FLAT</option>
+												<option value="PARENT OWNED-HOUSE">PARENT
+													OWNED-HOUSE</option>
+												<option value="PARENT OWNED-FLAT">PARENT OWNED-FLAT</option>
+												<option value="COMPANY PROVIDED-HOUSE">COMPANY
+													PROVIDED-HOUSE</option>
+											</select> <img alt="" src="../img/selArrow.png" class="customarrow" />
+										</div>
+										<div class="col-md-6 height" id="prmnt_ac" ng-if="prmnt_addressType.indexOf('RENTED') != -1">
+											<help>Rent Per Month*</help>
+											<i class="fa fa-rupee"></i> <input type='text' id='prmnt_rent' ng-model="prmnt_rent" class='customInput'
+												placeholder='Rent Per Month*' style="padding-left: 4%" rupees />
+										</div>
+
+									</div>
+									<div class="row clearfix customRow">
+										<div class="col-md-12 height">
+											<help>Address Line 1*</help>
+											<input type="text" id="prmnt_a1" ng-model="prmnt_a1"
+												class="customInput" placeholder="Address Line 1*"
+												style="width: 93%;" capitalize />
+										</div>
+									</div>
+									<div class="row clearfix customRow">
+										<div class="col-md-6 height">
+											<help>Address Line 2</help>
+											<input type="text" id="prmnt_a2" ng-model="prmnt_a2"
+												class="customInput" placeholder="Address Line 2" capitalize />
+										</div>
+										<div class="col-md-6 height">
+											<help>Address Line 3</help>
+											<input type="text" id="prmnt_a3" ng-model="prmnt_a3"
+												class="customInput" placeholder="Address Line 3" capitalize />
+										</div>
+									</div>
+
+									<div class="row clearfix customRow">
+										<div class="col-md-6 height">
+											<help>Pincode*</help>
+											<input type="text" id="prmnt_perpin" class="customInput" ng-model="prmntPincode"
+												placeholder="Pincode*" maxlength="6"/>
+										</div>
+										<div class="col-md-6 height">
+											<span>
+											<help>City*</help>
+											<input type="text" class="customInput city"
+												id="prmnt_percity" placeholder="City*" style="width: 45%;" ng-model="prmntCity"
+												disabled="disabled" />
+											</span>
+											<span>
+											<help class="margin_state">State*</help>
+											<input type="text" id="prmnt_perstate"
+												class="customInput state" placeholder="State*" ng-model="prmntState"
+												disabled="disabled" />
+											</span>
+										</div>
+									</div>
+									<div class="row clearfix customRow">
+										<div class="col-md-2 height">
+											<help>STD Code*</help>
+											<input type="text" id="prmnt_perstdCode" ng-model="prmntStd"
+												class="customInput" maxlength="5" placeholder="STD Code*" />
+										</div>
+										<div class="col-md-4 height">
+											<help>Phone</help>
+											<input type="text" id="prmnt_perphone" class="customInput" ng-model="prmntPhone"
+												placeholder="Phone" />
+										</div>
+										<div class="col-md-6 height">
+											<help>Mobile</help>
+											<input type="text" id="prmnt_permobile" class="customInput" ng-model="prmntMobile"
+												placeholder="Mobile" maxlength="10" />
+										</div>
+									</div>
+									<div class="row clearfix customRow">
+										<div class="col-md-12 height">
+											<help>Email*</help>
+											<input type="text" id="prmnt_peremail" class="customInput" ng-model="prmntEmail"
+												placeholder="Email*" style="width: 93%;" />
+										</div>
+									</div>
+									<div class="row clearfix customRow">
+										<div class="col-md-6 height">
+											<help>Months at Permanent address*</help>
+											<input type="text" id="prmnt_pertadd" class="customInput"  ng-model="prmntAddrStay"
+												placeholder="Months at permanent address" />
+										</div>
+										<div class="col-md-6 height">
+											<help>Months at City*</help>
+											<input type="text" class="customInput city" id="prmnt_mcity"  ng-model="prmntCityStay"
+												placeholder="Months at City*" />
+										</div>
+									</div>
+									<!-- 			</form> -->
+								</div>
+							</div>
+						</div>
+
+						<div class="row clearfix ">
+							<div class="col-md-10 col-md-offset-1">
+								<button class="customButton previous">Previous</button>
+								<button class="customButton next" id="frompersonalInfo">Next</button>
+									<button class="customButton save" id="save"  ng-click="submitApplication('step3')">Save</button>
+							</div>
+							<!-- <div class="col-md-3"></div> -->
+						</div>
+					</fieldset>
+
+					<fieldset id="employmentContainer" style="display: none;">
+
+						<div class="getheight" id="kycHeight">
+							<div class="row clearfix ">
+								<div class="col-md-10 col-md-offset-1">
+									<div class="row clearfix customRow">
+										<div class="col-md-6 height">
+											<help>Employer Name*</help>
+											<input type="text" ng-model="wrkename" id="wrkename" class="customInput"
+												placeholder="Employer Name*" />
+										</div>
+										<div class="col-md-6 height">
+											<help>Employment Type*</help>
+											<select class="customSelect" ng-model="wrketype" id="wrketype"
+												ng-model="wrketype"
+												ng-change="changeEvent('WRKTYPE',wrketype)">
+												<option ng-selected="true" value="">Select
+													Employment Type*</option>
+												<option value="SELF-EMPLOYED">SELF-EMPLOYED</option>
+												<option value="PROFESSIONAL">PROFESSIONAL</option>
+												<option value="RETIRED">RETIRED</option>
+												<option value="SALARIED">SALARIED</option>
+												<option value="OTHERS">OTHERS</option>
+											</select> <img alt="" src="../img/selArrow.png" class="customarrow" />
+										</div>
+									</div>
+
+									<div class="row clearfix customRow">
+										<!-- 				<div class="col-md-6 height">
+				<help>Address Type</help>
+				<select id="WrkaddressType" class="customSelect" ><option value="Select" selected="selected">Address Type</option>
+				<option value="Signatory\'s (Authorized) Residence">Signatory\'s (Authorized) Residence</option>
+				<option value="Current Residence">Current Residence</option>
+				<option value="Head Office">Head Office</option>
+				<option value="Invoice Address">Invoice Address</option>
+				<option value="Office Address">Office Address</option>
+				<option value="Permanent Address">Permanent Address</option>
+				<option value="Previous Office">Previous Office</option>
+				<option value="Previous Residence">Previous Residence</option>
+				<option value="Reference Address 1">Reference Address 1</option>
+				<option value="Reference Address 2">Reference Address 2</option>
+				</select>
+				<img alt="" src="../img/selArrow.png" class="customarrow"/></div> -->
+										<div class="col-md-12 height">
+											<help>Address Line 1*</help>
+											<input type="text" id="wrka1" ng-model="wrka1"
+												class="customInput" placeholder="Address Line 1*" capitalize
+												style="width: 93%" />
+										</div>
+									</div>
+
+									<div class="row clearfix customRow">
+										<div class="col-md-6 height">
+											<help>Address Line 2</help>
+											<input type="text" id="wrka2" ng-model="wrka2"
+												class="customInput" placeholder="Address Line 2" capitalize />
+										</div>
+										<div class="col-md-6 height">
+											<help>Address Line 3</help>
+											<input type="text" id="wrka3" ng-model="wrka3"
+												class="customInput" placeholder="Address Line 3" capitalize />
+										</div>
+									</div>
+
+
+									<div class="row clearfix customRow">
+										<div class="col-md-6 height">
+											<help>Pincode*</help>
+											<input type="text" ng-model="wrkpin" id="wrkpin" class="customInput"
+												placeholder="Pincode*" maxlength="6" />
+										</div>
+										<div class="col-md-6 height">
+											<span>
+												<help>City*</help>
+												<input type="text" class="customInput city"
+													disabled="disabled" ng-model="wrkcity" id="wrkcity" placeholder="City*"
+													style="width: 45%;" />
+											</span>
+											<span>
+												<help class="margin_state">State*</help>
+												<input type="text" id="wrkstate" ng-model="wrkstate" disabled="disabled"
+													class="customInput state" placeholder="State" />
+											</span>
+										</div>
+									</div>
+
+									<div class="row clearfix customRow">
+										<div class="col-md-2 height">
+											<help>STD Code*</help>
+											<input type="text" id="wrkstd" ng-model="wrkstd" class="customInput"
+												placeholder="STD Code*" maxlength="5" />
+										</div>
+										<div class="col-md-4 height">
+											<help>Landline Number</help>
+											<input type="text" id="wrkphn" ng-model="wrkphn" class="customInput"
+												placeholder="Landline Phone" maxlength="10"
+												style="width: 78%;" />
+										</div>
+										<div class="col-md-6 height">
+											<help>Office Mobile*</help>
+											<input type="text" id="wrkmob" ng-model="wrkmob" class="customInput"
+												placeholder="Office Mobile*" maxlength="10" />
+										</div>
+									</div>
+
+									<div class="row clearfix customRow">
+										<div class="col-md-6 height">
+											<help>Email*</help>
+											<input type="text" id="wrkemail" ng-model="wrkemail" class="customInput"
+												placeholder="Email*" />
+										</div>
+										<div class="col-md-6 height">
+											<help>Months with Current Employer*</help>
+											<input type="text" id="wrktwe" ng-model="wrktwe" class="customInput"
+												placeholder="Months with Current Employer*" maxlength="3" />
+										</div>
+									</div>
+									<div class="row clearfix customRow">
+										<div class="col-md-6 height"
+											ng-show="wrketype!='SELF-EMPLOYED'">
+											<help>Last Month Salary*</help>
+											<i class="fa fa-rupee"></i> <input type="text"
+												id="wrkLstMnthSal" ng-model="wrkLstMnthSal"
+												class="customInput" placeholder="Last Month salary*"
+												style="padding-left: 4%" rupees />
+										</div>
+										<div class="col-md-6 height"
+											ng-show="wrketype=='SELF-EMPLOYED'">
+											<help>Last Year IT Return*</help>
+											<i class="fa fa-rupee"></i> <input type="text"
+												id="wrkGrsAnnual" ng-model="wrkGrsAnnual"
+												class="customInput" placeholder="Last Year IT Return*"
+												style="padding-left: 4%" rupees />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row clearfix ">
+							<div class="col-md-10 col-md-offset-1">
+								<button class="customButton previous">Previous</button>
+								<button class="customButton next" id="fromemployment">Next</button>
+									<button class="customButton save" id="save" ng-click="submitApplication('step3')">Save</button>
+							</div>
+							<!-- <div class="col-md-4"></div> -->
+						</div>
+					</fieldset>
+
+					<fieldset id="incomeContainer" style="display: none;">
+						<div class="row clearfix getheight">
+							<div id="assetContainer" class="col-md-10 col-md-offset-1">
+								<form id="assetObj">
+									<div class="row clearfix customRow" style="display: none;">
+										<div class="col-md-12 height">
+											<help style="display:inline-block">Dealer*</help>
+											<input type="text" id="dlr" ng-model="dealerName"
+												class="customInput" disabled="disabled" />
+											</div>
+									</div> 
+									<div class="row clearfix customRow">
+										<div class="col-md-12 height">
+											<help>Asset Category*</help>
+											<select id="ast" ng-model="assetCategory" class="ast customSelect" ng-options = "d for d in assetArray track by d">
+												 <option value="" >Select Category</option>
+											</select>
+											<img alt="" src="../img/selArrow.png" class="customarrow"
+												style="right: 13%" /></span>
+										</div>
+									</div>
+
+									<div class="row clearfix customRow">
+										<div class="col-md-12 height">
+											<help>Make*</help>
+											<!-- <input type="text" id="mk" ng-model="mk" class="customInput"
+												placeholder="Make*" /> -->
+												<select id="mk" ng-model="mk" class="mk customSelect" ng-options = "d for d in makeTags track by d">
+												 	<option value="" >Select Make</option>
+											    </select> 
+											        <img alt="" src="../img/selArrow.png" class="customarrow"
+																style="right: 13%" />
+										</div>
+									</div>
+									<div class="row clearfix customRow">
+										<div class="col-md-12 height">
+											<help>Model*</help>
+											<!-- <input type="text" id="mdl" ng-model="mdl"
+												class="customInput" placeholder="Model*" /> -->
+												<select id="mdl" ng-model="mdl" class="customSelect" ng-options = "d for d in modelTags track by d">
+											    <option value="" >Select Model</option>
+											    </select>
+											    <img alt="" src="../img/selArrow.png" class="customarrow"
+												style="right: 13%" />
+										</div>
+									</div>
+								</form>
+							</div>
+
+						</div>
+
+						<div class="row clearfix ">
+							<div class="col-md-10 col-md-offset-1">
+								<button class="customButton previous">Previous</button>
+								<button class="customButton next">Next</button>
+									<button class="customButton save" id="save" ng-click="submitApplication('step3')">Save</button>
+							</div>
+							<!-- <div class="col-md-4"></div> -->
+						</div>
+					</fieldset>
+
+					<!-- //sayali  -->
+					<fieldset id="bankingInfo" style="display: none;">
+						<div class="getheight" id="kycHeight">
+							<div class="row clearfix ">
+								<div class="col-md-10 col-md-offset-1">
+									<div class="row clearfix">
+										<div class="col-md-4">
+											<div class="row clearfix">
+												<help>Pan Number</help>
+												<input type="text" id="panNo" ng-model="pan" maxlength="10"
+													class="customInput" placeholder="Pan Number" capitalize />
+											</div>
+											<div class="row clearifx">
+												<div class="preview" id="preview" ng-if="!panPresent" ng-style="{'background-image':'url('+selectImg1+')'}">
+													<input id="pan_card" class="pan" type="file" name="Pan Card" maxlength=""
+														ng-file-select="onselectImg($files,'PAN')"> <label
+														for="pan_card" ng-hide="selectImg1"> <img alt=""
+														src="../img/camera-128.png" class="img_icon">
+													</label>
+													<!-- 					    <label ng-hide="selectImg1" style="display: block;"> Pan Card</label> -->
+												</div>
+												<img  id="panImg"  ng-if="panPresent" ng-src ="{{panData}}" class="preview">
+												<!-- 			<small ng-show="selectImg1" class="size">{{file_size1}}</small> -->
+												<a class="remove_image" ng-show="selectImg1 || panPresent"
+													ng-click="remove_file('PAN','1',selectImg1)">Remove</a>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="row clearfix">
+												<help>Aadhaar Number</help>
+												<input type="text" id="adharNo" ng-model="aadhar" maxlength="12"
+													class="customInput aadhaar" placeholder="Aadhaar Number*" />
+											</div>
+											<div class="row clearfix">
+												<div class="preview" ng-if="!adharpresent"
+													ng-style="{'background-image':'url('+selectImg2+')'}">
+													<input type="file" id="aadhar_card" name="Aadhar Card"
+														ng-file-select="onselectImg($files,'AADHAAR')"> <label
+														for="aadhar_card" ng-hide="selectImg2"> <img
+														alt="" src="../img/camera-128.png" class="img_icon">
+													</label>
+													<!-- 		    <label ng-hide="selectImg2" style="display: block;">Aadhaar Card</label> -->
+												</div>
+												<img class="preview" ng-src="{{aadharData}}" id="aadhaarImg" ng-model="aadhaarImg" ng-if="adharpresent">
+												<!-- 		<small class="size" ng-show="selectImg2">{{file_size2}}</small> -->
+												<a class="remove_image" ng-show="selectImg2 ||adharpresent"
+													ng-click="remove_file('AADHAAR','2',selectImg2)">Remove</a>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="row clearifx">
+												<help>Passport Number</help>
+												<input type="text" id="passportNo" class="customInput"
+													placeholder="Passport Number*" />
+											</div>
+											<div class="row clearfix">
+												<div class="preview"ng-if="!passportPresent"
+													ng-style="{'background-image':'url('+selectImg3+')'}">
+													<input id="passport" type="file" name="passport"
+														ng-file-select="onselectImg($files,'PASSPORT')"> <label
+														for="passport" ng-hide="selectImg3"> <img alt=""
+														src="../img/camera-128.png" class="img_icon">
+													</label>
+													<!-- 				    <label ng-hide="selectImg3" style="display: block;"> Passport</label> -->
+												</div>
+												<img class="preview" ng-src="{{aadharData}}" id="passportImg" ng-model="passportImg" ng-if="passportPresent">
+												<!-- 		<small ng-show="selectImg3" class="size">{{file_size3}}</small> -->
+												<a class="remove_image" ng-show="selectImg3 || passportPresent"
+													ng-click="remove_file('PASSPORT','3',selectImg3)">Remove</a>
+											</div>
+										</div>
+									</div>
+									<div class="row clearfix">
+										<div class="col-md-4">
+											<div class="row clearfix">
+												<help>Driving-License Number</help>
+												<input type="text" id="drivingNo" class="customInput"
+													placeholder="Driving-License Number*" />
+											</div>
+											<div class="row clearfix">
+												<div class="preview"ng-if="!drivingPresent"
+													ng-style="{'background-image':'url('+selectImg4+')'}">
+													<input id="drivingl" type="file" name="driving license"
+														ng-file-select="onselectImg($files,'DRIVING-LICENSE')">
+													<label for="drivingl" ng-hide="selectImg4"> <img
+														alt="" src="../img/camera-128.png" class="img_icon">
+													</label>
+													<!-- 				    <label ng-hide="selectImg4" style="display: block;"> Driving-License</label> -->
+												</div>
+												<img class="preview" ng-src="{{drivingData}}" id="drivingImg" ng-model="drivingImg" ng-if="drivingPresent">
+												<!-- 		<small ng-show="selectImg4" class="size">{{file_size3}}</small> -->
+												<a class="remove_image" ng-show="selectImg4||drivingPresent"
+													ng-click="remove_file('DRIVING-LICENSE','4',selectImg4)">Remove</a>
+											</div>
+										</div>
+										<div class="col-md-4">
+											<div class="row clearfix">
+												<help>Income-Proof1</help>
+												<input type="text" class="customInput" id="incmProof"
+													placeholder="Income-Proof1*" disabled="disabled" />
+											</div>
+											<div class="row clearfix">
+												<div class="preview" ng-if="!incomePresent"
+													ng-style="{'background-image':'url('+selectImg6+')'}">
+													<input id="income1" type="file" name=""
+														ng-file-select="onselectImg($files,'INCOME-PROOF1')">
+													<label for="income1" ng-hide="selectImg6"> <img
+														alt="" src="../img/camera-128.png" class="img_icon">
+													</label>
+													<!-- 				    <label ng-hide="selectImg6" style="display: block;"> Income-Proof1</label> -->
+												</div>
+												<img class="preview" ng-src="{{income1Data}}" id="incomeImg" ng-model="incomeImg" ng-if="incomePresent">
+												<!-- 		<small ng-show="selectImg6" class="size">{{file_size3}}</small> -->
+												<a class="remove_image" ng-show="selectImg6 ||incomePresent"
+													ng-click="remove_file('INCOME-PROOF1','6',selectImg6)">Remove</a>
+											</div>
+										</div>
+										
+											<div class="col-md-4">
+											<div class="row clearfix">
+												<help>Income-Proof2</help>
+												<input type="text" class="customInput" id="incmProof2"
+													placeholder="Income-Proof2*" disabled="disabled" />
+											</div>
+											<div class="row clearfix">
+												<div class="preview"ng-if="!income2Present"
+													ng-style="{'background-image':'url('+selectImg7+')'}">
+													<input id="income2" type="file" name=""
+														ng-file-select="onselectImg($files,'INCOME-PROOF2')">
+													<label for="income2" ng-hide="selectImg7"> <img
+														alt="" src="../img/camera-128.png" class="img_icon">
+													</label>
+													<!-- 				    <label ng-hide="selectImg7" style="display: block;"> Income-Proof2</label> -->
+												</div>
+												<img class="preview" ng-src="{{income2Data}}" id="income2Img" ng-model="income2Img" ng-if="income2Present">
+												<!-- 		<small ng-show="selectImg7" class="size">{{file_size3}}</small> -->
+												<a class="remove_image" ng-show="selectImg7||income2Present"
+													ng-click="remove_file('INCOME-PROOF2','7',selectImg7)">Remove</a>
+											</div>
+										</div>
+									</div>
+
+									<div class="row clearfix">
+									
+										<div class="col-md-4">
+											<div class="row clearfix">
+												<help>Other</help>
+												<input type="text" class="customInput" id="otherTg" placeholder="Other*"
+													disabled="disabled" />
+											</div>
+											<div class="row clearfix">
+												<div class="preview" ng-if="!otherPresent"
+													ng-style="{'background-image':'url('+selectImg8+')'}">
+													<input id="other" type="file" name=""
+														ng-file-select="onselectImg($files,'OTHER')"> <label
+														for="other" ng-hide="selectImg8"> <img alt=""
+														src="../img/camera-128.png" class="img_icon">
+													</label>
+													<!-- 				    <label ng-hide="selectImg8" style="display: block;"> Other</label> -->
+												</div>
+												<img class="preview" id="otherImg" ng-model="otherImg" ng-src="{{otherData}}"  ng-if="otherPresent">
+												<!-- 		<small ng-show="selectImg8" class="size">{{file_size3}}</small> -->
+												<a class="remove_image" ng-show="selectImg8 || otherPresent"
+													ng-click="remove_file('OTHER','8',selectImg8)">Remove</a>
+											</div>
+										</div>
+										
+										<div class="col-md-4">
+										<div class="row clearfix">
+												<help>Applicant Photo</help>
+												<input type="text" class="customInput" id="otherTg" placeholder="Profile Image"
+													disabled="disabled" />
+											</div>
+											<div class="row clearfix">
+									<div class="row clearfix">
+									<div class="preview" ng-if="!profileImage" ng-style="{'background-image':'url('+selectImgInit+')'}" >
+									<input id="addrIP" type="file" ng-model="addrIP" ng-file-select="onselectImg($files,'APPLICANT-PHOTO')">
+									<label for="addrIP" ng-hide="selectImgInit" style="display: block;">
+									     <img id="selectImgInit" alt="" src="../img/camera-128.png" class="img_icon" >    
+									    </label>	<!-- <label ng-hide="image_url2">Present Address</label> -->
+							    </div>	
+							    
+							    <img ng-model="profileImg" id="selectImgInit" alt="" ng-src="{{profileData}}" ng-if="profileImage" style="width:100%;height: 113px;margin-left: 3%">
+							    <div style="height: 20px">
+								<small ng-show="image_url2" class="size">{{file_size2}}</small>
+								<a class="remove_image" ng-show="selectImgInit || profileImage" ng-click="remove_file('ResidenceProof','0',selectImgInit)">Remove</a>
+									</div>	
+										</div>
+									</div>
+									</div>
+									
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+						<div class="row clearfix ">
+							<div class="col-md-10 col-md-offset-1">
+								<button class="customButton previous">Previous</button>
+								<button class="customButton cancel" id="cancel">Cancel</button>
+								<button class="customButton save saveSubmit" id="save" ng-click="submitApplication('step3')">Save</button>
+								<button class="customButton submit" id="submit"
+									style="position: absolute; top: -1px;"
+									ng-click="submitApplication('step4')">Submit</button>
+							</div>
+							<!-- <div class="col-md-4"></div> -->
+					</fieldset>
+
+				</div>
+			</div>
+
+			<div id="resultPanel" style="display: none; position: relative;">
+				<img class="timerimg" src='../img/timer.png'>
+				<div id="timer_box" class="">
+					<div class="startTimer">
+						<div class="sui-progressbar sui-progressbar-circular "
+							id="progress"></div>
+					</div>
+				</div>
+
+				<div class="row-clearfix">
+					<div class="col-md-6 col-md-offset-3 resultInfo">
+						<h4>Please wait while CRO is analyzing your application.</h4>
+						<h5 style="color: #24A1ED">Your Reference ID is : {{REFID}}</h5>
+						<h5>Your GoNoGo Query is successfully received</h5>
+					</div>
+					<div class="col-md-3"></div>
+				</div>
+
+				<div class="row-clearfix">
+					<div class="col-md-7 col-md-offset-2"
+						style="border-bottom: 1px solid rgb(36, 161, 237); position: fixed; bottom: 20%; margin-left: 20%">
+						<div class="row clearfix ">
+							<div class="col-sm-4 col-md-4" class="progElement"
+								style="border-left: 01px solid rgb(36, 161, 237); text-align: center; height: 140px;">
+								<div class="resultNode">
+									<span></span>
+								</div>
+								<div class="circle">
+									<span>1</span>
+								</div>
+								<span style="color: rgb(36, 161, 237); display: block;">KYC
+									Verification Status</span>
+								<div id="vpc" style="display: none;">
+									<span id="ptext">PAN {{pstatus}}</span>
+								</div>
+							</div>
+							<div class="col-sm-4 col-md-4" class="progElement"
+								style="border-left: 01px solid rgb(36, 161, 237); text-align: center; height: 140px;">
+								<div class="resultNode">
+									<span></span>
+								</div>
+								<div class="circle">
+									<span>2</span>
+								</div>
+								<span style="color: rgb(36, 161, 237); display: block;">Bureau
+									Score</span> <span id="cs" style="display: none;">CIBIL
+									{{Cstatus}}</span>
+							</div>
+							<!-- <div class="col-sm-3 col-md-3" class="progElement" style="border-left: 01px solid rgb(36,161,237);text-align:center;height:140px;">
+								<div class="resultNode"><span></span></div>
+								<div class="circle"><span>3</span></div>
+								<span style="color: rgb(36,161,237);display: block;">Application Score</span>
+								<span id="as" style="display: none;">Completed</span>
+								</div> -->
+							<div class="col-sm-4 col-md-4" class="progElement"
+								style="border-left: 01px solid rgb(36, 161, 237); text-align: center; height: 140px;">
+								<div class="resultNode">
+									<span></span>
+								</div>
+								<div class="circle">
+									<span>3</span>
+								</div>
+								<span style="color: rgb(36, 161, 237); display: block;">Decision</span>
+								<span id="temp2"><img src="../img/reject.png" id="dimg"
+									class="dsnimg" style="display: none;" /></span>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row clearfix ">
+					<div class="col-md-10 col-md-offset-1"
+						style="text-align: center; margin-top: 9%">
+						<!-- <button class="customButton previous">Previous</button> -->
+						<button class="customButton next" id="postIPA"
+							style="float: initial; display: none; margin-top: 2%">Next</button>
+					</div>
+				</div>
+
+			</div>
+			
+			<div class="container" id="afterSubmit" style="display: none;" >
+			<div class="afterSubmit">
+			<div class="row clearfix approveSec">
+			<div class="col-md-12">
+			<span>Your application has been</span>
+			<span ng-if="statusObject.sAppStat == 'OnHold'"> put on hold. </span>
+			<span ng-if="statusObject.sAppStat == 'Decline'"> declined. </span>
+			<span ng-if="statusObject.sAppStat != 'OnHold' && statusObject.sAppStat != 'Decline'"> {{statusObject.sAppStat}} </span> 
+			</div>
+			</div>
+			<div class="row clearfix emiSec" ng-if="statusObject.sAppStat == 'Approved'">
+				<div class="col-md-4">Approved Amount : {{statusObject.aCroDec[0].dAmtAppr}}</div>
+				<div class="col-md-4">Emi :{{statusObject.aCroDec[0].dEmi}}</div>
+				<div class="col-md-4">Tenor : {{statusObject.aCroDec[0].iTenor}}</div>
+			</div><!-- Emi Saction-->
+			
+			</div><!-- After Submit --> 
+			<div class="row clearfix rmrkCr" ng-repeat="decision in statusObject.aCroJustification" ng-if="statusObject.sAppStat != 'OnHold'">
+			<div class="col-md-12 rmrk">Remark :{{decision.sSubTo}}</div>
+			<div class="col-md-12 sbjt">Subject To : {{decision.sRemark}}</div>
+			</div>
+
+			<div class="row clearfix rmrk" ng-if="statusObject.sAppStat == 'OnHold'" style="text-align: center;margin-top: 10px">List of Documents </div>
+			<div class="row clearfix rmrkCr" ng-repeat="decision in statusObject.aCroJustification" ng-if="statusObject.sAppStat == 'OnHold'">
+				<div class="col-md-12 rmrk">Document :{{decision.sDocName}}</div>
+				<div class="col-md-12 sbjt">Reason : {{decision.sDescrip}}</div>
+			</div>
+
+				<div class="row clearfix ">
+					<div class="col-md-10 col-md-offset-1"
+						style="text-align: center; margin-top: 2%">
+						<!-- <button class="customButton previous">Previous</button> -->
+						<button class="customButton next" id="aSubmitBtn"
+							style="float: right; margin-top: 4%">Next</button>
+					</div>
+				</div>
+			</div>
+			
+			<div id="pOrder" style="display: none">
+<!-- 				<div id="kycHeight"></div> -->
+					<div class="row clearfix ">
+							<div class="col-md-8 col-md-offset-2" id="do">
+								<div class="row clearfix customRow">
+									<div class="col-md-12"
+										style="border: 01px solid #24A1ED; line-height: 4">
+										<span style="color: #24A1ED">{{fname +" "+ mname +"
+											"+lname}}</span> <span style="float: right;">{{mkVal +" - "+
+											mdlVal}}</span>
+									</div>
+								</div>
+								<div class="row clearfix">
+								<div class="col-md-12" style="text-align: right;"><button class="customButton" data-toggle="modal" data-target="#assetModel" >Change Asset</button>
+								</div>
+								</div>
+								<div class="row clearfix customRow">
+									<div class="col-md-4 height">
+										<help>Approved Amount*</help>
+										<i class="fa fa-rupee"></i><input type="text" id="apvAmt"
+											ng-model="apvAmt" class="customInput"
+											placeholder="Approved_Amount*" style="padding-left: 4%"
+											rupees disabled="disabled" />
+									</div>
+									<div class="col-md-4 height">
+										<help>Scheme*</help>
+										<input type="text" class="customInput" id="scheme" ng-model="scheme"
+											placeholder="Scheme" />
+									</div>
+									<div class="col-md-4 height">
+										<help style="display:inline">Total Asset Cost*</help>
+										<i class="fa fa-rupee"></i><input type="text"
+											class="customInput" id="astCst" ng-model="astCst"
+											placeholder="Total Asset Cost*" style="padding-left: 4%"
+											rupees />
+									</div>
+								</div>
+
+								<div class="row clearfix customRow">
+									<div class="col-md-4 height">
+										<help>Margin Money*</help>
+										<input type="text" class="customInput" id="mrgnMny"
+											ng-model="mrgnMny" placeholder="Margin Money*"
+											style="padding-left: 4%" rupees disabled="disabled" />
+									</div>
+									<div class="col-md-4 height" id="mnyInstrDiv">
+										<help>Margin Money instrument*</help>
+										<select id="mnyInstn" class="customSelect" ng-model="mnyInstn"
+											ng-change="changeEvent('MNY_INTRMNT',mnyInstn)">
+											<option value="" ng-selected="true">Select Margin
+												Money Instrument</option>
+											<option value="Cash">Cash</option>
+											<option value="Cheque">Cheque</option>
+											<option value="Credit Card">Credit Card</option>
+											<option value="NEFT">NEFT</option>
+										</select> <img alt="" src="../img/selArrow.png" class="customarrow" />
+									</div>
+									<div class="col-md-4 height" id="mnyCnfmDiv">
+										<help>Margin Money Confirmation*</help>
+										<input type="text" class="customInput" id="mnyCnfm" ng-model="mnyCnfm"
+											placeholder="Margin Money Confirmation*"
+											style="padding-left: 4%" />
+									</div>
+								</div>
+
+								<div class="row clearfix customRow">
+									<div class="col-md-4 height">
+										<help>EMI*</help>
+										<input type="text" id="emi" class="customInput"
+											placeholder=" EMI" disabled="disabled" />
+									</div>
+									
+									<div class="col-md-4 height">
+										<help>Advance EMI*</help>
+										<input type="text" id="aEMI" class="customInput"
+											placeholder="Advance EMI" disabled="disabled" />
+									</div>
+									<div class="col-md-4 height">
+										<help>Processing Fees*</help>
+										<i class="fa fa-rupee"></i><input type="text"
+											class="customInput" id="prcsfee" ng-model="prcsfee"
+											placeholder="Processing Fees" style="padding-left: 4%" rupees
+											disabled="disabled" />
+									</div>
+								</div>
+							</div>
+						<div class="col-md-2"></div>
+					</div>
+			
+
+
+				<div class="row clearfix ">
+					<div class="col-md-10 col-md-offset-1" style="text-align: center;">
+<!-- 						<span style="text-align: center;">Proceed for DDE</span> -->
+						<button class="customButton Pnext" id="postNext"
+							style="text-align: center; float: initial; margin-left: 10px;">Next</button>
+					</div>
+					<!-- <div class="col-md-4"></div> -->
+				</div>
+
+			</div>
+			<!-- change -->
+			<fieldset id="additionalDoc" style="display: none;">
+				<div class="getheight" id="kycHeight">
+					<div class="row clearfix ">
+						<div class="col-md-10 col-md-offset-1">
+							<div class="row clearfix" id="appImgRw">
+								<div class="col-md-12" style="border-top: 01px solid #24A1ED">
+									<div class="row clearfix alert-info">
+										<span class="info">Application Form</span>
+									</div>
+									<div class="row clearfix">
+									<div class="col-md-3" ng-repeat="item in ApplicationArr"  style="padding: 8px;">
+										<content-item content="item"></content-item>
+											</div>
+										<span class="Add-Icon same abs_rght_mdl"
+											ng-click="addNewElement('APPLICATION_FORM')"><b>+</b></span>
+									</div>
+
+								</div>
+							</div>
+
+							<div class="row clearfix" id="aggImgRw">
+								<div class="col-md-12" style="border-top: 01px solid #24A1ED">
+
+									<div class="row clearfix alert-info">
+										<span class="info">Agreement</span>
+									</div>
+									<div class="row clearfix">
+									<div class="col-md-3" ng-repeat="item in AggrigationArr"  style="padding: 8px;">
+										<content-item content="item"></content-item></div>
+										<span class="Add-Icon same abs_rght_mdl"
+											ng-click="addNewElement('AGREEMENT')"><b>+</b></span>
+									</div>
+								</div>
+							</div>
+
+							<div class="row clearfix" id="chkImgRw">
+								<div class="col-md-12" style="border-top: 01px solid #24A1ED">
+									<div class="row clearfix alert-info">
+										<span class="info">ACH / ECS & Cancelled Cheque</span>
+									</div>
+
+
+									<div class="row clearfix">
+									<div class="col-md-3" ng-repeat="item in AchArr"  style="padding: 8px;">
+										<content-item  content="item"></content-item>
+										</div>
+										<span class="Add-Icon same abs_rght_mdl"
+											ng-click="addNewElement('ACH')"><b>+</b></span>
+									</div>
+
+								</div>
+							</div>
+
+							<div class="row clearfix" id="disImgRw">
+								<div class="col-md-12" style="border-top: 01px solid #24A1ED">
+									<div class="row clearfix alert-info">
+										<span class="info">Disbursement Kit</span>
+									</div>
+									<div class="row clearfix">
+									<div class="col-md-3" ng-repeat="item in DisbursmentArr"  style="padding: 8px;">
+										<content-item content="item"></content-item></div>
+										<span class="Add-Icon same abs_rght_mdl"
+											ng-click="addNewElement('DISBURSEMENT')"><b>+</b></span>
+									</div>
+								</div>
+							</div>
+
+							<div class="row clearfix" id="kycImgRw">
+								<div class="col-md-12" style="border-top: 01px solid #24A1ED">
+									<div class="row clearfix alert-info">
+										<span class="info">Additional_KYC</span>
+									</div>
+									<div class="row clearfix">
+									<div class="col-md-3" ng-repeat="item in AddtnlKycArr"  style="padding: 8px;">
+										<content-item content="item"></content-item></div>
+										<span class="Add-Icon same abs_rght_mdl"
+											ng-click="addNewElement('ADDITIONAL_KYC')"><b>+</b></span>
+									</div>
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+				<div class="row clearfix ">
+					<div class="col-md-10 col-md-offset-1" style="text-align: center">
+						<button class="customButton" id="dsubmit" ng-click="finalPdfshowFun()">Submit</button>
+					</div>
+					<!-- <div class="col-md-4"></div> -->
+				</div>
+
+			</fieldset>
+			<fieldset id="additionalDocfinal"
+				style="display: none; text-align: center;">
+				<div class="getheight text-center" id="kycHeight">
+					<div class="row clearfix" ng-show="dstatus=='Approved'">
+						<div class="preview" accesskey="{{postIpaPDFCode}}"
+							data-toggle="modal" data-target="#myModalnew"
+							style="display: inline-block;">
+							<span>View PDF</span>
+						</div>
+
+						<label class="control-label" style="display: block;">POST
+							DELIVERY ORDER</label>
+					</div>
+					<div class="row clearfix">
+						<label>{{finalResponse}}</label>
+						<button class="customButton" style="margin-top: 2%;margin-right: 4%;"
+							ng-click="sendPostIpaMail()">Submit</button>
+						<button id="homePG" class="customButton" style="margin-top: 2%;"
+							>home</button>
+					</div>
+				</div>
+			</fieldset>
+			
+			<div id="HoldStage" style="display: none;">
+			<div class="row clearfix" >
+			<div class="col-md-4" ng-repeat="item in holdStageArr">
+			<label>{{item.doc}}</label>
+			<content-item content="item"></content-item>
+			</div>
+			</div>	<!-- end of row clearfix -->
+			<div class="row clearfix" style="text-align: center;">
+				<button class="customButton submit" id="reprocess"	ng-click="reprocess()" style="float: inherit;">Submit</button>
+			</div>
+			</div><!-- End of hold stage -->
+			
+			<div class="row clearfix" style="background-color: white;" id="ErrorContainer">
+			<div id="msgContainer" ng-show="errHead!=''">
+			<img id="loaderImg" alt="" src="../img/loading.gif" style="display: none;">
+				<strong id="errorHeading" ng-show="errHead!=''" class="text-danger">{{errHead}}
+					:</strong> <span id="main_error" class="text-danger">{{errorMsg}}</span>
+			</div>
+		</div>
+
+		
+				<!-- Modal -->
+		<div class="modal fade" id="assetModel" role="dialog">
+			<div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Asset Change</h4>
+					</div>
+					<div class="modal-body">
+						<form>
+							<div class="row clearfix customRow">
+								<div class="col-md-12 height">
+									<help>Asset Category*</help>
+									<select id="ast1" ng-model="assetCategory" class="ast customSelect" ng-options = "d for d in assetArray track by d">
+										<option value="">Select Category</option>
+									</select>
+									<img alt="" src="../img/selArrow.png" class="customarrow"
+										style="right: 13%" /></span>
+								</div>
+							</div>
+
+							<div class="row clearfix customRow">
+								<div class="col-md-12 height">
+									<help>Make*</help>
+									<!-- <input type="text" id="mk1" ng-model="mk" class="customInput"
+										placeholder="Make*" /> -->
+										<select id="mk1" ng-model="mk" class="mk customSelect" ng-options = "d for d in makeTags track by d">
+											<option value="">Select Make</option>
+										</select> <img alt="" src="../img/selArrow.png" class="customarrow"
+																style="right: 13%" />
+								</div>
+							</div>
+							<div class="row clearfix customRow">
+								<div class="col-md-12 height">
+									<help>Model*</help>
+									<!-- <input type="text" id="mdl1" ng-model="mdl"
+										class="customInput" placeholder="Model*" /> -->
+										<select id="mdl1" ng-model="mdl" class="customSelect" ng-options = "d for d in modelTags track by d">
+											<option value="">Select Model</option>
+										</select>
+										<img alt="" src="../img/selArrow.png" class="customarrow"
+												style="right: 13%" />	
+								</div>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer" style="text-align: center">
+						<button type="button" class="btn btn-default" data-dismiss="modal"	style="border: 1px solid #24a1ed; background-color: white; padding: 4px 16px 5px; color: #24a1ed;" ng-click="onSaveAssetClicked()">Save</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	<div id="myModalnew" class="modal fade">
+			<div class="modal-dialog"
+				style="width: 55%; max-height: 600px; height: 65%">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title">Document Preview</h4>
+					</div>
+					<div class="modal-body" id="img_preview">
+						<div class="row clearfix" id="img_panel" style="padding: 15px;">
+							<img id="document_preview" src=""
+								style="width: 100%; height: 100%; max-height: 400px">
+							<object id="cirhtml" type="text/html" width="100%"
+								style="border: none; height: 500px;"></object>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</div>		

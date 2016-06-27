@@ -10,21 +10,45 @@
 				'ngSanitize',
 				'ngAnimate',
 				'ui.bootstrap',
-				'angular-loading-bar', 
+				'angular-loading-bar',
+				'ng-acl', 
 				'ngFileUpload',
 				'gonogo.analytics',
 				'gonogo.login',
-				'gonogo.directives'
+				'gonogo.directives',
+				'gonogo.cdl'
 	]);
 	
-	app.controller("Maincontroller",['$scope', '$rootScope', '$http', 'Validation', '$timeout','RestService','$location',function($scope, $rootScope, $http, Validation, $timeout,RestService,$location) {
+	app.controller("Maincontroller",['$scope', '$rootScope', '$http', 'Validation', '$timeout','RestService','$location','UserService','BASE_URL_GNG','APP_CONTEXT',function($scope, $rootScope, $http, Validation, $timeout,RestService,$location,UserService,BASE_URL_GNG,APP_CONTEXT) {
 		
 		
 		$scope.isSpecificPage = function() {
             var path;
-            return path = $location.path(),  _.contains(["/"], path);
+            return path = $location.path(),  _.contains(["/"], path) ;
+        }
+
+
+        $scope.isCdlPage = function() {
+            var path;
+            return path = $location.path(),  _.contains(["/cdl/dealer","/cdl/apply"], path);
         }
 		
+
+        $scope.logout = function() {
+
+				var json ={
+						"sInstID": $scope.InstitutionID,
+						"sUserID": $scope.userid
+				}
+
+				RestService.postDataWithHeaders(BASE_URL_GNG+'logout',json);
+
+				UserService.cleanUpUserDeatails();
+				$location.path(APP_CONTEXT);
+
+		};
+
+
 		var current_fs, next_fs, previous_fs;
 		var left, opacity, scale, animating, fieldsetn = 1;
 		var emailantigo, passval, error = 0, InError = 0;
@@ -72,7 +96,9 @@
 							return false;
 						}
 				}
-			}
+			};
+
+			
 
 			// logout user and delete details
 			$scope.redirect = function() {

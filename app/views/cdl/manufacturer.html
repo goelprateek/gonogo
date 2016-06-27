@@ -1,0 +1,28 @@
+
+<div class="row clearfix" style="text-align: center; margin-top: 1%">
+	
+	<div class="col-md-4">
+		<label class="assetHeader">Category</label>
+		<!-- 	<div class="list-group-item" ng-if="notifarray.length==0"
+								style="color: red; text-align: center;">Your Queue is Empty</div> -->
+		<div class="assetCol">
+			<div class="category " ng-repeat="category in categoryArray" style="font-size: 18px; cursor: pointer" ng-click="assetManufacturer(category)">
+				{{category}}
+			</div>
+		</div>		
+	</div>
+	<!-- End col md 3 -->
+
+	<div class="col-md-4 assetCol">
+		<label class="assetHeader">Manufacturer</label> <select
+			ng-model="mjob" ng-options="job for job in Manufacturer"
+			ng-change="assetModel(category,mjob)" style="width: 100%">
+		</select>
+	</div>
+
+	<div class="col-md-4 assetCol">
+		<label class="assetHeader">Model</label> <select ng-model="mjob1"
+			ng-options="job for job in assetArray" style="width: 100%">
+		</select>
+	</div>
+</div>

@@ -1,0 +1,27 @@
+<style>
+label {
+	font-size: 30px;
+}
+
+.decision-panel {
+	border: 2px #5aa1e7 solid;
+	padding: 20px;
+	text-align: center;
+	border-radius: 33px;
+}
+
+.decision-panel label {
+	color: #5aa1e7;
+}
+</style>
+<div style="padding: 10px;">
+	<div class="decision-panel">
+		<label>Status : {{data.decision}}</label>
+	</div>
+	<div style="margin-top: 20px;">
+		<label>Remark : {{data.remark}}</label>
+	</div>
+	<div>
+		<label style="color:#929090">Subject to : {{data.subject}}</label>
+	</div>
+</div>

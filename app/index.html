@@ -22,6 +22,12 @@
     <link rel="stylesheet" href="styles/scoring.css" >
     <link rel="stylesheet" href="styles/mygraphics.css" >
     <link rel="stylesheet" href="styles/app.css" >
+
+    <link rel="stylesheet" href="styles/cdl/application.css" />
+    <link rel="stylesheet" href="styles/cdl/customer-form.css" />
+    <link rel="stylesheet" href="styles/cdl/dashboard.css" />
+
+
     <!-- endbuild -->
   </head>
   <body data-ng-app="gonogo" layout="column" class="layout-column">
@@ -31,19 +37,30 @@
 
     
     <div data-ng-controller="Maincontroller">
-      <div data-ng-show="!isSpecificPage()"  data-ng-cloak="" >
+      
+      <div data-ng-show="!isSpecificPage() && !isCdlPage()"  data-ng-cloak="" >
         <section data-ng-include="'views/header.html'"  class="top-header"></section>
         <aside data-ng-include="'views/nav.html'"  id="nav-container"></aside>
       </div>
+      
+      <div data-ng-show="isCdlPage()" data-ng-cloak="">
+          <section data-ng-include="'views/cdl/cdl-header.html'"></section>
+          <aside data-ng-include="'views/cdl/cdl-footer.html'"></aside>
+      </div>
+
+
 
       <div layout="column" flex class="layout-column flex" >
         <div ng-view="" class="animate-fade-up"></div>
       </div>
 
-      <div data-ng-include="'views/footer.html'"></div>
+
+      <div data-ng-if="!isSpecificPage() && !isCdlPage()" data-ng-include="'views/footer.html'"></div>
+      <div data-ng-if="isCdlPage()" data-ng-include="'views/cdl/cdl-footer.html'"></div>
+
     </div>
     
-    
+     
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
        !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
@@ -85,6 +102,7 @@
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/c3/c3.js"></script>
     <script src="bower_components/c3-angular/c3-angular.min.js"></script>
+    <script src="bower_components/angularjs-acl/dist/acl.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -111,6 +129,14 @@
         <script src="scripts/controllers/dmi-application.js"></script>
         <script src="scripts/filter/app-filter.js"></script>
         <script src="scripts/login.js"></script>
+
+
+        <script  src="scripts/cdl/application.js"></script>
+        <script  src="scripts/cdl/dealer.js"></script>
+        <script  src="scripts/cdl/apply.js"></script>
+        <script  src="scripts/cdl/manufacturer.js"></script>
+        <script  src="scripts/cdl/dashboard.js"></script>
+        <script  src="scripts/cdl/customer-form.js"></script>
         <!-- endbuild -->
 </body>
 </html>

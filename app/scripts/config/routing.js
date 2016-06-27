@@ -29,8 +29,19 @@
 			templateUrl: 'views/templates/policy.html',
 			controller: 'Maincontroller'
 		}). when('/analytics', {
-			templateUrl: 'views/templates/analytics.html',
-		})
+			templateUrl: 'views/cdl/analytics.html',
+		}).when('/cdl/dealer',{
+			templateUrl: 'views/cdl/dealer.html'
+		}).when('/cdl/apply', {
+			templateUrl: 'views/cdl/apply.html',
+		}).when('/cdl/dashboard', {
+			templateUrl: 'views/cdl/dashboard.html',
+		}).	when('/cdl/assetMaster', {
+			templateUrl: 'views/cdl/manufacturer.html',
+		}).when('/cdl/customerForm', {
+			templateUrl: 'views/cdl/customer-form.html',
+		}).otherwise({ redirectTo: '/' })
+
 		
 	}]);
 	
