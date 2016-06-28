@@ -11,7 +11,8 @@
 	app.constant('APP_CONTEXT','/');
 
 	app.service("RestService",['$q','$http','BASE_URL_GNG',function($q,$http,BASE_URL_GNG){
-		var _saveToserver = function(url,data){
+			
+			var _saveToserver = function(url,data){
 			var defere = $q.defer();
 			$http.post(BASE_URL_GNG+url,data).success(function(response){
 				defere.resolve(response);
@@ -22,6 +23,7 @@
 		},
 		
 		getFromServer =function(url){
+
 			var defere = $q.defered();
 			
 			$http.get(url).success(function(resp){
@@ -75,8 +77,11 @@
 			getFromServer:getFromServer,
 			getStreamFromServer : getStreamFromServer,
 			postDataWithHeaders: postDataWithLoginHeaders
+
 		}
+
 	}]);
+	
 
  	app.service('sharedService', function () {
 	  	var refID="",
