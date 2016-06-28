@@ -5,13 +5,10 @@
 
 	var app = angular.module('gonogo.cdl');
 
-	app.controller("ApplyController", [ "$upload", "$scope", "$rootScope", "$http", "cfpLoadingBar", "$timeout", "$window", "$location", "$q", "BASE_URL_GNG", "sharedService", "CallRestAPI","$interval", function(
-	$upload, $scope,$rootScope,$http,cfpLoadingBar,$timeout,$window,$location,$q,BASE_URL_GNG,sharedService,CallRestAPI,$interval) {
+	app.controller("ApplyController", [ "$upload", "$scope", "$rootScope", "$http", "$timeout", "$window", "$location", "$q", "END_POINT", "sharedService", "CallRestAPI","$interval", function(
+	$upload, $scope,$rootScope,$http,$timeout,$window,$location,$q,END_POINT,sharedService,CallRestAPI,$interval) {
 
-//			alert(CustID);
-//	  		var baseUrl="http://localhost:8080/gonogo/";
-//  		var baseUrl="https://gonogo.direct/GoNoGo/";
-//			console.log("Dealer Name:"+CurrentUserService.getDealerName());
+
 	var poller;
 	$scope.dealerArr = [];
 	$scope.assetArray = [];
@@ -85,7 +82,7 @@
 		console.log("Check status Input josn: "+JSON.stringify(json));
 		$http({
 			method : 'POST',
-			url : BASE_URL_GNG+'status',
+			url : END_POINT.BASE_URL_GNG+'status',
 			data : json,
 			headers : {'Content-Type' : 'application/json'}
 		})
@@ -180,7 +177,7 @@
 		$scope.assetJson = {"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":""}; 
 		$http({
 			method : 'POST',
-			url : BASE_URL_GNG+'asset-category-web',
+			url : END_POINT.BASE_URL_GNG+'asset-category-web',
 			data :$scope.assetJson,
 			headers : {'Content-Type' : 'application/json'}
 		}).success(function(data) 

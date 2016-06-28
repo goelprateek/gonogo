@@ -3,12 +3,20 @@
 	'use strict';
 	
 	var app = angular.module('gonogo');
-	app.constant('BASE_URL_GNG','http://gng.softcell.in/GoNoGo/'),
-//	app.constant('BASE_URL_GNG','http://172.26.1.211:9090/GoNoGo/'),
+	
+	app.constant('END_POINT',{
+		'BASE_URL_GNG':'http://gng.softcell.in/GoNoGo/',
+		'BASE_URL_SCOR':'http://gng.softcell.in/AppScoringV2Git/api/ScoringV3/',
+		'BASE_URL_DEMO':'http://gng.softcell.in/GoNoGoV3/api/GoNoGoV3/',
+		'BASE_URL_DMI':'http://gng.softcell.in/gonogo_dmi/',
+		'APP_CONTEXT':'/'
+	});
+	
+	/*app.constant('BASE_URL_GNG','http://gng.softcell.in/GoNoGo/'),
 	app.constant('BASE_URL_SCOR','http://gng.softcell.in/AppScoringV2Git/api/ScoringV3/'),
 	app.constant('BASE_URL_DEMO','http://gng.softcell.in/GoNoGoV3/api/GoNoGoV3/'),
 	app.constant('BASE_URL_DMI','http://gng.softcell.in/gonogo_dmi/'),
-	app.constant('APP_CONTEXT','/');
+	app.constant('APP_CONTEXT','/');*/
 
 	app.service("RestService",['$q','$http','BASE_URL_GNG',function($q,$http,BASE_URL_GNG){
 			
