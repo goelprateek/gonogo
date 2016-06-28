@@ -4,6 +4,7 @@
 	
 	var app = angular.module('gonogo');
 
+
 	app.factory("APP_CONST",function(){
 		var END_POINT = {
 			BASE_URL_GNG : "http://gng.softcell.in/GoNoGo/",

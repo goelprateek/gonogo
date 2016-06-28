@@ -21,7 +21,6 @@
 	
 	app.controller("Maincontroller",['$scope', '$rootScope', '$http', 'Validation', '$timeout','RestService','$location','UserService','APP_CONST',function($scope, $rootScope, $http, Validation, $timeout,RestService,$location,UserService,APP_CONST) {
 		
-		
 		$scope.isSpecificPage = function() {
             var path;
             return path = $location.path(),  _.contains(["/"], path) ;
