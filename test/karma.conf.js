@@ -44,7 +44,6 @@ module.exports = function(config) {
       'bower_components/ng-file-upload/ng-file-upload.js',
       'bower_components/ng-file-upload-shim/ng-file-upload-shim.js',
       'bower_components/angular-loading-bar/build/loading-bar.js',
-      'bower_components/angular-material-data-table/dist/md-data-table.js',
       'bower_components/d3/d3.js',
       'bower_components/c3/c3.js',
       'bower_components/c3-angular/c3-angular.min.js',

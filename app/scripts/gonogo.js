@@ -21,7 +21,6 @@
 	
 	app.controller("Maincontroller",['$scope', '$rootScope', '$http', 'Validation', '$timeout','RestService','$location','UserService','APP_CONST',function($scope, $rootScope, $http, Validation, $timeout,RestService,$location,UserService,APP_CONST) {
 		
-		
 		$scope.isSpecificPage = function() {
             var path;
             return path = $location.path(),  _.contains(["/"], path) ;
@@ -840,8 +839,7 @@
 
 			/*$(document.body).on("click", "#ref", function() {
 				all_list();
-			});
-*/
+			});*/
 
 			function load_fromkyc()
 			{if($scope.InstitutionID == 4020)

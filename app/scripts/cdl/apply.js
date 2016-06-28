@@ -1839,7 +1839,7 @@ function validation()
 		});
 		var testArr=[{"val1":"#pertadd","val2":"#mcity"},{"val1":"#prmnt_pertadd","val2":"#prmnt_mcity"}];
 	  if($("#pertadd").is(":visible"))
-	  {  for(var Object of testArr)
+	  {  for(var Object in testArr)
 		 { var val1=parseInt($(Object.val1).val());
 	  	   var val2=parseInt($(Object.val2).val());
 		  	if(val1>val2)

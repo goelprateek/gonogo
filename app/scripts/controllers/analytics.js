@@ -8,7 +8,7 @@
 	app.controller('AnalyticsController',['$scope','$rootScope','Rules'
 	                                        ,'Score', 'Policy','Decision', '$http', '$timeout' ,'RestService','$filter','APP_CONST', '$uibModal',
 	                                        function($scope,$rootScope, Rules,Score,Policy,Decision, $http, $timeout,RestService,$filter,APP_CONST,$uibModal) {
-			 
+
 		
 		// chart functionality
 		var json = {'sInstID':$scope.InstitutionID};
