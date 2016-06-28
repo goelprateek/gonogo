@@ -3,26 +3,29 @@
 	'use strict';
 	
 	var app = angular.module('gonogo');
-	
-	app.constant('END_POINT',{
-		'BASE_URL_GNG':'http://gng.softcell.in/GoNoGo/',
-		'BASE_URL_SCOR':'http://gng.softcell.in/AppScoringV2Git/api/ScoringV3/',
-		'BASE_URL_DEMO':'http://gng.softcell.in/GoNoGoV3/api/GoNoGoV3/',
-		'BASE_URL_DMI':'http://gng.softcell.in/gonogo_dmi/',
-		'APP_CONTEXT':'/'
-	});
-	
-	/*app.constant('BASE_URL_GNG','http://gng.softcell.in/GoNoGo/'),
-	app.constant('BASE_URL_SCOR','http://gng.softcell.in/AppScoringV2Git/api/ScoringV3/'),
-	app.constant('BASE_URL_DEMO','http://gng.softcell.in/GoNoGoV3/api/GoNoGoV3/'),
-	app.constant('BASE_URL_DMI','http://gng.softcell.in/gonogo_dmi/'),
-	app.constant('APP_CONTEXT','/');*/
 
-	app.service("RestService",['$q','$http','BASE_URL_GNG',function($q,$http,BASE_URL_GNG){
+	app.factory("APP_CONST",function(){
+		var END_POINT = {
+			BASE_URL_GNG : "http://gng.softcell.in/GoNoGo/",
+			BASE_URL_SCORE:'http://gng.softcell.in/AppScoringV2Git/api/ScoringV3/',
+			BASE_URL_DEMO: 'http://gng.softcell.in/GoNoGoV3/api/GoNoGoV3/',
+			BASE_URL_DMI: 'http://gng.softcell.in/gonogo_dmi/',
+			APP_CONTEXT: '/'
+
+		};
+		return {
+			getConst : function(const_type){
+				return END_POINT[const_type];
+			}	
+		}
+	});
+
+	app.service("RestService",['$q','$http','APP_CONST',function($q,$http,APP_CONST){
 			
-			var _saveToserver = function(url,data){
-			var defere = $q.defer();
-			$http.post(BASE_URL_GNG+url,data).success(function(response){
+		var _saveToServer = function(url,data){
+			var defere = $q.defer(),
+			_url = APP_CONST.getConst('BASE_URL_GNG');
+			$http.post(_url+url,data).success(function(response){
 				defere.resolve(response);
 			}).error(function(error){
 				defere.reject(error);
@@ -81,7 +84,7 @@
 		};
 		
 		return {
-			saveToServer:_saveToserver,
+			saveToServer:_saveToServer,
 			getFromServer:getFromServer,
 			getStreamFromServer : getStreamFromServer,
 			postDataWithHeaders: postDataWithLoginHeaders

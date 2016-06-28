@@ -5,8 +5,8 @@
 
 	var app = angular.module('gonogo.cdl');
 
-	app.controller("ApplyController", [ "$upload", "$scope", "$rootScope", "$http", "$timeout", "$window", "$location", "$q", "END_POINT", "sharedService", "CallRestAPI","$interval", function(
-	$upload, $scope,$rootScope,$http,$timeout,$window,$location,$q,END_POINT,sharedService,CallRestAPI,$interval) {
+	app.controller("ApplyController", [  "$scope", "$rootScope", "$http", "$timeout", "$window", "$location", "$q", "END_POINT", "sharedService", "CallRestAPI","$interval", function(
+	 $scope,$rootScope,$http,$timeout,$window,$location,$q,END_POINT,sharedService,CallRestAPI,$interval) {
 
 
 	var poller;

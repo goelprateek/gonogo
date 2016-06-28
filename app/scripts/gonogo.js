@@ -19,7 +19,7 @@
 				'gonogo.cdl'
 	]);
 	
-	app.controller("Maincontroller",['$scope', '$rootScope', '$http', 'Validation', '$timeout','RestService','$location','UserService','BASE_URL_GNG','APP_CONTEXT',function($scope, $rootScope, $http, Validation, $timeout,RestService,$location,UserService,BASE_URL_GNG,APP_CONTEXT) {
+	app.controller("Maincontroller",['$scope', '$rootScope', '$http', 'Validation', '$timeout','RestService','$location','UserService','APP_CONST',function($scope, $rootScope, $http, Validation, $timeout,RestService,$location,UserService,APP_CONST) {
 		
 		
 		$scope.isSpecificPage = function() {

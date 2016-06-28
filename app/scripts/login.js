@@ -3,10 +3,12 @@
 	
 	var app = angular.module("gonogo.login", []);
 
-	app.controller("loginController",[ '$scope', '$cookies','RestService','BASE_URL_GNG','APP_CONTEXT' ,'UserService',function($scope, $cookies,RestService,BASE_URL_GNG,APP_CONTEXT,UserService) {
+	app.controller("loginController",[ '$scope', '$cookies','RestService','APP_CONST','UserService',function($scope, $cookies,RestService,APP_CONST,UserService) {
 		
 		var expireDate = new Date();
+		
 		$scope.isForgotOpen=false;
+		
 		var actions,instid,usid,valid = 0;
 		
 		$scope.rememberMe = function(){
@@ -318,9 +320,6 @@
 	  }
 		
 	}]);
-
-   
-
 	
 }).call(window, document)
 
