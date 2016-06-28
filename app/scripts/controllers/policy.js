@@ -4,9 +4,11 @@
 
 	
 
-angular.module('gonogo').controller("PolicyController" , ['$scope','$rootScope', '$http', '$timeout', 
-'cfpLoadingBar','$filter', 'Rules', 'Policy', 'Score', 'Decision', 'Validation','BASE_URL_SCOR','RestService',function($scope,$rootScope, $http, $timeout, 
-cfpLoadingBar,$filter, Rules, Policy, Score, Decision, Validation,BASE_URL_SCOR,RestService) 
+ var app = angular.module('gonogo');
+
+app.controller("PolicyController" , ['$scope','$rootScope', '$http', '$timeout', 
+'$filter', 'Rules', 'Policy', 'Score', 'Decision', 'Validation','APP_CONST','RestService',function($scope,$rootScope, $http, $timeout, 
+$filter, Rules, Policy, Score, Decision, Validation,APP_CONST,RestService) 
 {	
 	var dataset ={'master': []}; 
 	var colorList = ['#689f38','#EF3D16','#fb8c00','#8BC34A','#2196F3','#9C27B0','#bdbdbd','#009688','#ffc107','#689f38'];
@@ -118,7 +120,7 @@ cfpLoadingBar,$filter, Rules, Policy, Score, Decision, Validation,BASE_URL_SCOR,
 	function getInstitutionData() 
 	{ 
 		$http({
-			method : 'GET',	url : BASE_URL_SCOR+'GetInstitutionData',
+			method : 'GET',	url : APP_CONST.getConst('BASE_URL_SCORE')+'GetInstitutionData',
 			params : {'INSTITUTION_ID': $scope.InstitutionID},
 			headers : {'Content-Type' : 'application/json'}
 		}).success(function(data) 
@@ -222,7 +224,7 @@ $scope.getMasterList = function()
 {
 	$http({
 		method : 'POST',
-		url : BASE_URL_SCOR+'IFFDropDown',
+		url : APP_CONST.getConst('BASE_URL_SCORE')+'IFFDropDown',
 		params : {'INSTITUTION_ID':$scope.InstitutionID,'CType':'metadata'},
 		headers : {'Content-Type' : 'application/json'}
 	}).success(function(data) 
@@ -236,7 +238,8 @@ $scope.getMasterList = function()
 	// view table contents in detail
 	$scope.load_table = function(id, type)
 	{  
-		var url=BASE_URL_SCOR+"ScoreTable";
+		var url=APP_CONST.getConst('BASE_URL_SCORE') +"ScoreTable";
+
 		if(type === 'edit')
 		{ 
 			displayTables(id);
@@ -263,7 +266,8 @@ $scope.getMasterList = function()
 // handle master data display
 	$scope.mastervalue = function(id ,type)
 	{
-		var url=BASE_URL_SCOR+"masterDropDown";
+		var url=APP_CONST.getConst('BASE_URL_SCORE')+"masterDropDown";
+
 		if(type === 'edit' || type === 'view')
 		{
 	// displayTables(id);
@@ -293,28 +297,34 @@ $scope.getMasterList = function()
 	// view table contents in detail
 	$scope.Load_Iff = function(id, type, filetype)
 	{   $scope.selectedFileType = filetype;
-		var url=BASE_URL_SCOR+"IFFDropDown";
-		if(type === 'edit')
-		{ 
+		
+		var url=APP_CONST.getConst('BASE_URL_SCORE')+"IFFDropDown";
+		
+		if(type === 'edit'){ 
+		
 			$scope.ViewMode = false;
+		
 			displayIffFields(id,filetype);
-		}else if(type === 'delete')
-		{	var data = {'ID':id};
+		
+		}else if(type === 'delete'){
+			var data = {'ID':id};
 			$scope.deleteObject(url,data,"IFF");
-		}
-		else if(type === 'approve')
-		{
+		
+		}else if(type === 'approve'){
+
 			var data = {'ID':id,'updatedby':$scope.username,'status':'Approved'};
 			$scope.updateStatus(url,data,"IFF");
-		}else if(type === 'view')
-		{
+		
+		}else if(type === 'view'){
+
 			$scope.ViewMode = true;
 			displayIffFields(id,filetype);
-		}else 
-		{   /*$('#TableError').text("You are not authorised for this action")
-			.css("color","red").slideDown().delay(2000).slideUp();*/
+		
+		}else {
+
 			var data = {'ID':id,'updatedby':$scope.username,'status':'Disabled'};
 			$scope.updateStatus(url,data,"IFF");
+		
 		}
 	}
 	
@@ -323,7 +333,7 @@ $scope.getMasterList = function()
 	
 	$scope.deleteAttribute=function(objID)
 	{   $scope.AtID=objID;
-		var url=BASE_URL_SCOR+"Attribute";
+		var url=APP_CONST.getConst('BASE_URL_SCORE')+"Attribute";
 		var data = {'ID':objID};
 		$scope.deleteObject(url,data,"DAttr");
 	}
@@ -352,7 +362,7 @@ $scope.getMasterList = function()
 		$('#scoring_table, #scoring_main_container').slideToggle();
 		$('#T_LoaderSpinner').show();
 		$http({
-			method : 'GET',	url : BASE_URL_SCOR+'GetCategories',
+			method : 'GET',	url : APP_CONST.getConst('BASE_URL_SCORE')+'GetCategories',
 			params : {'TableID':id,'INSTITUTION_ID':$scope.InstitutionID},
 			headers : {'Content-Type' : 'application/json'}
 		}).success(function(data) 
@@ -378,16 +388,16 @@ $scope.getMasterList = function()
 		var url;
 		if(filetype =="ANALYTICAL")
 		{   $('#addIffField').show();
-			url = BASE_URL_SCOR+'Analytical';
+			url = APP_CONST.getConst('BASE_URL_SCORE')+'Analytical';
 		}else if(filetype =="CUSTOM")
 		{
 			 $('#addcstmField').show();
-			 url = BASE_URL_SCOR+"CustomFields";
+			 url = APP_CONST.getConst('BASE_URL_SCORE')+"CustomFields";
 			 $('#T_LoaderSpinner').hide(1000);
 // $scope.IffFieldList = $scope.cstmFieldList;
 		}
 		else{
-			url = BASE_URL_SCOR+'FieldDropDown';
+			url = APP_CONST.getConst('BASE_URL_SCORE')+'FieldDropDown';
 		}
 		if(url != "")
 		{	 $http({
@@ -412,7 +422,7 @@ $scope.getMasterList = function()
 	function fetchData(InstitutionID,fileID){
 		
 		 $http({
-				method : 'GET',	url : BASE_URL_SCOR+'FieldData',
+				method : 'GET',	url : APP_CONST.getConst('BASE_URL_SCORE')+'FieldData',
 				params : {'FileID':fileID,'INSTITUTION_ID':$scope.InstitutionID},
 				headers : {'Content-Type' : 'application/json'}
 			  }).success(function(data) 
@@ -421,21 +431,30 @@ $scope.getMasterList = function()
 				});
 	}
 	
-		$scope.mfieldlist=[];
+	$scope.mfieldlist=[];
+	
 	$scope.THead=[];
-	function displaymasterFields(fileID)
-	{ $('#T_LoaderSpinner').show();
+	
+	function displaymasterFields(fileID){ 
+
+		$('#T_LoaderSpinner').show();
+		
 		$scope.IffFileID = fileID;
+		
 		var divHeight=($(window).height()-($('#header').height() + $('#footer').height()));
+		
 		divHeight=divHeight-180;
+	    
 	    $("#MFTable").css({"height" : divHeight});
+		
 		$scope.Table = "IFF File ID : "+fileID;
+		
 		$('#master_fields_table  ,#MFTable').show();
-// $("#mlist_table").hide();
+
 		$('#iff_table, #iff_fields_table,#addIffField,#addcstmField').hide();
 		
 	  $http({
-			method : 'GET',	url : BASE_URL_SCOR+'MFieldDropDown',
+			method : 'GET',	url : APP_CONST.getConst('BASE_URL_SCORE') + 'MFieldDropDown',
 			params : {'FileID':fileID,'INSTITUTION_ID':$scope.InstitutionID},
 			headers : {'Content-Type' : 'application/json'}
 		  }).success(function(data) 
@@ -462,7 +481,7 @@ $scope.getMasterList = function()
 	
 	// view policy contents in detail
 	$scope.load_policy = function(id, type)
-	{var url=BASE_URL_SCOR+"CreditPolicy"; 
+	{var url=APP_CONST.getConst('BASE_URL_SCORE')+"CreditPolicy"; 
 		if(type === 'edit')
 		{    createPolicyStructure(id);
 		     $scope.ViewMode = false;
@@ -534,18 +553,18 @@ $scope.getMasterList = function()
 		else
 		   $scope.ViewMode = false;	
 	}else if(calltype == "delete")
-	{   var url=BASE_URL_SCOR+"DecisionRules";
+	{   var url=APP_CONST.getConst('BASE_URL_SCORE')+"DecisionRules";
 		var data = {'ID':ruleid};
 		$scope.deleteObject(url,data,"DRules","ALL");
 	}
 	else if(calltype === 'approve')
 	{
-		var url=BASE_URL_SCOR+"DecisionRules";
+		var url=APP_CONST.getConst('BASE_URL_SCORE')+"DecisionRules";
 		var data = {'ID':ruleid,'updatedby':$scope.username,'status':'Approved'};
 		$scope.updateStatus(url,data,"DRules",'ALL');
 	}else if(calltype === 'disable')
 	{
-		var url=BASE_URL_SCOR+"DecisionRules";
+		var url=APP_CONST.getConst('BASE_URL_SCORE')+"DecisionRules";
 		var data = {'ID':ruleid,'updatedby':$scope.username,'status':'Disabled'};
 		$scope.updateStatus(url,data,"DRules",'ALL');
 	}else if(calltype === 'view' && ruletype == "Matrix")
@@ -600,7 +619,7 @@ $scope.getMasterList = function()
 
 	$scope.deleteCategory=function(objID)
 	{	$scope.CatID=objID;
-	var url=BASE_URL_SCOR+"Category";
+	var url=APP_CONST.getConst('BASE_URL_SCORE')+"Category";
 	var data = {'ID':objID};
 	$scope.deleteObject(url,data,"DCat");
 	}
@@ -640,7 +659,7 @@ $scope.getMasterList = function()
 		$('#L_LoaderSpinner').show();
 		$http({
 			method : 'GET',
-			url : BASE_URL_SCOR+'GetItems',
+			url : APP_CONST.getConst('BASE_URL_SCORE')+'GetItems',
 			params : {'AtID':AtID, 'INSTITUTION_ID':$scope.InstitutionID},
 			headers : {'Content-Type' : 'application/json'}
 		}).success(function(data) 
@@ -744,7 +763,7 @@ $scope.getMasterList = function()
 			}
 			$('#T_LoaderSpinner').show();
 			$http({	method : 'POST',
-				url : BASE_URL_SCOR+'ScoreTable',
+				url : APP_CONST.getConst('BASE_URL_SCORE')+'ScoreTable',
 				params : {'INSTITUTION_ID':$scope.InstitutionID,'CType':'create'},
 				data : tableSet,
 				headers : {'Content-Type' : 'application/json'}
@@ -778,7 +797,7 @@ $scope.getMasterList = function()
 		{ 	var dataset = {'name':this.policyName,'priority':this.priority,'createdby':$scope.username};
 		$('#T_LoaderSpinner').show();
 		$http({	method : 'POST',
-			url : BASE_URL_SCOR+'CreditPolicy',
+			url : APP_CONST.getConst('BASE_URL_SCORE')+'CreditPolicy',
 			params : {'INSTITUTION_ID':$scope.InstitutionID,'CType':'Create'},
 			data : dataset,
 			headers : {'Content-Type' : 'application/json'}
@@ -1032,7 +1051,7 @@ else
 	
 	$http({
 		method : 'POST',
-		url : BASE_URL_SCOR+'CreateAttribute',
+		url : APP_CONST.getConst('BASE_URL_SCORE')+'CreateAttribute',
 		params:{'INSTITUTION_ID' : $scope.InstitutionID},
 		data : DataSet,
 		headers : {'Content-Type' : 'application/json'}
@@ -1458,7 +1477,7 @@ else
 
 	$scope.DeleteScoringRules = function(ItemID)
 	{
-		var url=BASE_URL_SCOR+"DeleteFieldRules";
+		var url=APP_CONST.getConst('BASE_URL_SCORE')+"DeleteFieldRules";
 		var data = {"ID":ItemID };
 		$scope.deleteObject(url,data,"STableRule");				
 
@@ -1747,7 +1766,7 @@ else
 	var jsonData = {'name':$("body #attributeName").val(),'weight':$("body #attribute_weight").val()};
 	$http({
 		method : 'POST',
-		url : BASE_URL_SCOR+'Attribute',
+		url : APP_CONST.getConst('BASE_URL_SCORE')+'Attribute',
 		params:{'INSTITUTION_ID':$scope.InstitutionID,'AtID':$scope.AtID,'CType':'Update','CatID':$scope.CatID},
 		data:jsonData,
 		headers : {	'Content-Type' : 'application/json'}
@@ -1805,7 +1824,7 @@ else
 		var jsonData={'name':$("body #CatName").val(),'weight':$("body #category_weight").val()};
 		$http({
 			method : 'POST',
-			url : BASE_URL_SCOR+'Category',
+			url : APP_CONST.getConst('BASE_URL_SCORE')+'Category',
 			params:{'INSTITUTION_ID':$scope.InstitutionID,'CatID':$scope.CatID,
 				     'TableID':$scope.ScoreTable,'CType':'Update'},
 			data:jsonData,
@@ -1924,7 +1943,7 @@ else
 	if(calltype === 'Create')
 	{	 			$scope.context_error = "";
 	$http({ method : 'POST',
-		url : BASE_URL_SCOR+'CreateAdjustment',
+		url : APP_CONST.getConst('BASE_URL_SCORE')+'CreateAdjustment',
 		params:{'INSTITUTION_ID':$scope.InstitutionID},
 		data : newContext,
 		headers : {'Content-Type' : 'application/json'}
@@ -1943,7 +1962,7 @@ else
 	{
 		$scope.context_error = "";
 		$http({ method : 'POST',
-			url : BASE_URL_SCOR+'UpdateAdjustment',
+			url : APP_CONST.getConst('BASE_URL_SCORE')+'UpdateAdjustment',
 			params:{'INSTITUTION_ID':$scope.InstitutionID},
 			data : newContext,
 			headers : {'Content-Type' : 'application/json'}
@@ -1983,7 +2002,7 @@ else
 			{ 	var weight = {'weight':$(this[this.selectedIndex]).val(),'AtID':$scope.AtID,'ItemID':$(this).attr("accesskey")}; 
 			$('#L_LoaderSpinner').show();
 			$http({ method : 'POST',
-				url : BASE_URL_SCOR+'UpdateWeight',
+				url : APP_CONST.getConst('BASE_URL_SCORE')+'UpdateWeight',
 				params:{'INSTITUTION_ID':$scope.InstitutionID},
 				data : weight,
 				headers : {'Content-Type' : 'application/json'}
@@ -2045,7 +2064,7 @@ else
 		else{
 			$('#T_LoaderSpinner').show();
 			$http({ method : 'POST',
-				url : BASE_URL_SCOR+'DecisionRules',
+				url : APP_CONST.getConst('BASE_URL_SCORE')+'DecisionRules',
 				params:{'INSTITUTION_ID':$scope.InstitutionID,'RType':'ALL','CType':"Create"},
 				data : data,
 				headers : {'Content-Type' : 'application/json'}
@@ -2176,7 +2195,7 @@ else
 	 	    var value2 = $("#MFValue2").val();
 		 	var Data = createMatrixJson(value1,value2,$scope.Expression.value,MField,MField,"N","","","");
 	 		$http({ method : 'POST',
-				url : BASE_URL_SCOR+'DecisionRules',
+				url : APP_CONST.getConst('BASE_URL_SCORE')+'DecisionRules',
 				params:{'INSTITUTION_ID':$scope.InstitutionID,'RuleID':$scope.Rule,'RType':'Matrix','FType':MField,'CType':'Create'},
 				data : Data,
 				headers : {'Content-Type' : 'application/json'}
@@ -2203,7 +2222,7 @@ else
 	 	 }else if(calltype == 'delete')
 	 		 { var data ="{'Code':"+$scope.MFieldCode+"}";
 		 		$http({ method : 'POST',
-					url : BASE_URL_SCOR+'DecisionRules',
+					url : APP_CONST.getConst('BASE_URL_SCORE')+'DecisionRules',
 					params:{'INSTITUTION_ID':$scope.InstitutionID,'RuleID':$scope.Rule,'RType':'Matrix','FType':MField,'CType':'Delete'},
 					data : data,
 					headers : {'Content-Type' : 'application/json'}
@@ -2234,7 +2253,7 @@ else
 		    		var value2 = $("#MFValue2").val();
 		    	    var Data = createMatrixJson(value1,value2,$scope.Expression.value,MField,MField,"N","","","");
 	 		 	     $http({ method : 'POST',
-					   url : BASE_URL_SCOR+'DecisionRules',
+					   url : APP_CONST.getConst('BASE_URL_SCORE')+'DecisionRules',
 					   params:{'INSTITUTION_ID':$scope.InstitutionID,'RuleID':$scope.Rule,'RType':'Matrix','FType':MField,'CType':'Update'},
 					   data : Data,
 					   headers : {'Content-Type' : 'application/json'}
@@ -2376,7 +2395,7 @@ else
 		var select = $(this).parent();
 		var data ={'Key':$(this).attr("name")+$(this).attr("title"),'value':value};
 		$http({ method : 'POST',
-			url : BASE_URL_SCOR+'DecisionRules',
+			url : APP_CONST.getConst('BASE_URL_SCORE')+'DecisionRules',
 			params:{'INSTITUTION_ID':$scope.InstitutionID,'RuleID':$scope.Rule,'RType':'Matrix','CType':'OutCome'},
 			data : data,
 			headers : {'Content-Type' : 'application/json'}
@@ -2430,7 +2449,7 @@ else
 	{
 		$http({
 			method : 'POST',
-			url : BASE_URL_SCOR+'IFFDropDown',
+			url : APP_CONST.getConst('BASE_URL_SCORE')+'IFFDropDown',
 			params : {'INSTITUTION_ID':$scope.InstitutionID,'CType':'FindAll'},
 			headers : {'Content-Type' : 'application/json'}
 		}).success(function(data) 
@@ -2938,7 +2957,7 @@ else
 				       });
 						// console.log(JSON.stringify(newmatrix));
 						$http({ method : 'POST',
-							url : BASE_URL_SCOR+'DecisionRules',
+							url : APP_CONST.getConst('BASE_URL_SCORE')+'DecisionRules',
 							params:{'INSTITUTION_ID':$scope.InstitutionID,'RuleID':$scope.Rule,'RType':'Criteria','CType':mode},
 							data:newmatrix,
 							headers : {'Content-Type' : 'application/json'}
@@ -3119,7 +3138,7 @@ else
 			$('#confirm').modal({ backdrop: 'static', keyboard: false }).one('click', '#delete', function (e) 
 		    {if(mongId!="" || mongId!=undefined) 
 		      {	$http({ method : 'POST',
-					url : BASE_URL_SCOR+'DecisionRules',
+					url : APP_CONST.getConst('BASE_URL_SCORE')+'DecisionRules',
 					params:{'INSTITUTION_ID':$scope.InstitutionID,'RuleID':$scope.Rule,'RType':'Criteria','CType':'Delete'},
 					data:mongId,
 					headers : {'Content-Type' : 'application/json'}
@@ -3617,12 +3636,12 @@ else
 	{  var url;
 		if($scope.selectedFileType=="ANALYTICAL")
 		{
-			url=BASE_URL_SCOR+"Analytical";
+			url=APP_CONST.getConst('BASE_URL_SCORE')+"Analytical";
 		}else if($scope.selectedFileType=="CUSTOM")
 		{
-			url=BASE_URL_SCOR+"CustomFields";
+			url=APP_CONST.getConst('BASE_URL_SCORE')+"CustomFields";
 		}else{
-			url=BASE_URL_SCOR+'IFFDropDown';	
+			url=APP_CONST.getConst('BASE_URL_SCORE')+'IFFDropDown';	
 		}
 		
 	  $("#confirm-title, #delete").removeClass("btn-danger").addClass("btn-success");
@@ -3830,7 +3849,7 @@ $(document.body).on("click",'#Upload_Master_File',function()
 					}
 			   	$http({
 	  	       	method : 'POST',
-	  	       	url: BASE_URL_SCOR+'UploadMASTER_File',
+	  	       	url: APP_CONST.getConst('BASE_URL_SCORE')+'UploadMASTER_File',
 	  	       	params:{'INSTITUTION_ID':$scope.InstitutionID,'user':$scope.username ,'STRID': id},
 	  	       	data : $rootScope.data_obj,transformRequest: angular.identity,
 	  	        headers: {'Content-Type': undefined}
@@ -3863,7 +3882,7 @@ $(document.body).on("click",'#Upload_Master_File',function()
 // console.log($("#IffFileType option:selected").val());
   	   $http({
 	  	       	method : 'POST',
-	  	       	url: BASE_URL_SCOR+'UploadIFF_File',
+	  	       	url: APP_CONST.getConst('BASE_URL_SCORE')+'UploadIFF_File',
 	  	       	params:{'INSTITUTION_ID':$scope.InstitutionID,'user':$scope.username},
 	  	       	data : $rootScope.data_obj,transformRequest: angular.identity,
 	  	        headers: {'Content-Type': undefined}
@@ -4206,7 +4225,7 @@ $(document.body).on("click",'#Upload_Master_File',function()
 		// close panel
 		$scope.closeAntclDefPnl();
 		 $http({ method : 'POST',
-				url : BASE_URL_SCOR+'Analytical',
+				url : APP_CONST.getConst('BASE_URL_SCORE')+'Analytical',
 				params:{'INSTITUTION_ID':$scope.InstitutionID,'CType':'AddField'},
 				data:dataSet,
 				headers : {'Content-Type' : 'application/json'}
@@ -4774,7 +4793,7 @@ $(document.body).on("click",'#Upload_Master_File',function()
 		// console.log("inside specification call"+objId);
 		if(objId!="")
 		{ $http({ method : 'POST',
-			url : BASE_URL_SCOR+'Analytical',
+			url : APP_CONST.getConst('BASE_URL_SCORE')+'Analytical',
 			params:{'INSTITUTION_ID':$scope.InstitutionID,'CType':'GetSpec'},
 			data:{'FieldName':field,'SpecID':objId},
 			headers : {'Content-Type' : 'application/json'}
@@ -4816,7 +4835,7 @@ $(document.body).on("click",'#Upload_Master_File',function()
 			 var currfile = $scope.IffFileID;
 			 $http({
 		  	       	method : 'GET',
-		  	       	url: BASE_URL_SCOR+'findAllDetails',
+		  	       	url: APP_CONST.getConst('BASE_URL_SCORE')+'findAllDetails',
 		  	       	params:{'INSTITUTION_ID':$scope.InstitutionID,'FileID':currfile,'FieldID':fieldid},
 		  	       	headers : {'Content-Type' : 'application/json'}
 		  	       }).success(function (data) 
@@ -4870,7 +4889,7 @@ $(document.body).on("click",'#Upload_Master_File',function()
 			var fileID=$scope.IffFileID;
 			$http({
 	  	       	method : 'POST',
-	  	       	url: BASE_URL_SCOR+'importDetails',
+	  	       	url: APP_CONST.getConst('BASE_URL_SCORE')+'importDetails',
 	  	       	params:{'INSTITUTION_ID':$scope.InstitutionID,'user':$scope.username,'FileID':fileID,'FieldID':fieldid,'FieldName':FNAME},
 	  	       	data : $rootScope.data_obj,transformRequest: angular.identity,
 	  	        headers: {'Content-Type': undefined}
@@ -4901,7 +4920,7 @@ $(document.body).on("click",'#Upload_Master_File',function()
 	function getAllData(fieldid,FNAME){
 			$http({
 	  	       	method : 'GET',
-	  	       	url: BASE_URL_SCOR+'AllValues',
+	  	       	url: APP_CONST.getConst('BASE_URL_SCORE')+'AllValues',
 	  	       	params:{'INSTITUTION_ID':$scope.InstitutionID,'FileID':$scope.IffFileID,'FieldID':fieldid,'FieldName':FNAME},
 	  	       	headers : {'Content-Type' : 'application/json'}
   	       }).success(function (data) 
@@ -5479,7 +5498,7 @@ $(document.body).on("click",'#Upload_Master_File',function()
 			       // console.log(JSON.stringify(finalRule));
 			       $scope.closeCstmPanel();
 			       $http({ method : 'POST',
-						url : BASE_URL_SCOR+'CustomFields',
+						url : APP_CONST.getConst('BASE_URL_SCORE')+'CustomFields',
 						params:{'INSTITUTION_ID':$scope.InstitutionID,'CType':'AddField'},
 						data:finalRule,
 						headers : {'Content-Type' : 'application/json'}
@@ -6191,7 +6210,7 @@ $(document.body).on("click",'#Upload_Master_File',function()
 		// load eligibility in details
 		$scope.Load_Elgblty = function(id, type)
 		{  
-			var url=BASE_URL_SCOR+"Eligibility";
+			var url=APP_CONST.getConst('BASE_URL_SCORE')+"Eligibility";
 			if(type === 'edit')
 			{ 
 				$scope.ViewMode = false;
@@ -6234,7 +6253,7 @@ $(document.body).on("click",'#Upload_Master_File',function()
 				}			 
 			}
 			$http({
-				method : 'POST',url : BASE_URL_SCOR+"Eligibility",
+				method : 'POST',url : APP_CONST.getConst('BASE_URL_SCORE')+"Eligibility",
 				params : {'INSTITUTION_ID':$scope.InstitutionID,'CType':"FindOne","ElgbltyID":$scope.ElgbltyID},
 				headers : {'Content-Type' : 'application/json'}
 			  }).success(function(data) 
@@ -6255,7 +6274,7 @@ $(document.body).on("click",'#Upload_Master_File',function()
 		 try{
 			var data = {'name':this.ElgbltyName,'createdby':$scope.username};
 			$http({
-				method : 'POST',url : BASE_URL_SCOR+"Eligibility",
+				method : 'POST',url : APP_CONST.getConst('BASE_URL_SCORE')+"Eligibility",
 				params : {'INSTITUTION_ID':$scope.InstitutionID,'CType':"AddElgblty"},
 				data : data,
 				headers : {'Content-Type' : 'application/json'}
@@ -6281,7 +6300,7 @@ $(document.body).on("click",'#Upload_Master_File',function()
 		$scope.getElgbltyList = function()
 		{  $('#T_LoaderSpinner').show();	
 		  $http({
-				method : 'POST',url : BASE_URL_SCOR+"Eligibility",
+				method : 'POST',url : APP_CONST.getConst('BASE_URL_SCORE')+"Eligibility",
 				params : {'INSTITUTION_ID':$scope.InstitutionID,'CType':"FindAll"},
 				headers : {'Content-Type' : 'application/json'}
 			  }).success(function(data) 
@@ -6447,7 +6466,7 @@ $(document.body).on("click",'#Upload_Master_File',function()
 					    		    calltype="updateGrid";
 					    		   }
 					       $http({ method : 'POST',
-								url : BASE_URL_SCOR+'Eligibility',
+								url : APP_CONST.getConst('BASE_URL_SCORE')+'Eligibility',
 								params:{'INSTITUTION_ID':$scope.InstitutionID,'CType':calltype,"ElgbltyID":$scope.ElgbltyID},
 								data:finalJson,
 								headers : {'Content-Type' : 'application/json'}
@@ -6602,7 +6621,7 @@ $(document.body).on("click",'#Upload_Master_File',function()
 			$('#confirm').modal({ backdrop: 'static', keyboard: false }).one('click', '#delete', function (e) 
 		    {if(gridID!="" || gridID!=undefined) 
 		      {	$http({ method : 'POST',
-					url : BASE_URL_SCOR+'Eligibility',
+					url : APP_CONST.getConst('BASE_URL_SCORE')+'Eligibility',
 					params:{'INSTITUTION_ID':$scope.InstitutionID,'ElgbltyID':$scope.ElgbltyID,'CType':callType},
 					data:gridID,
 					headers : {'Content-Type' : 'application/json'}
@@ -6707,7 +6726,7 @@ $(document.body).on("click",'#Upload_Master_File',function()
 			  var finalJson={"ElgbltyID":object.ElgbltyID,"RULES":object.RULES,
    		          			"AGRTD_VALUES":object.AGRTD_VALUES,"DEC_PRRTY":object.DEC_PRRTY};
 		      $http({ method : 'POST',
-					url : BASE_URL_SCOR+'Eligibility',
+					url : APP_CONST.getConst('BASE_URL_SCORE')+'Eligibility',
 					params:{'INSTITUTION_ID':4019,'CType':"AddElgRule","ElgbltyID":object.ElgbltyID},
 					data:finalJson,
 					headers : {'Content-Type' : 'application/json'}

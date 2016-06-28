@@ -2,7 +2,9 @@
 
 	'use strict';
 
-	angular.module('gonogo').factory("Validation", function() {
+	var app = angular.module('gonogo.validation',[]);
+
+	app.factory("Validation", function() {
 	var selectError =0,inputError=0;
 	return{
 		validate : function() {	    

@@ -294,8 +294,16 @@
 						<div class="row clearfix customRow">
 							<div class="col-md-6 height">
 								<help>Date of Birth*</help>
-								<input type="text" id="dob" class="customInput" ng-model="dob"
-									placeholder="Date of Birth*" />
+
+								<input type="text" class="customInput" ib-datepicker-popup="dd/MM/yyyy" 
+									ng-model="dob" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="dd/MM/yyyy" />
+								 <span class="input-group-btn">
+						            <button type="button" class="btn btn-default" ng-click="open1()">
+						            <i class="fa fa-calendar"></i></button>
+						         </span>	
+
+								<!-- <input type="text" id="dob" class="customInput" ng-model="dob"
+									placeholder="Date of Birth*" /> -->
 							</div>
 							<div class="col-md-6 height">
 								<help>Constitution*</help>

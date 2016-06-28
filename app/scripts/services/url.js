@@ -2,7 +2,7 @@
 	
 	'use strict';
 	
-	var app = angular.module('gonogo');
+	var app = angular.module('gonogo.commons',[]);
 
 	app.factory("APP_CONST",function(){
 		var END_POINT = {
@@ -25,11 +25,13 @@
 		var _saveToServer = function(url,data){
 			var defere = $q.defer(),
 			_url = APP_CONST.getConst('BASE_URL_GNG');
+			
 			$http.post(_url+url,data).success(function(response){
 				defere.resolve(response);
 			}).error(function(error){
 				defere.reject(error);
 			})
+			
 			return defere.promise;
 		},
 		
@@ -47,9 +49,10 @@
 		
 		getStreamFromServer = function(url,data){
 			var deferred = $q.defer();
+			console.log(data);
 			$http({
                 url:url,
-                method:"PUT",
+                method:"POST",
                 data:data,
                 headers:{'Content-type': 'application/json'},
                 responseType : 'arraybuffer',
@@ -121,7 +124,7 @@
 	    };
   	});
 
- 	app.service("UserService",['$location','AclService',function($location,AclService){
+ 	app.service("UserService",['$location',function($location){
  		
  		var fetchCurrentUser = function(){
     		
@@ -188,15 +191,7 @@
 
  	}]);
 
- 	app.run(["AclService",function(AclService){
-		AclService.addRole("4019");
-		AclService.addRole("CRO1");
-		
-		AclService.addResource("Application");
-		
-		AclService.allow("CRO1","Application","Reinitiate");
-		AclService.allow("CRO1","Application","Update");
-	}]);
+ 	
 	
 	
 }).call(this)

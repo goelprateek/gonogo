@@ -174,7 +174,7 @@ font-size:14px;}
 </style>
 
 
-<div id="notification_tmp" ng-controller="Maincontroller" ng-cloak>
+<div id="notification_tmp" ng-controller="NotifController" ng-cloak>
 	<div class="col-md-12" contextmenu="blur">
 		<div class="col-md-10 col-md-offset-1" style="padding-right: 0px;">
 			<div class="col-md-2" id="application_process" style="min-width: inherit;">
@@ -192,8 +192,13 @@ font-size:14px;}
 					</div>
 					<div class="col-md-6">
 						<ul class="nav navbar-nav navbar-right nhr">
-							<li><span href="" id="ref" ng-show="showrefid"
-								style="margin-top: 13px; display: block;"> <a ng-click="::authenticate('NRPRCS') && newApplication(details.oHeader.sAppID)">{{refID}}</a></span></li>
+							<li>
+								<span ng-show="showrefid" style="margin-top: 13px; display: block;"> 
+									<a ng-click="newApplication(details.oHeader.sAppID)">
+										{{refID}}
+									</a>
+								</span>
+							</li>
 							<li><a id="dsa_chat" ng-if="authenticate('NCHAT')">DSA Chat</a></li>
 							<li ><a id="onhold" title="{{refID}}"
 								ng-if="authenticate('NHOLD')"  

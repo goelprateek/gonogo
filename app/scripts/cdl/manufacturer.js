@@ -1,10 +1,13 @@
- 
-angular.module('gonogo').controller("manufacturerController",function(
-		$upload,$scope,$http,cfpLoadingBar,$timeout,$window,$location,$q,BASE_URL_GNG) {
+;(function(){
+
+
+	'use strict';
+
+	angular.module('gonogo').controller("manufacturerController",function(
+		$upload,$scope,$http,$timeout,$window,$location,$q,APP_CONST) {
 	
 	var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
-	//console.log("Localstage data : ");
-	//console.log(userdata);
+
 	$scope.username = userdata.name;
 	$scope.useremail = userdata.email;
 	$scope.InstitutionID = userdata.InstitutionID;
@@ -14,7 +17,7 @@ angular.module('gonogo').controller("manufacturerController",function(
 	  	$scope.assetJson ={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":""}; 
 	  	$http({
 	  		method : 'POST',
-	  		url : BASE_URL_GNG+'asset-category-web',
+	  		url : APP_CONST.getConst('BASE_URL_GNG')+'asset-category-web',
 	  		data :$scope.assetJson,
 	  		headers : {'Content-Type' : 'application/json'}
 	  	}).success(function(data) 
@@ -40,7 +43,7 @@ angular.module('gonogo').controller("manufacturerController",function(
 			$scope.makeJson ={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":val1}
 			$http({
 				method : 'POST',
-				url : BASE_URL_GNG+'asset-model-make-web',
+				url : APP_CONST.getConst('BASE_URL_GNG')+'asset-model-make-web',
 				data :$scope.makeJson,
 				headers : {'Content-Type' : 'application/json'}
 			}).success(function(data) 
@@ -63,7 +66,7 @@ angular.module('gonogo').controller("manufacturerController",function(
 			$scope.mdlJson ={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":val1,"sQuery2":val2}; 
 			$http({
 				method : 'POST',
-				url : BASE_URL_GNG+'asset-model-all-web',
+				url : APP_CONST.getConst('BASE_URL_GNG')+'asset-model-all-web',
 				data :$scope.mdlJson,
 				headers : {'Content-Type' : 'application/json'}
 			}).success(function(data) 
@@ -91,6 +94,10 @@ angular.module('gonogo').controller("manufacturerController",function(
 	  });
 
 	
-});
+	});
+
+}).call(this) 
+
+
 
 	  

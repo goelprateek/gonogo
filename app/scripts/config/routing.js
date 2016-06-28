@@ -29,7 +29,7 @@
 			templateUrl: 'views/templates/policy.html',
 			controller: 'Maincontroller'
 		}). when('/analytics', {
-			templateUrl: 'views/cdl/analytics.html',
+			templateUrl: 'views/templates/analytics.html',
 		}).when('/cdl/dealer',{
 			templateUrl: 'views/cdl/dealer.html'
 		}).when('/cdl/apply', {

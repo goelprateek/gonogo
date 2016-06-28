@@ -758,6 +758,8 @@ if(Validation.validate())
 
 	$scope.newApplication = function(refid)
 	{ 
+		console.log("newApplication");
+		
 		$('#dob').datepicker({changeMonth: true, changeYear: true, yearRange: "1945:1997", dateFormat: 'dd:M:yy'});
 		if(croQueue){//for CRO1 and CRO9
 			$("#notification-main-container").hide();

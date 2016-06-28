@@ -6,7 +6,7 @@
 	
 	var app = angular.module("gng.cdl.dealer",[]);
 
-	app.controller("DealerController",["$rootScope","$scope","$location",'UserService','APP_CONTEXT',function($rootScope,$scope,$location,UserService,APP_CONTEXT){
+	app.controller("DealerController",["$rootScope","$scope","$location",'UserService','APP_CONST',function($rootScope,$scope,$location,UserService,APP_CONST){
 
 	var user = UserService.getCurrentUser();
 
@@ -25,11 +25,11 @@
 				$location.path("/cdl/dealer");
 			
 			}else{
-				$location.path(APP_CONTEXT);
+				$location.path(APP_CONST.getConst('APP_CONTEXT'));
 			}
 		
 	}else{
-		$location.path(APP_CONTEXT);
+		$location.path(APP_CONST.getConst('APP_CONTEXT'));
 	}
 
 	

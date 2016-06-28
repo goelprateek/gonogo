@@ -11,12 +11,12 @@
 				'ngAnimate',
 				'ui.bootstrap',
 				'angular-loading-bar',
-				'ng-acl', 
 				'ngFileUpload',
 				'gonogo.analytics',
 				'gonogo.login',
 				'gonogo.directives',
-				'gonogo.cdl'
+				'gonogo.cdl',
+				'gonogo.services'
 	]);
 	
 	app.controller("Maincontroller",['$scope', '$rootScope', '$http', 'Validation', '$timeout','RestService','$location','UserService','APP_CONST',function($scope, $rootScope, $http, Validation, $timeout,RestService,$location,UserService,APP_CONST) {
@@ -41,10 +41,10 @@
 						"sUserID": $scope.userid
 				}
 
-				RestService.postDataWithHeaders(BASE_URL_GNG+'logout',json);
+				RestService.postDataWithHeaders(APP_CONST.getConst('BASE_URL_GNG')+'logout',json);
 
 				UserService.cleanUpUserDeatails();
-				$location.path(APP_CONTEXT);
+				$location.path(APP_CONST.getConst('APP_CONTEXT'));
 
 		};
 
@@ -838,10 +838,10 @@
 				$("#UserContainer").hide();
 			});
 
-			$(document.body).on("click", "#ref", function() {
+			/*$(document.body).on("click", "#ref", function() {
 				all_list();
 			});
-
+*/
 
 			function load_fromkyc()
 			{if($scope.InstitutionID == 4020)

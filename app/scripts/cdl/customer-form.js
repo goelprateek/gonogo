@@ -1,26 +1,19 @@
-var app=angular.module("gonogo");
+;(function(){
 
-app.controller('PDFViewerModalCtrl', function (CallRestAPI,BASE_URL_GNG,$scope, $uibModalInstance, response,refID,$location) {
-	//	alert(response);
-	//console.log("Dialog parameter 3: ");
-	//console.log(baseURL);
+	'use strict';
+
+	var app=angular.module("gonogo");
+
+app.controller('PDFViewerModalCtrl', ['RestService','$scope', '$uibModalInstance', 'response','refID','$location',function (RestService,BASE_URL_GNG,$scope, $uibModalInstance, response,refID,$location) {
+	
 	 $scope.response = response;
 	 $scope.refID = refID;
-//	 $scope.selected = {
-//			 item: $scope.items[0]
-//	 };
+
 
 	 $scope.submit = function (imgID,refID) {
-//		alert("submit: "+imgID);
-//		alert("submit: "+refID);
-//		{"sRefID":"SATH000231","oHeader":
-//		{"sCroId":"default","dtSubmit":1465287538113,"sReqType":null,"sAppSource":"Android","sDsaId
-//		":null,"sAppID":"","sDealerId":null,"sSourceID":null,"sInstID":"4019"},"sImgID":"5754ec605da0a
-//		16ebf889818"}
+
 
 		var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
-		//console.log("Localstage data : ");
-		//console.log(userdata);
 		$scope.username = userdata.name;
 		$scope.useremail = userdata.email;
 		$scope.image = userdata.userImage;
@@ -45,15 +38,9 @@ app.controller('PDFViewerModalCtrl', function (CallRestAPI,BASE_URL_GNG,$scope, 
 			sRefID:refID,
 			sImgID:imgID
 		};
-		//alert("lol...."+BASE_URL_GNG);
-		
-		//console.log("JSON Mail request : ");
-		//console.log(JSON.stringify(mailRequest));
 
-		URL = BASE_URL_GNG+'/send-mail-pdf';
-		CallRestAPI.postDataWithHeaders(URL,JSON.stringify(mailRequest),$scope.useremail,$scope.pass).then(function(Response){
-			//console.log("JSON Mail response : ");
-			//console.log(JSON.stringify(Response));
+		URL = APP_CONST.getConst('BASE_URL_GNG')+'/send-mail-pdf';
+		RestService.postDataWithHeaders(URL,JSON.stringify(mailRequest),$scope.useremail,$scope.pass).then(function(Response){
 
 			if(Response){}
 		});	
@@ -68,17 +55,13 @@ app.controller('PDFViewerModalCtrl', function (CallRestAPI,BASE_URL_GNG,$scope, 
 		$uibModalInstance.dismiss('cancel');
 		$location.path("/dashboard");
 	 };
-});
+}]);
 
-app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"CallRestAPI","BASE_URL_GNG","$location","$uibModal",function($scope,$rootScope,sharedService, CallRestAPI, BASE_URL_GNG, $location,$uibModal){
-	//console.log("Reference ID:"+sharedService.getRefID());
+app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"RestService","APP_CONST","$location","$uibModal",function($scope,$rootScope,sharedService, RestService, APP_CONST, $location,$uibModal){
+	
 	var CustID=sharedService.getRefID();
 	$scope.refID = CustID;
 	var URL='';
-	//console.log("Reference ID:"+CustID);
-	//TODO Hard Coded
-//	CustID="SATH000276";
-//	CustID="SATH000275";
 
 	//TODO
 	var json ={'sRefID':CustID};
@@ -86,24 +69,8 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Cal
 	if(CustID==null || CustID==""){
 		$location.path("/dashboard");
 	}
-//		if(croQueue)//for CRO1
-//		{ 
-	URL = BASE_URL_GNG+'/dashboard-application-data';
-//			if(flag == "true"){
-//				$('#approve , #decline, #onhold').show();
-//				 $("#dedupe , #dedupe1").val("Select");
-//			}else{
-//				$('#approve , #decline, #onhold').hide();
-//			}
-//		}else{
-//			URL = '/application-data-cro2';
-//			if(flag == "true"){
-//				$('#accept , #reject').show();
-//				 $("#dedupe , #dedupe1").val("Select");
-//			}else{
-//				$('#accept , #reject').hide();
-//			}
-//		}
+
+	URL = APP_CONST.getConst('BASE_URL_GNG') +'/dashboard-application-data';
 	
 	docData = [{'Name':'Address Proof',
 		'ID':'0',
@@ -195,20 +162,12 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Cal
 	$scope.addr_type = $scope.addrType[0].value;
 	$scope.time_employer =  $scope.timeataddress[0];
 	
-	CallRestAPI.postData(URL,json).then(function(Response){
-		//console.log("Form data loaded:");
-		//console.log(JSON.stringify(Response));
+	RestService.saveToServer(URL,json).then(function(Response){
 		if(Response){
 			$scope.applicant = Response.oReq.oApplicant;
 			$scope.kyc_data = Response.oReq.oApplicant;
-	//		$scope.kyc_status = Response.oIntrmStat.oPanResult; 
-	//		$scope.cibilScore = Response.oIntrmStat.oCibilResult;
-	//		console.log("Cibil Result:");
-	//		console.log(Response.oIntrmStat.oCibilResult);
 			$scope.applicantbckUp = Response.oReq.oApplicant; 
 			
-	//		$('#dob').datepicker({changeMonth: true, changeYear: true, yearRange: "1945:1997", dateFormat: 'dd:M:yy'});
-		
 			$scope.officeaddr = "";
 			$scope.peraddr = '';
 			$scope.resaddr='';
@@ -222,8 +181,6 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Cal
 			$scope.aplcntType=[{value:"SAL","text":"Salaried"},
 			               	{value:"SEB","text":"Self Employed Business"},
 			               	{value:"SEP","text":"Self Employed Professional"}];
-	//		try{
-				//console.log("Response.oReq.oApplicant.oApplName.sFirstName:"+Response.oReq.oApplicant.oApplName.sFirstName);
 				$scope.name = Response.oReq.oApplicant.oApplName.sFirstName+"  "+ Response.oReq.oApplicant.oApplName.sLastName.replace("null","");							    	
 				$scope.mobile = Response.oReq.oApplicant.aPhone[0].sPhoneNumber;
 				$scope.Amount = Response.oReq.oApplication.dLoanAmt;
@@ -238,69 +195,26 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Cal
 				$scope.gender = Response.oReq.oApplicant.sApplGndr;
 				$scope.age = Response.oReq.oApplicant.iAge;			
 				$scope.mStatus = Response.oReq.oApplicant.sMarStat;
-	//		}catch(error){
-	//			console.
-	//			$scope.name ="";							    	
-	//			$scope.mobile = "";
-	//			$scope.Amount = "";
-	//			$scope.email = "";
-	//			$scope.dob = "";
-	//			$scope.gender ="Male";
-	//			$scope.age ="";
-	//			$scope.mStatus ="Married";
-	//		}
-	//		try{
+
 				var address = Response.oReq.oApplicant.aAddr[0];	
 				$scope.statelist= address.sState;
-	//			$(document.body).find("#statelist").val(address.sState);
 				$scope.address1 = address.sLine1;
 				$scope.address2 = address.sLine2;
 				$scope.pin = address.iPinCode;
 				$scope.time_address = $scope.timeataddress[getTime(address.iTimeAtAddr,  $scope.timeataddress)];
 				$scope.location =address.sLine2;
-	//		}catch(error){
-	//			console.log(error);
-	//			$scope.statelist="";
-	//			$scope.address1 = "";
-	//			$scope.address2 = "";
-	//			$scope.pin = "";
-	//			$scope.time_address = "";
-	//			$scope.location ="";
-	//		}
 				
 			if(Response.oReq.oApplication.aAssetDetail && Response.oReq.oApplication.aAssetDetail.length>0)
 			{
-	//		try{
 				
 				$scope.project = Response.oReq.oApplication.aAssetDetail[0].sAssetMake;	
 				$scope.model= Response.oReq.oApplication.aAssetDetail[0].sModelNo;
 				
 			
-	//		}catch(e){
-	//			$scope.project ="";	
-	//			$scope.model="";
-	//		}
-				
-//		try{
 				$scope.dealer =Response.oReq.oApplication.aAssetDetail[0].sDlrName;
 				$scope.assetctg = Response.oReq.oApplication.aAssetDetail[0].sAssetCtg;
-	//		}catch(e){
-	//			$scope.dealer = "";
-	//			$scope.assetctg ="";
-	//		}
-				
-				//		try{
 				$scope.assetData =Response.oReq.oApplication.aAssetDetail;
-//				$scope.dealership = Response.oHeader.sDealerId;
-		//		}
-		//		catch(e) {
-		//			$scope.dealership ="";
-		//			$scope.assetData ="";
-		//		}
 			}
-			// $scope.state = $scope.statelist[getTime(Response.oAppReq.CUSTOMER.state,
-			// $scope.statelist)];
-	//		try{
 			$scope.employment_type = $scope.jobType[3];
 			$scope.time_employer = Response.oReq.oApplicant.aEmpl[0].iTmWithEmplr+" Months";
 			$scope.employer = Response.oReq.oApplicant.aEmpl[0].sEmplName;
@@ -309,17 +223,6 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Cal
 			$scope.loanAmt =  Response.oReq.oApplicant.aEmpl[0].dmonthSal;
 			$scope.education= Response.oReq.oApplicant.sEdu;
 			$scope.employment_type = Response.oReq.oApplicant.aEmpl[0].sEmplType;
-	//		}catch(error){
-	//			$scope.employment_type = "";
-	//			$scope.time_employer = "";
-	//			$scope.employer = "";
-	//			$scope.gross_annual = "";
-	//			$scope.current_emi =  "";
-	//			$scope.loanAmt ="";
-	//			$scope.education="";
-	//			$scope.employment_type ="";
-	//		}
-	//		try{
 				$scope.cro2Data =Response.oPostIPA;
 				
 				if($scope.cro2Data!=null){
@@ -334,19 +237,6 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Cal
 					$scope.asstmodal=$scope.cro2Data.aAssMdl;
 				}
 							
-	//		}catch(error){
-	//			$scope.cro2Data ="";
-	//			$scope.apprvdAmt="";
-	//			$scope.scheme="";
-	//			$scope.totalAssetCost="";
-	//			$scope.marginMoney="";
-	//			$scope.marginMoneyInst="";
-	//			$scope.marginMoneyConf="";
-	//			$scope.addvncEmi="";
-	//			$scope.processnFee="";
-	//			$scope.asstmodal="";
-	//		}
-	//		try{
 				var temp = Response.oReq.oApplicant.aEmpl[0].sConst;
 				var databoolean = getTime(temp,$scope.aplcntType);
 				if(databoolean!=undefined)
@@ -356,24 +246,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Cal
 				$scope.credit = Response.oReq.oApplicant.sCreditCardNum;
 				$scope.tenor = Response.oReq.oApplication.iLoanTenor;
 							
-	//		}catch(error){
-	//			console.log(error);
-	//			$scope.credit ="";
-	//			$scope.tenor = "";
-	//			$scope.constitution = "";
-	//		}
-	
-	//		try{
-	//			$scope.cibilS = $scope.cibilScore.sFldVal;
-	//		}catch(e){
-	//			$scope.cibilS ="";
-	//		}
-	//		try{
 				$scope.currStage = Response.sCurrentStageId;
-	//		}catch(error){
-	//			$scope.currStage ="";
-	//		}
-	//		try{
 				var fulladdress = Response.oReq.oApplicant.aAddr;
 				for (j in fulladdress)
 				{
@@ -385,46 +258,14 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Cal
 						$scope.resaddr= fulladdress[j];
 					}
 				} 
-	//		}catch(e){
-	//			$scope.officeaddr ="";
-	//			$scope.peraddr = "";
-	//			$scope.resaddr= "";
-	//		}
-	//		try{
 				var phoneArray=[];
 				phoneArray = Response.oReq.oApplicant.aPhone;
 				for(j in phoneArray){
 					phoneArray[j].sPhoneType= $scope.phoneData[getTime(phoneArray[j].sPhoneType,  $scope.phoneData)].name;
 				}
 				$scope.phn= phoneArray;
-	//		}catch(e){
-	//			console.log(e);
-	//			$scope.phn= '';
-	//		}
-	//		try{
 				$scope.lastsalary = Response.oReq.oApplicant.aEmpl[0].dmonthSal;
-	//			$scope.resAddrRslt= Response.oIntrmStat.oResAddressResult.iAddrStblty;
-	//			if($scope.resAddrRslt=="-1"){
-	//				$scope.resAddrRslt="";
-	//			}else{
-	//				$scope.resAddrRslt = $scope.resAddrRslt;
-	//			}
-	//			$scope.offAddrRslt= Response.oIntrmStat.oOffAddressResult.iAddrStblty;
-	//			if($scope.offAddrRslt=="-1"){
-	//				$scope.offAddrRslt="";
-	//			}else{
-	//				$scope.offAddrRslt = $scope.offAddrRslt;
-	//			}
-	//		}catch(e){
-	//			$scope.lastsalary ="";
-	//			$scope.resAddrRslt="";
-	//			$scope.offAddrRslt="";
-	//		}
-	//		try{
 				$scope.ITamt =  Response.oReq.oApplicant.aEmpl[0].dItrAmt;
-	//		}catch(error){
-	//			$scope.ITamt ='';
-	//		}
 			
 			$scope.error = "";
 			$scope.done = "";
@@ -472,7 +313,6 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Cal
 			$scope.apprAmount = '';
 			$scope.DetailsResp=[];
 			$scope.Emi ="";
-//			$scope.dealership ="";
 			
 			$scope.panpresent =false;
 			$scope.adharpresent =  false; 
@@ -490,12 +330,6 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Cal
 			$scope.applicationID = Response.sRefID;
 			$scope.applicID = Response.	oHeader.sAppID;
 			var data = 	$scope.notifarray;
-			/*for (j in data)
-			{
-				if(data[j].sAppId == $scope.applicationID){
-					$scope.applctnstatus = data[j].sStat;
-				}
-			}		*/
 			for (j in data)
 			{
 				if(data[j].sRefID == $scope.applicationID){
@@ -508,17 +342,8 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Cal
 			$scope.showrefid = "true";
 			$scope.currApplicant = $scope.kycid ;
 			
-	//		try{
 			$scope.bureau = Response.aAppScoRslt;
 			$scope.refID =Response.sRefID;
-	//		$scope.dsaName= Response.oAppReq.oHeader.sDsaId;
-	//		}catch(e){
-	//			$scope.bureau ="";
-	//			$scope.refID ="";
-	//			$scope.dsaName="";
-	//		}
-
-	//		try{
 			
 			if(Response.oReq.oCoApplicant!=null && Response.oReq.oCoApplicant.length>0)
 			{
@@ -1121,3 +946,5 @@ app.config(['$compileProvider',
 		$compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|blob):|data:image|data:application\//);
 	}
 ]);
+
+}).call(this)
