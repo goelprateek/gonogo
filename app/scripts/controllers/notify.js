@@ -319,13 +319,14 @@
 								'RestService','NotificationObject',function($scope, $rootScope, $timeout,Validation,$filter,RestService,NotificationObject){
 	
 
-	/*var object  = NotificationObject.dummy;
-	$scope.objectSet =  object;	*/
+	var object  = NotificationObject.dummy;
+	$scope.objectSet =  object;
 
+$scope.container = true;
 	var height=$(window).height()-200;
-	$scope.objectSet.aAppScoRslt = [];
+	/*$scope.objectSet.aAppScoRslt = [];
 	$scope.objectSet.oApplicant =[];
-	$scope.objectSet.oAppReq.oReq.oApplication.aAssetDetail =[];
+	$scope.objectSet.oAppReq.oReq.oApplication.aAssetDetail =[];*/
 	var nextImg=[];
 	var prevImg=[];
 	$scope.currImg= 0;
@@ -343,7 +344,7 @@
 	var tempReject=[];
 	$scope.setFlag = false;
 	$scope.countSelected="Select";
-	$scope.objectSet.oLosDtls.sStat="";
+/*	$scope.objectSet.oLosDtls.sStat="";*/
 	$('#losStatusId1').val("");
 	$('#losId').val('');
 	$('#losId').css("border","1px solid #cfcfcf");
@@ -393,16 +394,16 @@
 			}else{
 				URL = 'cro2-queue';
 			}
-				RestService.saveToServer(URL,json).then(function(Response){
-					if(Response !=null || Response!= undefined || Response!=""){
-						for(var i in Response){
-							queArray.push(Response[i]);	
-						}
-						$scope.notifarray = queArray;
-						$scope.error ="";
+			RestService.saveToServer(URL,json).then(function(Response){
+				if(Response !=null || Response!= undefined || Response!=""){
+					for(var i in Response){
+						queArray.push(Response[i]);	
 					}
+					$scope.notifarray = queArray;
+					$scope.error ="";
+				}
 
-				});	
+			});	
 
   		}
 	}
@@ -432,10 +433,11 @@
    	                  {value:'RESIDENCE_MOBILE', name:'Residence Mobile'},
    	                  {value:'OFFICE_MOBILE', name:'Office Mobile'}
    	                  ];
-	                  
-	$scope.objectSet.oAppReq.oReq.oApplicant.aEmpl[0].sEmplType = $scope.jobType[0];
+	$scope.addr_type = $scope.addrType[1];   //to set default address
+
+	/*$scope.objectSet.oAppReq.oReq.oApplicant.aEmpl[0].sEmplType = $scope.jobType[0];
 	$scope.addr_type = $scope.addrType[1];
-	$scope.objectSet.oAppReq.oReq.oApplicant.aEmpl[0].iTmWithEmplr =  $scope.timeataddress[0];
+	$scope.objectSet.oAppReq.oReq.oApplicant.aEmpl[0].iTmWithEmplr =  $scope.timeataddress[0];*/
 	// end variable default value section
 	var dataset = [{'Name':'Auto Loan',
 		'ID':'0',
@@ -557,12 +559,18 @@
 		}
 		RestService.saveToServer(URL,json).then(function(Response){
 			if(Response != '')
-				$scope.object = Response;
+				$scope.objectSet = Response;
 			else
-			$scope.object = NotificationObject.dummy();
-			
-
-			$(document.body).find('#cirhtml').attr("data", "").hide();
+			$scope.objectSet = NotificationObject.dummy();
+			$scope.Picked = CustID;
+			$scope.showrefid = "true";
+			$scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
+			var data = 	$scope.notifarray;
+			for (j in data)
+			{if(data[j].sRefID ==  $scope.objectSet.oAppReq.sRefID){
+					$scope.applctnstatus = data[j].sStat;}
+			}
+			/*$(document.body).find('#cirhtml').attr("data", "").hide();
 			$scope.error = "";
 			$scope.done = "";
 			$scope.appScore ='';
@@ -626,71 +634,165 @@
 			$scope.custPresent = false;
 			$scope.otherPresent = false;
 			$scope.extraPresent=false;
-			$scope.evidPresent=false;
+			$scope.evidPresent=false;*/
 			
 		});
 }
+$scope.newApplication = function(){ 
+	if(croQueue){
+	$scope.container = false;
+	}
+		/*if(croQueue){//for CRO1 and CRO9
+			$("#notification-main-container").hide();
+			$("#application-main-container").show();
+		}*/
+		
+}
+$scope.toggleForm= function(){
+	$scope.container = true;
+}
 	
-	$scope.cro_action = function(appID, action){ 
-		$scope.appltnID = appID;
-		$scope.actions = action;
-		if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!croQueue)){
-			var arr=[];
-			if((appID !== "undefined") && (typeof $scope.objectSet.oAppReq !== "undefined")){
-				 if(action == "OnHold"){
-					 console.log("final array : "+JSON.stringify(rejectArray));
-					 var data= $rootScope.rejectArray;
-					 for (j in data){
-								docData[4].Offers.push(data[j]);
-					 }	
-					 $('div[contextmenu="blur"]').addClass("blured");
-					 $('#OfferPanel').slideDown();
-					 $scope.flag = true;
-					 
-					 dataset =docData;
-					 
-					 $scope.OfferArrey =dataset ;
-					 
-					 $scope.AvailebleOffers = $scope.OfferArrey[0].Offers;
-					 
-					 $scope.ID = 0;
-					 
-					 $('#SendOffer').text("Request Document");
-					 
-					 $('#SendOffer').css("width","19%");
-					 
-					 setTimeout(function() { 	
-						 $(document.body).find('div[id^="OfferBox"]').css("background-color","#fff");
-						 $(document.body).find('#OfferBox0').css("background-color","#F4F8F9");
-					 },100);
+$scope.cro_action = function(appID, action){ 
+	$scope.appltnID = appID;
+	$scope.actions = action;
+	if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!croQueue)){
+		var arr=[];
+		if((appID !== "undefined") && (typeof $scope.objectSet.oAppReq !== "undefined")){
+			 if(action == "OnHold"){
+				 console.log("final array : "+JSON.stringify(rejectArray));
+				 var data= $rootScope.rejectArray;
+				 for (j in data){
+							docData[4].Offers.push(data[j]);
+				 }	
+				 $('div[contextmenu="blur"]').addClass("blured");
+				 $('#OfferPanel').slideDown();
+				 $scope.flag = true;
 				 
-				 }else if(action == "Declined"){
-				
-					 $('div[contextmenu="blur"]').addClass("blured");
-					 $('#declinereason').slideDown();
-					 $('#reason1container,#reason2container').text('');
+				 dataset =docData;
 				 
-				 }else{
-						 $('div[contextmenu="blur"]').addClass("blured");
-						 $('#approveReason').show();
-						 $('#appr1Container,#appr2Container').text(''); 
-						$scope.error = "Please select enquiry from Queue...!!!";
-						$scope.done = "";
-				}
+				 $scope.OfferArrey =dataset ;
+				 
+				 $scope.AvailebleOffers = $scope.OfferArrey[0].Offers;
+				 
+				 $scope.ID = 0;
+				 
+				 $('#SendOffer').text("Request Document");
+				 
+				 $('#SendOffer').css("width","19%");
+				 
+				 setTimeout(function() { 	
+					 $(document.body).find('div[id^="OfferBox"]').css("background-color","#fff");
+					 $(document.body).find('#OfferBox0').css("background-color","#F4F8F9");
+				 },100);
+			 
+			 }else if(action == "Declined"){
+			
+				 $('div[contextmenu="blur"]').addClass("blured");
+				 $('#declinereason').slideDown();
+				 $('#reason1container,#reason2container').text('');
+			 
+			 }else{
+					 $('div[contextmenu="blur"]').addClass("blured");
+					 $('#approveReason').show();
+					 $('#appr1Container,#appr2Container').text(''); 
+					$scope.error = "Please select enquiry from Queue...!!!";
+					$scope.done = "";
+			}
 
 		}else if($scope.applctnstatus == null){
-		
-			$scope.error = "Application status is not defined...!!!";
-			$scope.done = "";
-		
-		}else{
-			$scope.error = "Application has already taken an action...!!!";
-			$scope.done = "";
-		}
-		
-		$scope.showrefid = "true";
+	
+		$scope.error = "Application status is not defined...!!!";
+		$scope.done = "";
+	
+	}else{
+		$scope.error = "Application has already taken an action...!!!";
+		$scope.done = "";
 	}
-	 $(document.body).on("click","#SendOffer",function(){
+	
+	$scope.showrefid = "true";
+}
+
+$scope.updateStatus=function() {  
+	var offers={'offers':[],'documents':[]};
+	if(offersAllowed)
+	{
+	  for(var i=0;i<dataset.length;i++)
+	  {for(var j=0;j<dataset[i].Offers.length;j++)
+	   {if((typeof dataset[i].Offers[j].selected != 'undefined'))
+	    {
+		   if($scope.flag == true){
+				offers.documents.push(dataset[i].Offers[j]);
+				$scope.flag == false;
+		   }
+		   else{
+				offers.offers.push(dataset[i].Offers[j]);
+		   }
+	    }
+	   }
+	  }
+	 console.log("documents :"+JSON.stringify(offers));
+	 $scope.offrData = offers.documents; 
+     $('#OfferPanel').slideUp();
+     $('div[contextmenu="blur"]').removeClass("blured");
+	 } 
+}
+	$scope.Load_Offer = function(NodeID,Obj){
+		var BoxID = Obj.currentTarget.attributes.id.nodeValue;
+		$('div[id^='+BoxID.slice(0,BoxID.length-1)+']').css("background-color","#fff");
+		$('#'+BoxID+'').css("background-color","#F4F8F9");
+		for(var i=0; i<dataset.length; i++)
+		{if(dataset[i].ID == NodeID)
+		{	$scope.AvailebleOffers = dataset[i].Offers;
+			$scope.ID = NodeID;
+		}
+		}
+	}
+	
+	$scope.checkboxUpdate = function(Obj,id){ 
+		if(Obj){
+			
+			if (typeof dataset[$scope.ID].selected != "undefined") { 
+			 
+			 	dataset[$scope.ID].selected.push(id);	
+	      		
+	      		if(typeof dataset[$scope.ID].Offers[id].selected == "undefined"){ 
+	      			$.extend( dataset[$scope.ID].Offers[id], {'selected':'true'});
+	      		}
+
+	    	} else {
+			  
+				  var selected={'selected':[]};
+				  
+				  $.extend( dataset[$scope.ID], selected);
+				  
+				  dataset[$scope.ID].selected.push(id);	
+	 	  	
+		 	  	if(typeof dataset[$scope.ID].Offers[id].selected == "undefined"){
+		 	  		 
+		 	  		 $.extend( dataset[$scope.ID].Offers[id], {'selected':'true'});
+		 	  	}
+	        }	
+	  
+	  } else {
+		
+		dataset[$scope.ID].selected.splice($.inArray(id, dataset[$scope.ID].selected),1);
+		
+		delete dataset[$scope.ID].Offers[id].selected;
+	  }
+
+	  if((typeof dataset[$scope.ID].selected !="undefined") && (dataset[$scope.ID].selected.length > 0)){
+		
+		$('#active'+$scope.ID+'').css("background-color","green");
+		
+		$scope.OfferArrey = dataset;
+	  
+	  } else {
+		$('#active'+$scope.ID+'').css("background-color","#fff");
+	  }
+	}
+
+
+$(document.body).on("click","#SendOffer",function(){
 		 if($('#descReason').val()!=''){
 		 $("#approvemsg").text("");
 		 $scope.updateStatus();
@@ -763,33 +865,9 @@
 			$scope.error= "Sorry...Unable to update your action !!";
 		}
 	setTimeout(function() { $scope.error = "";},1500);
-	});	}
- $scope.updateStatus=function()
- {  
-		var offers={'offers':[],'documents':[]};
-		if(offersAllowed)
-		{
-		  for(var i=0;i<dataset.length;i++)
-		  {for(var j=0;j<dataset[i].Offers.length;j++)
-		   {if((typeof dataset[i].Offers[j].selected != 'undefined'))
-		    {
-			   if($scope.flag == true){
-					offers.documents.push(dataset[i].Offers[j]);
-					$scope.flag == false;
-			   }
-			   else{
-					offers.offers.push(dataset[i].Offers[j]);
-			   }
-		    }
-		   }
-		  }
-		 console.log("documents :"+JSON.stringify(offers));
-		 $scope.offrData = offers.documents; 
-	     $('#OfferPanel').slideUp();
-	     $('div[contextmenu="blur"]').removeClass("blured");
-	     } 
-	};
-
+	});	
+  }
+ 
 	$(document.body).on("click","#back",function(){
 		// alert("Closing...");
 		$("#application-main-container").slideUp();				
@@ -803,14 +881,6 @@
 		});
 	});
 
-	$scope.newApplication = function(refid)
-	{ 
-		if(croQueue){//for CRO1 and CRO9
-			$("#notification-main-container").hide();
-			$("#application-main-container").show();
-		}
-		
-	}
 	function getTime(value, array){
 		var index;
 		jQuery.each(array,function(val,text){
@@ -824,63 +894,6 @@
 		});
 		return index;
 	}
-	
-	$scope.Load_Offer = function(NodeID,Obj){
-		var BoxID = Obj.currentTarget.attributes.id.nodeValue;
-		$('div[id^='+BoxID.slice(0,BoxID.length-1)+']').css("background-color","#fff");
-		$('#'+BoxID+'').css("background-color","#F4F8F9");
-		for(var i=0; i<dataset.length; i++)
-		{if(dataset[i].ID == NodeID)
-		{	$scope.AvailebleOffers = dataset[i].Offers;
-			$scope.ID = NodeID;
-		}
-		}
-	}
-	
-	$scope.checkboxUpdate = function(Obj,id){ 
-		if(Obj){
-			
-			if (typeof dataset[$scope.ID].selected != "undefined") { 
-			 
-			 	dataset[$scope.ID].selected.push(id);	
-	      		
-	      		if(typeof dataset[$scope.ID].Offers[id].selected == "undefined"){ 
-	      			$.extend( dataset[$scope.ID].Offers[id], {'selected':'true'});
-	      		}
-
-	    	} else {
-			  
-				  var selected={'selected':[]};
-				  
-				  $.extend( dataset[$scope.ID], selected);
-				  
-				  dataset[$scope.ID].selected.push(id);	
-	 	  	
-		 	  	if(typeof dataset[$scope.ID].Offers[id].selected == "undefined"){
-		 	  		 
-		 	  		 $.extend( dataset[$scope.ID].Offers[id], {'selected':'true'});
-		 	  	}
-	        }	
-	  
-	  } else {
-		
-		dataset[$scope.ID].selected.splice($.inArray(id, dataset[$scope.ID].selected),1);
-		
-		delete dataset[$scope.ID].Offers[id].selected;
-	  }
-
-	  if((typeof dataset[$scope.ID].selected !="undefined") && (dataset[$scope.ID].selected.length > 0)){
-		
-		$('#active'+$scope.ID+'').css("background-color","green");
-		
-		$scope.OfferArrey = dataset;
-	  
-	  } else {
-		$('#active'+$scope.ID+'').css("background-color","#fff");
-	  }
-	}
-
-
 	$(document.body).on("click","#closeOffer" ,function() {
 		  
 		  docData[4].Offers=[];

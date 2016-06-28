@@ -11,7 +11,6 @@
 				'ngAnimate',
 				'ui.bootstrap',
 				'angular-loading-bar',
-				'ng-acl', 
 				'ngFileUpload',
 				'gonogo.analytics',
 				'gonogo.login',
@@ -837,9 +836,9 @@
 				$("#UserContainer").hide();
 			});
 
-			$(document.body).on("click", "#ref", function() {
+			/*$(document.body).on("click", "#ref", function() {
 				all_list();
-			});
+			});*/
 
 
 			function load_fromkyc()

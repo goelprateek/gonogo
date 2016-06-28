@@ -5,9 +5,9 @@
 	var app = angular.module('gonogo.analytics' ,['gonogo-directives']);
 	
 
-	app.controller('AnalyticsController',["$scope","$rootScope","$http","$timeout","$cookies","Rules"
+	app.controller('AnalyticsController',["$scope","$rootScope","$http","$timeout","Rules"
 	                                        ,"Score", "Policy","Decision",'RestService','$filter', 
-	                                        function($scope,$rootScope, $http, $timeout,$cookies,Rules,Score, Policy,Decision,RestService,$filter) {
+	                                        function($scope,$rootScope, $http, $timeout,Rules,Score, Policy,Decision,RestService,$filter) {
 			 
 		
 		// chart functionality

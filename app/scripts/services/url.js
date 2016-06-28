@@ -122,7 +122,7 @@
 	    };
   	});
 
- 	app.service("UserService",['$location','AclService',function($location,AclService){
+ 	app.service("UserService",['$location',function($location){
  		
  		var fetchCurrentUser = function(){
     		
@@ -188,17 +188,6 @@
 	    };
 
  	}]);
-
- 	app.run(["AclService",function(AclService){
-		AclService.addRole("4019");
-		AclService.addRole("CRO1");
-		
-		AclService.addResource("Application");
-		
-		AclService.allow("CRO1","Application","Reinitiate");
-		AclService.allow("CRO1","Application","Update");
-	}]);
-	
 	
 }).call(this)
 
