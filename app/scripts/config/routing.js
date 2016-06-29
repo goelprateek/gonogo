@@ -77,12 +77,23 @@
 	}]);
 
 	app.config(['cfpLoadingBarProvider','$compileProvider', function(cfpLoadingBarProvider,$compileProvider) {
-		
 		cfpLoadingBarProvider.includeSpinner = true;
 		cfpLoadingBarProvider.parentSelector = 'nav';
 		$compileProvider.debugInfoEnabled(false);
 		
 	}]);
+
+	
+
+	app.run(function($rootScope, $location, APP_CONST){
+
+		$rootScope.$on('$routeChangeStart', function(event, nextLoc, currentLoc){
+			var guid = localStorage.getItem('GUID');
+			if (_.isUndefined(guid) || _.isNull(guid) ){
+				$location.path( APP_CONST.getConst('APP_CONTEXT'));
+			}	
+		})		
+	});
 
 	
 }).call(this)

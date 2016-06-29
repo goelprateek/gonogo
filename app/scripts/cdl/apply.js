@@ -5,8 +5,8 @@
 
 	var app = angular.module('gonogo.cdl');
 
-	app.controller("ApplyController", [  "$scope", "$rootScope", "$http", "$timeout", "$window", "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval", function(
-	 $scope,$rootScope,$http,$timeout,$window,$location,$q,APP_CONST,sharedService,RestService,$interval) {
+	app.controller("ApplyController", [  "$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log', function(
+	 $scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log) {
 
 
 	$scope.dateOptions = {
@@ -22,7 +22,7 @@
 	$scope.assetArray = [];
 	try {
 		var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
-		console.log("userdata :"+JSON.stringify(userdata));
+		$log.debug("userdata :"+JSON.stringify(userdata));
 		$scope.username = userdata.name;
 		$scope.useremail = userdata.email;
 		$scope.image = userdata.userImage;
@@ -698,8 +698,8 @@
 		$("#KYCList").addClass("active");
 	}*/
 	
-	$scope.otpService=function()
-	{	$scope.ojs={	  "USER_ID":$scope.userid, "PASSWORD":$scope.ePassword,
+	$scope.otpService=function(){	
+		$scope.ojs={	  "USER_ID":$scope.userid, "PASSWORD":$scope.ePassword,
 						  "INSTITUTION_ID":$scope.InstitutionID,
 						  "inputJson_":{ "MOBILE-NUMBER":$("#tmob").val() }
 					}	

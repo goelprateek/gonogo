@@ -33,7 +33,7 @@
 					'sInstId': $scope.InstitutionID,
 					'sReportType': 'Credit Report',
 					'sProductType':'Consumer Durable',
-					'sReportCycle': 'MTD'
+					'sReportCycle': 'YTD'
 			}
 			
 			var _url = APP_CONST.getConst('BASE_URL_GNG');

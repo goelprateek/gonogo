@@ -21,7 +21,7 @@
 		}
 	});
 
-	app.service("RestService",['$q','$http','APP_CONST',function($q,$http,APP_CONST){
+	app.service("RestService",['$q','$http','$log','APP_CONST',function($q,$http,$log,APP_CONST){
 			
 		var _saveToServer = function(url,data){
 			var defere = $q.defer(),
@@ -41,8 +41,10 @@
 			var defere = $q.defered();
 			
 			$http.get(url).success(function(resp){
+				$log.debug(resp);
 				defere.resolve(resp);
 			}).error(function(error){
+				$log.error(error);
 				defere.resolve(error);
 			})
 			return defere.promise;
@@ -59,10 +61,10 @@
                 responseType : 'arraybuffer',
                })
                .success(function (data) {
-                   console.debug("SUCCESS");
+                   $log.debug("SUCCESS");
                    deferred.resolve(data);
                }).error(function (data) {
-                    console.error("ERROR");
+                    $log.error("ERROR");
                     deferred.reject(data);
                });
 			
@@ -80,8 +82,10 @@
 
 			var defer = $q.defer();
 			$http.post(url,data).success(function(data){
+				$log.info(data);
 				defer.resolve(data);
 			}).error(function(data){
+				$log.error(data);
 				defer.reject(data);
 			});
 			return defer.promise;

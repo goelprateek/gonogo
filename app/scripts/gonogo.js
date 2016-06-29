@@ -16,11 +16,14 @@
 				'gonogo.login',
 				'gonogo.directives',
 				'gonogo.cdl',
-				'gonogo.services'
+				'gonogo.services',
+				'gonogo.utilities'
 	]);
 	
-	app.controller("Maincontroller",['$scope', '$rootScope', '$http', 'Validation', '$timeout','RestService','$location','UserService','APP_CONST',function($scope, $rootScope, $http, Validation, $timeout,RestService,$location,UserService,APP_CONST) {
+	app.controller("Maincontroller",['$scope', '$log', 'Validation', '$timeout','RestService','$location','UserService','APP_CONST',function($scope, $log, Validation, $timeout,RestService,$location,UserService,APP_CONST) {
+			
 		
+			
 		$scope.isSpecificPage = function() {
             var path;
             return path = $location.path(),  _.contains(["/"], path) ;
@@ -79,7 +82,7 @@
 				$scope.userid = userdata.userid; $scope.color = userdata.color;
 				
 			}catch (e) {
-				//console.log(e);
+				$log.log(e);
 			}
 
 			if ($scope.InstitutionID == 4019 || $scope.InstitutionID == 4011) {
