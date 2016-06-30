@@ -138,7 +138,7 @@
                 "dLoanAmt": "",
                 "iLoanTenor": "",
                 "oProperty": "",
-                "sLnPurp": "",
+                "sLnPurp": null,
                 "dLnApr": "",
                 "dEmi": "",
                 "iAdvEmi": "",
@@ -322,7 +322,11 @@
 	var object  = NotificationObject.dummy;
 	$scope.objectSet =  object;
 
-$scope.container = true;
+	$scope.container = true;
+	$scope.toggleDocPanel = false;
+	$scope.toggleApprvPanel = false;
+	$scope.toggleDclnPanel = false;
+	$scope.invalidMsg = false;
 	var height=$(window).height()-200;
 	/*$scope.objectSet.aAppScoRslt = [];
 	$scope.objectSet.oApplicant =[];
@@ -358,10 +362,10 @@ $scope.container = true;
 	var current1 = 0;
 	var queArray = [];
 	
-	 $scope.loadData = function(){
+	$scope.loadData = function(){
 		 $scope.minVal = $scope.minVal+$scope.limit;
 		 polling($scope.minVal);
-	    }
+	 }
 	
 	polling($scope.minVal);
 	
@@ -371,26 +375,27 @@ $scope.container = true;
 			if(!crodefault)
 			{
 				if($scope.userid=="599"){
-					var json ={'sCroID':"STP_PL", //default
+					var json ={'sCroID':"STP_PL", 
 							'sInstID':$scope.InstitutionID, 
 							'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit }
 				}else{
-					var json ={'sCroID':"STA", //default
+					var json ={'sCroID':"STA", 
 							'sInstID':$scope.InstitutionID,
 							'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit}
 				}
 			}else if($scope.userid=="586"){
-				var json ={'sCroID':"PL_QUEUE", //default
+				var json ={'sCroID':"PL_QUEUE", 
 						'sInstID':$scope.InstitutionID, 
 						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit }
 			}
-			else{var json ={'sCroID':"default", //default
+			else{var json ={'sCroID':"default", 
 						'sInstID':$scope.InstitutionID, 
-						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit }
+						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit }//,'sCriteria' :"SIKKIM" 
 				}
 			var URL;
 			if(croQueue){
 				URL = 'cro-queue';
+				//URL = 'cro-queue-criteria';
 			}else{
 				URL = 'cro2-queue';
 			}
@@ -441,99 +446,110 @@ $scope.container = true;
 	// end variable default value section
 	var dataset = [{'Name':'Auto Loan',
 		'ID':'0',
-		'Icon':'img/icons_auto.png',
+		'Icon':'images/icons-auto.png',
 		'Count':'2',
 		'Type' : 'Approve',
-		'Offers':[{'Name':'Refinance your Auto Loan at 12% APR','Icon':'img/icons_auto.png'},
-		          {'Name':'Get up-to 60% discounts on Auto Insurance ','Icon':'img/icons_auto.png'}]
+		'Offers':[{'Name':'Refinance your Auto Loan at 12% APR','Icon':'images/icons-auto.png'},
+		          {'Name':'Get up-to 60% discounts on Auto Insurance ','Icon':'images/icons-auto.png'}]
 	},
 	{'Name':'Personal Loan',
 		'ID':'1',
-		'Icon':'img/icon-personal-loan.png',
+		'Icon':'images/icon-personal-loan.png',
 		'Count':'1',
 		'Type' : 'Approve',
-		'Offers':[{'Name':'Avail 10% of your sanctioned Home Loan amount at zero processing charges','Icon':'img/icon-personal-loan.png'}]
+		'Offers':[{'Name':'Avail 10% of your sanctioned Home Loan amount at zero processing charges','Icon':'images/icon-personal-loan.png'}]
 	},
 	{'Name':'Credit Card',
 		'ID':'2',
-		'Icon':'img/Credit_Card.png',
+		'Icon':'images/Credit_Card.png',
 		'Count':'4',
 		'Type' : 'Approve',
-		'Offers':[{'Name':'5000 INR cash-back if you pay the Home Loan processing fee using your new credit card','Icon':'img/Credit_Card.png'},
-		          {'Name':'0% on New purchases for the first three months ','Icon':'img/Credit_Card.png'},
-		          {'Name':'Credit Card with no credit limit cap','Icon':'img/Credit_Card.png'},
-		          {'Name':'Consolidate your balances for 6% APR for the first 6 months','Icon':'img/Credit_Card.png'}]
+		'Offers':[{'Name':'5000 INR cash-back if you pay the Home Loan processing fee using your new credit card','Icon':'images/Credit_Card.png'},
+		          {'Name':'0% on New purchases for the first three months ','Icon':'images/Credit_Card.png'},
+		          {'Name':'Credit Card with no credit limit cap','Icon':'images/Credit_Card.png'},
+		          {'Name':'Consolidate your balances for 6% APR for the first 6 months','Icon':'images/Credit_Card.png'}]
 	},
 	{'Name':'Home Insurance',
 		'ID':'3',
-		'Icon':'img/Home_Insurance.png',
+		'Icon':'images/Home_Insurance.png',
 		'Count':'3',
 		'Type' : 'Approve',
-		'Offers':[{'Name':'50% discount on Premium for long-term Home Insurance policy ','Icon':'img/Home_Insurance.png'},
-		          {'Name':'10% discount on the Home Content Insurance for covers upto 4 Lakh Rupees ','Icon':'img/Home_Insurance.png'},
-		          {'Name':'Protect your home for 20 years with a single premium','Icon':'img/Home_Insurance.png'}]
-	}],
-	docData = [{'Name':'Address Proof',
+		'Offers':[{'Name':'50% discount on Premium for long-term Home Insurance policy ','Icon':'images/Home_Insurance.png'},
+		          {'Name':'10% discount on the Home Content Insurance for covers upto 4 Lakh Rupees ','Icon':'images/Home_Insurance.png'},
+		          {'Name':'Protect your home for 20 years with a single premium','Icon':'images/Home_Insurance.png'}]
+	}];
+
+	var docData = [{'Name':'Address Proof',
 		'ID':'0',
-		'Icon':'img/address proof.png',
+		'Icon':'images/address-proof.png',
 		'Count':'1',
 		'Type' : 'Approve',
-		'Offers':[{'Name':'Valid Passport','Icon':'img/address proof.png','Code':'101'},
-			        {'Name':'Latest Electricity Bill','Icon':'img/address proof.png','Code':'102'},
-			        {'Name':'Telephone Bill','Icon':'img/address proof.png','Code':'103'},
-			        {'Name':'Driving License','Icon':'img/address proof.png','Code':'104'},
-			        {'Name':'Ration Card','Icon':'img/address proof.png','Code':'105'},
-			        {'Name':'Bank Account Statement/Pass Book 1st page','Icon':'img/address proof.png','Code':'106'},
-			        {'Name':'Rent Agreement','Icon':'img/address proof.png','Code':'107'},
-			        {'Name':'Gas Connection Bill or Post Paid Mobile Bill with full address ','Icon':'img/address proof.png','Code':'108'},
-			        {'Name':'Property Tax receipt or Water Bill','Icon':'img/address proof.png','Code':'109'},
-			        {'Name':'Voter’s Identity card','Icon':'img/address proof.png','Code':'110'},
-			        {'Name':'Aadhar UID Card','Icon':'img/address proof.png','Code':'111'}]
+		'Offers':[{'Name':'Valid Passport','Icon':'images/address-proof.png','Code':'101'},
+			        {'Name':'Latest Electricity Bill','Icon':'images/address-proof.png','Code':'102'},
+			        {'Name':'Telephone Bill','Icon':'images/address-proof.png','Code':'103'},
+			        {'Name':'Driving License','Icon':'images/address-proof.png','Code':'104'},
+			        {'Name':'Ration Card','Icon':'images/address-proof.png','Code':'105'},
+			        {'Name':'Bank Account Statement/Pass Book 1st page','Icon':'images/address-proof.png','Code':'106'},
+			        {'Name':'Rent Agreement','Icon':'images/address-proof.png','Code':'107'},
+			        {'Name':'Gas Connection Bill or Post Paid Mobile Bill with full address ','Icon':'images/address-proof.png','Code':'108'},
+			        {'Name':'Property Tax receipt or Water Bill','Icon':'images/address-proof.png','Code':'109'},
+			        {'Name':'Voter’s Identity card','Icon':'images/address-proof.png','Code':'110'},
+			        {'Name':'Aadhar UID Card','Icon':'images/address-proof.png','Code':'111'}]
 	},
 	{'Name':'DOB Proof',
 		'ID':'1',
-		'Icon':'img/date of birth proof.png',
+		'Icon':'images/date of birth proof.png',
 		'Count':'2',
 		'Type' : 'Approve',
-		'Offers':[{'Name':'Valid Passport','Icon':'img/date of birth proof.png','Code':'101'},
-			        {'Name':'PAN Card','Icon':'img/date of birth proof.png','Code':'112'},
-			        {'Name':'Driving License','Icon':'img/date of birth proof.png','Code':'104'},
-			        {'Name':'Birth Certificate (Govt agency)','Icon':'img/date of birth proof.png','Code':'113'},
-			        {'Name':'School Leaving certificate (10th/12th)','Icon':'img/date of birth proof.png','Code':'114'},
-			        {'Name':'Voter ID Card','Icon':'img/date of birth proof.png','Code':'110'},
-			        {'Name':'Pension Certificate / Govt. ID Card / Aadhar UID Card','Icon':'img/date of birth proof.png','Code':'111'}]
+		'Offers':[{'Name':'Valid Passport','Icon':'images/date of birth proof.png','Code':'101'},
+			        {'Name':'PAN Card','Icon':'images/date of birth proof.png','Code':'112'},
+			        {'Name':'Driving License','Icon':'images/date of birth proof.png','Code':'104'},
+			        {'Name':'Birth Certificate (Govt agency)','Icon':'images/date of birth proof.png','Code':'113'},
+			        {'Name':'School Leaving certificate (10th/12th)','Icon':'images/date of birth proof.png','Code':'114'},
+			        {'Name':'Voter ID Card','Icon':'images/date of birth proof.png','Code':'110'},
+			        {'Name':'Pension Certificate / Govt. ID Card / Aadhar UID Card','Icon':'images/date of birth proof.png','Code':'111'}]
 	},
 	{'Name':'Identification Proof',
 		'ID':'2',
-		'Icon':'img/identification number.png',
+		'Icon':'images/identification number.png',
 		'Count':'3',
 		'Type' : 'Approve',
-		'Offers':[{'Name':'Valid Passport','Icon':'img/identification number.png','Code':'101'},
-			        {'Name':'PAN Card','Icon':'img/identification number.png','Code':'112'},
-			        {'Name':'Driving License','Icon':'img/identification number.png','Code':'104'},
-			        {'Name':'Voter’s Identity Card','Icon':'img/identification number.png','Code':'110'},
-			        {'Name':'Aadhar UID card','Icon':'img/identification number.png','Code':'111'},
-			        {'Name':'Bank Passbook with photo','Icon':'img/identification number.png','Code':'115'}]
+		'Offers':[{'Name':'Valid Passport','Icon':'images/identification number.png','Code':'101'},
+			        {'Name':'PAN Card','Icon':'images/identification number.png','Code':'112'},
+			        {'Name':'Driving License','Icon':'images/identification number.png','Code':'104'},
+			        {'Name':'Voter’s Identity Card','Icon':'images/identification number.png','Code':'110'},
+			        {'Name':'Aadhar UID card','Icon':'images/identification number.png','Code':'111'},
+			        {'Name':'Bank Passbook with photo','Icon':'images/identification number.png','Code':'115'}]
 	},
 	{'Name':'Signature Proof',
 		'ID':'3',
-		'Icon':'img/signature proof.png',
+		'Icon':'images/signature proof.png',
 		'Count':'4',
-		'Offers':[{'Name':'Signature verification from bank','Icon':'img/signature proof.png','Code':'116'},
-			        {'Name':'Passport Copy','Icon':'img/signature proof.png','Code':'101'},
-			        {'Name':'PAN Card','Icon':'img/signature proof.png','Code':'112'},
-			        {'Name':'Driving license with photograph and signature','Icon':'img/signature proof.png','Code':'104'},
-			        {'Name':'Clearance of processing fees cheque','Icon':'img/signature proof.png','Code':'117'}]
+		'Offers':[{'Name':'Signature verification from bank','Icon':'images/signature proof.png','Code':'116'},
+			        {'Name':'Passport Copy','Icon':'images/signature proof.png','Code':'101'},
+			        {'Name':'PAN Card','Icon':'images/signature proof.png','Code':'112'},
+			        {'Name':'Driving license with photograph and signature','Icon':'images/signature proof.png','Code':'104'},
+			        {'Name':'Clearance of processing fees cheque','Icon':'images/signature proof.png','Code':'117'}]
 	},
 	{'Name':'Rejected Proof',
 		'ID':'4',
-		'Icon':'img/rejected proof.png',
+		'Icon':'images/rejected proof.png',
 		'Count':'5',
 		'Offers':[]
 	}];
+
+	 $scope.OfferArrey =docData ;
+	 $scope.AvailebleOffers = $scope.OfferArrey[0].Offers;
+	 $scope.ID = 0;
+	/* $scope.OfferArrey[0].addClass("sayali");*/
+
 	$scope.aplcntType=[{value:"SAL","text":"Salaried"},
 				               	{value:"SEB","text":"Self Employed Business"},
 				               	{value:"SEP","text":"Self Employed Professional"}];
+
+    $scope.findAddressType = function(orignal,final){
+    	return (angular.lowercase(orignal) == angular.lowercase(final));
+    }				               	
 
 	$scope.load_details = function(CustID,flag)
 	{  
@@ -566,10 +582,11 @@ $scope.container = true;
 			$scope.showrefid = "true";
 			$scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
 			var data = 	$scope.notifarray;
-			for (j in data)
+			for (var j in data)
 			{if(data[j].sRefID ==  $scope.objectSet.oAppReq.sRefID){
 					$scope.applctnstatus = data[j].sStat;}
 			}
+			$scope.croDecision = Response.aCroDec;
 			/*$(document.body).find('#cirhtml').attr("data", "").hide();
 			$scope.error = "";
 			$scope.done = "";
@@ -641,62 +658,51 @@ $scope.container = true;
 $scope.newApplication = function(){ 
 	if(croQueue){
 	$scope.container = false;
-	}
-		/*if(croQueue){//for CRO1 and CRO9
-			$("#notification-main-container").hide();
-			$("#application-main-container").show();
-		}*/
-		
+	}		
 }
 $scope.toggleForm= function(){
-	$scope.container = true;
+	$scope.container = !$scope.container;
 }
 	
 $scope.cro_action = function(appID, action){ 
 	$scope.appltnID = appID;
-	$scope.actions = action;
 	if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!croQueue)){
 		var arr=[];
 		if((appID !== "undefined") && (typeof $scope.objectSet.oAppReq !== "undefined")){
 			 if(action == "OnHold"){
-				 console.log("final array : "+JSON.stringify(rejectArray));
-				 var data= $rootScope.rejectArray;
+				/* var data= $rootScope.rejectArray;
 				 for (j in data){
 							docData[4].Offers.push(data[j]);
-				 }	
-				 $('div[contextmenu="blur"]').addClass("blured");
-				 $('#OfferPanel').slideDown();
-				 $scope.flag = true;
+				 }	*/
+				 /*$('div[contextmenu="blur"]').addClass("blured");
+				 $('#OfferPanel').slideDown();*/
+				 //blurr main container
+
+				 $scope.toggleDocPanel = !$scope.toggleDocPanel;
+				 $scope.docOfferFlag = true;
+								 
 				 
-				 dataset =docData;
+				/* $('#SendOffer').css("width","19%");*/
 				 
-				 $scope.OfferArrey =dataset ;
-				 
-				 $scope.AvailebleOffers = $scope.OfferArrey[0].Offers;
-				 
-				 $scope.ID = 0;
-				 
-				 $('#SendOffer').text("Request Document");
-				 
-				 $('#SendOffer').css("width","19%");
-				 
-				 setTimeout(function() { 	
+				 /*setTimeout(function() { 	
 					 $(document.body).find('div[id^="OfferBox"]').css("background-color","#fff");
 					 $(document.body).find('#OfferBox0').css("background-color","#F4F8F9");
-				 },100);
+				 },100);*/
 			 
 			 }else if(action == "Declined"){
-			
+			/*
 				 $('div[contextmenu="blur"]').addClass("blured");
 				 $('#declinereason').slideDown();
-				 $('#reason1container,#reason2container').text('');
-			 
+				 $('#reason1container,#reason2container').text('');*/
+			 	$scope.toggleDclnPanel = !$scope.toggleDclnPanel;
+
 			 }else{
-					 $('div[contextmenu="blur"]').addClass("blured");
+					/* $('div[contextmenu="blur"]').addClass("blured");
 					 $('#approveReason').show();
 					 $('#appr1Container,#appr2Container').text(''); 
 					$scope.error = "Please select enquiry from Queue...!!!";
-					$scope.done = "";
+					$scope.done = "";*/
+					$scope.toggleApprvPanel = !$scope.toggleApprvPanel;
 			}
 
 		}else if($scope.applctnstatus == null){
@@ -712,37 +718,58 @@ $scope.cro_action = function(appID, action){
 	$scope.showrefid = "true";
 }
 
-$scope.updateStatus=function() {  
+$scope.closeDclnPanel=function(){
+	/* $('#declinereason').slideUp();
+	 $('div[contextmenu="blur"]').removeClass("blured");
+	 $('#reason1container , #reason2container').text('');
+	 $('#declinemsg').text("");*/
+	 $scope.dclnRemark = '';
+	 $scope.dclnSubTo = '';
+	 $scope.toggleDclnPanel = !$scope.toggleDclnPanel;
+}
+$scope.closeApprvPanel=function(){
+	/* $('#approveReason').slideUp();
+	 $('div[contextmenu="blur"]').removeClass("blured");
+	 $('#appr1Container , #appr2Container ,#approvemsg').text('');
+	 $('#ApprvValue , #emiValue , #tenorValue').css("border","1px solid #999");
+	 $('#ApprvValue').val("");
+	 $('#ApprvValue').val($scope.objectSet.aCroDec[0].dAmtAppr);*/
+	 	$scope.apprvRemark = '';
+	 	$scope.apprvSubTo = '';
+	 	$scope.croDecision = '';
+	 	console.log("apprv : "+$scope.apprvRemark+" sfs:"+$scope.apprvSubTo);
+	 	$scope.toggleApprvPanel = !$scope.toggleApprvPanel;
+}
+$scope.setSelected=function() {  
 	var offers={'offers':[],'documents':[]};
 	if(offersAllowed)
 	{
-	  for(var i=0;i<dataset.length;i++)
-	  {for(var j=0;j<dataset[i].Offers.length;j++)
-	   {if((typeof dataset[i].Offers[j].selected != 'undefined'))
+	  for(var i=0;i<docData.length;i++)
+	  {for(var j=0;j<docData[i].Offers.length;j++)
+	   {if((typeof docData[i].Offers[j].selected != 'undefined'))
 	    {
-		   if($scope.flag == true){
-				offers.documents.push(dataset[i].Offers[j]);
-				$scope.flag == false;
+		   if($scope.docOfferFlag == true){
+				offers.documents.push(docData[i].Offers[j]);
+				$scope.docOfferFlag == false;
 		   }
 		   else{
-				offers.offers.push(dataset[i].Offers[j]);
+				offers.offers.push(docData[i].Offers[j]);
 		   }
 	    }
 	   }
 	  }
-	 console.log("documents :"+JSON.stringify(offers));
 	 $scope.offrData = offers.documents; 
-     $('#OfferPanel').slideUp();
-     $('div[contextmenu="blur"]').removeClass("blured");
+    /* $('#OfferPanel').slideUp();
+     $('div[contextmenu="blur"]').removeClass("blured");*/
 	 } 
 }
 	$scope.Load_Offer = function(NodeID,Obj){
 		var BoxID = Obj.currentTarget.attributes.id.nodeValue;
 		$('div[id^='+BoxID.slice(0,BoxID.length-1)+']').css("background-color","#fff");
 		$('#'+BoxID+'').css("background-color","#F4F8F9");
-		for(var i=0; i<dataset.length; i++)
-		{if(dataset[i].ID == NodeID)
-		{	$scope.AvailebleOffers = dataset[i].Offers;
+		for(var i=0; i<docData.length; i++)
+		{if(docData[i].ID == NodeID)
+		{	$scope.AvailebleOffers = docData[i].Offers;
 			$scope.ID = NodeID;
 		}
 		}
@@ -751,48 +778,108 @@ $scope.updateStatus=function() {
 	$scope.checkboxUpdate = function(Obj,id){ 
 		if(Obj){
 			
-			if (typeof dataset[$scope.ID].selected != "undefined") { 
+			if (typeof docData[$scope.ID].selected != "undefined") { 
 			 
-			 	dataset[$scope.ID].selected.push(id);	
+			 	docData[$scope.ID].selected.push(id);	
 	      		
-	      		if(typeof dataset[$scope.ID].Offers[id].selected == "undefined"){ 
-	      			$.extend( dataset[$scope.ID].Offers[id], {'selected':'true'});
+	      		if(typeof docData[$scope.ID].Offers[id].selected == "undefined"){ 
+	      			$.extend( docData[$scope.ID].Offers[id], {'selected':'true'});
 	      		}
 
 	    	} else {
 			  
 				  var selected={'selected':[]};
 				  
-				  $.extend( dataset[$scope.ID], selected);
+				  $.extend( docData[$scope.ID], selected);
 				  
-				  dataset[$scope.ID].selected.push(id);	
+				  docData[$scope.ID].selected.push(id);	
 	 	  	
-		 	  	if(typeof dataset[$scope.ID].Offers[id].selected == "undefined"){
+		 	  	if(typeof docData[$scope.ID].Offers[id].selected == "undefined"){
 		 	  		 
-		 	  		 $.extend( dataset[$scope.ID].Offers[id], {'selected':'true'});
+		 	  		 $.extend( docData[$scope.ID].Offers[id], {'selected':'true'});
 		 	  	}
 	        }	
 	  
 	  } else {
 		
-		dataset[$scope.ID].selected.splice($.inArray(id, dataset[$scope.ID].selected),1);
-		
-		delete dataset[$scope.ID].Offers[id].selected;
+		docData[$scope.ID].selected.splice($.inArray(id, docData[$scope.ID].selected),1);
+		delete docData[$scope.ID].Offers[id].selected;
 	  }
 
-	  if((typeof dataset[$scope.ID].selected !="undefined") && (dataset[$scope.ID].selected.length > 0)){
-		
+	  if((typeof docData[$scope.ID].selected !="undefined") && (docData[$scope.ID].selected.length > 0)){
 		$('#active'+$scope.ID+'').css("background-color","green");
-		
-		$scope.OfferArrey = dataset;
-	  
+		$scope.OfferArrey = docData;
 	  } else {
 		$('#active'+$scope.ID+'').css("background-color","#fff");
 	  }
 	}
 
+	$scope.closeDocument = function(){
+		$scope.toggleDocPanel = !$scope.toggleDocPanel;
+		 $scope.invalidMsg = !$scope.invalidMsg;
+	}
 
-$(document.body).on("click","#SendOffer",function(){
+	$scope.requestDoc = function(){
+		if($scope.reqComment != '' && $scope.reqComment != undefined){
+			$scope.setSelected();
+			 var data = $scope.offrData;
+			 for (j in data){
+				arrayDesc.push({sJCode:data[j].Code,sDescrip:$scope.reqComment,sDocName:data[j].Name});
+			  }
+			 var arr=[];
+			 var json = {
+						"sRefID":$scope.objectSet.oAppReq.sRefID,
+						'sHeader':{'sAppID':$scope.appltnID,'sInstID':$scope.InstitutionID,'sCroId':$scope.userid},
+						"sAppStat":"OnHold",
+						"aCroJustification":arrayDesc,
+						"aDedupeRefID": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : arr)
+						};
+			// requestFordclnOnhold(json);//call to server
+			  for(var j=0; j<$scope.OfferArrey.length ; j++){
+				  for (var i = 0; i <   $scope.OfferArrey[j].Offers.length ; i++) {
+					  if( $scope.OfferArrey[j].Offers[i].selected)
+						  $scope.OfferArrey[j].Offers[i].selected = false;
+				  } 
+			  }
+			  console.log("json :"+JSON.stringify(json));
+              $scope.toggleDocPanel = !$scope.toggleDocPanel;
+              if($scope.invalidMsg)
+                  $scope.invalidMsg = !$scope.invalidMsg;
+			/* $("#approvemsg").text("");
+			 $scope.updateStatus();
+			 var reason = $('#descReason').val();
+			 var data = $scope.offrData;
+			 for (j in data)
+				{
+					arrayDesc.push({sJCode:data[j].Code,sDescrip:reason,sDocName:data[j].Name});
+				}
+			 var arr=[];
+			 var json = {
+						"sRefID":$scope.refID,
+						'sHeader':{'sAppID':$scope.appltnID,'sInstID':$scope.InstitutionID,'sCroId':$scope.userid},
+						"sAppStat":"OnHold",
+						"aCroJustification":arrayDesc,
+						"aDedupeRefID": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : arr)
+						};
+			 requestFordecline(json);
+			  $('#offrform').trigger('reset');
+			  for(var j=0; j<$scope.OfferArrey.length ; j++){
+				  for (i = 0; i <   $scope.OfferArrey[j].Offers.length ; i++) {
+					  if( $scope.OfferArrey[j].Offers[i].selected)
+						  $scope.OfferArrey[j].Offers[i].selected = false;
+				  } 
+			  }
+			  $('div[id^="active"').css("background-color","#E4EDE4"); 
+			  $('#descReason').css("border","1px solid #999");
+			  docData[4].Offers=[];*/
+		 }else{
+		 	//console.log("invalid : "+$scope.invalidMsg);
+			 $scope.invalidMsg = !$scope.invalidMsg;
+		 }
+	}
+
+
+/*$(document.body).on("click","#SendOffer",function(){
 		 if($('#descReason').val()!=''){
 		 $("#approvemsg").text("");
 		 $scope.updateStatus();
@@ -825,8 +912,8 @@ $(document.body).on("click","#SendOffer",function(){
 			 $("#msg").text("Please enter your reason for Onhold");
 		 }
 	 });
-	 
-	 function  requestFordecline(json){
+	 */
+	 function  requestFordclnOnhold(json){
 			var URL='cro-onhold';
 			RestService.saveToServer(URL,json).then(function(Response){
 				if(Response.STATUS == "OK UPDATE SUCCESSFULLY")						
@@ -867,8 +954,256 @@ $(document.body).on("click","#SendOffer",function(){
 	setTimeout(function() { $scope.error = "";},1500);
 	});	
   }
+
+    $scope.scoreTree = function(){
+        console.log("function called");
+        treeData = [];
+        function generate_scoreJson(temp){
+
+            var colors = ['#689f38','#EF3D16','#fb8c00','#8BC34A','#2196F3','#9C27B0','#bdbdbd','#009688','#ffc107','#689f38'];
+            
+            try{
+                if(temp != null && typeof temp != 'undefined')
+                { treeData.push({"name":"Application Score", "score":temp.AppScore, "color":"#2196F3", "children":[]});
+                for(var i=0; i<temp.Scores.length; i++)
+                {
+                    var color = colors[i];
+                    var cat = temp.masterMap[temp.Scores[i].name];
+                    treeData[0].children.push({"name":temp.Scores[i].name, "score":temp.Scores[i].score, "color":color, "children":[]});
+                    for(var j=0; j< temp.Scores[i].Plans[0].length; j++)
+                    {
+                        var att = cat[temp.Scores[i].Plans[0][j].name];
+                        treeData[0].children[i].children.push({"name":temp.Scores[i].Plans[0][j].name, "score":temp.Scores[i].Plans[0][j].score, "color":color, "children":[]}); 
+                        for(var k=0; k<temp.Scores[i].Plans[0][j].Fields[0].length; k++)
+                        {
+                            var field = att[temp.Scores[i].Plans[0][j].Fields[0][k].name];
+                            var exp = field["FieldName"]; //fieldname
+                            var dscore = field["value"]; //
+                            var weight = field["weight"];
+                            treeData[0].children[i].children[j].children.push({"score":temp.Scores[i].Plans[0][j].Fields[0][k].score, "color":color,"dscore":dscore, "exp":exp, "weight":weight});
+                        }
+                    }
+                }
+                }
+            
+            }catch(error){
+                
+                console.log(error);
+                
+                $("#scoreTree").text("Sorry we cant process this score tree");
+            }
+
+            var margin = {top: 120,right: 150,bottom: 80,left: 120},
+            width = 1000,
+            height = 10;
+            var i = 0,duration = 750,root,depth = 0;
+            var tree = d3.layout.tree().nodeSize([120, 80]).separation(function separation(a, b) {
+                return (a.parent == b.parent ? 1 : 1);
+            });
+
+            var diagonal = d3.svg.diagonal()
+            .projection(function(d) {
+                return [d.y, d.x];
+            });
+
+            var svg = d3.select("#scoreTree").append("svg")
+            .attr("width", width)
+            .attr("height", height).call(zm = d3.behavior.zoom().scaleExtent([1, 1]).on("zoom", redraw))
+            .append("g").attr("transform", "translate(" + width / 2 + "," + 20 + ")");
+
+            zm.translate([width / 2, 20]); 
+            root = treeData[0];
+            root.x0 = height / 2;
+            root.y0 = 0;
+
+            function collapse(d) {
+                if (d.children) {
+                    d._children = d.children;
+                    d._children.forEach(collapse);
+                    d.children = null;
+                }
+            }
+
+            root.children.forEach(collapse);
+            
+            update(root);
+            
+            function update(source) {
+                var nodes = tree.nodes(root).reverse(),
+                links = tree.links(nodes);
+
+                nodes.forEach(function(d) {
+                    d.y = d.depth * 120;
+                });
+
+                var levelWidth = [1];
+                var childCount = function(level, n) {
+                    if (n.children && n.children.length > 0) {
+                        if (levelWidth.length <= level + 1) {
+                            levelWidth.push(0);
+                        }
+                        levelWidth[level + 1] += n.children.length;
+                        n.children.forEach(function(d) {
+                            childCount(level + 1, d);
+                        });
+
+                    }
+                };
+                childCount(0, root);
+                    height = height + 160;
+                    depth = levelWidth.length;
+                } 
+
+
+                $("#scoreTree").css("height", height);
+                d3.select("svg").attr("height", height);
+
+
+                var node = svg.selectAll("g.node")
+                .data(nodes, function(d) {
+                    return d.id || (d.id = ++i);
+                });
+
+                var SVGmouseTip = d3.select("g.tooltip.mouse");
+                // Enter any new nodes at the parent's previous position.
+                var nodeEnter = node.enter().append("g")
+                .attr("class", "node")      
+                .attr("transform", function(d) {
+                    return "translate(" + source.x0 + "," + source.y0 + ")";
+                })
+                .on("click", click).on("mouseout", function() {
+                    d3.select("#tooltip").classed("hidden", true);
+                })
+                .on("mouseover", function(d) {
+                    var matrix = this.getScreenCTM()
+                    .translate(+this.getAttribute("cx"), +this.getAttribute("cy")); 
+                    d3.select("#tooltip")
+                    .style("left", Math.max(0, d3.event.pageX - 20) + "px")
+                    .style("top", (d3.event.pageY - 120) + "px");
+
+                    $('#node_expression').text(d.exp);
+                    $('#node_details').text("Value : "+ d.dscore);
+                    d3.select("#tooltip").classed("hidden", false); 
+                                                                    
+
+                })
+                .on('mousemove', function(d) {
+                    d3.select("#tooltip").style("left", Math.max(0, d3.event.pageX - 20) + "px") 
+                    .style("top", (d3.event.pageY - 120) + "px");
+                });              
+
+                nodeEnter.append("ellipse")
+                .attr("cx", 0).attr("cy", 0).attr("rx", 25).attr("ry", 12)
+                .style("fill", function(d) {
+                    return d._children ? "lightsteelblue" : d.color;
+                });
+
+                nodeEnter.append("text")
+                .attr("y", function(d) {
+                    return d.children || d._children ? -20 : 20;
+                })
+                .attr("dy", ".20em")
+                .attr("text-anchor", "middle")
+                .text(function(d) {
+                    return d.name;
+                })
+                .style("fill-opacity", 1);
+
+                nodeEnter.append("text") 
+                .style("fill", "white")  
+                .attr("dy", ".20em")   
+                .attr("text-anchor", "middle") 
+                .text(function(d) {
+                    return d.score;
+                });        
+
+                var nodeUpdate = node.transition()
+                .duration(duration)
+                .attr("transform", function(d) {
+                    return "translate(" + d.x + "," + d.y + ")";
+                });
+
+                var diagonal = d3.svg.diagonal()
+                .projection(function(d) {
+                    return [d.x, d.y];
+                });
+
+                nodeUpdate.select("ellipse")
+                .attr("cx", 0).attr("cy", 0).attr("rx", 25).attr("ry", 12)
+                .style("fill", function(d) {
+                    // return d.color;
+                    return d._children ? "lightsteelblue" : d.color;
+                });
+
+
+                nodeUpdate.select("text").style("fill-opacity", 1);
+
+                var nodeExit = node.exit().transition()
+                .duration(duration)
+                .attr("transform", function(d) {
+                    return "translate(" + source.x + "," + source.y + ")";
+                })
+                .remove();
+
+                nodeExit.select("ellipse")
+                .attr("cx", 0).attr("cy", 0).attr("rx", 25).attr("ry", 12);
+
+                nodeExit.select("text")
+                .style("fill-opacity", 1e-6);
+
+                var link = svg.selectAll("path.link")
+                .data(links, function(d) {
+                    return d.target.id;
+                });
+
+                link.enter().insert("path", "g")
+                .attr("class", "link")
+                .attr("d", diagonal);
+
+                link.transition()
+                .duration(duration)
+                .attr("d", diagonal);
+
+                link.exit().transition()
+                .duration(duration)
+                .attr("d", function(d) {
+                    var o = {
+                            x: d.x0,
+                            y: d.y0
+                    };
+                    return diagonal({
+                        source: o,
+                        target: o
+                    });
+                })
+                .remove();
+
+                nodes.forEach(function(d) {
+                    d.x0 = d.x;
+                    d.y0 = d.y;
+                });
+            }
+
+            function click(d) 
+            {              
+                if (d.children) {
+                    d._children = d.children;
+                    d.children = null;
+                } else {
+                    d.children = d._children;
+                    d._children = null;
+                }
+                update(d);            
+            }
+
+            function redraw() 
+            {
+                svg.attr("transform", "translate(" + d3.event.translate + ")");
+            }
+        }
+    }
  
-	$(document.body).on("click","#back",function(){
+	/*$(document.body).on("click","#back",function(){
 		// alert("Closing...");
 		$("#application-main-container").slideUp();				
 		$("#notification-main-container").show();
@@ -880,7 +1215,7 @@ $(document.body).on("click","#SendOffer",function(){
 	
 		});
 	});
-
+*//*
 	function getTime(value, array){
 		var index;
 		jQuery.each(array,function(val,text){
@@ -893,8 +1228,8 @@ $(document.body).on("click","#SendOffer",function(){
 			}
 		});
 		return index;
-	}
-	$(document.body).on("click","#closeOffer" ,function() {
+	}*/
+	/*$(document.body).on("click","#closeOffer" ,function() {
 		  
 		  docData[4].Offers=[];
 		  
@@ -912,261 +1247,15 @@ $(document.body).on("click","#SendOffer",function(){
 		  
 		  $('#descReason').css("border","1px solid #999");
 		  
-		  for(j=0; j<$scope.OfferArrey.length ; j++){
-			  for (i = 0; i <   $scope.OfferArrey[j].Offers.length ; i++) {
+		  for(var j=0; j<$scope.OfferArrey.length ; j++){
+			  for (var i = 0; i <   $scope.OfferArrey[j].Offers.length ; i++) {
 				  if( $scope.OfferArrey[j].Offers[i].selected)
 					  $scope.OfferArrey[j].Offers[i].selected = false;
 			  } 
 		  }
-	 });
-
-	$scope.scoreTree = function(){
-		console.log("function called");
-		treeData = [];
-		function generate_scoreJson(temp){
-
-			var colors = ['#689f38','#EF3D16','#fb8c00','#8BC34A','#2196F3','#9C27B0','#bdbdbd','#009688','#ffc107','#689f38'];
-			
-			try{
-				if(temp != null && typeof temp != 'undefined')
-				{ treeData.push({"name":"Application Score", "score":temp.AppScore, "color":"#2196F3", "children":[]});
-				for(var i=0; i<temp.Scores.length; i++)
-				{
-					var color = colors[i];
-					var cat = temp.masterMap[temp.Scores[i].name];
-					treeData[0].children.push({"name":temp.Scores[i].name, "score":temp.Scores[i].score, "color":color, "children":[]});
-					for(var j=0; j< temp.Scores[i].Plans[0].length; j++)
-					{
-						var att = cat[temp.Scores[i].Plans[0][j].name];
-						treeData[0].children[i].children.push({"name":temp.Scores[i].Plans[0][j].name, "score":temp.Scores[i].Plans[0][j].score, "color":color, "children":[]}); 
-						for(var k=0; k<temp.Scores[i].Plans[0][j].Fields[0].length; k++)
-						{
-							var field = att[temp.Scores[i].Plans[0][j].Fields[0][k].name];
-							var exp = field["FieldName"]; //fieldname
-							var dscore = field["value"]; //
-							var weight = field["weight"];
-							treeData[0].children[i].children[j].children.push({"score":temp.Scores[i].Plans[0][j].Fields[0][k].score, "color":color,"dscore":dscore, "exp":exp, "weight":weight});
-						}
-					}
-				}
-				}
-			
-			}catch(error){
-				
-				console.log(error);
-				
-				$("#scoreTree").text("Sorry we cant process this score tree");
-			}
-
-			var margin = {top: 120,right: 150,bottom: 80,left: 120},
-			width = 1000,
-			height = 10;
-			var i = 0,duration = 750,root,depth = 0;
-			var tree = d3.layout.tree().nodeSize([120, 80]).separation(function separation(a, b) {
-				return (a.parent == b.parent ? 1 : 1);
-			});
-
-			var diagonal = d3.svg.diagonal()
-			.projection(function(d) {
-				return [d.y, d.x];
-			});
-
-			var svg = d3.select("#scoreTree").append("svg")
-			.attr("width", width)
-			.attr("height", height).call(zm = d3.behavior.zoom().scaleExtent([1, 1]).on("zoom", redraw))
-			.append("g").attr("transform", "translate(" + width / 2 + "," + 20 + ")");
-
-			zm.translate([width / 2, 20]); 
-			root = treeData[0];
-			root.x0 = height / 2;
-			root.y0 = 0;
-
-			function collapse(d) {
-				if (d.children) {
-					d._children = d.children;
-					d._children.forEach(collapse);
-					d.children = null;
-				}
-			}
-
-			root.children.forEach(collapse);
-			
-			update(root);
-			
-			function update(source) {
-				var nodes = tree.nodes(root).reverse(),
-				links = tree.links(nodes);
-
-				nodes.forEach(function(d) {
-					d.y = d.depth * 120;
-				});
-
-				var levelWidth = [1];
-				var childCount = function(level, n) {
-					if (n.children && n.children.length > 0) {
-						if (levelWidth.length <= level + 1) {
-							levelWidth.push(0);
-						}
-						levelWidth[level + 1] += n.children.length;
-						n.children.forEach(function(d) {
-							childCount(level + 1, d);
-						});
-
-					}
-				};
-				childCount(0, root);
-					height = height + 160;
-					depth = levelWidth.length;
-				} 
+	 });*/
 
 
-				$("#scoreTree").css("height", height);
-				d3.select("svg").attr("height", height);
-
-
-				var node = svg.selectAll("g.node")
-				.data(nodes, function(d) {
-					return d.id || (d.id = ++i);
-				});
-
-				var SVGmouseTip = d3.select("g.tooltip.mouse");
-				// Enter any new nodes at the parent's previous position.
-				var nodeEnter = node.enter().append("g")
-				.attr("class", "node")		
-				.attr("transform", function(d) {
-					return "translate(" + source.x0 + "," + source.y0 + ")";
-				})
-				.on("click", click).on("mouseout", function() {
-					d3.select("#tooltip").classed("hidden", true);
-				})
-				.on("mouseover", function(d) {
-					var matrix = this.getScreenCTM()
-					.translate(+this.getAttribute("cx"), +this.getAttribute("cy")); 
-					d3.select("#tooltip")
-					.style("left", Math.max(0, d3.event.pageX - 20) + "px")
-					.style("top", (d3.event.pageY - 120) + "px");
-
-					$('#node_expression').text(d.exp);
-					$('#node_details').text("Value : "+ d.dscore);
-					d3.select("#tooltip").classed("hidden", false); 
-																	
-
-				})
-				.on('mousemove', function(d) {
-					d3.select("#tooltip").style("left", Math.max(0, d3.event.pageX - 20) + "px") 
-					.style("top", (d3.event.pageY - 120) + "px");
-				});              
-
-				nodeEnter.append("ellipse")
-				.attr("cx", 0).attr("cy", 0).attr("rx", 25).attr("ry", 12)
-				.style("fill", function(d) {
-					return d._children ? "lightsteelblue" : d.color;
-				});
-
-				nodeEnter.append("text")
-				.attr("y", function(d) {
-					return d.children || d._children ? -20 : 20;
-				})
-				.attr("dy", ".20em")
-				.attr("text-anchor", "middle")
-				.text(function(d) {
-					return d.name;
-				})
-				.style("fill-opacity", 1);
-
-				nodeEnter.append("text") 
-				.style("fill", "white")  
-				.attr("dy", ".20em")   
-				.attr("text-anchor", "middle") 
-				.text(function(d) {
-					return d.score;
-				});        
-
-				var nodeUpdate = node.transition()
-				.duration(duration)
-				.attr("transform", function(d) {
-					return "translate(" + d.x + "," + d.y + ")";
-				});
-
-				var diagonal = d3.svg.diagonal()
-				.projection(function(d) {
-					return [d.x, d.y];
-				});
-
-				nodeUpdate.select("ellipse")
-				.attr("cx", 0).attr("cy", 0).attr("rx", 25).attr("ry", 12)
-				.style("fill", function(d) {
-					// return d.color;
-					return d._children ? "lightsteelblue" : d.color;
-				});
-
-
-				nodeUpdate.select("text").style("fill-opacity", 1);
-
-				var nodeExit = node.exit().transition()
-				.duration(duration)
-				.attr("transform", function(d) {
-					return "translate(" + source.x + "," + source.y + ")";
-				})
-				.remove();
-
-				nodeExit.select("ellipse")
-				.attr("cx", 0).attr("cy", 0).attr("rx", 25).attr("ry", 12);
-
-				nodeExit.select("text")
-				.style("fill-opacity", 1e-6);
-
-				var link = svg.selectAll("path.link")
-				.data(links, function(d) {
-					return d.target.id;
-				});
-
-				link.enter().insert("path", "g")
-				.attr("class", "link")
-				.attr("d", diagonal);
-
-				link.transition()
-				.duration(duration)
-				.attr("d", diagonal);
-
-				link.exit().transition()
-				.duration(duration)
-				.attr("d", function(d) {
-					var o = {
-							x: d.x0,
-							y: d.y0
-					};
-					return diagonal({
-						source: o,
-						target: o
-					});
-				})
-				.remove();
-
-				nodes.forEach(function(d) {
-					d.x0 = d.x;
-					d.y0 = d.y;
-				});
-			}
-
-			function click(d) 
-			{              
-				if (d.children) {
-					d._children = d.children;
-					d.children = null;
-				} else {
-					d.children = d._children;
-					d._children = null;
-				}
-				update(d);            
-			}
-
-			function redraw() 
-			{
-				svg.attr("transform", "translate(" + d3.event.translate + ")");
-			}
-		}
-	}
 	$(document).on('click', '.close', function(e) {
 		$("#scoreTree").text("");
 		$(document.body).find('#document_preview').attr("src","");
@@ -1876,20 +1965,6 @@ $(document.body).on("click","#SendOffer",function(){
 		}else{
 			$('#declinemsg').text("Please fill all the field");
 		}
-	}
-	$scope.closeDclnData=function(){
-		 $('#declinereason').slideUp();
-		 $('div[contextmenu="blur"]').removeClass("blured");
-		 $('#reason1container , #reason2container').text('');
-		 $('#declinemsg').text("");
-	}
-	$scope.closeApprvData=function(){
-		 $('#approveReason').slideUp();
-		 $('div[contextmenu="blur"]').removeClass("blured");
-		 $('#appr1Container , #appr2Container ,#approvemsg').text('');
-		 $('#ApprvValue , #emiValue , #tenorValue').css("border","1px solid #999");
-		 $('#ApprvValue').val("");
-		 $('#ApprvValue').val($scope.objectSet.aCroDec[0].dAmtAppr);
 	}
 	
 	$(document.body).on('change','select[id="select_addr"]',

@@ -190,7 +190,12 @@
 					</div>
 
 					<div id="addr_detail" data-ng-repeat="address in objectSet.oAppReq.oReq.oApplicant.aAddr">
-						<div  ng-show="addr_type.value == 'Residence'" style="display: block;">
+						
+					<!-- {{findAddressType(addr_type.value,address.sAddrType)}}
+						<div ng-if="findAddressType(addr_type.value,address.sAddrType)">
+						{{address.sAddrType}}	
+						</div> -->
+						<div  ng-show="addr_type.value == 'Residence' && findAddressType(addr_type.value,address.sAddrType)" style="display: block;">
 							<div class="row clearfix">
 							<div class="col-md-3">
 								<label class="control-label">Address Line 1</label> <input
@@ -247,7 +252,7 @@
 							</div>
 						</div>
 					</div>
-					<div ng-if="addr_type.value == 'Office'">
+					<div ng-if="addr_type.value == 'Office' && findAddressType(addr_type.value,address.sAddrType)">
 							<div class="row clearfix">
 							<div class="col-md-3">
 								<label class="control-label">Address Line 1</label> <input
@@ -285,7 +290,7 @@
 						</div>
 			
 					</div>
-						<div ng-if="addr_type.value == 'Permanent'">
+						<div ng-if="addr_type.value == 'Permanent' && findAddressType(addr_type.value,address.sAddrType)">
 							<div class="row clearfix">
 						<div class="col-md-3">
 							<label class="control-label">Address Line 1</label> <input
@@ -407,6 +412,23 @@
 							<label class="control-label">Model</label> <input
 								 ng-model="dealer.sModelNo" class="form-control"
 								type="text" disabled="disabled">
+						</div>
+					</div>
+					<div class="row clearfix" ng-if="objectSet.oAppReq.oReq.oApplication.sLnPurp!=null">
+						<div class="col-md-3">
+							<label class="control-label">Purpose</label> <input
+								ng-model="objectSet.oAppReq.oReq.oApplication.sLnPurp" class="form-control" type="text"
+								 disabled="disabled">
+						</div>
+						<div class="col-md-3" ng-repeat="income in objectSet.oAppReq.oReq.oApplicant.oIncomeDetails.aOthrSrcInc">
+							<label class="control-label">Other Income Source</label> <input id="newcity"
+								ng-model="income" class="form-control" type="text" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Amnt Of Other Income Source</label> <input
+								id="projectname" ng-model="objectSet.oAppReq.oReq.oApplicant.oIncomeDetails.dOthrSrcIncAmt" 
+								class="form-control"
+								type="text" name="Project" disabled="disabled">
 						</div>
 					</div>
 				</fieldset>
