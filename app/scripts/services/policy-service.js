@@ -1,32 +1,36 @@
 ;(function(){
 
-	angular.module('gonogo').factory("Policy", function($http,BASE_URL_SCOR) {
+	var app = angular.module('gonogo.policy',[]);
+
+	app.factory("Policy", ['$http','APP_CONST',function($http,APP_CONST) {
 	  var output=[];
 	  return {
 		  getAllpolicy: function(InstitutionID ,callback) {
 			return	$http({
 					method : 'GET',
-					url : BASE_URL_SCOR+'GetAllPolicy',
+					url : APP_CONST.getConst('BASE_URL_SCOR')+'GetAllPolicy',
 					params : {'INSTITUTION_ID': InstitutionID},
 					headers : {'Content-Type' : 'application/json'}
-				   }).success(function(data) 
-				   { 
+				   
+				   }).success(function(data) { 
 			   		$('#T_LoaderSpinner').hide(1000);
-					 if (data.StatusCode === 101) 
-					 {	output=data.Data;
+					 
+					 if (data.StatusCode === 101){
+					 	 
+					 	 output=data.Data;
+						 
 						 callback(output);
-					 } else 
-					 { 
-//									alert("Request failed due to an internal error...Please contact System Admin");
+					 
+					 } else { 
+						console.log("Request failed due to an internal error...Please contact System Admin");
 					 }
+
 			      }).error(function(data) 
 	    		  {$('#T_LoaderSpinner').hide();
 	    		  console.log("We could not process your request......Please try later.")
-				   });
+			 });
 	    }
 	  };
-	});
-
-
+	}]);
 
 }).call(this)

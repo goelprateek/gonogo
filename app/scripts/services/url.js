@@ -2,7 +2,7 @@
 	
 	'use strict';
 	
-	var app = angular.module('gonogo');
+	var app = angular.module('gonogo.commons',[]);
 
 
 	app.factory("APP_CONST",function(){
@@ -21,16 +21,18 @@
 		}
 	});
 
-	app.service("RestService",['$q','$http','APP_CONST',function($q,$http,APP_CONST){
+	app.service("RestService",['$q','$http','$log','APP_CONST',function($q,$http,$log,APP_CONST){
 			
 		var _saveToServer = function(url,data){
 			var defere = $q.defer(),
 			_url = APP_CONST.getConst('BASE_URL_GNG');
+			
 			$http.post(_url+url,data).success(function(response){
 				defere.resolve(response);
 			}).error(function(error){
 				defere.reject(error);
 			})
+			
 			return defere.promise;
 		},
 		
@@ -39,8 +41,10 @@
 			var defere = $q.defered();
 			
 			$http.get(url).success(function(resp){
+				$log.debug(resp);
 				defere.resolve(resp);
 			}).error(function(error){
+				$log.error(error);
 				defere.resolve(error);
 			})
 			return defere.promise;
@@ -48,18 +52,19 @@
 		
 		getStreamFromServer = function(url,data){
 			var deferred = $q.defer();
+			console.log(data);
 			$http({
                 url:url,
-                method:"PUT",
+                method:"POST",
                 data:data,
                 headers:{'Content-type': 'application/json'},
                 responseType : 'arraybuffer',
                })
                .success(function (data) {
-                   console.debug("SUCCESS");
+                   $log.debug("SUCCESS");
                    deferred.resolve(data);
                }).error(function (data) {
-                    console.error("ERROR");
+                    $log.error("ERROR");
                     deferred.reject(data);
                });
 			
@@ -77,8 +82,10 @@
 
 			var defer = $q.defer();
 			$http.post(url,data).success(function(data){
+				$log.info(data);
 				defer.resolve(data);
 			}).error(function(data){
+				$log.error(data);
 				defer.reject(data);
 			});
 			return defer.promise;
@@ -188,6 +195,7 @@
 	    };
 
  	}]);
+
 	
 }).call(this)
 

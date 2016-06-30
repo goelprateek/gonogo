@@ -5,14 +5,14 @@
 	var app = angular.module('gonogo.analytics' ,['gonogo-directives']);
 	
 
-	app.controller('AnalyticsController',["$scope","$rootScope","$http","$timeout","Rules"
-	                                        ,"Score", "Policy","Decision",'RestService','$filter', 
-	                                        function($scope,$rootScope, $http, $timeout,Rules,Score, Policy,Decision,RestService,$filter) {
-			 
+	app.controller('AnalyticsController',['$scope','$rootScope','Rules'
+	                                        ,'Score', 'Policy','Decision', '$http', '$timeout' ,'RestService','$filter','APP_CONST', '$uibModal',
+	                                        function($scope,$rootScope, Rules,Score,Policy,Decision, $http, $timeout,RestService,$filter,APP_CONST,$uibModal) {
+
 		
 		// chart functionality
 		var json = {'sInstID':$scope.InstitutionID};
-		
+
 		RestService.saveToServer("stack-graph",json).then(function(data){
 			$scope.orignalData = data;
 		});
@@ -28,24 +28,39 @@
 		
 		$scope.myBlobObject = undefined;
 		$scope.getFile=function(){
-			console.log('download started, you can show a wating animation');
+			
 			var data = {
-					'sInstID':$scope.InstitutionID,
-					productType:'',
-					fromDate:'',
-					toDate:''
+					'sInstId': $scope.InstitutionID,
+					'sReportType': 'Credit Report',
+					'sProductType':'Consumer Durable',
+					'sReportCycle': 'YTD'
 			}
 			
-			RestService.getStreamFromServer("",data).then(function(data){
-			}, function(data){
-				$scope.myBlobObject=new Blob([data],{ type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
-			},function(){
-				console.log('Download Error, stop animation and show error message');
-				$scope.myBlobObject=[];
+			var _url = APP_CONST.getConst('BASE_URL_GNG');
+
+			RestService.getStreamFromServer(_url+"report/download-credit",data).then(function(data){
+				 var anchor = angular.element('<a/>');
+				 anchor.attr({
+			         href: 'data:attachment/csv;charset=utf-8,' + encodeURI(data),
+			         target: '_self',
+			         download: new Date()+'.csv'
+			     })[0].click();
 			});
 		}
 
 
+
+		// custom report modal
+
+		$scope.openModal = function(){
+			var modalInstance = $uibModal.open({
+	      animation: true,
+	      templateUrl: 'views/templates/report-modal.html',
+	      controller: 'CustomReportController',
+	      size: 'lg',
+	    });	
+		}
+		
 		
 		
 		var kyc_array=[];var appForm_array=[];var disburst_array=[];var agreement_array=[];var extra_array=[];var evidence_array=[];
@@ -62,7 +77,6 @@
 			if($scope.isTableData == false){
 				var json = {'sInstID':$scope.InstitutionID,'iSkip':"0",'iLimit':"100"};
 				RestService.saveToServer('score-log',json).then(function(data){
-					console.log(data);
 				 if(data){
 				 	  	//sort data in reverse chronological order
 			          	data.sort(SortByDate);
@@ -4523,4 +4537,10 @@
 			return result;
 		};
 	});
+
+
+	app.controller("CustomReportController", [ '$scope' , function($scope){
+		console.log('modal controller hitted');
+	}]);
+
 }).call(this)

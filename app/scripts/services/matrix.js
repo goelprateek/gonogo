@@ -1,5 +1,13 @@
 ;(function(){
-	angular.module('gonogo').service('Rules',function($http,BASE_URL_SCOR){
+	
+	'use strict';
+
+	angular.module('gonogo.services',['gonogo.matrix','gonogo.policy','gonogo.rule','gonogo.score','gonogo.commons','gonogo.validation']);
+
+	var app = angular.module('gonogo.matrix',[]);
+
+	app.service('Rules',['$http','APP_CONST',function($http,APP_CONST){
+	
 	var ViewMode;
 	var OutputList = [{'value':'Approved','color':'#43A443'},{'value':'Declined','color':'#E42E28'},
 	                  {'value':'Queue','color':'#2196f3'}];
@@ -10,7 +18,7 @@
 		 var matrixData={'Ascore':[],'Bscore':[],'outcomeList':[],'RcriteriaList':[]};
 		
 		 $http({ method : 'POST',
-			url : BASE_URL_SCOR+'DecisionRules',
+			url : APP_CONST.getConst('BASE_URL_SCORE')+'DecisionRules',
 			params:{'INSTITUTION_ID':InstitutionID,'RuleID':id,'RType':ruletype,'CType':calltype},
 			headers : {'Content-Type' : 'application/json'}
 		}).success(function(data) 
@@ -117,7 +125,7 @@
 			}
 		}); 
 	}
-});
+}]);
 
 
 }).call(this)

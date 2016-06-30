@@ -4,17 +4,17 @@
 
 	var app = angular.module('gonogo');
 
-app.controller('NotificationController', ['$scope','$rootScope', '$http', 
-'$timeout','Validation',function($scope, $rootScope ,$http , $timeout,Validation,BASE_URL_DEMO) 
-{
-console.log("Notification controller load ");
-	if(typeof $scope.InstitutionID != 'undefined')
-	{
-		if($scope.InstitutionID==3988 || $scope.InstitutionID==4011)
-		{
+	app.controller('NotificationController', ['$scope','$rootScope', '$http', 
+		'$timeout','Validation',function($scope, $rootScope ,$http , $timeout,Validation,BASE_URL_DEMO){
+
+	
+	if(typeof $scope.InstitutionID != 'undefined'){
+
+		if($scope.InstitutionID==3988 || $scope.InstitutionID==4011){
 			$("#logo.img-responsive").css("padding","1");
 		}		
 	}
+	
 	//check offers access to this user.
 	var offersAllowed = $scope.authenticate('NOFRS');
 

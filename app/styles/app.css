@@ -455,3 +455,14 @@ svg:not (:root ) {
 .nhr a {
 	color: #777;
 }
+
+
+.form-inline .search-bar {
+	width: 8em;
+	transition(width, 0.2s, ease-in-out);
+	padding-right: 2.5em;
+}
+
+.form-inline .search-bar :hover, .form-inline .search-bar :focus{
+	width: 15em;
+} 

@@ -3,27 +3,29 @@
 	
 	var app = angular.module("gonogo.login", []);
 
-	app.controller("loginController",[ '$scope', '$cookies','RestService','APP_CONST','UserService',function($scope, $cookies,RestService,APP_CONST,UserService) {
+	app.controller("loginController",[ '$scope','$rootScope' ,'$cookies','RestService','APP_CONST','UserService',function($scope,$rootScope,$cookies,RestService,APP_CONST,UserService) {
 		
+		(function(window){
+
+			if (_.isUndefined($cookies.get("UID"))) {
+				$scope.alert = "Welcome "+ atob($cookies.get("UID")) +" to GoNoGo";
+			} else {
+				$scope.alert = "Welcome to GoNoGo Portal";
+			}
+
+		}).call(this);
+
 		var expireDate = new Date();
 		
 		$scope.isForgotOpen=false;
 		
 		var actions,instid,usid,valid = 0;
 		
-		$scope.rememberMe = function(){
-			if ($scope.username != "") {
-				expireDate.setDate(expireDate.getDate() + 45)
-				var user = $scope.username;
-				$cookies.put('RMID', btoa(user), {'expires' : expireDate});
-			}
-		}
-
 		// forget password recovery block
 		$scope.forgetPassword = function() {
 			if (($scope.recoveryemail != "" || typeof $scope.recoveryemail != 'undefined')
 					&& valid == 0) {
-				$scope.error = "Please contact Admin (Softcell)...!! Currently this services is not activated on your account";
+				$scope.alert = "Please contact Admin (Softcell)...!! Currently this services is not activated on your account";
 			}
 		}
 		
@@ -41,7 +43,7 @@
 		      return $scope.submitted || field.$dirty;
 		 };
 		
-		$scope.$watch('recoveryemail',function(val){
+		/*$scope.$watch('recoveryemail',function(val){
 			if (/^[A-Za-z0-9._]+@[A-Za-z]+\.[a-z]{2,4}$/.test(val)) 
 			{ $('input[name="email"]').css("border","1px solid green");
 			  changeErrorMsg();
@@ -51,7 +53,7 @@
 			  $scope.error = "Please Enter Valid Recovery Email";
 		    	valid = 0;
 			}
-		});
+		});*/
 		
 		$scope.login = {
 				'userName':'HDBFS_DSA1@softcell.com',
@@ -60,13 +62,19 @@
 		},
 		
 		$scope.submit = function(){
-				
+
+				if($scope.login.rememberme){
+					expireDate.setDate(expireDate.getDate() + 45);
+					$cookies.put('RMID', btoa($scope.login.userName), {'expires' : expireDate});
+				}
+
 				UserService.cleanUpUserDeatails();
 
 				var _data = {'userName' : $scope.login.userName, 'password' : SHA1($scope.login.password)};
 
 				RestService.saveToServer("login-web",_data).then(function(data){
 						
+					console.log(data);
 						
 					if(data.STATUS=="SUCCESS"){  
 						
@@ -82,7 +90,9 @@
 									'userid': details.USER_ID,
 									'color': details.COLOR
 						    };
-						    
+
+						    $rootScope.loggedInUser = listvalues;
+
 						    instid = details.INSTITUTION_ID;
 							
 							usid = details.USER_ID;
@@ -94,38 +104,29 @@
 							UserService.persistDataTolocalStorage('DEALERS', btoa(JSON.stringify(data.DEALERS)));
 							UserService.persistDataTolocalStorage('ROLES', btoa(JSON.stringify(data.ROLES)));
 							UserService.persistDataTolocalStorage('DETAILS', btoa(JSON.stringify(data.USER_DETAILS)));
-							
-							if(actions == null || actions == undefined){
+
+							if(!_.isUndefined(actions)){
+								router(data); 
 								
-								$http.get('JSON/Auth.json').success(function(data){		     
-									actions = data[instid][usid].actions;
-								    redirect(data);
-								});
-								
-							}else{
-								redirect(data); 
 							}
+							
+							
 						   }else{
-							   $scope.error = "Sorry ! User Details are not availeble.\n Please contact system admin";
+							   $scope.alert = "Sorry ! User Details are not availeble.\n Please contact system admin";
 						   }
 						 
 					}else if(data.ERRORS.length > 0){
-						$scope.error = data.ERRORS[0].DESCRIPTION;
+						$scope.alert = data.ERRORS[0].DESCRIPTION;
 					}
 					
 				},function(error){
-					
-					$scope.error = "Sorry ! System is under maintenance.\n\t Please try later.";
+					$scope.alert = "Sorry ! System is under maintenance.\n\t Please try later.";
 				});
 		}
 		
-
-
-
-		
 		// action contains {APPLICATION,NOTIFICATION}
 		
-		function redirect(Response){
+		function router(Response){
 			
 			UserService.persistDataTolocalStorage('actions',btoa(JSON.stringify(actions)))
 			
@@ -171,15 +172,15 @@
 					!_.contains(actions , 'POLICY') &&
 					!_.contains(actions , 'ANALYTCS' )){
 				
-				$scope.error = "Sorry... User has been blocked. Please contact your system Admin !!!";
+				$scope.alert = "Sorry... User has been blocked. Please contact your system Admin !!!";
 			}
 		}
 			
 		function changeErrorMsg() {
-			if ($cookies.get("UID") != undefined) {
-				$scope.error = "Welcome "+atob($cookies.get("UID"))+" to GoNoGo Portal";
+			if (_.isUndefined($cookies.get("UID"))){
+				$scope.alert = "Welcome "+ atob($cookies.get("UID")) +" to GoNoGo";
 			} else {
-				$scope.error = "Welcome to GoNoGo Portal";
+				$scope.alert = "Welcome to GoNoGo Portal";
 			}
 		}
 		

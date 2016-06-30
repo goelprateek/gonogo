@@ -5,8 +5,16 @@
 
 	var app = angular.module('gonogo.cdl');
 
-	app.controller("ApplyController", [  "$scope", "$rootScope", "$http", "$timeout", "$window", "$location", "$q", "END_POINT", "sharedService", "CallRestAPI","$interval", function(
-	 $scope,$rootScope,$http,$timeout,$window,$location,$q,END_POINT,sharedService,CallRestAPI,$interval) {
+	app.controller("ApplyController", [  "$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log', function(
+	 $scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log) {
+
+
+	$scope.dateOptions = {
+	    dateDisabled: 'disabled',
+	    maxDate: new Date(2020, 5, 22),
+	    minDate: new Date(),
+	    startingDay: 1
+  	};
 
 
 	var poller;
@@ -14,7 +22,7 @@
 	$scope.assetArray = [];
 	try {
 		var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
-		console.log("userdata :"+JSON.stringify(userdata));
+		$log.debug("userdata :"+JSON.stringify(userdata));
 		$scope.username = userdata.name;
 		$scope.useremail = userdata.email;
 		$scope.image = userdata.userImage;
@@ -82,7 +90,7 @@
 		console.log("Check status Input josn: "+JSON.stringify(json));
 		$http({
 			method : 'POST',
-			url : END_POINT.BASE_URL_GNG+'status',
+			url : APP_CONST.getConst('BASE_URL_GNG')+'status',
 			data : json,
 			headers : {'Content-Type' : 'application/json'}
 		})
@@ -177,7 +185,7 @@
 		$scope.assetJson = {"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":""}; 
 		$http({
 			method : 'POST',
-			url : END_POINT.BASE_URL_GNG+'asset-category-web',
+			url : APP_CONST.getConst('BASE_URL_GNG')+'asset-category-web',
 			data :$scope.assetJson,
 			headers : {'Content-Type' : 'application/json'}
 		}).success(function(data) 
@@ -215,7 +223,7 @@
 		$scope.makeJson ={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":val1}
 		$http({
 			method : 'POST',
-			url : BASE_URL_GNG+'asset-model-make-web',
+			url : APP_CONST.getConst('BASE_URL_GNG')+'asset-model-make-web',
 			data :$scope.makeJson,
 			headers : {'Content-Type' : 'application/json'}
 		}).success(function(data) 
@@ -242,7 +250,7 @@
 		$scope.mdlJson ={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":val1,"sQuery2":val2}; 
 		$http({
 			method : 'POST',
-			url : BASE_URL_GNG+'asset-model-all-web',
+			url : APP_CONST.getConst('BASE_URL_GNG')+'asset-model-all-web',
 			data :$scope.mdlJson,
 			headers : {'Content-Type' : 'application/json'}
 		}).success(function(data) 
@@ -272,9 +280,10 @@
 	if(CustID!=null && CustID!="") {
 		var URL='';
 		var json ={'sRefID':CustID};
-		URL = BASE_URL_GNG +'/dashboard-application-data';
+		URL = APP_CONST.getConst('BASE_URL_GNG') +'/dashboard-application-data';
 
-		CallRestAPI.postData(URL,json).then(function(Response){
+		RestService.saveToServer(URL,json).then(function(Response){
+			
 			$scope.fname=Response.oReq.oApplicant.oApplName.sFirstName;
 	  		$scope.mname=Response.oReq.oApplicant.oApplName.sMiddleName;
 	  		$scope.lname=Response.oReq.oApplicant.oApplName.sLastName;
@@ -437,7 +446,7 @@
 							function kyc_img(kycName , imgId ,status , reason,value){
 								var json ={'sImgID':imgId}
 								var URL = BASE_URL_GNG+'/get-image-by-id-base64';
-								CallRestAPI.postData(URL,json).then(function(Response){
+								RestService.saveToServer(URL,json).then(function(Response){
 									var image = "data:image/png;base64,"+Response.sByteCode;
 									if(Response.sByteCode != undefined && Response.sByteCode != null && Response.sByteCode != "" ){
 //										console.log("image :"+kycName+"id :"+imgId);
@@ -496,7 +505,8 @@
 							}
 							URL = BASE_URL_GNG+'/application-images';
 							var json ={'sRefID':CustID};
-							CallRestAPI.postData(URL,json).then(function(Response){
+							
+							RestService.saveToServer(URL,json).then(function(Response){
 								console.log("Images loaded:");
 								console.log(JSON.stringify(Response));
 								if(Response!=null && Response!=="")
@@ -671,21 +681,16 @@
 	var containerHeight=top-150;
 	$(".getheight").css("height",containerHeight-35+"px");
 	$("#progressDiv").css("height",containerHeight+20);
-/*	$( window ).resize(function() {
-		var top=$(window).height()-$(".header").height()-$(".footer").height();
-		$("#msgContainer").css("top",top);
-		var containerHeight=top-130;
-		$("#progressDiv").css("height",containerHeight);
-		$(".getheight").css("height",containerHeight+100+"px");
-	});*/
+
 	
-	$('#dob').datepicker({changeMonth: true, changeYear: true, yearRange: "1945:1997", dateFormat: 'dd:mm:yy',
-		 defaultDate:'01:01:1985',
-		 onSelect: function(dateText, inst) {
+	/*$('#dob').datepicker({
+		changeMonth: true, changeYear: true, yearRange: "1945:1997", dateFormat: 'dd:mm:yy',
+		defaultDate:'01:01:1985',
+		onSelect: function(dateText, inst) {
 //			 $(this).next().focus();
 			 $(this).siblings("help").show();
 		    }		
-	}).attr('readonly','readonly');
+	}).attr('readonly','readonly');*/
 
 	/*function refreshPLst()
 	{
@@ -693,8 +698,8 @@
 		$("#KYCList").addClass("active");
 	}*/
 	
-	$scope.otpService=function()
-	{	$scope.ojs={	  "USER_ID":$scope.userid, "PASSWORD":$scope.ePassword,
+	$scope.otpService=function(){	
+		$scope.ojs={	  "USER_ID":$scope.userid, "PASSWORD":$scope.ePassword,
 						  "INSTITUTION_ID":$scope.InstitutionID,
 						  "inputJson_":{ "MOBILE-NUMBER":$("#tmob").val() }
 					}	
@@ -1345,13 +1350,18 @@ $(document).on('click','.preview', function(e) {
 });
 // ==========================================================================================================
 
-function ageCalculator()
-{
+function ageCalculator(){
+	
 	var dat = $("#dob").val();
+	
 	var day=dat.slice(0,2);
+	
 	var month=dat.slice(3,6);
+	
 	var yr=dat.slice(7,11);
+	
 	var convert;
+	
 	switch (month) {
 	case "Jan":
 		convert=1;
@@ -1516,114 +1526,63 @@ $scope.submitApplication=function(UrlKey)
    
    $http({
 		method : 'POST',
-		url : BASE_URL_GNG+'submit-application/'+UrlKey,
+		url : APP_CONST.getConst('BASE_URL_GNG')+'submit-application/'+UrlKey,
 		data :$scope.object,
 		headers : {'Content-Type':'application/json'}
-	}).success(function(data) 
-			{ 
-//				console.log("Data Successfully submitted-" + JSON.stringify(data));
-				if(UrlKey=="step4")
-				{
-					$("#infoContainer , #ErrorContainer").hide();
-					$("#resultPanel").show();
-					start_timer(); // 60 sec timer
-					// console.log("data.sRefID="+data.sRefID);
-					$scope.REFID =data.sRefID;
-					var statusJSON ={
-						  "sRefID":data.sRefID,
-						  "oHeader": {
-						    "sCroId": "default",
-						    "dtSubmit":new Date().getTime(),
-						    "sReqType": "JSON",
-						    "sAppSource" : "WEB",
-						    "sDsaId":$scope.useremail,
-						    "sAppID": "",
-						    "sSourceID":"",
-						    "sInstID":$scope.InstitutionID
-						  }
-					};
-					// console.log("Status input json="+ JSON.stringify($scope.statusJSON));
-					poller = $interval(function(){
-						$scope.check_status(statusJSON);
-					},3000);
-				}
-			if(UrlKey=="step3")
-				{
-					$scope.errHead = "Status"
-					$scope.errorMsg = "Data Saved Successfully.";
-				}
-			UploadAllImgs(data.sRefID,img_array,"submit");
-			$scope.REFID = data.sRefID;
-			}).error(function(data) 
+	}).success(function(data){ 
+		if(UrlKey=="step4"){
+				
+			$("#infoContainer , #ErrorContainer").hide();
+			
+			$("#resultPanel").show();
+			
+			start_timer();
+				$scope.REFID =data.sRefID;
+				var statusJSON ={
+					  "sRefID":data.sRefID,
+					  "oHeader": {
+					    "sCroId": "default",
+					    "dtSubmit":new Date().getTime(),
+					    "sReqType": "JSON",
+					    "sAppSource" : "WEB",
+					    "sDsaId":$scope.useremail,
+					    "sAppID": "",
+					    "sSourceID":"",
+					    "sInstID":$scope.InstitutionID
+					  }
+				};
+
+				poller = $interval(function(){
+					$scope.check_status(statusJSON);
+				},3000);
+		}
+
+		if(UrlKey=="step3"){
+			$scope.errHead = "Status"
+			$scope.errorMsg = "Data Saved Successfully.";
+		}
+		
+		UploadAllImgs(data.sRefID,img_array,"submit");
+		
+		$scope.REFID = data.sRefID;
+
+	}).error(function(data){
+		$scope.serviceHitCount=$scope.serviceHitCount+1;
+		if($scope.serviceHitCount<=3)
 			{
-				$scope.serviceHitCount=$scope.serviceHitCount+1;
-				if($scope.serviceHitCount<=3)
-					{
-					$scope.submitApplication();
-					}
-				else{
-					$scope.serviceHitCount=1;
-					$scope.error="Sorry we can not process your Submit request";
-				}	
-			});
-//   $("#postIPA").show();
-//   $("#pOrder").show();
+			$scope.submitApplication();
+			}
+		else{
+			$scope.serviceHitCount=1;
+			$scope.error="Sorry we can not process your Submit request";
+		}	
+	});
 };
 
-/*function dtcnvrt()
-{
-var dat=$("#dob").val();
-var  convert;
-var day=dat.slice(0,2);
-var month=dat.slice(3,6);
-var yr=dat.slice(7,11);
-switch (month) {
-case "Jan":
-	convert=day+"01"+yr;
-	break;
 
-case "Feb":
-	convert=day+"02"+yr;
-	break;
-case "Mar":
-	convert=day+"03"+yr;
-	break;
-	
-case "Apr":
-	convert=day+"04"+yr;
-		break;
-case "May":
-	convert=day+"05"+yr;	
-				break;
-case "Jun":
-	convert=day+"06"+yr;	
-				break;
-case "Jul":
-	convert=day+"07"+yr;
-				break;
-case "Aug":
-	convert=day+"08"+yr;	
-				break;
-case "Sep":
-	convert=day+"09"+yr;		
-				break;
-case "Oct":
-	convert=day+"10"+yr;			
-				break;
-case "Nov":
-	convert=day+"11"+yr;				
-				break;
-case "Dec":
-	convert=day+"12"+yr;					
-				break;
-
-}
-// console.log("day:"+day+"month"+month+"year"+yr);
-return convert;
-}*/
 
 var timer = null, startTime = null;
-var progress = $("#progress").shieldProgressBar(
+/*var progress = $("#progress").shieldProgressBar(
 		{	min : 0,max : 60, value : 60,
 			layout : "circular",
 			layoutOptions : {
@@ -1634,7 +1593,7 @@ var progress = $("#progress").shieldProgressBar(
 				template : '<span style="font-size:60px;color:rgb(36,161,237);text-align :center">{0:n0}</span><p style="color:rgb(36,161,237);margin-top:-10px;">SECONDS</p>'
 			},
 			reversed : true
-		}).swidget();
+		}).swidget();*/
 // set last and llast month from date
 //var myDate = new Date();
 //$scope.lastmonth = myDate.setMonth(myDate.getMonth() - 1);
@@ -2034,7 +1993,7 @@ $scope.ipaService = function()
 //	console.log("$scope.ipaJson :"+$scope.ipaJson);
 	$http({
 		method : 'POST',
-		url : BASE_URL_GNG+'post-ipa-pdf',
+		url : APP_CONST.getConst('BASE_URL_GNG')+'post-ipa-pdf',
 		data :$scope.ipaJson,
 		headers : {'Content-Type':'application/json'}
 	}).success(function(data) 
@@ -2123,7 +2082,7 @@ $scope.sendPostIpaMail=function()
 		"sImgID":$scope.postIpaPdfId};
 	$http({
 		method : 'POST',
-		url : BASE_URL_GNG+'send-mail-pdf',
+		url : APP_CONST.getConst('BASE_URL_GNG')+'send-mail-pdf',
 		data :requestJson,
 		headers : {'Content-Type':'application/json'}
 	}).success(function(data) 
@@ -2163,11 +2122,10 @@ $("#wrkename").autocomplete({
   });
 
 $scope.empService = function(key){
-	//console.log("***************** EMPLOYEE SERVICE **************************** ");
 	$scope.assetJson ={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":""}; 
 	$http({
 		method : 'POST',
-		url : BASE_URL_GNG+'employer-master-details-web',
+		url : APP_CONST.getConst('BASE_URL_GNG')+'employer-master-details-web',
 		data :$scope.assetJson,
 		headers : {'Content-Type' : 'application/json'}
 	}).success(function(data) 
@@ -2223,7 +2181,7 @@ $scope.scmService = function(key){
 	console.log("$scope.scmJson Input JSON"+JSON.stringify($scope.scmJson));
 	$http({
 		method : 'POST',
-		url : BASE_URL_GNG+'filtered-scheme-master',
+		url : APP_CONST.getConst('BASE_URL_GNG')+'filtered-scheme-master',
 		data :$scope.scmJson,
 		headers : {'Content-Type' : 'application/json'}
 	}).success(function(data)
@@ -2409,7 +2367,7 @@ $scope.updateStatus = function(){
 	console.log("Input JSON for status update :"+$scope.updateJson);
 	$http({
 		method : 'POST',
-		url : BASE_URL_GNG+"post-ipa-stage-update",
+		url : APP_CONST.getConst('BASE_URL_GNG')+"post-ipa-stage-update",
 		data :$scope.updateJson,
 		headers : {'Content-Type' : 'application/json'}
 	}).success(function(data) 
@@ -2440,7 +2398,7 @@ $scope.resetStatus=function(){
 //	console.log("Input JSON for status update :"+$scope.updateJson);
 	$http({
 		method : 'POST',
-		url : BASE_URL_GNG+"reset-status",
+		url : APP_CONST.getConst('BASE_URL_GNG')+"reset-status",
 		data :$scope.updateJson,
 		headers : {'Content-Type' : 'application/json'}
 	}).success(function(data) 
@@ -2471,19 +2429,8 @@ $scope.resetStatus=function(){
 	console.log("Getting Error from Reset State.");
 	});
 };
-// hide mrgn mny cnfrmtn on select mrgn mny 
-/*$("#mnyInstn").change(function(){
- var val=$(this[this.selectedIndex]).val();
- if(val!="Select" && val!="Cash")
- {
-	$("#mnyCnfmDiv").show();
- }else{
-	$("#mnyCnfmDiv").hide();
- }
- })*/
- 
- $("select").change(function()
- {
+
+ $("select").change(function(){
 	 $(this).siblings("help").show(); 
  });
  
@@ -2635,7 +2582,6 @@ $scope.resetStatus=function(){
 		  $interval.cancel(poller);
 	  });
 	  
-//	 $scope.holdStageArr=[{"value":"holdCase" ,"index":1,"doc":"pan"},{"value":"holdCase" ,"index":2,"doc":"aadhar"},{"value":"holdCase" ,"index":3,"doc":"passport"},{"value":"holdCase" ,"index":4,"doc":"voterID"}];
 	 
 }]);
 

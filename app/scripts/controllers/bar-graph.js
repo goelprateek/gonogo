@@ -1,16 +1,22 @@
 ;(function(){
 	'use strict';
 	
-	angular.module('gonogo').controller("BarGraphController" , [ '$http','$rootScope' ,'$scope','BASE_URL_SCOR','BASE_URL_GNG','RestService', function($http,$rootScope,$scope,BASE_URL_SCOR,BASE_URL_GNG,RestService) {
+	// 'BASE_URL_SCOR','BASE_URL_GNG'
+	angular.module('gonogo').controller("BarGraphController" , [ '$http','$rootScope' ,'$scope','APP_CONST','RestService', function($http,$rootScope,$scope,APP_CONST,RestService) {
 	     
 		var stackThumbnail ='<div class="thumb" id="stackThumbnail"><a ><img src="ReportLib/stackgraphimg.png"/></a><div>Volume Stack</div></div>';
+	
 		var tableDataThumbnail ='<div class="thumb" id="tableDataThumbnail"><a ><img src="ReportLib/tabledata.png" /></a><div>Customer Info</div></div>';
+	
 		var treeThumbnail='<div class="thumb" id="treeThumbnail"><a ><img src="ReportLib/tree.png" /></a><div>Scoring Tree</div></div>';
+	
 		var mbars='<div id="mbars" style="border: 0px solid;width:100%;margin-left:4%"></div>';
+	
 		if($scope.InstitutionID == '4019'){
 			var layout='<div class="col-md-12" id="graphArea" style="padding-left:0px"></div>';
 			var legend = '<div id="legendGroup" style="margin-left: 25%;"><ul class="legend"><li><span class="approved"></span> Approved</li><li><span class="declined"></span> Declined</li><li><span class="pending"></span>Queue</li></ul></div>';
 		}
+	
 		var instid=$scope.InstitutionID;
 		var userid = $scope.userid;
 		var email = $scope.useremail;
@@ -37,9 +43,13 @@
 				console.log("ERROR GONOGO: "+e);
 				$scope.redirect();
 			}
+	
 			var instid=$scope.InstitutionID;
+	
 			var userid = $scope.userid;
+	
 			var email = $scope.useremail;
+	
 			$(document.body).find("#mtd-box").append(layout);
 //			$('body').append(canvasElement);
 //			canvas = document.getElementById('canvas');
@@ -113,7 +123,7 @@
 				}else{
 					$.ajax({
 						method: "GET",
-						url: BASE_URL_SCOR+"StackGraphData",
+						url: APP_CONST.getConst('BASE_URL_SCORE')+"StackGraphData",
 						data:{'INSTITUTION_ID':instid},
 						type:"application/json"
 					  }).done(function(resp) {
@@ -137,7 +147,6 @@
 					});
 				}
 			
-			/*	*/
 			}
 			setInterval(function(){getStackGraph()}, 5*60000);
 			        
@@ -278,7 +287,6 @@
 
 						$('#scoringdiv').html('');	
 						$('body #Loader').show();
-	//***********************************tree graph******************************************
 					
 						if( $scope.InstitutionID=='4019'){
 							if(email.indexOf("dsa") > -1 || email.indexOf("DSA") > -1)
@@ -342,28 +350,17 @@
 										 	 if(item.croJustificationList!="" && item.croJustificationList!=null){
 										 		 $.each(item.croJustificationList, function(i, temp){
 										 			 if(temp.sRemark!=null && temp.sRemark!=''){
-		//								 				tableRow.find('ul').append("<li>"  +temp.sRemark + "</li>");
 										 				tableRow.find('#remark').find('ul').append("<li>"  +temp.sRemark.toUpperCase() + "</li>");
 										 			 }
 										 		 });
 										 	 }
-										 	/* tableRow.append("<td id='subject'><ul></ul></td>");
-										 	 if(item.croJustificationList!="" && item.croJustificationList!=null){
-										 		 $.each(item.croJustificationList, function(i, temp) {
-										 			 if(temp.sSubTo!=null && temp.sSubTo!=''){
-		//								 				tableRow.find('ul').append("<li>"  +temp.sSubTo + "</li>");
-										 				tableRow.find('#subject').find('ul').append("<li>"  +temp.sSubTo.toUpperCase() + "</li>");
-										 			 }
-										 		 });
-										 	 }*/
-//										 $('#scoring_table table').addClass("table-striped table-condensed header");
+										 	
 										 	 $('#scoring_table tbody').append(tableRow);
 									});
 								}
 							}
 						},function(error){
 								$('body #Loader').hide(1500);
-								//		alert('Data is not available.');
 								$('body #mtd-box .CatError').text("Sorry...We are unable to generate report. Please try later..!!!").show();
 						});	
 							
@@ -372,7 +369,7 @@
 						}else{
 							$.ajax({
 								method: "GET",
-								url: BASE_URL_SCOR+"TableGraphData",
+								url: APP_CONST.getConst('BASE_URL_SCORE')+"TableGraphData",
 								type:"application/json",
 								data:{"date":d.time,"status":d.status,'INSTITUTION_ID':instid}
 							})

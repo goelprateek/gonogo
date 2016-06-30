@@ -22,7 +22,7 @@
 		    link : function(scope,element,attribute, controller){
 
 		    	var element = element[0],
-		    		width = 950,
+		    		width = 1000,
 		    		height = 300,
 		    		padding = {top: 0, right: 10, bottom: 70, left:0},
 		    		svg = d3.select(element).append("svg").attr("width", width)

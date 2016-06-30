@@ -15,11 +15,15 @@
 				'gonogo.analytics',
 				'gonogo.login',
 				'gonogo.directives',
-				'gonogo.cdl'
+				'gonogo.cdl',
+				'gonogo.services',
+				'gonogo.utilities'
 	]);
 	
-	app.controller("Maincontroller",['$scope', '$rootScope', '$http', 'Validation', '$timeout','RestService','$location','UserService','APP_CONST',function($scope, $rootScope, $http, Validation, $timeout,RestService,$location,UserService,APP_CONST) {
+	app.controller("Maincontroller",['$scope', '$log', 'Validation', '$timeout','RestService','$location','UserService','APP_CONST',function($scope, $log, Validation, $timeout,RestService,$location,UserService,APP_CONST) {
+			
 		
+			
 		$scope.isSpecificPage = function() {
             var path;
             return path = $location.path(),  _.contains(["/"], path) ;
@@ -39,10 +43,10 @@
 						"sUserID": $scope.userid
 				}
 
-				RestService.postDataWithHeaders(BASE_URL_GNG+'logout',json);
+				RestService.postDataWithHeaders(APP_CONST.getConst('BASE_URL_GNG')+'logout',json);
 
 				UserService.cleanUpUserDeatails();
-				$location.path(APP_CONTEXT);
+				$location.path(APP_CONST.getConst('APP_CONTEXT'));
 
 		};
 
@@ -78,7 +82,7 @@
 				$scope.userid = userdata.userid; $scope.color = userdata.color;
 				
 			}catch (e) {
-				//console.log(e);
+				$log.log(e);
 			}
 
 			if ($scope.InstitutionID == 4019 || $scope.InstitutionID == 4011) {
@@ -839,7 +843,6 @@
 			/*$(document.body).on("click", "#ref", function() {
 				all_list();
 			});*/
-
 
 			function load_fromkyc()
 			{if($scope.InstitutionID == 4020)

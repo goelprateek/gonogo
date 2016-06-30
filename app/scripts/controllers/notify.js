@@ -1215,6 +1215,7 @@ $scope.setSelected=function() {
 	
 		});
 	});
+
 *//*
 	function getTime(value, array){
 		var index;
