@@ -290,8 +290,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 			var ach_array=[];
 			var arrayDesc=[];
 			var arrayDclnDesc=[];
-			$(document.body).find('#OfferBox0').css("background-color","#F4F8F9");
-	
+			$(document.body).find('#OfferBox0').css("background-color","#F4F8F9");	
 			$scope.appStatflag = '';
 			$scope.appform = '';
 			$scope.disburstment ='';
@@ -602,7 +601,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 		function applicantImg(data){
 			var map =data;
 			checkRejectedImg(map);
-			for (i in map)
+			for (var i in map)
 			{
 				if(map[i].sImgType == "PAN")
 				{
@@ -655,7 +654,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 		function kyc_img(kycName , imgId ,status , reason,value){
 			var json ={'sImgID':imgId}
 			var URL = 'get-image-by-id-base64';
-			CallRestAPI.postData(URL,json).then(function(Response){
+			RestService.saveToServer(URL,json).then(function(Response){
 //				//console.log("Response: "+JSON.stringify(Response));
 				var image = "data:image/png;base64,"+Response.sByteCode;
 				if(Response.sByteCode != undefined && Response.sByteCode != null && Response.sByteCode != "" ){
