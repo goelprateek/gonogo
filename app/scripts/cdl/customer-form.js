@@ -39,7 +39,7 @@ app.controller('PDFViewerModalCtrl', ['RestService','$scope', '$uibModalInstance
 			sImgID:imgID
 		};
 
-		URL = APP_CONST.getConst('BASE_URL_GNG')+'/send-mail-pdf';
+		URL = 'send-mail-pdf';
 		RestService.postDataWithHeaders(URL,JSON.stringify(mailRequest),$scope.useremail,$scope.pass).then(function(Response){
 
 			if(Response){}
@@ -48,12 +48,12 @@ app.controller('PDFViewerModalCtrl', ['RestService','$scope', '$uibModalInstance
 		$uibModalInstance.close();
 		
 		alert("DO has been sent to dealer.");
-		$location.path("/dashboard");
+		$location.path("/cdl/dashboard");
 	 };
 
 	 $scope.cancel = function () {
 		$uibModalInstance.dismiss('cancel');
-		$location.path("/dashboard");
+		$location.path("/cdl/dashboard");
 	 };
 }]);
 
@@ -67,12 +67,12 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 	var json ={'sRefID':CustID};
 	
 	if(CustID==null || CustID==""){
-		$location.path("/dashboard");
+		$location.path("/cdl/dashboard");
 	}
 
-	URL = APP_CONST.getConst('BASE_URL_GNG') +'/dashboard-application-data';
+	URL = 'dashboard-application-data';
 	
-	docData = [{'Name':'Address Proof',
+	var docData = [{'Name':'Address Proof',
 		'ID':'0',
 		'Icon':'img/address proof.png',
 		'Count':'1',
@@ -248,7 +248,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 							
 				$scope.currStage = Response.sCurrentStageId;
 				var fulladdress = Response.oReq.oApplicant.aAddr;
-				for (j in fulladdress)
+				for (var j in fulladdress)
 				{
 					if(fulladdress[j].sAddrType=="OFFICE"){
 						$scope.officeaddr = fulladdress[j]; 
@@ -276,11 +276,20 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 			$('#descReason').val("");
 			$("#approvemsg").text("");
 			$scope.rejectArray=[];
-			rejectArray=[];
+			var rejectArray=[];
 			$scope.rejectFlag = false;
-			$scope.losID="";
-			$scope.kyc_array=[];appForm_array=[];disburst_array=[];agreement_array=[];extra_array=[];evidence_array=[];
-			ach_array=[];addkyc_array=[];ach_array=[];arrayDesc=[];arrayDclnDesc=[];
+			$scope.losID ="";
+			$scope.kyc_array=[];
+			var appForm_array=[];
+			var disburst_array=[];
+			var agreement_array=[];
+			var extra_array=[];
+			var evidence_array=[];
+			var ach_array=[];
+			var addkyc_array=[];
+			var ach_array=[];
+			var arrayDesc=[];
+			var arrayDclnDesc=[];
 			$(document.body).find('#OfferBox0').css("background-color","#F4F8F9");
 	
 			$scope.appStatflag = '';
@@ -294,9 +303,9 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 			$scope.dlicense = '';
 			$scope.passport = '';
 			temp=[];
-			passport=[];
-			dlicen=[];
-			adhar=[];			
+			var passport=[];
+			var dlicen=[];
+			var adhar=[];			
 			$scope.uploadedImg1 ='';
 			$scope.uploadedImg2 ='';
 			$(document.body).find('#imgpreview1').attr('src', "");
@@ -359,9 +368,9 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 			
 			//Fetch Images
 			//alert("Call Images");
-				URL = BASE_URL_GNG+'/application-images';
+				URL = 'application-images';
 				var json ={'sRefID':CustID};
-				CallRestAPI.postData(URL,json).then(function(Response){
+				RestService.saveToServer(URL,json).then(function(Response){
 					//console.log("Images loaded:");
 					//console.log(JSON.stringify(Response));
 					if(Response!=null)
@@ -581,7 +590,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 		}
 
 		function checkRejectedImg(array){
-			for(i=0;i<array.length;i++){
+			for(var i=0;i<array.length;i++){
 				if(array[i].sStat == "Reject"){
 					if(array[i].sImgType !=null && array[i].sImgType!=''){
 						rejectArray.push({Name: array[i].sImgType,Image:"",Reason:array[i].sReason,Id:array[i].sImgID});
@@ -645,7 +654,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 		
 		function kyc_img(kycName , imgId ,status , reason,value){
 			var json ={'sImgID':imgId}
-			var URL = BASE_URL_GNG+'/get-image-by-id-base64';
+			var URL = 'get-image-by-id-base64';
 			CallRestAPI.postData(URL,json).then(function(Response){
 //				//console.log("Response: "+JSON.stringify(Response));
 				var image = "data:image/png;base64,"+Response.sByteCode;
@@ -807,7 +816,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 		}else if($scope.currStage=="APRV"){
 			$rootScope.DashFlag = true;
 			sharedService.setCurrentStage($scope.currStage);
-			$location.path("/apply");
+			$location.path("/cdl/apply");
 		}else if($scope.currStage=="PD_DE"){
 			var status=sharedService.getDecisionStatus();
 			status=status.toLowerCase();
@@ -816,13 +825,13 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 				$scope.loadPDF();
 			}else if(status=="declined"){
 				alert("This application has been declined.");
-				$location.path("/dashboard");
+				$location.path("/cdl/dashboard");
 			}
 		}else{
 //			alert("Sending : "+$scope.currStage);
 //			$rootScope.DashFlag=true;
 			sharedService.setCurrentStage($scope.currStage);
-			$location.path("/apply");
+			$location.path("/cdl/apply");
 		}
 	}
 	
@@ -878,7 +887,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 		//alert(JSON.stringify(request));
 		//console.log("JSON IPA REQUEST : "+JSON.stringify(postIPARequest));
 		
-		URL = BASE_URL_GNG+'/get-post-ipa';
+		URL = 'get-post-ipa';
 		CallRestAPI.postData(URL,JSON.stringify(postIPARequest)).then(function(Response){
 			//console.log("JSON IPA RESPONSE : ");
 			//console.log(JSON.stringify(Response));
@@ -896,7 +905,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 				
 				//console.log(" IPA PDF REQUEST : "+JSON.stringify(postIPARequest));
 				
-				URL = BASE_URL_GNG+'/get-pdf-ref';
+				URL = 'get-pdf-ref';
 				CallRestAPI.postData(URL,JSON.stringify(postIPARequest)).then(function(Response){
 					//console.log("JSON IPA PDF RESPONSE : ");
 					//console.log(JSON.stringify(Response));
@@ -909,7 +918,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 	}
 	
 	$scope.gotoDashboard=function(){
-		$location.path("/dashboard");
+		$location.path("/cdl/dashboard");
 	};
 	
 	$scope.showPreviewModal=function(img){

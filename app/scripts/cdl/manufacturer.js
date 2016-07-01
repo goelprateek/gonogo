@@ -4,7 +4,7 @@
 	'use strict';
 
 	angular.module('gonogo').controller("manufacturerController",function(
-		$upload,$scope,$http,$timeout,$window,$location,$q,APP_CONST) {
+		$scope,$http,$timeout,$window,$location,$q,APP_CONST) {
 	
 	var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
 
@@ -71,7 +71,7 @@
 				headers : {'Content-Type' : 'application/json'}
 			}).success(function(data) 
 			 { $scope.assetArray=[];
-				for(i in data)
+				for(var i in data)
 				{
 					if(data[i].sMdlNo !=="")
 					{	$scope.assetArray.push(data[i].sMdlNo);

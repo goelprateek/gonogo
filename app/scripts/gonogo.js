@@ -22,7 +22,10 @@
 	
 	app.controller("Maincontroller",['$scope', '$log', 'Validation', '$timeout','RestService','$location','UserService','APP_CONST',function($scope, $log, Validation, $timeout,RestService,$location,UserService,APP_CONST) {
 			
-		
+		$log.info("hello this first log");
+		$log.debug("hello this first log");
+		$log.error("hello this first log");
+
 			
 		$scope.isSpecificPage = function() {
             var path;
@@ -32,7 +35,7 @@
 
         $scope.isCdlPage = function() {
             var path;
-            return path = $location.path(),  _.contains(["/cdl/dealer","/cdl/apply"], path);
+            return path = $location.path(),  _.contains(["/cdl/dealer","/cdl/apply",'/cdl/dashboard','/cdl/assetMaster','/cdl/customerForm'], path);
         }
 		
 
