@@ -22,10 +22,6 @@
 	
 	app.controller("Maincontroller",['$scope', '$log','notifier' ,'Validation', '$timeout','RestService','$location','UserService','APP_CONST',function($scope, $log, notifier ,Validation, $timeout,RestService,$location,UserService,APP_CONST) {
 			
-		$log.log(UserService.getCurrentUser().username);
-
-		
-;
 		$scope.isSpecificPage = function() {
             var path;
             return path = $location.path(),  _.contains(["/"], path) ;
@@ -34,7 +30,7 @@
 
         $scope.isCdlPage = function() {
             var path;
-            return path = $location.path(),  _.contains(["/cdl/dealer","/cdl/apply"], path);
+            return path = $location.path(),  _.contains(["/cdl/dealer","/cdl/apply",'/cdl/dashboard','/cdl/assetMaster','/cdl/customerForm'], path);
         }
 		
 

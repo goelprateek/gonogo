@@ -10,7 +10,7 @@ app.controller('DecisionViewController', function ($scope,$uibModalInstance, dat
 //	 };
 });
 
-app.controller("DashboardController",["$scope","CallRestAPI","BASE_URL_GNG","$filter",'sharedService','$location',"$uibModal",function($scope,CallRestAPI,BASE_URL_GNG,$filter,sharedService,$location,$uibModal){
+app.controller("DashboardController",["$scope","$filter",'sharedService','$location',"$uibModal",'APP_CONST',"RestService",function($scope,$filter,sharedService,$location,$uibModal,APP_CONST,RestService){
 	$scope.applicationList="ApplicationList";
 	$scope.duration="LastYear";
 	$scope.dashboardResult=[];
@@ -82,7 +82,10 @@ app.controller("DashboardController",["$scope","CallRestAPI","BASE_URL_GNG","$fi
 		dashboardJson={"iLimit":10000,"dtToDate":todayStr,"sDsaId":$scope.useremail,"iSkip":0,"dtFromDate":fromDateStr};
 		
 		var dashboardJson=JSON.stringify(dashboardJson);
-		CallRestAPI.postData(BASE_URL_GNG+"dashboard-detail",dashboardJson)
+		// var urlConst= APP_CONST.getConst('BASE_URL_GNG');
+		console.log("APP_CONST.getConst('BASE_URL_GNG')" + APP_CONST.getConst('BASE_URL_GNG'));
+		RestService.saveToServer("dashboard-detail",dashboardJson)
+
 		.then(function(data){
 			console.log("dashboard-detail response:");
 			console.log(data);
@@ -93,7 +96,7 @@ app.controller("DashboardController",["$scope","CallRestAPI","BASE_URL_GNG","$fi
 	$scope.loadCDLForm=function(refID,decisionStatus){
 		sharedService.setRefID(refID);
 		sharedService.setDecisionStatus(decisionStatus);
-		$location.path( "/customerForm" );
+		$location.path( "/cdl/customerForm" );
 	};
 	
 	$scope.fetchDashboardList();
@@ -139,7 +142,7 @@ app.controller("DashboardController",["$scope","CallRestAPI","BASE_URL_GNG","$fi
 		 //alert('modal baseURL'+baseURL);
 		 var modalInstance = $uibModal.open({
 	 		animation: true,
-	 		templateUrl: 'dashboard-result.html',
+	 		templateUrl: 'views/cdl/dashboard-result.html',
 	 		controller: 'DecisionViewController',
 	 		size: size,
 	 		resolve: {

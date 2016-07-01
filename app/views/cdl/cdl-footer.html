@@ -1,3 +1,10 @@
+
+<div class="row clearfix" style="background-color: white;" id="ErrorContainer">
+			<div id="msgContainer" ng-show="errHead!=''">
+			<img id="loaderImg" alt="" src="../img/loading.gif" style="display: none;">
+				<strong id="errorHeading" ng-show="errHead!=''" class="text-danger">{{errHead}}
+					:</strong> <span id="main_error" class="text-danger">{{errorMsg}}</span>
+</div>
 	<div class="row clearfix footer" style="line-height: 4px; background-color: #24A1ED"></div>
 
 		<div style="width: 400px;position: fixed; bottom: 14px;left: 1%;text-align: center;" >

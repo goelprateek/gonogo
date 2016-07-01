@@ -126,7 +126,7 @@ padding: 6px 5px;
 }
 
 .scroll-divs-outer {
- margin: 5px 13px;
+ margin: 5px 0px;
 }
 
 #img_panel{
@@ -171,6 +171,13 @@ width: 100%; height: 100%; max-height: 400px;
 .modal-title h5{
 font-size:14px;}
 
+.declinePanel {
+	position: absolute;width: 46%; left: 30%; top: 28%;background-color: white; border: 1px solid #C9D7E1;
+}
+
+.dashedcontainer {
+	border: 1px dashed grey; min-height: 40px; margin:4px 15px; padding: 10px; width: 95%; font-weight: bold
+}
 </style>
 
 
@@ -197,17 +204,17 @@ font-size:14px;}
 								style="margin-top: 13px; display: block;"> 
 								<a href="javascript:;" ng-click="newApplication()">{{objectSet.oAppReq.sRefID}}</a></span></li>
 							<li><a id="dsa_chat" ng-if="authenticate('NCHAT')">DSA Chat</a></li>
-							<li ><a id="onhold" title="{{refID}}"
+							<li ><a id="onhold" title="{{objectSet.oAppReq.sRefID}}"
 								ng-if="authenticate('NHOLD')"  
-								ng-click='cro_action(applicID, "OnHold")'>OnHold</a><!-- 27 -->
+								ng-click='cro_action(objectSet.oAppReq.oHeader.sAppID, "OnHold")'>OnHold</a><!-- 27 -->
 							</li>
-							<li ><a id="approve" title="{{refID}}"
+							<li ><a id="approve" title="{{objectSet.oAppReq.sRefID}}"
 								ng-if="authenticate('NAPPROVE')"
-								ng-click='cro_action(applicID, "Approved")'>Approve</a>
+								ng-click='cro_action(objectSet.oAppReq.oHeader.sAppID, "Approved")'>Approve</a>
 							</li>
-							<li ><a id="decline" title="{{refID}}"
+							<li ><a id="decline" title="{{objectSet.oAppReq.sRefID}}"
 								ng-if="authenticate('NDECLINE')"
-								ng-click='cro_action(applicID, "Declined")'>Decline</a>
+								ng-click='cro_action(objectSet.oAppReq.oHeader.sAppID, "Declined")'>Decline</a>
 							</li>
 							<!-- <li ><a id="accept" title="{{refID}}"
 								ng-if="authenticate('NACCEPT')"
@@ -253,7 +260,7 @@ font-size:14px;}
 								</span>	
 
 								<div class="notify-name">{{user.sDsaName.split("@")[0]}}</div>
-								<div class="status" id="{{user.sAppId}}"
+								<div class="status" id="{{user.sAppId}}" ng-model="user.sAppId"
 									ng-class="{Pending: user.sStat.toUpperCase() == 'ONHOLD', Approved: user.sStat.toUpperCase() == 'APPROVED', Declined:user.sStat.toUpperCase()== 'DECLINED'} "style="margin-top: 2px"></div>
 								<div class="notify-time" style="position: absolute;right: 7px;width:32%;margin-right: 3%;font-size: 12px">{{user.dtDateTime | dateFormat }}</div>
 								<div class="property_location" style="font-size: 10px;  min-width: 60px;" ng-if="user.sStage!=null && !authenticate('NCROQUE')">{{user.sStage}}</div>
@@ -261,7 +268,7 @@ font-size:14px;}
 								<div class="property_amount" style="    right: 11%;">{{user.dloanAmt | currency:"&#x20B9; "}}</div>
 							</div>
 						</div>
-					</div>
+				</div>
 				</div>
 			</div>
 <!-- 	userid!='37' -->
@@ -275,7 +282,7 @@ font-size:14px;}
 	                	<option ng-repeat="count in dedupeArray" value="{{count}}">{{count}}</option>
 					</select>
  				</ul>
-				<div class="row clearfix"  id="applicant_panel" style=" width: 100%; margin-bottom: 36px;overflow-y:auto ">
+				<div class="row clearfix"  id="applicant_panel" style=" width: 101%; margin-bottom: 36px;overflow-y:auto ">
 					<div class="col-md-4 column">
 						<div class="scroll-divs-outer">
 							<label class="div-heading customer">DEMOGRAPHICS</label>
@@ -336,11 +343,14 @@ font-size:14px;}
 						</div>
 					</div>
 					<div class="col-md-4 column">
-						<div class="scroll-divs-outer"  style="margin: 5px 13px;">
+						<div class="scroll-divs-outer" >
 							<label class="div-heading income">ABILITY TO PAY <span class="badge">{{details.APPLICATION.IncomeScore}}</span></label>
 							<div id="income" class="scroll-divs" ng-repeat="emp in objectSet.oAppReq.oReq.oApplicant.aEmpl">
-								<div class="list-group-item">
+								<div class="list-group-item" ng-if="emp.dGrossSal!=0">
 									<span>Gross Annual : {{ emp.dGrossSal | rupee:"&#x20B9; "}}</span>
+								</div>
+								<div class="list-group-item" ng-if="emp.dGrossSal==0">
+									<span>IT Amount : {{emp.dItrAmt}}</span> 
 								</div>
 								<div class="list-group-item">
 									<span ng-if="emp.dmonthSal != 0">Monthly Income : {{emp.dmonthSal | rupee:"&#x20B9; "}}</span>
@@ -384,7 +394,7 @@ font-size:14px;}
 							</div>
 						</div>
 					<div class="col-md-4 column">
-						<div class="scroll-divs-outer"  style="    margin: 5px 13px;">
+						<div class="scroll-divs-outer">
 							<label class="div-heading cir">SCORE<span
 								class="badge"></span></label>
 							<div class="scroll-divs" style="height: 158px;">
@@ -432,16 +442,16 @@ font-size:14px;}
 						</div>
 						<div style="position: absolute; background: #fff; width: 87%; margin: 2px; bottom: 8px;height: 50px;">
 							<a>
-								<img alt="CIBIL CIR" ng-if="pdf"
+								<img alt="CIBIL CIR" ng-if="objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]['PDF REPORT']"
 										name="{{pdf}}" data-toggle="modal"
 										data-target="#myModalnew" 
 										class="custom_img_rounded Report-Icon"
-										src="img/cibil_logo.png"></a> 
-							<a style="float: right;"><span id="appscore" ng-show="appScore"
+										src="images/cibil_logo.png"></a> 
+							<a style="float: right;"><span ng-show="objectSet.oCompRes.scoringServiceResponse['SCORE-DATA'].STATUS != 'ERROR' && objectSet.oCompRes.scoringServiceResponse['SCORE-DATA'].STATUS != null"
 										style="display: block; margin: 13px 8px;"
 										ng-click="scoreTree()"
 										data-toggle="modal" data-target="#treeModal">App Score :
-										{{appScore}}</span></a>
+										{{objectSet.oCompRes.scoringServiceResponse.SCORE_TREE.AppScore}}</span></a>
 							</div>
 						</div>
 					</div>
@@ -451,7 +461,7 @@ font-size:14px;}
 								<label class="div-heading property">ASSET <span
 									class="badge"></span></label>
 								<div id="property" class="scroll-divs">
-								<div ng-repeat="asset in objectSet.oAppReq.oReq.oApplication.aAssetDetail" >
+								<div ng-repeat="asset in objectSet.oAppReq.oReq.oApplication.aAssetDetail" ng-if=" objectSet.oAppReq.oReq.oApplication.aAssetDetail" >
 									<div class="list-group-item" style="border-top: 2px solid rgb(221, 221, 221);">
 										<span>Asset Category : {{asset.sAssetCtg}}</span>
 									</div>
@@ -468,7 +478,7 @@ font-size:14px;}
 										<span>Price : {{asset.sPrice}}</span>
 									</div>
 								</div>
-								<div  ng-if="">
+								<div  ng-if="objectSet.oAppReq.oReq.oApplication.sLnPurp!=null">
 									<div class="list-group-item" style="border-top: 2px solid rgb(221, 221, 221);">
 										<span>Purpose : {{objectSet.oAppReq.oReq.oApplication.sLnPurp}}</span>
 									</div>
@@ -480,7 +490,7 @@ font-size:14px;}
 									</div>
 
 								</div>
-								<div ng-if="assetData.length==0 && purpose==null">
+								<div ng-if="!objectSet.oAppReq.oReq.oApplication.aAssetDetail && objectSet.oAppReq.oReq.oApplication.sLnPurp==null">
 									<div class="list-group-item" style="border-top: 2px solid rgb(221, 221, 221);">
 										<span>Asset Category : </span>
 									</div>
@@ -609,47 +619,19 @@ font-size:14px;}
 				</div>
 			</div>
 <!-- ******************************Second Common Form ************************************************* -->
-		<div ng-include="'views/templates/app-form.html'"></div> 
-<!-- 		****************************************END  ************************************************* -->
+			<div ng-include="'views/templates/app-form.html'"></div> 
 		</div>
 	</div>
-	</div>
-	<div id="chat_window" class="row clearfix">
-		<div class="chat_header_box" style="font-weight: bold;">
-			<a id="minimize"
-				style="vertical-align: middle; border: 1px solid #fff; color: #fff; padding: 0px 5px 0px 5px; text-decoration: none;">-</a>
-			<a id="maxmize"
-				style="vertical-align: middle; border: 1px solid #fff; color: #fff; padding: 0px 5px 0px 5px; text-decoration: none;">+</a>
-			<a id="" title="{{}}"
-				style="vertical-align: middle; color: #fff; padding: 0px 5px 0px 5px; text-decoration: none;">{{
-				users.DSA.name}}</a> <a
-				style="float: right; padding-right: 10px; color: #fff;"
-				onclick="closeSocket();" id="btn_close">Close</a>
-		</div>
-		<div id="message_container">
-			<ul id="messages">
-			</ul>
-			<div id="input_message_container">
-				<form id="form_send_message" method="post" action="#">
-					<input type="text" id="input_message"
-						placeholder="Type your message here..." /> <input type="submit"
-						id="btn_send" onclick="send('');" value="Send" />
-					<div class="clear"></div>
-				</form>
-			</div>
-		</div>
-	</div>
-	<form id="offrform">
-	<div class="row clearfix" id="OfferPanel"
-		style="position: absolute; display: none; left: 25%; top: 28%;"
-		ng-if="authenticate('NOFRS')">
+	<form id="offrform" ng-show="toggleDocPanel">
+	<div class="row clearfix" 
+		style="position: absolute; left: 25%; top: 28%;">
 		
 		<div class="col-md-12"
-			style="background-color: white; border: 1px solid #C9D7E1;">
+			style="background-color: white; border: 1px solid #C9D7E1;padding:0px">
 			<div class="row clearfix" id="searchBox">
 				<!-- <span class="glyphicon glyphicon-chevron-left"></span> -->
 				<div class="col-md-2 thumbnail-box" ng-repeat="offer in OfferArrey"
-					id="OfferBox{{$index}}" ng-click="Load_Offer(offer.ID,$event)">
+					id="OfferBox{{$index}}"  ng-click="Load_Offer(offer.ID,$event)">
 				<!-- 	<span class="badge">{{offer.Count}}</span>  -->
 				<img
 						ng-src="{{offer.Icon}}" />
@@ -676,43 +658,23 @@ font-size:14px;}
 									for="Offer{{$index}}" style="box-shadow:0px 0px 4px rgba(0, 0, 0, 1);"></label>
 							</div>
 						</div>
-						<!-- <div class="col-md-2">
-						<span class="glyphicon glyphicon-pencil" id="changeActive{{$index}}" title="edit" ng-click="editDescInfo(moreoffer.Code , moreoffer.Name)"style="display: none;">
-						</span>
-							
-						</div> -->
 					</li>
 				</ul>
 			</div>
 			<div class="row clearfix lo" style="background-color: #DADADB;">
 				<div class="col-md-12">
-					<a class="add-button-div-notification" id="SendOffer" style="float: left">Offer</a>
-					<input type="text" id="descReason" maxlength="150" style="margin: 6px 0px; margin-left: 10px;" ng-if="InstitutionID=='4019'">
+					<a class="add-button-div-notification" ng-click="requestDoc()" style="float: left">Request Document</a>
+					<input type="text" ng-model="reqComment" maxlength="150" style="margin: 6px 0px; margin-left: 10px;">
 <!-- 						ng-click="updateStatus()" style="float: left">Offer</a>  --> 
-					<span  class="text-danger" id="msg"></span>
+					<span  class="text-danger" ng-if="invalidMsg">Please enter your reason for Onhold</span>
 						<a	class="add-button-div-notification" id="closeOffer"
-						style="float: right">Close</a>
+						style="float: right" ng-click="closeDocument()">Close</a>
 				</div>
 			</div>
 		</div>
-<!-- 		required ng-pattern="/^(\D)+$/" -->
 	</div>
 </form>
-	<!--   <div class="row clearfix hiden" id="DescInfo"style="position: absolute; display: none;width: 46%; left: 30%; top: 28%;background-color: white; border: 1px solid #C9D7E1;">
-		<div class="panel_heading"><label>Description </label><span class="text-danger" id="errorheading" style="float:right ;margin-top: 3px"> </span></div>
-		<div class="panel_body">
-		  <div class="row clearfix">
-		   <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
-			  padding: 10px; font-weight: bold" id="descContainer" contenteditable="true"spellcheck="false"> 
-			  </div>
-		  </div>
-		</div>
-		<div class="panel_footer text-right">
-		  <a class="TC_button" ng-click="saveDescData(codeVal,offrName)">Save</a>													
-		  <a class="TC_button" ng-click="closeDescPanel()">Close</a>
-		</div>
-	</div> -->
-	 <div class="row clearfix hiden" id="declinereason"style="position: absolute; display: none;width: 46%; left: 30%; top: 28%;background-color: white; border: 1px solid #C9D7E1;">
+ <div class="row clearfix declinePanel" id="declinereason" data-ng-show="toggleDclnPanel">
 		<div class="panel_heading"><label>Description </label><span class="text-danger" id="errorheading" style="float:right ;margin-top: 3px"> </span></div>
 		<div class="panel_body">
 		 <!--  <div class="row clearfix">
@@ -722,60 +684,80 @@ font-size:14px;}
 		  </div> -->
 		  <div class="row clearfix">
 		  <label style="margin-left: 15px">Remark :</label>
-		   <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
-			  padding: 10px; font-weight: bold" id="reason1container" contenteditable="true"spellcheck="false"> 
-			  </div>
+			  <input type="text" class="dashedcontainer" ng-model="dclnRemark" >
 		  </div>
 		   <div class="row clearfix">
 		   <label style="margin-left: 15px">Subject to  :</label>
-		   <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
-			  padding: 10px; font-weight: bold" id="reason2container" contenteditable="true"spellcheck="false"> 
-			  </div>
+			   <input type="text" class="dashedcontainer" ng-model="dclnSubTo" >
 		  </div>
 		</div>
 		<div class="panel_footer" style="height: 27px;">	
 			<span id="declinemsg" class="text-danger" style="text-align: left;"></span>
+			<span  class="text-danger" ng-if="errorMsg">Please fill all the fields</span>
 			<div class="text-right" style=" display: inline; float: right;">
-		  	<a class="TC_button" ng-click="saveDclnData()">Submit</a>	
-		   <a class="TC_button" ng-click="closeDclnData()">Close</a>	
+		  	<a class="TC_button" ng-click="saveDclnPanel()">Submit</a>	
+		   <a class="TC_button" ng-click="closeDclnPanel()">Close</a>	
 		   </div>												
 <!-- 		  <a class="TC_button" ng-click="closeDclnPanel()">Close</a> -->
 		</div>
 	</div>
-	 <div class="row clearfix hiden" id="approveReason"style="position: absolute; display: none;width: 46%; left: 30%; top: 28%;background-color: white; border: 1px solid #C9D7E1;">
+	 <div class="row clearfix declinePanel" id="approveReason" data-ng-show="toggleApprvPanel">
 		<div class="panel_heading"><label>Description </label><span class="text-danger" id="errorheading" style="float:right ;margin-top: 3px"> </span></div>
 		<div class="panel_body">
 		 <div class="row clearfix" id="enterAmount" style=" margin-top: 5px;">
 		 	<div class="col-md-4"><label>Approve Amount :</label>
-		 <input type="text" class="checkVisible" maxlength="20" ng-model="croDec.dAmtAppr" id="ApprvValue" style="width: 100%;"/></div>
+		 <input type="text" class="checkVisible" maxlength="20" ng-model="croDecision[0].dAmtAppr" id="ApprvValue" style="width: 100%;"/></div>
 		 	<div class="col-md-4"><label>EMI :</label>
-		 <input type="text" class="checkVisible" maxlength="20" ng-model="croDec.iTenor" id="emiValue" style="width: 100%;"/></div>
+		 <input type="text" class="checkVisible" maxlength="20" ng-model="croDecision[0].iTenor" id="emiValue" style="width: 100%;"/></div>
 		 	<div class="col-md-4"><label>Tenor :</label>
-		 <input type="text" class="checkVisible" maxlength="20" ng-model="croDec.dEmi" id="tenorValue" style="width: 100%;"/></div>
+		 <input type="text" class="checkVisible" maxlength="20" ng-model="croDecision[0].dEmi" id="tenorValue" style="width: 100%;"/></div>
 		 
 		 </div>
 		  <div class="row clearfix">
 		  <label style="margin-left: 15px; margin-top: 5px;">Remark :</label>
-		   <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
-			  padding: 10px; font-weight: bold" id="appr1Container" contenteditable="true"spellcheck="false"> 
-			  </div>
+			  <input type="text" class="dashedcontainer" ng-model="apprvRemark" >
 		  </div>
 		   <div class="row clearfix">
 		   <label style="margin-left: 15px">Subject to  :</label>
-		   <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
-			  padding: 10px; font-weight: bold" id="appr2Container" contenteditable="true"spellcheck="false"> 
-			  </div>
+			   <input type="text" class="dashedcontainer" ng-model="apprvSubTo" >
 		  </div>
 		</div>
 		<div class="panel_footer" style="height: 27px;">
 			<span id="approvemsg" class="text-danger" style="text-align: left;"></span>
-		
 			<div class="text-right" style=" display: inline; float: right;">
-		   <a class="TC_button" ng-click="saveApprvData()">Submit</a>	
-		   <a class="TC_button" ng-click="closeApprvData()">Close</a>	
+		   <a class="TC_button" ng-click="saveApprvPanel()">Submit</a>	
+		   <a class="TC_button" ng-click="closeApprvPanel()">Close</a>	
 		   </div>							
 		</div>
 	</div>
+
+</div><!-- end of controller -->
+	<div id="chat_window" class="row clearfix">
+		<div class="chat_header_box" style="font-weight: bold;">
+			<a id="minimize"
+				style="vertical-align: middle; border: 1px solid #fff; color: #fff; padding: 0px 5px 0px 5px; text-decoration: none;">-</a>
+			<a id="maxmize"
+				style="vertical-align: middle; border: 1px solid #fff; color: #fff; padding: 0px 5px 0px 5px; text-decoration: none;">+</a>
+			<a id="" title="{{}}"
+				style="vertical-align: middle; color: #fff; padding: 0px 5px 0px 5px; text-decoration: none;">{{
+				users.DSA.name}}</a> <a
+				style="float: right; padding-right: 10px; color: #fff;"
+				onclick="closeSocket();" id="btn_close">Close</a>
+		</div>
+		<div id="message_container">
+			<ul id="messages">
+			</ul>
+			<div id="input_message_container">
+				<form id="form_send_message" method="post" action="#">
+					<input type="text" id="input_message"
+						placeholder="Type your message here..." /> <input type="submit"
+						id="btn_send" onclick="send('');" value="Send" />
+					<div class="clear"></div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
 	<div id="checkConfirmation" class="modal fade">
 		<div id="confirm-title" class="modal-header btn-danger" style="padding: 6px 12px;">
 			<h4 class="modal-title">Are you Sure...?</h4>

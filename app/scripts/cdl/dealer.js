@@ -49,8 +49,8 @@
 			$location.path("/cdl/apply");
 		
 		}else {
-			$scope.errHead="Dealer";
-			$scope.errorMsg="Please select Dealer";
+			$rootScope.errHead="Dealer";
+			$rootScope.errorMsg="Please select Dealer";
 		}
 	}
 }]);

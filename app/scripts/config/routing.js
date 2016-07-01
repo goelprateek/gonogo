@@ -28,12 +28,16 @@
 			templateUrl: 'views/cdl/dealer.html'
 		}).when('/cdl/apply', {
 			templateUrl: 'views/cdl/apply.html',
+			controller: 'ApplyController'
 		}).when('/cdl/dashboard', {
 			templateUrl: 'views/cdl/dashboard.html',
+			controller: 'DashboardController'
 		}).	when('/cdl/assetMaster', {
 			templateUrl: 'views/cdl/manufacturer.html',
+			controller: 'manufacturerController'
 		}).when('/cdl/customerForm', {
 			templateUrl: 'views/cdl/customer-form.html',
+			controller: 'CustomerFormCntrolr'
 		}).otherwise({ redirectTo: '/' })
 
 		

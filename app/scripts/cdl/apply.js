@@ -34,8 +34,8 @@
 		$scope.productType="";
 		$scope.suspAct="No";
 		$scope.edu="";
-		$scope.errHead="";
-		$scope.errorMsg="";
+		$rootScope.errHead="";
+		$rootScope.errorMsg="";
 	    $scope.holdStageArr=[];
 	    $scope.holdIndex =[];
 	    $scope.wrketype="";
@@ -255,7 +255,7 @@
 			headers : {'Content-Type' : 'application/json'}
 		}).success(function(data) 
 		 { $scope.modelTags=[];
-			for(i in data)
+			for(var i in data)
 			{
 				if(data[i].sMdlNo !=="")
 				{	$scope.modelTags.push(data[i].sMdlNo);
@@ -280,7 +280,7 @@
 	if(CustID!=null && CustID!="") {
 		var URL='';
 		var json ={'sRefID':CustID};
-		URL = APP_CONST.getConst('BASE_URL_GNG') +'/dashboard-application-data';
+		URL = 'dashboard-application-data';
 
 		RestService.saveToServer(URL,json).then(function(Response){
 			
@@ -304,11 +304,9 @@
 							console.log($scope.dealerArr[0]);
 					  		$("#nmCntnr").show();
 					  		//alert($scope.dealerObj["DEALER_CODE"]);
-							$scope.errHead = "";
+							$rootScope.errHead = "";
 							$scope.error = "";
 					  		var mApplicant=Response.oReq.oApplicant;
-					  		
-					  		
 					  		
 					  		if(mApplicant.aPhone){
 					  			for(var i=0;i<mApplicant.aPhone.length;i++){
@@ -445,7 +443,7 @@
 							//Fetch Images
 							function kyc_img(kycName , imgId ,status , reason,value){
 								var json ={'sImgID':imgId}
-								var URL = BASE_URL_GNG+'/get-image-by-id-base64';
+								var URL = 'get-image-by-id-base64';
 								RestService.saveToServer(URL,json).then(function(Response){
 									var image = "data:image/png;base64,"+Response.sByteCode;
 									if(Response.sByteCode != undefined && Response.sByteCode != null && Response.sByteCode != "" ){
@@ -503,7 +501,7 @@
 									$scope.error = "Sorry, unable to fetch images from server !!";					
 								});
 							}
-							URL = BASE_URL_GNG+'/application-images';
+							URL ='application-images';
 							var json ={'sRefID':CustID};
 							
 							RestService.saveToServer(URL,json).then(function(Response){
@@ -643,7 +641,7 @@
 			dlrCode=dealerCurrent["DEALER_CODE"];
 			$scope.dealerName=dealerCurrent["DEALER_NAME"];
 		}else{
-			$location.path("/dealer");
+			$location.path("/cdl/dealer");
 		}
 		
 		$("#nmCntnr").show();
@@ -715,7 +713,7 @@
 		$http.defaults.headers.common['username']=$scope.useremail;
 		$http.defaults.headers.common['password']=$scope.ePassword;
 		var defere = $q.defer();
-		$http.post(BASE_URL_GNG+'get-otp',$scope.ojs).success(function(response){
+		$http.post(APP_CONST.getConst('BASE_URL_GNG')+'get-otp',$scope.ojs).success(function(response){
 			defere.resolve(response);
 //			console.log("OTP Response -" + JSON.stringify(response));
 			$scope.otp=response.OTP;
@@ -747,8 +745,8 @@
 //		{		  
 //			$("#dlrContainer").hide();
 //			$("#nmCntnr").show();
-//			$scope.errHead="";
-//			$scope.errorMsg="";
+//			$rootScope.errHead="";
+//			$rootScope.errorMsg="";
 //			$scope.dealerObj=JSON.parse(dealerSelected);
 ////			console.log("$scope.dealerObj :"+JSON.stringify($scope.dealerObj));
 //			dlrCode=$scope.dealerObj["DEALER_CODE"];
@@ -757,8 +755,8 @@
 //		}
 //		else
 //		{
-//			$scope.errHead="Dealer";
-//			$scope.errorMsg="Please select Dealer";
+//			$rootScope.errHead="Dealer";
+//			$rootScope.errorMsg="Please select Dealer";
 //		}
 //	}
 	
@@ -792,20 +790,20 @@ case "verifybtn":
 	  }
 	  else
 	  {  $(".otp").val("");
-		 $scope.errHead="OTP";
-		$scope.errorMsg="Please enter valid OTP";
+		 $rootScope.errHead="OTP";
+		$rootScope.errorMsg="Please enter valid OTP";
 	  }
 	}else{
 		$("input[class='otp'][value='']").focus();
-		$scope.errHead="OTP";
-		$scope.errorMsg="Please enter OTP";
+		$rootScope.errHead="OTP";
+		$rootScope.errorMsg="Please enter OTP";
 //		$("#errorHeading").text("OTP : ");
 //		$("#main_error").text("Please enter OTP");
 	}
 	break;	
 case "Resend":
-			$scope.errHead="";
-			$scope.errorMsg="";
+			$rootScope.errHead="";
+			$rootScope.errorMsg="";
 			$scope.otpService();
 			$("#Resend").hide();
 			$(".otp").val("");
@@ -983,7 +981,7 @@ $scope.pinService = function(pin,id){
 	var pinJson ={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":pin}; 
 	$http({
 		method : 'POST',
-		url : BASE_URL_GNG+'pincode-details-web',
+		url : APP_CONST.getConst('BASE_URL_GNG')+'pincode-details-web',
 		data : pinJson,
 		headers : {'Content-Type' : 'application/json'}
 	}).success(function(Response) 
@@ -1030,21 +1028,21 @@ $('input[type="password"]').keyup(function(e) {
 
 $(".next").click(function() {
 //	changees
-	$scope.errHead="";
-	$scope.errorMsg="";
+	$rootScope.errHead="";
+	$rootScope.errorMsg="";
 	
 	var bool =  validation();
 	$scope.$apply();
 //	var bool= true;
 	if (bool) {
-		animating = true;
-		$scope.errHead="";
-		$scope.errorMsg="";
+		var animating = true;
+		$rootScope.errHead="";
+		$rootScope.errorMsg="";
 // fieldsetn = fieldsetn + 1;
 // change_header();// change form heading
 		$(".getheight").scrollTop(0);
-		current_fs = $(this).parents('fieldset');
-		next_fs = $(this).parents('fieldset').next();
+		var current_fs = $(this).parents('fieldset');
+		var next_fs = $(this).parents('fieldset').next();
 		var count=$("fieldset").index(next_fs);
 //		console.log("fieldset count="+count);
 		$(".progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
@@ -1052,10 +1050,10 @@ $(".next").click(function() {
 				{opacity : 0},{
 					duration : 400,
 					step : function(now,mx) 
-					{	scale = 1 - (1 - now) * 0.2;
-					right = 100;
-					left = (now * 50)+ '%';
-					opacity = 1 - now;
+					{	var scale = 1 - (1 - now) * 0.2;
+					var right = 100;
+					var left = (now * 50)+ '%';
+					var opacity = 1 - now;
 					next_fs.css({'left' : left,'opacity' : opacity});
 					current_fs.css({'transform' : 'scale('+ scale+ ')'});
 					},
@@ -1078,23 +1076,23 @@ $(".next").click(function() {
 $(".previous").click(function() {
 	if(animating)
 		return false;
-	animating = true;
-	$scope.errHead="";
-	$scope.errorMsg="";
+	var  animating = true;
+	$rootScope.errHead="";
+	$rootScope.errorMsg="";
 	
 // fieldsetn = fieldsetn - 1;
 // change_header();
 	$(".getheight").scrollTop(0);
-	current_fs = $(this).parents('fieldset');
-	previous_fs = $(this).parents('fieldset').prev();
+	var current_fs = $(this).parents('fieldset');
+	var previous_fs = $(this).parents('fieldset').prev();
 	$(".progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
 	current_fs.animate({
-		opacity : 0}, {
+		 opacity : 0}, {
 			duration : 400,
 			step : function(now, mx) {
-				scale = 0.8 + (1 - now) * 0.2;
-				left = ((1 - now) * 50) + "%";
-				opacity = 1 - now;
+			var	scale = 0.8 + (1 - now) * 0.2;
+			var	left = ((1 - now) * 50) + "%";
+			var	opacity = 1 - now;
 				current_fs.css({'left' : left});
 				previous_fs.css({'transform' : 'scale('+ scale + ')','opacity' : opacity});
 			},
@@ -1256,15 +1254,15 @@ function UploadAllImgs(Ref,array,callType)
 	}
 	if(callType=="ipa")
 		{
-		 $scope.errHead="Submit";
-	     $scope.errorMsg="Your application has been succesfully completed.";
+		 $rootScope.errHead="Submit";
+	     $rootScope.errorMsg="Your application has been succesfully completed.";
 		}
 }
 
 function uploadImage(json,callType)
 {	$http({
 			method : 'POST',
-			url : BASE_URL_GNG+'upload-image',
+			url : APP_CONST.getConst('BASE_URL_GNG')+'upload-image',
 			data : json,
 			headers : {'Content-Type' : 'application/json'}
 		}).success(function(Response) 
@@ -1305,17 +1303,17 @@ function uploadImage(json,callType)
 //$(document.body).on("click","#dsubmit",function(){
 	$scope.finalPdfshowFun = function()
 	{
-		$scope.errHead="";
-	     $scope.errorMsg="";
+		$rootScope.errHead="";
+	     $rootScope.errorMsg="";
 	    UploadAllImgs($scope.REFID,addkyc_array,"ipa");
 	    $scope.updateStatus();
 	    console.log("$scope.dstatus :"+$scope.dstatus);
 	    if(status == "Declined")
 		{	
 	    	$("loaderImg").show();
-	    	$timeout( function(){ $location.path("/dashboard"); }, 3000);
-		     $scope.errHead="";
-		     $scope.errorMsg="";
+	    	$timeout( function(){ $location.path("/cdl/dashboard"); }, 3000);
+		     $rootScope.errHead="";
+		     $rootScope.errorMsg="";
 		}else
 		 {
 			$('#additionalDoc').hide();
@@ -1558,8 +1556,8 @@ $scope.submitApplication=function(UrlKey)
 		}
 
 		if(UrlKey=="step3"){
-			$scope.errHead = "Status"
-			$scope.errorMsg = "Data Saved Successfully.";
+			$rootScope.errHead = "Status"
+			$rootScope.errorMsg = "Data Saved Successfully.";
 		}
 		
 		UploadAllImgs(data.sRefID,img_array,"submit");
@@ -1654,8 +1652,8 @@ function validation()
 //					console.log("Input is blank");
 					$(this).focus();
 					error = true;
-					 $scope.errHead=$(this).siblings("help").text();
-					 $scope.errorMsg="Please enter the value";
+					 $rootScope.errHead=$(this).siblings("help").text();
+					 $rootScope.errorMsg="Please enter the value";
 					 return false;
 				}
 //			else if(char4.test(id))
@@ -1675,8 +1673,8 @@ function validation()
 					{
 						$(this).focus();
 						error = true;
-						$scope.errHead=$(this).siblings("help").text();
-						$scope.errorMsg="Please enter the valid value";
+						$rootScope.errHead=$(this).siblings("help").text();
+						$rootScope.errorMsg="Please enter the valid value";
 						return false;
 //						console.log("String condition not matched");
 					}
@@ -1687,8 +1685,8 @@ function validation()
 					{
 						$(this).focus();
 						error = true;
-						$scope.errHead=$(this).siblings("help").text();
-						$scope.errorMsg="Please enter the valid value";
+						$rootScope.errHead=$(this).siblings("help").text();
+						$rootScope.errorMsg="Please enter the valid value";
 						return false;
 //						console.log("mailptrn not matched");
 					}
@@ -1698,8 +1696,8 @@ function validation()
 				{
 					$(this).focus();
 					error = true;
-					$scope.errHead=$(this).siblings("help").text();
-					$scope.errorMsg="Please enter valid input";
+					$rootScope.errHead=$(this).siblings("help").text();
+					$rootScope.errorMsg="Please enter valid input";
 					return false;
 //					console.log("mailptrn not matched");
 				}
@@ -1712,8 +1710,8 @@ function validation()
 					{
 					$(this).focus();
 					error = true;
-					$scope.errHead=$(this).siblings("help").text();
-					$scope.errorMsg="Please enter the valid value";
+					$rootScope.errHead=$(this).siblings("help").text();
+					$rootScope.errorMsg="Please enter the valid value";
 					return false;
 //					console.log("mobile Condition not matched..");
 					}
@@ -1723,8 +1721,8 @@ function validation()
 					if(!nmrptrn.test(val) || val.length !== 6)
 					{	$(this).focus();
 					error = true;
-					$scope.errHead=$(this).siblings("help").text();
-					$scope.errorMsg="Please enter the valid value";
+					$rootScope.errHead=$(this).siblings("help").text();
+					$rootScope.errorMsg="Please enter the valid value";
 					return false;
 //					console.log("pincode Condition not matched..");
 					}
@@ -1734,8 +1732,8 @@ function validation()
 					if(!nmrptrn.test(val) || val.length < 4)
 					{	$(this).focus();
 					error = true;
-					$scope.errHead=$(this).siblings("help").text();
-					$scope.errorMsg="Please enter the valid value";
+					$rootScope.errHead=$(this).siblings("help").text();
+					$rootScope.errorMsg="Please enter the valid value";
 					return false;
 //					console.log("phone Condition not matched..");
 					}
@@ -1745,8 +1743,8 @@ function validation()
 					if(!nmrptrn.test(val) || val.length < 3)
 					{$(this).focus();
 					error = true;
-					$scope.errHead=$(this).siblings("help").text();
-					$scope.errorMsg="Please enter the valid value";
+					$rootScope.errHead=$(this).siblings("help").text();
+					$rootScope.errorMsg="Please enter the valid value";
 					return false;
 //					console.log("phone Condition not matched..");
 					}
@@ -1757,8 +1755,8 @@ function validation()
 					if(!nmrptrn.test(val))
 					{	$(this).focus();
 						error = true;
-						$scope.errHead=$(this).siblings("help").text();
-						$scope.errorMsg="Please enter only numeric values";
+						$rootScope.errHead=$(this).siblings("help").text();
+						$rootScope.errorMsg="Please enter only numeric values";
 //						console.log("phone Condition not matched..");
 						return false;
 					}
@@ -1771,8 +1769,8 @@ function validation()
 	if(error == false && (parseInt($("#fname").val().length)+parseInt($("#lname").val().length)) < 4)
 	{
 	 error=true;
-	 $scope.errHead="Name";
-	 $scope.errorMsg="First name and last name should have atleast 4 character";
+	 $rootScope.errHead="Name";
+	 $rootScope.errorMsg="First name and last name should have atleast 4 character";
 	 $("#fname,#lname").focus();
 	 return false;
 	}else if(error == false)
@@ -1781,15 +1779,15 @@ function validation()
 		if($(".aadhaar").val() !="")
 		{
 				if($("#aadhar").val().length != 12 ||!nmrptrn.test($("#aadhar").val()))
-				{$scope.errHead="AADHAAR";
-				 $scope.errorMsg="Please Enter valid AADHAAR Number";
+				{$rootScope.errHead="AADHAAR";
+				 $rootScope.errorMsg="Please Enter valid AADHAAR Number";
 					$("#aadhar").focus();
 					error = true;
 					return false;
 				}
 				else{
-					$scope.errHead="";
-					$scope.errorMsg="";
+					$rootScope.errHead="";
+					$rootScope.errorMsg="";
 					error = false;
 				}
 			}
@@ -1797,22 +1795,22 @@ function validation()
 		{
 			if(!panptrn.test($("#pan").val()))
 				{
-				$scope.errHead="PAN";
-				$scope.errorMsg="Please Enter Correct PAN Number ";
+				$rootScope.errHead="PAN";
+				$rootScope.errorMsg="Please Enter Correct PAN Number ";
 				$("#pan").focus();
 				error = true;
 				return false;
 				}else{
-					$scope.errHead="";
-					$scope.errorMsg="";
+					$rootScope.errHead="";
+					$rootScope.errorMsg="";
 					error = false;
 				}
 			}
 	}
   else if($(".pan").is(":visible")  || $(".aadhaar").is(":visible") )
 	{
-		$scope.errHead="KYC";
-		$scope.errorMsg="Please Enter PAN OR AADHAAR Number";
+		$rootScope.errHead="KYC";
+		$rootScope.errorMsg="Please Enter PAN OR AADHAAR Number";
 		$("#pan").focus();
 		$("#aadhar").css("border-bottom","1px solid red");
 		error = true;
@@ -1828,8 +1826,8 @@ function validation()
 			{
 				$(this).focus();
 				selectError = true;
-				$scope.errHead=$(this).siblings("help").text();
-				$scope.errorMsg="Please select valid option";
+				$rootScope.errHead=$(this).siblings("help").text();
+				$rootScope.errorMsg="Please select valid option";
 				return false;
 			}
 			else
@@ -1845,8 +1843,8 @@ function validation()
 		  	if(val1>val2)
 			{	$(Object.val1).focus();
 			  	 error = true;
-				 $scope.errHead=$(Object.val1).siblings("help").text();
-				 $scope.errorMsg="Time at address should be less or equal to time at City";
+				 $rootScope.errHead=$(Object.val1).siblings("help").text();
+				 $rootScope.errorMsg="Time at address should be less or equal to time at City";
 				 return false;
 			}
 		 }
@@ -1860,10 +1858,11 @@ function validation()
 		}
 	else
 		{
-		$scope.errHead="";
-		$scope.errorMsg="";
+		$rootScope.errHead="";
+		$rootScope.errorMsg="";
 		return true;
 		}
+		$scope.$apply();
 }
 
 /*$(document.body).on("change","#addressType",function(){
@@ -2117,42 +2116,63 @@ $scope.sendPostIpaMail=function()
 //	}
 //});
 $scope.emplArr=[];
-$("#wrkename").autocomplete({
+/*$("#wrkename").autocomplete({
 	source: $scope.emplArr
   });
+*/
+// $scope.empService = function(key){
+// 	$scope.assetJson ={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":""}; 
+// 	$http({
+// 		method : 'POST',
+// 		url : APP_CONST.getConst('BASE_URL_GNG')+'employer-master-details-web',
+// 		data :$scope.assetJson,
+// 		headers : {'Content-Type' : 'application/json'}
+// 	}).success(function(data) 
+// 	{ 
+// 		$scope.emplArr = [];
+// 		for(var i in data) 
+// 		{   
+// 			$scope.emplArr.push(data[i].sEmpName);
+// 		};
+// 		/*$("#wrkename").autocomplete({
+// 			source: $scope.emplArr
+// 		});*/
 
-$scope.empService = function(key){
-	$scope.assetJson ={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":""}; 
-	$http({
-		method : 'POST',
-		url : APP_CONST.getConst('BASE_URL_GNG')+'employer-master-details-web',
-		data :$scope.assetJson,
-		headers : {'Content-Type' : 'application/json'}
-	}).success(function(data) 
-	{ 
-		$scope.emplArr = [];
-		for(i in data) 
-		{   
-			$scope.emplArr.push(data[i].sEmpName);
+// 		console.log("Data Successfully getting after Employr master*********************-" + $scope.emplArr);
+// 	}).error(function(data) 
+// 	{
+// 		console.log("Getting Error from Employer service.");
+// 	});
+// };
+// $scope.empService();
+// $scope.Employee=["Pune","allahabad","Hello","apply","Alpha","Beta","Gama"];
+
+$scope.getEmployerNames=function(queryStr){
+			var ojs={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":queryStr};
+
+			return RestService.saveToServer("employer-master-details-web",ojs)
+			.then(function(data)
+			{
+
+				var map=data.map(function(item){					
+			        return item.sEmpName;
+		      	});
+				//console.log(map);
+				return data.map(function(item){
+					//console.log(item.sEmpName);
+			        return item.sEmpName;
+		      	});
+ 			});
 		};
-		$("#wrkename").autocomplete({
-			source: $scope.emplArr
-		});
 
-//		console.log("Data Successfully getting after Employr master*********************-" + availableTags);
-	}).error(function(data) 
-	{
-		console.log("Getting Error from Employer service.");
-	});
-};
-$scope.empService();
+
 
 // *********************SCHEME SERVICE***********************************************************
 $scope.allSchemes = "";
 $scope.scmTags = [];
-$("#scheme").autocomplete({
+/*$("#scheme").autocomplete({
 	source: $scope.scmTags
-});
+});*/
 
 $scope.scmService = function(key){
 	if( key !=undefined)
@@ -2190,9 +2210,9 @@ $scope.scmService = function(key){
 		for(i in data){   
 			$scope.scmTags.push(data[i].sSchDes)
 		}
-		$("#scheme").autocomplete({
+		/*$("#scheme").autocomplete({
 			source: $scope.scmTags
-		});
+		});*/
 		console.log("Data Scheme master : " + JSON.stringify(data));
 		console.log("Data ScHIT124DBD1heme master : " + $scope.scmTags);
 		
@@ -2470,14 +2490,14 @@ $scope.resetStatus=function(){
 //		  {		  
 //			  $("#dlrContainer").hide();
 //	  		  $("#nmCntnr").show();
-//	  		  $scope.errHead="";
-//	  		  $scope.errorMsg="";
+//	  		  $rootScope.errHead="";
+//	  		  $rootScope.errorMsg="";
 //	  		  $scope.dealerObj=JSON.parse($scope.dealerObj);
 //		  }
 //		  else
 //		  { 
-//			  $scope.errHead="Dealer";
-//			  $scope.errorMsg="Please select Dealer";
+//			  $rootScope.errHead="Dealer";
+//			  $rootScope.errorMsg="Please select Dealer";
 //		  }
 ////		  console.log($scope.dealerObj+" : "+$scope.dealerObj["DEALER_CODE"]);
 //	  });
@@ -2581,6 +2601,34 @@ $scope.resetStatus=function(){
 		  stop_timer();
 		  $interval.cancel(poller);
 	  });
+
+	 	/* dob popup */		
+		$scope.openDOBDialog=function(){
+	 		var defaultDate = new Date();
+	 		defaultDate.setFullYear(defaultDate.getFullYear()-25);
+	 		$scope.dob = defaultDate;
+			$scope.dobPopup.opened = true;			
+		};
+		$scope.dobFormat = "dd/MM/yyyy";
+	 	$scope.dobPopup = {
+		    opened: false
+	  	};
+
+		var minDa = new Date();
+			minDa.setFullYear(minDa.getFullYear()-100);
+
+		var maxDa = new Date();
+		maxDa.setFullYear(maxDa.getFullYear()-18);
+		//alert($filter('date')(maxDa,"dd:MM:yyyy"));
+
+		$scope.dateOptions = {		    
+		    formatYear: 'yyyy',
+		    showWeeks:false,
+		    maxDate: maxDa,
+		    minDate: minDa,
+		    startingDay: 1
+		};
+		/* dob popup */
 	  
 	 
 }]);
