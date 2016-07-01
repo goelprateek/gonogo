@@ -26,27 +26,26 @@
 		}];
 		
 		
-		$scope.myBlobObject = undefined;
-		$scope.getFile=function(){
+		$scope.reportDownload = function(){
 			
-			var data = {
+			var _data = {
 					'sInstId': $scope.InstitutionID,
 					'sReportType': 'Credit Report',
 					'sProductType':'Consumer Durable',
-					'sReportCycle': 'YTD'
+					'sReportCycle': 'MTD'
 			}
 			
-			var _url = APP_CONST.getConst('BASE_URL_GNG');
-
-			RestService.getStreamFromServer(_url+"report/download-credit",data).then(function(data){
-				 var anchor = angular.element('<a/>');
-				 anchor.attr({
-			         href: 'data:attachment/csv;charset=utf-8,' + encodeURI(data),
-			         target: '_self',
-			         download: new Date()+'.csv'
-			     })[0].click();
+			RestService.getStreamFromServer(APP_CONST.getConst('BASE_URL_GNG')+"report/download-credit",_data).then(function(data){
+				var blob = new Blob([data], { type: "application/zip" });
+				var downloadUrl = window.URL.createObjectURL(blob);
+				var a = document.createElement("a");
+				 a.href = downloadUrl;
+				 a.download = new Date().getTime()+".zip";
+				 document.body.appendChild(a);
+			        a.click();
 			});
-		}
+			
+		};
 
 
 
@@ -4540,7 +4539,7 @@
 
 
 	app.controller("CustomReportController", [ '$scope' , function($scope){
-		console.log('modal controller hitted');
+		$log.log('modal controller hitted');
 	}]);
 
 }).call(this)

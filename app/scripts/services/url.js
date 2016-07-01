@@ -73,11 +73,8 @@
 		},
 
 		postDataWithLoginHeaders = function (url,data,username,pass){
-			
 			$http.defaults.headers.common['token-key'] = '95957453469767522788';
-			
 			$http.defaults.headers.common['username'] = username;
-			
 			$http.defaults.headers.common['password']= pass;
 
 			var defer = $q.defer();

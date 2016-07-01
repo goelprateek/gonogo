@@ -5,15 +5,19 @@
 
 	app.controller("loginController",[ '$scope','$rootScope' ,'$cookies','RestService','APP_CONST','UserService',function($scope,$rootScope,$cookies,RestService,APP_CONST,UserService) {
 		
-		(function(window){
+		
+		(function(){
 
-			if (_.isUndefined($cookies.get("UID"))) {
+			if (!_.isUndefined($cookies.get("UID")) && !_.isNull($cookies.get("UID"))  ) {
 				$scope.alert = "Welcome "+ atob($cookies.get("UID")) +" to GoNoGo";
 			} else {
 				$scope.alert = "Welcome to GoNoGo Portal";
 			}
 
 		}).call(this);
+			
+
+		
 
 		var expireDate = new Date();
 		
@@ -36,24 +40,14 @@
 		}
 
 		
-		changeErrorMsg();
+		//changeErrorMsg();
 		
 		$scope.submitted = false;
 		 $scope.interacted = function(field) {
 		      return $scope.submitted || field.$dirty;
 		 };
 		
-		/*$scope.$watch('recoveryemail',function(val){
-			if (/^[A-Za-z0-9._]+@[A-Za-z]+\.[a-z]{2,4}$/.test(val)) 
-			{ $('input[name="email"]').css("border","1px solid green");
-			  changeErrorMsg();
-			  valid = 1;
-			} else if (val) {
-			  $('input[name="email"]').css("border", "1px solid red");
-			  $scope.error = "Please Enter Valid Recovery Email";
-		    	valid = 0;
-			}
-		});*/
+		
 		
 		$scope.login = {
 				'userName':'HDBFS_DSA1@softcell.com',
@@ -73,8 +67,6 @@
 				var _data = {'userName' : $scope.login.userName, 'password' : SHA1($scope.login.password)};
 
 				RestService.saveToServer("login-web",_data).then(function(data){
-						
-					console.log(data);
 						
 					if(data.STATUS=="SUCCESS"){  
 						
@@ -176,15 +168,6 @@
 			}
 		}
 			
-		function changeErrorMsg() {
-			if (_.isUndefined($cookies.get("UID"))){
-				$scope.alert = "Welcome "+ atob($cookies.get("UID")) +" to GoNoGo";
-			} else {
-				$scope.alert = "Welcome to GoNoGo Portal";
-			}
-		}
-		
-		
 
 	function SHA1(msg) {
 	    function rotate_left(n,s) {

@@ -12,22 +12,16 @@
 			templateUrl : 'views/login.html',
 		}).when('/application', {
 			templateUrl: 'views/template/application.html',
-			controller: 'Maincontroller'
 		}). when('/apply', {
 			templateUrl: 'views/template/hdbfs-cdl/application.html',
-			controller: 'HdbfsAppController'
 		}). when('/dmiapplication', {
 			templateUrl: 'views/templates/dmi-application.html',
-			controller: 'Maincontroller'
 		}).	when('/hdbfsnotification', {
 			templateUrl: 'views/templates/notify.html',
-			controller: 'NotifController'
 		}).	when('/notification', {
 			templateUrl: 'views/templates/notification.html',
-			controller: 'NotificationController'
 		}). when('/policy', {
 			templateUrl: 'views/templates/policy.html',
-			controller: 'Maincontroller'
 		}). when('/analytics', {
 			templateUrl: 'views/templates/analytics.html',
 		}).when('/cdl/dealer',{

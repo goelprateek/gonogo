@@ -147,10 +147,10 @@ font-size:14px;}
 			
 
 			
-			<div class="col-md-12" data-ng-if="!isTableData && !appView" style="padding: 0px;">
-				 <div class="col-md-12 pull-left" >
+			<div class="col-md-12" data-ng-if="!isTableData && !appView" style="padding: 0px;" >
+				 <div class="col-md-12 pull-left" fix-to-top="fix-to-top"  padding-when-at-top="50">
 					<div class="col-sm-3 col-md-offset-5 col-xs-6"  style="padding: 0px;">
-						<form name="gridsearch" autocomplete="false"  class="form-group form-inline">
+						<form name="gridsearch" autocomplete="off"  class="form-group form-inline">
 							<div class="input-group">
 								<input type="text" name="searchKeywords"  placeholder="Search..." autofocus
 									class="form-control" data-ng-model="searchKeywords"
@@ -159,8 +159,6 @@ font-size:14px;}
 								        <i class="fa fa-search"></i>
 								</span>	
 							</div>
-							
-								
 						</form>
 						<span data-ng-show="searchKeywords.length >= 1"> Showing {{filteredStores.length}}/{{stores.length}} entries </span>
 					</div>
@@ -176,13 +174,13 @@ font-size:14px;}
 						  </button>
 						  <ul class="dropdown-menu">
 						    <li>
-						    	<a href="javascript:;" file-name="'fileName.extension'" data-ng-click="getFile()"  file-download="myBlobObject">XLS</a>
+						    	<a href="javascript:;" data-ng-click="reportDownload()" >XLS</a>
 						    </li>
 						    <li>
-						    	<a href="javascript:;"  data-ng-click="getFile()"  file-download="myBlobObject">CSV</a>
+						    	<a href="javascript:;"  data-ng-click="reportDownload()"  >CSV</a>
 						    </li>
 						    <li>
-						    	<a href="javascript:;"  data-ng-click="openModal()"  file-download="myBlobObject">Custom Report</a>
+						    	<a href="javascript:;"  >Custom Report</a>
 						    </li>
 						  </ul>
 						</div>

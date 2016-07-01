@@ -20,10 +20,12 @@
 				'gonogo.utilities'
 	]);
 	
-	app.controller("Maincontroller",['$scope', '$log', 'Validation', '$timeout','RestService','$location','UserService','APP_CONST',function($scope, $log, Validation, $timeout,RestService,$location,UserService,APP_CONST) {
+	app.controller("Maincontroller",['$scope', '$log','notifier' ,'Validation', '$timeout','RestService','$location','UserService','APP_CONST',function($scope, $log, notifier ,Validation, $timeout,RestService,$location,UserService,APP_CONST) {
 			
+		$log.log(UserService.getCurrentUser().username);
+
 		
-			
+;
 		$scope.isSpecificPage = function() {
             var path;
             return path = $location.path(),  _.contains(["/"], path) ;
@@ -59,8 +61,7 @@
 		if (IEversion.valid != true) {
 			alert("Sorry we are not supporting Internet Explorer Version "+ IEversion.version
 					+ " \n\n\tPlease Update Your Browser");
-		}
-		else {
+		} else {
 			try {
 //				$scope.keyarr = localStorage.getItem('LOGID');
 				var userdata = JSON.parse(atob(localStorage.getItem('GUID')));

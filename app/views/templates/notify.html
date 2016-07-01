@@ -232,9 +232,14 @@ font-size:14px;}
 				<div class="list-group" ng-init="names"
 					style="border: 1px solid rgb(218, 218, 219);overflow: hidden;margin-bottom: 0px "> 
 					<!-- remove overflow hidden -->
-					<input class="form-control" type="text" ng-model="search"
-						placeholder="Search Notification..."
-						style="margin: 0px; max-width: 277px; background-color: white;" />
+					<form name="notification_search" autocomplete="off">
+                		<div class="icon-addon addon-lg">
+							<input id="search" class="form-control" type="text" ng-model="search"
+								placeholder="Search Notification..."
+								style="margin: 0px; max-width: 277px; background-color: white;" />
+							<label for="search" class="fa fa-search"></label>	
+						</div>
+					</form>	
 					
 					<div class="leftbar_scroll" style="height: 515px;" when-scrolled="loadData()">
 						<div class="list-group-item" ng-if="notifarray.length==0"

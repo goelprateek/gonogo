@@ -167,6 +167,31 @@
             }]
         }
 	});
+
+	app.directive("fixToTop", function($window){
+		var $win = angular.element($window);
+		return {
+			restrict:'A',
+			link:function(scope,elem,attrs,controller){
+				var topClass = attrs.fixToTop,
+				 parent = elem.parent(),
+				 topPadding = parseInt(attrs.paddingWhenAtTop, 10),
+                 offsetTop;	
+				 
+
+				 $win.on('scroll', function (e) {
+				 	offsetTop = (parent.offset().top - topPadding);
+	                if ($win.scrollTop() >= offsetTop) {
+	                    elem.addClass(topClass);
+	                    parent.height(elem.height());
+	                } else {
+	                    elem.removeClass(topClass);
+	                    parent.css("height", null);
+	                }
+	            });
+			}
+		}
+	})
 	
 }).call(this)
 
