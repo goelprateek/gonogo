@@ -1,17 +1,17 @@
 	
 <!-- 		<div class="row clearfix"> -->
 		<form id="msform" style="margin-bottom:30px;">
-		<!-- ng-if="!authenticate('NCONTAINER')" -->
-			<fieldset class="formfield" ng-if="objectSet.oLosDtls">
+		<!-- ng-if="!authenticate('NCONTAINER')"  ng-if="objectSet.oLosDtls"-->
+			<fieldset class="formfield" ng-if="!authenticate('NCONTAINER')">
 					<legend> LOS Information</legend>
 					<div class="row clearfix">
 						<div class="col-md-3">
 							<label class="control-label">LOS ID</label> <input
-								class="form-control" ng-model="objectSet.oLosDtls.sLosID" type="text" maxlength="10">
+								class="form-control" ng-model="objectSet.oLosDtls.sLosID" type="text" maxlength="10" ng-disable="true">
 						</div>
 						<div class="col-md-3">
 							<label class="control-label">UTR#</label> <input class="form-control"
-								ng-model="objectSet.oLosDtls.sUtr" disabled="disabled" type="text" maxlength="25">
+								ng-model="objectSet.oLosDtls.sUtr" ng-disable="isUtrEdit" type="text" maxlength="25">
 						</div>
 						<div class="col-md-3">
 							<label class="control-label">LOS Status</label> 		
@@ -61,7 +61,7 @@
 						</div>
 						<div class="col-md-3">
 							<label class="control-label">Date of Birth</label> <input
-								id="dob" class="form-control" ng-model="objectSet.oAppReq.oReq.oApplicant.sDob" type="text"
+								id="dob" class="form-control" ng-model="objectSet.oAppReq.oReq.oApplicant.sDob | dateFilter:objectSet.oAppReq.oReq.oApplicant.sDob" type="text"
 								name="Date Of Birth" disabled="disabled">
 						</div>
 							<div class="col-md-3">

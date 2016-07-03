@@ -1,0 +1,58 @@
+<!-- ng-if="toggleDocPanel" -->
+<style>
+.docBackground{
+	background-color: rgb(244, 248, 249);
+}
+
+.checkContentSelect{ 
+	background-color : green;
+}
+</style>
+
+<form id="offrform" >
+	<div class="row clearfix" >
+		
+		<div class="col-md-12"
+			style="padding:0px">
+			<div class="row clearfix">
+				<div class="col-md-2 thumbnail-box" ng-repeat="offer in OfferArrey"
+					id="OfferBox{{$index}}" ng-class= "{ docBackground : isCurrTab($index)}" ng-click="Load_Offer(offer.ID,$event,$index)">
+				<img ng-src="{{offer.Icon}}" />
+					<div>{{offer.Name}}</div>
+					<div class="active_bar" ng-class= "{checkContentSelect : isSelected($index)}" id="active{{$index}}"></div>
+				</div>
+			</div>
+			<div class="row clearfix offer_box" style="overflow-y: scroll;height: 200px;">
+				<ul>
+					<li ng-repeat="moreoffer in AvailebleOffers">
+						<div class="col-md-2">
+							<img alt="" ng-src="{{moreoffer.Icon}}" width="28px"
+								height="28px">
+						</div>
+						<div class="col-md-8">
+							<span>{{moreoffer.Name}}</span>
+						</div>
+						<div class="col-md-2">
+							<div class="roundedTwo">
+								<input type="checkbox" id="Offer{{$index}}" name="check" class="checkBox"
+									ng-model="moreoffer.selected" 
+									autocomplete="off"
+									ng-change="checkboxUpdate(moreoffer.selected,$index)" /> 
+								<label for="Offer{{$index}}" style="box-shadow:0px 0px 4px rgba(0, 0, 0, 1);"></label>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="row clearfix lo" style="background-color: #DADADB;">
+				<div class="col-md-12">
+					<a class="add-button-div-notification" ng-click="requestDoc(holdObject.reqComment)" style="float: left">Request Document</a>
+					<input type="text" ng-model="holdObject.reqComment" maxlength="150" style="margin: 6px 0px; margin-left: 10px;">
+					<span  class="text-danger" ng-if="invalidMsg">Please enter your reason for Onhold</span>
+						<a	class="add-button-div-notification" id="closeOffer"
+						style="float: right" ng-click="closeDocument()">Close</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
