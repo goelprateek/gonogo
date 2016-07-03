@@ -343,7 +343,8 @@
 
     
     notifier.log("Wecome back "+ UserService.getCurrentUser().username);
-    
+
+
 	$scope.container = true;
 	$scope.toggleDocPanel = false;
 	$scope.toggleApprvPanel = false;
@@ -572,8 +573,8 @@
     	return (angular.lowercase(orignal) == angular.lowercase(final));
     }				               	
 
-	$scope.load_details = function(CustID,flag)
-	{  
+
+	$scope.load_details = function(CustID,flag){  
 		var URL='';
 		var json ={'sRefID':CustID};	
 		if(croQueue)//for CRO1
