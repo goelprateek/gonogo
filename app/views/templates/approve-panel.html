@@ -1,0 +1,37 @@
+ <form name="approve">
+ <div class="row clearfix" id="approveReason">
+ <!-- data-ng-show="toggleApprvPanel" -->
+		<div class="panel_heading"><label>Description</label></div>
+		<div class="panel_body">
+		 <div class="row clearfix" id="enterAmount" style=" margin-top: 5px;">
+		 	<div class="col-md-4"><label>Approve Amount :</label>
+		 <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.approveAmt" name="ApprvValue" style="width: 100%;" ng-pattern="/^[0-9]{}$/" required only-digits/>
+		 <!-- <div ng-messages="approve.ApprvValue.$error" class="errorMsg">
+							    <p ng-message="pattern">Please enter valid amout</p>
+							    <p ng-message="required">Please enter amount</p>
+			</div> -->
+		 </div>
+		 	<div class="col-md-4"><label>EMI :</label>
+		 <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.emi" id="emiValue" style="width: 100%;"/></div>
+		 	<div class="col-md-4"><label>Tenor :</label>
+		 <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.tenor" id="tenorValue" style="width: 100%;"/></div>
+		 
+		 </div>
+		  <div class="row clearfix">
+		  <label style="margin-left: 15px; margin-top: 5px;">Remark :</label>
+			  <input type="text" class="dashedcontainer" ng-model="modalFeed.apprvRemark" >
+		  </div>
+		   <div class="row clearfix">
+		   <label style="margin-left: 15px">Subject to  :</label>
+			   <input type="text" class="dashedcontainer" ng-model="modalFeed.apprvSubTo" >
+		  </div>
+		</div>
+		<div class="panel_footer" style="height: 27px;">
+			<span ng-if="approvemsg" class="text-danger" style="text-align: left;">Please fill all the field</span>
+			<div class="text-right" style=" display: inline; float: right;">
+		   <a class="TC_button" ng-click="saveApprvPanel()">Submit</a>	
+		   <a class="TC_button" ng-click="closeApprvPanel()">Close</a>	
+		   </div>							
+		</div>
+	</div>
+</form>

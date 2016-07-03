@@ -334,23 +334,19 @@
 
 	app.controller('NotifController', ['$scope','$rootScope', 
 								'$timeout','Validation','$filter',
-								'RestService','NotificationObject','notifier','UserService',function($scope, $rootScope, $timeout,Validation,$filter,RestService,NotificationObject,notifier,UserService){
-	
-
-	var object  = NotificationObject.dummy;
-	$scope.objectSet =  object;
-
+								'RestService','NotificationObject','$log','$uibModal',function($scope, $rootScope, $timeout,Validation,$filter,RestService,NotificationObject,$log,$uibModal){
 
     
     notifier.log("Wecome back "+ UserService.getCurrentUser().username);
 
+	var object  = NotificationObject.dummy;
+	$scope.objectSet =  object;    
 
 	$scope.container = true;
-	$scope.toggleDocPanel = false;
+    $scope.isDedupeSelected = true;
+	/*$scope.toggleDocPanel = false;
 	$scope.toggleApprvPanel = false;
-	$scope.toggleDclnPanel = false;
-	$scope.invalidMsg = false;
-
+	$scope.toggleDclnPanel = false;*/
 	var height=$(window).height()-200;
 	/*$scope.objectSet.aAppScoRslt = [];
 	$scope.objectSet.oApplicant =[];
@@ -370,7 +366,7 @@
 	var temp=[], passport=[],dlicen=[],adhar=[];
 	var rejectArray=[],income1_array=[], income2_array=[],custImg_array=[],other_array=[];
 	var tempReject=[];
-	$scope.setFlag = false;
+	/*$scope.setFlag = false;*/
 	$scope.countSelected="Select";
 /*	$scope.objectSet.oLosDtls.sStat="";*/
 	$('#losStatusId1').val("");
@@ -434,8 +430,9 @@
 
   		}
 	}
+//not in use but preserve forfuture purpose
 
-	$scope.timeataddress = [ { value: 'select', name: 'Select Time @ address'},
+	/*$scope.timeataddress = [ { value: 'select', name: 'Select Time @ address'},
 	                         { value: '5', name: 'Less than 6 months'},
 	                         { value: '11', name: '6 to 12 months'},
 	                         { value: '15', name: '1 to 3 years'},
@@ -448,123 +445,59 @@
 	                  {value:'Business', name:'Bussiness'},
 	                  {value:'Job', name:'Job'}
 	                  ];
+     $scope.phoneData = [{value:'OFFICE_PHONE', name:'Office Phone'},
+                      {value:'RESIDENCE_PHONE',name:'Residence Phone'},
+                      {value:'PERSONAL_PHONE',name:'Personal Phone'},
+                      {value:'PERSONAL_MOBILE', name:'Personal Mobile'},
+                      {value:'RESIDENCE_MOBILE', name:'Residence Mobile'},
+                      {value:'OFFICE_MOBILE', name:'Office Mobile'}
+                      ];
+    
+    var dataset = [{'Name':'Auto Loan',
+        'ID':'0',
+        'Icon':'images/icons-auto.png',
+        'Count':'2',
+        'Type' : 'Approve',
+        'Offers':[{'Name':'Refinance your Auto Loan at 12% APR','Icon':'images/icons-auto.png'},
+                  {'Name':'Get up-to 60% discounts on Auto Insurance ','Icon':'images/icons-auto.png'}]
+    },
+    {'Name':'Personal Loan',
+        'ID':'1',
+        'Icon':'images/icon-personal-loan.png',
+        'Count':'1',
+        'Type' : 'Approve',
+        'Offers':[{'Name':'Avail 10% of your sanctioned Home Loan amount at zero processing charges','Icon':'images/icon-personal-loan.png'}]
+    },
+    {'Name':'Credit Card',
+        'ID':'2',
+        'Icon':'images/Credit_Card.png',
+        'Count':'4',
+        'Type' : 'Approve',
+        'Offers':[{'Name':'5000 INR cash-back if you pay the Home Loan processing fee using your new credit card','Icon':'images/Credit_Card.png'},
+                  {'Name':'0% on New purchases for the first three months ','Icon':'images/Credit_Card.png'},
+                  {'Name':'Credit Card with no credit limit cap','Icon':'images/Credit_Card.png'},
+                  {'Name':'Consolidate your balances for 6% APR for the first 6 months','Icon':'images/Credit_Card.png'}]
+    },
+    {'Name':'Home Insurance',
+        'ID':'3',
+        'Icon':'images/Home_Insurance.png',
+        'Count':'3',
+        'Type' : 'Approve',
+        'Offers':[{'Name':'50% discount on Premium for long-term Home Insurance policy ','Icon':'images/Home_Insurance.png'},
+                  {'Name':'10% discount on the Home Content Insurance for covers upto 4 Lakh Rupees ','Icon':'images/Home_Insurance.png'},
+                  {'Name':'Protect your home for 20 years with a single premium','Icon':'images/Home_Insurance.png'}]
+    }];
+
+
+                      */
+
 	$scope.addrType = [{value:'selected', name:'Please Select Addr Type'},
 	                  {value:'Residence', name:'Residence'},
 	                  {value:'Office', name:'Office'},
 	                  {value:'Permanent', name:'Permanent'}
 	                  ]; 
-   $scope.phoneData = [{value:'OFFICE_PHONE', name:'Office Phone'},
-                      {value:'RESIDENCE_PHONE',name:'Residence Phone'},
-                      {value:'PERSONAL_PHONE',name:'Personal Phone'},
-   	                  {value:'PERSONAL_MOBILE', name:'Personal Mobile'},
-   	                  {value:'RESIDENCE_MOBILE', name:'Residence Mobile'},
-   	                  {value:'OFFICE_MOBILE', name:'Office Mobile'}
-   	                  ];
+  
 	$scope.addr_type = $scope.addrType[1];   //to set default address
-
-	/*$scope.objectSet.oAppReq.oReq.oApplicant.aEmpl[0].sEmplType = $scope.jobType[0];
-	$scope.addr_type = $scope.addrType[1];
-	$scope.objectSet.oAppReq.oReq.oApplicant.aEmpl[0].iTmWithEmplr =  $scope.timeataddress[0];*/
-	// end variable default value section
-	var dataset = [{'Name':'Auto Loan',
-		'ID':'0',
-		'Icon':'images/icons-auto.png',
-		'Count':'2',
-		'Type' : 'Approve',
-		'Offers':[{'Name':'Refinance your Auto Loan at 12% APR','Icon':'images/icons-auto.png'},
-		          {'Name':'Get up-to 60% discounts on Auto Insurance ','Icon':'images/icons-auto.png'}]
-	},
-	{'Name':'Personal Loan',
-		'ID':'1',
-		'Icon':'images/icon-personal-loan.png',
-		'Count':'1',
-		'Type' : 'Approve',
-		'Offers':[{'Name':'Avail 10% of your sanctioned Home Loan amount at zero processing charges','Icon':'images/icon-personal-loan.png'}]
-	},
-	{'Name':'Credit Card',
-		'ID':'2',
-		'Icon':'images/Credit_Card.png',
-		'Count':'4',
-		'Type' : 'Approve',
-		'Offers':[{'Name':'5000 INR cash-back if you pay the Home Loan processing fee using your new credit card','Icon':'images/Credit_Card.png'},
-		          {'Name':'0% on New purchases for the first three months ','Icon':'images/Credit_Card.png'},
-		          {'Name':'Credit Card with no credit limit cap','Icon':'images/Credit_Card.png'},
-		          {'Name':'Consolidate your balances for 6% APR for the first 6 months','Icon':'images/Credit_Card.png'}]
-	},
-	{'Name':'Home Insurance',
-		'ID':'3',
-		'Icon':'images/Home_Insurance.png',
-		'Count':'3',
-		'Type' : 'Approve',
-		'Offers':[{'Name':'50% discount on Premium for long-term Home Insurance policy ','Icon':'images/Home_Insurance.png'},
-		          {'Name':'10% discount on the Home Content Insurance for covers upto 4 Lakh Rupees ','Icon':'images/Home_Insurance.png'},
-		          {'Name':'Protect your home for 20 years with a single premium','Icon':'images/Home_Insurance.png'}]
-	}];
-
-	var docData = [{'Name':'Address Proof',
-		'ID':'0',
-		'Icon':'images/address-proof.png',
-		'Count':'1',
-		'Type' : 'Approve',
-		'Offers':[{'Name':'Valid Passport','Icon':'images/address-proof.png','Code':'101'},
-			        {'Name':'Latest Electricity Bill','Icon':'images/address-proof.png','Code':'102'},
-			        {'Name':'Telephone Bill','Icon':'images/address-proof.png','Code':'103'},
-			        {'Name':'Driving License','Icon':'images/address-proof.png','Code':'104'},
-			        {'Name':'Ration Card','Icon':'images/address-proof.png','Code':'105'},
-			        {'Name':'Bank Account Statement/Pass Book 1st page','Icon':'images/address-proof.png','Code':'106'},
-			        {'Name':'Rent Agreement','Icon':'images/address-proof.png','Code':'107'},
-			        {'Name':'Gas Connection Bill or Post Paid Mobile Bill with full address ','Icon':'images/address-proof.png','Code':'108'},
-			        {'Name':'Property Tax receipt or Water Bill','Icon':'images/address-proof.png','Code':'109'},
-			        {'Name':'Voter’s Identity card','Icon':'images/address-proof.png','Code':'110'},
-			        {'Name':'Aadhar UID Card','Icon':'images/address-proof.png','Code':'111'}]
-	},
-	{'Name':'DOB Proof',
-		'ID':'1',
-		'Icon':'images/date of birth proof.png',
-		'Count':'2',
-		'Type' : 'Approve',
-		'Offers':[{'Name':'Valid Passport','Icon':'images/date of birth proof.png','Code':'101'},
-			        {'Name':'PAN Card','Icon':'images/date of birth proof.png','Code':'112'},
-			        {'Name':'Driving License','Icon':'images/date of birth proof.png','Code':'104'},
-			        {'Name':'Birth Certificate (Govt agency)','Icon':'images/date of birth proof.png','Code':'113'},
-			        {'Name':'School Leaving certificate (10th/12th)','Icon':'images/date of birth proof.png','Code':'114'},
-			        {'Name':'Voter ID Card','Icon':'images/date of birth proof.png','Code':'110'},
-			        {'Name':'Pension Certificate / Govt. ID Card / Aadhar UID Card','Icon':'images/date of birth proof.png','Code':'111'}]
-	},
-	{'Name':'Identification Proof',
-		'ID':'2',
-		'Icon':'images/identification number.png',
-		'Count':'3',
-		'Type' : 'Approve',
-		'Offers':[{'Name':'Valid Passport','Icon':'images/identification number.png','Code':'101'},
-			        {'Name':'PAN Card','Icon':'images/identification number.png','Code':'112'},
-			        {'Name':'Driving License','Icon':'images/identification number.png','Code':'104'},
-			        {'Name':'Voter’s Identity Card','Icon':'images/identification number.png','Code':'110'},
-			        {'Name':'Aadhar UID card','Icon':'images/identification number.png','Code':'111'},
-			        {'Name':'Bank Passbook with photo','Icon':'images/identification number.png','Code':'115'}]
-	},
-	{'Name':'Signature Proof',
-		'ID':'3',
-		'Icon':'images/signature proof.png',
-		'Count':'4',
-		'Offers':[{'Name':'Signature verification from bank','Icon':'images/signature proof.png','Code':'116'},
-			        {'Name':'Passport Copy','Icon':'images/signature proof.png','Code':'101'},
-			        {'Name':'PAN Card','Icon':'images/signature proof.png','Code':'112'},
-			        {'Name':'Driving license with photograph and signature','Icon':'images/signature proof.png','Code':'104'},
-			        {'Name':'Clearance of processing fees cheque','Icon':'images/signature proof.png','Code':'117'}]
-	},
-	{'Name':'Rejected Proof',
-		'ID':'4',
-		'Icon':'images/rejected proof.png',
-		'Count':'5',
-		'Offers':[]
-	}];
-
-	 $scope.OfferArrey =docData ;
-	 $scope.AvailebleOffers = $scope.OfferArrey[0].Offers;
-	 $scope.ID = 0;
-	/* $scope.OfferArrey[0].addClass("sayali");*/
-
 	$scope.aplcntType=[{value:"SAL","text":"Salaried"},
 				               	{value:"SEB","text":"Self Employed Business"},
 				               	{value:"SEP","text":"Self Employed Professional"}];
@@ -573,22 +506,28 @@
     	return (angular.lowercase(orignal) == angular.lowercase(final));
     }				               	
 
+<<<<<<< HEAD
 
 	$scope.load_details = function(CustID,flag){  
+=======
+	$scope.load_details = function(CustID,dedupeflag)
+	{  
+>>>>>>> fee2da533c81105ff52239ec8ab88ba920982529
 		var URL='';
 		var json ={'sRefID':CustID};	
 		if(croQueue)//for CRO1
 		{ 
 			URL = 'application-data';
-			if(flag == "true"){
-				$('#approve , #decline, #onhold').show();
+			if(dedupeflag == "true"){
+				 $scope.isDedupeSelected = true;
 				 $("#dedupe , #dedupe1").val("Select");
 			}else{
-				$('#approve , #decline, #onhold').hide();
+				 $scope.isDedupeSelected = false;
 			}
 		}else{
 			URL = 'application-data-cro2';
-			if(flag == "true"){
+			if(dedupeflag == "true"){
+                  //remain 
 				$('#accept , #reject').show();
 				 $("#dedupe , #dedupe1").val("Select");
 			}else{
@@ -609,6 +548,8 @@
 					$scope.applctnstatus = data[j].sStat;}
 			}
 			$scope.croDecision = Response.aCroDec;
+            $scope.scoreTreeData = $scope.objectSet.oCompRes.scoringServiceResponse.SCORE_TREE;
+           /* $scope.amount = $scope.croDecision;*/
 			/*$(document.body).find('#cirhtml').attr("data", "").hide();
 			$scope.error = "";
 			$scope.done = "";
@@ -682,304 +623,18 @@ $scope.newApplication = function(){
 	$scope.container = false;
 	}		
 }
-$scope.toggleForm= function(){
+//for back button of grey form
+$scope.toggleFormminimize= function(){
 	$scope.container = !$scope.container;
 }
-	
-$scope.cro_action = function(appID, action){ 
-	$scope.appltnID = appID;
-	if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!croQueue)){
-		var arr=[];
-		if((appID !== "undefined") && (typeof $scope.objectSet.oAppReq !== "undefined")){
-			 if(action == "OnHold"){
-				/* var data= $rootScope.rejectArray;
-				 for (j in data){
-							docData[4].Offers.push(data[j]);
-				 }	*/
-				 /*$('div[contextmenu="blur"]').addClass("blured");
-				 $('#OfferPanel').slideDown();*/
-				 //blurr main container
 
-				 $scope.toggleDocPanel = !$scope.toggleDocPanel;
-				 $scope.docOfferFlag = true;
-								 
-				 
-				/* $('#SendOffer').css("width","19%");*/
-				 
-				 /*setTimeout(function() { 	
-					 $(document.body).find('div[id^="OfferBox"]').css("background-color","#fff");
-					 $(document.body).find('#OfferBox0').css("background-color","#F4F8F9");
-				 },100);*/
-			 
-			 }else if(action == "Declined"){
-			/*
-				 $('div[contextmenu="blur"]').addClass("blured");
-				 $('#declinereason').slideDown();
-				 $('#reason1container,#reason2container').text('');*/
-			 	$scope.toggleDclnPanel = !$scope.toggleDclnPanel;
-
-			 }else{
-					/* $('div[contextmenu="blur"]').addClass("blured");
-					 $('#approveReason').show();
-					 $('#appr1Container,#appr2Container').text(''); 
-					$scope.error = "Please select enquiry from Queue...!!!";
-					$scope.done = "";*/
-					$scope.toggleApprvPanel = !$scope.toggleApprvPanel;
-			}
-
-		}else if($scope.applctnstatus == null){
-	
-		$scope.error = "Application status is not defined...!!!";
-		$scope.done = "";
-	
-	}else{
-		$scope.error = "Application has already taken an action...!!!";
-		$scope.done = "";
-	}
-	
-	$scope.showrefid = "true";
-}
-
-$scope.closeDclnPanel=function(){
-	/* $('#declinereason').slideUp();
-	 $('div[contextmenu="blur"]').removeClass("blured");
-	 $('#reason1container , #reason2container').text('');
-	 $('#declinemsg').text("");*/
-	 $scope.dclnRemark = '';
-	 $scope.dclnSubTo = '';
-	 $scope.toggleDclnPanel = !$scope.toggleDclnPanel;
-}
-$scope.closeApprvPanel=function(){
-	/* $('#approveReason').slideUp();
-	 $('div[contextmenu="blur"]').removeClass("blured");
-	 $('#appr1Container , #appr2Container ,#approvemsg').text('');
-	 $('#ApprvValue , #emiValue , #tenorValue').css("border","1px solid #999");
-	 $('#ApprvValue').val("");
-	 $('#ApprvValue').val($scope.objectSet.aCroDec[0].dAmtAppr);*/
-	 	$scope.apprvRemark = '';
-	 	$scope.apprvSubTo = '';
-	 	$scope.croDecision = '';
-	 	console.log("apprv : "+$scope.apprvRemark+" sfs:"+$scope.apprvSubTo);
-	 	$scope.toggleApprvPanel = !$scope.toggleApprvPanel;
-}
-$scope.setSelected=function() {  
-	var offers={'offers':[],'documents':[]};
-	if(offersAllowed)
-	{
-	  for(var i=0;i<docData.length;i++)
-	  {for(var j=0;j<docData[i].Offers.length;j++)
-	   {if((typeof docData[i].Offers[j].selected != 'undefined'))
-	    {
-		   if($scope.docOfferFlag == true){
-				offers.documents.push(docData[i].Offers[j]);
-				$scope.docOfferFlag == false;
-		   }
-		   else{
-				offers.offers.push(docData[i].Offers[j]);
-		   }
-	    }
-	   }
-	  }
-	 $scope.offrData = offers.documents; 
-    /* $('#OfferPanel').slideUp();
-     $('div[contextmenu="blur"]').removeClass("blured");*/
-	 } 
-}
-	$scope.Load_Offer = function(NodeID,Obj){
-		var BoxID = Obj.currentTarget.attributes.id.nodeValue;
-		$('div[id^='+BoxID.slice(0,BoxID.length-1)+']').css("background-color","#fff");
-		$('#'+BoxID+'').css("background-color","#F4F8F9");
-		for(var i=0; i<docData.length; i++)
-		{if(docData[i].ID == NodeID)
-		{	$scope.AvailebleOffers = docData[i].Offers;
-			$scope.ID = NodeID;
-		}
-		}
-	}
-	
-	$scope.checkboxUpdate = function(Obj,id){ 
-		if(Obj){
-			
-			if (typeof docData[$scope.ID].selected != "undefined") { 
-			 
-			 	docData[$scope.ID].selected.push(id);	
-	      		
-	      		if(typeof docData[$scope.ID].Offers[id].selected == "undefined"){ 
-	      			$.extend( docData[$scope.ID].Offers[id], {'selected':'true'});
-	      		}
-
-	    	} else {
-			  
-				  var selected={'selected':[]};
-				  
-				  $.extend( docData[$scope.ID], selected);
-				  
-				  docData[$scope.ID].selected.push(id);	
-	 	  	
-		 	  	if(typeof docData[$scope.ID].Offers[id].selected == "undefined"){
-		 	  		 
-		 	  		 $.extend( docData[$scope.ID].Offers[id], {'selected':'true'});
-		 	  	}
-	        }	
-	  
-	  } else {
-		
-		docData[$scope.ID].selected.splice($.inArray(id, docData[$scope.ID].selected),1);
-		delete docData[$scope.ID].Offers[id].selected;
-	  }
-
-	  if((typeof docData[$scope.ID].selected !="undefined") && (docData[$scope.ID].selected.length > 0)){
-		$('#active'+$scope.ID+'').css("background-color","green");
-		$scope.OfferArrey = docData;
-	  } else {
-		$('#active'+$scope.ID+'').css("background-color","#fff");
-	  }
-	}
-
-	$scope.closeDocument = function(){
-		$scope.toggleDocPanel = !$scope.toggleDocPanel;
-		 $scope.invalidMsg = !$scope.invalidMsg;
-	}
-
-	$scope.requestDoc = function(){
-		if($scope.reqComment != '' && $scope.reqComment != undefined){
-			$scope.setSelected();
-			 var data = $scope.offrData;
-			 for (j in data){
-				arrayDesc.push({sJCode:data[j].Code,sDescrip:$scope.reqComment,sDocName:data[j].Name});
-			  }
-			 var arr=[];
-			 var json = {
-						"sRefID":$scope.objectSet.oAppReq.sRefID,
-						'sHeader':{'sAppID':$scope.appltnID,'sInstID':$scope.InstitutionID,'sCroId':$scope.userid},
-						"sAppStat":"OnHold",
-						"aCroJustification":arrayDesc,
-						"aDedupeRefID": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : arr)
-						};
-			// requestFordclnOnhold(json);//call to server
-			  for(var j=0; j<$scope.OfferArrey.length ; j++){
-				  for (var i = 0; i <   $scope.OfferArrey[j].Offers.length ; i++) {
-					  if( $scope.OfferArrey[j].Offers[i].selected)
-						  $scope.OfferArrey[j].Offers[i].selected = false;
-				  } 
-			  }
-			  console.log("json :"+JSON.stringify(json));
-              $scope.toggleDocPanel = !$scope.toggleDocPanel;
-              if($scope.invalidMsg)
-                  $scope.invalidMsg = !$scope.invalidMsg;
-			/* $("#approvemsg").text("");
-			 $scope.updateStatus();
-			 var reason = $('#descReason').val();
-			 var data = $scope.offrData;
-			 for (j in data)
-				{
-					arrayDesc.push({sJCode:data[j].Code,sDescrip:reason,sDocName:data[j].Name});
-				}
-			 var arr=[];
-			 var json = {
-						"sRefID":$scope.refID,
-						'sHeader':{'sAppID':$scope.appltnID,'sInstID':$scope.InstitutionID,'sCroId':$scope.userid},
-						"sAppStat":"OnHold",
-						"aCroJustification":arrayDesc,
-						"aDedupeRefID": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : arr)
-						};
-			 requestFordecline(json);
-			  $('#offrform').trigger('reset');
-			  for(var j=0; j<$scope.OfferArrey.length ; j++){
-				  for (i = 0; i <   $scope.OfferArrey[j].Offers.length ; i++) {
-					  if( $scope.OfferArrey[j].Offers[i].selected)
-						  $scope.OfferArrey[j].Offers[i].selected = false;
-				  } 
-			  }
-			  $('div[id^="active"').css("background-color","#E4EDE4"); 
-			  $('#descReason').css("border","1px solid #999");
-			  docData[4].Offers=[];*/
-		 }else{
-		 	//console.log("invalid : "+$scope.invalidMsg);
-			 $scope.invalidMsg = !$scope.invalidMsg;
-		 }
-	}
-
-
-/*$(document.body).on("click","#SendOffer",function(){
-		 if($('#descReason').val()!=''){
-		 $("#approvemsg").text("");
-		 $scope.updateStatus();
-		 var reason = $('#descReason').val();
-		 var data = $scope.offrData;
-		 for (j in data)
-			{
-				arrayDesc.push({sJCode:data[j].Code,sDescrip:reason,sDocName:data[j].Name});
-			}
-		 var arr=[];
-		 var json = {
-					"sRefID":$scope.refID,
-					'sHeader':{'sAppID':$scope.appltnID,'sInstID':$scope.InstitutionID,'sCroId':$scope.userid},
-					"sAppStat":"OnHold",
-					"aCroJustification":arrayDesc,
-					"aDedupeRefID": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : arr)
-					};
-		 requestFordecline(json);
-		  $('#offrform').trigger('reset');
-		  for(j=0; j<$scope.OfferArrey.length ; j++){
-			  for (i = 0; i <   $scope.OfferArrey[j].Offers.length ; i++) {
-				  if( $scope.OfferArrey[j].Offers[i].selected)
-					  $scope.OfferArrey[j].Offers[i].selected = false;
-			  } 
-		  }
-		  $('div[id^="active"').css("background-color","#E4EDE4"); 
-		  $('#descReason').css("border","1px solid #999");
-		  docData[4].Offers=[];
-		 }else{
-			 $("#msg").text("Please enter your reason for Onhold");
-		 }
-	 });
-	 */
-	 function  requestFordclnOnhold(json){
-			var URL='cro-onhold';
-			RestService.saveToServer(URL,json).then(function(Response){
-				if(Response.STATUS == "OK UPDATE SUCCESSFULLY")						
-				{
-					setTimeout(function() 
-					{ $('.LoaderSpinner').hide()},2000);
-					$(document.body).find("#"+$scope.appltnID+"").addClass($scope.actions);
-
-					$scope.done = "Application is successfully "+$scope.actions+""; 
-					polling();// check it out
-					setTimeout(function() 
-					{ 
-						$scope.done="";
-					},4000);
-				}
-			});
-		}
-	 
-	function requestForStatus(json)
-	{
-	var URL = 'cro-approval';
-	RestService.saveToServer(URL,json).then(function(Response){
-		$scope.appStatflag =json.sAppStat;
-		if(Response.STATUS == "OK UPDATE SUCCESSFULLY")						
-		{
-			setTimeout(function() 
-			{ $('.LoaderSpinner').hide()},2000);
-				$(document.body).find("#"+$scope.appltnID+"").addClass($scope.actions);
-				$scope.done = "Application is successfully "+$scope.actions+""; 
-				setTimeout(function() 
-						{ 
-							$scope.done="";
-						},4000);
-		}
-		else{
-			$scope.error= "Sorry...Unable to update your action !!";
-		}
-	setTimeout(function() { $scope.error = "";},1500);
-	});	
-  }
-
-    $scope.scoreTree = function(){
-        console.log("function called");
-        treeData = [];
+$scope.scoreTree = function(){
+       /* console.log("function called");
+        var treeData = [];
+        var zm;
+        var nodes;
+        var links;
+        generate_scoreJson($scope.objectSet.oCompRes.scoringServiceResponse.SCORE_TREE);
         function generate_scoreJson(temp){
 
             var colors = ['#689f38','#EF3D16','#fb8c00','#8BC34A','#2196F3','#9C27B0','#bdbdbd','#009688','#ffc107','#689f38'];
@@ -987,31 +642,28 @@ $scope.setSelected=function() {
             try{
                 if(temp != null && typeof temp != 'undefined')
                 { treeData.push({"name":"Application Score", "score":temp.AppScore, "color":"#2196F3", "children":[]});
-                for(var i=0; i<temp.Scores.length; i++)
-                {
-                    var color = colors[i];
-                    var cat = temp.masterMap[temp.Scores[i].name];
-                    treeData[0].children.push({"name":temp.Scores[i].name, "score":temp.Scores[i].score, "color":color, "children":[]});
-                    for(var j=0; j< temp.Scores[i].Plans[0].length; j++)
+                    for(var i=0; i<temp.Scores.length; i++)
                     {
-                        var att = cat[temp.Scores[i].Plans[0][j].name];
-                        treeData[0].children[i].children.push({"name":temp.Scores[i].Plans[0][j].name, "score":temp.Scores[i].Plans[0][j].score, "color":color, "children":[]}); 
-                        for(var k=0; k<temp.Scores[i].Plans[0][j].Fields[0].length; k++)
+                        var color = colors[i];
+                        var cat = temp.masterMap[temp.Scores[i].name];
+                        treeData[0].children.push({"name":temp.Scores[i].name, "score":temp.Scores[i].score, "color":color, "children":[]});
+                        for(var j=0; j< temp.Scores[i].Plans[0].length; j++)
                         {
-                            var field = att[temp.Scores[i].Plans[0][j].Fields[0][k].name];
-                            var exp = field["FieldName"]; //fieldname
-                            var dscore = field["value"]; //
-                            var weight = field["weight"];
-                            treeData[0].children[i].children[j].children.push({"score":temp.Scores[i].Plans[0][j].Fields[0][k].score, "color":color,"dscore":dscore, "exp":exp, "weight":weight});
+                            var att = cat[temp.Scores[i].Plans[0][j].name];
+                            treeData[0].children[i].children.push({"name":temp.Scores[i].Plans[0][j].name, "score":temp.Scores[i].Plans[0][j].score, "color":color, "children":[]}); 
+                            for(var k=0; k<temp.Scores[i].Plans[0][j].Fields[0].length; k++)
+                            {
+                                var field = att[temp.Scores[i].Plans[0][j].Fields[0][k].name];
+                                var exp = field["FieldName"]; //fieldname
+                                var dscore = field["value"]; //
+                                var weight = field["weight"];
+                                treeData[0].children[i].children[j].children.push({"score":temp.Scores[i].Plans[0][j].Fields[0][k].score, "color":color,"dscore":dscore, "exp":exp, "weight":weight});
+                            }
                         }
                     }
                 }
-                }
-            
             }catch(error){
-                
                 console.log(error);
-                
                 $("#scoreTree").text("Sorry we cant process this score tree");
             }
 
@@ -1200,7 +852,7 @@ $scope.setSelected=function() {
                 })
                 .remove();
 
-                nodes.forEach(function(d) {
+                node.forEach(function(d) { //nodes
                     d.x0 = d.x;
                     d.y0 = d.y;
                 });
@@ -1221,24 +873,237 @@ $scope.setSelected=function() {
             function redraw() 
             {
                 svg.attr("transform", "translate(" + d3.event.translate + ")");
-            }
+            }*/
         }
-    }
- 
-	/*$(document.body).on("click","#back",function(){
-		// alert("Closing...");
-		$("#application-main-container").slideUp();				
-		$("#notification-main-container").show();
-		$timeout(function(){
-		$('#losStatusId1').val("");
-		$scope.objectSet.oLosDtls.sStat ="";
-		$('#losId').val('');
-		$('#losId').css("border","1px solid #cfcfcf");
 	
-		});
-	});
+$scope.cro_action = function(appID, action){ 
+	$scope.appltnID = appID;
+	if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!croQueue)){
+		if((appID !== "undefined") && (typeof $scope.objectSet.oAppReq !== "undefined")){
+			 if(action == "OnHold"){
+				/* $scope.toggleDocPanel = !$scope.toggleDocPanel;
+				 $scope.docOfferFlag = true;*/
 
-*//*
+                  var modalInstance = $uibModal.open({
+                      animation: $scope.animationsEnabled,
+                      templateUrl: 'views/templates/onhold-panel.html',
+                      controller: 'onholdModelCtrl',
+                      size: 'lg',
+                      resolve: {
+                        holdModelFeed : function (){
+                            var dataForModel;
+                            return dataForModel = {
+                              
+                            }
+                        }
+                      }
+                    });
+
+                     modalInstance.result.then(function (offerarray) {
+                        var json = {
+                            "sRefID":$scope.objectSet.oAppReq.sRefID,
+                            'sHeader':{'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
+                            'sInstID':$scope.InstitutionID,
+                            'sCroId':$scope.userid},
+                            "sAppStat":"OnHold",
+                            "aCroJustification":offerarray,
+                            "aDedupeRefID": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : [])
+                        };
+                        requestFordclnOnhold(json);
+
+                        }, function () {
+                          $log.info('Modal dismissed at: ' + new Date());
+                        });
+			 
+			 }else if(action == "Declined"){
+			 	/*$scope.toggleDclnPanel = !$scope.toggleDclnPanel;*/
+                  var modalInstance = $uibModal.open({
+                      animation: $scope.animationsEnabled,
+                      templateUrl: 'views/templates/decline-panel.html',
+                      controller: 'DeclInstanceCtrl',
+                      size: 'lg',
+                      resolve: {
+                         dclnModelFeed : function (){
+                            var dataForDcl;
+                            return dataForDcl = {
+                            }
+                        }
+                      }
+                    });
+                   modalInstance.result.then(function (selected) {
+                        var arrayDclnDesc = [];
+                        $scope.selected = selected;
+                        arrayDclnDesc.push({
+                            sJCode:null,
+                            sDescrip:null,
+                            sDocName:null,
+                            sSubTo:$scope.selected.dclnSubTo,
+                            sRemark:$scope.selected.dclnRemark
+                        });
+                         var json = {
+                                    "sRefID":$scope.objectSet.oAppReq.sRefID,
+                                    'sHeader':{'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
+                                    'sInstID':$scope.InstitutionID,'sCroId':$scope.userid},
+                                    "sAppStat":"Declined",
+                                    "aCroJustification":arrayDclnDesc, //not yet
+                                    "aDedupeRefID ": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : [])
+                                    };
+                                     console.log(json);
+                        requestFordclnOnhold(json);
+
+                        }, function () {
+                          $log.info('Modal dismissed at: ' + new Date());
+                        });
+                
+
+			 }else{
+					/* $('div[contextmenu="blur"]').addClass("blured");
+					 $('#approveReason').show();
+					 $('#appr1Container,#appr2Container').text(''); 
+					$scope.error = "Please select enquiry from Queue...!!!";
+					$scope.done = "";*/
+                     var modalInstance = $uibModal.open({
+                      animation: $scope.animationsEnabled,
+                      templateUrl: 'views/templates/approve-panel.html',
+                      controller: 'ModalInstanceCtrl',
+                      size: 'lg',
+                      resolve: {
+                        modalFeed : function (){
+                            var dataForModel;
+                            return dataForModel = {
+                                approveAmt : $scope.objectSet.aCroDec[0].dAmtAppr,
+                                tenor: $scope.objectSet.aCroDec[0].iTenor,
+                                emi : $scope.objectSet.aCroDec[0].dEmi
+                            }
+                        }
+                      }
+                    });
+
+                     modalInstance.result.then(function (selected) {
+                        var arrayApprvDesc = [];
+                        $scope.selected = selected;
+
+                        arrayApprvDesc.push({
+                            sJCode:null,
+                            sDescrip:null,
+                            sDocName:null,
+                            sSubTo:$scope.selected.apprvSubTo,
+                            sRemark:$scope.selected.apprvRemark
+                        });
+                        var json={
+                            'sHeader':{'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
+                            'sInstID':$scope.InstitutionID,'sCroId':$scope.userid},
+                            'sRefID':$scope.objectSet.oAppReq.sRefID,
+                            'sAppStat':"Approved",
+                            "aCroJustification":arrayApprvDesc,
+                            "bApprAmtExist":true,
+                            "dApprAmt":$scope.selected.approveAmt,
+                            "iTenor":$scope.selected.tenor,
+                            "dEmi":$scope.selected.emi,
+                            "aDedupeRefID": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : [])
+                            }
+                            requestForStatus(json);
+
+                        }, function () {
+                          $log.info('Modal dismissed at: ' + new Date());
+                        });
+                
+					/*$scope.toggleApprvPanel = !$scope.toggleApprvPanel;*/
+			}
+
+		}else if($scope.applctnstatus == null){
+    		$scope.error = "Application status is not defined...!!!";
+    		$scope.done = "";
+    	}else{
+    		$scope.error = "Application has already taken an action...!!!";
+    		$scope.done = "";
+    	}
+	   
+       $scope.showrefid = "true";
+    }
+}
+
+function requestForStatus(json)
+    {
+    var URL = 'cro-approval';
+    RestService.saveToServer(URL,json).then(function(Response){
+        if(Response.STATUS == "OK UPDATE SUCCESSFULLY")                     
+        {
+            /*setTimeout(function() 
+            { $('.LoaderSpinner').hide()},2000);*/
+          _.each($scope.notifarray,function(value,key){
+                        if($scope.notifarray[key].sAppId == $scope.objectSet.oAppReq.oHeader.sAppID){
+                            return($scope.notifarray[key].sStat = json.sAppStat);
+                        }  
+                  });
+            $scope.done = "Application is successfully "+json.sAppStat+""; 
+        }
+        else{
+            $scope.error= "Sorry...Unable to update your action !!";
+        }
+    setTimeout(function() { $scope.error = "";},1500);
+    }); 
+  }
+
+ function  requestFordclnOnhold(json){
+            var URL='cro-onhold';
+            RestService.saveToServer(URL,json).then(function(Response){
+                if(Response.STATUS == "OK UPDATE SUCCESSFULLY")                     
+                {
+                      _.each($scope.notifarray,function(value,key){
+                            if($scope.notifarray[key].sRefID ==  $scope.objectSet.oAppReq.sRefID){
+                                return($scope.notifarray[key].sStat = json.sAppStat);
+                            }  
+                      });
+                    $scope.done = "Application is successfully "+json.sAppStat+""; 
+                }
+            });
+        }
+ $scope.showPdf = function(){
+        $scope.cirhtml =$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];
+    }
+
+//check if neccessary
+
+	$scope.closeDocument = function(){
+		$scope.toggleDocPanel = !$scope.toggleDocPanel;
+        $scope.holdObject.reqComment ='';
+        for(var j=0; j<$scope.OfferArrey.length ; j++){
+          for (var i = 0; i < $scope.OfferArrey[j].Offers.length ; i++) {
+              if( $scope.OfferArrey[j].Offers[i].selected)
+                 $scope.OfferArrey[j].Offers[i].selected = false;
+          } 
+        }
+        $scope.tabIndex = undefined;
+        $scope.isCurrTab(0);
+        $scope.AvailebleOffers = docData[0].Offers;
+        if($scope.invalidMsg)
+		 $scope.invalidMsg = !$scope.invalidMsg;
+	};
+
+  $scope.losStatusChange=function(status){
+    var utr =  $scope.objectSet.oLosDtls.sUtr;
+     if(status == "LOS_DISB" && (utr=='' || utr==null) &&   $scope.applctnstatus.toUpperCase()=="APPROVED"){
+            $scope.isUtrEdit = false;
+        }else{
+              $scope.isUtrEdit = true;
+             $(document.body).find('#utrData').css("border","1px solid #cfcfcf");
+        }
+         $('#losStatusId1').val(this.value);
+        $scope.objectSet.oLosDtls.sStat =this.value;
+  }
+
+  $scope.onchange = function(id) {
+        if(id!='Select'){
+        $scope.load_details(id,"false");
+        }else{
+            $scope.load_details($scope.objectSet.oAppReq.sRefID,"true");
+        }
+        }
+    
+ /*   }*/
+ 
+ /*
 	function getTime(value, array){
 		var index;
 		jQuery.each(array,function(val,text){
@@ -1252,32 +1117,6 @@ $scope.setSelected=function() {
 		});
 		return index;
 	}*/
-	/*$(document.body).on("click","#closeOffer" ,function() {
-		  
-		  docData[4].Offers=[];
-		  
-		  $('#OfferPanel').slideUp();
-		  
-		  $('#descReason').val("");
-		  
-		  $('#msg').text("");
-		  
-		  $('div[contextmenu="blur"]').removeClass("blured");
-		  
-		  $('#offrform').trigger('reset');
-		  
-		  $('div[id^="active"').css("background-color","#E4EDE4"); 
-		  
-		  $('#descReason').css("border","1px solid #999");
-		  
-		  for(var j=0; j<$scope.OfferArrey.length ; j++){
-			  for (var i = 0; i <   $scope.OfferArrey[j].Offers.length ; i++) {
-				  if( $scope.OfferArrey[j].Offers[i].selected)
-					  $scope.OfferArrey[j].Offers[i].selected = false;
-			  } 
-		  }
-	 });*/
-
 
 	$(document).on('click', '.close', function(e) {
 		$("#scoreTree").text("");
@@ -1307,7 +1146,7 @@ $scope.setSelected=function() {
 			$('.leftbar_scroll').css("margin","0px");			
 		}
 	});
-	$(document.body).on('click','.custom_img_rounded',function() 
+	/*$(document.body).on('click','.custom_img_rounded',function() 
 		    {
 					if($(this).attr("id")!="imgpreview1" && $(this).attr("id")!="imgpreview2"){
 		    		$(document.body).find('#cirhtml').attr("data", "").hide();
@@ -1377,7 +1216,7 @@ $scope.setSelected=function() {
 					}
 		    }
 			});
-		
+		*/
 	function applicantImg(data){
 		var map =data;
 		for (i in map)
@@ -1726,7 +1565,7 @@ $scope.setSelected=function() {
 
 	});
 
-	$(document).on('change', '#id_option', function() 
+	/*$(document).on('change', '#id_option', function() 
 			{
 		if(this.value=="PASSPORT"){
 			$("#id_number").attr('maxlength','1');
@@ -1751,11 +1590,10 @@ $scope.setSelected=function() {
 			$('#kyc_text_field, #kyc_submit').slideUp();
 			console.log("selected:"+(this).value);
 		}
-			});
+			});*/
 
-	$(document).on('click', '#submit_kyc', function(e)
-
-			{
+	/*$(document).on('click', '#submit_kyc', function(e)
+    {
 		var id_n = document.getElementById('id_number').value;// text field of number
 		var option = document.getElementById('id_option').value;
 		var optionid = document.getElementById('id_option');
@@ -1772,7 +1610,7 @@ $scope.setSelected=function() {
 		$('#kyc_submit').slideUp();
 		e.preventDefault();
 
-			});
+	});*/
 	$(document).on('click', '.preview', function(e) {  //preview click
 		var src = $(this).attr("accesskey"); 
 		var currentImgID = $(this).attr("name"); 
@@ -1911,29 +1749,11 @@ $scope.setSelected=function() {
 		$('#approve_rejectPanel').show();
 		$('#uploadNewimgPanel').hide();
 	}
-	$scope.onchange = function(id) {
-		if(id!='Select'){
-		$scope.load_details(id,"false");
-		}else{
-			$scope.load_details($scope.objectSet.oAppReq.sRefID,"true");
-		}
-	    }
-	$(document).on('change', '#losStatusId1', function() 
-			{
-		var utr = $('#utrData').val();
-		var action = $scope.applctnstatus;
-		if($(this).val() == "LOS_DISB" && (utr=='' || utr==null) && action.toUpperCase()=="APPROVED"){
-			 $(document.body).find('#utrData').prop('disabled', false);
-		}else{
-			 $(document.body).find('#utrData').prop('disabled', true);
-			 $(document.body).find('#utrData').css("border","1px solid #cfcfcf");
-		}
-		$('#losStatusId1').val(this.value);
-		$scope.objectSet.oLosDtls.sStat =this.value;
-			});
+	
+	
 
 	
-	$scope.saveApprvData=function(){
+	/*$scope.saveApprvData=function(){
 		$scope.checkValidation=false;
 		$('input[type="text"]:visible').each(function(){
 			if($(this).css("border")=="1px solid rgb(255, 0, 0)"){
@@ -1966,8 +1786,8 @@ $scope.setSelected=function() {
 		}else{
 			$('#approvemsg').text("Please fill all the field");
 		}
-	}
-	$scope.saveDclnData=function(){
+	}*/
+	/*$scope.saveDclnData=function(){
 		if($('#reason1container').text()!='' && $('#reason2container').text()!=''){
 		var remark = $('#reason1container').text().replace("\t",' ');
 		var subject = $('#reason2container').text().replace("\t",' ');
@@ -1988,7 +1808,7 @@ $scope.setSelected=function() {
 		}else{
 			$('#declinemsg').text("Please fill all the field");
 		}
-	}
+	}*/
 	
 	$(document.body).on('change','select[id="select_addr"]',
 			function() {
@@ -2365,13 +2185,13 @@ $scope.setSelected=function() {
 					}
 				}
 				else if($(this).attr("id")=="ApprvValue" || $(this).attr("id")=="emiValue" || $(this).attr("id")=="tenorValue"){
-					if (!(/^[0-9]+$/.test(val))) {
+					/*if (!(/^[0-9]+$/.test(val))) {
 						error = 1;
 						$(this).css("border","1px solid red");
 					} else {
 						error = 0;
 						$(this).css("border","1px solid green");
-					}
+					}*/
 				}
 			}
 		});
@@ -2385,6 +2205,228 @@ $scope.setSelected=function() {
 	 
 }]);
 
+app.controller('ModalInstanceCtrl', ['$scope','$rootScope','NotificationObject','modalFeed',
+   '$uibModalInstance','$log', function($scope, $rootScope,NotificationObject,modalFeed,$uibModalInstance,$log){
+   
+    $scope.modalFeed = modalFeed;
+     $scope.approvemsg = false;
+
+    $scope.saveApprvPanel = function () {
+        console.log($scope.modalFeed.apprvRemark );
+         if($scope.modalFeed.apprvRemark !=undefined && $scope.modalFeed.apprvRemark !=''){
+             if($scope.modalFeed.apprvSubTo!=undefined && $scope.modalFeed.apprvSubTo!=''){
+                if(modalFeed.approveAmt !='' && modalFeed.emi!='' && modalFeed.tenor!=''){
+                    $uibModalInstance.close($scope.modalFeed);   
+                }else{
+                    $scope.approvemsg = true;
+                }
+             }else{
+                $scope.approvemsg = true;
+            }
+        }else{
+            $scope.approvemsg = true;
+        }
+    };
+
+    $scope.closeApprvPanel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+
+  }]);
+
+app.controller('DeclInstanceCtrl', ['$scope','$rootScope','NotificationObject',
+   '$uibModalInstance','dclnModelFeed', function($scope, $rootScope,NotificationObject,$uibModalInstance,dclnModelFeed){ 
+       
+    $scope.dclnModelFeed = dclnModelFeed;
+    $scope.errorMsg = false;
+    $scope.saveDclnPanel = function () {
+        if($scope.dclnModelFeed.dclnRemark !='' && $scope.dclnModelFeed.dclnRemark !=undefined){
+            if($scope.dclnModelFeed.dclnSubTo !='' && $scope.dclnModelFeed.dclnSubTo !=undefined){
+                $uibModalInstance.close($scope.dclnModelFeed);        
+            }else{
+                 $scope.errorMsg = true;     
+            }
+        }else{
+            $scope.errorMsg = true;
+        }
+    };
+    $scope.closeDclnPanel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+}]);
+
+app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
+   '$uibModalInstance','holdModelFeed', function($scope, $rootScope,NotificationObject,$uibModalInstance,holdModelFeed){ 
+       
+    var docData = [{'Name':'Address Proof',
+        'ID':'0',
+        'Icon':'images/address-proof.png',
+        'Count':'1',
+        'Type' : 'Approve',
+        'Offers':[{'Name':'Valid Passport','Icon':'images/address-proof.png','Code':'101'},
+                    {'Name':'Latest Electricity Bill','Icon':'images/address-proof.png','Code':'102'},
+                    {'Name':'Telephone Bill','Icon':'images/address-proof.png','Code':'103'},
+                    {'Name':'Driving License','Icon':'images/address-proof.png','Code':'104'},
+                    {'Name':'Ration Card','Icon':'images/address-proof.png','Code':'105'},
+                    {'Name':'Bank Account Statement/Pass Book 1st page','Icon':'images/address-proof.png','Code':'106'},
+                    {'Name':'Rent Agreement','Icon':'images/address-proof.png','Code':'107'},
+                    {'Name':'Gas Connection Bill or Post Paid Mobile Bill with full address ','Icon':'images/address-proof.png','Code':'108'},
+                    {'Name':'Property Tax receipt or Water Bill','Icon':'images/address-proof.png','Code':'109'},
+                    {'Name':'Voter’s Identity card','Icon':'images/address-proof.png','Code':'110'},
+                    {'Name':'Aadhar UID Card','Icon':'images/address-proof.png','Code':'111'}]
+    },
+    {'Name':'DOB Proof',
+        'ID':'1',
+        'Icon':'images/date of birth proof.png',
+        'Count':'2',
+        'Type' : 'Approve',
+        'Offers':[{'Name':'Valid Passport','Icon':'images/date of birth proof.png','Code':'101'},
+                    {'Name':'PAN Card','Icon':'images/date of birth proof.png','Code':'112'},
+                    {'Name':'Driving License','Icon':'images/date of birth proof.png','Code':'104'},
+                    {'Name':'Birth Certificate (Govt agency)','Icon':'images/date of birth proof.png','Code':'113'},
+                    {'Name':'School Leaving certificate (10th/12th)','Icon':'images/date of birth proof.png','Code':'114'},
+                    {'Name':'Voter ID Card','Icon':'images/date of birth proof.png','Code':'110'},
+                    {'Name':'Pension Certificate / Govt. ID Card / Aadhar UID Card','Icon':'images/date of birth proof.png','Code':'111'}]
+    },
+    {'Name':'Identification Proof',
+        'ID':'2',
+        'Icon':'images/identification number.png',
+        'Count':'3',
+        'Type' : 'Approve',
+        'Offers':[{'Name':'Valid Passport','Icon':'images/identification number.png','Code':'101'},
+                    {'Name':'PAN Card','Icon':'images/identification number.png','Code':'112'},
+                    {'Name':'Driving License','Icon':'images/identification number.png','Code':'104'},
+                    {'Name':'Voter’s Identity Card','Icon':'images/identification number.png','Code':'110'},
+                    {'Name':'Aadhar UID card','Icon':'images/identification number.png','Code':'111'},
+                    {'Name':'Bank Passbook with photo','Icon':'images/identification number.png','Code':'115'}]
+    },
+    {'Name':'Signature Proof',
+        'ID':'3',
+        'Icon':'images/signature proof.png',
+        'Count':'4',
+        'Offers':[{'Name':'Signature verification from bank','Icon':'images/signature proof.png','Code':'116'},
+                    {'Name':'Passport Copy','Icon':'images/signature proof.png','Code':'101'},
+                    {'Name':'PAN Card','Icon':'images/signature proof.png','Code':'112'},
+                    {'Name':'Driving license with photograph and signature','Icon':'images/signature proof.png','Code':'104'},
+                    {'Name':'Clearance of processing fees cheque','Icon':'images/signature proof.png','Code':'117'}]
+    },
+    {'Name':'Rejected Proof',
+        'ID':'4',
+        'Icon':'images/rejected proof.png',
+        'Count':'5',
+        'Offers':[]
+    }];
+
+     $scope.OfferArrey =docData ;
+     $scope.AvailebleOffers = $scope.OfferArrey[0].Offers;
+     $scope.ID = 0;
+     $scope.tabIndex = undefined;
+     $scope.contentSelect = false;
+     $scope.invalidMsg = false;
+     $scope.docOfferFlag = true;
+     $scope.holdModelFeed = holdModelFeed;
+
+    $scope.holdObject = {
+        reqComment : ""
+    };
+
+      $scope.isCurrTab = function(index){
+        if((index == 0 && $scope.tabIndex== undefined) || index == $scope.tabIndex){
+            return true;
+        }
+    }
+
+     $scope.isSelected = function(index){
+          if((typeof docData[index].selected !="undefined") && (docData[index].selected.length > 0))
+          return true;
+    }
+
+    $scope.Load_Offer = function(NodeID,Obj,index){
+        $scope.tabIndex = index;
+        for(var i=0; i<docData.length; i++)
+        {if(docData[i].ID == NodeID)
+        {   $scope.AvailebleOffers = docData[i].Offers;
+            $scope.ID = NodeID;
+        }
+        }
+    }
+    
+    $scope.checkboxUpdate = function(obj,id){ 
+        console.log(obj);
+        if(obj){
+            if (typeof docData[$scope.ID].selected != "undefined") {
+
+                /*if($.inArray(id, docData[$scope.ID].selected),1)
+                delete docData[$scope.ID].selected[id];
+                else{*/
+                    docData[$scope.ID].selected.push(id);   
+                    if(typeof docData[$scope.ID].Offers[id].selected == "undefined"){ 
+                        $.extend( docData[$scope.ID].Offers[id], {'selected':'true'});
+                /*  }*/
+                }
+
+            } else {
+                  var selected={'selected':[]};
+                  $.extend( docData[$scope.ID], selected);
+                  docData[$scope.ID].selected.push(id); 
+                if(typeof docData[$scope.ID].Offers[id].selected == "undefined"){
+                     $.extend( docData[$scope.ID].Offers[id], {'selected':'true'});
+                }
+            }   
+      
+      } else {
+        
+        docData[$scope.ID].selected.splice($.inArray(id, docData[$scope.ID].selected),1);
+        delete docData[$scope.ID].Offers[id].selected;
+      }
+         $scope.isSelected($scope.ID);
+         $scope.OfferArrey = docData;
+      /*} else {
+        $('#active'+$scope.ID+'').css("background-color","#fff");
+      }*/
+    }
+
+    $scope.setSelected=function() {  
+    var offers={'offers':[],'documents':[]};
+      for(var i=0;i<docData.length;i++)
+      {for(var j=0;j<docData[i].Offers.length;j++)
+       {if((typeof docData[i].Offers[j].selected != 'undefined'))
+        {
+           if($scope.docOfferFlag == true){
+                offers.documents.push(docData[i].Offers[j]);
+                $scope.docOfferFlag == false;
+           }
+           else{
+                offers.offers.push(docData[i].Offers[j]);
+           }
+        }
+       }
+      }
+     $scope.offrData = offers.documents; 
+}
+
+    $scope.requestDoc = function () {
+          if($scope.holdObject.reqComment != '' && $scope.holdObject.reqComment != undefined){
+            $scope.setSelected();
+            var data = $scope.offrData;
+            var arrayDesc = [];
+             for (var j in data){
+                arrayDesc.push({sJCode:data[j].Code,sDescrip:$scope.holdObject.reqComment,sDocName:data[j].Name});
+              }
+              if( $scope.invalidMsg == true)
+                 $scope.invalidMsg = !$scope.invalidMsg;
+            $uibModalInstance.close(arrayDesc);
+         }else{
+             $scope.invalidMsg = !$scope.invalidMsg;
+         }
+    };
+
+      $scope.closeDocument = function () {
+        $uibModalInstance.dismiss('cancel');
+      };
+    }]);
+
+
 
 app.directive("whenScrolled",function(){
     return function(scope, elm, attr) {
@@ -2395,7 +2437,14 @@ app.directive("whenScrolled",function(){
         }
       });
     };
-  })
+  });
+
+app.filter('dateFilter', function() {
+    return function(date){
+        var result = date.slice(0,2)+"/"+date.slice(2,4)+"/"+date.slice(4,8);
+        return result;
+    };
+});
 
 app.filter('dateFormat', function() {
 	return function(item) {
