@@ -12,6 +12,8 @@
 	                                     'ui.bootstrap',
 	                                     'angular-loading-bar',
 	                                     'ngFileUpload',
+	                                     'angular-svg-round-progressbar',
+	                                     'ngTagsInput',
 	                                     'gonogo.analytics',
 	                                     'gonogo.login',
 	                                     'gonogo.directives',
@@ -19,9 +21,7 @@
 	                                     'gonogo.services',
 	                                     'gonogo.utilities',
 	                                     'gonogo.commons',
-	                                     'gonogo.factories',
-	                                     'ngTagsInput',
-	                                     'angular-svg-round-progressbar'
+	                                     'gonogo.factories'
 	                                     ]);
 
 	app.controller("Maincontroller",['$scope', '$log', 'notifier' ,'Validation', '$timeout','RestService','$location','UserService','APP_CONST','AclService',function($scope, $log, notifier ,Validation, $timeout,RestService,$location,UserService,APP_CONST,AclService) {
