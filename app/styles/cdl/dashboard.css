@@ -75,8 +75,4 @@
 }
 
 
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
-  background: #ffffff;
-}
-
 /***************************************END OF DASHBOARD.CSS **************************************************/
