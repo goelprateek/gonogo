@@ -356,6 +356,7 @@
 
     $scope.isLosId = function(){
         if($scope.objectSet.oLosDtls){
+            console.log($scope.objectSet.oLosDtls);
              if($scope.objectSet.oLosDtls.sLosID)
                 return true;
             else
