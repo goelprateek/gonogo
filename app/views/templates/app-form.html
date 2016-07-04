@@ -455,73 +455,6 @@
 								 disabled="disabled">	 
 						</div>
 					</div>
-<<<<<<< 7b608d3346190de1b36f9b813384b46ca45d82f6
-=======
-				</fieldset>
-					<fieldset class="formfield" style="display: block;">
-					<legend>Decision</legend>
-						<div class="row clearfix">
-							<div class="col-md-3">
-							<label class="control-label">Applied Amount </label> 
-								<div class="input-group input-group-md">
-									<span class="input-group-addon" id="sizing-addon3"><i
-										class="fa fa-inr"></i></span> <input id="project_amount"
-										class="form-control" ng-model=" objectSet.oAppReq.oReq.oApplication.dLoanAmt" type="text"
-										name="Amount" accesskey="commas" disabled="disabled">
-								</div>
-							</div>
-							<div class="col-md-3">
-								<label class="control-label">Eligibility Amount</label> 
-								<div class="input-group input-group-md">
-								<span class="input-group-addon" id="sizing-addon3"><i
-									class="fa fa-inr"></i></span> <input
-									ng-model="objectSet.aCroDec[0].dEligibleAmt" class="form-control" type="text" disabled="disabled">
-								</div>
-							</div>
-							<div class="col-md-3">
-								<label class="control-label">Approved Amount</label> 
-								<div class="input-group input-group-md">
-								<span class="input-group-addon" id="sizing-addon3"><i
-									class="fa fa-inr"></i></span><input
-									ng-model="objectSet.aCroDec[0].dAmtAppr" class="form-control" type="text" disabled="disabled">
-							</div>
-							</div>
-							<div class="col-md-3">
-								<label class="control-label">Tenor </label> <input
-									ng-model="objectSet.aCroDec[0].iTenor" class="form-control" type="text" disabled="disabled">
-							</div>
-						</div>
-						<div class="row clearfix">
-								<div class="col-md-3">
-									<label class="control-label">EMI </label> <input
-										ng-model="objectSet.aCroDec[0].dEmi" class="form-control" type="text" disabled="disabled">
-								</div>
-							    <div class="col-md-3">
-								 <label class="control-label"> Eligibility Remark</label> <input
-									ng-model="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE'].REMARK" class="form-control" type="text"
-									disabled="disabled">
-							   </div>
-							    <div class="col-md-3">
-								 <label class="control-label">FOIR Adjusted Amount</label> <input
-									ng-model="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']" class="form-control" type="text"
-									 disabled="disabled">
-							   </div> 
-							   	<div class="col-md-3"  ng-repeat="decision in objectSet.oCompRes.scoringServiceResponse['DECISION_RESPONSE'].Details" ng-if="decision.Outcome!=' '">
-									<label class="control-label">Reason </label> <input
-										value="{{decision.RuleName}} : {{decision.Remark}}" class="form-control" type="text" disabled="disabled">
-								</div>
-							
-								<div class="col-md-3" ng-repeat="outcome in objectSet.oCompRes.scoringServiceResponse['DECISION_RESPONSE'].Details" ng-if="outcome.Outcome!=' '">
-									<label class="control-label"> Outcome</label> <input
-										value="Criteria {{outcome.CriteriaID}} , Outcome :{{outcome.Outcome}} " class="form-control" type="text"
-										 disabled="disabled">
-								</div>
-						</div>
-				</fieldset>
-				
-				<fieldset class="formfield" style="display: block;">
-					<legend>KYC Information</legend>
->>>>>>> ac04310e142d9ad922cb0ebc1dc5ca81389e0537
 					<div class="row clearfix">
 						<div class="col-md-3">
 						<label class="control-label">Total Experience</label>
@@ -631,7 +564,6 @@
 					<label class="control-label">PAN Score</label> <input
 						ng-model="data.fNameScore" class="form-control" type="text"
 						 disabled="disabled">
-						 
 				</div>
 				</div>
 			</div>
@@ -681,7 +613,7 @@
 					   </div>
 					   <div class="col-md-3">
 						 <label class="control-label">FOIR Adjusted Amount</label> <input
-							ng-model="FOIR" class="form-control" type="text"
+							ng-model="{{objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']}}" class="form-control" type="text"
 							 disabled="disabled">
 					   </div>
 					   	<div class="col-md-3"  ng-repeat="decision in objectSet.oCompRes.scoringServiceResponse['DECISION_RESPONSE'].Details" ng-if="decision.Outcome!=' '">
