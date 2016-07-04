@@ -7,7 +7,7 @@
 		
 		(function(window){
 
-			if (_.isUndefined($cookies.get("UID"))) {
+			if (!_.isUndefined($cookies.get("UID"))) {
 				$scope.alert = "Welcome "+ atob($cookies.get("UID")) +" to GoNoGo";
 			} else {
 				$scope.alert = "Welcome to GoNoGo Portal";
@@ -28,13 +28,10 @@
 				$scope.alert = "Please contact Admin (Softcell)...!! Currently this services is not activated on your account";
 			}
 		}
-		
-		
 
 		if ($cookies.get("RMID")  !== undefined) {
 			$scope.username = atob($cookies.get("RMID"));
 		}
-
 		
 		changeErrorMsg();
 		
@@ -177,7 +174,7 @@
 		}
 			
 		function changeErrorMsg() {
-			if (_.isUndefined($cookies.get("UID"))){
+			if (!_.isUndefined($cookies.get("UID"))){
 				$scope.alert = "Welcome "+ atob($cookies.get("UID")) +" to GoNoGo";
 			} else {
 				$scope.alert = "Welcome to GoNoGo Portal";

@@ -71,8 +71,3 @@
 	box-shadow: none;
 	-webkit-box-shadow: none;
 }
-
-
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
-	background: #ffffff;
-}

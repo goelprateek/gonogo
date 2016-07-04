@@ -47,6 +47,8 @@ module.exports = function(config) {
       'bower_components/d3/d3.js',
       'bower_components/c3/c3.js',
       'bower_components/c3-angular/c3-angular.min.js',
+      'bower_components/angularjs-acl/dist/acl.js',
+      'bower_components/ng-tags-input/ng-tags-input.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',
