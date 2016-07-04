@@ -334,7 +334,9 @@
 
 	app.controller('NotifController', ['$scope','$rootScope', 
 								'$timeout','Validation','$filter',
-								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log',function($scope, $rootScope, $timeout,Validation,$filter,RestService,NotificationObject,UserService,AclService,$uibModal,SelectArrays,$log){
+								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log',
+                                function($scope, $rootScope, $timeout,Validation,$filter,RestService,NotificationObject,UserService,AclService,
+                                    $uibModal,SelectArrays,$log){
 	var user=UserService.getCurrentUser();
     $scope.can=AclService.can;
 
@@ -354,6 +356,7 @@
 
     $scope.isLosId = function(){
         if($scope.objectSet.oLosDtls){
+            console.log($scope.objectSet.oLosDtls);
              if($scope.objectSet.oLosDtls.sLosID)
                 return true;
             else
@@ -520,13 +523,13 @@
 
                       */
 
-	$scope.addrType = [{value:'selected', name:'Please Select Addr Type'},
+	/*$scope.addrType = [{value:'selected', name:'Please Select Addr Type'},
 	                  {value:'Residence', name:'Residence'},
 	                  {value:'Office', name:'Office'},
 	                  {value:'Permanent', name:'Permanent'}
-	                  ]; 
+	                  ]; */
   
-	$scope.addr_type = $scope.addrType[1];   //to set default address
+	$scope.addr_type = SelectArrays.getAddrType[1];   //to set default address
 	$scope.aplcntType=[{value:"SAL","text":"Salaried"},
 				               	{value:"SEB","text":"Self Employed Business"},
 				               	{value:"SEP","text":"Self Employed Professional"}];
@@ -662,7 +665,7 @@ $scope.newApplication = function(){
 }
 
 //for back button of grey form
-$scope.toggleFormminimize= function(){
+$scope.toggleForm= function(){
 	$scope.container = !$scope.container;
 }
 

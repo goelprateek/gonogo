@@ -2,7 +2,7 @@
 	
 	'use strict';
 	
-	var app = angular.module('gonogo.factories',[]);
+	var app = angular.module('gonogo.factory',[]);
 	
 	app.factory("SelectArrays",function(){
 		
