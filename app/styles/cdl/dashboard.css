@@ -1,6 +1,4 @@
 
-/******************************************* DASHBOARD.CSS *************************************************/
-
 .control-select{
   /*for firefox*/
     -moz-appearance: none;
@@ -22,9 +20,9 @@
 }
 
 .inputMaterial:focus { outline:none;}
-/* LABEL ======================================= */
 
-.inputMaterial ~ label         {
+.inputMaterial ~ label         
+{
   color:#999; 
   font-size:14px;
   font-weight:normal;
@@ -37,7 +35,7 @@
   -webkit-transition:0.2s ease all;
 }
 
-.inputMaterialRupee ~ label          {
+.inputMaterialRupee ~ label{
   color:#999; 
   font-size:14px;
   font-weight:normal;
@@ -60,7 +58,7 @@
   border:none;
 }
 
-.form-control,.form-control:focus {
+.form-control :not(.otp),.form-control:focus :not(.otp) {
   height:auto;
   box-shadow: none;
   padding-bottom: 0px;
@@ -73,10 +71,3 @@
   box-shadow: none;
   -webkit-box-shadow: none;
 }
-
-
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
-  background: #ffffff;
-}
-
-/***************************************END OF DASHBOARD.CSS **************************************************/

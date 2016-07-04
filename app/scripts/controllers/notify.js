@@ -346,10 +346,7 @@
         $location.path(APP_CONST.getConst('APP_CONTEXT'));
     }
 
-    notifier.log("Wecome back "+ UserService.getCurrentUser().username);
-
-
-	var object  = NotificationObject.dummy;
+    var object  = NotificationObject.dummy;
 	$scope.objectSet =  object;    
 
 	$scope.container = true;
@@ -2285,16 +2282,16 @@ function requestForStatus(json)
             var isVoterPresent=false;
             var isPanPresent=false;
 
-            for(var i=0;i<$scope.details.oReq.oApplicant.aKycDocs.length;i++){
-                if($scope.details.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("aadhar")>=0){
+            for(var i=0;i<$scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.length;i++){
+                if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("aadhar")>=0){
                     isAadhaarPresent=true;
                 }
                 
-                if($scope.details.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("pan")>=0){
+                if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("pan")>=0){
                     isPanPresent=true;
                 }
                 
-                if($scope.details.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("voter")>=0){
+                if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("voter")>=0){
                     isVoterPresent=true;
                 }
             }
@@ -2308,7 +2305,7 @@ function requestForStatus(json)
                     sKycStat:null
                 }
                 
-                $scope.details.oReq.oApplicant.aKycDocs.push(newKYC);
+                $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
             }
             
             if(!isVoterPresent){
@@ -2319,7 +2316,7 @@ function requestForStatus(json)
                     sKycNumber:"",
                     sKycStat:null
                 }
-                $scope.details.oReq.oApplicant.aKycDocs.push(newKYC);
+                $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
             }
             
             if(!isPanPresent){
@@ -2330,7 +2327,7 @@ function requestForStatus(json)
                     sKycNumber:"",
                     sKycStat:null
                 }
-                $scope.details.oReq.oApplicant.aKycDocs.push(newKYC);
+                $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
             }
         }
         /* dob popup */     

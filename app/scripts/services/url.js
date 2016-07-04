@@ -1,14 +1,14 @@
 ; (function () {
 
 	'use strict';
-
-	var app = angular.module('gonogo.commons', []);
+	var app = angular.module('gonogo.commons',['ng-acl']);
 
 
 	app.factory("APP_CONST", function () {
 		var END_POINT = {
 			//BASE_URL_GNG : "http://172.26.1.211:9090/GoNoGo/",
 		    BASE_URL_GNG : "http://gng.softcell.in/GoNoGo/",
+
 			BASE_URL_SCORE:'http://gng.softcell.in/AppScoringV2Git/api/ScoringV3/',
 			BASE_URL_DEMO: 'http://gng.softcell.in/GoNoGoV3/api/GoNoGoV3/',
 			BASE_URL_DMI: 'http://gng.softcell.in/gonogo_dmi/',
@@ -125,47 +125,49 @@
 
 		}
 
-	}]);
+	}]);	
 
+ 	app.service('sharedService', function () {
+	  	var refID="",
+	  	 currentStage="",
+	  	 decisionStatus="";
+	  	return {
+	        getRefID: function () {
+	            return refID;
+	        },
+	        setRefID: function(value) {
+	            refID = value;
+	         
+	        },
+	        getCurrentStage: function () {
+	            return currentStage;
+	        },
+	        setCurrentStage: function(value) {
+	        	currentStage = value;
+	        },
+	        getDecisionStatus: function () {
+	            return decisionStatus;
+	        },
+	        setDecisionStatus: function(value) {
+	        	decisionStatus = value;
+	        }
+	    };
+  	});
 
-	app.service('sharedService', function () {
-		var refID = "",
-			currentStage = "",
-			decisionStatus = "";
-		return {
-			getRefID: function () {
-				return refID;
-			},
-			setRefID: function (value) {
-				refID = value;
-
-			},
-			getCurrentStage: function () {
-				return currentStage;
-			},
-			setCurrentStage: function (value) {
-				currentStage = value;
-			},
-			getDecisionStatus: function () {
-				return decisionStatus;
-			},
-			setDecisionStatus: function (value) {
-				decisionStatus = value;
-			}
-		};
-	});
-
-	app.service("UserService", ['$location', function ($location) {
-
-		var fetchCurrentUser = function () {
-
-			var user = {
-				roles: [],
-			};
-
-			var guid = localStorage.getItem('GUID');
-
-			if (guid) {
+ 	app.service("UserService",['$location','AclService',function($location,AclService){
+ 		
+ 		var fetchCurrentUser = function(){
+    		
+	    	var user={
+    			roles:[],
+    			getRoles: function () {
+    	            return this.roles;
+    	        }
+    		};
+	    	
+	    	var guid = localStorage.getItem('GUID');
+			
+			if(guid){
 
 				var userdata = JSON.parse(atob(guid));
 
@@ -194,34 +196,43 @@
 					user.roles = ["CRO1"]
 				}
 
-				//AclService.setUserIdentity(user);
+				AclService.setUserIdentity(user);
 			}
 
-			return user;
-		},
+		    return user;
+    	},
 
-			cleanupTask = function () {
-				localStorage.removeItem('GUID');
-				localStorage.removeItem('actions');
-				localStorage.removeItem('CURRENT_DEALER');
-				localStorage.removeItem('DEALERS');
-				localStorage.removeItem('ROLES');
-				localStorage.removeItem('DETAILS');
-			},
+	    cleanupTask = function(){
+	    	localStorage.removeItem('GUID');
+			localStorage.removeItem('actions');
+			localStorage.removeItem('CURRENT_DEALER');
+			localStorage.removeItem('DEALERS');
+			localStorage.removeItem('ROLES');
+			localStorage.removeItem('DETAILS');
+	    }, 
+	    
 
+	    persistTolocalStorage = function(propertyName, propertyValue){
+	    	localStorage.setItem(propertyName, propertyValue);
+	    };
+	    
+	    return {
+	    	getCurrentUser:fetchCurrentUser,
+	    	cleanUpUserDeatails : cleanupTask,
+	    	persistDataTolocalStorage : persistTolocalStorage
+	    };
 
-			persistTolocalStorage = function (propertyName, propertyValue) {
-				localStorage.setItem(propertyName, propertyValue);
-			};
+ 	}]);
 
-		return {
-			getCurrentUser: fetchCurrentUser,
-			cleanUpUserDeatails: cleanupTask,
-			persistDataTolocalStorage: persistTolocalStorage
-		};
-
+ 	app.run(["AclService",function(AclService){
+		AclService.addRole("4019");
+		AclService.addRole("CRO1");
+		
+		AclService.addResource("Application");
+		
+		AclService.allow("CRO1","Application","Reinitiate");
+		AclService.allow("CRO1","Application","Update");
 	}]);
-
 
 }).call(this)
 

@@ -1,7 +1,7 @@
 ;(function(){
 
 	'use strict';
-
+7
 	var app = angular.module('gonogo', [ 'ngRoute', 
 	                                     'ngAria',
 	                                     'ngMessages' ,
@@ -20,7 +20,8 @@
 	                                     'gonogo.utilities',
 	                                     'gonogo.commons',
 	                                     'gonogo.factories',
-	                                     'ngTagsInput'
+	                                     'ngTagsInput',
+	                                     'angular-svg-round-progressbar'
 	                                     ]);
 
 	app.controller("Maincontroller",['$scope', '$log', 'notifier' ,'Validation', '$timeout','RestService','$location','UserService','APP_CONST','AclService',function($scope, $log, notifier ,Validation, $timeout,RestService,$location,UserService,APP_CONST,AclService) {
