@@ -29,47 +29,44 @@
 				style="width: 100px; display: inline-block;" ng-show="{{InstitutionID==4019 && (userid != '493')}}" id="submit">Submit</a> -->
 		</div>
 	</div>
-
-	<fieldset class="formfield" ng-if="!authenticate('NCONTAINER')" style="display: none;">
-<!-- 	not changed yet as not visible in cro1 screen -->
-			<legend> LOS Information</legend>
-			<div class="row clearfix">
-				<div class="col-md-3">
-					<label class="control-label">LOS ID</label> <input
-						class="form-control" id="losId" ng-model="losID" type="text" maxlength="10">
-				</div>
-				<div class="col-md-3">
-					<label class="control-label">UTR#</label> <input class="form-control"
-						ng-model="utrValue" id="utrData" disabled="disabled" type="text" maxlength="25">
-				</div>
-				<div class="col-md-3">
-					<label class="control-label">LOS Status</label> 
-<!-- 							<input id="losStatus" class="form-control" type="text"> -->
-								<!-- ng-change="losStatusChange(losStatus1)" -->			
-						<select class="form-control" id="losStatusId1" name="Los status" ng-model="losStatus1" data-ng-change="losStatusChange(losStatus1)" >
-							<option value="">Please Select LOS Status</option>
-							<option value="LOS_QDE">LOS_QDE</option>
-							<option value="LOS_APRV">LOS_APRV</option>
-							<option value="LOS_DCLN">LOS_DCLN</option>
-							<option value="LOS_DISB">LOS_DISB</option>
-							<option value="DO">DO</option>
-						</select>
-				</div>
+		<!-- ng-if="!authenticate('NCONTAINER')"  ng-if="objectSet.oLosDtls"-->
+		<fieldset class="formfield" ng-if="!authenticate('NCONTAINER')">
+		<legend> LOS Information</legend>
+		<div class="row clearfix">
+			<div class="col-md-3">
+				<label class="control-label">LOS ID</label> <input
+					class="form-control" ng-model="objectSet.oLosDtls.sLosID" type="text" maxlength="10" ng-disabled="isLosId()">
 			</div>
-			<div class="row clearfix">
-				<div class="col-md-3" style="float: right;">
-					<a class="add-button-div-notification" ng-click="updateLosData(losStatus1)"
-					style="float: right;margin-top: 7px;margin-bottom: -4px; width: 35%;">Update</a>
-				</div>
+			<div class="col-md-3">
+				<label class="control-label">UTR#</label> <input class="form-control"
+					ng-model="objectSet.oLosDtls.sUtr" ng-disabled="isUtr()" type="text" maxlength="25">
 			</div>
+			<div class="col-md-3">
+				<label class="control-label">LOS Status</label> 		
+					<select class="form-control" ng-model="objectSet.oLosDtls.sStat" data-ng-change="losStatusChange(objectSet.oLosDtls.sStat)" >
+						<option value="">Please Select LOS Status</option>
+						<option value="LOS_QDE">LOS_QDE</option>
+						<option value="LOS_APRV">LOS_APRV</option>
+						<option value="LOS_DCLN">LOS_DCLN</option>
+						<option value="LOS_DISB">LOS_DISB</option>
+						<option value="DO">DO</option>
+					</select>
+			</div>
+		</div>
+		<div class="row clearfix">
+			<div class="col-md-3" style="float: right;">
+				<a class="add-button-div-notification" ng-click="updateLosData(objectSet.oLosDtls.sStat)"
+				style="float: right;margin-top: 7px;margin-bottom: -4px; width: 35%;">Update</a>
+			</div>
+		</div>
 	</fieldset>
-	<fieldset class="formfield" style="display: block;" ng-if="objectSet.aCroJustification!='' && objectSet.aCroJustification!=undefined ">
-			<legend>CRO Justification</legend>
-			<div class="row clearfix">
-			<div ng-repeat="data in objectSet.aCroJustification">
-			<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null">
-					<label class="control-label">CRO NAME</label> <input class="form-control"
-					value="{{data.sCroID}}" disabled="disabled" type="text">
+			<fieldset class="formfield" style="display: block;" ng-if="objectSet.aCroJustification!='' && objectSet.aCroJustification!=undefined ">
+					<legend>CRO Justification</legend>
+					<div class="row clearfix">
+					<div ng-repeat="data in objectSet.aCroJustification">
+					<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null">
+							<label class="control-label">CRO NAME</label> <input class="form-control"
+							value="{{data.sCroID}}" disabled="disabled" type="text">
 			</div>
 			<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null">
 					<label class="control-label">Remark</label> <input class="form-control"
@@ -264,6 +261,7 @@
 								name="address1" ng-disabled="!isUpdating" change-on-blur="onValueChanged('address')">
 						</div>
 						<div class="col-md-3">
+
 							<label class="control-label">Address Line 2</label> <input
 								class="form-control" ng-model="address.sLine2" type="text"
 								name="address2" ng-disabled="!isUpdating" change-on-blur="onValueChanged('address')">
@@ -457,6 +455,73 @@
 								 disabled="disabled">	 
 						</div>
 					</div>
+<<<<<<< 7b608d3346190de1b36f9b813384b46ca45d82f6
+=======
+				</fieldset>
+					<fieldset class="formfield" style="display: block;">
+					<legend>Decision</legend>
+						<div class="row clearfix">
+							<div class="col-md-3">
+							<label class="control-label">Applied Amount </label> 
+								<div class="input-group input-group-md">
+									<span class="input-group-addon" id="sizing-addon3"><i
+										class="fa fa-inr"></i></span> <input id="project_amount"
+										class="form-control" ng-model=" objectSet.oAppReq.oReq.oApplication.dLoanAmt" type="text"
+										name="Amount" accesskey="commas" disabled="disabled">
+								</div>
+							</div>
+							<div class="col-md-3">
+								<label class="control-label">Eligibility Amount</label> 
+								<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span> <input
+									ng-model="objectSet.aCroDec[0].dEligibleAmt" class="form-control" type="text" disabled="disabled">
+								</div>
+							</div>
+							<div class="col-md-3">
+								<label class="control-label">Approved Amount</label> 
+								<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3"><i
+									class="fa fa-inr"></i></span><input
+									ng-model="objectSet.aCroDec[0].dAmtAppr" class="form-control" type="text" disabled="disabled">
+							</div>
+							</div>
+							<div class="col-md-3">
+								<label class="control-label">Tenor </label> <input
+									ng-model="objectSet.aCroDec[0].iTenor" class="form-control" type="text" disabled="disabled">
+							</div>
+						</div>
+						<div class="row clearfix">
+								<div class="col-md-3">
+									<label class="control-label">EMI </label> <input
+										ng-model="objectSet.aCroDec[0].dEmi" class="form-control" type="text" disabled="disabled">
+								</div>
+							    <div class="col-md-3">
+								 <label class="control-label"> Eligibility Remark</label> <input
+									ng-model="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE'].REMARK" class="form-control" type="text"
+									disabled="disabled">
+							   </div>
+							    <div class="col-md-3">
+								 <label class="control-label">FOIR Adjusted Amount</label> <input
+									ng-model="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']" class="form-control" type="text"
+									 disabled="disabled">
+							   </div> 
+							   	<div class="col-md-3"  ng-repeat="decision in objectSet.oCompRes.scoringServiceResponse['DECISION_RESPONSE'].Details" ng-if="decision.Outcome!=' '">
+									<label class="control-label">Reason </label> <input
+										value="{{decision.RuleName}} : {{decision.Remark}}" class="form-control" type="text" disabled="disabled">
+								</div>
+							
+								<div class="col-md-3" ng-repeat="outcome in objectSet.oCompRes.scoringServiceResponse['DECISION_RESPONSE'].Details" ng-if="outcome.Outcome!=' '">
+									<label class="control-label"> Outcome</label> <input
+										value="Criteria {{outcome.CriteriaID}} , Outcome :{{outcome.Outcome}} " class="form-control" type="text"
+										 disabled="disabled">
+								</div>
+						</div>
+				</fieldset>
+				
+				<fieldset class="formfield" style="display: block;">
+					<legend>KYC Information</legend>
+>>>>>>> ac04310e142d9ad922cb0ebc1dc5ca81389e0537
 					<div class="row clearfix">
 						<div class="col-md-3">
 						<label class="control-label">Total Experience</label>

@@ -354,6 +354,27 @@
 
 	$scope.container = true;
     $scope.isDedupeSelected = true;
+
+    $scope.isLosId = function(){
+        if($scope.objectSet.oLosDtls){
+             if($scope.objectSet.oLosDtls.sLosID)
+                return true;
+            else
+                return false;//can edit
+        }else
+        return false;
+    }
+
+    $scope.isUtr = function(){
+        if($scope.objectSet.oLosDtls){
+             if($scope.objectSet.oLosDtls.sUtr)
+                return true;
+            else
+                return false;//can edit
+        }else
+        return false;
+    }
+
 	/*$scope.toggleDocPanel = false;
 	$scope.toggleApprvPanel = false;
 	$scope.toggleDclnPanel = false;*/
@@ -555,6 +576,19 @@
 			}
 			$scope.croDecision = Response.aCroDec;
             $scope.scoreTreeData = $scope.objectSet.oCompRes.scoringServiceResponse.SCORE_TREE;
+            console.log("if los : "+$scope.objectSet.oLosDtls.sLosID);
+           /* var data = Response.aAppImgDtl;
+            console.log("images");
+                for (j in data)
+                {
+                  if(data[j].sApplID == $scope.applicantID){
+                        $scope.appkycimg = data[j].aImgMap;
+                        applicantImg(data[j].aImgMap);
+                    }
+                    else{
+                        $scope.coappImgs = data[j].aImgMap;
+                    }
+                }*/
            /* $scope.amount = $scope.croDecision;*/
 			/*$(document.body).find('#cirhtml').attr("data", "").hide();
 			$scope.error = "";
@@ -629,6 +663,7 @@ $scope.newApplication = function(){
 	$scope.container = false;
 	}		
 }
+
 //for back button of grey form
 $scope.toggleFormminimize= function(){
 	$scope.container = !$scope.container;
@@ -1066,7 +1101,7 @@ function requestForStatus(json)
             });
         }
  $scope.showPdf = function(){
-        $scope.cirhtml =$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];
+        $scope.cirhtml ="data:application/pdf;base64,"+$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];
     }
 
 //check if neccessary
@@ -1089,14 +1124,15 @@ function requestForStatus(json)
 
   $scope.losStatusChange=function(status){
     var utr =  $scope.objectSet.oLosDtls.sUtr;
-     if(status == "LOS_DISB" && (utr=='' || utr==null) &&   $scope.applctnstatus.toUpperCase()=="APPROVED"){
-            $scope.isUtrEdit = false;
-        }else{
-              $scope.isUtrEdit = true;
+     if(status == "LOS_DISB" ){ //&&   $scope.applctnstatus.toUpperCase()=="APPROVED"
+            //$scope.isUtrEdit = false; //&& (utr=='' || utr==null)//can edit
+            $scope.isUtr();
+        }/*else{
+             // $scope.isUtrEdit = true;
              $(document.body).find('#utrData').css("border","1px solid #cfcfcf");
-        }
-         $('#losStatusId1').val(this.value);
-        $scope.objectSet.oLosDtls.sStat =this.value;
+        }*/
+        /* $('#losStatusId1').val(this.value);
+        $scope.objectSet.oLosDtls.sStat =this.value;*/
   }
 
   $scope.onchange = function(id) {
