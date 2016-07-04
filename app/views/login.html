@@ -2,7 +2,8 @@
 	<div class="signin-body" >
 		<div class="container">
 			<div class="form-container">
-				<div class="alert alert-warning text-center" role="alert" style="margin-top: 20%" data-ng-bind="error"></div>
+				
+				<div class="alert alert-warning text-center" role="alert" ng-show="alert" style="margin-top: 20%" data-ng-bind="alert"></div>
 				
 				<div class="panel panel-default" id="forget_password" data-ng-show="!isForgotOpen">
 					<div class="panel-heading">

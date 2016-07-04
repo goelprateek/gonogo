@@ -23,7 +23,7 @@
 	                                     'ngTagsInput'
 	                                     ]);
 
-	app.controller("Maincontroller",['$scope', '$log', 'Validation', '$timeout','RestService','$location','UserService','APP_CONST','AclService',function($scope, $log, Validation, $timeout,RestService,$location,UserService,APP_CONST,AclService) {
+	app.controller("Maincontroller",['$scope', '$log', 'notifier' ,'Validation', '$timeout','RestService','$location','UserService','APP_CONST','AclService',function($scope, $log, notifier ,Validation, $timeout,RestService,$location,UserService,APP_CONST,AclService) {
 
 		$log.info("hello this first log");
 		$log.debug("hello this first log");
@@ -55,6 +55,7 @@
 		var current_fs, next_fs, previous_fs;
 		var left, opacity, scale, animating, fieldsetn = 1;
 		var emailantigo, passval, error = 0, InError = 0;
+
 
 //		var IEversion = Validation.checkBrowser();
 //		if (IEversion.valid != true) {

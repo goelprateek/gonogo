@@ -1,16 +1,19 @@
+
+/******************************************* DASHBOARD.CSS *************************************************/
+
 .control-select{
-	/*for firefox*/
+  /*for firefox*/
     -moz-appearance: none;
     /*for chrome*/
     -webkit-appearance:none;
-	padding-bottom: 0px;
-	background: url("../img/arrow_select.png") no-repeat right #FFFFFF;
-	border:0px;
-	border-bottom: 1px solid #004d82;
-	border-radius: 0px;
-	padding-top: 0px;
+  padding-bottom: 0px;
+  background: url("../img/arrow_select.png") no-repeat right #FFFFFF;
+  border:0px;
+  border-bottom: 1px solid #004d82;
+  border-radius: 0px;
+  padding-top: 0px;
 }
-.inputMaterial 				{
+.inputMaterial{
   font-size:18px;
   padding:0px 0px 0px 5px;
   display:block;
@@ -21,7 +24,7 @@
 .inputMaterial:focus { outline:none;}
 /* LABEL ======================================= */
 
-.inputMaterial ~ label 				 {
+.inputMaterial ~ label         {
   color:#999; 
   font-size:14px;
   font-weight:normal;
@@ -34,7 +37,7 @@
   -webkit-transition:0.2s ease all;
 }
 
-.inputMaterialRupee ~ label 				 {
+.inputMaterialRupee ~ label          {
   color:#999; 
   font-size:14px;
   font-weight:normal;
@@ -49,15 +52,13 @@
 
 /* active state */
 .inputMaterial:focus ~ label, .inputMaterial:valid ~ label, .inputMaterial:disabled ~ label, 
-.inputMaterialRupee:focus ~ label, .inputMaterialRupee:valid ~ label, .inputMaterialRupee:disabled ~ label	{
+.inputMaterialRupee:focus ~ label, .inputMaterialRupee:valid ~ label, .inputMaterialRupee:disabled ~ label  {
   top:-15px;
   font-size:12px;
   color: #004d82;
   font-weight:normal;
   border:none;
 }
-
-/*-------------------------------------------------------------------------*/
 
 .form-control,.form-control:focus {
   height:auto;
@@ -68,6 +69,14 @@
 }
 
 .has-error .form-control , .has-error .form-control:focus{
-	box-shadow: none;
-	-webkit-box-shadow: none;
+
+  box-shadow: none;
+  -webkit-box-shadow: none;
 }
+
+
+.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
+  background: #ffffff;
+}
+
+/***************************************END OF DASHBOARD.CSS **************************************************/

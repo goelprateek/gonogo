@@ -189,13 +189,16 @@ a:hover {
 	.control-label.right {
 		float: right;
 	}
-	#leftbar label {
+	
+	/*#leftbar label {
 		line-height: 43px;
 		float: right;
-	}
+	}*/
+
 	#kyc_fielset label {
 		line-height: normal;
 		float: none;
+		
 		display: block;
 		padding-top: 5px;
 	}

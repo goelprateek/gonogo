@@ -308,8 +308,6 @@
 							$scope.error = "";
 					  		var mApplicant=Response.oReq.oApplicant;
 					  		
-					  		
-					  		
 					  		if(mApplicant.aPhone){
 					  			for(var i=0;i<mApplicant.aPhone.length;i++){
 					  				if(mApplicant.aPhone[i].sPhoneType==="PERSONAL_MOBILE"){
@@ -643,7 +641,7 @@
 			dlrCode=dealerCurrent["DEALER_CODE"];
 			$scope.dealerName=dealerCurrent["DEALER_NAME"];
 		}else{
-			$location.path("/dealer");
+			$location.path("/cdl/dealer");
 		}
 		
 		$("#nmCntnr").show();
@@ -1313,7 +1311,7 @@ function uploadImage(json,callType)
 	    if(status == "Declined")
 		{	
 	    	$("loaderImg").show();
-	    	$timeout( function(){ $location.path("/dashboard"); }, 3000);
+	    	$timeout( function(){ $location.path("/cdl/dashboard"); }, 3000);
 		     $rootScope.errHead="";
 		     $rootScope.errorMsg="";
 		}else
@@ -2152,11 +2150,9 @@ $scope.emplArr=[];
 $scope.getEmployerNames=function(queryStr){
 			var ojs={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":queryStr};
 
-			return CallRestAPI.saveData(BASE_URL+"employer-master-details-web",ojs)
+			return RestService.saveToServer("employer-master-details-web",ojs)
 			.then(function(data)
 			{
-				//console.log("Employee master Response:");
-				//console.log(data);
 
 				var map=data.map(function(item){					
 			        return item.sEmpName;
