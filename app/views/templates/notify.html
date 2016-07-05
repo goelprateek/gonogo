@@ -289,11 +289,10 @@ font-size:14px;}
 							<div id="customer" class="scroll-divs" style="height: 158px;">
 								<div class="list-group-item">
 									<span>Name : <span >{{name}}
-									</span></span>
-								</div>
-								<div class="list-group-item">
-									<span>D.O.B : {{objectSet.oAppReq.oReq.oApplicant.sDob}}</span>
-								</div>
+
+									</span></span></div>
+								<div class="list-group-item"><span>D.O.B : {{objectSet.oAppReq.oReq.oApplicant.sDob | dateFilter}}</span></div>
+
 								<div class="list-group-item" ng-repeat="data in objectSet.oAppReq.oReq.oApplicant.aPhone" ng-if="data.sPhoneType=='PERSONAL_MOBILE' || data.sPhoneType=='Personal Mobile'">
 									<span >Mobile : {{data.sPhoneNumber}}
 									</span>
@@ -565,7 +564,10 @@ font-size:14px;}
 											<span>EMI :{{cro.dEmi}}</span>
 										</div>
 									</div>
-									
+									<div class="list-group-item" 
+									ng-if="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']">
+									    <span>FOIR : {{objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']}}</span>
+									</div>
 									<div class="list-group-item" 
 									ng-if="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['RULE-SEQ']">
 									    <span>Eligibility Grid : {{objectSet.oCompRes.scoringServiceResponse["ELIGIBILITY_RESPONSE"]["RULE-SEQ"]}}</span>
@@ -615,7 +617,7 @@ font-size:14px;}
 		<div class="row clearfix" id="application-main-container" data-ng-if="!container"
 			style="border-top: 1px solid #DADADB; padding-top: 10px;"
 			>
-			<div class="row clearfix">
+			<!-- <div class="row clearfix">
 				<div class="col-md-9 text-left">
 					<div class="alert alert-danger" id="erro-msg"
 						style="float: none; text-align: left; margin: 0px">
@@ -624,6 +626,7 @@ font-size:14px;}
 				</div>
 				<div class="col-md-3 text-right" id="top-fixed">
 					<a class="add-button-div-notification"
+
 						style="width: 100px; display: inline-block;" ng-click="toggleForm()">Back</a> <!-- <a
 						class="add-button-div-notification"
 						style="width: 100px; display: inline-block;" ng-show="{{InstitutionID==4019 && (userid != '493')}}" id="submit">Submit</a> -->
@@ -631,6 +634,7 @@ font-size:14px;}
 			</div>
 <!-- ******************************Second Common Form ************************************************* -->
 			<div ng-include="'views/templates/app-form.html'"></div> 
+
 		</div>
 	</div>
 	<form id="offrform" ng-show="toggleDocPanel">

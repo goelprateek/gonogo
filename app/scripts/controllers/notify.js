@@ -334,23 +334,57 @@
 
 	app.controller('NotifController', ['$scope','$rootScope', 
 								'$timeout','Validation','$filter',
-								'RestService','NotificationObject','$log','$uibModal','notifier','UserService',function($scope, $rootScope, $timeout,Validation,$filter,RestService,NotificationObject,$log,$uibModal,notifier,UserService){
+								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log',
+                                function($scope, $rootScope, $timeout,Validation,$filter,RestService,NotificationObject,UserService,AclService,
+                                    $uibModal,SelectArrays,$log){
+	var user=UserService.getCurrentUser();
+    $scope.can=AclService.can;
 
-    
-    notifier.log("Wecome back "+ UserService.getCurrentUser().username);
 
-	var object  = NotificationObject.dummy;
+    $scope.selectResidence = SelectArrays.getResidenceTypes();
+
+    $scope.isDisabled=true;
+
+    if(_.isUndefined(user.id) ){
+        $location.path(APP_CONST.getConst('APP_CONTEXT'));
+    }
+
+    var object  = NotificationObject.dummy;
 	$scope.objectSet =  object;    
 
 	$scope.container = true;
     $scope.isDedupeSelected = true;
+
+    $scope.isLosId = function(){
+        if($scope.objectSet.oLosDtls){
+            console.log($scope.objectSet.oLosDtls);
+             if($scope.objectSet.oLosDtls.sLosID)
+                return true;
+            else
+                return false;//can edit
+        }else
+        return false;
+    }
+
+    $scope.isUtr = function(){
+        if($scope.objectSet.oLosDtls){
+             if($scope.objectSet.oLosDtls.sUtr)
+                return true;
+            else
+                return false;//can edit
+        }else
+        return false;
+    }
+
 	/*$scope.toggleDocPanel = false;
 	$scope.toggleApprvPanel = false;
 	$scope.toggleDclnPanel = false;*/
 	var height=$(window).height()-200;
+
 	/*$scope.objectSet.aAppScoRslt = [];
 	$scope.objectSet.oApplicant =[];
 	$scope.objectSet.oAppReq.oReq.oApplication.aAssetDetail =[];*/
+
 	var nextImg=[];
 	var prevImg=[];
 	$scope.currImg= 0;
@@ -368,7 +402,7 @@
 	var tempReject=[];
 	/*$scope.setFlag = false;*/
 	$scope.countSelected="Select";
-/*	$scope.objectSet.oLosDtls.sStat="";*/
+/*	$scope.objectSet.oLosDtls.sStat=""; */
 	$('#losStatusId1').val("");
 	$('#losId').val('');
 	$('#losId').css("border","1px solid #cfcfcf");
@@ -394,20 +428,20 @@
 			if(!crodefault){
 				if($scope.userid=="599"){
 					var json ={'sCroID':"STP_PL", 
-							'sInstID':$scope.InstitutionID, 
+							'sInstID':user.institutionID, 
 							'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit }
 				}else{
 					var json ={'sCroID':"STA", 
-							'sInstID':$scope.InstitutionID,
+							'sInstID':user.institutionID,
 							'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit}
 				}
 			}else if($scope.userid=="586"){
 				var json ={'sCroID':"PL_QUEUE", 
-						'sInstID':$scope.InstitutionID, 
+						'sInstID':user.institutionID, 
 						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit }
 			}
 			else{var json ={'sCroID':"default", 
-						'sInstID':$scope.InstitutionID, 
+						'sInstID':user.institutionID, 
 						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit }//,'sCriteria' :"SIKKIM" 
 				}
 			var URL;
@@ -427,7 +461,6 @@
 				}
 
 			});	
-
   		}
 	}
 //not in use but preserve forfuture purpose
@@ -491,13 +524,13 @@
 
                       */
 
-	$scope.addrType = [{value:'selected', name:'Please Select Addr Type'},
+	/*$scope.addrType = [{value:'selected', name:'Please Select Addr Type'},
 	                  {value:'Residence', name:'Residence'},
 	                  {value:'Office', name:'Office'},
 	                  {value:'Permanent', name:'Permanent'}
-	                  ]; 
+	                  ]; */
   
-	$scope.addr_type = $scope.addrType[1];   //to set default address
+	$scope.addr_type = SelectArrays.getAddrType[1];   //to set default address
 	$scope.aplcntType=[{value:"SAL","text":"Salaried"},
 				               	{value:"SEB","text":"Self Employed Business"},
 				               	{value:"SEP","text":"Self Employed Professional"}];
@@ -505,6 +538,7 @@
     $scope.findAddressType = function(orignal,final){
     	return (angular.lowercase(orignal) == angular.lowercase(final));
     }				               	
+
 
 
     $scope.showimage = function(obj){
@@ -565,7 +599,9 @@
 			$scope.croDecision = response.aCroDec;
             $scope.scoreTreeData = $scope.objectSet.oCompRes.scoringServiceResponse.SCORE_TREE;
 
+
             return response;
+
 
 
            /* $scope.amount = $scope.croDecision;*/
@@ -662,7 +698,7 @@ $scope.newApplication = function(){
 }
 
 //for back button of grey form
-$scope.toggleFormminimize= function(){
+$scope.toggleForm= function(){
 	$scope.container = !$scope.container;
 }
 
@@ -1098,7 +1134,7 @@ function requestForStatus(json)
             });
         }
  $scope.showPdf = function(){
-        $scope.cirhtml =$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];
+        $scope.cirhtml ="data:application/pdf;base64,"+$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];
     }
 
 //check if neccessary
@@ -1121,14 +1157,15 @@ function requestForStatus(json)
 
   $scope.losStatusChange=function(status){
     var utr =  $scope.objectSet.oLosDtls.sUtr;
-     if(status == "LOS_DISB" && (utr=='' || utr==null) &&   $scope.applctnstatus.toUpperCase()=="APPROVED"){
-            $scope.isUtrEdit = false;
-        }else{
-              $scope.isUtrEdit = true;
+     if(status == "LOS_DISB" ){ //&&   $scope.applctnstatus.toUpperCase()=="APPROVED"
+            //$scope.isUtrEdit = false; //&& (utr=='' || utr==null)//can edit
+            $scope.isUtr();
+        }/*else{
+             // $scope.isUtrEdit = true;
              $(document.body).find('#utrData').css("border","1px solid #cfcfcf");
-        }
-         $('#losStatusId1').val(this.value);
-        $scope.objectSet.oLosDtls.sStat =this.value;
+        }*/
+        /* $('#losStatusId1').val(this.value);
+        $scope.objectSet.oLosDtls.sStat =this.value;*/
   }
 
   $scope.onchange = function(id) {
@@ -1806,7 +1843,7 @@ function requestForStatus(json)
 		var arr=[];
 		var json=null;
 	    json={
-				'sHeader':{'sAppID':$scope.appltnID,'sInstID':$scope.InstitutionID,'sCroId':$scope.userid},
+				'sHeader':{'sAppID':$scope.appltnID,'sInstID':user.institutionID,'sCroId':$scope.userid},
 				'sRefID':$scope.refID,
 				'sAppStat':"Approved",
 				"aCroJustification":arrayApprvDesc,
@@ -1833,7 +1870,7 @@ function requestForStatus(json)
 		var arr=[];
 		 var json = {
 					"sRefID":$scope.refID,
-					'sHeader':{'sAppID':$scope.appltnID,'sInstID':$scope.InstitutionID,'sCroId':$scope.userid},
+					'sHeader':{'sAppID':$scope.appltnID,'sInstID':user.institutionID,'sCroId':$scope.userid},
 					"sAppStat":"Declined",
 					"aCroJustification":arrayDclnDesc, //not yet
 					"aDedupeRefID ": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : arr)
@@ -1886,7 +1923,7 @@ function requestForStatus(json)
 				    "sRefID":$scope.refID,
 				    "oHeader":{
 				         "sAppID":$scope.objectSet.sAppID,
-				         "sInstID":$scope.InstitutionID,
+				         "sInstID":user.institutionID,
 				         "sSourceID":"WEB",
 				         "sAppSource":"WEB",
 				         "sReqType":"JSON",
@@ -1962,7 +1999,7 @@ function requestForStatus(json)
 					  					  "oHeader": {
 					  					    "sAppID": $scope.objectSet.sAppID,
 					  					    "sApplID": $scope.objectSet.sApplID,
-					  					    "sInstID": $scope.InstitutionID
+					  					    "sInstID": user.institutionID
 					  					  },
 					  					  "sRefID": $scope.objectSet.oAppReq.sRefID,
 					  					  "oUpldDtl": {
@@ -1981,7 +2018,7 @@ function requestForStatus(json)
 					  					  "oHeader": {
 					  					    "sAppID": $scope.objectSet.sAppID,
 					  					    "sApplID": $scope.objectSet.sApplID,
-					  					    "sInstID": $scope.InstitutionID
+					  					    "sInstID": user.institutionID
 					  					  },
 					  					  "sRefID": $scope.objectSet.oAppReq.sRefID,
 					  					  "oUpldDtl": {
@@ -2238,9 +2275,160 @@ function requestForStatus(json)
 		 $scope.minVal = $scope.minVal+ $scope.limit; 
 		 polling($scope.minVal);
 	 });
-	 
-	
-	 
+	/******************* Reinitiate & Update *****************/
+	$scope.dobFormat = "dd/MM/yyyy";
+    $scope.dobPopup = {
+        opened: false
+    };
+    
+    var minDa = new Date();
+    minDa.setFullYear(minDa.getFullYear()-100);
+    
+    var maxDa = new Date();
+    maxDa.setFullYear(maxDa.getFullYear()-18);
+    //alert($filter('date')(maxDa,"dd:MM:yyyy"));
+    
+    $scope.dateOptions = {          
+        formatYear: 'yyyy',
+        showWeeks:false,
+        maxDate: maxDa,
+        minDate: minDa,
+        startingDay: 1
+    };
+
+    $scope.enableForm=function(){
+        $scope.nameOld=$scope.name;
+        $scope.dobOld=$scope.dob;
+        
+        $scope.resAddr1Old=$scope.dob;
+        $scope.resAddr2Old=$scope.dob;
+        $scope.resAddr3Old=$scope.dob;
+        $scope.resCityOld=$scope.dob;
+        $scope.resStateOld=$scope.dob;
+        $scope.resPincodeOld=$scope.dob;
+        $scope.resMonthlyRentOld=$scope.dob;
+        $scope.resAddrTypeOld=$scope.dob;
+        $scope.resStayMonthOld=$scope.dob;
+        $scope.resCityStayMonthOld=$scope.dob;
+        
+        $scope.isUpdating=!$scope.isUpdating;
+        
+        if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs!=null){
+            var isAadhaarPresent=false;
+            var isVoterPresent=false;
+            var isPanPresent=false;
+
+            for(var i=0;i<$scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.length;i++){
+                if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("aadhar")>=0){
+                    isAadhaarPresent=true;
+                }
+                
+                if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("pan")>=0){
+                    isPanPresent=true;
+                }
+                
+                if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("voter")>=0){
+                    isVoterPresent=true;
+                }
+            }
+            
+            if(!isAadhaarPresent){
+                var newKYC={
+                    sExpiryDate:null,
+                    sIssueDate:null,
+                    sKycName:"AADHAR",
+                    sKycNumber:"",
+                    sKycStat:null
+                }
+                
+                $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
+            }
+            
+            if(!isVoterPresent){
+                var newKYC={
+                    sExpiryDate:null,
+                    sIssueDate:null,
+                    sKycName:"VOTERID",
+                    sKycNumber:"",
+                    sKycStat:null
+                }
+                $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
+            }
+            
+            if(!isPanPresent){
+                var newKYC={
+                    sExpiryDate:null,
+                    sIssueDate:null,
+                    sKycName:"PAN",
+                    sKycNumber:"",
+                    sKycStat:null
+                }
+                $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
+            }
+        }
+        /* dob popup */     
+        $scope.openDOBDialog=function(){
+            
+            $scope.dobPopup.opened = true;          
+        };      
+        /* dob popup */
+    };
+
+    $scope.updateForm=function(){
+        
+        $scope.isUpdating=!$scope.isUpdating;
+        
+        console.log("Updating form : ");
+        console.log($scope.objectSet);
+        
+        $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet.oAppReq);
+    };
+    
+    $scope.onValueChanged=function(valueChanged){
+        console.log("Value Changed :"+valueChanged);
+    };  
+    
+    $scope.showReinitiateModal = function (size,refID,applicantFormObject) {
+         //alert('modal baseURL'+baseURL);
+         var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: './views/modal-reinitiate.html',
+            controller: 'ReinitiateModalController',
+            size: size,
+            resolve: {
+                refID:function(){
+                    return refID;
+                },
+                applicantFormObject:function(){
+                    return applicantFormObject;
+                }
+            }
+         });
+    };
+    
+    $scope.getStateCity=function($event,address){
+        
+        console.log("getStateCity");
+        console.log(address);
+        var pin=$event.target.value;
+        
+        address.sCity="";
+        address.sState="";
+        
+        if(pin.length==6){
+            //alert($event.target.value);
+
+            var pinJson ={"oHeader":{"sInstID":user.institutionID},"sQuery":pin}; 
+            
+            RestService.saveToServer("pincode-details-web",pinJson).then(function(data){
+                if(data!=""){
+                    address.sCity=data.sCity;
+                    address.sState=data.sState;
+                }
+                //console.log(data);
+            });
+        };
+    };
 }]);
 
 app.controller("supportedDocuments",['$scope', 'docImg'  ,function($scope,docImg){
@@ -2468,6 +2656,308 @@ app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
       };
     }]);
 
+
+
+app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantFormObject",function($scope,RestService,refID,applicantFormObject){
+    $scope.refID = refID;
+    $scope.applicantFormObject = applicantFormObject;
+    
+    var reinitiateModules=[
+                                {sModuleName : "101", bRunModule : false},
+                                {sModuleName : "201", bRunModule : false},
+                                {sModuleName : "202", bRunModule : false},
+                                {sModuleName : "301", bRunModule : false},
+                                {sModuleName : "302", bRunModule : false},
+                                {sModuleName : "401", bRunModule : false},
+                                {sModuleName : "402", bRunModule : false}
+                            ];
+//  var reinitiateModules=[
+//                          {main:"MB" ,subs: [{name:"Cibil",id:101}]},
+//                          {main:"KYC" , subs: [{name:"PAN",id:201},
+//                                               {name:"Aadhaar",id:201}]},
+//                          {main:"Dedupe" , subs: [{name:"Dedupe",id:301},
+//                                                  {name:"Negative Pin Code",id:302}]},
+//                          {main:"SOBRE" , subs: [{name:"Verificaton scoring",id:401},
+//                                                 {name:"Application scoring",id:402}]}
+//                       ];
+    $scope.tab = 0;
+    $scope.tabSuccess=[true,false,true,false];
+    
+    $scope.tags = [];
+
+    $scope.setTab = function(newTab){
+      $scope.tab = newTab;
+    };
+
+    $scope.isSet = function(tabNum){
+      return $scope.tab === tabNum;
+    };
+
+    $scope.getTabStyle=function(pTab){
+        //console.log("pTab:"+pTab);
+        var val="";
+        if(pTab==$scope.tab){
+            //This tab is active
+            val={
+                    color:"white",
+                    background:$scope.getColor(pTab),
+                    outline:null
+                };
+        }else{
+            //This tab is not active
+            val={
+                    color:$scope.getColor(pTab),
+                    border:"1px solid "+$scope.getColor(pTab)
+                }
+        }
+        return val;
+    };
+    
+    $scope.getTabStyle=function(pTab){
+        //console.log("pTab:"+pTab);
+        var val="";
+        if(pTab==$scope.tab){
+            //This tab is active
+            val= {
+                    color:"white",
+                    background:$scope.getColor(pTab),
+                    outline:null
+                    };
+        }else{
+            //This tab is not active
+            val= {
+                    color:$scope.getColor(pTab),
+                    border:"1px solid "+$scope.getColor(pTab)
+                }
+        }
+        return val;
+    };
+    
+    $scope.getOptionStyle=function(pTab){
+//      console.log("pTab:"+pTab);
+        var val="";
+        //This tab is not active
+        val= {
+                color:$scope.getColor(pTab),
+                outline:null        
+            }
+        return val;
+    };
+    
+    $scope.getColor=function(pTab){
+        if($scope.tabSuccess[pTab]){ //Color code == green
+            return "#22ab4a";
+        }else{
+            return "#ee1f23";
+        }
+    };
+    
+    $scope.addTag=function(pTag,tagId){
+        //alert(pTag);
+        var tagFound=false;
+        
+        for(var i=0;i<$scope.tags.length;i++)
+        {
+            if($scope.tags[i].text==pTag){
+                tagFound=true;
+                break;
+            }
+        }
+        if(tagFound!=true)
+        {
+            $scope.tags.push({text: pTag,id:tagId});
+        }
+    };
+    
+    $scope.reinitiateForm=function(){
+        console.log("Reinitiate form :"+$scope.refID);
+        
+        var moduleArr=[];
+        for(var i=0;i<$scope.tags.length;i++){
+            console.log("Reinitiating :"+$scope.tags[i].id+" "+$scope.tags[i].text);
+            
+            for(var j=0;j<reinitiateModules.length;j++)
+            {
+                if(reinitiateModules[j].sModuleName==$scope.tags[i].id){
+                    reinitiateModules[j].bRunModule=true;
+                }               
+            }
+        }
+        
+        if(applicantFormObject==null){
+            var requestJson={
+                    sGngRefId:$scope.refID,
+                    aModuleConfig:reinitiateModules
+            };
+
+            var URL="/worker/reprocess-by-id/";
+
+            RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
+                if(Response !=null || Response!= undefined || Response!=""){
+                }
+            });
+        }else{
+            var requestJson={
+                sWorkFlowConfig : {
+                    sGngRefId : $scope.refID,
+                    aModuleConfig : reinitiateModules
+                },
+                oApplicationRequest : applicantFormObject
+            };
+
+            var URL="/worker/reprocess-updated/";
+
+            RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
+                if(Response !=null || Response!= undefined || Response!=""){
+                }
+            });
+        }
+    };
+    
+}]);
+
+app.directive('selectRequired',function(){
+    return {
+        restrict: "A",
+        require:"ngModel",
+        link: function(element,scope,attr,controller){
+
+            controller.$validators.selectrequired = function(modelValue){                   
+                return modelValue === '' || modelValue.startsWith('Select') ? false : true;
+            }
+        }
+    }
+});
+
+app.directive('thisEarlierThan', function () {
+    return {
+        require: 'ngModel',
+        restrict: 'A',
+        link: function (scope, elem, attrs, ctrl) {
+            var cityStay,residenceStay;
+
+            scope.$watch(attrs.ngModel, function (newVal, oldVal, scope) {
+                residenceStay = newVal;
+                check();
+            });
+
+            scope.$watch(attrs.thisEarlierThan, function (newVal, oldVal, scope) {
+                cityStay = newVal;
+                check();
+            });
+
+            var check = function () {
+                if (typeof cityStay === 'undefined' || typeof residenceStay === 'undefined') {
+                    return;
+                }
+
+                if (!validate(cityStay)) {
+                    return;                     
+                }
+
+                if (!validate(residenceStay)) {
+                    return;                     
+                }
+
+                if (parseInt(cityStay) >= parseInt(residenceStay)) {
+                    ctrl.$setValidity('thisEarlierThan', true);
+                }
+                else {
+                    ctrl.$setValidity('thisEarlierThan', false);
+                }
+
+                return;
+            };
+
+            var validate = function (iYears) {                  
+                if (isNaN(parseInt(iYears))) {
+                    return false;
+                }
+                else {
+                    return true;
+                }                   
+            };
+        }
+    };
+});
+
+app.directive('updateCityState',function(RestService,BASE_URL_GNG,UserService){
+    return{
+        restrict: 'A',
+        require: 'ngModel',
+        scope : {
+            pin: '='
+        },
+        priority:2,
+        link: function(scope, elm, attrs, ngModelCtrl) {
+            if (attrs.type === 'radio' || attrs.type === 'checkbox') 
+                return;
+            
+            var pinJson ={"oHeader":{"sInstID":UserService.getCurrentUser().institutionID},"sQuery":'202521'}; 
+            
+            console.log(scope);
+            
+            scope.$watch('pin', function(newVal,oldVal){
+                console.log(newVal);
+                console.log(oldVal);
+            },true);
+            
+            var state,city;
+            RestService.saveToServer("pincode-details-web",pinJson).then(function(data){
+                
+                city = data.sCity || '';
+                state = data.sState || ""; 
+                
+                console.log(city);
+                
+                if(attrs.fetchModels){
+                    var array = attrs.fetchModels.split('|'),
+                    state = array[0],
+                    city = array[1];
+                    
+                }
+                
+            });
+        
+            console.log("element value: "+elm.val());
+            if(elm.val()!="" && elm.val().length==6){
+                
+            }else{
+                return;
+            }           
+        }
+    }
+});
+
+app.directive('changeOnBlur', function() {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        priority:1,
+        link: function(scope, elm, attrs, ngModelCtrl) {
+            if (attrs.type === 'radio' || attrs.type === 'checkbox') 
+                return;
+
+            var expressionToCall = attrs.changeOnBlur;
+
+            var oldValue = null;
+            elm.bind('focus',function() {
+                oldValue = elm.val();
+                //console.log(oldValue);
+            })
+            elm.bind('blur', function() {
+                scope.$apply(function() {
+                    var newValue = elm.val();
+                    //console.log(newValue);
+                    if (newValue !== oldValue){
+                        scope.$eval(expressionToCall);
+                    }
+                        //alert('changed '  oldValue);
+                });         
+            });
+        }
+    };
+});
 
 
 app.directive("whenScrolled",function(){

@@ -1,71 +1,63 @@
 ;(function(){
 
 	'use strict';
-
-
 	var app = angular.module('gonogo.cdl');
-
-	app.controller("ApplyController", [  "$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log', function(
-	 $scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log) {
-
-
+	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"roundProgressService", function(
+	 $scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,roundProgressService) {
 	$scope.dateOptions = {
 	    dateDisabled: 'disabled',
 	    maxDate: new Date(2020, 5, 22),
 	    minDate: new Date(),
 	    startingDay: 1
   	};
-
-
 	var poller;
 	$scope.dealerArr = [];
 	$scope.assetArray = [];
-	try {
-		var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
-		$log.debug("userdata :"+JSON.stringify(userdata));
-		$scope.username = userdata.name;
-		$scope.useremail = userdata.email;
-		$scope.image = userdata.userImage;
-		$scope.instImage = userdata.instImage;
-		$scope.InstitutionID = userdata.InstitutionID;
-		$scope.userid = userdata.userid;
-		$scope.color = userdata.color;
-		$scope.ePassword = userdata.ePassword;
-		$scope.productType="";
-		$scope.suspAct="No";
-		$scope.edu="";
-		$rootScope.errHead="";
-		$rootScope.errorMsg="";
-	    $scope.holdStageArr=[];
-	    $scope.holdIndex =[];
-	    $scope.wrketype="";
-	    $scope.assetCategory="";
-	    $scope.astCst=0;
-		$scope.dealerArr=JSON.parse(atob(localStorage.getItem('DEALERS')));
-		var dlrCode =null;
-		var status=null;
-		var modelNo=null;
-		var make=null;
-		console.log("$scope.username :"+$scope.username);
-		console.log("$scope.ePassword :"+$scope.ePassword);
-		
-//		console.log("Dealers Array : ");
-//		console.log($scope.dealerArr);
+		try {
+			var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
+			$log.debug("userdata :"+JSON.stringify(userdata));
+			$scope.username = userdata.name;
+			$scope.useremail = userdata.email;
+			$scope.image = userdata.userImage;
+			$scope.instImage = userdata.instImage;
+			$scope.InstitutionID = userdata.InstitutionID;
+			$scope.userid = userdata.userid;
+			$scope.color = userdata.color;
+			$scope.ePassword = userdata.ePassword;
+			$scope.productType="";
+			$scope.suspAct="No";
+			$scope.edu="";
+			$rootScope.errHead="";
+			$rootScope.errorMsg="";
+		    $scope.holdStageArr=[];
+		    $scope.holdIndex =[];
+		    $scope.wrketype="";
+		    $scope.assetCategory="";
+		    $scope.astCst=0;
+			$scope.dealerArr=JSON.parse(atob(localStorage.getItem('DEALERS')));
+			var dlrCode =null;
+			var status=null;
+			var modelNo=null;
+			var make=null;
+			console.log("$scope.username :"+$scope.username);
+			console.log("$scope.ePassword :"+$scope.ePassword);
+			
+	//		console.log("Dealers Array : ");
+	//		console.log($scope.dealerArr);
 
-		$scope.ROLE=JSON.parse(atob(localStorage.getItem('ROLES')));
-		var actions = JSON.parse(atob(localStorage.getItem('actions')));
-//		console.log(JSON.stringify(actions));
-		if(actions != null && actions.length!=0)
-		{ $scope.app=$.inArray('APPLICATION',actions ) > -1;
-		  $scope.notif=$.inArray('NOTIFICATION',actions ) > -1;
-		  $scope.policy=$.inArray('POLICY',actions ) > -1;
-		  $scope.analytics=$.inArray('ANALYTCS',actions ) > -1;
-		}
-//		console.log(JSON.stringify(userdata));
-	}catch (e){
+			$scope.ROLE=JSON.parse(atob(localStorage.getItem('ROLES')));
+			var actions = JSON.parse(atob(localStorage.getItem('actions')));
+	//		console.log(JSON.stringify(actions));
+			if(actions != null && actions.length!=0)
+			{ $scope.app=$.inArray('APPLICATION',actions ) > -1;
+			  $scope.notif=$.inArray('NOTIFICATION',actions ) > -1;
+			  $scope.policy=$.inArray('POLICY',actions ) > -1;
+			  $scope.analytics=$.inArray('ANALYTCS',actions ) > -1;
+			}
+	//		console.log(JSON.stringify(userdata));
+		}catch (e){
 		console.log("ERROR : "+e);
-		
-		//$location.path("/");
+		// 	$location.path("/");
 	}
 	
 	var CustID=sharedService.getRefID();
@@ -83,105 +75,104 @@
 	$scope.statusJSON={};
 	$scope.dcsnPtrn=/(Declined|Approved|OnHold)$/i;
 	$scope.check_status=function(jsonOBJ)
-	{
-		var json=jsonOBJ ? jsonOBJ:$scope.statusJSON;
-		$("#ErrorContainer").hide();
-//		var json = $scope.statusJSON;
-		console.log("Check status Input josn: "+JSON.stringify(json));
-		$http({
-			method : 'POST',
-			url : APP_CONST.getConst('BASE_URL_GNG')+'status',
-			data : json,
-			headers : {'Content-Type' : 'application/json'}
-		})
-		.success(function(data) 
 		{
-			$scope.holdStageArr=[];
-			//						console.log("from data getting score-" + JSON.stringify(data));
-			//	 					console.log("data.sAppStat"+data.sAppStat);
-			$scope.statusObject=data;
-			if(typeof data.aCroDec != "undefined" && data.aCroDec != null && data.aCroDec.length >0)
+			var json=jsonOBJ ? jsonOBJ:$scope.statusJSON;
+			$("#ErrorContainer").hide();
+	//		var json = $scope.statusJSON;
+			console.log("Check status Input josn: "+JSON.stringify(json));
+			$http({
+				method : 'POST',
+				url : APP_CONST.getConst('BASE_URL_GNG')+'status',
+				data : json,
+					headers : {'Content-Type' : 'application/json'}
+			})
+			.success(function(data) 
 			{
-				$(document.body).find("#apvAmt").val(data.aCroDec[0].dAmtAppr).siblings("help").show();
-				console.log("data.aCroDec[0].dAmtAppr :" + data.aCroDec[0].dAmtAppr); 
-			}
-			if(typeof data.oIntrmStat != "undefined" && data.oIntrmStat != null)
-			{
-				if(data.oIntrmStat.sPanStat == "COMPLETE")
-				{	$("#vpc").fadeIn("500");
-				$scope.pstatus=data.oIntrmStat.oPanResult.sMsg;
-				}
-				if(data.oIntrmStat.sCblScore == "COMPLETE")
-				{	$("#cs").fadeIn("500");
-				$scope.Cstatus=data.oIntrmStat.oCibilResult.sMsg;
-				}
-			}
-
-			if(data.sAppStat =="Declined")
-			{
-				status = data.sAppStat;
-				$scope.dstatus = data.sAppStat;
-				$("#dimg").attr("src","../img/reject.png").show();
-				$("#postIPA").show();
-
-				$("#nmCntnr").hide();
-				stop_timer();
-			}
-			else if(data.sAppStat =="Approved")
-			{
-				status = data.sAppStat;
-				$scope.dstatus = data.sAppStat;
-				$("#ErrorContainer").show();
-				//					$scope.scmService();
-				$("#dimg").attr("src","../img/approve.png").show();
-				$("#postIPA").show();
-				$("#nmCntnr").hide();
-				stop_timer();
-			}
-			else if(data.sAppStat =="Queue")
-			{
-				status = data.sAppStat;
-				$scope.dstatus = data.sAppStat;
-				$("#dimg").attr("src","../img/queue_status.png").show();
-				$("#nmCntnr").hide();
-			}
-			else if(data.sAppStat =="OnHold")
-			{
-				$scope.dstatus = data.sAppStat;
-				$("#dimg").attr("src","../img/pending.png").show();
-				$("#postIPA").show();
-				$("#nmCntnr").hide();
-				stop_timer();
-				for(var i=0; i<data.aCroJustification.length;i++)
+				$scope.holdStageArr=[];
+				//						console.log("from data getting score-" + JSON.stringify(data));
+				//	 					console.log("data.sAppStat"+data.sAppStat);
+				$scope.statusObject=data;
+				if(typeof data.aCroDec != "undefined" && data.aCroDec != null && data.aCroDec.length >0)
 				{
-					var object={"value" : "holdCase",
-							"index" :i+1,
-							"doc"  :data.aCroJustification[i].sDocName
-					};
-					$scope.holdStageArr.push(object);
+					$(document.body).find("#apvAmt").val(data.aCroDec[0].dAmtAppr).siblings("help").show();
+					console.log("data.aCroDec[0].dAmtAppr :" + data.aCroDec[0].dAmtAppr); 
 				}
-			}
-		}).error(function(data) 
-		{
-			$scope.serviceHitCount=$scope.serviceHitCount+1;
-			if($scope.serviceHitCount<=3)
+				if(typeof data.oIntrmStat != "undefined" && data.oIntrmStat != null)
+				{
+					if(data.oIntrmStat.sPanStat == "COMPLETE")
+					{	$("#vpc").fadeIn("500");
+					$scope.pstatus=data.oIntrmStat.oPanResult.sMsg;
+					}
+					if(data.oIntrmStat.sCblScore == "COMPLETE")
+					{	$("#cs").fadeIn("500");
+					$scope.Cstatus=data.oIntrmStat.oCibilResult.sMsg;
+					}
+				}
+
+				if(data.sAppStat =="Declined")
+				{
+					status = data.sAppStat;
+					$scope.dstatus = data.sAppStat;
+					$("#dimg").attr("src","images/reject.png").show();
+					$("#postIPA").show();
+
+					$("#nmCntnr").hide();
+					$scope.stopTimer();				}
+				else if(data.sAppStat =="Approved")
+				{
+					status = data.sAppStat;
+					$scope.dstatus = data.sAppStat;
+					$("#ErrorContainer").show();
+					//					$scope.scmService();
+					$("#dimg").attr("src","images/approve.png").show();
+					$("#postIPA").show();
+					$("#nmCntnr").hide();
+					$scope.stopTimer();
+				}
+				else if(data.sAppStat =="Queue")
+				{
+					status = data.sAppStat;
+					$scope.dstatus = data.sAppStat;
+					$("#dimg").attr("src","images/queue_status.png").show();
+					$("#nmCntnr").hide();
+				}
+				else if(data.sAppStat =="OnHold")
+				{
+					$scope.dstatus = data.sAppStat;
+					$("#dimg").attr("src","images/pending.png").show();
+					$("#postIPA").show();
+					$("#nmCntnr").hide();
+					$scope.stopTimer();
+					for(var i=0; i<data.aCroJustification.length;i++)
+					{
+						var object={"value" : "holdCase",
+								"index" :i+1,
+								"doc"  :data.aCroJustification[i].sDocName
+						};
+						$scope.holdStageArr.push(object);
+					}
+				}
+			}).error(function(data) 
 			{
-				$scope.check_status();
+				$scope.serviceHitCount=$scope.serviceHitCount+1;
+				if($scope.serviceHitCount<=3)
+				{
+					$scope.check_status();
+				}
+				else{
+					$scope.serviceHitCount=1;
+					$scope.error="Sorry we can not process your Check Status request";
+				}
+			});
+			if($scope.dcsnPtrn.test($scope.dstatus))
+			{
+				$interval.cancel(poller);
 			}
-			else{
-				$scope.serviceHitCount=1;
-				$scope.error="Sorry we can not process your Check Status request";
-			}
-		});
-		if($scope.dcsnPtrn.test($scope.dstatus))
-		{
-			$interval.cancel(poller);
-		}
-	};
+		};
 	
 	
 //	 get all asset category from master
-	$scope.astService = function(){
+		$scope.astService = function(){
 		$scope.assetJson = {"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":""}; 
 		$http({
 			method : 'POST',
@@ -193,7 +184,7 @@
 			console.log("Asset Category Response:");
 			console.log(data);
 			$scope.assetArray=data;
-		
+
 		try{
 			if($scope.Response.oReq.oApplication.aAssetDetail[0].sAssetCtg !=undefined && $scope.Response.oReq.oApplication.aAssetDetail[0].sAssetCtg !=null)
 			{
@@ -205,8 +196,8 @@
 			}
 		}
 		catch(Exception){}
-	}).error(function(data) 
-	{
+		}).error(function(data) 
+		{
 		$scope.serviceHitCount=$scope.serviceHitCount+1;
 		if($scope.serviceHitCount<=3)
 			{
@@ -216,8 +207,8 @@
 			$scope.serviceHitCount=1;
 			$scope.error="Sorry we can not process your Asset request";
 		}	
-	});
-	}
+		});
+}
 	
 	$scope.assetMake = function(val1){
 		$scope.makeJson ={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":val1}
@@ -362,8 +353,12 @@
 							$scope.mstatus=mApplicant.sMarStat;
 							
 							if(mApplicant.sDob && mApplicant.sDob!=""){
-								$scope.dob=mApplicant.sDob.substring(0,2)+":"+mApplicant.sDob.substring(2,4)+":"+mApplicant.sDob.substring(4);
-								
+								// $scope.dob=mApplicant.sDob.substring(0,2)+":"+mApplicant.sDob.substring(2,4)+":"+mApplicant.sDob.substring(4);
+								var dateOfBirth = new Date();
+								dateOfBirth.setFullYear(parseInt(mApplicant.sDob.substring(4)));
+								dateOfBirth.setDate(parseInt(mApplicant.sDob.substring(0,2)));
+								dateOfBirth.setMonth(parseInt(mApplicant.sDob.substring(2,4))-1);
+								$scope.dob = dateOfBirth;
 							}
 
 							$scope.constitution=mApplicant.aEmpl[0].sConst;
@@ -591,7 +586,7 @@
 					  }
 				}
 				$("#resultPanel").show();
-				start_timer(); // 	60 sec timer
+				$scope.StartTimer(); // 	60 sec timer
 				poller = $interval(function(){
 					$scope.check_status(statusJSON);
 				},3000);
@@ -1108,6 +1103,7 @@ $(".previous").click(function() {
 // var countimg=0;
 $scope.onselectImg = function($files,type,index) 
 {           //console.log("inside file select"+type+" file:"+$files[0].name);
+			alert("Hello");
 			var img_type ='';
 			for (var i = 0; i < $files.length; i++) 
 			{    	
@@ -1534,7 +1530,7 @@ $scope.submitApplication=function(UrlKey)
 			
 			$("#resultPanel").show();
 			
-			start_timer();
+				$scope.StartTimer();
 				$scope.REFID =data.sRefID;
 				var statusJSON ={
 					  "sRefID":data.sRefID,
@@ -1597,18 +1593,18 @@ var timer = null, startTime = null;
 //$scope.lastmonth = myDate.setMonth(myDate.getMonth() - 1);
 //$scope.last_lastmonth = myDate.setMonth(myDate.getMonth() - 1);
 // save function at submit button
-function start_timer() {
-	$('#timer_box').show();
-	clearInterval(timer);
-	startTime = Date.now();
-	timer = setInterval(updateProgress, 100);
-};
-function stop_timer() {						
-	$rootScope.counter = -1;
-//	progress.value(0);
-	clearInterval(timer);
-//	$('#timer_box').hide();
-};
+// function start_timer() {
+// 	$('#timer_box').show();
+// 	clearInterval(timer);
+// 	startTime = Date.now();
+// 	timer = setInterval(updateProgress, 100);
+// };
+// function stop_timer() {						
+// 	$rootScope.counter = -1;
+// //	progress.value(0);
+// 	clearInterval(timer);
+// //	$('#timer_box').hide();
+// };
 
 function updateProgress() {
 	var remaining = 60 - (Date.now() - startTime) / 1000;
@@ -2207,7 +2203,7 @@ $scope.scmService = function(key){
 	}).success(function(data)
 	 {	$scope.allSchemes = data;
 	 	$scope.scmTags=[];
-		for(i in data){   
+		for(var i in data){   
 			$scope.scmTags.push(data[i].sSchDes)
 		}
 		/*$("#scheme").autocomplete({
@@ -2439,7 +2435,7 @@ $scope.resetStatus=function(){
 				  }
 			}
 		$("#resultPanel").show();
-		start_timer(); // 	60 sec timer
+		$scope.StartTimer(); // 	60 sec timer
 		poller = $interval(function(){
 			$scope.check_status(statusJSON);
 		},3000);
@@ -2598,7 +2594,7 @@ $scope.resetStatus=function(){
 	 }
 	 
 	  $scope.$on('$destroy', function() {
-		  stop_timer();
+		  $scope.stopTimer();
 		  $interval.cancel(poller);
 	  });
 
@@ -2628,7 +2624,64 @@ $scope.resetStatus=function(){
 		    minDate: minDa,
 		    startingDay: 1
 		};
-		/* dob popup */
+		/* End of dob popup */
+
+//		************************Round Progress bar script ****************************************
+
+		   $scope.current =        27;
+           $scope.max =            50;
+           $scope.offset =         0;
+           $scope.timerCurrent =   0;
+           $scope.uploadCurrent =  0;
+           $scope.stroke =         7;
+           $scope.radius =         50;
+           $scope.isSemi =         false;
+           $scope.rounded =        false;
+           $scope.responsive =     false;
+           $scope.clockwise =      true;
+           $scope.currentColor =   '#45ccce';
+           $scope.bgColor =        '#eaeaea';
+           $scope.duration =       800;
+           $scope.currentAnimation = 'easeOutCubic';
+           $scope.animationDelay = 0;
+
+           $scope.getStyle = function(){
+               var transform = ($scope.isSemi ? '' : 'translateY(-50%) ') + 'translateX(-50%)';
+
+               return {
+                   'top': $scope.isSemi ? 'auto' : '50%',
+                   'bottom': $scope.isSemi ? '5%' : 'auto',
+                   'left': '50%',
+                   'transform': transform,
+                   '-moz-transform': transform,
+                   '-webkit-transform': transform,
+                   'font-size': $scope.radius/2 + 'px'
+               };
+           };
+           var getPadded = function(val){
+               return val < 10 ? ('0' + val) : val;
+           };
+
+   		var seconds = 1;
+   		var intervalPromise;
+   		$scope.StartTimer = function () {
+   	             intervalPromise = $interval(function(){
+   	                var date = new Date();
+   	               $scope.seconds = seconds;
+   	               $scope.time = getPadded(seconds);
+   			seconds = seconds+1;
+   			if( seconds >60)
+   				$scope.stopTimer();
+   	            }, 1000);
+   		};
+   			// $scope.StartTimer();
+   		
+   		$scope.stopTimer = function()
+   		{
+   			$interval.cancel(intervalPromise);
+   		}
+// ***********************************************************************************************
+
 	  
 	 
 }]);

@@ -3,11 +3,11 @@
 
 	'use strict';
 
-	app.module('gonogo.factories',[]);
+	var app = angular.module('gonogo.factories',[]);
 
-	var app  = app.module("app.ui.metadata",[]);
+	/*var app  = app.module("app.ui.metadata",[]);*/
 	
-	app.factory("timeataddress",['$scope',function($scope){
+	app.factory("timeataddress",function(){
 		var timeataddress;
 		return timeataddress = [ { value: 'select', name: 'Select Time @ address'},
 	                         { value: '5', name: 'Less than 6 months'},
@@ -15,27 +15,27 @@
 	                         { value: '15', name: '1 to 3 years'},
 	                         { value: '37', name: 'More than 3 years'}					          
 	                         ];
-	}]),
+	}),
 
-	app.factory("timeataddress",['$scope',function($scope){
+	app.factory("timeataddress",function(){
 		var jobType;
 		return  jobType = [{value:'selected', name:'Please Select Employment'},
 	                  {value:'Professional', name:'Professional'},
 	                  {value:'Business', name:'Bussiness'},
 	                  {value:'Job', name:'Job'}
 	                  ];
-	}]),
+	}),
 
-	app.factory("addrType",['$scope',function($scope){
+	app.factory("addrType",function(){
 		var addrType;
 		return addrType = [{value:'selected', name:'Please Select Addr Type'},
 	                  {value:'Residence', name:'Residence'},
 	                  {value:'Office', name:'Office'},
 	                  {value:'Permanent', name:'Permanent'}
 	                  ]; 
-	}]),
+	}),
 
-	app.factory("phoneData",['$scope', function($scope){
+	app.factory("phoneData",function(){
 		var phoneData ;
 		return phoneData = [{value:'OFFICE_PHONE', name:'Office Phone'},
                       {value:'RESIDENCE_PHONE',name:'Residence Phone'},
@@ -44,9 +44,9 @@
    	                  {value:'RESIDENCE_MOBILE', name:'Residence Mobile'},
    	                  {value:'OFFICE_MOBILE', name:'Office Mobile'}
    	                  ];
-	}]),
+	}),
 
-	app.factory("dataset",['$scope',function($scope){
+	app.factory("dataset",function(){
 		var dataset;
 		return dataset = [{'Name':'Auto Loan',
 		'ID':'0',
@@ -82,13 +82,46 @@
 			          {'Name':'10% discount on the Home Content Insurance for covers upto 4 Lakh Rupees ','Icon':'images/Home_Insurance.png'},
 			          {'Name':'Protect your home for 20 years with a single premium','Icon':'images/Home_Insurance.png'}]
 		}];
-	}]),
+	}),
 
-	app.factory("aplcntType", ['$scope',  function($scope){
+	app.factory("aplcntType",function(){
 		var aplcntType;
 		return aplcntType = [{value:"SAL","text":"Salaried"},
 				               	{value:"SEB","text":"Self Employed Business"},
 				               	{value:"SEP","text":"Self Employed Professional"}];
-	}])
+	}),
+
+	app.factory("SelectArrays",function(){
+	
+	var _getResidenceTypes = function(){
+		return [{value:"OWNED-BUNGLOW","text":"OWNED-BUNGLOW"},
+					{value:"OWNED-CHAWL","text":"OWNED-CHAWL"},
+					{value:"OWNED-FLAT","text":"OWNED-FLAT"},
+					{value:"OWNED-PENTHOUSE","text":"OWNED-PENTHOUSE"},
+					{value:"OWNED-ROWHOUSE","text":"OWNED-ROWHOUSE"},
+					{value:"RENTED-BUNGLOW","text":"RENTED-BUNGLOW"},
+					{value:"RENTED-CHAWL","text":"RENTED-CHAWL"},
+					{value:"RENTED-FLAT","text":"RENTED-FLAT"},
+					{value:"RENTED-PENTHOUSE","text":"RENTED-PENTHOUSE"},
+					{value:"RENTED-ROWHOUSE","text":"RENTED-ROWHOUSE"},
+					{value:"RENTED-BACHELOR ACCOMODATION","text":"RENTED-BACHELOR ACCOMODATION"},
+					{value:"COMPANY PROVIDED-FLAT","text":"COMPANY PROVIDED-FLAT"},
+					{value:"PARENT OWNED-HOUSE","text":"PARENT OWNED-HOUSE"},
+					{value:"PARENT OWNED-FLAT","text":"PARENT OWNED-FLAT"},
+					{value:"COMPANY PROVIDED-HOUSE","text":"COMPANY PROVIDED-HOUSE"}];
+	},
+  _getAddrType = function(){
+		return [{value:'selected', name:'Please Select Addr Type'},
+	                  {value:'Residence', name:'Residence'},
+	                  {value:'Office', name:'Office'},
+	                  {value:'Permanent', name:'Permanent'}
+	                  ]; 
+
+	}
+	return {
+		getResidenceTypes :_getResidenceTypes,
+		getAddrType :_getAddrType
+	};
+});
 
 }).call(this)

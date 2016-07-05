@@ -7,10 +7,12 @@
 	function ($scope, $rootScope, $cookies, RestService, APP_CONST, UserService, HttpService) {
 
 
+
 		(function () {
 
 			if (!_.isUndefined($cookies.get("UID")) && !_.isNull($cookies.get("UID"))) {
 				$scope.alert = "Welcome " + atob($cookies.get("UID")) + " to GoNoGo";
+
 			} else {
 				$scope.alert = "Welcome to GoNoGo Portal";
 			}
@@ -42,7 +44,7 @@
 
 
 		//changeErrorMsg();
-
+		
 		$scope.submitted = false;
 		$scope.interacted = function (field) {
 			return $scope.submitted || field.$dirty;

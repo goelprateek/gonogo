@@ -1,11 +1,11 @@
- <form name="approve">
+ <form name="approve" class="form-horizontal form-validation">
  <div class="row clearfix" id="approveReason">
  <!-- data-ng-show="toggleApprvPanel" -->
 		<div class="panel_heading"><label>Description</label></div>
 		<div class="panel_body">
 		 <div class="row clearfix" id="enterAmount" style=" margin-top: 5px;">
 		 	<div class="col-md-4"><label>Approve Amount :</label>
-		 <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.approveAmt" name="ApprvValue" style="width: 100%;" ng-pattern="/^[0-9]{}$/" required only-digits/>
+		 <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.approveAmt" name="ApprvValue" style="width: 100%;" required only-digits/>
 		 <!-- <div ng-messages="approve.ApprvValue.$error" class="errorMsg">
 							    <p ng-message="pattern">Please enter valid amout</p>
 							    <p ng-message="required">Please enter amount</p>

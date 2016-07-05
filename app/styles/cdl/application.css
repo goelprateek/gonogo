@@ -269,7 +269,7 @@ z-index: 2; */
 	border-radius: 54px;
 	position: relative;
 	text-align: center;
-	top: -172px;
+	top: -106px;
 	height: 160px;
 }
 
@@ -607,92 +607,11 @@ input[disabled]{
 	background:white;
 }
 
-/******************************************* DASHBOARD.CSS *************************************************/
-
-.control-select{
-	/*for firefox*/
-    -moz-appearance: none;
-    /*for chrome*/
-    -webkit-appearance:none;
-	padding-bottom: 0px;
-	background: url("../img/arrow_select.png") no-repeat right #FFFFFF;
-	border:0px;
-	border-bottom: 1px solid #004d82;
-	border-radius: 0px;
-	padding-top: 0px;
-}
-.inputMaterial 				{
-  font-size:18px;
-  padding:0px 0px 0px 5px;
-  display:block;
-  border:none;
-  border-bottom:1px solid #757575;
-}
-
-.inputMaterial:focus { outline:none;}
-/* LABEL ======================================= */
-
-.inputMaterial ~ label 				 {
-  color:#999; 
-  font-size:14px;
-  font-weight:normal;
-  position:absolute;
-  pointer-events:none;
-  left:18px;
-  top:0px;
-  transition:0.2s ease all; 
-  -moz-transition:0.2s ease all; 
-  -webkit-transition:0.2s ease all;
-}
-
-.inputMaterialRupee ~ label 				 {
-  color:#999; 
-  font-size:14px;
-  font-weight:normal;
-  position:absolute;
-  pointer-events:none;
-  left:35px;
-  top:0px;
-  transition:0.2s ease all; 
-  -moz-transition:0.2s ease all; 
-  -webkit-transition:0.2s ease all;
-}
-
-/* active state */
-.inputMaterial:focus ~ label, .inputMaterial:valid ~ label, .inputMaterial:disabled ~ label, 
-.inputMaterialRupee:focus ~ label, .inputMaterialRupee:valid ~ label, .inputMaterialRupee:disabled ~ label	{
-  top:-15px;
-  font-size:12px;
-  color: #004d82;
-  font-weight:normal;
-  border:none;
-}
-
-.form-control,.form-control:focus {
-  height:auto;
-  box-shadow: none;
-  padding-bottom: 0px;
-  border-radius: 0px;
-  font-size:16px;
-}
-
-.has-error .form-control , .has-error .form-control:focus{
-	box-shadow: none;
-	-webkit-box-shadow: none;
-}
-
-
-.form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{
-	background: #ffffff;
-}
-
-/***************************************END OF DASHBOARD.CSS **************************************************/
-
 .otp {
 	width: 30px;
 	display: inline;
 	height: 29px;
 	padding: 0px;
-	font-size: 25px;
+	font-size: 17px;
 	text-align: center;
 }
