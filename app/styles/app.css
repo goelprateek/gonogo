@@ -561,3 +561,51 @@ svg:not (:root ) {
 .icon-addon:hover .fa {
     color: #2580db;
 }
+
+
+.notify-scroll-container{
+	width: 1000px;
+    height: 100px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    box-shadow: 0 0 10px #000;
+
+}
+
+.notify-scroll-container ul{
+	float: left;
+    /*margin-right: -999em;*/
+    white-space: nowrap;
+    list-style: none;
+}
+
+.notify-scroll-container li{
+	margin: 5px;
+    text-align: center;
+    float: left;
+    display: inline;
+    height: 40px;
+    width: 80px;
+}
+
+.notify-scroll-container a {
+    text-decoration: none;
+    font-weight: bold;
+}
+    
+.notify-scroll-container img {
+    text-decoration: none;
+    font-weight: bold;
+    height: 40px;
+    width: 80px;
+    -webkit-transition: all 1s ease;
+     -moz-transition: all 1s ease;
+       -o-transition: all 1s ease;
+      -ms-transition: all 1s ease;
+          transition: all 1s ease;
+}    
+
+.notify-scroll-container img:hover{
+	height: 80px;
+	width: 100px;
+}    

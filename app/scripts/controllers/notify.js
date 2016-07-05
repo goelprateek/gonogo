@@ -334,7 +334,7 @@
 
 	app.controller('NotifController', ['$scope','$rootScope', 
 								'$timeout','Validation','$filter',
-								'RestService','NotificationObject','$log','$uibModal',function($scope, $rootScope, $timeout,Validation,$filter,RestService,NotificationObject,$log,$uibModal){
+								'RestService','NotificationObject','$log','$uibModal','notifier','UserService',function($scope, $rootScope, $timeout,Validation,$filter,RestService,NotificationObject,$log,$uibModal,notifier,UserService){
 
     
     notifier.log("Wecome back "+ UserService.getCurrentUser().username);
@@ -417,10 +417,10 @@
 			}else{
 				URL = 'cro2-queue';
 			}
-			RestService.saveToServer(URL,json).then(function(Response){
-				if(Response !=null || Response!= undefined || Response!=""){
-					for(var i in Response){
-						queArray.push(Response[i]);	
+			RestService.saveToServer(URL,json).then(function(data){
+				if(!_.isNull(data) || _.isUndefined(data)){
+					for(var i in data){
+						queArray.push(data[i]);	
 					}
 					$scope.notifarray = queArray;
 					$scope.error ="";
@@ -506,13 +506,22 @@
     	return (angular.lowercase(orignal) == angular.lowercase(final));
     }				               	
 
-<<<<<<< HEAD
 
-	$scope.load_details = function(CustID,flag){  
-=======
+    $scope.showimage = function(obj){
+        var modalInstance = $uibModal.open({
+                      animation: $scope.animationsEnabled,
+                      templateUrl: 'views/templates/modal.html',
+                      controller: 'supportedDocuments',
+                      size: 'lg',
+                      resolve: {
+                         docImg : obj
+                      }
+                    });
+    }
+
 	$scope.load_details = function(CustID,dedupeflag)
 	{  
->>>>>>> fee2da533c81105ff52239ec8ab88ba920982529
+
 		var URL='';
 		var json ={'sRefID':CustID};	
 		if(croQueue)//for CRO1
@@ -534,12 +543,18 @@
 				$('#accept , #reject').hide();
 			}
 		}
-		RestService.saveToServer(URL,json).then(function(Response){
-			if(Response != '')
-				$scope.objectSet = Response;
+		RestService.saveToServer(URL,json).then(function(response){
+
+            /*RestService.saveToServer("get-image-by-id-base64",{'sImgID':imgId}).then(function(data){
+                $log.log(data);
+            })*/
+
+            if(response)
+				$scope.objectSet = response;
 			else
 			$scope.objectSet = NotificationObject.dummy();
-			$scope.Picked = CustID;
+			
+            $scope.Picked = CustID;
 			$scope.showrefid = "true";
 			$scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
 			var data = 	$scope.notifarray;
@@ -547,8 +562,12 @@
 			{if(data[j].sRefID ==  $scope.objectSet.oAppReq.sRefID){
 					$scope.applctnstatus = data[j].sStat;}
 			}
-			$scope.croDecision = Response.aCroDec;
+			$scope.croDecision = response.aCroDec;
             $scope.scoreTreeData = $scope.objectSet.oCompRes.scoringServiceResponse.SCORE_TREE;
+
+            return response;
+
+
            /* $scope.amount = $scope.croDecision;*/
 			/*$(document.body).find('#cirhtml').attr("data", "").hide();
 			$scope.error = "";
@@ -616,13 +635,32 @@
 			$scope.extraPresent=false;
 			$scope.evidPresent=false;*/
 			
-		});
-}
+		}).then(function(data){
+            
+          var objArray = _.map(_.pluck(data.aAppImgDtl, 'aImgMap'),function(data){
+                    return data;
+                });
+
+           var finalImageArray = _.flatten(_.each(objArray,function(val){
+                return _.each(val,function(val){
+                    return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
+                        if(!_.isUndefined(data) || !_.isNull(data)){
+                            val["sByteCode"] = "data:image/png;base64,"+data.sByteCode;    
+                        }
+                    });
+                });
+             }));
+
+           $scope.imageDataArray =  finalImageArray;
+        });
+ }
+
 $scope.newApplication = function(){ 
 	if(croQueue){
-	$scope.container = false;
+	   $scope.container = false;
 	}		
 }
+
 //for back button of grey form
 $scope.toggleFormminimize= function(){
 	$scope.container = !$scope.container;
@@ -887,7 +925,7 @@ $scope.cro_action = function(appID, action){
                   var modalInstance = $uibModal.open({
                       animation: $scope.animationsEnabled,
                       templateUrl: 'views/templates/onhold-panel.html',
-                      controller: 'onholdModelCtrl',
+                      controller: 'imageHandlingController',
                       size: 'lg',
                       resolve: {
                         holdModelFeed : function (){
@@ -2204,6 +2242,10 @@ function requestForStatus(json)
 	
 	 
 }]);
+
+app.controller("supportedDocuments",['$scope', 'docImg'  ,function($scope,docImg){
+    console.log(docImg);
+}]),
 
 app.controller('ModalInstanceCtrl', ['$scope','$rootScope','NotificationObject','modalFeed',
    '$uibModalInstance','$log', function($scope, $rootScope,NotificationObject,modalFeed,$uibModalInstance,$log){
