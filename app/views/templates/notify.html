@@ -271,11 +271,11 @@ font-size:14px;}
 			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden;padding-right: 0px; max-height: 640px;" ng-if="authenticate('NCONTAINER')"> <!-- NCONTAINER  ng-show="{{userid != '494'}}"-->
 				<ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;    height: 38px;   width:98%;">
  				    <li  class="active" style=" margin-top: 7px;"><a id="applicant" style="padding: 6px 10px;font-weight: bold; font-size: 13px;">Applicant</a></li>
-					<select class="form-control" id="dedupe1" ng-if="dedupeArray" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
+					<select class="form-control" id="dedupe1" ng-if="objectSet.aDeDupe!=''" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
 	                	 ng-change="onchange(countSelected)">
 	<!--                 	 ng-options="count as count.ref for count in dedupeArray" -->
 						<option ng-selected="true" value="Select">Dedupe Found</option>
-	                	<option ng-repeat="count in dedupeArray" value="{{count}}">{{count}}</option>
+	                	<option ng-repeat="count in objectSet.aDeDupe">{{count.sRefID}}</option>
 					</select>
  				</ul>
 				<div class="row clearfix"  id="applicant_panel" style=" width: 101%; margin-bottom: 36px;overflow-y:auto ">
@@ -579,10 +579,10 @@ font-size:14px;}
 				<ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;    height: 38px;   width: 98%;">
  				    <li  class="active" style=" margin-top: 7px;"><a id="applicant" style="padding: 6px 10px;font-weight: bold; font-size: 13px;">Applicant</a></li>
  
-					<select class="form-control" id="dedupe" ng-if="dedupeArray" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
+					<select class="form-control" id="dedupe" ng-if="objectSet.aDeDupe!=''" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
 	                	  ng-change="onchange(countSelected)">
 						<option ng-selected="true" value="Select">Dedupe Found</option>
-	                	<option ng-repeat="count in dedupeArray" value="{{count}}">{{count}}</option>
+	                	<option ng-repeat="count in objectSet.aDeDupe">{{count.sRefID}}</option>
 					</select>
  				</ul>
 				<div class="row clearfix" ng-init="applicant" id="applicant_panel" style=" width: 102%;margin-left: 14px;max-height: 515px;margin-right: -14px;overflow-y:scroll">

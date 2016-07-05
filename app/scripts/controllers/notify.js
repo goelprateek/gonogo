@@ -356,7 +356,6 @@
 
     $scope.isLosId = function(){
         if($scope.objectSet.oLosDtls){
-            console.log($scope.objectSet.oLosDtls);
              if($scope.objectSet.oLosDtls.sLosID)
                 return true;
             else
@@ -375,6 +374,8 @@
         return false;
     }
 
+    $scope.utrVal = true;
+    $scope.losIdval = true;
 	/*$scope.toggleDocPanel = false;
 	$scope.toggleApprvPanel = false;
 	$scope.toggleDclnPanel = false;*/
@@ -528,8 +529,8 @@
 	                  {value:'Office', name:'Office'},
 	                  {value:'Permanent', name:'Permanent'}
 	                  ]; */
-  
-	$scope.addr_type = SelectArrays.getAddrType[1];   //to set default address
+    $scope.addrType = SelectArrays.getAddrType();
+	$scope.addr_type = $scope.addrType[1];   //to set default address
 	$scope.aplcntType=[{value:"SAL","text":"Salaried"},
 				               	{value:"SEB","text":"Self Employed Business"},
 				               	{value:"SEP","text":"Self Employed Professional"}];
@@ -576,11 +577,21 @@
 			}
 			$scope.croDecision = Response.aCroDec;
             $scope.scoreTreeData = $scope.objectSet.oCompRes.scoringServiceResponse.SCORE_TREE;
-            console.log("if los : "+$scope.objectSet.oLosDtls.sLosID);
+            try{
+                 if($scope.objectSet.oLosDtls.sLosID){
+                 $scope.losIdval = true;
+                 }else{
+                     $scope.losIdval = false;
+                 }   
+            }catch(e){
+                 $scope.losIdval = false;
+            }
+           
+           /* try{$scope.utrVal = $scope.objectSet.oLosDtls.sUtr;}catch(e){$scope.utrVal ='';}*/
            /* var data = Response.aAppImgDtl;
             console.log("images");
                 for (j in data)
-                {
+                {tr
                   if(data[j].sApplID == $scope.applicantID){
                         $scope.appkycimg = data[j].aImgMap;
                         applicantImg(data[j].aImgMap);
@@ -1043,6 +1054,7 @@ $scope.cro_action = function(appID, action){
                             "dEmi":$scope.selected.emi,
                             "aDedupeRefID": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : [])
                             }
+                            console.log(json);
                             requestForStatus(json);
 
                         }, function () {
@@ -1124,13 +1136,17 @@ function requestForStatus(json)
 
   $scope.losStatusChange=function(status){
     var utr =  $scope.objectSet.oLosDtls.sUtr;
-     if(status == "LOS_DISB" ){ //&&   $scope.applctnstatus.toUpperCase()=="APPROVED"
+     if(status == "LOS_DISB" &&   $scope.applctnstatus.toUpperCase()=="APPROVED"){ //
             //$scope.isUtrEdit = false; //&& (utr=='' || utr==null)//can edit
-            $scope.isUtr();
-        }/*else{
+            if(utr=='' || utr==null){
+                 $scope.isUtr();
+                $scope.utrVal = false;        
+            }
+        }else{
              // $scope.isUtrEdit = true;
+             $scope.utrVal = true; 
              $(document.body).find('#utrData').css("border","1px solid #cfcfcf");
-        }*/
+        }
         /* $('#losStatusId1').val(this.value);
         $scope.objectSet.oLosDtls.sStat =this.value;*/
   }
@@ -1880,42 +1896,44 @@ function requestForStatus(json)
 		}
 	}
 
-	$scope.updateLosData = function(status){	  
+	$scope.updateLosData = function(status){
 	var losStat = status;
-	var losId = $('#losId').val();
-	var utr = $('#utrData').val();
-	if(($('#utrData').prop("disabled")==false && utr!='') || ($('#utrData').prop("disabled")==true && utr=='')){
-	if(losId != "" && losStat !="Select"){
-		 var jsondata=	 {
-				    "sRefID":$scope.refID,
-				    "oHeader":{
-				         "sAppID":$scope.objectSet.sAppID,
-				         "sInstID":user.institutionID,
-				         "sSourceID":"WEB",
-				         "sAppSource":"WEB",
-				         "sReqType":"JSON",
-				         "sCroId":$scope.userid
-				    },
-				    "oLosDtls":{
-				        "sLosID":losId,
-				        "sStat":losStat,
-				        "sUtr":utr
-				    }
-				}	 
-		 var URL='update-los-details';
-		 RestService.saveToServer(URL,jsondata).then(function(Response){
-				console.log("Response: "+JSON.stringify(Response));
-				if(Response.STATUS == "SUCCESS"){
-					alert("LOS Status updated successfully");
-					 $(document.body).find('#utrData').prop('disabled', true);
-					 $(document.body).find('#losId').prop('disabled', true);
-					 $(document.body).find('#utrData').css("border","1px solid #cfcfcf");
-					 $(document.body).find('#losId').css("border","1px solid #cfcfcf");
-				}else{
-					alert("LOS Status is not updated successfully");
-				}
-		 });
-		}
+	var losId = $scope.objectSet.oLosDtls.sLosID;
+	var utr = $scope.objectSet.oLosDtls.sUtr;
+
+    if(($scope.utrVal==false && utr!='') || ($scope.utrVal == true && (utr=='' || utr!=''))){
+    	if(losId != "" && losStat !="Select"){
+    		 var jsondata=	 {
+    				    "sRefID":$scope.objectSet.sRefID,
+    				    "oHeader":{
+    				         "sAppID":$scope.objectSet.oAppReq.oHeader.sAppID,
+    				         "sInstID":user.institutionID,
+    				         "sSourceID":"WEB",
+    				         "sAppSource":"WEB",
+    				         "sReqType":"JSON",
+    				         "sCroId":$scope.userid
+    				    },
+    				    "oLosDtls":{
+    				        "sLosID":losId,
+    				        "sStat":losStat,
+    				        "sUtr":utr
+    				    }
+    				};
+                      console.log(jsondata);	 
+    		 var URL='update-los-details';
+    		 RestService.saveToServer(URL,jsondata).then(function(Response){
+    				console.log("Response: "+JSON.stringify(Response));
+    				if(Response.STATUS == "SUCCESS"){
+    					alert("LOS Status updated successfully");
+    					 $scope.losIdval = true;
+                         $scope.utrVal = true;
+    					 $(document.body).find('#utrData').css("border","1px solid #cfcfcf");
+    					 $(document.body).find('#losId').css("border","1px solid #cfcfcf");
+    				}else{
+    					alert("LOS Status is not updated successfully");
+    				}
+    		 });
+    		}
 	}
 }
 	
