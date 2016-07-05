@@ -253,6 +253,31 @@
 	            });
 	        }
 	    };
+	})
+
+	app.directive('replace', function() {
+	  return {
+	  	restrict:'A',
+	    require: 'ngModel',
+	    link: function(scope, element, attrs, model) {
+	      model.$parsers.push(function(val) {
+	        if (!val) { return ''; }
+	        var transformedInput = val.replace(/[^a-zA-Z0-9]/g, '');
+	         if (transformedInput !== val) {
+	                    model.$setViewValue(transformedInput);
+	                    model.$render();
+	                }
+	               return transformedInput;
+	      /*  var regex = new RegExp(scope.regex);
+	        var replaced = val.replace(regex, scope.with); 
+	        if (replaced !== val) {
+	          model.$setViewValue(replaced);
+	          model.$render();
+	        }         
+	        return replaced;  */       
+	      });
+	    }
+	  };
 	});
 	
 }).call(this)

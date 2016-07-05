@@ -375,7 +375,7 @@
     }
 
     $scope.utrVal = true;
-    $scope.losIdval = true;
+    $scope.losIdval = false;
 	/*$scope.toggleDocPanel = false;
 	$scope.toggleApprvPanel = false;
 	$scope.toggleDclnPanel = false;*/
@@ -2235,7 +2235,7 @@ function requestForStatus(json)
 						$(this).css("border","1px solid green");
 					}
 				}
-				else if($(this).attr("id")=="losId" || $(this).attr("id")=="utrData"){
+			/*	else if($(this).attr("id")=="losId" || $(this).attr("id")=="utrData"){
 					if (!(/^[a-zA-Z0-9]+$/.test(val))) {
 						error = 1;
 						$(this).css("border","1px solid red");
@@ -2245,14 +2245,14 @@ function requestForStatus(json)
 					}
 				}
 				else if($(this).attr("id")=="ApprvValue" || $(this).attr("id")=="emiValue" || $(this).attr("id")=="tenorValue"){
-					/*if (!(/^[0-9]+$/.test(val))) {
+					if (!(/^[0-9]+$/.test(val))) {
 						error = 1;
 						$(this).css("border","1px solid red");
 					} else {
 						error = 0;
 						$(this).css("border","1px solid green");
-					}*/
-				}
+					}
+				}*/
 			}
 		});
 	 
