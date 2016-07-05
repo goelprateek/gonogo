@@ -622,6 +622,7 @@
                         $scope.coappImgs = data[j].aImgMap;
                     }
                 }*/
+
            /* $scope.amount = $scope.croDecision;*/
 			/*$(document.body).find('#cirhtml').attr("data", "").hide();
 			$scope.error = "";
