@@ -193,49 +193,7 @@
 		}
 	}),
 
-	app.directive("imgSliderWithGallery", ['$scope',function($scope){
-		var generateTemplate = function(data){
-			console.log(data);
-			var template ;
-			template = '<ul id="imageGallery"> '+
-							'<li data-thumb="img/thumb/cS-1.jpg" data-src="img/largeImage.jpg"> '+
-							'<img src="img/cS-1.jpg" />'+
-						'</li>';
-
-						
-			return template;
-		};
-		return {
-			restrict : "AE",
-			scope: {
-		          data: "=",
-		          onClick: "&"
-		    },
-			link : function(scope,elem,attrs,controller){
-				var elem = elem[0];
-
-				var template = generateTemplate(data);
-				elem.html(template);
-
-				elem.lightSlider({
-					gallery:true,
-			        item:1,
-			        loop:false,
-			        thumbItem:9,
-			        slideMargin:0,
-			        enableDrag: false,
-			        currentPagerPosition:'left',
-			        onSliderLoad : function(el){
-			        	el.lightGallery({
-			        		selector : elem.lslide
-			        	});
-			        }
-				});
-
-				$compile(elem.contents())(scope);
-			}
-		}
-	}])
+	
 
 	app.directive('onlyDigits', function () {
 	    return {
@@ -279,6 +237,6 @@
 	    }
 	  };
 	});
-	
+
 }).call(this)
 

@@ -262,9 +262,9 @@
 						</div>
 						<div class="col-md-3">
 
-							<label class="control-label">Address Line 2</label> <input
-								class="form-control" ng-model="address.sLine2" type="text"
-								name="address2" ng-disabled="!isUpdating" change-on-blur="onValueChanged('address')">
+							<label class="control-label">Date of Birth</label> <input
+								id="dob" class="form-control" ng-model="objectSet.oAppReq.oReq.oApplicant.sDob || dateFilter:objectSet.oAppReq.oReq.oApplicant.sDob" type="text"
+								name="Date Of Birth" disabled="disabled">
 						</div>
 						<div class="col-md-3">
 							<label class="control-label">Address Line 3</label> <input
