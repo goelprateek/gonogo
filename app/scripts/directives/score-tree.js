@@ -10,7 +10,7 @@
             restrict:"EA",
             scope: {
                   data: "=scoreData",
-                  ngModel: '='
+                 // ngModel: '='
                 /*  isolatedTableData:'&', send back to cntroller*/
                 /*  onClick: "&"*/
             },
@@ -18,52 +18,43 @@
             priority:10, 
             terminal:false,
             link : function(scope,element,attribute, controller){
-            }
-        }
- }]);
-    
-}).call(this)
-
-
-/*
-  console.log("function called");
-        var treeData = [];
-        var zm;
-        var nodes;
-        var links;
-        generate_scoreJson($scope.objectSet.oCompRes.scoringServiceResponse.SCORE_TREE);
-        function generate_scoreJson(temp){
-
+                var treeData = [];
+                var zm;
+                var nodes;
+                var links;
+                generate_scoreJson(scope.data);
+                function generate_scoreJson(temp){
             var colors = ['#689f38','#EF3D16','#fb8c00','#8BC34A','#2196F3','#9C27B0','#bdbdbd','#009688','#ffc107','#689f38'];
-            
             try{
                 if(temp != null && typeof temp != 'undefined')
                 { treeData.push({"name":"Application Score", "score":temp.AppScore, "color":"#2196F3", "children":[]});
-                    for(var i=0; i<temp.Scores.length; i++)
+                for(var i=0; i<temp.Scores.length; i++)
+                {
+                    var color = colors[i];
+                    var cat = temp.masterMap[temp.Scores[i].name];
+                    treeData[0].children.push({"name":temp.Scores[i].name, "score":temp.Scores[i].score, "color":color, "children":[]});
+                    for(var j=0; j< temp.Scores[i].Plans[0].length; j++)
                     {
-                        var color = colors[i];
-                        var cat = temp.masterMap[temp.Scores[i].name];
-                        treeData[0].children.push({"name":temp.Scores[i].name, "score":temp.Scores[i].score, "color":color, "children":[]});
-                        for(var j=0; j< temp.Scores[i].Plans[0].length; j++)
+                        var att = cat[temp.Scores[i].Plans[0][j].name];
+                        treeData[0].children[i].children.push({"name":temp.Scores[i].Plans[0][j].name, "score":temp.Scores[i].Plans[0][j].score, "color":color, "children":[]}); 
+                        for(var k=0; k<temp.Scores[i].Plans[0][j].Fields[0].length; k++)
                         {
-                            var att = cat[temp.Scores[i].Plans[0][j].name];
-                            treeData[0].children[i].children.push({"name":temp.Scores[i].Plans[0][j].name, "score":temp.Scores[i].Plans[0][j].score, "color":color, "children":[]}); 
-                            for(var k=0; k<temp.Scores[i].Plans[0][j].Fields[0].length; k++)
-                            {
-                                var field = att[temp.Scores[i].Plans[0][j].Fields[0][k].name];
-                                var exp = field["FieldName"]; //fieldname
-                                var dscore = field["value"]; //
-                                var weight = field["weight"];
-                                treeData[0].children[i].children[j].children.push({"score":temp.Scores[i].Plans[0][j].Fields[0][k].score, "color":color,"dscore":dscore, "exp":exp, "weight":weight});
-                            }
+                            var field = att[temp.Scores[i].Plans[0][j].Fields[0][k].name];
+                            var exp = field["FieldName"]; //fieldname
+                            var dscore = field["value"]; //
+                            var weight = field["weight"];
+                            treeData[0].children[i].children[j].children.push({"score":temp.Scores[i].Plans[0][j].Fields[0][k].score, "color":color,"dscore":dscore, "exp":exp, "weight":weight});
                         }
                     }
                 }
-            }catch(error){
+                }
+            }catch(error)
+            {
                 console.log(error);
                 $("#scoreTree").text("Sorry we cant process this score tree");
             }
 
+// console.log(JSON.stringify(treeData));
             var margin = {top: 120,right: 150,bottom: 80,left: 120},
             width = 1000,
             height = 10;
@@ -82,7 +73,7 @@
             .attr("height", height).call(zm = d3.behavior.zoom().scaleExtent([1, 1]).on("zoom", redraw))
             .append("g").attr("transform", "translate(" + width / 2 + "," + 20 + ")");
 
-            zm.translate([width / 2, 20]); 
+            zm.translate([width / 2, 20]); // add drag functionality
             root = treeData[0];
             root.x0 = height / 2;
             root.y0 = 0;
@@ -96,17 +87,19 @@
             }
 
             root.children.forEach(collapse);
-            
             update(root);
-            
+            /* d3.select("#graph").style("height", "800px"); */
             function update(source) {
+                // Compute the new tree layout.
                 var nodes = tree.nodes(root).reverse(),
                 links = tree.links(nodes);
 
+                // Normalize for fixed-depth.
                 nodes.forEach(function(d) {
                     d.y = d.depth * 120;
                 });
 
+                // count no of chuldren
                 var levelWidth = [1];
                 var childCount = function(level, n) {
                     if (n.children && n.children.length > 0) {
@@ -121,15 +114,20 @@
                     }
                 };
                 childCount(0, root);
+                /* increase height of graph with respect to depth */
+                if ((height > 100) && (levelWidth.length > depth)) {
                     height = height + 160;
                     depth = levelWidth.length;
-                } 
-
+                } else if (height < 100) {
+                    height = 170;
+                }
+                // console.log(depth);
 
                 $("#scoreTree").css("height", height);
                 d3.select("svg").attr("height", height);
 
 
+                // Update the nodes…
                 var node = svg.selectAll("g.node")
                 .data(nodes, function(d) {
                     return d.id || (d.id = ++i);
@@ -148,18 +146,25 @@
                 .on("mouseover", function(d) {
                     var matrix = this.getScreenCTM()
                     .translate(+this.getAttribute("cx"), +this.getAttribute("cy")); 
-                    d3.select("#tooltip")
+                    // Get this bar's x/y values,then augment for the tooltip                                                              
+
+                    d3.select("#tooltip") // Update the tooltip position and
+                                            // value
                     .style("left", Math.max(0, d3.event.pageX - 20) + "px")
                     .style("top", (d3.event.pageY - 120) + "px");
 
-                    $('#node_expression').text(d.exp);
+                    // bind value with labels
+                    $('#node_expression').text(d.exp);// find function erturn
+                                                        // the full string
                     $('#node_details').text("Value : "+ d.dscore);
-                    d3.select("#tooltip").classed("hidden", false); 
-                                                                    
+                    d3.select("#tooltip").classed("hidden", false); // Show the
+                                                                    // tooltip
 
                 })
                 .on('mousemove', function(d) {
                     d3.select("#tooltip").style("left", Math.max(0, d3.event.pageX - 20) + "px") 
+                    // the d3.mouse() function calculates the mo
+                                                                                        
                     .style("top", (d3.event.pageY - 120) + "px");
                 });              
 
@@ -180,14 +185,16 @@
                 })
                 .style("fill-opacity", 1);
 
-                nodeEnter.append("text") 
-                .style("fill", "white")  
-                .attr("dy", ".20em")   
-                .attr("text-anchor", "middle") 
+                nodeEnter.append("text") // append text
+                .style("fill", "white")   // fill the text with the colour
+                                            // black
+                .attr("dy", ".20em")   // set offset y position
+                .attr("text-anchor", "middle") // set anchor y justification
                 .text(function(d) {
                     return d.score;
                 });        
 
+                // Transition nodes to their new position.
                 var nodeUpdate = node.transition()
                 .duration(duration)
                 .attr("transform", function(d) {
@@ -209,6 +216,7 @@
 
                 nodeUpdate.select("text").style("fill-opacity", 1);
 
+                // Transition exiting nodes to the parent's new position.
                 var nodeExit = node.exit().transition()
                 .duration(duration)
                 .attr("transform", function(d) {
@@ -222,19 +230,23 @@
                 nodeExit.select("text")
                 .style("fill-opacity", 1e-6);
 
+                // Update the links…
                 var link = svg.selectAll("path.link")
                 .data(links, function(d) {
                     return d.target.id;
                 });
 
+                // Enter any new links at the parent's previous position.
                 link.enter().insert("path", "g")
                 .attr("class", "link")
                 .attr("d", diagonal);
 
+                // Transition links to their new position.
                 link.transition()
                 .duration(duration)
                 .attr("d", diagonal);
 
+                // Transition exiting nodes to the parent's new position.
                 link.exit().transition()
                 .duration(duration)
                 .attr("d", function(d) {
@@ -249,12 +261,14 @@
                 })
                 .remove();
 
-                node.forEach(function(d) { //nodes
+                // Stash the old positions for transition.
+                nodes.forEach(function(d) {
                     d.x0 = d.x;
                     d.y0 = d.y;
                 });
             }
 
+            // Toggle children on click.
             function click(d) 
             {              
                 if (d.children) {
@@ -267,7 +281,19 @@
                 update(d);            
             }
 
+            // Redraw for zoom
             function redraw() 
-            {
+            {// console.log("here", d3.event.translate, d3.event.scale);
                 svg.attr("transform", "translate(" + d3.event.translate + ")");
-            }*/
+// console.log("scroll "+$('#scoreTree').parent().parent().parent());
+            }
+        }
+
+          
+         }
+      }
+ }]);
+    
+}).call(this)
+
+      

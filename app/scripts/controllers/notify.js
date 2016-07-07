@@ -356,6 +356,7 @@
 
 	$scope.container = true;
     $scope.isDedupeSelected = true;
+    $scope.isImg = true;
 
     $scope.isLosId = function(){
         if($scope.objectSet.oLosDtls){
@@ -544,16 +545,33 @@
 
 
 
-    $scope.showimage = function(obj){
+    $scope.showimage = function(obj,isImgFlag,index){
         var modalInstance = $uibModal.open({
                       animation: $scope.animationsEnabled,
                       templateUrl: 'views/templates/modal.html',
                       controller: 'supportedDocuments',
                       size: 'lg',
-                      resolve: {
-                         docImg : obj
+                      resolve:{
+                        ImageFeed : function (){
+                            var imageData;
+                            return imageData = {
+                                isImage : isImgFlag,
+                                docData : obj,
+                                index : index,
+                                applicationId : $scope.objectSet.oAppReq.oHeader.sAppID,
+                                applicantId : $scope.objectSet.oAppReq.oReq.oApplicant.sApplID,
+                                institutionId : $scope.InstitutionID,
+                                refId : $scope.objectSet.oAppReq.sRefID
+                            }
+                        }
                       }
                     });
+
+         modalInstance.result.then(function (selected) {
+                       console.log("successfully");
+                        }, function () {
+                          $log.info('Modal dismissed at: ');
+                        });
     }
 
 	$scope.load_details = function(CustID,dedupeflag)
@@ -611,7 +629,6 @@
 					$scope.applctnstatus = data[j].sStat;}
 			}
 			$scope.croDecision = response.aCroDec;
-            $scope.scoreTreeData = $scope.objectSet.oCompRes.scoringServiceResponse.SCORE_TREE;
             try{
                  if($scope.objectSet.oLosDtls.sLosID){
                  $scope.losIdval = true;
@@ -621,6 +638,12 @@
             }catch(e){
                  $scope.losIdval = false;
             }
+            try{
+                 $scope.pdfData ="data:application/pdf;base64,"+$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];             
+            }catch(e){
+                 $scope.pdfData = '';
+            }
+            return response;
            
            /* try{$scope.utrVal = $scope.objectSet.oLosDtls.sUtr;}catch(e){$scope.utrVal ='';}*/
            /* var data = Response.aAppImgDtl;
@@ -737,6 +760,30 @@ $scope.toggleForm= function(){
 }
 
 $scope.scoreTree = function(){
+    var modalInstance = $uibModal.open({
+              animation: $scope.animationsEnabled,
+              templateUrl: 'views/templates/score-tree.html',
+              controller: 'scoreTreeCtr',
+              size: 'lg',
+              resolve:{
+                treeFeed : function (){
+                    var scoreTree;
+                    return scoreTree = {
+                        treeData : $scope.objectSet.oCompRes.scoringServiceResponse.SCORE_TREE
+                    }
+                }
+              }
+            });
+
+    modalInstance.result.then(function (selected) {
+       console.log("successfully");
+        }, function () {
+          $log.info('Modal dismissed at: ');
+        });
+    }
+
+
+
        /* console.log("function called");
         var treeData = [];
         var zm;
@@ -982,7 +1029,7 @@ $scope.scoreTree = function(){
             {
                 svg.attr("transform", "translate(" + d3.event.translate + ")");
             }*/
-        }
+       // }
 	
 $scope.cro_action = function(appID, action){ 
 	$scope.appltnID = appID;
@@ -995,7 +1042,7 @@ $scope.cro_action = function(appID, action){
                   var modalInstance = $uibModal.open({
                       animation: $scope.animationsEnabled,
                       templateUrl: 'views/templates/onhold-panel.html',
-                      controller: 'imageHandlingController',
+                      controller: 'onholdModelCtrl',
                       size: 'lg',
                       resolve: {
                         holdModelFeed : function (){
@@ -1168,9 +1215,6 @@ function requestForStatus(json)
                 }
             });
         }
- $scope.showPdf = function(){
-        $scope.cirhtml ="data:application/pdf;base64,"+$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];
-    }
 
 //check if neccessary
 
@@ -2472,8 +2516,127 @@ function requestForStatus(json)
     };
 }]);
 
-app.controller("supportedDocuments",['$scope', 'docImg'  ,function($scope,docImg){
-    console.log(docImg);
+app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService',
+    function($scope,ImageFeed,$uibModalInstance,$timeout,RestService){
+
+    /*$scope.myInterval = 5000;*/
+    $scope.noWrapSlides = true;
+    $scope.isReject = false;
+    $scope.active = ImageFeed.index;
+    if(ImageFeed.isImage){
+        $scope.imageTag = 1;
+        $scope.slides = _.each(ImageFeed.docData,function(value,key){
+            return value["id"] = key;
+        });
+    }else{
+        $scope.imageTag = 0;
+        $scope.pdf = ImageFeed.docData;
+    }
+
+    $scope.approveImg = function(index){
+        $scope.slides[index].sStat = "Approve";
+    }
+
+    $scope.rejectImg = function(index){
+        $scope.slides[index].sStat = "Reject";
+        $scope.isReject = true;
+console.log( $scope.slides[index].sReason);
+        /* var imageId = $(document.body).find('#myModalnew').find('.modal-title').find('h5').attr("title");
+             var imageName = $(document.body).find('#myModalnew').find('.modal-title').find('h5').text();
+             var reason =  $(document.body).find('#reason').val();
+             var json ={
+                      "oHeader": {
+                        "sAppID": ImageFeed.applicationId,
+                        "sApplID": ImageFeed.applicantId
+                      },
+                      "sRefID": ImageFeed.refId,
+                      "sImageID": $scope.slides[index].sImgID,
+                      "oUpldDtl": {
+                        "sStat": "Reject",
+                        "sReason":reason
+                      }
+                    };
+             ImgSevice(json,imageName);//uncomment later
+             rejectArray.push({Name: imageName,Image:"",Reason:reason});
+             $(document.body).find('#reason, #submitreason').hide();
+             e.stopImmediatePropagation();*/
+    }
+
+    $scope.onFileSelect = function($files,imageName,imageIndex){
+               // $files: an array of files selected, each file has
+                for (var i = 0; i < $files.length; i++) 
+                {       
+                    var fname=$files[0].name
+                    var re = (/\.(jpg)$/i);
+                    if(!re.exec(fname))
+                    {
+                        alert("File extension not supported!");
+                        break;
+                    }
+                    var $file = $files[i];
+                    var base64;
+                    var  reader=new FileReader();
+                    if ($files[i] && $file) {
+                        var binaryString;
+                        reader.onload = function(readerEvt) {
+                            binaryString = readerEvt.target.result;
+                            base64 = binaryString;
+                            if(base64.split(",")[1].substring(0, 13) == "/9j/4AAQSkZJR"){
+                                 var json ={
+                                          "oHeader": {
+                                            "sAppID": ImageFeed.applicationId,
+                                            "sApplID": ImageFeed.applicantId,
+                                            "sInstID": ImageFeed.institutionId
+                                          },
+                                          "sRefID": ImageFeed.refId,
+                                          "oUpldDtl": {
+                                            "sFileID": "1",
+                                            "sFileName": $scope.slides[imageIndex].sImgType+"_EVIDENCE1",
+                                            "sFileType": "JPG",
+                                            "sfileData": base64.split(",")[1],
+                                            "sStat": "",
+                                            "sReason":""
+                                          }
+                                        };
+                                var URL = 'upload-image';
+                               /*  RestService.saveToServer(URL,json).then(function(Response){
+                                        if(Response.sStatus == 'SUCCESS'){*/
+                                            if(!$scope.slides[imageIndex]["evdncArray"]){
+                                                  $scope.slides[imageIndex]["evdncArray"]=[];
+                                            }
+                                            if($scope.slides[imageIndex]["evdncArray"].length < 2){
+                                                var evdcJson = {
+                                                    "id" : $scope.slides[imageIndex]["evdncArray"].length,
+                                                    "sByteCode" : base64,
+                                                    "sImgID" : '',
+                                                    "sImgType" : $scope.slides[imageIndex].sImgType+"_EVIDENCE"+($scope.slides[imageIndex]["evdncArray"].length+1),
+                                                    "sReason" : '',
+                                                    "sStat" : ''
+                                                };
+                                                $scope.slides[imageIndex].evdncArray.push(evdcJson);
+                                                evdcJson.id = $scope.slides.length ;
+                                                $scope.slides.push(evdcJson);
+                                                 console.log($scope.slides);
+                                            }else{
+                                                alert("You have max limit of 2 images!");
+                                            }
+                                      /*  }
+                                 });  */  
+                           }else{
+                                    alert("File Type Not Supported");
+                               }
+                        };
+                        reader.readAsDataURL($files[i]);
+                        $timeout(function() {
+                        }, 3000);
+                }
+            }
+      }
+
+    $scope.closeModal = function(){
+          $uibModalInstance.dismiss('cancel');
+    };
+
 }]),
 
 app.controller('ModalInstanceCtrl', ['$scope','$rootScope','NotificationObject','modalFeed',
@@ -2504,6 +2667,18 @@ app.controller('ModalInstanceCtrl', ['$scope','$rootScope','NotificationObject',
     };
 
   }]);
+
+
+app.controller('scoreTreeCtr', ['$scope','$uibModalInstance','treeFeed', 
+    function($scope,$uibModalInstance,treeFeed){ 
+       
+    $scope.treeFeed = treeFeed.treeData;
+    console.log(treeFeed);
+    
+    $scope.closeTreePanel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+}]);
 
 app.controller('DeclInstanceCtrl', ['$scope','$rootScope','NotificationObject',
    '$uibModalInstance','dclnModelFeed', function($scope, $rootScope,NotificationObject,$uibModalInstance,dclnModelFeed){ 
@@ -2943,9 +3118,9 @@ app.directive("whenScrolled",function(){
 
 app.filter('dateFilter', function() {
     return function(date){
-        var result="";
-        if(date && date!=""){
-            result = date.slice(0,2)+"/"+date.slice(3,5)+"/"+date.slice(6,10);
+         var result = '';
+        if(date){
+           result = date.slice(0,2)+"/"+date.slice(2,4)+"/"+date.slice(4,8);
         }
         return result;
     };

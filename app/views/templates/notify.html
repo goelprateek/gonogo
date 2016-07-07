@@ -309,11 +309,11 @@ font-size:14px;}
 							</div>
 
 							<div class="notify-scroll-container" data-ng-if="imageDataArray">
-								<ul>
+								 <ul> 
 									<li ng-repeat="d in imageDataArray">
-										<a href="javascript:;" data-ng-click="showimage(d)"><img ng-src="{{d.sByteCode}}"> </a>
+										<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index)"><img ng-src="{{d.sByteCode}}"> </a>
 									</li>
-								</ul>
+								 </ul> 
 							</div>
 
 							<!-- <div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">
@@ -356,13 +356,13 @@ font-size:14px;}
 						<div class="scroll-divs-outer" >
 							<label class="div-heading income">ABILITY TO PAY <span class="badge">{{details.APPLICATION.IncomeScore}}</span></label>
 							<div id="income" class="scroll-divs" ng-repeat="emp in objectSet.oAppReq.oReq.oApplicant.aEmpl">
-								<div class="list-group-item" ng-if="emp.dGrossSal!=0">
+								<!-- <div class="list-group-item" ng-if="emp.dGrossSal!=0">
 									<span>Gross Annual : {{ emp.dGrossSal | rupee:"&#x20B9; "}}</span>
-								</div>
-								<div class="list-group-item" ng-if="emp.dGrossSal==0">
+								</div> -->
+								<div class="list-group-item" ng-if="emp.sConst.toUpperCase()=='SELF-EMPLOYED'">
 									<span>IT Amount : {{emp.dItrAmt}}</span> 
 								</div>
-								<div class="list-group-item">
+								<div class="list-group-item" ng-if="emp.sConst.toUpperCase()!='SELF-EMPLOYED'">
 									<span ng-if="emp.dmonthSal != 0">Monthly Income : {{emp.dmonthSal | rupee:"&#x20B9; "}}</span>
 										<span ng-if="emp.dmonthSal == 0">Yearly Income : {{emp.dGrossSal | rupee:"&#x20B9; "}}</span>
 								</div>
@@ -451,16 +451,15 @@ font-size:14px;}
 							</div>
 						</div>
 						<div style="position: absolute; background: #fff; width: 87%; margin: 2px; bottom: 8px;height: 50px;">
-							<a>
-								<img alt="CIBIL CIR" ng-if="objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]['PDF REPORT']"
-										name="{{pdf}}" data-toggle="modal"
-										data-target="#myModalnew" 
+							<a> <!-- ng-click="showimage()" -->
+								<img alt="CIBIL CIR" ng-if="objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]['PDF REPORT']" name="{{pdf}}" data-ng-click="showimage(pdfData,!isImg)"
 										class="custom_img_rounded Report-Icon"
 										src="images/cibil_logo.png"></a> 
+
+<!--  data-toggle="modal" data-target="#myModalnew"  -->
 							<a style="float: right;"><span ng-show="objectSet.oCompRes.scoringServiceResponse['SCORE-DATA'].STATUS != 'ERROR' && objectSet.oCompRes.scoringServiceResponse['SCORE-DATA'].STATUS != null"
 										style="display: block; margin: 13px 8px;"
-										ng-click="scoreTree()"
-										data-toggle="modal" data-target="#treeModal">App Score :
+										ng-click="scoreTree()">App Score :
 										{{objectSet.oCompRes.scoringServiceResponse.SCORE_TREE.AppScore}}</span></a>
 							</div>
 						</div>
@@ -488,7 +487,7 @@ font-size:14px;}
 										<span>Price : {{asset.sPrice}}</span>
 									</div>
 								</div>
-								<div  ng-if="objectSet.oAppReq.oReq.oApplication.sLnPurp!=null">
+								<div ng-if="objectSet.oAppReq.oReq.oApplication.sLnPurp">
 									<div class="list-group-item" style="border-top: 2px solid rgb(221, 221, 221);">
 										<span>Purpose : {{objectSet.oAppReq.oReq.oApplication.sLnPurp}}</span>
 									</div>
@@ -773,7 +772,7 @@ font-size:14px;}
 		</div>
 	</div>
 	
-	<div id="checkConfirmation" class="modal fade">
+<!-- 	<div id="checkConfirmation" class="modal fade">
 		<div id="confirm-title" class="modal-header btn-danger" style="padding: 6px 12px;">
 			<h4 class="modal-title">Are you Sure...?</h4>
 		</div>
@@ -784,4 +783,4 @@ font-size:14px;}
     		<button type="button" data-dismiss="modal" class="btn btn-danger" id="saveLosData">Ok</button>
     		<button type="button" data-dismiss="modal" class="btn btn-info">Cancel</button>
   		</div>
-	</div>
+	</div> -->
