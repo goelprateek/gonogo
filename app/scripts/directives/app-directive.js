@@ -123,29 +123,29 @@
 	});
 
 	// directives from simdirecctive.js (Piyush) (need to disccuss why need all these)
-	app.directive('policy', function() {
-	    var directive = {};
+	// app.directive('policy', function() {
+	//     var directive = {};
 
-	    directive.restrict = 'E'; 
-	    directive.templateUrl = 'views/templates/policy-outcome.html';
-	    return directive;
-	});
+	//     directive.restrict = 'E'; 
+	//     directive.templateUrl = 'views/templates/policy-outcome.html';
+	//     return directive;
+	// });
 
-	app.directive('score', function() {
-	    var directive = {};
+	// app.directive('score', function() {
+	//     var directive = {};
 
-	    directive.restrict = 'E'; 
-	    directive.templateUrl = 'views/templates/score-rule.html';
-	    return directive;
-	});
+	//     directive.restrict = 'E'; 
+	//     directive.templateUrl = 'views/templates/score-rule.html';
+	//     return directive;
+	// });
 
-	app.directive('matrix', function() {
-	    var directive = {};
+	// app.directive('matrix', function() {
+	//     var directive = {};
 
-	    directive.restrict = 'E'; /* restrict this directive to elements */
-	    directive.templateUrl = 'views/templates/matrix.html';
-	    return directive;
-	});
+	//     directive.restrict = 'E'; /* restrict this directive to elements */
+	//     directive.templateUrl = 'views/templates/matrix.html';
+	//     return directive;
+	// });
 	
 	
 	app.directive("customBackground",function(){

@@ -41,7 +41,7 @@
 				$scope.userid = userdata.userid;
 			}catch (e){
 				console.log("ERROR GONOGO: "+e);
-				$scope.redirect();
+				$scope.logout();
 			}
 	
 			var instid=$scope.InstitutionID;

@@ -7,9 +7,15 @@
  var app = angular.module('gonogo');
 
 app.controller("PolicyController" , ['$scope','$rootScope', '$http', '$timeout', 
-'$filter', 'Rules', 'Policy', 'Score', 'Decision', 'Validation','APP_CONST','RestService',function($scope,$rootScope, $http, $timeout, 
-$filter, Rules, Policy, Score, Decision, Validation,APP_CONST,RestService) 
-{	
+'$filter', 'Rules', 'Policy', 'Score', 'Decision', 'Validation','APP_CONST','RestService','UserService',function($scope,$rootScope, $http, $timeout, 
+$filter, Rules, Policy, Score, Decision, Validation,APP_CONST,RestService,UserService) 
+{
+	var currentUser=UserService.getCurrentUser();
+
+	if(currentUser.id){
+		$scope.$emit('onSuccessfulLogin', { message: "Hi" });
+	}
+
 	var dataset ={'master': []}; 
 	var colorList = ['#689f38','#EF3D16','#fb8c00','#8BC34A','#2196F3','#9C27B0','#bdbdbd','#009688','#ffc107','#689f38'];
 	var categoryFlag=false, attributeFlag=false, FDataTypesUpdtd=[],FTypes=[], Fname=[], Dname=[],itemcount = 0,error;

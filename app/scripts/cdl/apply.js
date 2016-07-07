@@ -184,6 +184,7 @@
 			console.log("Asset Category Response:");
 			console.log(data);
 			$scope.assetArray=data;
+			$scope.assetMake(data[0]);
 
 		try{
 			if($scope.Response.oReq.oApplication.aAssetDetail[0].sAssetCtg !=undefined && $scope.Response.oReq.oApplication.aAssetDetail[0].sAssetCtg !=null)
@@ -221,7 +222,8 @@
 		{ $scope.makeTags=[];
 				
 			$scope.makeTags = data;
-			$scope.mk = data[0];
+			// $scope.mk = data[0];
+			$scope.assetModel($scope.assetCategory,data[0]);
 			try{
 			if($scope.Response.oReq.oApplication.aAssetDetail[0].sAssetCtg !=undefined && $scope.Response.oReq.oApplication.aAssetDetail[0].sAssetCtg !=null)
 			{
@@ -863,6 +865,7 @@ $scope.changeEvent=function(type,val)
 		 }else{
 			 $("#wrketype").val("Select").removeAttr("disabled");
 			 $("#wrketype option[value='SELF-EMPLOYED']").hide();
+			 $scope.wrketype="";
 		 }
 		break;
 	case "WRKTYPE":
@@ -1469,7 +1472,7 @@ $scope.submitApplication=function(UrlKey)
 	$scope.asset.aAssetDetail.push($scope.asset1);
 	
 	$scope.emp={"aEmpl":[]};
-	$scope.emp1={"sConst": $("#constitution").val(),"sEmplName":$("#wrkename").val(),"sEmplType":$("#wrketype").val(),
+	$scope.emp1={"sConst": $("#constitution").val(),"sEmplName":$("#wrkename").val(),"sEmplType":$scope.wrketype,
 			"iTmWithEmplr":$("#wrktwe").val(),"dmonthSal":$("#wrkLstMnthSal").val().replace(/,/g,""),"dGrossSal":"",
 			"dItrAmt":$("#wrkGrsAnnual").val().replace(/,/g,"")};
 	$scope.emp.aEmpl.push($scope.emp1);
@@ -2227,11 +2230,12 @@ $scope.scmService = function(key){
 }
 
 // to set the emi and other value for selected scheme
-$('#scheme').on('autocompleteselect', function (e, ui) 
+// $('#scheme').on('autocompleteselect', function (e, ui) 
+$scope.selectScheme =function(ui)
 {	$scope.SchemeObject = "";
 	for(var Object of $scope.allSchemes)
 		{
-		 if(Object.sSchDes==ui.item.value)
+		 if(Object.sSchDes==ui)
 			 {
 			 	$scope.SchemeObject=Object;
 //			 	console.log("$scope.SchemeObject : "+ JSON.stringify($scope.SchemeObject));
@@ -2283,7 +2287,7 @@ $('#scheme').on('autocompleteselect', function (e, ui)
 	$("#emi").val(temi).siblings("help").show();
 //	$("#mrgnMny").val(tmrgnMny).prev().show();
 	$("#prcsfee").val( Math.ceil($scope.SchemeObject.sMinAmt)).siblings("help").show();
-});
+};
 
 $("#astCst").keyup(function(){
 	var tmrgnMny;
@@ -2655,7 +2659,8 @@ $scope.resetStatus=function(){
                    'transform': transform,
                    '-moz-transform': transform,
                    '-webkit-transform': transform,
-                   'font-size': $scope.radius/2 + 'px'
+                   'font-size': $scope.radius + 'px',
+                    'color':'#24A1ED'
                };
            };
            var getPadded = function(val){

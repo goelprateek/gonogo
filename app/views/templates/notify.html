@@ -181,7 +181,7 @@ font-size:14px;}
 </style>
 
 
-<div id="notification_tmp" ng-controller="NotifController" ng-cloak>
+<div id="notification_tmp" data-ng-controller="NotifController" ng-cloak>
 	<div class="col-md-12" contextmenu="blur">
 		<div class="col-md-10 col-md-offset-1" style="padding-right: 0px;">
 			<div class="col-md-2" id="application_process" style="min-width: inherit;">
@@ -203,17 +203,17 @@ font-size:14px;}
 							<li><span ng-show="showrefid"
 								style="margin-top: 13px; display: block;"> 
 								<a href="javascript:;" ng-click="newApplication()">{{objectSet.oAppReq.sRefID}}</a></span></li>
-							<li><a id="dsa_chat" ng-if="authenticate('NCHAT')">DSA Chat</a></li>
+							<li><a id="dsa_chat" ng-if="can('NCHAT')">DSA Chat</a></li>
 							<li ><a id="onhold" title="{{objectSet.oAppReq.sRefID}}"
-								ng-if="authenticate('NHOLD')"  
+								ng-if="can('NHOLD')"  
 								ng-click='cro_action(objectSet.oAppReq.oHeader.sAppID, "OnHold")'>OnHold</a><!-- 27 -->
 							</li>
 							<li ><a id="approve" title="{{objectSet.oAppReq.sRefID}}"
-								ng-if="authenticate('NAPPROVE')"
+								ng-if="can('NAPPROVE')"
 								ng-click='cro_action(objectSet.oAppReq.oHeader.sAppID, "Approved")'>Approve</a>
 							</li>
 							<li ><a id="decline" title="{{objectSet.oAppReq.sRefID}}"
-								ng-if="authenticate('NDECLINE')"
+								ng-if="can('NDECLINE')"
 								ng-click='cro_action(objectSet.oAppReq.oHeader.sAppID, "Declined")'>Decline</a>
 							</li>
 							<!-- <li ><a id="accept" title="{{refID}}"
@@ -263,8 +263,8 @@ font-size:14px;}
 								<div class="status" id="{{user.sAppId}}" ng-model="user.sAppId"
 									ng-class="{Pending: user.sStat.toUpperCase() == 'ONHOLD', Approved: user.sStat.toUpperCase() == 'APPROVED', Declined:user.sStat.toUpperCase()== 'DECLINED'} "style="margin-top: 2px"></div>
 								<div class="notify-time" style="position: absolute;right: 7px;width:32%;margin-right: 3%;font-size: 12px">{{user.dtDateTime | dateFormat }}</div>
-								<div class="property_location" style="font-size: 10px;  min-width: 60px;" ng-if="user.sStage!=null && !authenticate('NCROQUE')">{{user.sStage}}</div>
-								<div class="processedBy" ng-if="!authenticate('NCROQUE') && user.sProcBy.toUpperCase()!='DEFAULT'&& user.sProcBy.toUpperCase()!='ERROR'" style="font-size: 10px;left:105px">{{user.sProcBy.toUpperCase()=='STA'?'STP':user.sProcBy.toUpperCase()}}</div>
+								<div class="property_location" style="font-size: 10px;  min-width: 60px;" ng-if="user.sStage!=null && !can('NCROQUE')">{{user.sStage}}</div>
+								<div class="processedBy" ng-if="!can('NCROQUE') && user.sProcBy.toUpperCase()!='DEFAULT'&& user.sProcBy.toUpperCase()!='ERROR'" style="font-size: 10px;left:105px">{{user.sProcBy.toUpperCase()=='STA'?'STP':user.sProcBy.toUpperCase()}}</div>
 								<div class="property_amount" style="    right: 11%;">{{user.dloanAmt | currency:"&#x20B9; "}}</div>
 							</div>
 						</div>
@@ -272,7 +272,7 @@ font-size:14px;}
 				</div>
 			</div>
 <!-- 	userid!='37' -->
-			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden;padding-right: 0px; max-height: 640px;" ng-if="authenticate('NCONTAINER')"> <!-- NCONTAINER  ng-show="{{userid != '494'}}"-->
+			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden;padding-right: 0px; max-height: 640px;" ng-if="can('NCONTAINER')"> <!-- NCONTAINER  ng-show="{{userid != '494'}}"-->
 				<ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;    height: 38px;   width:98%;">
  				    <li  class="active" style=" margin-top: 7px;"><a id="applicant" style="padding: 6px 10px;font-weight: bold; font-size: 13px;">Applicant</a></li>
 					<select class="form-control" id="dedupe1" ng-if="objectSet.aDeDupe!=''" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
@@ -291,7 +291,7 @@ font-size:14px;}
 									<span>Name : <span >{{name}}
 
 									</span></span></div>
-								<div class="list-group-item"><span>D.O.B : {{objectSet.oAppReq.oReq.oApplicant.sDob | dateFilter}}</span></div>
+								<div class="list-group-item"><span>D.O.B : {{dob | dateFilter}}</span></div>
 
 								<div class="list-group-item" ng-repeat="data in objectSet.oAppReq.oReq.oApplicant.aPhone" ng-if="data.sPhoneType=='PERSONAL_MOBILE' || data.sPhoneType=='Personal Mobile'">
 									<span >Mobile : {{data.sPhoneNumber}}
@@ -585,7 +585,7 @@ font-size:14px;}
 				</div>
 			</div>
 <!-- 			scroll form for cro2 -->
-			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden; max-height: 640px;padding-right: 0px;" ng-if="!authenticate('NCONTAINER')"> <!-- 28 --> <!-- NOT NCONTAINER -->
+			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden; max-height: 640px;padding-right: 0px;" ng-if="!can('NCONTAINER')"> <!-- 28 --> <!-- NOT NCONTAINER -->
 				<ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;    height: 38px;   width: 98%;">
  				    <li  class="active" style=" margin-top: 7px;"><a id="applicant" style="padding: 6px 10px;font-weight: bold; font-size: 13px;">Applicant</a></li>
  
