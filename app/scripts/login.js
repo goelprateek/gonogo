@@ -81,7 +81,7 @@
 					if (data.STATUS == "SUCCESS") {
 
 						if (data.USER_DETAILS.length > 0) {
-							actions = data.ACTION;
+							
 							var details = data.USER_DETAILS[0];
 							var listvalues = {
 								'name': details.USER_NAME,
@@ -106,13 +106,11 @@
 							UserService.persistDataTolocalStorage('DEALERS', btoa(JSON.stringify(data.DEALERS)));
 							UserService.persistDataTolocalStorage('ROLES', btoa(JSON.stringify(data.ROLES)));
 							UserService.persistDataTolocalStorage('DETAILS', btoa(JSON.stringify(data.USER_DETAILS)));
+							UserService.persistDataTolocalStorage('ACTIONS', btoa(JSON.stringify(data.ACTION)))
 
-							if (!_.isUndefined(actions)) {
-								router(data);
-
+							if (!_.isUndefined(data.ACTION)) {
+								router(data.ACTION);
 							}
-
-
 						} else {
 							$scope.alert = "Sorry ! User Details are not availeble.\n Please contact system admin";
 						}
@@ -128,10 +126,7 @@
 
 		// action contains {APPLICATION,NOTIFICATION}
 
-		function router(Response) {
-
-			UserService.persistDataTolocalStorage('actions', btoa(JSON.stringify(actions)))
-
+		function router(actions) {
 
 			if (_.contains(actions, 'APPLICATION') && !_.contains(actions, 'NOTIFICATION')) {
 

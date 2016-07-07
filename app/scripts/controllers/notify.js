@@ -332,14 +332,16 @@
 	
     });
 
-	app.controller('NotifController', ['$scope','$rootScope', 
-								'$timeout','Validation','$filter',
+	app.controller('NotifController', ['$scope','$rootScope', '$timeout','Validation','$filter',
 								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log',
                                 function($scope, $rootScope, $timeout,Validation,$filter,RestService,NotificationObject,UserService,AclService,
                                     $uibModal,SelectArrays,$log){
 	var user=UserService.getCurrentUser();
     $scope.can=AclService.can;
 
+    if(currentUser.id){
+        $scope.$emit('onSuccessfulLogin', { message: "Hi" });
+    }
 
     $scope.selectResidence = SelectArrays.getResidenceTypes();
 
@@ -407,9 +409,9 @@
 	$('#losStatusId1').val("");
 	$('#losId').val('');
 	$('#losId').css("border","1px solid #cfcfcf");
-	var offersAllowed = $scope.authenticate('NOFRS');
-	var crodefault = $scope.authenticate('NAPPDATADEF'); 
-	var croQueue = $scope.authenticate('NCROQUE'); 
+	var offersAllowed = AclService.can('NOFRS');
+	var crodefault = AclService.can('NAPPDATADEF'); 
+	var croQueue = AclService.can('NCROQUE'); 
 	var treeData = [], map;
 	$rootScope.template ="notification";
 	$scope.minVal = 0;
@@ -427,7 +429,7 @@
 	function polling(minimum) {
 		if($rootScope.template == "notification"){
 			if(!crodefault){
-				if($scope.userid=="599"){
+				if(user.id=="599"){
 					var json ={'sCroID':"STP_PL", 
 							'sInstID':user.institutionID, 
 							'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit }
@@ -436,7 +438,7 @@
 							'sInstID':user.institutionID,
 							'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit}
 				}
-			}else if($scope.userid=="586"){
+			}else if(user.id=="586"){
 				var json ={'sCroID':"PL_QUEUE", 
 						'sInstID':user.institutionID, 
 						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit }
@@ -997,7 +999,7 @@ $scope.cro_action = function(appID, action){
                             "sRefID":$scope.objectSet.oAppReq.sRefID,
                             'sHeader':{'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
                             'sInstID':$scope.InstitutionID,
-                            'sCroId':$scope.userid},
+                            'sCroId':user.id},
                             "sAppStat":"OnHold",
                             "aCroJustification":offerarray,
                             "aDedupeRefID": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : [])
@@ -1036,7 +1038,7 @@ $scope.cro_action = function(appID, action){
                          var json = {
                                     "sRefID":$scope.objectSet.oAppReq.sRefID,
                                     'sHeader':{'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
-                                    'sInstID':$scope.InstitutionID,'sCroId':$scope.userid},
+                                    'sInstID':$scope.InstitutionID,'sCroId':user.id},
                                     "sAppStat":"Declined",
                                     "aCroJustification":arrayDclnDesc, //not yet
                                     "aDedupeRefID ": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : [])
@@ -1085,7 +1087,7 @@ $scope.cro_action = function(appID, action){
                         });
                         var json={
                             'sHeader':{'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
-                            'sInstID':$scope.InstitutionID,'sCroId':$scope.userid},
+                            'sInstID':$scope.InstitutionID,'sCroId':user.id},
                             'sRefID':$scope.objectSet.oAppReq.sRefID,
                             'sAppStat':"Approved",
                             "aCroJustification":arrayApprvDesc,
@@ -1867,7 +1869,7 @@ function requestForStatus(json)
 		var arr=[];
 		var json=null;
 	    json={
-				'sHeader':{'sAppID':$scope.appltnID,'sInstID':user.institutionID,'sCroId':$scope.userid},
+				'sHeader':{'sAppID':$scope.appltnID,'sInstID':user.institutionID,'sCroId':user.id},
 				'sRefID':$scope.refID,
 				'sAppStat':"Approved",
 				"aCroJustification":arrayApprvDesc,
@@ -1894,7 +1896,7 @@ function requestForStatus(json)
 		var arr=[];
 		 var json = {
 					"sRefID":$scope.refID,
-					'sHeader':{'sAppID':$scope.appltnID,'sInstID':user.institutionID,'sCroId':$scope.userid},
+					'sHeader':{'sAppID':$scope.appltnID,'sInstID':user.institutionID,'sCroId':user.id},
 					"sAppStat":"Declined",
 					"aCroJustification":arrayDclnDesc, //not yet
 					"aDedupeRefID ": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : arr)
@@ -1952,7 +1954,7 @@ function requestForStatus(json)
     				         "sSourceID":"WEB",
     				         "sAppSource":"WEB",
     				         "sReqType":"JSON",
-    				         "sCroId":$scope.userid
+    				         "sCroId":user.id
     				    },
     				    "oLosDtls":{
     				        "sLosID":losId,
@@ -2677,14 +2679,12 @@ app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
          }
     };
 
-      $scope.closeDocument = function () {
+    $scope.closeDocument = function () {
         $uibModalInstance.dismiss('cancel');
       };
     }]);
 
-
-
-app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantFormObject",function($scope,RestService,refID,applicantFormObject){
+app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantFormObject","$uibModalInstance",function($scope,RestService,refID,applicantFormObject,$uibModalInstance){
     $scope.refID = refID;
     $scope.applicantFormObject = applicantFormObject;
     
@@ -2712,33 +2712,13 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
     $scope.tags = [];
 
     $scope.setTab = function(newTab){
-      $scope.tab = newTab;
+        $scope.tab = newTab;
     };
 
     $scope.isSet = function(tabNum){
-      return $scope.tab === tabNum;
+        return $scope.tab === tabNum;
     };
 
-    $scope.getTabStyle=function(pTab){
-        //console.log("pTab:"+pTab);
-        var val="";
-        if(pTab==$scope.tab){
-            //This tab is active
-            val={
-                    color:"white",
-                    background:$scope.getColor(pTab),
-                    outline:null
-                };
-        }else{
-            //This tab is not active
-            val={
-                    color:$scope.getColor(pTab),
-                    border:"1px solid "+$scope.getColor(pTab)
-                }
-        }
-        return val;
-    };
-    
     $scope.getTabStyle=function(pTab){
         //console.log("pTab:"+pTab);
         var val="";
@@ -2824,7 +2804,7 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
             });
         }else{
             var requestJson={
-                sWorkFlowConfig : {
+                oWorkFlowConfig : {
                     sGngRefId : $scope.refID,
                     aModuleConfig : reinitiateModules
                 },
@@ -2839,7 +2819,6 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
             });
         }
     };
-    
 }]);
 
 app.directive('selectRequired',function(){
@@ -2905,54 +2884,6 @@ app.directive('thisEarlierThan', function () {
             };
         }
     };
-});
-
-app.directive('updateCityState',function(RestService,BASE_URL_GNG,UserService){
-    return{
-        restrict: 'A',
-        require: 'ngModel',
-        scope : {
-            pin: '='
-        },
-        priority:2,
-        link: function(scope, elm, attrs, ngModelCtrl) {
-            if (attrs.type === 'radio' || attrs.type === 'checkbox') 
-                return;
-            
-            var pinJson ={"oHeader":{"sInstID":UserService.getCurrentUser().institutionID},"sQuery":'202521'}; 
-            
-            console.log(scope);
-            
-            scope.$watch('pin', function(newVal,oldVal){
-                console.log(newVal);
-                console.log(oldVal);
-            },true);
-            
-            var state,city;
-            RestService.saveToServer("pincode-details-web",pinJson).then(function(data){
-                
-                city = data.sCity || '';
-                state = data.sState || ""; 
-                
-                console.log(city);
-                
-                if(attrs.fetchModels){
-                    var array = attrs.fetchModels.split('|'),
-                    state = array[0],
-                    city = array[1];
-                    
-                }
-                
-            });
-        
-            console.log("element value: "+elm.val());
-            if(elm.val()!="" && elm.val().length==6){
-                
-            }else{
-                return;
-            }           
-        }
-    }
 });
 
 app.directive('changeOnBlur', function() {

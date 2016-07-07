@@ -1472,7 +1472,7 @@ $scope.submitApplication=function(UrlKey)
 	$scope.asset.aAssetDetail.push($scope.asset1);
 	
 	$scope.emp={"aEmpl":[]};
-	$scope.emp1={"sConst": $("#constitution").val(),"sEmplName":$("#wrkename").val(),"sEmplType":$("#wrketype").val(),
+	$scope.emp1={"sConst": $("#constitution").val(),"sEmplName":$("#wrkename").val(),"sEmplType":$scope.wrketype,
 			"iTmWithEmplr":$("#wrktwe").val(),"dmonthSal":$("#wrkLstMnthSal").val().replace(/,/g,""),"dGrossSal":"",
 			"dItrAmt":$("#wrkGrsAnnual").val().replace(/,/g,"")};
 	$scope.emp.aEmpl.push($scope.emp1);

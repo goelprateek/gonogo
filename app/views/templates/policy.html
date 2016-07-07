@@ -299,7 +299,7 @@ button:active {
 		   					</div>
 	   					</div>
 					<hr />
-				 <policy></policy>
+					<div ng-include="'template/PolicyOutcome.html'"></div>
 			    <br>		
 			    <div>
 			       <a class="add-button-div" ng-click="savePolicyData()" ng-if="!ViewMode">Update Policy</a>
@@ -343,7 +343,7 @@ button:active {
 						    <object id="bargraph" type="text/html" data="tree.html" width="100%" height="600px;" style="border:none;"></object>
 						  </div>
 					
-						<matrix></matrix>
+						<div ng-include="'template/matrix.html'"></div>
 	
 		<div class="row clearfix" id="Criteria_main_container" style="display: none;">
 		   <div class="col-md-12">		
@@ -520,9 +520,8 @@ button:active {
 		</div>
 
 <!-- **************************Common in Simulator************************* -->
-			<score></score>
+			<div ng-include="'template/ScorRule.html'"></div>
 <!-- ****************************End***************************************** -->
-
 
 		</div>
 		

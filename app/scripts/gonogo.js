@@ -30,6 +30,34 @@
 		$log.debug("hello this first log");
 		$log.error("hello this first log");
 
+		$scope.$on('onSuccessfulLogin', function (event, args) {
+//			$scope.keyarr = localStorage.getItem('LOGID');
+			var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
+//			console.log($scope.app+":"+$scope.notif+":"+$scope.policy);
+			var actions = JSON.parse(atob(localStorage.getItem('actions')));
+//			console.log(JSON.stringify(actions));
+			if(actions != null && actions.length!=0)
+			{ 
+				$scope.app=$.inArray('APPLICATION',actions ) > -1;
+				$scope.notif=$.inArray('NOTIFICATION',actions ) > -1;
+				$scope.policy=$.inArray('POLICY',actions ) > -1;
+				$scope.analytics=$.inArray('ANALYTCS',actions ) > -1;
+			}
+
+			$scope.username = userdata.name;
+			$scope.useremail = userdata.email;
+			$scope.image = userdata.userImage;	
+			$scope.instImage = userdata.instImage;
+			$scope.InstitutionID = userdata.InstitutionID;
+			$scope.userid = userdata.userid;
+			$scope.color = userdata.color;
+			
+			console.log("onSuccessfulLogin");
+		});
+
+		var currentUser=UserService.getCurrentUser();
+
+
 		$scope.isSpecificPage = function() {
 			var path;
 			return path = $location.path(),  _.contains(["/"], path) ;
@@ -56,6 +84,7 @@
 		var current_fs, next_fs, previous_fs;
 		var left, opacity, scale, animating, fieldsetn = 1;
 		var emailantigo, passval, error = 0, InError = 0;
+		var actions;
 
 
 //		var IEversion = Validation.checkBrowser();
@@ -71,21 +100,26 @@
 				var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
 			
 //				console.log($scope.app+":"+$scope.notif+":"+$scope.policy);
-				var actions = JSON.parse(atob(localStorage.getItem('actions')));
-//				console.log(JSON.stringify(actions));
-				if(actions != null && actions.length!=0)
-				{ $scope.app=$.inArray('APPLICATION',actions ) > -1;
-				$scope.notif=$.inArray('NOTIFICATION',actions ) > -1;
-				$scope.policy=$.inArray('POLICY',actions ) > -1;
-				$scope.analytics=$.inArray('ANALYTCS',actions ) > -1;
-				}
 
+				if(localStorage.getItem('ACTIONS'))
+				{
+					actions = JSON.parse(atob(localStorage.getItem('ACTIONS')));
+	//				console.log(JSON.stringify(actions));
+					if(actions != null && actions.length!=0)
+					{ 
+						$scope.app=$.inArray('APPLICATION',actions ) > -1;
+						$scope.notif=$.inArray('NOTIFICATION',actions ) > -1;
+						$scope.policy=$.inArray('POLICY',actions ) > -1;
+						$scope.analytics=$.inArray('ANALYTCS',actions ) > -1;
+					}
+				}
 				$scope.username = userdata.name;
 				$scope.useremail = userdata.email;
 				$scope.image = userdata.userImage;	
 				$scope.instImage = userdata.instImage;
 				$scope.InstitutionID = userdata.InstitutionID;
-				$scope.userid = userdata.userid; $scope.color = userdata.color;
+				$scope.userid = userdata.userid;
+				$scope.color = userdata.color;
 			}
 //			}catch (e) {
 //				$log.log(e);
@@ -96,14 +130,7 @@
 			}
 			//check authorization level of user
 			$scope.authenticate=function(element){
-
-				if(actions != null && actions.length != 0) { 
-					if($.inArray(element,actions ) > -1 == true) { 
-						return true;
-					}else  {	
-						return false;
-					}
-				}
+				return _.contains(actions,element);
 			};
 
 			// logout user and delete details
@@ -114,7 +141,7 @@
 				}
 				var URL ='logout';
 				RestService.saveToServer(URL,json).then(function(Response){
-					if(Response.status=="SUCCESS"){
+					if(Response.STATUS=="SUCCESS"){
 
 						localStorage.removeItem('GUID');
 						localStorage.removeItem('actions');
