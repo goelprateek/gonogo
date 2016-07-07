@@ -1625,9 +1625,7 @@ section.navbar-brand {
 	width: 63px;
 }
 
-
-.thumbnail-box {
-	min-width: 150px;
+.onhold  .thumbnail-box {
 	min-height: 145px;
 	border-left: 1px solid rgb(236, 236, 236);
 	border-bottom: 1px solid rgb(236, 236, 236);
@@ -1635,6 +1633,7 @@ section.navbar-brand {
 	padding: 15px;
 	color: #878C92;
 	filter: blur(0px);
+	width: 20%;
 }
 
 .thumbnail-box img {
