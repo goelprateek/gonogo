@@ -26,37 +26,33 @@
 
 	app.controller("Maincontroller",['$scope', '$log', 'notifier' ,'Validation', '$timeout','RestService','$location','UserService','APP_CONST','AclService',function($scope, $log, notifier ,Validation, $timeout,RestService,$location,UserService,APP_CONST,AclService) {
 
-		$log.info("hello this first log");
-		$log.debug("hello this first log");
-		$log.error("hello this first log");
+		//$log.info("hello this first log");
+		//$log.debug("hello this first log");
+		//$log.error("hello this first log");
 
 		$scope.$on('onSuccessfulLogin', function (event, args) {
-//			$scope.keyarr = localStorage.getItem('LOGID');
-			var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
-//			console.log($scope.app+":"+$scope.notif+":"+$scope.policy);
-			var actions = JSON.parse(atob(localStorage.getItem('actions')));
-//			console.log(JSON.stringify(actions));
-			if(actions != null && actions.length!=0)
-			{ 
-				$scope.app=$.inArray('APPLICATION',actions ) > -1;
-				$scope.notif=$.inArray('NOTIFICATION',actions ) > -1;
-				$scope.policy=$.inArray('POLICY',actions ) > -1;
-				$scope.analytics=$.inArray('ANALYTCS',actions ) > -1;
+
+			var currentUser=UserService.getCurrentUser();
+
+			if(!_.isUndefined(currentUser.id) )
+			{
+				if(currentUser.actions && currentUser.actions.length!=0)
+				{ 
+					$scope.app=_.contains(currentUser.actions,'APPLICATION' );
+					$scope.notif=_.contains(currentUser.actions,'NOTIFICATION');
+					$scope.policy=_.contains(currentUser.actions,'POLICY' );
+					$scope.analytics=_.contains(currentUser.actions,'ANALYTCS');
+				}
+
+				$scope.username = currentUser.username;
+				$scope.useremail = currentUser.useremail;
+				$scope.image = currentUser.image;	
+				$scope.instImage = currentUser.instImage;
+				$scope.InstitutionID = currentUser.InstitutionID;
+				$scope.userid = currentUser.userid;
+				$scope.color = currentUser.color;
 			}
-
-			$scope.username = userdata.name;
-			$scope.useremail = userdata.email;
-			$scope.image = userdata.userImage;	
-			$scope.instImage = userdata.instImage;
-			$scope.InstitutionID = userdata.InstitutionID;
-			$scope.userid = userdata.userid;
-			$scope.color = userdata.color;
-			
-			console.log("onSuccessfulLogin");
 		});
-
-		var currentUser=UserService.getCurrentUser();
-
 
 		$scope.isSpecificPage = function() {
 			var path;
@@ -77,7 +73,7 @@
 
 			RestService.postDataWithHeaders(APP_CONST.getConst('BASE_URL_GNG')+'logout',json);
 
-			UserService.cleanUpUserDeatails();
+			UserService.cleanUpUserDetails();
 			$location.path(APP_CONST.getConst('APP_CONTEXT'));
 		};
 
@@ -85,7 +81,6 @@
 		var left, opacity, scale, animating, fieldsetn = 1;
 		var emailantigo, passval, error = 0, InError = 0;
 		var actions;
-
 
 //		var IEversion = Validation.checkBrowser();
 //		if (IEversion.valid != true) {
@@ -95,31 +90,25 @@
 //		else {
 //			try {
 //				$scope.keyarr = localStorage.getItem('LOGID');
-			if(localStorage.getItem('GUID'))
-			{
-				var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
-			
-//				console.log($scope.app+":"+$scope.notif+":"+$scope.policy);
+			var currentUser=UserService.getCurrentUser();
 
-				if(localStorage.getItem('ACTIONS'))
-				{
-					actions = JSON.parse(atob(localStorage.getItem('ACTIONS')));
-	//				console.log(JSON.stringify(actions));
-					if(actions != null && actions.length!=0)
-					{ 
-						$scope.app=$.inArray('APPLICATION',actions ) > -1;
-						$scope.notif=$.inArray('NOTIFICATION',actions ) > -1;
-						$scope.policy=$.inArray('POLICY',actions ) > -1;
-						$scope.analytics=$.inArray('ANALYTCS',actions ) > -1;
-					}
+			if(!_.isUndefined(currentUser.id) )
+			{
+				if(currentUser.actions && currentUser.actions.length!=0)
+				{ 
+					$scope.app=_.contains(currentUser.actions,'APPLICATION' );
+					$scope.notif=_.contains(currentUser.actions,'NOTIFICATION');
+					$scope.policy=_.contains(currentUser.actions,'POLICY' );
+					$scope.analytics=_.contains(currentUser.actions,'ANALYTCS');
 				}
-				$scope.username = userdata.name;
-				$scope.useremail = userdata.email;
-				$scope.image = userdata.userImage;	
-				$scope.instImage = userdata.instImage;
-				$scope.InstitutionID = userdata.InstitutionID;
-				$scope.userid = userdata.userid;
-				$scope.color = userdata.color;
+
+				$scope.username = currentUser.username;
+				$scope.useremail = currentUser.useremail;
+				$scope.image = currentUser.image;	
+				$scope.instImage = currentUser.instImage;
+				$scope.InstitutionID = currentUser.InstitutionID;
+				$scope.userid = currentUser.userid;
+				$scope.color = currentUser.color;
 			}
 //			}catch (e) {
 //				$log.log(e);
@@ -132,31 +121,6 @@
 			$scope.authenticate=function(element){
 				return _.contains(actions,element);
 			};
-
-			// logout user and delete details
-			$scope.redirect = function() {
-				var json ={
-						"sInstID": $scope.InstitutionID,
-						"sUserID": $scope.userid
-				}
-				var URL ='logout';
-				RestService.saveToServer(URL,json).then(function(Response){
-					if(Response.STATUS=="SUCCESS"){
-
-						localStorage.removeItem('GUID');
-						localStorage.removeItem('actions');
-						localStorage.removeItem('DEALERS');
-						localStorage.removeItem('ROLES');
-						localStorage.removeItem('DETAILS');
-						var url = "/";
-						$(location).attr('href',url);
-
-					}else{
-
-						console.log("Request failed");
-					}
-				});	
-			}
 
 			var availeblecity = [ {
 				label : "Kolhapur",

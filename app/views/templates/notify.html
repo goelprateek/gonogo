@@ -181,7 +181,7 @@ font-size:14px;}
 </style>
 
 
-<div id="notification_tmp" ng-cloak>
+<div id="notification_tmp" data-ng-controller="NotifController" ng-cloak>
 	<div class="col-md-12" contextmenu="blur">
 		<div class="col-md-10 col-md-offset-1" style="padding-right: 0px;">
 			<div class="col-md-2" id="application_process" style="min-width: inherit;">
@@ -291,7 +291,7 @@ font-size:14px;}
 									<span>Name : <span >{{name}}
 
 									</span></span></div>
-								<div class="list-group-item"><span>D.O.B : {{objectSet.oAppReq.oReq.oApplicant.sDob | dateFilter}}</span></div>
+								<div class="list-group-item"><span>D.O.B : {{dob | dateFilter}}</span></div>
 
 								<div class="list-group-item" ng-repeat="data in objectSet.oAppReq.oReq.oApplicant.aPhone" ng-if="data.sPhoneType=='PERSONAL_MOBILE' || data.sPhoneType=='Personal Mobile'">
 									<span >Mobile : {{data.sPhoneNumber}}

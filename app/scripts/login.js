@@ -3,8 +3,8 @@
 
 	var app = angular.module("gonogo.login", []);
 
-	app.controller("loginController", ['$scope', '$rootScope', '$cookies', 'RestService', 'APP_CONST', 'UserService','HttpService', 
-	function ($scope, $rootScope, $cookies, RestService, APP_CONST, UserService, HttpService) {
+	app.controller("loginController", ['$scope', '$rootScope', '$cookies', 'RestService', 'APP_CONST', 'UserService', 
+	function ($scope, $rootScope, $cookies, RestService, APP_CONST, UserService) {
 
 
 
@@ -65,16 +65,9 @@
 					$cookies.put('RMID', btoa($scope.login.userName), { 'expires': expireDate });
 				}
 
-				UserService.cleanUpUserDeatails();
+				UserService.cleanUpUserDetails();
 
 				var _data = { 'userName': $scope.login.userName, 'password': SHA1($scope.login.password) };
-
-				HttpService.post("login-web",_data).then(function(){
-					console.log("Hey there");
-				},function(err){
-					console.error("Error occured. Err "+err);
-					throw err;
-				})
 
 				RestService.saveToServer("login-web", _data).then(function (data) {
 

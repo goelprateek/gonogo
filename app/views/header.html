@@ -1,64 +1,64 @@
 <header class="clearfix">
 	<div class="clearfix" data-ng-if ="InstitutionID != '4011'">
-			<div class="col-md-12 column" id="header">
-				<nav class="navbar navbar-default" role="navigation">
-					
-					<div class="navbar-header">
-						<button type="button" class="navbar-toggle" data-toggle="collapse"
-							data-target="#bs-example-navbar-collapse-1">
-							<span class="sr-only">Toggle navigation</span><span
-								class="icon-bar"></span><span class="icon-bar"></span><span
-								class="icon-bar"></span>
-						</button>
+		<div class="col-md-12 column" id="header">
+			<nav class="navbar navbar-default" role="navigation">
+				
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse"
+						data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span><span
+							class="icon-bar"></span><span class="icon-bar"></span><span
+							class="icon-bar"></span>
+					</button>
 
-					</div>
-					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-						<ul class="nav navbar-nav navbar-right">
-							<li>
-								 <a href="Hdbfs_CDL/Application.html"  id="applicationLink" title="{{app}}" ng-if="  InstitutionID=='4019' && app">Application
-								 </a>
-							 </li>
-							<li>
-								<a href="#dmiapplication" id="applicationLink" title="{{app}}" ng-if="InstitutionID=='4020' && app">Application</a>
-							</li>
-							<li>
-								<a href="#notification"  id="notificationLink" title="{{notif}}" ng-if="InstitutionID!='4019' && notif">Notification</a>
-							</li>
-							<li>
-								<a href="#hdbfsnotification"  id="notificationLink" title="{{notif}}" ng-if="InstitutionID=='4019' && notif">Notification</a>
-							</li>
-							<li>
-								<a href="#policy"  id="policy" title="{{policy}}" ng-show="policy" >Policy</a>
-							</li>
-							<li>
-								<a href="#analytics"  id="anlysis" title="{{analytics}}"  ng-show="analytics">Analytics</a>
-							</li>
+				</div>
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav navbar-right">
+						<li>
+							 <a href="Hdbfs_CDL/Application.html"  id="applicationLink" title="{{app}}" ng-if="  InstitutionID=='4019' && app">Application
+							 </a>
+						 </li>
+						<li>
+							<a href="#dmiapplication" id="applicationLink" title="{{app}}" ng-if="InstitutionID=='4020' && app">Application</a>
+						</li>
+						<li>
+							<a href="#notification"  id="notificationLink" title="{{notif}}" ng-if="InstitutionID!='4019' && notif">Notification</a>
+						</li>
+						<li>
+							<a href="#hdbfsnotification"  id="notificationLink" title="{{notif}}" ng-if="InstitutionID=='4019' && notif">Notification</a>
+						</li>
+						<li>
+							<a href="#policy"  id="policy" title="{{policy}}" ng-show="policy" >Policy</a>
+						</li>
+						<li>
+							<a href="#analytics"  id="anlysis" title="{{analytics}}"  ng-show="analytics">Analytics</a>
+						</li>
+						
+						<li >
+							<a href="javascript:;" class="img-circle" data-toggle="dropdown">
+							  <i class="fa fa-user" style="font-size:24px;"></i>
+							</a>	
+						 <!-- <img ng-src="{{image}}"  data-toggle="dropdown" alt="user Icon"
+							class="img-circle user_thumb" height="45px"> -->
 							
-							<li >
-								<a href="javascript:;" class="img-circle" data-toggle="dropdown">
-								  <i class="fa fa-user" style="font-size:24px;"></i>
-								</a>	
-							 <!-- <img ng-src="{{image}}"  data-toggle="dropdown" alt="user Icon"
-								class="img-circle user_thumb" height="45px"> -->
-								
-								<div class="dropdown-menu slideOutDown" id="logout_dropdown_panel">
-									<div class="profile_icon" style="float: left;"
-										ng-style="{'background-image':'url('+image+')'}">
-										<div id="change_thumb">Change photo</div>
-									</div>
-									<div class="user_data">
-										<label id="user_name" title="{{userid}}">{{username}}</label><!--  -->
-										<div class="copyright">{{useremail}}</div>
-										<a class="btn-primary" id="view_profile">View profile</a>
-									</div>
-									<div class="logout_footer">
-										<a data-ng-click="redirect()">LogOut</a>
-									</div>
+							<div class="dropdown-menu slideOutDown" id="logout_dropdown_panel">
+								<div class="profile_icon" style="float: left;"
+									ng-style="{'background-image':'url('+image+')'}">
+									<div id="change_thumb">Change photo</div>
 								</div>
-							  </li>
-						</ul>
-					</div>
-				</nav>
-			</div>
+								<div class="user_data">
+									<label id="user_name" title="{{userid}}">{{username}}</label><!--  -->
+									<div class="copyright">{{useremail}}</div>
+									<a class="btn-primary" id="view_profile">View profile</a>
+								</div>
+								<div class="logout_footer">
+									<a data-ng-click="logout()">LogOut</a>
+								</div>
+							</div>
+						  </li>
+					</ul>
+				</div>
+			</nav>
 		</div>
+	</div>
 </header>

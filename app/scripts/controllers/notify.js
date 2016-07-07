@@ -339,7 +339,7 @@
 	var user=UserService.getCurrentUser();
     $scope.can=AclService.can;
 
-    if(currentUser.id){
+    if(user.id){
         $scope.$emit('onSuccessfulLogin', { message: "Hi" });
     }
 
@@ -592,6 +592,17 @@
 			$scope.objectSet = NotificationObject.dummy();
 			
             $scope.Picked = CustID;
+
+            if($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob!=""){
+                $scope.dob = $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)+"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4)+"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4);
+                var dateOfBirth=new Date();
+                dateOfBirth.setFullYear(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4)));
+                dateOfBirth.setDate(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)));
+                dateOfBirth.setMonth((parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4))-1));
+                
+                $scope.objectSet.oAppReq.oReq.oApplicant.sDob=dateOfBirth;
+            }
+
 			$scope.showrefid = "true";
 			$scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
 			var data = 	$scope.notifarray;
@@ -693,22 +704,24 @@
 			$scope.evidPresent=false;*/
 			
 		}).then(function(data){
-            
-          var objArray = _.map(_.pluck(data.aAppImgDtl, 'aImgMap'),function(data){
-                    return data;
-                });
 
-           var finalImageArray = _.flatten(_.each(objArray,function(val){
-                return _.each(val,function(val){
-                    return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
-                        if(!_.isUndefined(data) || !_.isNull(data)){
-                            val["sByteCode"] = "data:image/png;base64,"+data.sByteCode;    
-                        }
+            if(data){            
+                var objArray = _.map(_.pluck(data.aAppImgDtl, 'aImgMap'),function(data){
+                        return data;
                     });
-                });
-             }));
 
-           $scope.imageDataArray =  finalImageArray;
+                var finalImageArray = _.flatten(_.each(objArray,function(val){
+                    return _.each(val,function(val){
+                        return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
+                            if(!_.isUndefined(data) || !_.isNull(data)){
+                                val["sByteCode"] = "data:image/png;base64,"+data.sByteCode;    
+                            }
+                        });
+                    });
+                }));
+
+                $scope.imageDataArray =  finalImageArray;
+            }
         });
  }
 
@@ -2930,7 +2943,10 @@ app.directive("whenScrolled",function(){
 
 app.filter('dateFilter', function() {
     return function(date){
-        var result = date.slice(0,2)+"/"+date.slice(2,4)+"/"+date.slice(4,8);
+        var result="";
+        if(date && date!=""){
+            result = date.slice(0,2)+"/"+date.slice(3,5)+"/"+date.slice(6,10);
+        }
         return result;
     };
 });
