@@ -123,29 +123,29 @@
 	});
 
 	// directives from simdirecctive.js (Piyush) (need to disccuss why need all these)
-	app.directive('policy', function() {
-	    var directive = {};
+	// app.directive('policy', function() {
+	//     var directive = {};
 
-	    directive.restrict = 'E'; 
-	    directive.templateUrl = 'views/templates/policy-outcome.html';
-	    return directive;
-	});
+	//     directive.restrict = 'E'; 
+	//     directive.templateUrl = 'views/templates/policy-outcome.html';
+	//     return directive;
+	// });
 
-	app.directive('score', function() {
-	    var directive = {};
+	// app.directive('score', function() {
+	//     var directive = {};
 
-	    directive.restrict = 'E'; 
-	    directive.templateUrl = 'views/templates/score-rule.html';
-	    return directive;
-	});
+	//     directive.restrict = 'E'; 
+	//     directive.templateUrl = 'views/templates/score-rule.html';
+	//     return directive;
+	// });
 
-	app.directive('matrix', function() {
-	    var directive = {};
+	// app.directive('matrix', function() {
+	//     var directive = {};
 
-	    directive.restrict = 'E'; /* restrict this directive to elements */
-	    directive.templateUrl = 'views/templates/matrix.html';
-	    return directive;
-	});
+	//     directive.restrict = 'E'; /* restrict this directive to elements */
+	//     directive.templateUrl = 'views/templates/matrix.html';
+	//     return directive;
+	// });
 	
 	
 	app.directive("customBackground",function(){
@@ -211,6 +211,31 @@
 	            });
 	        }
 	    };
+	})
+
+	app.directive('replace', function() {
+	  return {
+	  	restrict:'A',
+	    require: 'ngModel',
+	    link: function(scope, element, attrs, model) {
+	      model.$parsers.push(function(val) {
+	        if (!val) { return ''; }
+	        var transformedInput = val.replace(/[^a-zA-Z0-9]/g, '');
+	         if (transformedInput !== val) {
+	                    model.$setViewValue(transformedInput);
+	                    model.$render();
+	                }
+	               return transformedInput;
+	      /*  var regex = new RegExp(scope.regex);
+	        var replaced = val.replace(regex, scope.with); 
+	        if (replaced !== val) {
+	          model.$setViewValue(replaced);
+	          model.$render();
+	        }         
+	        return replaced;  */       
+	      });
+	    }
+	  };
 	});
 
 }).call(this)

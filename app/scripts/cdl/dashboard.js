@@ -10,7 +10,7 @@ app.controller('DecisionViewController', function ($scope,$uibModalInstance, dat
 //	 };
 });
 
-app.controller("DashboardController",["$scope","$filter",'sharedService','$location',"$uibModal",'APP_CONST',"RestService",function($scope,$filter,sharedService,$location,$uibModal,APP_CONST,RestService){
+app.controller("DashboardController",["$scope","$filter",'sharedService','$location',"$uibModal",'APP_CONST',"RestService","UserService",function($scope,$filter,sharedService,$location,$uibModal,APP_CONST,RestService,UserService){
 	$scope.applicationList="ApplicationList";
 	$scope.duration="LastYear";
 	$scope.dashboardResult=[];
@@ -26,33 +26,27 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 	$scope.fetchDashboardList=function(){
 		//alert("Search String: "+$scope.searchText+" Duration: "+$scope.duration);
 		
-		try {
-//	 		$scope.keyarr = localStorage.getItem('LOGID');
-			var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
-			console.log("Localstage data : ");
-			console.log(userdata);
-			$scope.username = userdata.name;
-			$scope.useremail = userdata.email;
-			$scope.image = userdata.userImage;
-			$scope.instImage = userdata.instImage;
-			$scope.InstitutionID = userdata.InstitutionID;
-			$scope.userid = userdata.userid;
-			$scope.color = userdata.color;
-			$scope.ePassword = userdata.ePassword;
-			$scope.dealerArr=JSON.parse(atob(localStorage.getItem('DEALERS')));
-			$scope.ROLE=JSON.parse(atob(localStorage.getItem('ROLES')));
-			var actions = JSON.parse(atob(localStorage.getItem('actions')));
-//			console.log(JSON.stringify(actions));
-			if(actions != null && actions.length!=0)
-			{ $scope.app=$.inArray('APPLICATION',actions ) > -1;
-			  $scope.notif=$.inArray('NOTIFICATION',actions ) > -1;
-			  $scope.policy=$.inArray('POLICY',actions ) > -1;
-			  $scope.analytics=$.inArray('ANALYTCS',actions ) > -1;
+	var currentUser=UserService.getCurrentUser();
+
+		if(!_.isUndefined(currentUser.id) )
+		{
+			if(currentUser.actions && currentUser.actions.length!=0)
+			{ 
+				$scope.app=_.contains(currentUser.actions,'APPLICATION' );
+				$scope.notif=_.contains(currentUser.actions,'NOTIFICATION');
+				$scope.policy=_.contains(currentUser.actions,'POLICY' );
+				$scope.analytics=_.contains(currentUser.actions,'ANALYTCS');
 			}
-//			console.log(JSON.stringify(userdata));
-		}catch (e){
-			console.log("ERROR GONOGO: "+e);
-			$scope.redirect();
+
+			$scope.username = currentUser.username;
+			$scope.useremail = currentUser.useremail;
+			$scope.image = currentUser.image;	
+			$scope.instImage = currentUser.instImage;
+			$scope.InstitutionID = currentUser.InstitutionID;
+			$scope.userid = currentUser.userid;
+			$scope.color = currentUser.color;
+		}else{
+			$location.path(APP_CONST.getConst('APP_CONTEXT'));
 		}
 		
 //		alert($scope.useremail.toLowerCase());
@@ -63,6 +57,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 //			alert("Moving to root");
 			$location.path("/");
 		}
+
 		$scope.query   = $scope.searchText;
 		
 		var todayStr = $filter('date')(new Date(),'yyyy-MM-dd');

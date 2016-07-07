@@ -6,9 +6,9 @@
 
 	app.factory("APP_CONST", function () {
 		var END_POINT = {
-			//BASE_URL_GNG : "http://172.26.1.211:9090/GoNoGo/",
-		    BASE_URL_GNG : "http://gng.softcell.in/GoNoGo/",
+			// BASE_URL_GNG : "http://172.26.1.211:9090/GoNoGo/",
 
+		    BASE_URL_GNG : "http://gng.softcell.in/GoNoGo/",
 			BASE_URL_SCORE:'http://gng.softcell.in/AppScoringV2Git/api/ScoringV3/',
 			BASE_URL_DEMO: 'http://gng.softcell.in/GoNoGoV3/api/GoNoGoV3/',
 			BASE_URL_DMI: 'http://gng.softcell.in/gonogo_dmi/',
@@ -21,34 +21,6 @@
 			}
 		}
 	});
-
-	app.service("HttpService", ['$q', '$http', '$log', 'APP_CONST', function ($q, $http, $log, APP_CONST) {
-		var get = function (url) {
-			var defere = $q.defered();
-
-			$http.get(url).success(function (resp) {
-				$log.debug(resp);
-				defere.resolve(resp);
-			}).error(function (error) {
-				$log.error(error);
-				defere.resolve(error);
-			})
-			return defere.promise;
-		}
-		var post = function (url, data) {
-			var defer = $q.defer();
-			$http.post(url, data).success(function (response) {
-				defer.resolve(response);
-			}).error(function (error) {
-				defer.reject(error);
-			})
-			return defer.promise;
-		}
-		return {
-			get: get,
-			post: post
-		}
-	}])
 
 	app.service("RestService", ['$q', '$http', '$log', 'APP_CONST', function ($q, $http, $log, APP_CONST) {
 
@@ -180,7 +152,6 @@
 				user.color = userdata.color;
 				//user.ePassword = userdata.ePassword;
 
-
 				var dealers = localStorage.getItem('DEALERS');
 				if (dealers) {
 					user.dealers = JSON.parse(atob(dealers));
@@ -190,10 +161,33 @@
 				if (currentDealer) {
 					user.dealer = JSON.parse(atob(currentDealer));
 				}
+				
+				//user.roles = localStorage.getItem('ACTIONS');
 
+				if (user.useremail && user.useremail.indexOf("CRO1") > - 1) {
+					user.roles = ["CRO1"];
+				}
 
-				if (user.useremail.indexOf("CRO1") > - 1) {
-					user.roles = ["CRO1"]
+				user.roles.push(user.id);
+
+				if (AclService.hasRole(user.id)) {
+		            AclService.removeRole(user.id);
+		        }
+				AclService.addRole(user.id);
+
+				if(localStorage.getItem('ACTIONS') ){
+
+					var actions=JSON.parse(atob(localStorage.getItem('ACTIONS')));
+
+					user.actions = actions;
+					_.each(actions,function(action){
+						if (AclService.hasResource(action)) {
+				           AclService.removeResource(action);
+				        }
+
+						AclService.addResource(action);
+						AclService.allow(user.id,action);
+					});
 				}
 
 				AclService.setUserIdentity(user);
@@ -204,13 +198,12 @@
 
 	    cleanupTask = function(){
 	    	localStorage.removeItem('GUID');
-			localStorage.removeItem('actions');
+			localStorage.removeItem('ACTIONS');
 			localStorage.removeItem('CURRENT_DEALER');
 			localStorage.removeItem('DEALERS');
 			localStorage.removeItem('ROLES');
 			localStorage.removeItem('DETAILS');
-	    }, 
-	    
+	    },	    
 
 	    persistTolocalStorage = function(propertyName, propertyValue){
 	    	localStorage.setItem(propertyName, propertyValue);
@@ -218,21 +211,20 @@
 	    
 	    return {
 	    	getCurrentUser:fetchCurrentUser,
-	    	cleanUpUserDeatails : cleanupTask,
+	    	cleanUpUserDetails : cleanupTask,
 	    	persistDataTolocalStorage : persistTolocalStorage
 	    };
-
  	}]);
 
  	app.run(["AclService",function(AclService){
 		AclService.addRole("4019");
 		AclService.addRole("CRO1");
-		
+
+		AclService.addResource("NCHAT");
 		AclService.addResource("Application");
 		
 		AclService.allow("CRO1","Application","Reinitiate");
 		AclService.allow("CRO1","Application","Update");
 	}]);
 
-}).call(this)
-
+}).call(this);

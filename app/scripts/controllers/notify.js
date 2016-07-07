@@ -332,14 +332,16 @@
 	
     });
 
-	app.controller('NotifController', ['$scope','$rootScope', 
-								'$timeout','Validation','$filter',
+	app.controller('NotifController', ['$scope','$rootScope', '$timeout','Validation','$filter',
 								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log',
                                 function($scope, $rootScope, $timeout,Validation,$filter,RestService,NotificationObject,UserService,AclService,
                                     $uibModal,SelectArrays,$log){
 	var user=UserService.getCurrentUser();
     $scope.can=AclService.can;
 
+    if(user.id){
+        $scope.$emit('onSuccessfulLogin', { message: "Hi" });
+    }
 
     $scope.selectResidence = SelectArrays.getResidenceTypes();
 
@@ -357,7 +359,6 @@
 
     $scope.isLosId = function(){
         if($scope.objectSet.oLosDtls){
-            console.log($scope.objectSet.oLosDtls);
              if($scope.objectSet.oLosDtls.sLosID)
                 return true;
             else
@@ -376,6 +377,8 @@
         return false;
     }
 
+    $scope.utrVal = true;
+    $scope.losIdval = false;
 	/*$scope.toggleDocPanel = false;
 	$scope.toggleApprvPanel = false;
 	$scope.toggleDclnPanel = false;*/
@@ -406,9 +409,9 @@
 	$('#losStatusId1').val("");
 	$('#losId').val('');
 	$('#losId').css("border","1px solid #cfcfcf");
-	var offersAllowed = $scope.authenticate('NOFRS');
-	var crodefault = $scope.authenticate('NAPPDATADEF'); 
-	var croQueue = $scope.authenticate('NCROQUE'); 
+	var offersAllowed = AclService.can('NOFRS');
+	var crodefault = AclService.can('NAPPDATADEF'); 
+	var croQueue = AclService.can('NCROQUE'); 
 	var treeData = [], map;
 	$rootScope.template ="notification";
 	$scope.minVal = 0;
@@ -426,7 +429,7 @@
 	function polling(minimum) {
 		if($rootScope.template == "notification"){
 			if(!crodefault){
-				if($scope.userid=="599"){
+				if(user.id=="599"){
 					var json ={'sCroID':"STP_PL", 
 							'sInstID':user.institutionID, 
 							'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit }
@@ -435,7 +438,7 @@
 							'sInstID':user.institutionID,
 							'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit}
 				}
-			}else if($scope.userid=="586"){
+			}else if(user.id=="586"){
 				var json ={'sCroID':"PL_QUEUE", 
 						'sInstID':user.institutionID, 
 						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit }
@@ -529,8 +532,8 @@
 	                  {value:'Office', name:'Office'},
 	                  {value:'Permanent', name:'Permanent'}
 	                  ]; */
-  
-	$scope.addr_type = SelectArrays.getAddrType[1];   //to set default address
+    $scope.addrType = SelectArrays.getAddrType();
+	$scope.addr_type = $scope.addrType[1];   //to set default address
 	$scope.aplcntType=[{value:"SAL","text":"Salaried"},
 				               	{value:"SEB","text":"Self Employed Business"},
 				               	{value:"SEP","text":"Self Employed Professional"}];
@@ -589,6 +592,17 @@
 			$scope.objectSet = NotificationObject.dummy();
 			
             $scope.Picked = CustID;
+
+            if($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob!=""){
+                $scope.dob = $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)+"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4)+"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4);
+                var dateOfBirth=new Date();
+                dateOfBirth.setFullYear(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4)));
+                dateOfBirth.setDate(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)));
+                dateOfBirth.setMonth((parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4))-1));
+                
+                $scope.objectSet.oAppReq.oReq.oApplicant.sDob=dateOfBirth;
+            }
+
 			$scope.showrefid = "true";
 			$scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
 			var data = 	$scope.notifarray;
@@ -598,11 +612,29 @@
 			}
 			$scope.croDecision = response.aCroDec;
             $scope.scoreTreeData = $scope.objectSet.oCompRes.scoringServiceResponse.SCORE_TREE;
-
-
-            return response;
-
-
+            try{
+                 if($scope.objectSet.oLosDtls.sLosID){
+                 $scope.losIdval = true;
+                 }else{
+                     $scope.losIdval = false;
+                 }   
+            }catch(e){
+                 $scope.losIdval = false;
+            }
+           
+           /* try{$scope.utrVal = $scope.objectSet.oLosDtls.sUtr;}catch(e){$scope.utrVal ='';}*/
+           /* var data = Response.aAppImgDtl;
+            console.log("images");
+                for (j in data)
+                {tr
+                  if(data[j].sApplID == $scope.applicantID){
+                        $scope.appkycimg = data[j].aImgMap;
+                        applicantImg(data[j].aImgMap);
+                    }
+                    else{
+                        $scope.coappImgs = data[j].aImgMap;
+                    }
+                }*/
 
            /* $scope.amount = $scope.croDecision;*/
 			/*$(document.body).find('#cirhtml').attr("data", "").hide();
@@ -672,22 +704,24 @@
 			$scope.evidPresent=false;*/
 			
 		}).then(function(data){
-            
-          var objArray = _.map(_.pluck(data.aAppImgDtl, 'aImgMap'),function(data){
-                    return data;
-                });
 
-           var finalImageArray = _.flatten(_.each(objArray,function(val){
-                return _.each(val,function(val){
-                    return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
-                        if(!_.isUndefined(data) || !_.isNull(data)){
-                            val["sByteCode"] = "data:image/png;base64,"+data.sByteCode;    
-                        }
+            if(data){            
+                var objArray = _.map(_.pluck(data.aAppImgDtl, 'aImgMap'),function(data){
+                        return data;
                     });
-                });
-             }));
 
-           $scope.imageDataArray =  finalImageArray;
+                var finalImageArray = _.flatten(_.each(objArray,function(val){
+                    return _.each(val,function(val){
+                        return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
+                            if(!_.isUndefined(data) || !_.isNull(data)){
+                                val["sByteCode"] = "data:image/png;base64,"+data.sByteCode;    
+                            }
+                        });
+                    });
+                }));
+
+                $scope.imageDataArray =  finalImageArray;
+            }
         });
  }
 
@@ -978,7 +1012,7 @@ $scope.cro_action = function(appID, action){
                             "sRefID":$scope.objectSet.oAppReq.sRefID,
                             'sHeader':{'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
                             'sInstID':$scope.InstitutionID,
-                            'sCroId':$scope.userid},
+                            'sCroId':user.id},
                             "sAppStat":"OnHold",
                             "aCroJustification":offerarray,
                             "aDedupeRefID": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : [])
@@ -1017,7 +1051,7 @@ $scope.cro_action = function(appID, action){
                          var json = {
                                     "sRefID":$scope.objectSet.oAppReq.sRefID,
                                     'sHeader':{'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
-                                    'sInstID':$scope.InstitutionID,'sCroId':$scope.userid},
+                                    'sInstID':$scope.InstitutionID,'sCroId':user.id},
                                     "sAppStat":"Declined",
                                     "aCroJustification":arrayDclnDesc, //not yet
                                     "aDedupeRefID ": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : [])
@@ -1066,7 +1100,7 @@ $scope.cro_action = function(appID, action){
                         });
                         var json={
                             'sHeader':{'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
-                            'sInstID':$scope.InstitutionID,'sCroId':$scope.userid},
+                            'sInstID':$scope.InstitutionID,'sCroId':user.id},
                             'sRefID':$scope.objectSet.oAppReq.sRefID,
                             'sAppStat':"Approved",
                             "aCroJustification":arrayApprvDesc,
@@ -1076,6 +1110,7 @@ $scope.cro_action = function(appID, action){
                             "dEmi":$scope.selected.emi,
                             "aDedupeRefID": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : [])
                             }
+                            console.log(json);
                             requestForStatus(json);
 
                         }, function () {
@@ -1157,13 +1192,17 @@ function requestForStatus(json)
 
   $scope.losStatusChange=function(status){
     var utr =  $scope.objectSet.oLosDtls.sUtr;
-     if(status == "LOS_DISB" ){ //&&   $scope.applctnstatus.toUpperCase()=="APPROVED"
+     if(status == "LOS_DISB" &&   $scope.applctnstatus.toUpperCase()=="APPROVED"){ //
             //$scope.isUtrEdit = false; //&& (utr=='' || utr==null)//can edit
-            $scope.isUtr();
-        }/*else{
+            if(utr=='' || utr==null){
+                 $scope.isUtr();
+                $scope.utrVal = false;        
+            }
+        }else{
              // $scope.isUtrEdit = true;
+             $scope.utrVal = true; 
              $(document.body).find('#utrData').css("border","1px solid #cfcfcf");
-        }*/
+        }
         /* $('#losStatusId1').val(this.value);
         $scope.objectSet.oLosDtls.sStat =this.value;*/
   }
@@ -1843,7 +1882,7 @@ function requestForStatus(json)
 		var arr=[];
 		var json=null;
 	    json={
-				'sHeader':{'sAppID':$scope.appltnID,'sInstID':user.institutionID,'sCroId':$scope.userid},
+				'sHeader':{'sAppID':$scope.appltnID,'sInstID':user.institutionID,'sCroId':user.id},
 				'sRefID':$scope.refID,
 				'sAppStat':"Approved",
 				"aCroJustification":arrayApprvDesc,
@@ -1870,7 +1909,7 @@ function requestForStatus(json)
 		var arr=[];
 		 var json = {
 					"sRefID":$scope.refID,
-					'sHeader':{'sAppID':$scope.appltnID,'sInstID':user.institutionID,'sCroId':$scope.userid},
+					'sHeader':{'sAppID':$scope.appltnID,'sInstID':user.institutionID,'sCroId':user.id},
 					"sAppStat":"Declined",
 					"aCroJustification":arrayDclnDesc, //not yet
 					"aDedupeRefID ": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : arr)
@@ -1913,42 +1952,44 @@ function requestForStatus(json)
 		}
 	}
 
-	$scope.updateLosData = function(status){	  
+	$scope.updateLosData = function(status){
 	var losStat = status;
-	var losId = $('#losId').val();
-	var utr = $('#utrData').val();
-	if(($('#utrData').prop("disabled")==false && utr!='') || ($('#utrData').prop("disabled")==true && utr=='')){
-	if(losId != "" && losStat !="Select"){
-		 var jsondata=	 {
-				    "sRefID":$scope.refID,
-				    "oHeader":{
-				         "sAppID":$scope.objectSet.sAppID,
-				         "sInstID":user.institutionID,
-				         "sSourceID":"WEB",
-				         "sAppSource":"WEB",
-				         "sReqType":"JSON",
-				         "sCroId":$scope.userid
-				    },
-				    "oLosDtls":{
-				        "sLosID":losId,
-				        "sStat":losStat,
-				        "sUtr":utr
-				    }
-				}	 
-		 var URL='update-los-details';
-		 RestService.saveToServer(URL,jsondata).then(function(Response){
-				console.log("Response: "+JSON.stringify(Response));
-				if(Response.STATUS == "SUCCESS"){
-					alert("LOS Status updated successfully");
-					 $(document.body).find('#utrData').prop('disabled', true);
-					 $(document.body).find('#losId').prop('disabled', true);
-					 $(document.body).find('#utrData').css("border","1px solid #cfcfcf");
-					 $(document.body).find('#losId').css("border","1px solid #cfcfcf");
-				}else{
-					alert("LOS Status is not updated successfully");
-				}
-		 });
-		}
+	var losId = $scope.objectSet.oLosDtls.sLosID;
+	var utr = $scope.objectSet.oLosDtls.sUtr;
+
+    if(($scope.utrVal==false && utr!='') || ($scope.utrVal == true && (utr=='' || utr!=''))){
+    	if(losId != "" && losStat !="Select"){
+    		 var jsondata=	 {
+    				    "sRefID":$scope.objectSet.sRefID,
+    				    "oHeader":{
+    				         "sAppID":$scope.objectSet.oAppReq.oHeader.sAppID,
+    				         "sInstID":user.institutionID,
+    				         "sSourceID":"WEB",
+    				         "sAppSource":"WEB",
+    				         "sReqType":"JSON",
+    				         "sCroId":user.id
+    				    },
+    				    "oLosDtls":{
+    				        "sLosID":losId,
+    				        "sStat":losStat,
+    				        "sUtr":utr
+    				    }
+    				};
+                      console.log(jsondata);	 
+    		 var URL='update-los-details';
+    		 RestService.saveToServer(URL,jsondata).then(function(Response){
+    				console.log("Response: "+JSON.stringify(Response));
+    				if(Response.STATUS == "SUCCESS"){
+    					alert("LOS Status updated successfully");
+    					 $scope.losIdval = true;
+                         $scope.utrVal = true;
+    					 $(document.body).find('#utrData').css("border","1px solid #cfcfcf");
+    					 $(document.body).find('#losId').css("border","1px solid #cfcfcf");
+    				}else{
+    					alert("LOS Status is not updated successfully");
+    				}
+    		 });
+    		}
 	}
 }
 	
@@ -2250,7 +2291,7 @@ function requestForStatus(json)
 						$(this).css("border","1px solid green");
 					}
 				}
-				else if($(this).attr("id")=="losId" || $(this).attr("id")=="utrData"){
+			/*	else if($(this).attr("id")=="losId" || $(this).attr("id")=="utrData"){
 					if (!(/^[a-zA-Z0-9]+$/.test(val))) {
 						error = 1;
 						$(this).css("border","1px solid red");
@@ -2260,14 +2301,14 @@ function requestForStatus(json)
 					}
 				}
 				else if($(this).attr("id")=="ApprvValue" || $(this).attr("id")=="emiValue" || $(this).attr("id")=="tenorValue"){
-					/*if (!(/^[0-9]+$/.test(val))) {
+					if (!(/^[0-9]+$/.test(val))) {
 						error = 1;
 						$(this).css("border","1px solid red");
 					} else {
 						error = 0;
 						$(this).css("border","1px solid green");
-					}*/
-				}
+					}
+				}*/
 			}
 		});
 	 
@@ -2651,14 +2692,12 @@ app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
          }
     };
 
-      $scope.closeDocument = function () {
+    $scope.closeDocument = function () {
         $uibModalInstance.dismiss('cancel');
       };
     }]);
 
-
-
-app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantFormObject",function($scope,RestService,refID,applicantFormObject){
+app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantFormObject","$uibModalInstance",function($scope,RestService,refID,applicantFormObject,$uibModalInstance){
     $scope.refID = refID;
     $scope.applicantFormObject = applicantFormObject;
     
@@ -2686,33 +2725,13 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
     $scope.tags = [];
 
     $scope.setTab = function(newTab){
-      $scope.tab = newTab;
+        $scope.tab = newTab;
     };
 
     $scope.isSet = function(tabNum){
-      return $scope.tab === tabNum;
+        return $scope.tab === tabNum;
     };
 
-    $scope.getTabStyle=function(pTab){
-        //console.log("pTab:"+pTab);
-        var val="";
-        if(pTab==$scope.tab){
-            //This tab is active
-            val={
-                    color:"white",
-                    background:$scope.getColor(pTab),
-                    outline:null
-                };
-        }else{
-            //This tab is not active
-            val={
-                    color:$scope.getColor(pTab),
-                    border:"1px solid "+$scope.getColor(pTab)
-                }
-        }
-        return val;
-    };
-    
     $scope.getTabStyle=function(pTab){
         //console.log("pTab:"+pTab);
         var val="";
@@ -2798,7 +2817,7 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
             });
         }else{
             var requestJson={
-                sWorkFlowConfig : {
+                oWorkFlowConfig : {
                     sGngRefId : $scope.refID,
                     aModuleConfig : reinitiateModules
                 },
@@ -2813,7 +2832,6 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
             });
         }
     };
-    
 }]);
 
 app.directive('selectRequired',function(){
@@ -2881,54 +2899,6 @@ app.directive('thisEarlierThan', function () {
     };
 });
 
-app.directive('updateCityState',function(RestService,BASE_URL_GNG,UserService){
-    return{
-        restrict: 'A',
-        require: 'ngModel',
-        scope : {
-            pin: '='
-        },
-        priority:2,
-        link: function(scope, elm, attrs, ngModelCtrl) {
-            if (attrs.type === 'radio' || attrs.type === 'checkbox') 
-                return;
-            
-            var pinJson ={"oHeader":{"sInstID":UserService.getCurrentUser().institutionID},"sQuery":'202521'}; 
-            
-            console.log(scope);
-            
-            scope.$watch('pin', function(newVal,oldVal){
-                console.log(newVal);
-                console.log(oldVal);
-            },true);
-            
-            var state,city;
-            RestService.saveToServer("pincode-details-web",pinJson).then(function(data){
-                
-                city = data.sCity || '';
-                state = data.sState || ""; 
-                
-                console.log(city);
-                
-                if(attrs.fetchModels){
-                    var array = attrs.fetchModels.split('|'),
-                    state = array[0],
-                    city = array[1];
-                    
-                }
-                
-            });
-        
-            console.log("element value: "+elm.val());
-            if(elm.val()!="" && elm.val().length==6){
-                
-            }else{
-                return;
-            }           
-        }
-    }
-});
-
 app.directive('changeOnBlur', function() {
     return {
         restrict: 'A',
@@ -2973,7 +2943,10 @@ app.directive("whenScrolled",function(){
 
 app.filter('dateFilter', function() {
     return function(date){
-        var result = date.slice(0,2)+"/"+date.slice(2,4)+"/"+date.slice(4,8);
+        var result="";
+        if(date && date!=""){
+            result = date.slice(0,2)+"/"+date.slice(3,5)+"/"+date.slice(6,10);
+        }
         return result;
     };
 });

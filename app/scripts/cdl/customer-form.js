@@ -8,7 +8,7 @@ app.controller('PDFViewerModalCtrl', ['RestService','$scope', '$uibModalInstance
 	
 	 $scope.response = response;
 	 $scope.refID = refID;
-
+	 sharedService.setRefID(null);
 
 	 $scope.submit = function (imgID,refID) {
 
@@ -815,6 +815,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 		}else if($scope.currStage=="APRV"){
 			$rootScope.DashFlag = true;
 			sharedService.setCurrentStage($scope.currStage);
+			sharedService.setRefID(refID);
 			$location.path("/cdl/apply");
 		}else if($scope.currStage=="PD_DE"){
 			var status=sharedService.getDecisionStatus();
@@ -824,12 +825,14 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 				$scope.loadPDF();
 			}else if(status=="declined"){
 				alert("This application has been declined.");
+				sharedService.setRefID(refID);
 				$location.path("/cdl/dashboard");
 			}
 		}else{
 //			alert("Sending : "+$scope.currStage);
 //			$rootScope.DashFlag=true;
 			sharedService.setCurrentStage($scope.currStage);
+			sharedService.setRefID(refID);
 			$location.path("/cdl/apply");
 		}
 	}

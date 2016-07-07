@@ -5,16 +5,12 @@
 		<div class="panel_body">
 		 <div class="row clearfix" id="enterAmount" style=" margin-top: 5px;">
 		 	<div class="col-md-4"><label>Approve Amount :</label>
-		 <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.approveAmt" name="ApprvValue" style="width: 100%;" required only-digits/>
-		 <!-- <div ng-messages="approve.ApprvValue.$error" class="errorMsg">
-							    <p ng-message="pattern">Please enter valid amout</p>
-							    <p ng-message="required">Please enter amount</p>
-			</div> -->
+		 <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.approveAmt" style="width: 100%;" required only-digits/>
 		 </div>
 		 	<div class="col-md-4"><label>EMI :</label>
-		 <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.emi" id="emiValue" style="width: 100%;"/></div>
+		 <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.emi" required only-digits style="width: 100%;"/></div>
 		 	<div class="col-md-4"><label>Tenor :</label>
-		 <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.tenor" id="tenorValue" style="width: 100%;"/></div>
+		 <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.tenor" required only-digits style="width: 100%;"/></div>
 		 
 		 </div>
 		  <div class="row clearfix">
