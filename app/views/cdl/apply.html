@@ -661,7 +661,7 @@
 										<div class="col-md-6 height">
 											<help>Employment Type*</help>
 											<select class="customSelect" ng-model="wrketype" id="wrketype"
-												ng-model="wrketype"
+												
 												ng-change="changeEvent('WRKTYPE',wrketype)">
 												<option ng-selected="true" value="">Select
 													Employment Type*</option>
@@ -1086,7 +1086,7 @@
                     <round-progress
                         max="59"
                         current="seconds"
-                        color="#1485CC"
+                        color="#24A1ED"
                         bgcolor="transparent"
                         radius="{{ radius*1.5 }}"
                         semi="isSemi"
@@ -1238,7 +1238,7 @@
 <!-- 										<input type="text" class="customInput" id="scheme" ng-model="scheme"
 											typeahead="state for state in scmTags | limitTo:8" placeholder="Scheme" /> -->
 											<input type="text" class="customInput" id="scheme" ng-model="scheme" uib-typeahead="schemes for schemes in scmTags"
-											  typeahead-loading="loadingLocations" typeahead-no-results="noResults"
+											  typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select=selectScheme(scheme)
 											placeholder="Scheme" />
 									</div>
 									<div class="col-md-4 height">
