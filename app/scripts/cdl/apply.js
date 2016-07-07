@@ -2229,7 +2229,7 @@ $scope.scmService = function(key){
 // to set the emi and other value for selected scheme
 $('#scheme').on('autocompleteselect', function (e, ui) 
 {	$scope.SchemeObject = "";
-	for(var Object of $scope.allSchemes)
+	for(var Object in $scope.allSchemes)
 		{
 		 if(Object.sSchDes==ui.item.value)
 			 {
