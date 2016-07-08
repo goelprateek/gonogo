@@ -335,6 +335,7 @@
 	app.controller('NotifController', ['$scope','$rootScope', '$timeout','Validation','$filter',
 								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log',
                                 function($scope, $rootScope, $timeout,Validation,$filter,RestService,NotificationObject,UserService,AclService,
+        
                                     $uibModal,SelectArrays,$log){
 	var user=UserService.getCurrentUser();
     $scope.can=AclService.can;
