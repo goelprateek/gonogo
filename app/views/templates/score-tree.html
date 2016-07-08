@@ -1,0 +1,23 @@
+<div class="modal-content">
+	<div class="modal-header">
+		<button type="button" class="close" ng-click="closeTreePanel()"
+			aria-hidden="true">&times;</button>
+		<h4 class="modal-title">
+			Score Tree <span style="margin-left: 50px">Customer ID :
+				{{details.CUSTOMER.CustID}}</span> <span style="margin-left: 50px">Customer
+				Name : {{details.CUSTOMER.name}}</span>
+		</h4>
+	</div>
+	<div class="modal-body">
+		<div id="scoreTree" gng-score-tree  score-data="treeFeed" style="text-align: center; overflow: hidden; padding-top: 15px">
+		</div>
+	</div>
+	<div id="tooltip" class="hidden">
+		<div class="row clearfix">
+			<div class="col-md-12">
+				<div id="node_expression" class="tooltipExp"></div>
+				<div id="node_details" class="tooltipExp"></div>
+			</div>
+		</div>
+	</div>
+</div>
