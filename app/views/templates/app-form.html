@@ -9,7 +9,7 @@
 <!-- {{ApplicantForm.$valid;}}
 {{ApplicantForm.$error;}} -->
 <form id="msform" name="ApplicantForm" style="margin-bottom:30px;" novalidate>
-	<div class="row clearfix" ng-if="authenticate('NRPRCS')">
+	<div class="row clearfix" ng-if="can('NRPRCS')">
 		<div class="col-md-8 text-left">
 			<div class="alert alert-danger" id="erro-msg"
 				style="float: none; text-align: left; margin: 0px">
@@ -18,11 +18,11 @@
 		</div>
 		<div class="col-md-4 text-right" id="top-fixed">
 			<a class="add-button-div-notification"
-				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('Application', 'Update') && isUpdating && ApplicantForm.$valid" ng-click="updateForm();">Save</a>					
+				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('DEApplication', 'Update') && isUpdating && ApplicantForm.$valid" ng-click="updateForm();">Save</a>					
 			<a class="add-button-div-notification"
-				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('Application', 'Update') && !isUpdating" ng-click="enableForm();">Update</a>
+				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('DEApplication', 'Update') && !isUpdating" ng-click="enableForm();">Update</a>
 			<a class="add-button-div-notification"
-				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('Application', 'Reinitiate')" ng-click="showReinitiateModal('lg',currentApplicationFormRefID);">Reinitiate</a>
+				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('DEApplication', 'Reinitiate')" ng-click="showReinitiateModal('lg',currentApplicationFormRefID);">Reinitiate</a>
 			<a class="add-button-div-notification"
 				style="width: 100px; display: inline-block;" ng-click="toggleForm()">Back</a>
 				<!-- <a class="add-button-div-notification"
@@ -60,24 +60,24 @@
 			</div>
 		</div>
 	</fieldset>
-			<fieldset class="formfield" style="display: block;" ng-if="objectSet.aCroJustification!='' && objectSet.aCroJustification!=undefined ">
-					<legend>CRO Justification</legend>
-					<div class="row clearfix">
-					<div ng-repeat="data in objectSet.aCroJustification">
-					<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null">
-							<label class="control-label">CRO NAME</label> <input class="form-control"
-							value="{{data.sCroID}}" disabled="disabled" type="text">
-			</div>
-			<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null">
-					<label class="control-label">Remark</label> <input class="form-control"
-						disabled="disabled" value="{{data.sRemark}}" type="text">
-			</div>
-			<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null ">
-					<label class="control-label">Subject To</label> <input class="form-control"
-						value="{{data.sSubTo}}" disabled="disabled" type="text" >
-			</div>
+	<fieldset class="formfield" style="display: block;" ng-if="objectSet.aCroJustification!='' && objectSet.aCroJustification!=undefined ">
+		<legend>CRO Justification</legend>
+		<div class="row clearfix">
+			<div ng-repeat="data in objectSet.aCroJustification">
+				<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null">
+					<label class="control-label">CRO NAME</label>
+					<textarea class="form-control" rows="1" readonly>{{data.sCroID}}</textarea>
+				</div>
+				<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null">
+					<label class="control-label">Remark</label>
+					<textarea class="form-control" rows="1" readonly>{{data.sRemark}}</textarea>
+				</div>
+				<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null ">
+					<label class="control-label">Subject To</label>
+					<textarea class="form-control" rows="1" readonly>{{data.sSubTo}}</textarea>
+				</div>
 			</div>	
-			</div>
+		</div>
 	</fieldset>
 	<fieldset class="formfield" style="display: block;">
 			<legend>Personal Information</legend>

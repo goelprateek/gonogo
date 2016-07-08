@@ -1183,7 +1183,7 @@ function requestForStatus(json)
     {
     var URL = 'cro-approval';
     RestService.saveToServer(URL,json).then(function(Response){
-        if(Response.STATUS == "OK UPDATE SUCCESSFULLY")                     
+        if(Response.status == "OK UPDATE SUCCESSFULLY")                     
         {
             /*setTimeout(function() 
             { $('.LoaderSpinner').hide()},2000);*/
@@ -1204,7 +1204,7 @@ function requestForStatus(json)
  function  requestFordclnOnhold(json){
             var URL='cro-onhold';
             RestService.saveToServer(URL,json).then(function(Response){
-                if(Response.STATUS == "OK UPDATE SUCCESSFULLY")                     
+                if(Response.status == "OK UPDATE SUCCESSFULLY")                     
                 {
                       _.each($scope.notifarray,function(value,key){
                             if($scope.notifarray[key].sRefID ==  $scope.objectSet.oAppReq.sRefID){
@@ -3120,7 +3120,7 @@ app.filter('dateFilter', function() {
     return function(date){
          var result = '';
         if(date){
-           result = date.slice(0,2)+"/"+date.slice(2,4)+"/"+date.slice(4,8);
+           result = date.slice(0,2)+"/"+date.slice(3,5)+"/"+date.slice(6,10);
         }
         return result;
     };
