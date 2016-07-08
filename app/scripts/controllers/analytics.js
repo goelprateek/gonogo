@@ -54,13 +54,15 @@
 
 		// custom report modal
 
-		$scope.openModal = function(){
+		$scope.openCustomReportDesigner = function(){
 			var modalInstance = $uibModal.open({
-	      animation: true,
-	      templateUrl: 'views/templates/report-modal.html',
-	      controller: 'CustomReportController',
-	      size: 'lg',
-	    });	
+							      animation: true,
+							      templateUrl: 'views/templates/report-modal.html',
+							      controller: 'CustomReportController',
+							      size: 'lg',
+							    });	
+
+			
 		}
 		
 		
