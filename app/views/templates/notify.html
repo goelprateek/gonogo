@@ -636,17 +636,17 @@ font-size:14px;}
 
 		</div>
 	</div>
-	<form id="offrform" ng-show="toggleDocPanel">
+<!-- 	<form id="offrform" ng-show="toggleDocPanel">
 	<div class="row clearfix" 
 		style="position: absolute; left: 25%; top: 28%;">
 		
 		<div class="col-md-12"
 			style="background-color: white; border: 1px solid #C9D7E1;padding:0px">
 			<div class="row clearfix" id="searchBox">
-				<!-- <span class="glyphicon glyphicon-chevron-left"></span> -->
+				<span class="glyphicon glyphicon-chevron-left"></span> 
 				<div class="col-md-2 thumbnail-box" ng-repeat="offer in OfferArrey"
 					id="OfferBox{{$index}}"  ng-click="Load_Offer(offer.ID,$event)">
-				<!-- 	<span class="badge">{{offer.Count}}</span>  -->
+					<span class="badge">{{offer.Count}}</span> 
 				<img
 						ng-src="{{offer.Icon}}" />
 					<div>{{offer.Name}}</div>
@@ -679,7 +679,7 @@ font-size:14px;}
 				<div class="col-md-12">
 					<a class="add-button-div-notification" ng-click="requestDoc()" style="float: left">Request Document</a>
 					<input type="text" ng-model="reqComment" maxlength="150" style="margin: 6px 0px; margin-left: 10px;">
-<!-- 						ng-click="updateStatus()" style="float: left">Offer</a>  --> 
+						ng-click="updateStatus()" style="float: left">Offer</a>  
 					<span  class="text-danger" ng-if="invalidMsg">Please enter your reason for Onhold</span>
 						<a	class="add-button-div-notification" id="closeOffer"
 						style="float: right" ng-click="closeDocument()">Close</a>
@@ -687,15 +687,15 @@ font-size:14px;}
 			</div>
 		</div>
 	</div>
-</form>
- <div class="row clearfix declinePanel" id="declinereason" data-ng-show="toggleDclnPanel">
+</form> -->
+ <!-- <div class="row clearfix declinePanel" id="declinereason" data-ng-show="toggleDclnPanel">
 		<div class="panel_heading"><label>Description </label><span class="text-danger" id="errorheading" style="float:right ;margin-top: 3px"> </span></div>
 		<div class="panel_body">
-		 <!--  <div class="row clearfix">
+		 <div class="row clearfix">
 		   <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
 			  padding: 10px; font-weight: bold" id="reasoncontainer" contenteditable="true"spellcheck="false"> 
 			  </div>
-		  </div> -->
+		  </div> 
 		  <div class="row clearfix">
 		  <label style="margin-left: 15px">Remark :</label>
 			  <input type="text" class="dashedcontainer" ng-model="dclnRemark" >
@@ -712,10 +712,10 @@ font-size:14px;}
 		  	<a class="TC_button" ng-click="saveDclnPanel()">Submit</a>	
 		   <a class="TC_button" ng-click="closeDclnPanel()">Close</a>	
 		   </div>												
-<!-- 		  <a class="TC_button" ng-click="closeDclnPanel()">Close</a> -->
+		  <a class="TC_button" ng-click="closeDclnPanel()">Close</a> 
 		</div>
-	</div>
-	 <div class="row clearfix declinePanel" id="approveReason" data-ng-show="toggleApprvPanel">
+	</div> -->
+	<!--  <div class="row clearfix declinePanel" id="approveReason" data-ng-show="toggleApprvPanel">
 		<div class="panel_heading"><label>Description </label><span class="text-danger" id="errorheading" style="float:right ;margin-top: 3px"> </span></div>
 		<div class="panel_body">
 		 <div class="row clearfix" id="enterAmount" style=" margin-top: 5px;">
@@ -744,7 +744,7 @@ font-size:14px;}
 		   </div>							
 		</div>
 	</div>
-
+ -->
 </div><!-- end of controller -->
 	<div id="chat_window" class="row clearfix">
 		<div class="chat_header_box" style="font-weight: bold;">
@@ -771,8 +771,7 @@ font-size:14px;}
 			</div>
 		</div>
 	</div>
-	
-<!-- 	<div id="checkConfirmation" class="modal fade">
+	<div id="checkConfirmation" class="modal fade">
 		<div id="confirm-title" class="modal-header btn-danger" style="padding: 6px 12px;">
 			<h4 class="modal-title">Are you Sure...?</h4>
 		</div>
@@ -783,4 +782,4 @@ font-size:14px;}
     		<button type="button" data-dismiss="modal" class="btn btn-danger" id="saveLosData">Ok</button>
     		<button type="button" data-dismiss="modal" class="btn btn-info">Cancel</button>
   		</div>
-	</div> -->
+	</div> 
