@@ -307,13 +307,14 @@ font-size:14px;}
 									<span>Address Line2 : {{objectSet.oAppReq.oReq.oApplicant.aAdr[0].sLine2}}</span>
 								</div> 
 							</div>
-
+							<div class="list-group-item" >
 							<div class="notify-scroll-container" data-ng-if="imageDataArray">
 								 <ul> 
 									<li ng-repeat="d in imageDataArray">
 										<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index)"><img ng-src="{{d.sByteCode}}"> </a>
 									</li>
 								 </ul> 
+							</div>
 							</div>
 
 							<!-- <div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">
