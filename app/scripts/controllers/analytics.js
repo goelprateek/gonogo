@@ -5,13 +5,16 @@
 	var app = angular.module('gonogo.analytics' ,['gonogo-directives']);
 	
 
-	app.controller('AnalyticsController',['$scope','$rootScope','Rules'
-	                                        ,'Score', 'Policy','Decision', '$http', '$timeout' ,'RestService','$filter','APP_CONST', '$uibModal',
-	                                        function($scope,$rootScope, Rules,Score,Policy,Decision, $http, $timeout,RestService,$filter,APP_CONST,$uibModal) {
+	app.controller('AnalyticsController',['$scope','$rootScope','Rules','Score', 'Policy','Decision', '$http', '$timeout',
+										  'RestService','$filter','APP_CONST', '$uibModal','UserService',
+	                                        function($scope,$rootScope, Rules,Score,Policy,Decision, $http, $timeout,
+	                                        	RestService,$filter,APP_CONST,$uibModal,UserService) {
 
 		
 		// chart functionality
-		var json = {'sInstID':$scope.InstitutionID};
+		var user=UserService.getCurrentUser();
+
+		var json = {'sInstID':user.institutionID};
 
 		RestService.saveToServer("stack-graph",json).then(function(data){
 			$scope.orignalData = data;
@@ -29,7 +32,7 @@
 		$scope.reportDownload = function(){
 			
 			var _data = {
-					'sInstId': $scope.InstitutionID,
+					'sInstId': user.institutionID,
 					'sReportType': 'Credit Report',
 					'sProductType':'Consumer Durable',
 					'sReportCycle': 'MTD'
@@ -74,7 +77,7 @@
 			$scope.isTableData = !$scope.isTableData;
 			
 			if($scope.isTableData == false){
-				var json = {'sInstID':$scope.InstitutionID,'iSkip':"0",'iLimit':"100"};
+				var json = {'sInstID':user.institutionID,'iSkip':"0",'iLimit':"100"};
 				RestService.saveToServer('score-log',json).then(function(data){
 				 if(data){
 				 	  	//sort data in reverse chronological order
@@ -1184,7 +1187,7 @@
 				}
 		
 		
-                	if(typeof $scope.InstitutionID != 'undefined')
+                	if(typeof user.institutionID != 'undefined')
                 	{
                 		var email = $scope.useremail;
                 		if(email.indexOf("dsa") > -1 || email.indexOf("DSA") > -1)
@@ -1351,7 +1354,7 @@
 
                 		//get roles authentication
 //	                                    		$http.get('JSON/Auth.json').success(function(data) {
-//	                                    		$scope.Auth=data[""+$scope.InstitutionID+""].roles;
+//	                                    		$scope.Auth=data[""+user.institutionID+""].roles;
 //	                                    		});
 /*
                 		$("#recordTo").datepicker({
@@ -1571,16 +1574,16 @@
 //	                                    		*****************Updating Scoring List***********************************************
 
             		/*	$("#scoreBlock").hide();*/
-            		Score.getAll_ScoringTables($scope.InstitutionID ,function(data){
+            		Score.getAll_ScoringTables(user.institutionID ,function(data){
             			$scope.tableList=data;
             		});			    
 //	                                    		***************** Updating Policy **********************************************
-            		Policy.getAllpolicy($scope.InstitutionID ,function(data){
+            		Policy.getAllpolicy(user.institutionID ,function(data){
             			$scope.policyList=data;
             		});
 
 //	                                    		*****************Updating Rules***********************************************
-            		Decision.getRuleList($scope.InstitutionID,$scope.Rule,function(data){
+            		Decision.getRuleList(user.institutionID,$scope.Rule,function(data){
             			$scope.RuleList=data;
             		});
 
@@ -1796,7 +1799,7 @@
             			$http({
             				method : 'GET',
             				url : baseUrl+'IFFDropDown',
-            				params : {'INSTITUTION_ID':$scope.InstitutionID},
+            				params : {'INSTITUTION_ID':user.institutionID},
             				headers : {'Content-Type' : 'application/json'}
             			}).success(function(data) 
             					{    	  $('#'+id+' option:not(:first)').remove();
@@ -2160,7 +2163,7 @@
             		$http({
             			method : 'GET',
             			url : baseUrl+'GetAllPolicy',
-            			params : {'INSTITUTION_ID': $scope.InstitutionID},
+            			params : {'INSTITUTION_ID': user.institutionID},
             			headers : {'Content-Type' : 'application/json'}
             		}).success(function(data) 
             				{ $('#Loader,#simulator-error').hide();
@@ -2199,7 +2202,7 @@
             		$http({
             			method : 'GET',
             			url : baseUrl+'GetTables',
-            			params : {'INSTITUTION_ID': $scope.InstitutionID,'type' : ''},
+            			params : {'INSTITUTION_ID': user.institutionID,'type' : ''},
             			headers : {'Content-Type' : 'application/json'}
             		}).success(function(data) 
             				{ 
@@ -2247,7 +2250,7 @@
             		{	$('#Loader').show();
             		$http({ method : 'POST',
             			url : baseUrl+'DecisionRules',
-            			params:{'INSTITUTION_ID':$scope.InstitutionID,'RuleID':$scope.Rule,'CType':"Find-All"},
+            			params:{'INSTITUTION_ID':user.institutionID,'RuleID':$scope.Rule,'CType':"Find-All"},
             			headers : {'Content-Type' : 'application/json'}
             		}).success(function(data) 
             				{   $("#creditPolicy").find('option ').remove().end();
@@ -2314,7 +2317,7 @@
             				$http({
             					method : 'GET',
             					url : baseUrl+'GetAttributes',
-            					params : {'CatID':MasterID,'INSTITUTION_ID':$scope.InstitutionID},
+            					params : {'CatID':MasterID,'INSTITUTION_ID':user.institutionID},
             					headers : {'Content-Type' : 'application/json'}
             				}).success(function(data) 
             						{   $('#A_LoaderSpinner').hide();
@@ -2415,7 +2418,7 @@
             		$http({
             			method : 'POST',
             			url : baseUrl+'CreateAttribute',
-            			params:{'INSTITUTION_ID' : $scope.InstitutionID},
+            			params:{'INSTITUTION_ID' : user.institutionID},
             			data : DataSet,
             			headers : {'Content-Type' : 'application/json'}
             		}).success(function(data)
@@ -2452,7 +2455,7 @@
             			$http({
             				method : 'POST',
             				url : baseUrl+'CreateCategory',
-            				params : {'INSTITUTION_ID':$scope.InstitutionID},
+            				params : {'INSTITUTION_ID':user.institutionID},
             				data : DataSet,
             				headers : {'Content-Type' : 'application/json'}
             			}).success(function(data) 
@@ -2491,7 +2494,7 @@
             				$http({
             					method : 'GET',
             					url : baseUrl+'GetItems',
-            					params : {'AtID':AtID, 'INSTITUTION_ID':$scope.InstitutionID},
+            					params : {'AtID':AtID, 'INSTITUTION_ID':user.institutionID},
             					headers : {'Content-Type' : 'application/json'}
             				}).success(function(data) 
             						{	if(data.StatusCode == 101)
@@ -2525,7 +2528,7 @@
             		$('#C_LoaderSpinner').show();
             		$http({
             			method : 'GET',	url : baseUrl+'GetCategories',
-            			params : {'TableID':id,'INSTITUTION_ID':$scope.InstitutionID},
+            			params : {'TableID':id,'INSTITUTION_ID':user.institutionID},
             			headers : {'Content-Type' : 'application/json'}
             		}).success(function(data) 
             				{       $('#C_LoaderSpinner').hide();
@@ -2622,7 +2625,7 @@
             		{	 			$scope.context_error = "";
             		$http({ method : 'POST',
             			url : baseUrl+'CreateAdjustment',
-            			params:{'INSTITUTION_ID':$scope.InstitutionID},
+            			params:{'INSTITUTION_ID':user.institutionID},
             			data : newContext,
             			headers : {'Content-Type' : 'application/json'}
             		}).success(function(data) 
@@ -2639,7 +2642,7 @@
             			$scope.context_error = "";
             			$http({ method : 'POST',
             				url : baseUrl+'UpdateAdjustment',
-            				params:{'INSTITUTION_ID':$scope.InstitutionID},
+            				params:{'INSTITUTION_ID':user.institutionID},
             				data : newContext,
             				headers : {'Content-Type' : 'application/json'}
             			}).success(function(data) 
@@ -2779,7 +2782,7 @@
             			$http({
             				method : 'POST',
             				url : baseUrl+'CreateCategory',
-            				params : {'INSTITUTION_ID':$scope.InstitutionID},
+            				params : {'INSTITUTION_ID':user.institutionID},
             				data : DataSet,
             				headers : {'Content-Type' : 'application/json'}
             			}).success(function(data) 
@@ -3406,8 +3409,8 @@
             		$("#Loader").show();
             		$scope.reportList =[];
             		//sayali
-            		if($scope.InstitutionID == '4019'){
-            			var json = {'sInstID':$scope.InstitutionID,'iSkip':min,'iLimit':max};
+            		if(user.institutionID == '4019'){
+            			var json = {'sInstID':user.institutionID,'iSkip':min,'iLimit':max};
             			var URL = 'score-log';
             			RestService.saveToServer(URL,json).then(function(Response){
             				/*if(data.StatusCode === 101)
@@ -3485,7 +3488,7 @@
             		$http({
             			method : 'GET',
             			url : baseUrl+'GetReports',
-            			params : {'INSTITUTION_ID':$scope.InstitutionID, 'start':min, 'count':max, 'RType':'Live'},
+            			params : {'INSTITUTION_ID':user.institutionID, 'start':min, 'count':max, 'RType':'Live'},
             			headers : {'Content-Type' : 'application/json'}
             		}).success(function(data) 
             				{      
@@ -3518,7 +3521,7 @@
             		var numItems = list.length;
             		var perPage;
             		//sayali
-            		if($scope.InstitutionID == '4019')
+            		if(user.institutionID == '4019')
             		{ var pager = $("#pager1");
             		  $("#pager1").text("");
             		  perPage = parseInt($("#pagelimit1 option:selected").val());
@@ -3556,7 +3559,7 @@
             				{
             			var clickedPage = parseInt($(this).parent().index()-1);
             			var pno = parseInt($(this).text())-1;
-            			if($scope.InstitutionID == '4019'){
+            			if(user.institutionID == '4019'){
             				$scope.reportRange = ""+((pno*parseInt($("#pagelimit1 option:selected").val()))+1)+" to "+((parseInt($("#pagelimit1 option:selected").val()))*(pno+1))+".... of "+total+"";
             			}else{
             				$scope.reportRange = ""+((pno*parseInt($("#pagelimit option:selected").val()))+1)+" to "+((parseInt($("#pagelimit option:selected").val()))*(pno+1))+".... of "+total+"";
@@ -3580,7 +3583,7 @@
             		pager.find('li #prev').click(function()
             				{
             			goTo(parseInt(current - 1));
-            			if($scope.min != 0 && $scope.InstitutionID == '4019')
+            			if($scope.min != 0 && user.institutionID == '4019')
             			{	getReportData($scope.min-100,$scope.min-200); }
             			elseif($scope.min != 0)
             			{ pagging(list, total);
@@ -3590,7 +3593,7 @@
             		pager.find('li #next').click(function(){
             			goTo(parseInt(current + 1));
             			console.log("min : "+$scope.min);
-            			if(total >= ($scope.min+100) && $scope.InstitutionID == '4019')
+            			if(total >= ($scope.min+100) && user.institutionID == '4019')
             			{	getReportData($scope.min+100, $scope.min+200); }
             			else if(total >= ($scope.min+100))
             			{ pagging(list, total); }
@@ -4272,7 +4275,7 @@
             		   		 	alert("Error Ocurred....Please try later.");*/
             				//$http({ method : 'POST',
             				//	url : '/AppScoringV2/api/ScoringV2/DecisionRules',
-            				//	params:{'INSTITUTION_ID':$scope.InstitutionID,'RuleID':$scope.Rule,'RType':'Matrix','FType':MField,'CType':'Create'},
+            				//	params:{'INSTITUTION_ID':user.institutionID,'RuleID':$scope.Rule,'RType':'Matrix','FType':MField,'CType':'Create'},
             				//	data : data,
             				//	headers : {'Content-Type' : 'application/json'}
             				//}).success(function(data) 
@@ -4472,7 +4475,7 @@
             				$http({
             					method : 'POST',
             					url : '/GoNoGoV3/api/GoNoGoV3/UserProfile',
-            					params:{'userid':$scope.userid,'INSTITUTION_ID':$scope.InstitutionID},
+            					params:{'userid':$scope.userid,'INSTITUTION_ID':user.institutionID},
             					headers : {	'Content-Type' : 'application/json'}
             				}).success(function(Response) 
             				 {if(Response.StatusCode == 101)

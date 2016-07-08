@@ -48,7 +48,7 @@
 				$scope.useremail = currentUser.useremail;
 				$scope.image = currentUser.image;	
 				$scope.instImage = currentUser.instImage;
-				$scope.InstitutionID = currentUser.InstitutionID;
+				$scope.InstitutionID = currentUser.institutionID;
 				$scope.userid = currentUser.userid;
 				$scope.color = currentUser.color;
 			}
