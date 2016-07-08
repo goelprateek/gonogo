@@ -3120,7 +3120,7 @@ app.filter('dateFilter', function() {
     return function(date){
          var result = '';
         if(date){
-           result = date.slice(0,2)+"/"+date.slice(2,4)+"/"+date.slice(4,8);
+           result = date.slice(0,2)+"/"+date.slice(3,5)+"/"+date.slice(6,10);
         }
         return result;
     };
