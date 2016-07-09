@@ -307,8 +307,8 @@ font-size:14px;}
 									<span>Address Line2 : {{objectSet.oAppReq.oReq.oApplicant.aAdr[0].sLine2}}</span>
 								</div> 
 							</div>
-							<div class="list-group-item" >
-							<div class="notify-scroll-container" data-ng-if="imageDataArray">
+							<div data-ng-if="imageDataArray.length!=0" style=" overflow-y: scroll;height: 54px;">
+							<div class="notify-scroll-container" >
 								 <ul> 
 									<li ng-repeat="d in imageDataArray">
 										<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index)"><img ng-src="{{d.sByteCode}}"> </a>
@@ -555,6 +555,9 @@ font-size:14px;}
 											<span>Eligibility Amount : {{cro.dEligibleAmt}}</span>
 										</div>
 										<div class="list-group-item">
+											<span>FOIR : </span>
+										</div>
+										<div class="list-group-item">
 											<span>Approved Amount : {{cro.dAmtAppr}}</span>
 										</div>
 										<div class="list-group-item">
@@ -564,10 +567,10 @@ font-size:14px;}
 											<span>EMI :{{cro.dEmi}}</span>
 										</div>
 									</div>
-									<div class="list-group-item" 
+									<!-- <div class="list-group-item" 
 									ng-if="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']">
 									    <span>FOIR : {{objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']}}</span>
-									</div>
+									</div> -->
 									<div class="list-group-item" 
 									ng-if="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['RULE-SEQ']">
 									    <span>Eligibility Grid : {{objectSet.oCompRes.scoringServiceResponse["ELIGIBILITY_RESPONSE"]["RULE-SEQ"]}}</span>

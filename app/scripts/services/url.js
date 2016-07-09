@@ -220,10 +220,10 @@
 		AclService.addRole("CRO1");
 
 		AclService.addResource("NCHAT");
-		AclService.addResource("DEApplication");
+		AclService.addResource("Application");
 		
-		AclService.allow("CRO1","DEApplication","Reinitiate");
-		AclService.allow("CRO1","DEApplication","Update");
+		AclService.allow("CRO1","Application","Reinitiate");
+		AclService.allow("CRO1","Application","Update");
 	}]);
 
 }).call(this);

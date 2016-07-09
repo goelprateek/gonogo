@@ -564,11 +564,11 @@ svg:not (:root ) {
 
 
 .notify-scroll-container{
-	width: 1000px;
+	width: 100%;
     height: 100px;
     overflow-x: auto;
     overflow-y: hidden;
-    box-shadow: 0 0 10px #000;
+  /*  box-shadow: 0 0 10px #000;*/
 
 }
 

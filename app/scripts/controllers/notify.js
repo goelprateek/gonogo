@@ -569,9 +569,13 @@
                     });
 
          modalInstance.result.then(function (selected) {
-                       console.log("successfully");
-                        }, function () {
-                          $log.info('Modal dismissed at: ');
+                        }, function (array) {
+                            $log.info($scope.rejectImgFromServer);
+                             var filter = _.filter(array,function(arr2obj){
+                                return arr2obj.sStat == "Reject";
+                            });
+                            $scope.rejectImgFromServer = filter;
+
                         });
     }
 
@@ -745,7 +749,13 @@
                 }));
 
                 $scope.imageDataArray =  finalImageArray;
-                console.log($scope.imageDataArray);
+                var rejectImgFromServer =[];
+                _.each($scope.imageDataArray,function(val){
+                    if(val.sStat == "Reject"){
+                        rejectImgFromServer.push(val);
+                    }  
+                });
+                $scope.rejectImgFromServer = rejectImgFromServer;
             }
         });
  }
@@ -786,12 +796,12 @@ $scope.scoreTree = function(){
 	
 $scope.cro_action = function(appID, action){ 
 	$scope.appltnID = appID;
+    console.log( $scope.rejectImgFromServer);
 	if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!croQueue)){
 		if((appID !== "undefined") && (typeof $scope.objectSet.oAppReq !== "undefined")){
 			 if(action == "OnHold"){
 				/* $scope.toggleDocPanel = !$scope.toggleDocPanel;
 				 $scope.docOfferFlag = true;*/
-
                   var modalInstance = $uibModal.open({
                       animation: $scope.animationsEnabled,
                       templateUrl: 'views/templates/onhold-panel.html',
@@ -801,7 +811,7 @@ $scope.cro_action = function(appID, action){
                         holdModelFeed : function (){
                             var dataForModel;
                             return dataForModel = {
-                              
+                              rejectedImage : $scope.rejectImgFromServer
                             }
                         }
                       }
@@ -2271,11 +2281,12 @@ function requestForStatus(json)
 
 app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService',
     function($scope,ImageFeed,$uibModalInstance,$timeout,RestService){
-
     /*$scope.myInterval = 5000;*/
     $scope.noWrapSlides = true;
     $scope.isReject = false;
     $scope.active = ImageFeed.index;
+    var rejectedImgArray = [];
+    
     if(ImageFeed.isImage){
         $scope.imageTag = 1;
         $scope.slides = _.each(ImageFeed.docData,function(value,key){
@@ -2288,31 +2299,59 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
 
     $scope.approveImg = function(index){
         $scope.slides[index].sStat = "Approve";
-    }
-
-    $scope.rejectImg = function(index){
-        $scope.slides[index].sStat = "Reject";
-        $scope.isReject = true;
-console.log( $scope.slides[index].sReason);
-        /* var imageId = $(document.body).find('#myModalnew').find('.modal-title').find('h5').attr("title");
-             var imageName = $(document.body).find('#myModalnew').find('.modal-title').find('h5').text();
-             var reason =  $(document.body).find('#reason').val();
-             var json ={
+         var json ={
                       "oHeader": {
                         "sAppID": ImageFeed.applicationId,
                         "sApplID": ImageFeed.applicantId
                       },
                       "sRefID": ImageFeed.refId,
-                      "sImageID": $scope.slides[index].sImgID,
+                      "sImageID":$scope.slides[index].sImgID,
                       "oUpldDtl": {
-                        "sStat": "Reject",
-                        "sReason":reason
+                        "sStat": "Approve",
+                        "sReason":""
                       }
-                    };
-             ImgSevice(json,imageName);//uncomment later
-             rejectArray.push({Name: imageName,Image:"",Reason:reason});
-             $(document.body).find('#reason, #submitreason').hide();
-             e.stopImmediatePropagation();*/
+        };
+        $scope.imageService(json,$scope.slides[index]);
+
+    }
+
+    $scope.rejectImg = function(index){
+        $scope.slides[index].sStat = "Reject";
+        $scope.isReject = true;
+    }
+
+    $scope.rejectService = function(index){
+     var json ={
+              "oHeader": {
+                "sAppID": ImageFeed.applicationId,
+                "sApplID": ImageFeed.applicantId
+              },
+              "sRefID": ImageFeed.refId,
+              "sImageID": $scope.slides[index].sImgID,
+              "oUpldDtl": {
+                "sStat": "Reject",
+                "sReason":$scope.slides[index].sReason
+              }
+            };
+            $scope.imageService(json,$scope.slides[index]);
+//             rejectArray.push({Name: imageName,Image:"",Reason:reason});
+    }
+
+    $scope.imageService = function(json,object){
+        console.log(json);
+         var URL ='update-image-status';
+         RestService.saveToServer(URL,json).then(function(Response){
+                console.log(Response);
+                if(Response.sStatus == "SUCCESS"){
+                   /* if(json.oUpldDtl.sStat == "Reject"){
+                        rejectedImgArray.push(object);
+                        console.log(rejectedImgArray);
+                    }*/
+                }else{
+                    $scope.slides[index].sReason = '';
+                }
+                   
+        });
     }
 
     $scope.onFileSelect = function($files,imageName,imageIndex){
@@ -2352,8 +2391,8 @@ console.log( $scope.slides[index].sReason);
                                           }
                                         };
                                 var URL = 'upload-image';
-                               /*  RestService.saveToServer(URL,json).then(function(Response){
-                                        if(Response.sStatus == 'SUCCESS'){*/
+                                 RestService.saveToServer(URL,json).then(function(Response){
+                                        if(Response.sStatus == 'SUCCESS'){
                                             if(!$scope.slides[imageIndex]["evdncArray"]){
                                                   $scope.slides[imageIndex]["evdncArray"]=[];
                                             }
@@ -2373,8 +2412,8 @@ console.log( $scope.slides[index].sReason);
                                             }else{
                                                 alert("You have max limit of 2 images!");
                                             }
-                                      /*  }
-                                 });  */  
+                                     }
+                                 });   
                            }else{
                                     alert("File Type Not Supported");
                                }
@@ -2387,7 +2426,7 @@ console.log( $scope.slides[index].sReason);
       }
 
     $scope.closeModal = function(){
-          $uibModalInstance.dismiss('cancel');
+          $uibModalInstance.dismiss($scope.slides);
     };
 
 }]),
@@ -2529,6 +2568,10 @@ app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
         reqComment : ""
     };
 
+    _.each($scope.holdModelFeed.rejectedImage , function(image){
+         docData[4].Offers.push({'Name':image.sImgType , 'Icon':'images/rejected proof.png','Code':image.sImgType});
+     });
+    
       $scope.isCurrTab = function(index){
         if((index == 0 && $scope.tabIndex== undefined) || index == $scope.tabIndex){
             return true;
