@@ -248,7 +248,7 @@ font-size:14px;}
 						</div>
 					</form>	
 					
-					<div class="leftbar_scroll" style="height: 515px;" when-scrolled="loadData()">
+					<div class="leftbar_scroll" style="height: 504px;" when-scrolled="loadData()">
 						<div class="list-group-item" ng-if="notifarray.length==0"
 								style="color: red; text-align: center;">Your Queue is Empty</div>
 						<div class="list-group-item" style="padding: 0px;border-bottom: 1px solid #ddd;margin-bottom: 0px;" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" > <!-- ['-refId','-dateTime'] -->
@@ -411,13 +411,14 @@ font-size:14px;}
 							<div class="scroll-divs" style="height: 158px;">
 							<div ng-repeat="bureauData in objectSet.aAppScoRslt" ng-if="bureau.length != 0">
 								
-								<div class="list-group-item" ng-if="bureauData.sFldName =='Application Score'">
+								<div class="list-group-item" ng-if="bureauData.sFldName =='Application Score'" 
+								style="border-bottom: 1px solid #ddd;">
 									<span>Application Score : {{bureauData.sFldVal}}</span>
 								</div>
-								<div class="list-group-item" ng-if="bureauData.sFldName =='Residential Address Score'">
+								<div class="list-group-item" ng-if="bureauData.sFldName =='Residential Address Score'"	style="border-bottom: 1px solid #ddd;">
 									<span>Res Addr Score : {{bureauData.sFldVal}}</span>
 								</div> 
-									<div class="list-group-item" ng-if="bureauData.sFldName =='Office Address Score'">
+								<div class="list-group-item" ng-if="bureauData.sFldName =='Office Address Score'"	style="border-bottom: 1px solid #ddd;">
 									<span>Off Addr Score : {{bureauData.sFldVal}}</span>
 								</div>
 							</div>
@@ -618,138 +619,15 @@ font-size:14px;}
 		</div>
 <!-- 	ng-if="authenticate('NRPRCS')" -->
 		<div class="row clearfix" id="application-main-container" data-ng-if="!container"
-			style="border-top: 1px solid #DADADB; padding-top: 10px;"
-			>
-			<!-- <div class="row clearfix">
-				<div class="col-md-9 text-left">
-					<div class="alert alert-danger" id="erro-msg"
-						style="float: none; text-align: left; margin: 0px">
-						<strong>Error ! &nbsp&nbsp&nbsp</strong><span id="error"></span>
-					</div>
-				</div>
-				<div class="col-md-3 text-right" id="top-fixed">
-					<a class="add-button-div-notification"
-
-						style="width: 100px; display: inline-block;" ng-click="toggleForm()">Back</a> <!-- <a
-						class="add-button-div-notification"
-						style="width: 100px; display: inline-block;" ng-show="{{InstitutionID==4019 && (userid != '493')}}" id="submit">Submit</a> -->
+			style="border-top: 1px solid #DADADB; padding-top: 10px;">
 						<div ng-include="'views/templates/app-form.html'"></div> 
 				</div>
 			</div>
 <!-- ******************************Second Common Form ************************************************* -->
-
 		</div>
 	</div>
-<!-- 	<form id="offrform" ng-show="toggleDocPanel">
-	<div class="row clearfix" 
-		style="position: absolute; left: 25%; top: 28%;">
-		
-		<div class="col-md-12"
-			style="background-color: white; border: 1px solid #C9D7E1;padding:0px">
-			<div class="row clearfix" id="searchBox">
-				<span class="glyphicon glyphicon-chevron-left"></span> 
-				<div class="col-md-2 thumbnail-box" ng-repeat="offer in OfferArrey"
-					id="OfferBox{{$index}}"  ng-click="Load_Offer(offer.ID,$event)">
-					<span class="badge">{{offer.Count}}</span> 
-				<img
-						ng-src="{{offer.Icon}}" />
-					<div>{{offer.Name}}</div>
-					<div class="active_bar" id="active{{$index}}"></div>
-				</div>
-			</div>
-			<div class="row clearfix offer_box" style="overflow-y: scroll;height: 200px;">
-				<ul>
-					<li ng-repeat="moreoffer in AvailebleOffers">
-						<div class="col-md-2">
-							<img alt="" ng-src="{{moreoffer.Icon}}" width="28px"
-								height="28px">
-						</div>
-						<div class="col-md-8">
-							<span>{{moreoffer.Name}}</span>
-						</div>
-						<div class="col-md-2">
-							<div class="roundedTwo">
-								<input type="checkbox" id="Offer{{$index}}" name="check" class="checkBox"
-									ng-model="offer[moreoffer]" ng-checked={{moreoffer.selected}}
-									autocomplete="off"
-									ng-change="checkboxUpdate(offer[moreoffer],$index)" /> <label
-									for="Offer{{$index}}" style="box-shadow:0px 0px 4px rgba(0, 0, 0, 1);"></label>
-							</div>
-						</div>
-					</li>
-				</ul>
-			</div>
-			<div class="row clearfix lo" style="background-color: #DADADB;">
-				<div class="col-md-12">
-					<a class="add-button-div-notification" ng-click="requestDoc()" style="float: left">Request Document</a>
-					<input type="text" ng-model="reqComment" maxlength="150" style="margin: 6px 0px; margin-left: 10px;">
-						ng-click="updateStatus()" style="float: left">Offer</a>  
-					<span  class="text-danger" ng-if="invalidMsg">Please enter your reason for Onhold</span>
-						<a	class="add-button-div-notification" id="closeOffer"
-						style="float: right" ng-click="closeDocument()">Close</a>
-				</div>
-			</div>
-		</div>
-	</div>
-</form> -->
- <!-- <div class="row clearfix declinePanel" id="declinereason" data-ng-show="toggleDclnPanel">
-		<div class="panel_heading"><label>Description </label><span class="text-danger" id="errorheading" style="float:right ;margin-top: 3px"> </span></div>
-		<div class="panel_body">
-		 <div class="row clearfix">
-		   <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
-			  padding: 10px; font-weight: bold" id="reasoncontainer" contenteditable="true"spellcheck="false"> 
-			  </div>
-		  </div> 
-		  <div class="row clearfix">
-		  <label style="margin-left: 15px">Remark :</label>
-			  <input type="text" class="dashedcontainer" ng-model="dclnRemark" >
-		  </div>
-		   <div class="row clearfix">
-		   <label style="margin-left: 15px">Subject to  :</label>
-			   <input type="text" class="dashedcontainer" ng-model="dclnSubTo" >
-		  </div>
-		</div>
-		<div class="panel_footer" style="height: 27px;">	
-			<span id="declinemsg" class="text-danger" style="text-align: left;"></span>
-			<span  class="text-danger" ng-if="errorMsg">Please fill all the fields</span>
-			<div class="text-right" style=" display: inline; float: right;">
-		  	<a class="TC_button" ng-click="saveDclnPanel()">Submit</a>	
-		   <a class="TC_button" ng-click="closeDclnPanel()">Close</a>	
-		   </div>												
-		  <a class="TC_button" ng-click="closeDclnPanel()">Close</a> 
-		</div>
-	</div> -->
-	<!--  <div class="row clearfix declinePanel" id="approveReason" data-ng-show="toggleApprvPanel">
-		<div class="panel_heading"><label>Description </label><span class="text-danger" id="errorheading" style="float:right ;margin-top: 3px"> </span></div>
-		<div class="panel_body">
-		 <div class="row clearfix" id="enterAmount" style=" margin-top: 5px;">
-		 	<div class="col-md-4"><label>Approve Amount :</label>
-		 <input type="text" class="checkVisible" maxlength="20" ng-model="croDecision[0].dAmtAppr" id="ApprvValue" style="width: 100%;"/></div>
-		 	<div class="col-md-4"><label>EMI :</label>
-		 <input type="text" class="checkVisible" maxlength="20" ng-model="croDecision[0].iTenor" id="emiValue" style="width: 100%;"/></div>
-		 	<div class="col-md-4"><label>Tenor :</label>
-		 <input type="text" class="checkVisible" maxlength="20" ng-model="croDecision[0].dEmi" id="tenorValue" style="width: 100%;"/></div>
-		 
-		 </div>
-		  <div class="row clearfix">
-		  <label style="margin-left: 15px; margin-top: 5px;">Remark :</label>
-			  <input type="text" class="dashedcontainer" ng-model="apprvRemark" >
-		  </div>
-		   <div class="row clearfix">
-		   <label style="margin-left: 15px">Subject to  :</label>
-			   <input type="text" class="dashedcontainer" ng-model="apprvSubTo" >
-		  </div>
-		</div>
-		<div class="panel_footer" style="height: 27px;">
-			<span id="approvemsg" class="text-danger" style="text-align: left;"></span>
-			<div class="text-right" style=" display: inline; float: right;">
-		   <a class="TC_button" ng-click="saveApprvPanel()">Submit</a>	
-		   <a class="TC_button" ng-click="closeApprvPanel()">Close</a>	
-		   </div>							
-		</div>
-	</div>
- -->
-</div><!-- end of controller -->
+</div>
+<!-- end of controller -->
 	<div id="chat_window" class="row clearfix">
 		<div class="chat_header_box" style="font-weight: bold;">
 			<a id="minimize"
