@@ -237,7 +237,7 @@ font-size:14px;}
 			<div class="col-md-3 column" id="leftbar" style="padding: 7px 0px 0px 0px;height: 553px;margin-bottom: 55px;"> <!--  overflow: hidden; margin-bottom: 20px; -->
 				
 				<div class="list-group" ng-init="names"
-					style="border: 1px solid rgb(218, 218, 219);overflow: hidden;margin-bottom: 0px "> 
+					style="border: 1px solid rgb(218, 218, 219);overflow: hidden;margin-bottom: 0px ;border-radius: 5px;"> 
 					<!-- remove overflow hidden -->
 					<form name="notification_search" autocomplete="off">
                 		<div class="icon-addon addon-lg">
@@ -248,7 +248,7 @@ font-size:14px;}
 						</div>
 					</form>	
 					
-					<div class="leftbar_scroll" style="height: 504px;" when-scrolled="loadData()">
+					<div class="leftbar_scroll" style="height: 512px;" when-scrolled="loadData()">
 						<div class="list-group-item" ng-if="notifarray.length==0"
 								style="color: red; text-align: center;">Your Queue is Empty</div>
 						<div class="list-group-item" style="padding: 0px;border-bottom: 1px solid #ddd;margin-bottom: 0px;" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" > <!-- ['-refId','-dateTime'] -->
@@ -533,14 +533,20 @@ font-size:14px;}
 									<div class="list-group-item">
 										<span>Location : {{}}</span>
 									</div>
+									<div class="list-group-item">
+										<span>IP Address : {{}}</span>
 									</div>
-									<div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">
+									<div class="list-group-item">
+										<span>Browser : {{}}</span>
+									</div>
+									</div>
+									<!-- <div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">
 										    <div class="col-md-4" ng-if="otherPresent" style="padding: 0px">
 											<a><img ng-if="otherPresent" alt="Preview Not Availeble"  id="other" name="OTHER" data-toggle="modal"
 											data-target="#myModalnew" class="custom_img_rounded" title="OTHER"
 											ng-src="{{others}}"  usermap="{{otherId}}" style="float: left;margin: 3px;"></a>
 											</div>
-									</div>	
+									</div>	 -->
 								
 							</div>
 						</div>

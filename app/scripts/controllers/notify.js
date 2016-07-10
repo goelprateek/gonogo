@@ -1196,7 +1196,7 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
                                                     "id" : $scope.slides[imageIndex]["evdncArray"].length,
                                                     "sByteCode" : base64,
                                                     "sImgID" : '',
-                                                    "sImgType" : $scope.slides[imageIndex].sImgType+"_EVIDENCE"+($scope.slides[imageIndex]["evdncArray"].length+1),
+                                                    "sImgType" : $scope.slides[imageIndex].sImgType+"_EVIDENCE"+($scope.slides[imageIndex].evdncArray.length+1),
                                                     "sReason" : '',
                                                     "sStat" : ''
                                                 };

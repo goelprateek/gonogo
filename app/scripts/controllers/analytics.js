@@ -344,9 +344,43 @@
 		var user=UserService.getCurrentUser();
 		var object  = AnalyticsObject.dummy;
 		$scope.objectSet =  object; 
+		$scope.isImg = true;
 		$scope.findAddressType = function(orignal,final){
     		return (angular.lowercase(orignal) == angular.lowercase(final));
-    	}	 
+    	}	
+
+    	$scope.showimage = function(obj,isImgFlag,index){
+        var modalInstance = $uibModal.open({
+                      animation: $scope.animationsEnabled,
+                      templateUrl: 'views/templates/modal.html',
+                      controller: 'imagesCtr',
+                      size: 'lg',
+                      resolve:{
+                        ImageFeed : function (){
+                            var imageData;
+                            return imageData = {
+                                isImage : isImgFlag,
+                                docData : obj,
+                                index : index,
+                                applicationId : $scope.objectSet.oAppReq.oHeader.sAppID,
+                                applicantId : $scope.objectSet.oAppReq.oReq.oApplicant.sApplID,
+                                institutionId : $scope.InstitutionID,
+                                refId : $scope.objectSet.oAppReq.sRefID
+                            }
+                        }
+                      }
+                    });
+
+         modalInstance.result.then(function (selected) {
+                        }, function (array) {
+                            $log.info($scope.rejectImgFromServer);
+                             var filter = _.filter(array,function(arr2obj){
+                                return arr2obj.sStat == "Reject";
+                            });
+                            $scope.rejectImgFromServer = filter;
+
+                        });
+    } 
 
 		var json = {'sInstID':user.institutionID};
 
@@ -4075,6 +4109,34 @@
             			$(document.body).find("#scoringdiv").css("overflow-x","hidden");
             	 }
             }]);
+
+	app.controller("imagesCtr",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService',
+    function($scope,ImageFeed,$uibModalInstance,$timeout,RestService){
+    /*$scope.myInterval = 5000;*/
+    $scope.noWrapSlides = true;
+    $scope.isReject = false;
+    $scope.active = ImageFeed.index;
+    var rejectedImgArray = [];
+    
+    if(ImageFeed.isImage){
+        $scope.imageTag = 1;
+        $scope.slides = _.each(ImageFeed.docData,function(value,key){
+            return value["id"] = key;
+        });
+    }else{
+        $scope.imageTag = 0;
+        $scope.pdf = ImageFeed.docData;
+    }
+
+    $scope.approveImg = function(index){return false;}
+
+    $scope.rejectImg = function(index){return false;}
+
+    $scope.closeModal = function(){
+          $uibModalInstance.dismiss($scope.slides);
+    };
+
+}]);
 
 	app.filter('dateFormat', function() {
 		return function(item) {

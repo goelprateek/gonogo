@@ -646,53 +646,16 @@
 			style="margin-bottom: 40px; display: block;">
 			<legend>KYC Document</legend>
 				<div class="notify-scroll-container" data-ng-if="imageDataArray">
-								 <ul> 
-									<li ng-repeat="d in imageDataArray">
-										<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index)"><img ng-src="{{d.sByteCode}}"> </a>
-									</li>
-								 </ul> 
+					 <ul> 
+						<li ng-repeat="d in imageDataArray">
+							<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index)"><img ng-src="{{d.sByteCode}}"> </a>
+						</li>
+					 </ul> 
 				</div>
-
-			<!-- <div class="col-md-3">
-					<a><img alt="Document Not available"  title="APPLICANT-PHOTO" accesskey="{{custimg}}" data-toggle="modal"
-						data-target="#myModalnew" class="preview" src="{{custimg}}" name="{{custimgId}}" style="border: none;">
-						<label class="control-label">Applicant Photo</label></a> 
-			</div>
-			<div class="col-md-3">
-					<a><img alt="Document Not available"  title="PAN" accesskey="{{src_img}}" data-toggle="modal"
-						data-target="#myModalnew" class="preview" src="{{src_img}}" name="{{panimgID}}" style="border: none;">
-						<label class="control-label">PAN</label></a> 
-			</div>
-			<div class="col-md-3">
-				<a><img alt="Document Not available"  title="AADHAAR" accesskey="{{aadhar}}" data-toggle="modal"
-						data-target="#myModalnew" class="preview" src="{{aadhar}}" name="{{adhrimgID}}" style="border: none;">
-						<label class="control-label">Aadhaar Card</label></a>
-			</div>
-			<div class="col-md-3">
-				<a><img alt="Document Not available"  title="DRIVING-LICENSE" accesskey="{{dlicense}}" data-toggle="modal"
-						data-target="#myModalnew" class="preview" src="{{dlicense}}" name="{{drvlimgID}}" style="border: none;">
-						<label class="control-label">Driving License</label></a>
-			</div>
-			<div class="col-md-3">
-				<a><img alt="Document Not available"  title="PASSPORT" accesskey="{{passport}}" data-toggle="modal"
-						data-target="#myModalnew" class="preview" src="{{passport}}" name="{{passimgID}}" style="border: none;">
-						<label class="control-label"> Passport</label></a>
-			</div>
-			<div class="col-md-3">
-					<a><img alt="Document Not available"  title="INCOME-PROOF1" accesskey="{{income1}}" data-toggle="modal"
-						data-target="#myModalnew" class="preview" src="{{income1}}" name="{{income1Id}}" style="border: none;">
-						<label class="control-label">Income Proof 1</label></a> 
-			</div>
-			<div class="col-md-3">
-					<a><img alt="Document Not available"  title="INCOME-PROOF2" accesskey="{{income2}}" data-toggle="modal"
-						data-target="#myModalnew" class="preview" src="{{income2}}" name="{{income2Id}}" style="border: none;">
-						<label class="control-label">Income Proof 2</label></a> 
-			</div>
-			<div class="col-md-3">
-					<a><img alt="Document Not available"  title="OTHER" accesskey="{{others}}" data-toggle="modal"
-						data-target="#myModalnew" class="preview" src="{{others}}" name="{{otherId}}" style="border: none;">
-						<label class="control-label">Other</label></a> 
-			</div> -->
+				<!-- <a>
+					<img alt="CIBIL CIR" ng-if="objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]['PDF REPORT']" name="{{pdf}}" data-ng-click="showimage(pdfData,!isImg)"
+							class="custom_img_rounded Report-Icon"
+							src="images/cibil_logo.png"></a>  -->
 		</fieldset>
 		<fieldset class="formfield" style="display: block;">
 			<legend>IPA Details</legend>
