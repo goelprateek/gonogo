@@ -219,10 +219,10 @@ vertical-align: middle;
 	outline: none;
 }
 
-label {
+/*label {
 	color: black;
 	font-weight: inherit;
-}
+}*/
 
 #progressbar li::before {
 	content: counter(step, decimal);

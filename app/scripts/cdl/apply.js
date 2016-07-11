@@ -2239,7 +2239,7 @@ $scope.scmService = function(key){
 // $('#scheme').on('autocompleteselect', function (e, ui) 
 $scope.selectScheme =function(ui)
 {	$scope.SchemeObject = "";
-	for(var Object of $scope.allSchemes)
+	for(var Object in $scope.allSchemes)
 		{
 		 if(Object.sSchDes==ui)
 			 {

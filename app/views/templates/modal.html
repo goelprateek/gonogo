@@ -26,7 +26,7 @@ border-color: #EF160B;
 			      <uib-slide ng-repeat="slide in slides  track by slide.id" index="slide.id">
 			      <h4>{{slide.sImgType}}</h4>
 			       <img  ng-src="{{slide.sByteCode}}" ng-modal="slide.sImgType"
-				style="width: 100%; height: 100%; max-height: 400px; margin:auto;">
+						style="width: 100%; height: 100%; max-height: 400px; margin:auto;">
 					<div class="row clearfix" style="margin-top: 3%;">
 					<div class="col-md-7"
 						style="padding-right: 0px; padding-left: 15%;">
@@ -41,10 +41,10 @@ border-color: #EF160B;
 						</div>
 						<div class="col-md-2" ng-if="slide.sStat =='Reject'">
 							<input type="text" class="form-control" maxlength="150"
-								ng-modal="slide.sReason" style="height: 33px; width: 150px;">
+								ng-model="slide.sReason" style="height: 33px; width: 150px;">
 						</div>
 						<div class="col-md-1" style="margin-top: 15px;" ng-if="slide.sStat =='Reject'">
-							<a id="submitreason" style="margin-left: 105px;">OK</a>
+							<a ng-click="rejectService($index)" style="margin-left: 105px;">OK</a>
 						</div>
 					</div>
 					<div class="col-md-1" style="padding: 0px; width: 10%;" ng-if="slide.evdncArray" 
