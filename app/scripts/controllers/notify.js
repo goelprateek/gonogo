@@ -495,7 +495,7 @@
 
 	$scope.load_details = function(CustID,dedupeflag)
 	{  
-
+        $scope.currentApplicationFormRefID=CustID;
 		var URL='';
 		var json ={'sRefID':CustID};	
 		if(croQueue)//for CRO1
@@ -530,7 +530,7 @@
             $scope.error = '';
 
             if($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob!=""){
-                $scope.dob = $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)+"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4)+"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4);
+                $scope.dob = $scope.objectSet.oAppReq.oReq.oApplicant.sDob;
                 var dateOfBirth=new Date();
                 dateOfBirth.setFullYear(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4)));
                 dateOfBirth.setDate(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)));
@@ -1029,6 +1029,12 @@ function requestForStatus(json)
 
     $scope.updateForm=function(){
         
+        var dobFormatted=$filter('date')($scope.objectSet.oAppReq.oReq.oApplicant.sDob,"dd:MM:yyyy")
+        if(dobFormatted && dobFormatted!="")
+        {
+            $scope.objectSet.oAppReq.oReq.oApplicant.sDob=dobFormatted.replace(/:/g,"");
+        }
+
         $scope.isUpdating=!$scope.isUpdating;
         
         console.log("Updating form : ");
