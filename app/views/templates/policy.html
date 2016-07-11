@@ -131,38 +131,38 @@ button:active {
 			<div class="row clearfix" id="btn-row">
 				<div class="col-md-8">
 					<div class="btn-group btn-group-sm medium-button" role="group" aria-label="...">
-						<a class="btn table-btn" id="Policy" ng-show="authenticate('PPOLICY')" ng-click="open_tab('Policy')">Credit Policy</a> 
-						<a class="btn table-btn" id="Rules"  ng-show="authenticate('PRULE')" ng-click="open_tab('Rules')">Credit Rules</a>       
-						<a class="btn table-btn" id="Scores" ng-show="authenticate('PTABLE')" ng-click="open_tab('Scores')">Scoring Tables</a>
-						<a class="btn table-btn" id="iff_master" ng-show="authenticate('PMASTER')" ng-click="open_tab('Pmaster')">IFF & Masters</a>
-						<a class="btn table-btn" id="Elgblty" ng-show="authenticate('ELGBLTY')" ng-click="open_tab('Elgblty')">Eligibility</a>
-<!-- 						<a class="btn table-btn" ng-show="authenticate('ELGBLTY')" ng-click="uploadtempElgblty()">Temp Elgblty</a>   -->
+						<a class="btn table-btn" id="Policy" ng-show="can('PPOLICY')" ng-click="open_tab('Policy')">Credit Policy</a> 
+						<a class="btn table-btn" id="Rules"  ng-show="can('PRULE')" ng-click="open_tab('Rules')">Credit Rules</a>       
+						<a class="btn table-btn" id="Scores" ng-show="can('PTABLE')" ng-click="open_tab('Scores')">Scoring Tables</a>
+						<a class="btn table-btn" id="iff_master" ng-show="can('PMASTER')" ng-click="open_tab('Pmaster')">IFF & Masters</a>
+						<a class="btn table-btn" id="Elgblty" ng-show="can('ELGBLTY')" ng-click="open_tab('Elgblty')">Eligibility</a>
+<!-- 						<a class="btn table-btn" ng-show="can('ELGBLTY')" ng-click="uploadtempElgblty()">Temp Elgblty</a>   -->
 					</div>
 				</div>
 				<div class="col-md-4 text-right">
 				         <img src="images/loading.gif" style="width: 25px;margin-top:7px; display: none;" id="T_LoaderSpinner">	
 							<div class="float-right" ng-hide="Table">
-								<form ng-submit="submit_table()" ng-show="ScoreTable && authenticate('PADSCRTBL')">
+								<form ng-submit="submit_table()" ng-show="ScoreTable && can('PADSCRTBL')">
 									<input type="text" ng-model="tableName" class="form-control name" placeholder="Table Name" required ValueType capitalize>
 									<input type="submit" class="add-button-div" value="Add Table"/>
 								</form>
-								<form ng-submit="submit_Rule()" ng-show="Rule && authenticate('PADCRRUL')">
+								<form ng-submit="submit_Rule()" ng-show="Rule && can('PADCRRUL')">
 									<input type="text" ng-model="rule_name" class="form-control name" placeholder="Rule Name" required capitalize>
 									<select ng-model="rule_type" class="inline_control form-control normal-select" style="width: 50px">
 										<option value="Select" ng-selected="true">Type</option>
-										<option value="Tree" ng-if="authenticate('RTREE')">Tree</option>
-										<option value="Matrix" ng-if="authenticate('RMATRIX')">Matrix</option>
-										<option value="Criteria" ng-if="authenticate('RCRITRIA')">Criteria</option>
+										<option value="Tree" ng-if="can('RTREE')">Tree</option>
+										<option value="Matrix" ng-if="can('RMATRIX')">Matrix</option>
+										<option value="Criteria" ng-if="can('RCRITRIA')">Criteria</option>
 									</select>
 									<input type="submit" class="add-button-div" value="Add Rule"/>
 								</form>
-								<form ng-submit="SaveCreditPolicy()" ng-show="PolicyID && authenticate('PADPLCY')">
+								<form ng-submit="SaveCreditPolicy()" ng-show="PolicyID && can('PADPLCY')">
 									<input type="text" ng-model="policyName" class="form-control name" placeholder="Policy Name" required capitalize>
 									<input type="text" ng-model="priority" class="form-control name inline" placeholder="Priority" name="Priority" required capitalize
 									 style="width: 50px;">				
 									<input type="submit" class="add-button-div" value="Add Policy"/>
 								</form>
-								<form ng-submit="SaveElgblty()" ng-show="ElgbltyID && authenticate('PADPLCY')" name="ElgbltyForm">
+								<form ng-submit="SaveElgblty()" ng-show="ElgbltyID && can('PADPLCY')" name="ElgbltyForm">
 									<input type="text" ng-model="ElgbltyName" class="form-control name" placeholder="Eligibility Name" required capitalize>
 									<input type="submit" class="add-button-div" value="Add Eligibility"/>
 								</form>
@@ -191,15 +191,15 @@ button:active {
 							<td>{{policy.PolicyID}}</td><td>{{policy.name}}</td>
 							<td>{{policy.priority}}</td><td>{{policy.status}}</td>
 							<td>{{policy.createdby}}</td><td>{{policy.updatedby}}</td>
-							<td><span class="glyphicon glyphicon-edit" ng-if="authenticate('PEDIT')" title="edit"
+							<td><span class="glyphicon glyphicon-edit" ng-if="can('PEDIT')" title="edit"
 							    ng-click="load_policy(policy.PolicyID, 'edit')"></span>
-							<span class="glyphicon glyphicon-eye-open" ng-if="authenticate('PVIEW')" title="View" 
+							<span class="glyphicon glyphicon-eye-open" ng-if="can('PVIEW')" title="View" 
 							    ng-click="load_policy(policy.PolicyID, 'view')"></span>
-							<span class="glyphicon glyphicon-trash" ng-if="authenticate('PDLT')" title="Delete" 
+							<span class="glyphicon glyphicon-trash" ng-if="can('PDLT')" title="Delete" 
 								ng-click="load_policy(policy.PolicyID, 'delete')"></span>
-							<span class="glyphicon glyphicon-check" ng-if="(policy.status=='Pending'||policy.status=='Disabled') && authenticate('PAPRV')" title="Approve"
+							<span class="glyphicon glyphicon-check" ng-if="(policy.status=='Pending'||policy.status=='Disabled') && can('PAPRV')" title="Approve"
 								ng-click="load_policy(policy.PolicyID, 'approve')"></span>
-							<span class="glyphicon glyphicon-ban-circle" ng-if="policy.status=='Approved' && authenticate('PAPRV')" title="Disable"
+							<span class="glyphicon glyphicon-ban-circle" ng-if="policy.status=='Approved' && can('PAPRV')" title="Disable"
 								ng-click="load_policy(policy.PolicyID, 'disable')"></span>	
 							</td>
 						</tr>											
@@ -323,15 +323,15 @@ button:active {
 								<td>{{Rule.RuleID}}</td><td>{{Rule.name}}</td>
 								<td>{{Rule.type}}</td><td>{{Rule.status}}</td>
 								<td>{{Rule.createdby}}</td><td>{{Rule.updatedby}}</td>
-								<td><span class="glyphicon glyphicon-edit" ng-if="authenticate('REDIT')" title="edit" 
+								<td><span class="glyphicon glyphicon-edit" ng-if="can('REDIT')" title="edit" 
 									ng-click="Load_Rules(Rule.RuleID, 'edit',Rule.type)"></span>
-								<span class="glyphicon glyphicon-eye-open" ng-if="authenticate('RVIEW')" title="View" 
+								<span class="glyphicon glyphicon-eye-open" ng-if="can('RVIEW')" title="View" 
 									ng-click="Load_Rules(Rule.RuleID, 'view',Rule.type)"></span>
-								<span class="glyphicon glyphicon-trash" ng-if="authenticate('RDLT')" title="Delete" 
+								<span class="glyphicon glyphicon-trash" ng-if="can('RDLT')" title="Delete" 
 									ng-click="Load_Rules(Rule.RuleID, 'delete',Rule.type)"></span>
-								<span class="glyphicon glyphicon-check" ng-if="(Rule.status=='Pending'||Rule.status=='Disabled') && authenticate('RAPRV')" title="Approve"
+								<span class="glyphicon glyphicon-check" ng-if="(Rule.status=='Pending'||Rule.status=='Disabled') && can('RAPRV')" title="Approve"
 									ng-click="Load_Rules(Rule.RuleID, 'approve',Rule.type)"></span>
-								<span class="glyphicon glyphicon-ban-circle" ng-if="Rule.status=='Approved' && authenticate('RAPRV')" title="Disable"
+								<span class="glyphicon glyphicon-ban-circle" ng-if="Rule.status=='Approved' && can('RAPRV')" title="Disable"
 									ng-click="Load_Rules(Rule.RuleID, 'disable',Rule.type)"></span>
 								</td>
 							</tr>	
@@ -502,15 +502,15 @@ button:active {
 					<tr ng-repeat="table in tableList | orderBy:'TableID' |filter:tableName">
 						<td>{{table.TableID}}</td><td>{{table.name}}</td><td>{{table.status}}</td>
 						<td>{{table.createdby}}</td><td>{{table.updatedby}}</td>
-						<td><span class="glyphicon glyphicon-edit" ng-if="authenticate('STEDIT')" title="edit" 
+						<td><span class="glyphicon glyphicon-edit" ng-if="can('STEDIT')" title="edit" 
 							ng-click="load_table(table.TableID, 'edit')"></span>
-						<span class="glyphicon glyphicon-eye-open" ng-if="authenticate('STVIEW')" title="View" 
+						<span class="glyphicon glyphicon-eye-open" ng-if="can('STVIEW')" title="View" 
 							ng-click="load_table(table.TableID, 'view')"></span>
-						<span class="glyphicon glyphicon-trash" ng-if="authenticate('STDLT')" title="Delete" 
+						<span class="glyphicon glyphicon-trash" ng-if="can('STDLT')" title="Delete" 
 							ng-click="load_table(table.TableID, 'delete')"></span>
-						<span class="glyphicon glyphicon-check" ng-if="(table.status=='Pending'||table.status=='Disabled') && authenticate('STAPRV')" title="Approve" 
+						<span class="glyphicon glyphicon-check" ng-if="(table.status=='Pending'||table.status=='Disabled') && can('STAPRV')" title="Approve" 
 							ng-click="load_table(table.TableID, 'approve')"></span>
-						<span class="glyphicon glyphicon-ban-circle" ng-if="table.status=='Approved' && authenticate('STAPRV')" title="Disable"
+						<span class="glyphicon glyphicon-ban-circle" ng-if="table.status=='Approved' && can('STAPRV')" title="Disable"
 							ng-click="load_table(table.TableID, 'disable')"></span>	
 							</td>
 						</tr>	
@@ -542,15 +542,15 @@ button:active {
 								<td>{{IFF.Name}}</td><td>{{IFF.Type}}</td>
 								<td>{{IFF.status}}</td><td>{{IFF.createdby}}</td>
 								<td>{{IFF.updatedby}}</td>
-								<td><span class="glyphicon glyphicon-edit" ng-if="authenticate('PIFFEDIT')" title="edit" 
+								<td><span class="glyphicon glyphicon-edit" ng-if="can('PIFFEDIT')" title="edit" 
 									ng-click="Load_Iff(IFF.FileID, 'edit',IFF.Type)"></span>
-								<span class="glyphicon glyphicon-eye-open" ng-if="authenticate('PIFFVIEW')" title="View" 
+								<span class="glyphicon glyphicon-eye-open" ng-if="can('PIFFVIEW')" title="View" 
 									ng-click="Load_Iff(IFF.FileID, 'view',IFF.Type)"></span>
-								<span class="glyphicon glyphicon-trash" ng-if="authenticate('PIFFDLT')" title="Delete" 
+								<span class="glyphicon glyphicon-trash" ng-if="can('PIFFDLT')" title="Delete" 
 									ng-click="Load_Iff(IFF.FileID, 'delete')"></span>
-								<span class="glyphicon glyphicon-check" ng-if="(IFF.status=='Pending'||IFF.status=='Disabled') && authenticate('PIFFAPRV')" title="Approve"
+								<span class="glyphicon glyphicon-check" ng-if="(IFF.status=='Pending'||IFF.status=='Disabled') && can('PIFFAPRV')" title="Approve"
 									ng-click="Load_Iff(IFF.FileID, 'approve')"></span>
-								<span class="glyphicon glyphicon-ban-circle" ng-if="IFF.status=='Approved' && authenticate('PIFFAPRV')" title="Disable"
+								<span class="glyphicon glyphicon-ban-circle" ng-if="IFF.status=='Approved' && can('PIFFAPRV')" title="Disable"
 									ng-click="Load_Iff(IFF.FileID, 'disable')"></span>
 								</td>
 							</tr>	
@@ -559,15 +559,15 @@ button:active {
 								<td>{{master.Name}}</td><td>{{master.Type}}</td>
 								<td>{{master.status}}</td><td>{{master.createdby}}</td>
 								<td>{{master.updatedby}}</td>
-								<td><span class="glyphicon glyphicon-edit"  ng-if="authenticate('PIFFEDIT')" title="edit" 
+								<td><span class="glyphicon glyphicon-edit"  ng-if="can('PIFFEDIT')" title="edit" 
 									ng-click="mastervalue(master.FileID, 'edit')"></span>
-								<span class="glyphicon glyphicon-eye-open" ng-if="authenticate('PIFFVIEW')" title="View" 
+								<span class="glyphicon glyphicon-eye-open" ng-if="can('PIFFVIEW')" title="View" 
 									ng-click="mastervalue(master.FileID, 'view')"></span>
-								<span class="glyphicon glyphicon-trash" ng-if="authenticate('PIFFDLT')" title="Delete" 
+								<span class="glyphicon glyphicon-trash" ng-if="can('PIFFDLT')" title="Delete" 
 									ng-click="mastervalue(master.FileID, 'delete')"></span>
-								<span class="glyphicon glyphicon-check" ng-if="(master.status=='Pending'||master.status=='Disabled') && authenticate('PIFFAPRV')" title="Approve" 
+								<span class="glyphicon glyphicon-check" ng-if="(master.status=='Pending'||master.status=='Disabled') && can('PIFFAPRV')" title="Approve" 
 									ng-click="mastervalue(master.FileID, 'approve')"></span>
-								<span class="glyphicon glyphicon-ban-circle" ng-if="master.status=='Approved' && authenticate('PIFFAPRV')" title="Disable" 
+								<span class="glyphicon glyphicon-ban-circle" ng-if="master.status=='Approved' && can('PIFFAPRV')" title="Disable" 
 									ng-click="mastervalue(master.FileID, 'disable')"></span>
 								</td>
 							</tr>	
@@ -971,15 +971,15 @@ button:active {
 						<td>{{elgblty.ElgbltyID}}</td><td>{{elgblty.name}}</td>
 						<td>{{elgblty.status}}</td><td>{{elgblty.createdby}}</td>
 						<td>{{elgblty.updatedby}}</td>
-						<td><span class="glyphicon glyphicon-edit" ng-if="authenticate('PIFFEDIT')" title="edit" 
+						<td><span class="glyphicon glyphicon-edit" ng-if="can('PIFFEDIT')" title="edit" 
 							ng-click="Load_Elgblty(elgblty.ElgbltyID, 'edit')"></span>
-						<span class="glyphicon glyphicon-eye-open" ng-if="authenticate('PIFFVIEW')" title="View" 
+						<span class="glyphicon glyphicon-eye-open" ng-if="can('PIFFVIEW')" title="View" 
 							ng-click="Load_Elgblty(elgblty.ElgbltyID,'view')"></span>
-						<span class="glyphicon glyphicon-trash" ng-if="authenticate('PIFFDLT')" title="Delete" 
+						<span class="glyphicon glyphicon-trash" ng-if="can('PIFFDLT')" title="Delete" 
 							ng-click="Load_Elgblty(elgblty.ElgbltyID,'delete')"></span>
-						<span class="glyphicon glyphicon-check" ng-if="(elgblty.status=='Pending'||elgblty.status=='Disabled') && authenticate('PIFFAPRV')" title="Approve"
+						<span class="glyphicon glyphicon-check" ng-if="(elgblty.status=='Pending'||elgblty.status=='Disabled') && can('PIFFAPRV')" title="Approve"
 							ng-click="Load_Elgblty(elgblty.ElgbltyID, 'approve')"></span>
-						<span class="glyphicon glyphicon-ban-circle" ng-if="elgblty.status=='Approved' && authenticate('PIFFAPRV')" title="Disable"
+						<span class="glyphicon glyphicon-ban-circle" ng-if="elgblty.status=='Approved' && can('PIFFAPRV')" title="Disable"
 							ng-click="Load_Elgblty(elgblty.ElgbltyID, 'disable')"></span>
 						</td>
 					</tr>

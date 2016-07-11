@@ -1429,18 +1429,18 @@ function requestForStatus(json)
 			
 		}
 		$scope.rejectFlag = false;
-		 checkRejectedImg(kyc_array);
-		 checkRejectedImg(income1_array);
-		 checkRejectedImg(income2_array);
-		 checkRejectedImg(other_array);
-		 checkRejectedImg(custImg_array);
-		 checkRejectedImg(appForm_array);
-		 checkRejectedImg(disburst_array);
-		 checkRejectedImg(agreement_array);
-		 checkRejectedImg(ach_array);
-		 checkRejectedImg(addkyc_array);
-		 checkRejectedImg(evidence_array);
-		 checkRejectedImg(extra_array);
+		checkRejectedImg(kyc_array);
+		checkRejectedImg(income1_array);
+		checkRejectedImg(income2_array);
+		checkRejectedImg(other_array);
+		checkRejectedImg(custImg_array);
+		checkRejectedImg(appForm_array);
+		checkRejectedImg(disburst_array);
+		checkRejectedImg(agreement_array);
+		checkRejectedImg(ach_array);
+		checkRejectedImg(addkyc_array);
+		checkRejectedImg(evidence_array);
+		checkRejectedImg(extra_array);
 	}
 	function kyc_img(kycName , imgId ,status , reason){
 		var json ={'sImgID':imgId}
@@ -2876,27 +2876,29 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
     $scope.refID = refID;
     $scope.applicantFormObject = applicantFormObject;
     
-    var reinitiateModules=[
-                                {sModuleName : "101", bRunModule : false},
-                                {sModuleName : "201", bRunModule : false},
-                                {sModuleName : "202", bRunModule : false},
-                                {sModuleName : "301", bRunModule : false},
-                                {sModuleName : "302", bRunModule : false},
-                                {sModuleName : "401", bRunModule : false},
-                                {sModuleName : "402", bRunModule : false}
-                            ];
-//  var reinitiateModules=[
-//                          {main:"MB" ,subs: [{name:"Cibil",id:101}]},
-//                          {main:"KYC" , subs: [{name:"PAN",id:201},
-//                                               {name:"Aadhaar",id:201}]},
-//                          {main:"Dedupe" , subs: [{name:"Dedupe",id:301},
-//                                                  {name:"Negative Pin Code",id:302}]},
-//                          {main:"SOBRE" , subs: [{name:"Verificaton scoring",id:401},
-//                                                 {name:"Application scoring",id:402}]}
-//                       ];
+    var requestReinitiateModules=[];
+
+    // var requestReinitiateModules=[
+    //                              {sModuleName : "101", bRunModule : false},
+    //                              {sModuleName : "201", bRunModule : false},
+    //                              {sModuleName : "202", bRunModule : false},
+    //                              {sModuleName : "301", bRunModule : false},
+    //                              {sModuleName : "302", bRunModule : false},
+    //                              {sModuleName : "401", bRunModule : false},
+    //                              {sModuleName : "402", bRunModule : false}
+    //                          ];
+
+    $scope.reinitiateModules=[
+                         {main:"MB" ,subs: [{name:"Cibil",id:101,isSuccess:false}]},
+                         {main:"KYC" , subs: [{name:"PAN",id:201,isSuccess:true},
+                                              {name:"Aadhaar",id:202,isSuccess:false}]},
+                         {main:"Dedupe" , subs: [{name:"Dedupe",id:301,isSuccess:true},
+                                                 {name:"Negative Pin Code",id:302,isSuccess:true}]},
+                         {main:"SOBRE" , subs: [{name:"Verificaton scoring",id:401,isSuccess:true},
+                                                {name:"Application scoring",id:402,isSuccess:true}]}
+                      ];
     $scope.tab = 0;
-    $scope.tabSuccess=[true,false,true,false];
-    
+
     $scope.tags = [];
 
     $scope.setTab = function(newTab){
@@ -2914,38 +2916,68 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
             //This tab is active
             val= {
                     color:"white",
-                    background:$scope.getColor(pTab),
+                    background:$scope.getTabColor(pTab),
                     outline:null
                     };
         }else{
             //This tab is not active
             val= {
-                    color:$scope.getColor(pTab),
-                    border:"1px solid "+$scope.getColor(pTab)
-                }
+                    color:$scope.getTabColor(pTab),
+                    border:"1px solid " + $scope.getTabColor(pTab)
+                };
         }
         return val;
     };
-    
-    $scope.getOptionStyle=function(pTab){
+
+    $scope.isTabSuccess=function(pTab){
+        var isSuccess=true;
+        for(var i=0;i<$scope.reinitiateModules.length;i++){
+            if($scope.reinitiateModules[i].main==pTab){
+                for(var j=0;j<$scope.reinitiateModules[i].subs.length;j++)
+                {
+                    if(!$scope.reinitiateModules[i].subs[j].isSuccess){
+                        isSuccess=false;
+                    }
+                }
+            }
+        }
+
+        return isSuccess;
+    };
+
+    $scope.getSubStyle=function(pSub){
 //      console.log("pTab:"+pTab);
         var val="";
         //This tab is not active
         val= {
-                color:$scope.getColor(pTab),
+                color:$scope.getSubColor(pSub),
                 outline:null        
-            }
+            };
         return val;
     };
-    
-    $scope.getColor=function(pTab){
-        if($scope.tabSuccess[pTab]){ //Color code == green
+
+    $scope.getTabColor=function(pTab){
+        if($scope.isTabSuccess(pTab)){ //Color code == green
             return "#22ab4a";
         }else{
             return "#ee1f23";
         }
     };
-    
+
+    $scope.getSubColor=function(pSub){
+        for(var i=0;i<$scope.reinitiateModules.length;i++) {
+            for(var j=0;j<$scope.reinitiateModules[i].subs.length;j++) {
+                if($scope.reinitiateModules[i].subs[j].id==pSub){
+                    if($scope.reinitiateModules[i].subs[j].isSuccess) { //Color code == green
+                        return "#22ab4a";
+                    }else{
+                        return "#ee1f23";
+                    }
+                }
+            }
+        }
+    };
+
     $scope.addTag=function(pTag,tagId){
         //alert(pTag);
         var tagFound=false;
@@ -2962,26 +2994,39 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
             $scope.tags.push({text: pTag,id:tagId});
         }
     };
-    
+
     $scope.reinitiateForm=function(){
-        console.log("Reinitiate form :"+$scope.refID);
-        
-        var moduleArr=[];
-        for(var i=0;i<$scope.tags.length;i++){
-            console.log("Reinitiating :"+$scope.tags[i].id+" "+$scope.tags[i].text);
-            
-            for(var j=0;j<reinitiateModules.length;j++)
-            {
-                if(reinitiateModules[j].sModuleName==$scope.tags[i].id){
-                    reinitiateModules[j].bRunModule=true;
-                }               
+        //console.log("Reinitiate form :"+$scope.refID);
+        requestReinitiateModules=[];
+        for(var mainIndex=0;mainIndex<$scope.reinitiateModules.length;mainIndex++) {
+            for(var subIndex=0;subIndex<$scope.reinitiateModules[mainIndex].subs.length;subIndex++) {
+                var shouldProcess=false;            
+                for(var tagIndex=0;tagIndex<$scope.tags.length;tagIndex++) {                    
+                    if($scope.reinitiateModules[mainIndex].subs[subIndex].id==$scope.tags[tagIndex].id) {
+                        shouldProcess=true;
+                    }
+                }
+
+                requestReinitiateModules.push({sModuleName : ""+$scope.reinitiateModules[mainIndex].subs[subIndex].id, bRunModule : shouldProcess});
             }
         }
         
+        // var moduleArr=[];
+        // for(var i=0;i<$scope.tags.length;i++){
+        //     console.log("Reinitiating :"+$scope.tags[i].id+" "+$scope.tags[i].text);
+            
+        //     for(var j=0;j<$scope.reinitiateModules.length;j++)
+        //     {
+        //         if(reinitiateModules[j].sModuleName==$scope.tags[i].id){
+        //             reinitiateModules[j].bRunModule=true;
+        //         }          
+        //     }
+        // }
+        
         if(applicantFormObject==null){
             var requestJson={
-                    sGngRefId:$scope.refID,
-                    aModuleConfig:reinitiateModules
+                sGngRefId:$scope.refID,
+                aModuleConfig:requestReinitiateModules
             };
 
             var URL="/worker/reprocess-by-id/";
@@ -2994,7 +3039,7 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
             var requestJson={
                 oWorkFlowConfig : {
                     sGngRefId : $scope.refID,
-                    aModuleConfig : reinitiateModules
+                    aModuleConfig : requestReinitiateModules
                 },
                 oApplicationRequest : applicantFormObject
             };
@@ -3104,7 +3149,6 @@ app.directive('changeOnBlur', function() {
     };
 });
 
-
 app.directive("whenScrolled",function(){
     return function(scope, elm, attr) {
       var raw = elm[0];
@@ -3114,13 +3158,13 @@ app.directive("whenScrolled",function(){
         }
       });
     };
-  });
+});
 
 app.filter('dateFilter', function() {
     return function(date){
          var result = '';
         if(date){
-           result = date.slice(0,2)+"/"+date.slice(3,5)+"/"+date.slice(6,10);
+           result = date.slice(0,2)+"/"+date.slice(2,4)+"/"+date.slice(4);
         }
         return result;
     };
@@ -3150,7 +3194,7 @@ app.filter('dateFormat', function() {
 	};
 });
 
-	app.filter('currency', function() {
+app.filter('currency', function() {
 	return function(value, symbol) {
 		if(value != undefined){
 		if ($.isNumeric(value) || value.length >3 ) {

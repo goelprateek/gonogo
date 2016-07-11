@@ -53,7 +53,7 @@ tags-input .host{
     filter: blur(0px);
 }*/
 </style>
-<div style="overflow: hidden;">
+<!-- <div style="overflow: hidden;">
 	<div class="col-md-12" style="overflow: hidden;text-align:center; padding: 20px;">
 		<div style="display:inline-block;">
 		<a href ng-click="setTab(0)" ng-style="getTabStyle(0)"	class="reinitiate-tab-head">Dedupe</a>
@@ -96,6 +96,29 @@ tags-input .host{
 			</label>
 			<label ng-style="getOptionStyle(3)" class="lbl-reinitiate" ng-click="addTag('Application',402)">
 				Application Scoring
+			</label>
+		</div>
+	</div>
+	<div class="col-md-12" style="overflow: hidden;border-top: #417ac7 1px solid;padding:10px;">
+		<div class="col-md-10">
+			<tags-input ng-model="tags"></tags-input>
+		</div>
+		<button class="col-md-2 btn-reinitiate" ng-click="reinitiateForm()">Reinitiate</button>
+	</div>
+</div> -->
+
+<div style="overflow: hidden;">
+	<div class="col-md-12" style="overflow: hidden;text-align:center; padding: 20px;">
+		<div style="display:inline-block;" ng-repeat="module in reinitiateModules">
+			<a href ng-click="setTab(module.main)" ng-style="getTabStyle(module.main)" class="reinitiate-tab-head">
+				{{module.main}}
+			</a>
+		</div>
+	</div>
+	<div class="col-md-12" style="text-align:center;margin: 50px 0px;padding:10px;">
+		<div ng-show="isSet(module.main)" ng-repeat="module in reinitiateModules">
+			<label ng-style="getSubStyle(subModule.id)" class="lbl-reinitiate" ng-click="addTag(subModule.name,subModule.id)" ng-repeat="subModule in module.subs">
+				{{subModule.name}}
 			</label>
 		</div>
 	</div>

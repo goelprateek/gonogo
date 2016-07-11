@@ -245,12 +245,12 @@ label {
 }
 
 .timerimg {
-	width: 190px;
-	height: 190px;
-	position: absolute;
-	left: 17%;
-	z-index: 1;
-	top: -5%;
+    width: 190px;
+    height: 190px;
+    position: absolute;
+    left: 9%;
+    z-index: 0;
+    top: 0%;
 }
 
 .startTimer {
@@ -262,6 +262,7 @@ z-index: 2; */
 	z-index: 2;
 	margin-left: -53%;
 	top: 27%;
+	padding:10px;
 }
 
 .resultInfo {
