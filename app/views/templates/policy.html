@@ -267,8 +267,12 @@ button:active {
 	   					     <option value="till">Valid Till</option>
 	   					     <option value="between">Valid Between</option>
 			   				</select>
-	   					    <input type="text" id="vfrom" class="form-control" placeholder="Valid From" style="display: none" ng-disabled="ViewMode"/>
-	   					    <input type="text" id="vtill" class="form-control" placeholder="Valid Till" style="display: none;" ng-disabled="ViewMode"/>
+	   					    <input type="text" id="vfrom" class="form-control" placeholder="Valid From" style="display: none" ng-disabled="ViewMode" ng-model="vfrom" uib-datepicker-popup="{{dobFormat}}" 
+						is-open="dobPopup.opened" datepicker-options="dateOptions" close-text="Close" 
+						ng-pattern="/^[0-9]{2}/[0-9]{2}/[0-9]{4}/i" required />
+	   					    <input type="text" id="vtill" class="form-control" placeholder="Valid Till" style="display: none;" ng-disabled="ViewMode" ng-model="vtill" uib-datepicker-popup="{{dobFormat}}" 
+						is-open="dobPopup.opened" datepicker-options="dateOptions" close-text="Close" 
+						ng-pattern="/^[0-9]{2}/[0-9]{2}/[0-9]{4}/i" required />
 	   					</div>
    					</div>
 	   				<div id="Criteria-block" class="row clearfix" style="margin: 5px 0px">

@@ -2538,8 +2538,10 @@ else
 	    				}
 	    			
 	    		});
-	  $('#vfrom, #vtill').datepicker({changeMonth: true, changeYear: true, yearRange: "1900:2016",
+	 /* $('#vfrom, #vtill').datepicker({changeMonth: true, changeYear: true, yearRange: "1900:2016",
 			dateFormat: 'dd:mm:yy',defaultDate:(new Date(new Date()).getDate())}).attr('readonly','readonly');
+*/
+
 	// expression change in criteria panel ule row
     $(document.body).on('change', 'select[id^="expression"]', function()
 	    		{ $("body #rule_error").text("");
@@ -6742,6 +6744,34 @@ $(document.body).on("click",'#Upload_Master_File',function()
 					});
 			});
 		}
+
+			 	/* dob popup for error datepicker not found */		
+		$scope.openDOBDialog=function(){
+	 		var defaultDate = new Date();
+	 		defaultDate.setFullYear(defaultDate.getFullYear()-25);
+	 		$scope.dob = defaultDate;
+			$scope.dobPopup.opened = true;			
+		};
+		$scope.dobFormat = "dd/MM/yyyy";
+	 	$scope.dobPopup = {
+		    opened: false
+	  	};
+
+		var minDa = new Date();
+			minDa.setFullYear(minDa.getFullYear()-100);
+
+		var maxDa = new Date();
+		maxDa.setFullYear(maxDa.getFullYear()-18);
+		//alert($filter('date')(maxDa,"dd:MM:yyyy"));
+
+		$scope.dateOptions = {		    
+		    formatYear: 'yyyy',
+		    showWeeks:false,
+		    maxDate: maxDa,
+		    minDate: minDa,
+		    startingDay: 1
+		};
+		/* End of dob popup */
 }]);
 
 }).call(this)

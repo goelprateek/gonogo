@@ -282,6 +282,7 @@
 		AclService.addResource("ABURCOMM");
 		AclService.addResource("CONREQ");
 		AclService.addResource("NAPPDATASTA");
+		AclService.addResource("RTREE");
 
 		AclService.allow("CRO1","DEApplication","Reinitiate");
 		AclService.allow("CRO1","DEApplication","Update");
