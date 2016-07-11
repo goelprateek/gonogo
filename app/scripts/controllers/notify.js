@@ -347,6 +347,7 @@
     $scope.selectResidence = SelectArrays.getResidenceTypes();
 
     $scope.isDisabled=true;
+    $scope.isUpdating = false;
 
     if(_.isUndefined(user.id) ){
         $location.path(APP_CONST.getConst('APP_CONTEXT'));
@@ -358,6 +359,7 @@
 	$scope.container = true;
     $scope.isDedupeSelected = true;
     $scope.isImg = true;
+    $scope.backUpDefaultRefId = [];
 
     $scope.isLosId = function(){
         if($scope.objectSet.oLosDtls){
@@ -501,6 +503,7 @@
 			URL = 'application-data';
 			if(dedupeflag == "true"){
 				 $scope.isDedupeSelected = true;
+                 $scope.backUpDefaultRefId = [];
 				 $("#dedupe , #dedupe1").val("Select");
 			}else{
 				 $scope.isDedupeSelected = false;
@@ -508,6 +511,7 @@
 		}else{
 			URL = 'application-data-cro2';
 			if(dedupeflag == "true"){
+                 $scope.backUpDefaultRefId = [];
                   //remain 
 				$('#accept , #reject').show();
 				 $("#dedupe , #dedupe1").val("Select");
@@ -522,6 +526,8 @@
 			$scope.objectSet = NotificationObject.dummy();
 			
             $scope.Picked = CustID;
+            $scope.done = '';
+            $scope.error = '';
 
             if($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob!=""){
                 $scope.dob = $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)+"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4)+"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4);
@@ -837,10 +843,14 @@ function requestForStatus(json)
   }
 
   $scope.onchange = function(id) {
+        $scope.backUpDefaultRefId.push($scope.objectSet);
+        console.log($scope.backUpDefaultRefId);
         if(id!='Select'){
         $scope.load_details(id,"false");
         }else{
-            $scope.load_details($scope.objectSet.oAppReq.sRefID,"true");
+            $scope.defaultRefId= $scope.backUpDefaultRefId[0].oAppReq.sRefID;
+             console.log( $scope.defaultRefId);
+            $scope.load_details($scope.defaultRefId,"true");
         }
         }
 	
@@ -880,7 +890,7 @@ function requestForStatus(json)
     		 var URL='update-los-details';
     		 RestService.saveToServer(URL,jsondata).then(function(Response){
     				console.log("Response: "+JSON.stringify(Response));
-    				if(Response.STATUS == "SUCCESS"){
+    				if(Response.status == "SUCCESS"){
     					alert("LOS Status updated successfully");
     					 $scope.losIdval = true;
                          $scope.utrVal = true;

@@ -278,7 +278,7 @@ font-size:14px;}
 					<select class="form-control" id="dedupe1" ng-if="objectSet.aDeDupe!=''" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
 	                	 ng-change="onchange(countSelected)">
 	<!--                 	 ng-options="count as count.ref for count in dedupeArray" -->
-						<option ng-selected="true" value="Select">Dedupe Found</option>
+						<option ng-selected="true" value="Select">Default Ref</option>
 	                	<option ng-repeat="count in objectSet.aDeDupe">{{count.sRefID}}</option>
 					</select>
  				</ul>
@@ -603,7 +603,7 @@ font-size:14px;}
 					<select class="form-control" id="dedupe" ng-if="objectSet.aDeDupe!=''" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
 	                	  ng-change="onchange(countSelected)">
 	<!--                 	 ng-options="count as count.ref for count in dedupeArray" -->
-						<option ng-selected="true" value="Select">Dedupe Found</option>
+						<option ng-selected="true" value="Select">Default Ref</option>
 	                	<option ng-repeat="count in objectSet.aDeDupe">{{count.sRefID}}</option>
 					</select>
  				</ul>
