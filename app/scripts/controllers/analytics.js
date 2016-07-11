@@ -2,13 +2,13 @@
 	
 	'use strict';
 	
-	var app = angular.module('gonogo.analytics' ,['gonogo-directives']);
+	var app = angular.module('gonogo.analytics' ,['gonogo-directives','dndLists','ui.slimscroll']);
 	
 
 	app.controller('AnalyticsController',['$scope','$rootScope','Rules','Score', 'Policy','Decision', '$http', '$timeout',
-										  'RestService','$filter','APP_CONST', '$uibModal','UserService',
+										  'RestService','$filter','APP_CONST', '$uibModal','UserService','$log',
 	                                        function($scope,$rootScope, Rules,Score,Policy,Decision, $http, $timeout,
-	                                        	RestService,$filter,APP_CONST,$uibModal,UserService) {
+	                                        	RestService,$filter,APP_CONST,$uibModal,UserService,$log) {
 
 		
 		// chart functionality
@@ -62,8 +62,14 @@
 							      size: 'lg',
 							    });	
 
-			
-		}
+			modalInstance.result.then(function (selectedItem) {
+		      $scope.selected = selectedItem;
+		    }, function () {
+		      $log.info('Modal dismissed at: ' + new Date());
+		    });
+		};
+
+
 		
 		
 		
@@ -4543,8 +4549,75 @@
 	});
 
 
-	app.controller("CustomReportController", [ '$scope' , function($scope){
+	app.controller("CustomReportController", [ '$scope','$log','$uibModalInstance' , function($scope,$log,$uibModalInstance){
+
 		$log.log('modal controller hitted');
+
+		$scope.models = [
+	        {listName: "A", items: [], dragging: false},
+      		{listName: "B", items: [], dragging: false}	
+	        
+	    ];
+
+	    $scope.selectAll = function(list,checkit){
+	    	if(checkit){
+	    		return _.each(list.items,function(value,key){
+	    			value["selected"] = true;	
+	    		});
+	    	}else{
+	    		return _.each(list.items,function(value,key){
+	    			value["selected"] = false;	
+	    		});
+	    	}
+	    	
+	    }
+
+	    $scope.getSelectedItemsIncluding = function(list, item) {
+	      item.selected = true;
+	      return list.items.filter(function(item) { return item.selected; });
+	    };
+
+	    $scope.onDragstart = function(list, event) {
+	       list.dragging = true;
+	       if (event.dataTransfer.setDragImage) {
+	         var img = new Image();
+	         img.src = 'framework/vendor/ic_content_copy_black_24dp_2x.png';
+	         event.dataTransfer.setDragImage(img, 0, 0);
+	       }
+	    };
+
+	    $scope.onDrop = function(list, items, index) {
+	      angular.forEach(items, function(item) { item.selected = false; });
+	      list.items = list.items.slice(0, index)
+	                  .concat(items)
+	                  .concat(list.items.slice(index));
+	      return true;
+	    }
+
+	    $scope.onMoved = function(list) {
+	      list.items = list.items.filter(function(item) { return !item.selected; });
+	    };
+
+	    
+	    angular.forEach($scope.models, function(list) {
+	      for (var i = 1; i <= 4; ++i) {
+	          list.items.push({label: "Item " + list.listName + i});
+	      }
+	    });
+
+	    
+	    $scope.$watch('models', function(model) {
+	        $scope.modelAsJson = angular.toJson(model, true);
+	    }, true);
+
+		$scope.ok = function () {
+	    	$uibModalInstance.close();
+	  	};
+
+	  	$scope.cancel = function () {
+	    	$uibModalInstance.dismiss('cancel');
+	  	};
+
 	}]);
 
 }).call(this)
