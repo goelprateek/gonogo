@@ -528,6 +528,7 @@
             $scope.Picked = CustID;
             $scope.done = '';
             $scope.error = '';
+            $scope.dedupeRefArray = [];
 
             if($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob!=""){
                 $scope.dob = $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)+"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4)+"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4);
@@ -560,6 +561,16 @@
                  $scope.pdfData ="data:application/pdf;base64,"+$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];             
             }catch(e){
                  $scope.pdfData = '';
+            }
+            try{
+               if($scope.objectSet.aDeDupe){
+                     _.each($scope.objectSet.aDeDupe,function(val){
+                        $scope.dedupeRefArray.push(val.sRefID);  
+                });
+               }
+
+            }catch(e){
+
             }
             return response;
 			
@@ -657,7 +668,7 @@ $scope.cro_action = function(appID, action){
                             'sCroId':user.id},
                             "sAppStat":"OnHold",
                             "aCroJustification":offerarray,
-                            "aDedupeRefID": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : [])
+                            "aDedupeRefID": ($scope.dedupeRefArray ? $scope.dedupeRefArray : [])
                         };
                         requestFordclnOnhold(json);
 
@@ -696,7 +707,7 @@ $scope.cro_action = function(appID, action){
                                     'sInstID':$scope.InstitutionID,'sCroId':user.id},
                                     "sAppStat":"Declined",
                                     "aCroJustification":arrayDclnDesc, //not yet
-                                    "aDedupeRefID ": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : [])
+                                    "aDedupeRefID ": ($scope.dedupeRefArray ? $scope.dedupeRefArray : [])
                                     };
                                      console.log(json);
                         requestFordclnOnhold(json);
@@ -746,7 +757,7 @@ $scope.cro_action = function(appID, action){
                             "dApprAmt":$scope.selected.approveAmt,
                             "iTenor":$scope.selected.tenor,
                             "dEmi":$scope.selected.emi,
-                            "aDedupeRefID": ($scope.objectSet.aDeDupe ? $scope.objectSet.aDeDupe : [])
+                            "aDedupeRefID": ($scope.dedupeRefArray ? $scope.dedupeRefArray : [])
                             }
                             console.log(json);
                             requestForStatus(json);
