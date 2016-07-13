@@ -1,18 +1,165 @@
-<div ng-controller="ModalDemoCtrl">
+<style type="text/css">
+    
+    /**
+ * For the correct positioning of the placeholder element, the dnd-list and
+ * it's children must have position: relative
+ */
+.custom-reports ul[dnd-list],
+.custom-reports ul[dnd-list] > li {
+    position: relative;
+}
+
+/**
+ * The dnd-list should always have a min-height,
+ * otherwise you can't drop to it once it's empty
+ */
+.custom-reports ul[dnd-list] {
+    min-height: 42px;
+    padding-left: 0px;
+}
+
+/**
+ * The dndDraggingSource class will be applied to
+ * the source element of a drag operation. It makes
+ * sense to hide it to give the user the feeling
+ * that he's actually moving it.
+ */
+.custom-reports ul[dnd-list] .dndDraggingSource {
+    display: none;
+}
+
+/**
+ * An element with .dndPlaceholder class will be
+ * added to the dnd-list while the user is dragging
+ * over it.
+ */
+.custom-reports ul[dnd-list] .dndPlaceholder {
+    display: block;
+    background-color: #ddd;
+    min-height: 42px;
+}
+
+/**
+ * The dnd-lists's child elements currently MUST have
+ * position: relative. Otherwise we can not determine
+ * whether the mouse pointer is in the upper or lower
+ * half of the element we are dragging over. In other
+ * browsers we can use event.offsetY for this.
+ */
+.custom-reports ul[dnd-list] li {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    display: block;
+    
+}
+
+/**
+ * Show selected elements in green
+ */
+.custom-reports ul[dnd-list] li.selected {
+    color: #1C7EBB;
+    border: 1px dashed gray;
+    border-left: 3px solid #1C7EBB;
+    background-color: #fafafa;
+
+}
+
+
+
+</style>
+
+<div class="custom-reports">
         <div class="modal-header">
-            <h3 class="modal-title">I'm a modal!</h3>
+            <h3 class="modal-title">Custom Report Designer</h3>
         </div>
-        <div class="modal-body">
-            <ul>
-                <li ng-repeat="item in items">
-                    <a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>
-                </li>
-            </ul>
-            Selected: <b>{{ selected.item }}</b>
+        <div class="modal-body" style="height:550px;">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="reportName" class="col-sm-2 control-label">Report Name</label>
+                    <div class="col-md-10">
+                       <input id="reportName" type="text" ng-model="reportName" placeholder="Add report name" uib-typeahead="address for address in getLocation($viewValue)" typeahead-loading="loadingReports" typeahead-no-results="noResults" class="form-control" typeahead-min-length="3">
+                        <i ng-show="loadingReports" class="fa fa-refresh"></i>
+                        <div ng-show="noResults">
+                          <i class="fa fa-remove"></i> No Results Found
+                        </div>     
+                    </div>
+                </div>
+
+                 <div class="form-group">
+                    
+                    <div class="col-md-12">
+                        <div class="row" >
+                        <div > 
+                            <div ng-repeat="list in models" class="col-md-6">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Columns {{list.listName}}
+                                            <input type="text" name="query" ng-model="query" >   
+                                            <span class="badge bage-info pull-right"  >{{list.items.length}}</span>
+                                        </h3>
+                                    </div>
+                                    <div class="pannel-body" >
+                                       
+                                    </div>  
+                                       <div class="scroll-body"  slimscroll="{height: 300,railVisible:true}">
+                                       <ul dnd-list class="list-group" dnd-drop="onDrop(list, item, index)" >
+                                            
+                                            <li ng-repeat="item in list.items | filter:query"
+                                                dnd-draggable="getSelectedItemsIncluding(list, item)"
+                                                dnd-dragstart="onDragstart(list, event)"
+                                                dnd-moved="onMoved(list)"
+                                                dnd-dragend="list.dragging = false"
+                                                dnd-selected="item.selected = !item.selected"
+                                                ng-class="{'selected': item.selected}"
+                                                ng-hide="list.dragging && item.selected"
+                                                class="list-group-item"
+                                                >
+
+                                                <span href="javascript:;">
+                                                    {{item.label}}
+                                                    <!-- <input type="checkbox" class="pull-right" />
+                                                    <input type="checkbox" class="pull-right" aria-hidden="true"> -->
+                                                </span>
+                                            </li>
+                                                
+                                            <li class="dndPlaceholder list-group-item" >
+                                                Drop any <strong>Column</strong> here
+                                            </li>
+                                        </ul>
+                                        </div>
+                                    </div>          
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <div class="row" >
+
+                                <div class="col-md-10">
+                                        <textarea row="4" ng-model="tagDescription" placeholder="What Best Suited for your report ?" class="form-control" ></textarea>
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="checkbox">
+                                        <label for="markAsFav">
+                                            <input type="checkbox" name="markAsFav">
+                                            Mark as favorite
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>   
+                    </div>             
+             </form>       
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
-            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+            <button class="btn btn-primary" type="button" ng-click="ok()">
+                <span class="fa fa-save"> Save</span>
+            </button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">
+                <span class="fa fa-download"> Download</span>
+            </button>
         </div>
     
 </div>

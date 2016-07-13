@@ -36,6 +36,18 @@
 			return defere.promise;
 		},
 
+		jsonpReq = function (url, data) {
+			var defere = $q.defer();
+
+			$http.post(url, data).success(function (response) {
+				defere.resolve(response);
+			}).error(function (error) {
+				defere.reject(error);
+			})
+
+			return defere.promise;
+		},
+
 			getFromServer = function (url) {
 
 				var defere = $q.defer();
@@ -92,7 +104,8 @@
 			saveToServer: _saveToServer,
 			getFromServer: getFromServer,
 			getStreamFromServer: getStreamFromServer,
-			postDataWithHeaders: postDataWithLoginHeaders
+			postDataWithHeaders: postDataWithLoginHeaders,
+			jsonpReq:jsonpReq
 
 		}
 

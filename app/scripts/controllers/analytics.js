@@ -2,10 +2,10 @@
 	
 	'use strict';
 	
-	var app = angular.module('gonogo.analytics' ,['gonogo-directives']);
+	var app = angular.module('gonogo.analytics' ,['gonogo-directives','dndLists','ui.slimscroll']);
 
-	app.factory("AnalyticsObject",function(){
-    	var _obj = {
+    app.factory("AnalyticsObject",function(){
+        var _obj = {
         "applicationLog": {},
         "sRefID": "",
         "bStatFlag": "",
@@ -325,21 +325,20 @@
             }
           ]
         }
-	
+    
        return {
-    		dummy : _obj
+            dummy : _obj
        }
+    
+    }),
 	
-    });
 
-	
+    app.controller('AnalyticsController',['$scope','$rootScope','Rules','Score', 'Policy','Decision', '$http', '$timeout',
+                                          'RestService','$filter','APP_CONST', '$uibModal','UserService','$log','AnalyticsObject','SelectArrays',
+                                            function($scope,$rootScope, Rules,Score,Policy,Decision, $http, $timeout,
+                                                RestService,$filter,APP_CONST,$uibModal,UserService,$log,AnalyticsObject,SelectArrays) {
 
-	app.controller('AnalyticsController',['$scope','$rootScope','Rules','Score', 'Policy','Decision', '$http', '$timeout',
-										  'RestService','$filter','APP_CONST', '$uibModal','UserService','AnalyticsObject','SelectArrays',
-	                                        function($scope,$rootScope, Rules,Score,Policy,Decision, $http, $timeout,
-	                                        	RestService,$filter,APP_CONST,$uibModal,UserService,AnalyticsObject,SelectArrays) {
 
-		
 		// chart functionality
 		var user=UserService.getCurrentUser();
 		var object  = AnalyticsObject.dummy;
@@ -348,6 +347,11 @@
 		$scope.findAddressType = function(orignal,final){
     		return (angular.lowercase(orignal) == angular.lowercase(final));
     	}	
+
+
+        $scope.findHeight = function(){
+            
+        }
 
     	$scope.showimage = function(obj,isImgFlag,index){
         var modalInstance = $uibModal.open({
@@ -430,8 +434,14 @@
 							      size: 'lg',
 							    });	
 
-			
-		}
+			modalInstance.result.then(function (selectedItem) {
+		      $scope.selected = selectedItem;
+		    }, function () {
+		      $log.info('Modal dismissed at: ' + new Date());
+		    });
+		};
+
+
 		
 		
 		
@@ -554,9 +564,9 @@
 
 		                  return $scope.row !== rowName ? ($scope.row = rowName, $scope.filteredStores = $filter("orderBy")($scope.filteredStores, rowName), $scope.onOrderChange()) : void 0;
 
-		              }, $scope.numPerPageOpt = [3, 5, 10, 20],
+		              }, $scope.numPerPageOpt = [20,30,50],
 
-		              $scope.numPerPage = $scope.numPerPageOpt[2], 
+		              $scope.numPerPage = $scope.numPerPageOpt[0], 
 
 		              $scope.currentPage = 1, 
 
@@ -4148,8 +4158,88 @@
 	});
 
 
-	app.controller("CustomReportController", [ '$scope' , function($scope){
+	app.controller("CustomReportController", [ '$scope','$log','$uibModalInstance' ,'RestService', function($scope,$log,$uibModalInstance,RestService){
+
 		$log.log('modal controller hitted');
+
+
+        $scope.selected = undefined;
+
+        $scope.getLocation = function(val) {
+            return RestService.jsonpReq('//maps.googleapis.com/maps/api/geocode/json', {
+              params: {
+                address: val,
+                sensor: false
+              }
+            }).then(function(response){
+              return response.data.results.map(function(item){
+                return item.formatted_address;
+              });
+            });
+          };
+
+		$scope.models = [
+	        {listName: "A", items: [], dragging: false},
+      		{listName: "B", items: [], dragging: false}	
+	        
+	    ];
+
+	    $scope.selectAll = function(list,checkit){
+	    	if(checkit){
+	    		return _.each(list.items,function(value,key){
+	    			value["selected"] = true;	
+	    		});
+	    	}else{
+	    		return _.each(list.items,function(value,key){
+	    			value["selected"] = false;	
+	    		});
+	    	}
+	    	
+	    }
+
+	    $scope.getSelectedItemsIncluding = function(list, item) {
+	      item.selected = true;
+	      return list.items.filter(function(item) { return item.selected; });
+	    };
+
+	    $scope.onDragstart = function(list, event) {
+	       list.dragging = true;
+	       if (event.dataTransfer.setDragImage) {
+	       }
+	    };
+
+	    $scope.onDrop = function(list, items, index) {
+	      angular.forEach(items, function(item) { item.selected = false; });
+	      list.items = list.items.slice(0, index)
+	                  .concat(items)
+	                  .concat(list.items.slice(index));
+	      return true;
+	    }
+
+	    $scope.onMoved = function(list) {
+	      list.items = list.items.filter(function(item) { return !item.selected; });
+	    };
+
+	    
+	    angular.forEach($scope.models, function(list) {
+	      for (var i = 1; i <= 4; ++i) {
+	          list.items.push({label: "Item " + list.listName + i});
+	      }
+	    });
+
+	    
+	    $scope.$watch('models', function(model) {
+	        $scope.modelAsJson = angular.toJson(model, true);
+	    }, true);
+
+		$scope.ok = function () {
+	    	$uibModalInstance.close();
+	  	};
+
+	  	$scope.cancel = function () {
+	    	$uibModalInstance.dismiss('cancel');
+	  	};
+
 	}]);
 
 }).call(this)

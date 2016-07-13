@@ -55,8 +55,8 @@
             }
 
 // console.log(JSON.stringify(treeData));
-            var margin = {top: 120,right: 150,bottom: 80,left: 120},
-            width = 1000,
+            var margin = {top: 120,right: 150,bottom: 80,left: 100},
+            width = 900,
             height = 10;
             var i = 0,duration = 750,root,depth = 0;
             var tree = d3.layout.tree().nodeSize([120, 80]).separation(function separation(a, b) {
@@ -150,8 +150,8 @@
 
                     d3.select("#tooltip") // Update the tooltip position and
                                             // value
-                    .style("left", Math.max(0, d3.event.pageX - 20) + "px")
-                    .style("top", (d3.event.pageY - 120) + "px");
+                    .style("left", Math.max(0, d3.event.pageX - 350) + "px")
+                    .style("top", (d3.event.pageY - 184) + "px");
 
                     // bind value with labels
                     $('#node_expression').text(d.exp);// find function erturn

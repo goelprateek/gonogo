@@ -117,10 +117,71 @@
 	                  {value:'Permanent', name:'Permanent'}
 	                  ]; 
 
+	},
+	_getOfferData = function(){
+		return [{'Name':'Address Proof',
+        'ID':'0',
+        'Icon':'images/address-proof.png',
+        'Count':'1',
+        'Type' : 'Approve',
+        'Offers':[{'Name':'Valid Passport','Icon':'images/address-proof.png','Code':'101'},
+                    {'Name':'Latest Electricity Bill','Icon':'images/address-proof.png','Code':'102'},
+                    {'Name':'Telephone Bill','Icon':'images/address-proof.png','Code':'103'},
+                    {'Name':'Driving License','Icon':'images/address-proof.png','Code':'104'},
+                    {'Name':'Ration Card','Icon':'images/address-proof.png','Code':'105'},
+                    {'Name':'Bank Account Statement/Pass Book 1st page','Icon':'images/address-proof.png','Code':'106'},
+                    {'Name':'Rent Agreement','Icon':'images/address-proof.png','Code':'107'},
+                    {'Name':'Gas Connection Bill or Post Paid Mobile Bill with full address ','Icon':'images/address-proof.png','Code':'108'},
+                    {'Name':'Property Tax receipt or Water Bill','Icon':'images/address-proof.png','Code':'109'},
+                    {'Name':'Voter’s Identity card','Icon':'images/address-proof.png','Code':'110'},
+                    {'Name':'Aadhar UID Card','Icon':'images/address-proof.png','Code':'111'}]
+    },
+    {'Name':'DOB Proof',
+        'ID':'1',
+        'Icon':'images/date of birth proof.png',
+        'Count':'2',
+        'Type' : 'Approve',
+        'Offers':[{'Name':'Valid Passport','Icon':'images/date of birth proof.png','Code':'101'},
+                    {'Name':'PAN Card','Icon':'images/date of birth proof.png','Code':'112'},
+                    {'Name':'Driving License','Icon':'images/date of birth proof.png','Code':'104'},
+                    {'Name':'Birth Certificate (Govt agency)','Icon':'images/date of birth proof.png','Code':'113'},
+                    {'Name':'School Leaving certificate (10th/12th)','Icon':'images/date of birth proof.png','Code':'114'},
+                    {'Name':'Voter ID Card','Icon':'images/date of birth proof.png','Code':'110'},
+                    {'Name':'Pension Certificate / Govt. ID Card / Aadhar UID Card','Icon':'images/date of birth proof.png','Code':'111'}]
+    },
+    {'Name':'Identification Proof',
+        'ID':'2',
+        'Icon':'images/identification number.png',
+        'Count':'3',
+        'Type' : 'Approve',
+        'Offers':[{'Name':'Valid Passport','Icon':'images/identification number.png','Code':'101'},
+                    {'Name':'PAN Card','Icon':'images/identification number.png','Code':'112'},
+                    {'Name':'Driving License','Icon':'images/identification number.png','Code':'104'},
+                    {'Name':'Voter’s Identity Card','Icon':'images/identification number.png','Code':'110'},
+                    {'Name':'Aadhar UID card','Icon':'images/identification number.png','Code':'111'},
+                    {'Name':'Bank Passbook with photo','Icon':'images/identification number.png','Code':'115'}]
+    },
+    {'Name':'Signature Proof',
+        'ID':'3',
+        'Icon':'images/signature proof.png',
+        'Count':'4',
+        'Offers':[{'Name':'Signature verification from bank','Icon':'images/signature proof.png','Code':'116'},
+                    {'Name':'Passport Copy','Icon':'images/signature proof.png','Code':'101'},
+                    {'Name':'PAN Card','Icon':'images/signature proof.png','Code':'112'},
+                    {'Name':'Driving license with photograph and signature','Icon':'images/signature proof.png','Code':'104'},
+                    {'Name':'Clearance of processing fees cheque','Icon':'images/signature proof.png','Code':'117'}]
+    },
+    {'Name':'Rejected Proof',
+        'ID':'4',
+        'Icon':'images/rejected proof.png',
+        'Count':'5',
+        'Offers':[]
+    }];
 	}
 	return {
 		getResidenceTypes :_getResidenceTypes,
-		getAddrType :_getAddrType
+		getAddrType :_getAddrType,
+		getOfferData : _getOfferData
 	};
 });
 
