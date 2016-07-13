@@ -4,21 +4,15 @@
 
 	var app=angular.module("gonogo");
 
-app.controller('PDFViewerModalCtrl', ['RestService','$scope', '$uibModalInstance', 'response','refID','$location',function (RestService,$scope, $uibModalInstance, response,refID,$location) {
+app.controller('PDFViewerModalCtrl', [
+	'RestService','$scope', '$uibModalInstance', 'response','refID','$location','UserService',
+	function (RestService,$scope, $uibModalInstance, response,refID,$location,UserService) {
 	
-	 $scope.response = response;
-	 $scope.refID = refID;
+	var user=UserService.getCurrentUser();
+	$scope.response = response;
+	$scope.refID = refID;
 	 
-	 $scope.submit = function (imgID,refID) {
-
-		var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
-		$scope.username = userdata.name;
-		$scope.useremail = userdata.email;
-		$scope.image = userdata.userImage;
-		$scope.instImage = userdata.instImage;
-		$scope.InstitutionID = userdata.InstitutionID;
-		$scope.userid = userdata.userid;
-		$scope.pass = userdata.ePassword;
+	$scope.submit = function (imgID,refID) {
 
 		var mailRequest={
 			oHeader:
@@ -27,18 +21,18 @@ app.controller('PDFViewerModalCtrl', ['RestService','$scope', '$uibModalInstance
 				dtSubmit:new Date().getTime(),
 				sReqType:null,
 				sAppSource:"Web",
-				sDsaId:$scope.useremail,
+				sDsaId:user.useremail,
 				sAppID:"",
 				sDealerId:null,
 				sSourceID:null,
-				sInstID:$scope.InstitutionID
+				sInstID:user.institutionID
 			},
 			sRefID:refID,
 			sImgID:imgID
 		};
 
 		URL = 'send-mail-pdf';
-		RestService.postDataWithHeaders(URL,JSON.stringify(mailRequest),$scope.useremail,$scope.pass).then(function(Response){
+		RestService.postDataWithHeaders(URL,JSON.stringify(mailRequest),user.useremail,user.ePassword).then(function(Response){
 
 			if(Response){}
 		});	
