@@ -8,8 +8,7 @@ app.controller('PDFViewerModalCtrl', ['RestService','$scope', '$uibModalInstance
 	
 	 $scope.response = response;
 	 $scope.refID = refID;
-	 sharedService.setRefID(null);
-
+	 
 	 $scope.submit = function (imgID,refID) {
 
 
@@ -60,6 +59,8 @@ app.controller('PDFViewerModalCtrl', ['RestService','$scope', '$uibModalInstance
 app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"RestService","APP_CONST","$location","$uibModal",function($scope,$rootScope,sharedService, RestService, APP_CONST, $location,$uibModal){
 	
 	var CustID=sharedService.getRefID();
+	sharedService.setRefID(null);
+
 	$scope.refID = CustID;
 	var URL='';
 

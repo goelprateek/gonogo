@@ -17,9 +17,13 @@
   display:block;
   border:none;
   border-bottom:1px solid #757575;
+  box-shadow: none;
 }
 
-.inputMaterial:focus { outline:none;}
+.inputMaterial:focus { 
+  outline:none;
+  box-shadow: none;
+}
 
 .inputMaterial ~ label         
 {

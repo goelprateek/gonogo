@@ -115,9 +115,9 @@
 //				$log.log(e);
 //			}
 
-			if ($scope.InstitutionID == 4019 || $scope.InstitutionID == 4011) {
-				$("#logo.img-responsive").css("padding", "1");
-			}
+			// if ($scope.InstitutionID == 4019 || $scope.InstitutionID == 4011) {
+			// 	$("#logo.img-responsive").css("padding", "1");
+			// }
 			//check authorization level of user
 			$scope.authenticate=function(element){
 				return _.contains(actions,element);

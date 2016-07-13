@@ -1062,43 +1062,40 @@
 							</div>
 							<!-- <div class="col-md-4"></div> -->
 					</fieldset>
-
-
 				</div>
 			</div>
 
 			<div id="resultPanel" style="display: none;position: relative;">
-					 
-				<!--<div id="timer_box" class="">
-					<div class="startTimer">
-						<div class="sui-progressbar sui-progressbar-circular "
-							id="progress"></div>
-					</div>
-				</div> -->
-	<!-- ********************************* angular round ProgressBar ***************************************		 -->
-			
-			<div class="container startTimer">
-				<img class="timerimg" src='images/timer.png'>
-				  <div class="progress-wrapper">
-            <div class="progressFont ng-cloak" ng-style="getStyle()">{{ time }}</div>
-                    <round-progress
-                        max="59"
-                        current="seconds"
-                        color="#24A1ED"
-                        bgcolor="transparent"
-                        radius="{{ radius}}"
-                        semi="isSemi"
-                        rounded="rounded"
-                        clockwise="clockwise"
-                        responsive="responsive"
-                        stroke="{{ stroke*1.5 }}"
-                        animation="{{ currentAnimation }}"
-                        offset="inherit"></round-progress>
-             
+						 
+					<!--<div id="timer_box" class="">
+						<div class="startTimer">
+							<div class="sui-progressbar sui-progressbar-circular "
+								id="progress"></div>
+						</div>
+					</div> -->
+		<!-- ********************************* angular round ProgressBar ***************************************		 -->
+				<div class="container startTimer">
+					<img class="timerimg" src='images/timer.png'>
+				  	<div class="progress-wrapper">
+	            		<div class="progressFont ng-cloak" ng-style="getStyle()">{{ time }}</div>
+	                    <round-progress
+	                        max="59"
+	                        current="seconds"
+	                        color="#24A1ED"
+	                        bgcolor="transparent"
+	                        radius="{{ radius}}"
+	                        semi="isSemi"
+	                        rounded="rounded"
+	                        clockwise="clockwise"
+	                        responsive="responsive"
+	                        stroke="{{ stroke*1.5 }}"
+	                        animation="{{ currentAnimation }}"
+	                        offset="inherit"></round-progress>
+	             
 			        </div><!-- End of progress wrapper -->
-					    </div>
+			    </div>
 
- 			<div class="row-clearfix">
+	 			<div class="row-clearfix">
 					<div class="col-md-6 col-md-offset-3 resultInfo">
 						<h4>Please wait while CRO is analyzing your application.</h4>
 						<h5 style="color: #24A1ED">Your Reference ID is : {{REFID}}</h5>
@@ -1108,7 +1105,7 @@
 				</div> 
 				<div class="row-clearfix">
 					<div class="col-md-7 col-md-offset-2"
-						style="border-bottom: 1px solid rgb(36, 161, 237); position: fixed; bottom: 20%; margin-left: 20%">
+						style="border-bottom: 1px solid rgb(36, 161, 237); margin-left: 20%">
 						<div class="row clearfix ">
 							<div class="col-sm-4 col-md-4" class="progElement"
 								style="border-left: 01px solid rgb(36, 161, 237); text-align: center; height: 140px;">
@@ -1166,7 +1163,6 @@
 							style="float: initial; display: none; margin-top: 5%">Next</button>
 					</div>
 				</div>
-
 			</div>
 			
 			<div class="container" id="afterSubmit" style="display: none;" >
