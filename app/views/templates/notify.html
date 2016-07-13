@@ -205,15 +205,15 @@ font-size:14px;}
 								<a href="javascript:;" ng-click="newApplication()">{{objectSet.oAppReq.sRefID}}</a></span></li>
 							<li><a id="dsa_chat" ng-if="can('NCHAT')">DSA Chat</a></li>
 							<li ><a id="onhold" title="{{objectSet.oAppReq.sRefID}}"
-								ng-if="can('NHOLD')"  
+								ng-if="can('NHOLD') && isDedupeSelected"  
 								ng-click='cro_action(objectSet.oAppReq.oHeader.sAppID, "OnHold")'>OnHold</a><!-- 27 -->
 							</li>
 							<li ><a id="approve" title="{{objectSet.oAppReq.sRefID}}"
-								ng-if="can('NAPPROVE')"
+								ng-if="can('NAPPROVE') && isDedupeSelected"
 								ng-click='cro_action(objectSet.oAppReq.oHeader.sAppID, "Approved")'>Approve</a>
 							</li>
 							<li ><a id="decline" title="{{objectSet.oAppReq.sRefID}}"
-								ng-if="can('NDECLINE')"
+								ng-if="can('NDECLINE') && isDedupeSelected"
 								ng-click='cro_action(objectSet.oAppReq.oHeader.sAppID, "Declined")'>Decline</a>
 							</li>
 							<!-- <li ><a id="accept" title="{{refID}}"
@@ -278,7 +278,7 @@ font-size:14px;}
 					<select class="form-control" id="dedupe1" ng-if="objectSet.aDeDupe!=''" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
 	                	 ng-change="onchange(countSelected)">
 	<!--                 	 ng-options="count as count.ref for count in dedupeArray" -->
-						<option ng-selected="true" value="Select">Dedupe Found</option>
+						<option ng-selected="true" value="Select">Default Ref</option>
 	                	<option ng-repeat="count in objectSet.aDeDupe">{{count.sRefID}}</option>
 					</select>
  				</ul>
@@ -603,7 +603,7 @@ font-size:14px;}
 					<select class="form-control" id="dedupe" ng-if="objectSet.aDeDupe!=''" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
 	                	  ng-change="onchange(countSelected)">
 	<!--                 	 ng-options="count as count.ref for count in dedupeArray" -->
-						<option ng-selected="true" value="Select">Dedupe Found</option>
+						<option ng-selected="true" value="Select">Default Ref</option>
 	                	<option ng-repeat="count in objectSet.aDeDupe">{{count.sRefID}}</option>
 					</select>
  				</ul>

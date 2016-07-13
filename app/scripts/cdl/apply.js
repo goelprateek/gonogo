@@ -283,7 +283,7 @@
 	  		$scope.Response=Response;
 			if(currentStage=="DE"){
 			if(Response){
-	//				{"sInstId":null,"sUserId":null,"sPassword":null,"sRefID":"SATH000302","oHeader":{"sAppID":"160608FK9FAI","sInstID":"4019","sSourceID":null,"sAppSource":"WEB","sReqType":"JSON","dtSubmit":1465371687106,"sDsaId":"HDBFS_DSA1@softcell.com","sCroId":null,"sDealerId":"SATH"},"oReq":{"oApplicant":{"residenceAddSameAsAbove":false,"sApplID":"APPLICANT_1","oApplName":{"sFirstName":"JKJKJKJKJ","sMiddleName":"JKJKJKJKJKJ","sLastName":"JKJKJKJKJJ","sPrefix":null,"sSuffix":null},"oFatherName":null,"oSpouseName":null,"sReligion":null,"sApplGndr":"Male","sDob":"","iAge":0,"sMarStat":"Single","aKycDocs":[{"sKycName":"PAN","sKycNumber":"","sKycStat":null,"sIssueDate":null,"sExpiryDate":null},{"sKycName":"AADHAR","sKycNumber":"989898998989","sKycStat":null,"sIssueDate":null,"sExpiryDate":null}],"bSameAbove":false,"aAddr":[{"sLine1":"","sLine2":"","sCity":"","iPinCode":0,"sState":"","sCountry":"INDIA","sLandLoard":null,"sLine3":"","sLine4":null,"sVillage":null,"sDistrict":null,"fDistFrom":0,"sLandMark":null,"sAccm":null,"iTimeAtAddr":0,"sAddrType":"RESIDENCE","sResAddrType":"Select","iMonthAtCity":0,"iMonthAtAddr":0,"dRentAmt":0,"iYearAtCity":0},{"sLine1":"","sLine2":"","sCity":"","iPinCode":0,"sState":"","sCountry":"INDIA","sLandLoard":null,"sLine3":"","sLine4":null,"sVillage":null,"sDistrict":null,"fDistFrom":0,"sLandMark":null,"sAccm":null,"iTimeAtAddr":0,"sAddrType":"PERMANENT","sResAddrType":"Select","iMonthAtCity":0,"iMonthAtAddr":0,"dRentAmt":0,"iYearAtCity":0},{"sLine1":"","sLine2":"","sCity":"","iPinCode":0,"sState":"","sCountry":"INDIA","sLandLoard":null,"sLine3":"","sLine4":null,"sVillage":null,"sDistrict":null,"fDistFrom":0,"sLandMark":null,"sAccm":null,"iTimeAtAddr":0,"sAddrType":"OFFICE","sResAddrType":null,"iMonthAtCity":0,"iMonthAtAddr":0,"dRentAmt":0,"iYearAtCity":0}],"aPhone":[{"sPhoneType":"PERSONAL_PHONE","sAreaCode":"","sCountryCode":"+91","sPhoneNumber":"","sExt":null},{"sPhoneType":"RESIDENCE_PHONE","sAreaCode":"","sCountryCode":"+91","sPhoneNumber":"","sExt":null},{"sPhoneType":"OFFICE_PHONE","sAreaCode":"","sCountryCode":"+91","sPhoneNumber":"","sExt":null},{"sPhoneType":"PERSONAL_MOBILE","sAreaCode":null,"sCountryCode":"+91","sPhoneNumber":"9898989889","sExt":null},{"sPhoneType":"RESIDENCE_MOBILE","sAreaCode":null,"sCountryCode":"+91","sPhoneNumber":"","sExt":null},{"sPhoneType":"OFFICE_MOBILE","sAreaCode":null,"sCountryCode":"+91","sPhoneNumber":"","sExt":null}],"aEmail":[{"sEmailType":"PERSONAL","sEmailAddr":""},{"sEmailType":"RESIDENCE","sEmailAddr":""},{"sEmailType":"WORK","sEmailAddr":""}],"aEmpl":[{"sEmplType":"Select","sEmplName":"","iTmWithEmplr":0,"sDtJoin":null,"sDtLeave":null,"dmonthSal":0,"dGrossSal":0,"aLastMonthIncome":[],"sConst":"Select","sItrID":null,"dItrAmt":0,"sDesig":null,"sEmplrCode":null,"sEmplrBr":null,"sModePayment":null,"sDeptmt":null,"sWorkExps":null,"sBusinesName":null,"dtComencemnt":null}],"iNoOfDep":0,"iEarnMem":0,"iFamilyMem":0,"oApplRef":null,"sEdu":"Select","sCreditCardNum":"","bMobVer":true,"aBankingDetails":null,"aLoanDetails":null,"oIncomeDetails":null},"aCoApplicant":null,"oApplication":{"sAppID":null,"sLoanType":"Consumer Durables","sAppliedFor":null,"dLoanAmt":0,"iLoanTenor":0,"oProperty":null,"sLnPurp":null,"dLnApr":0,"dEmi":0,"iAdvEmi":0,"dMarginAmt":0,"aAssetDetail":[{"sAssetCtg":"Select","sDlrName":"SATHYA AGENCIES-SLM","sAssetMake":"","sModelNo":"","sPrice":""}],"aOwndAst":null},"sSuspAct":"No"},"sRespFormat":null,"sCurrentStageId":"DE"}
+	//				{"sInstId":null,"sUserId":null,"sPassword":null,"sRefID":"SATH000302","oHeader":{"sAppID":"160608FK9FAI","sInstID":"4019","sSourceID":null,"sAppSource":"WEB","sReqType":"JSON","dtSubmit":1465371687106,"sDsaId":"HDBFS_DSA1@softcell.com","sCroId":null,"sDealerId":"SATH"},"oReq":{"oApplicant":{"residenceAddSameAsAbove":false,"sApplID":"APPLICANT_1","oApplName":{"sFirstName":"JKJKJKJKJ","sMiddleName":"JKJKJKJKJKJ","sLastName":"JKJKJKJKJJ","sPrefix":null,"sSuffix":null},"oFatherName":null,"oSpouseName":null,"sReligion":null,"sApplGndr":"Male","sDob":"","iAge":0,"sMarStat":"Single","aKycDocs":[{"sKycName":"PAN","sKycNumber":"","sKycStat":null,"sIssueDate":null,"sExpiryDate":null},{"sKycName":"AADHAAR","sKycNumber":"989898998989","sKycStat":null,"sIssueDate":null,"sExpiryDate":null}],"bSameAbove":false,"aAddr":[{"sLine1":"","sLine2":"","sCity":"","iPinCode":0,"sState":"","sCountry":"INDIA","sLandLoard":null,"sLine3":"","sLine4":null,"sVillage":null,"sDistrict":null,"fDistFrom":0,"sLandMark":null,"sAccm":null,"iTimeAtAddr":0,"sAddrType":"RESIDENCE","sResAddrType":"Select","iMonthAtCity":0,"iMonthAtAddr":0,"dRentAmt":0,"iYearAtCity":0},{"sLine1":"","sLine2":"","sCity":"","iPinCode":0,"sState":"","sCountry":"INDIA","sLandLoard":null,"sLine3":"","sLine4":null,"sVillage":null,"sDistrict":null,"fDistFrom":0,"sLandMark":null,"sAccm":null,"iTimeAtAddr":0,"sAddrType":"PERMANENT","sResAddrType":"Select","iMonthAtCity":0,"iMonthAtAddr":0,"dRentAmt":0,"iYearAtCity":0},{"sLine1":"","sLine2":"","sCity":"","iPinCode":0,"sState":"","sCountry":"INDIA","sLandLoard":null,"sLine3":"","sLine4":null,"sVillage":null,"sDistrict":null,"fDistFrom":0,"sLandMark":null,"sAccm":null,"iTimeAtAddr":0,"sAddrType":"OFFICE","sResAddrType":null,"iMonthAtCity":0,"iMonthAtAddr":0,"dRentAmt":0,"iYearAtCity":0}],"aPhone":[{"sPhoneType":"PERSONAL_PHONE","sAreaCode":"","sCountryCode":"+91","sPhoneNumber":"","sExt":null},{"sPhoneType":"RESIDENCE_PHONE","sAreaCode":"","sCountryCode":"+91","sPhoneNumber":"","sExt":null},{"sPhoneType":"OFFICE_PHONE","sAreaCode":"","sCountryCode":"+91","sPhoneNumber":"","sExt":null},{"sPhoneType":"PERSONAL_MOBILE","sAreaCode":null,"sCountryCode":"+91","sPhoneNumber":"9898989889","sExt":null},{"sPhoneType":"RESIDENCE_MOBILE","sAreaCode":null,"sCountryCode":"+91","sPhoneNumber":"","sExt":null},{"sPhoneType":"OFFICE_MOBILE","sAreaCode":null,"sCountryCode":"+91","sPhoneNumber":"","sExt":null}],"aEmail":[{"sEmailType":"PERSONAL","sEmailAddr":""},{"sEmailType":"RESIDENCE","sEmailAddr":""},{"sEmailType":"WORK","sEmailAddr":""}],"aEmpl":[{"sEmplType":"Select","sEmplName":"","iTmWithEmplr":0,"sDtJoin":null,"sDtLeave":null,"dmonthSal":0,"dGrossSal":0,"aLastMonthIncome":[],"sConst":"Select","sItrID":null,"dItrAmt":0,"sDesig":null,"sEmplrCode":null,"sEmplrBr":null,"sModePayment":null,"sDeptmt":null,"sWorkExps":null,"sBusinesName":null,"dtComencemnt":null}],"iNoOfDep":0,"iEarnMem":0,"iFamilyMem":0,"oApplRef":null,"sEdu":"Select","sCreditCardNum":"","bMobVer":true,"aBankingDetails":null,"aLoanDetails":null,"oIncomeDetails":null},"aCoApplicant":null,"oApplication":{"sAppID":null,"sLoanType":"Consumer Durables","sAppliedFor":null,"dLoanAmt":0,"iLoanTenor":0,"oProperty":null,"sLnPurp":null,"dLnApr":0,"dEmi":0,"iAdvEmi":0,"dMarginAmt":0,"aAssetDetail":[{"sAssetCtg":"Select","sDlrName":"SATHYA AGENCIES-SLM","sAssetMake":"","sModelNo":"","sPrice":""}],"aOwndAst":null},"sSuspAct":"No"},"sRespFormat":null,"sCurrentStageId":"DE"}
 				dlrCode=Response.oHeader.sDealerId;
 	//				console.log("$scope.dealerArr :"+$scope.dealerArr);
 				console.log("$scope.dealerArr :");
@@ -328,7 +328,7 @@
 					  					$scope.pan=mApplicant.aKycDocs[i].sKycNumber;
 					  				}
 					  				
-					  				if(mApplicant.aKycDocs[i].sKycName==="AADHAR"){
+					  				if(mApplicant.aKycDocs[i].sKycName==="AADHAAR"){
 					  					$scope.aadhar=mApplicant.aKycDocs[i].sKycNumber;
 					  				}
 					  			}
@@ -345,7 +345,7 @@
 							//TODO
 							$scope.REFID=CustID;
 //							console.log("Rquired:"+Response.oReq.sSuspAct +"and"+mApplicant.sCreditCardNum);
-							$scope.suspAct=Response.oReq.sSuspAct;
+							$scope.suspAct=Response.oReq.sSuspAct =="" ? "No" : Response.oReq.sSuspAct;
 							$scope.creditCardNumber=mApplicant.sCreditCardNum;
 							
 							$scope.gender=mApplicant.sApplGndr;
@@ -355,12 +355,16 @@
 							$scope.mstatus=mApplicant.sMarStat;
 							
 							if(mApplicant.sDob && mApplicant.sDob!=""){
-								// $scope.dob=mApplicant.sDob.substring(0,2)+":"+mApplicant.sDob.substring(2,4)+":"+mApplicant.sDob.substring(4);
-								var dateOfBirth = new Date();
-								dateOfBirth.setFullYear(parseInt(mApplicant.sDob.substring(4)));
-								dateOfBirth.setDate(parseInt(mApplicant.sDob.substring(0,2)));
-								dateOfBirth.setMonth(parseInt(mApplicant.sDob.substring(2,4))-1);
-								$scope.dob = dateOfBirth;
+								var dateOfBirth=new Date();
+				                dateOfBirth.setFullYear(parseInt(mApplicant.sDob.slice(4)));
+				                dateOfBirth.setDate(parseInt(mApplicant.sDob.slice(0,2)));
+				                dateOfBirth.setMonth((parseInt(mApplicant.sDob.slice(2,4))-1));
+				                
+				                $scope.dob=dateOfBirth;
+							}else{
+								var dateOfBirth=new Date();
+				                dateOfBirth.setFullYear(new Date().getFullYear()-25);
+				                $scope.dob=dateOfBirth;
 							}
 
 							$scope.constitution=mApplicant.aEmpl[0].sConst;
@@ -507,10 +511,12 @@
 								if(Response!=null && Response!=="")
 								{
 									var data = Response;
-									for(info=0; info<data[0].aImgMap.length; info++)
-									{
-										console.log("Response[applicant].aImgMap[info].sImgType :"+data[0].aImgMap[info].sImgType);
-										kyc_img(data[0].aImgMap[info].sImgType , data[0].aImgMap[info].sImgID, data[0].aImgMap[info].sStat, data[0].aImgMap[info].sReason, data[0].aImgMap[info].sImgVal);
+									if(data[0]){
+										for(info=0; info<data[0].aImgMap.length; info++)
+										{
+											console.log("Response[applicant].aImgMap[info].sImgType :"+data[0].aImgMap[info].sImgType);
+											kyc_img(data[0].aImgMap[info].sImgType , data[0].aImgMap[info].sImgID, data[0].aImgMap[info].sStat, data[0].aImgMap[info].sReason, data[0].aImgMap[info].sImgVal);
+										}
 									}
 									function applicantImg(data){}
 								}
@@ -1460,7 +1466,7 @@ $scope.submitApplication=function(UrlKey)
 
 	$scope.kyc={"aKycDocs":[]};
 	$scope.kyc1={"sKycName":"PAN","sKycNumber":$("#pan").val()};
-	$scope.kyc2={"sKycName":"AADHAR","sKycNumber":$("#aadhar").val()};
+	$scope.kyc2={"sKycName":"AADHAAR","sKycNumber":$("#aadhar").val()};
 	$scope.kyc.aKycDocs.push($scope.kyc1);
 	$scope.kyc.aKycDocs.push($scope.kyc2);
 	$scope.mobileVer={"bMobVer":$scope.verifyMob};
@@ -2668,6 +2674,12 @@ $scope.resetStatus=function(){
            };
 
    		var seconds = 1;
+
+//   	seconds=59;
+//      $scope.seconds=59;
+//      $scope.time=59;
+        
+
    		var intervalPromise;
    		$scope.StartTimer = function () {
    	             intervalPromise = $interval(function(){

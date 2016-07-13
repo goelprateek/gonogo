@@ -30,7 +30,7 @@
 		</div>
 	</div>
 		<!-- ng-if="!authenticate('NCONTAINER')"  ng-if="objectSet.oLosDtls"-->
-		<fieldset class="formfield" ng-if="!authenticate('NCONTAINER')">
+		<fieldset class="formfield" ng-if="!can('NCONTAINER')">
 		<legend> LOS Information</legend>
 		<div class="row clearfix">
 			<div class="col-md-3">
@@ -64,15 +64,15 @@
 		<legend>CRO Justification</legend>
 		<div class="row clearfix">
 			<div ng-repeat="data in objectSet.aCroJustification">
-				<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null">
+				<div class="col-md-3" ng-if="data.sRemark!='' && data.sRemark!=null">
 					<label class="control-label">CRO NAME</label>
 					<textarea class="form-control" rows="1" readonly>{{data.sCroID}}</textarea>
 				</div>
-				<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null">
+				<div class="col-md-3" ng-if="data.sRemark!='' && data.sRemark!=null">
 					<label class="control-label">Remark</label>
 					<textarea class="form-control" rows="1" readonly>{{data.sRemark}}</textarea>
 				</div>
-				<div class="col-md-3" ng-if="data.sRemark!='' || data.sRemark!=null ">
+				<div class="col-md-3" ng-if="data.sRemark!='' && data.sRemark!=null ">
 					<label class="control-label">Subject To</label>
 					<textarea class="form-control" rows="1" readonly>{{data.sSubTo}}</textarea>
 				</div>
@@ -564,6 +564,14 @@
 					<label class="control-label">PAN Score</label> <input
 						ng-model="data.fNameScore" class="form-control" type="text"
 						 disabled="disabled">
+				</div>
+				</div>
+				<div  class="row clearfix"> 
+					<div class="col-md-3">
+					<a> 
+						<img alt="CIBIL CIR" ng-if="objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]['PDF REPORT']" name="{{pdf}}" data-ng-click="showimage(pdfData,!isImg)"
+						class="custom_img_rounded Report-Icon"
+						src="images/cibil_logo.png"></a> 
 				</div>
 				</div>
 			</div>
