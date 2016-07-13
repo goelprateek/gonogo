@@ -4,13 +4,12 @@
 
 	var app=angular.module("gonogo");
 
-app.controller('PDFViewerModalCtrl', ['RestService','$scope', '$uibModalInstance', 'response','refID','$location',function (RestService,BASE_URL_GNG,$scope, $uibModalInstance, response,refID,$location) {
+app.controller('PDFViewerModalCtrl', ['RestService','$scope', '$uibModalInstance', 'response','refID','$location',function (RestService,$scope, $uibModalInstance, response,refID,$location) {
 	
 	 $scope.response = response;
 	 $scope.refID = refID;
 	 
 	 $scope.submit = function (imgID,refID) {
-
 
 		var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
 		$scope.username = userdata.name;
@@ -842,7 +841,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 		 //alert('modal baseURL'+baseURL);
 		 var modalInstance = $uibModal.open({
 	 		animation: $scope.animationsEnabled,
-	 		templateUrl: 'modal_post_ipa_pdf.html',
+	 		templateUrl: 'views/cdl/modal-post-ipa-pdf.html',
 	 		controller: 'PDFViewerModalCtrl',
 	 		size: size,
 	 		resolve: {
@@ -891,7 +890,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 		//console.log("JSON IPA REQUEST : "+JSON.stringify(postIPARequest));
 		
 		URL = 'get-post-ipa';
-		CallRestAPI.postData(URL,JSON.stringify(postIPARequest)).then(function(Response){
+		RestService.saveToServer(URL,JSON.stringify(postIPARequest)).then(function(Response){
 			//console.log("JSON IPA RESPONSE : ");
 			//console.log(JSON.stringify(Response));
 			if(Response){
@@ -909,11 +908,11 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 				//console.log(" IPA PDF REQUEST : "+JSON.stringify(postIPARequest));
 				
 				URL = 'get-pdf-ref';
-				CallRestAPI.postData(URL,JSON.stringify(postIPARequest)).then(function(Response){
+				RestService.saveToServer(URL,JSON.stringify(postIPARequest)).then(function(Response){
 					//console.log("JSON IPA PDF RESPONSE : ");
 					//console.log(JSON.stringify(Response));
 					if(Response){
-						$scope.shwPDFModal('sm',Response,CustID);
+						$scope.shwPDFModal('lg',Response,CustID);
 					}
 				});
 			}
