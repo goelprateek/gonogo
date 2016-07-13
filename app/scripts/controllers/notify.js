@@ -489,6 +489,7 @@
                                 return arr2obj.sStat == "Reject";
                             });
                             $scope.rejectImgFromServer = filter;
+                            $scope.imageDataArray = array;
 
                         });
     }
@@ -529,6 +530,7 @@
             $scope.done = '';
             $scope.error = '';
             $scope.dedupeRefArray = [];
+            $scope.isAllImgApprove = true;
 
             if($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob!=""){
                 $scope.dob = $scope.objectSet.oAppReq.oReq.oApplicant.sDob;
@@ -639,7 +641,15 @@ $scope.scoreTree = function(){
 	
 $scope.cro_action = function(appID, action){ 
 	$scope.appltnID = appID;
-    console.log( $scope.rejectImgFromServer.length);
+    $scope.isAllImgApprove = true;
+     _.each($scope.imageDataArray,function(val){
+        if(val.sStat != "Approve"){
+           $scope.isAllImgApprove = false;
+           return;
+        }
+    });
+      console.log($scope.isAllImgApprove);
+
 	if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!croQueue)){
 		if((appID !== "undefined") && (typeof $scope.objectSet.oAppReq !== "undefined")){
 			 if(action == "OnHold"){
@@ -718,7 +728,7 @@ $scope.cro_action = function(appID, action){
                 
 
 			 }else{
-                    if($scope.rejectImgFromServer.length==0){
+                    if($scope.isAllImgApprove){
                      var modalInstance = $uibModal.open({
                       animation: $scope.animationsEnabled,
                       templateUrl: 'views/templates/approve-panel.html',
@@ -766,7 +776,7 @@ $scope.cro_action = function(appID, action){
                           $log.info('Modal dismissed at: ' + new Date());
                         });
                  }else{
-                        alert("rejectedImage");
+                        alert("having some rejected Image");
                     }
 					/*$scope.toggleApprvPanel = !$scope.toggleApprvPanel;*/
 			}
