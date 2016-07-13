@@ -10,6 +10,10 @@
 
 	var user = UserService.getCurrentUser();
 
+    if(user.id){
+        $scope.$emit('onSuccessfulLogin');
+    }
+
 	if(!_.isUndefined(user.id) ){
 
 			var currDealer  = user.dealer;

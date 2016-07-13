@@ -225,7 +225,7 @@ a:hover {
 	max-width: 100%;
 	box-shadow: 0px 0px 8px #8A7878;
 	background: #FFF none repeat scroll 0% 0%;
-	padding: 9px 48px;
+	padding: 1px;
 	width: 272px;
 }
 
@@ -1228,7 +1228,7 @@ body {
 		box-shadow: 0px 0px 8px #8A7878;
 		background: none repeat scroll 0% 0% #FFF;
 		/* padding: 0px 16px; */ /*  hdfc log */
-		padding: 0px 50px;
+		padding: 1px;
 	}
 	.navbar.navbar-default.submenu {
 		margin-bottom: 0px;

@@ -341,7 +341,7 @@
     $scope.can=AclService.can;
 
     if(user.id){
-        $scope.$emit('onSuccessfulLogin', { message: "Hi" });
+        $scope.$emit('onSuccessfulLogin');
     }
 
     $scope.selectResidence = SelectArrays.getResidenceTypes();

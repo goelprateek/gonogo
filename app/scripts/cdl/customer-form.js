@@ -4,23 +4,15 @@
 
 	var app=angular.module("gonogo");
 
-app.controller('PDFViewerModalCtrl', ['RestService','$scope', '$uibModalInstance', 'response','refID','$location',function (RestService,BASE_URL_GNG,$scope, $uibModalInstance, response,refID,$location) {
+app.controller('PDFViewerModalCtrl', [
+	'RestService','$scope', '$uibModalInstance', 'response','refID','$location','UserService',
+	function (RestService,$scope, $uibModalInstance, response,refID,$location,UserService) {
 	
-	 $scope.response = response;
-	 $scope.refID = refID;
-	 sharedService.setRefID(null);
-
-	 $scope.submit = function (imgID,refID) {
-
-
-		var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
-		$scope.username = userdata.name;
-		$scope.useremail = userdata.email;
-		$scope.image = userdata.userImage;
-		$scope.instImage = userdata.instImage;
-		$scope.InstitutionID = userdata.InstitutionID;
-		$scope.userid = userdata.userid;
-		$scope.pass = userdata.ePassword;
+	var user=UserService.getCurrentUser();
+	$scope.response = response;
+	$scope.refID = refID;
+	 
+	$scope.submit = function (imgID,refID) {
 
 		var mailRequest={
 			oHeader:
@@ -29,18 +21,18 @@ app.controller('PDFViewerModalCtrl', ['RestService','$scope', '$uibModalInstance
 				dtSubmit:new Date().getTime(),
 				sReqType:null,
 				sAppSource:"Web",
-				sDsaId:$scope.useremail,
+				sDsaId:user.useremail,
 				sAppID:"",
 				sDealerId:null,
 				sSourceID:null,
-				sInstID:$scope.InstitutionID
+				sInstID:user.institutionID
 			},
 			sRefID:refID,
 			sImgID:imgID
 		};
 
 		URL = 'send-mail-pdf';
-		RestService.postDataWithHeaders(URL,JSON.stringify(mailRequest),$scope.useremail,$scope.pass).then(function(Response){
+		RestService.postDataWithHeaders(URL,JSON.stringify(mailRequest),user.useremail,user.ePassword).then(function(Response){
 
 			if(Response){}
 		});	
@@ -60,6 +52,8 @@ app.controller('PDFViewerModalCtrl', ['RestService','$scope', '$uibModalInstance
 app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"RestService","APP_CONST","$location","$uibModal",function($scope,$rootScope,sharedService, RestService, APP_CONST, $location,$uibModal){
 	
 	var CustID=sharedService.getRefID();
+	sharedService.setRefID(null);
+
 	$scope.refID = CustID;
 	var URL='';
 
@@ -841,7 +835,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 		 //alert('modal baseURL'+baseURL);
 		 var modalInstance = $uibModal.open({
 	 		animation: $scope.animationsEnabled,
-	 		templateUrl: 'modal_post_ipa_pdf.html',
+	 		templateUrl: 'views/cdl/modal-post-ipa-pdf.html',
 	 		controller: 'PDFViewerModalCtrl',
 	 		size: size,
 	 		resolve: {
@@ -890,7 +884,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 		//console.log("JSON IPA REQUEST : "+JSON.stringify(postIPARequest));
 		
 		URL = 'get-post-ipa';
-		CallRestAPI.postData(URL,JSON.stringify(postIPARequest)).then(function(Response){
+		RestService.saveToServer(URL,JSON.stringify(postIPARequest)).then(function(Response){
 			//console.log("JSON IPA RESPONSE : ");
 			//console.log(JSON.stringify(Response));
 			if(Response){
@@ -908,11 +902,11 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 				//console.log(" IPA PDF REQUEST : "+JSON.stringify(postIPARequest));
 				
 				URL = 'get-pdf-ref';
-				CallRestAPI.postData(URL,JSON.stringify(postIPARequest)).then(function(Response){
+				RestService.saveToServer(URL,JSON.stringify(postIPARequest)).then(function(Response){
 					//console.log("JSON IPA PDF RESPONSE : ");
 					//console.log(JSON.stringify(Response));
 					if(Response){
-						$scope.shwPDFModal('sm',Response,CustID);
+						$scope.shwPDFModal('lg',Response,CustID);
 					}
 				});
 			}

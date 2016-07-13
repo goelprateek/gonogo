@@ -2,28 +2,29 @@
 
 	'use strict';
 	var app = angular.module('gonogo.cdl');
-	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"roundProgressService", function(
-	 $scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,roundProgressService) {
-	$scope.dateOptions = {
-	    dateDisabled: 'disabled',
-	    maxDate: new Date(2020, 5, 22),
-	    minDate: new Date(),
-	    startingDay: 1
-  	};
+	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"roundProgressService","UserService","AclService", function(
+	 $scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,roundProgressService,UserService,AclService) {
+	
+	var user=UserService.getCurrentUser();
+    $scope.can=AclService.can;
+
+    if(user.id){
+        $scope.$emit('onSuccessfulLogin');
+    }
+
 	var poller;
 	$scope.dealerArr = [];
 	$scope.assetArray = [];
 		try {
-			var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
-			$log.debug("userdata :"+JSON.stringify(userdata));
-			$scope.username = userdata.name;
-			$scope.useremail = userdata.email;
-			$scope.image = userdata.userImage;
-			$scope.instImage = userdata.instImage;
-			$scope.InstitutionID = userdata.InstitutionID;
-			$scope.userid = userdata.userid;
-			$scope.color = userdata.color;
-			$scope.ePassword = userdata.ePassword;
+			//$log.debug("userdata :"+JSON.stringify(userdata));
+			$scope.username = user.username ;
+			$scope.useremail = user.useremail ;
+			$scope.image = user.image;
+			$scope.instImage = user.instImage;
+			$scope.InstitutionID = user.institutionID;
+			$scope.userid = user.id;
+			$scope.color = user.color;
+			$scope.ePassword = user.ePassword;
 			$scope.productType="";
 			$scope.suspAct="No";
 			$scope.edu="";
@@ -39,21 +40,13 @@
 			var status=null;
 			var modelNo=null;
 			var make=null;
-			console.log("$scope.username :"+$scope.username);
-			console.log("$scope.ePassword :"+$scope.ePassword);
+			//console.log("$scope.username :"+$scope.username);
+			//sconsole.log("$scope.ePassword :"+$scope.ePassword);
 			
 	//		console.log("Dealers Array : ");
 	//		console.log($scope.dealerArr);
 
 			$scope.ROLE=JSON.parse(atob(localStorage.getItem('ROLES')));
-			var actions = JSON.parse(atob(localStorage.getItem('actions')));
-	//		console.log(JSON.stringify(actions));
-			if(actions != null && actions.length!=0)
-			{ $scope.app=$.inArray('APPLICATION',actions ) > -1;
-			  $scope.notif=$.inArray('NOTIFICATION',actions ) > -1;
-			  $scope.policy=$.inArray('POLICY',actions ) > -1;
-			  $scope.analytics=$.inArray('ANALYTCS',actions ) > -1;
-			}
 	//		console.log(JSON.stringify(userdata));
 		}catch (e){
 		console.log("ERROR : "+e);
@@ -2610,12 +2603,18 @@ $scope.resetStatus=function(){
 
 	 	/* dob popup */		
 		$scope.openDOBDialog=function(){
-	 		var defaultDate = new Date();
-	 		defaultDate.setFullYear(defaultDate.getFullYear()-25);
-	 		$scope.dob = defaultDate;
+
+			if(!$scope.dob){
+				//console.log("DOB Dialog Opened");
+		 		var defaultDate = new Date();
+		 		defaultDate.setFullYear(defaultDate.getFullYear()-25);
+
+		 		$scope.dob=defaultDate;
+			}
+
 			$scope.dobPopup.opened = true;			
 		};
-		$scope.dobFormat = "dd/MM/yyyy";
+		$scope.dobFormat = "dd:MM:yyyy";
 	 	$scope.dobPopup = {
 		    opened: false
 	  	};
@@ -2644,7 +2643,7 @@ $scope.resetStatus=function(){
            $scope.timerCurrent =   0;
            $scope.uploadCurrent =  0;
            $scope.stroke =         7;
-           $scope.radius =         50;
+           $scope.radius =         78;
            $scope.isSemi =         false;
            $scope.rounded =        false;
            $scope.responsive =     false;
@@ -2665,7 +2664,7 @@ $scope.resetStatus=function(){
                    'transform': transform,
                    '-moz-transform': transform,
                    '-webkit-transform': transform,
-                   'font-size': $scope.radius + 'px',
+                   'font-size': '60px',
                     'color':'#24A1ED'
                };
            };
@@ -2675,10 +2674,9 @@ $scope.resetStatus=function(){
 
    		var seconds = 1;
 
-//   	seconds=59;
-//      $scope.seconds=59;
-//      $scope.time=59;
-        
+		// seconds=59;
+		// $scope.seconds=59;
+		// $scope.time=59;        
 
    		var intervalPromise;
    		$scope.StartTimer = function () {
