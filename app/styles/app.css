@@ -606,10 +606,10 @@ svg:not (:root ) {
           transition: all 1s ease;
 }    
 
-.notify-scroll-container img:hover{
+/*.notify-scroll-container img:hover{
 	height: 80px;
 	width: 100px;
-}   
+} */  
 
 .list-group .list-group-item>span{
 	display: block;

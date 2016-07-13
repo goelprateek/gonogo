@@ -564,9 +564,9 @@
 
 		                  return $scope.row !== rowName ? ($scope.row = rowName, $scope.filteredStores = $filter("orderBy")($scope.filteredStores, rowName), $scope.onOrderChange()) : void 0;
 
-		              }, $scope.numPerPageOpt = [3, 5, 10, 20],
+		              }, $scope.numPerPageOpt = [20,30,50],
 
-		              $scope.numPerPage = $scope.numPerPageOpt[2], 
+		              $scope.numPerPage = $scope.numPerPageOpt[0], 
 
 		              $scope.currentPage = 1, 
 
