@@ -501,7 +501,6 @@
 			if(dedupeflag == "true"){
 				 $scope.isDedupeSelected = true;
                  $scope.backUpDefaultRefId = [];
-				 $("#dedupe , #dedupe1").val("Select");
 			}else{
 				 $scope.isDedupeSelected = false;
 			}
@@ -509,24 +508,41 @@
 			URL = 'application-data-cro2';
 			if(dedupeflag == "true"){
                  $scope.backUpDefaultRefId = [];
-                  //remain 
-				$('#accept , #reject').show();
-				 $("#dedupe , #dedupe1").val("Select");
-			}else{
+				/*$('#accept , #reject').show();*/
+			}/*else{
 				$('#accept , #reject').hide();
-			}
+			}*/
 		}
-		RestService.saveToServer(URL,json).then(function(response){
+		
+        RestService.saveToServer(URL,json).then(function(response){
+            var transfrmedOject ;
+            console.log(response.aAppScoRslt);
+            // code to tune aspr screen
+            if(response){
+                transfrmedOject =  response;
+                transfrmedOject.aAppScoRslt = _.uniq(transfrmedOject.aAppScoRslt,true,function(object){
+                   /* if(object.sFldName  && !_.isEmpty(object.sFldVal))*/
+                    return object;
+                });
+            }
+            console.log(transfrmedOject.aAppScoRslt);         
+            return transfrmedOject;
+
+        }).then(function(response){
             if(response)
 				$scope.objectSet = response;
 			else
-			$scope.objectSet = NotificationObject.dummy();
+			 $scope.objectSet = NotificationObject.dummy();
 			
             $scope.Picked = CustID;
             $scope.done = '';
             $scope.error = '';
             $scope.dedupeRefArray = [];
             $scope.isAllImgApprove = true;
+            $scope.showrefid = "true";
+            $scope.croDecision = response.aCroDec;
+            $scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
+
 
             if($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob!=""){
                 $scope.dob = $scope.objectSet.oAppReq.oReq.oApplicant.sDob;
@@ -538,14 +554,13 @@
                 $scope.objectSet.oAppReq.oReq.oApplicant.sDob=dateOfBirth;
             }
 
-			$scope.showrefid = "true";
-			$scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
 			var data = 	$scope.notifarray;
-			for (var j in data)
-			{if(data[j].sRefID ==  $scope.objectSet.oAppReq.sRefID){
-					$scope.applctnstatus = data[j].sStat;}
-			}
-			$scope.croDecision = response.aCroDec;
+			_.each(data ,function(value){
+
+                if(value.sRefID ==  $scope.objectSet.oAppReq.sRefID){
+                    $scope.applctnstatus = value.sStat;}
+            });
+
             try{
                  if($scope.objectSet.oLosDtls.sLosID){
                  $scope.losIdval = true;
@@ -555,11 +570,13 @@
             }catch(e){
                  $scope.losIdval = false;
             }
+
             try{
                  $scope.pdfData ="data:application/pdf;base64,"+$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];             
             }catch(e){
                  $scope.pdfData = '';
             }
+
             try{
                if($scope.objectSet.aDeDupe){
                      _.each($scope.objectSet.aDeDupe,function(val){
@@ -812,9 +829,8 @@ function requestForStatus(json)
             });
         }
 
-//check if neccessary
 
-	$scope.closeDocument = function(){
+	/*$scope.closeDocument = function(){
 		$scope.toggleDocPanel = !$scope.toggleDocPanel;
         $scope.holdObject.reqComment ='';
         for(var j=0; j<$scope.OfferArrey.length ; j++){
@@ -829,7 +845,7 @@ function requestForStatus(json)
         if($scope.invalidMsg)
 		 $scope.invalidMsg = !$scope.invalidMsg;
 	};
-
+*/
   $scope.losStatusChange=function(status){
     var utr =  $scope.objectSet.oLosDtls.sUtr;
      if(status == "LOS_DISB" &&   $scope.applctnstatus.toUpperCase()=="APPROVED"){ //
@@ -857,6 +873,7 @@ function requestForStatus(json)
         }
         }
 	
+    //check if neccessary
 	$(function() {
 		$('#chat_window').hide();
 		if(navigator.platform.toUpperCase().indexOf('MAC') !== -1)
@@ -905,7 +922,7 @@ function requestForStatus(json)
 	}
 }
 	
-	
+	//check if neccessary
 	$(document).on('click', '#btn_close', function(e) {
 		e.preventDefault();
 		$(this).parent().parent().hide();
@@ -925,10 +942,6 @@ function requestForStatus(json)
 		e.preventDefault();
 	});
 	 
-	/* $("#loadMoreRecord").click(function(){
-		 $scope.minVal = $scope.minVal+ $scope.limit; 
-		 polling($scope.minVal);
-	 });*/
 	/******************* Reinitiate & Update *****************/
 	$scope.dobFormat = "dd/MM/yyyy";
     $scope.dobPopup = {
