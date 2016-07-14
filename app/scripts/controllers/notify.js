@@ -595,17 +595,21 @@
                         return data;
                     });
 
+                $scope.imageDataArray = [];
                 var finalImageArray = _.flatten(_.each(objArray,function(val){
                     return _.each(val,function(val){
                         return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
                             if(!_.isUndefined(data) || !_.isNull(data)){
-                                val["sByteCode"] = "data:image/png;base64,"+data.sByteCode;    
+                                if(!_.isEmpty(data.sByteCode)){
+                                val["sByteCode"] = "data:image/png;base64,"+data.sByteCode; 
+                                 $scope.imageDataArray.push(val); 
+                                }  
                             }
                         });
                     });
                 }));
 
-                $scope.imageDataArray =  finalImageArray;
+               /* $scope.imageDataArray =  finalImageArray;*/
                 var rejectImgFromServer =[];
                 _.each($scope.imageDataArray,function(val){
                     if(val.sStat == "Reject"){
