@@ -516,8 +516,7 @@
 		
         RestService.saveToServer(URL,json).then(function(response){
             var transfrmedOject ;
-            console.log(response.aAppScoRslt);
-            // code to tune aspr screen
+            //console.log(response.aAppScoRslt);
             if(response){
                 transfrmedOject =  response;
                 transfrmedOject.aAppScoRslt = _.uniq(transfrmedOject.aAppScoRslt,true,function(object){
@@ -525,7 +524,7 @@
                     return object;
                 });
             }
-            console.log(transfrmedOject.aAppScoRslt);         
+            //console.log(transfrmedOject.aAppScoRslt);         
             return transfrmedOject;
 
         }).then(function(response){
@@ -779,7 +778,7 @@ $scope.cro_action = function(appID, action){
 
                         });
                  }else{
-                        alert("having some rejected Image");
+                        alert("Please approve all the images");
                     }
 			}
 
@@ -829,23 +828,6 @@ function requestForStatus(json)
             });
         }
 
-
-	/*$scope.closeDocument = function(){
-		$scope.toggleDocPanel = !$scope.toggleDocPanel;
-        $scope.holdObject.reqComment ='';
-        for(var j=0; j<$scope.OfferArrey.length ; j++){
-          for (var i = 0; i < $scope.OfferArrey[j].Offers.length ; i++) {
-              if( $scope.OfferArrey[j].Offers[i].selected)
-                 $scope.OfferArrey[j].Offers[i].selected = false;
-          } 
-        }
-        $scope.tabIndex = undefined;
-        $scope.isCurrTab(0);
-        $scope.AvailebleOffers = docData[0].Offers;
-        if($scope.invalidMsg)
-		 $scope.invalidMsg = !$scope.invalidMsg;
-	};
-*/
   $scope.losStatusChange=function(status){
     var utr =  $scope.objectSet.oLosDtls.sUtr;
      if(status == "LOS_DISB" &&   $scope.applctnstatus.toUpperCase()=="APPROVED"){ //
@@ -857,7 +839,6 @@ function requestForStatus(json)
         }else{
              // $scope.isUtrEdit = true;
              $scope.utrVal = true; 
-             $(document.body).find('#utrData').css("border","1px solid #cfcfcf");
         }
         /* $('#losStatusId1').val(this.value);
         $scope.objectSet.oLosDtls.sStat =this.value;*/
@@ -872,16 +853,6 @@ function requestForStatus(json)
             $scope.load_details($scope.defaultRefId,"true");
         }
         }
-	
-    //check if neccessary
-	$(function() {
-		$('#chat_window').hide();
-		if(navigator.platform.toUpperCase().indexOf('MAC') !== -1)
-		{
-			$('.leftbar_scroll').css("margin","0px");			
-		}
-	});
-	
 
 	$scope.updateLosData = function(status){
 	var losStat = status;
@@ -922,8 +893,8 @@ function requestForStatus(json)
 	}
 }
 	
-	//check if neccessary
-	$(document).on('click', '#btn_close', function(e) {
+	//code for chatting application
+	/*$(document).on('click', '#btn_close', function(e) {
 		e.preventDefault();
 		$(this).parent().parent().hide();
 	});
@@ -940,7 +911,7 @@ function requestForStatus(json)
 			height : '250px'
 		}, 200);
 		e.preventDefault();
-	});
+	});*/
 	 
 	/******************* Reinitiate & Update *****************/
 	$scope.dobFormat = "dd/MM/yyyy";
