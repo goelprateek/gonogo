@@ -162,6 +162,8 @@
 				user.institutionID = userdata.InstitutionID;
 				user.id = userdata.userid;
 				user.color = userdata.color;
+				user.branches = userdata.branches;
+				user.products = userdata.products;
 				user.ePassword = userdata.ePassword;
 
 				var dealers = localStorage.getItem('DEALERS');
