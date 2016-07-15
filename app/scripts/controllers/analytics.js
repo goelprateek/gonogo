@@ -1,8 +1,8 @@
-(function(){
+;(function(){
 	
 	'use strict';
 	
-	var app = angular.module('gonogo.analytics' ,['gonogo-directives','dndLists','ui.slimscroll']);
+	var app = angular.module('gonogo.analytics' ,['gonogo-directives','dndLists','ui.slimscroll','ngMaterial']);
 
     app.factory("AnalyticsObject",function(){
         var _obj = {

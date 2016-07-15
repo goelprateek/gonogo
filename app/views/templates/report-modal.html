@@ -73,6 +73,42 @@
             <h3 class="modal-title">Custom Report Designer</h3>
         </div>
         <div class="modal-body" style="height:550px;">
+
+        <!-- <div layout-gt-sm="row" layout="column">
+            
+            <div flex-gt-sm="45" flex ng-repeat="list in models">
+                <md-toolbar layout="row" class="md-hue-3" md-scroll-shrink>  
+                  <div class="md-toolbar-tools">
+                    <span>Columns {{list.listName}}</span>
+                  </div>
+                </md-toolbar>
+                <md-content md-theme="altTheme">
+                    <section>
+                        <md-list flex dnd-list class="md-dense md-2-line" dnd-drop="onDrop(list, item, index)" class="scroll-body report"  slimscroll="{height: 300,railVisible:true}" >
+
+                            <md-list-item class="md-3-line" ng-repeat="item in list.items" ng-click="null"
+                                dnd-draggable="getSelectedItemsIncluding(list, item)"
+                                dnd-dragstart="onDragstart(list, event)"
+                                dnd-moved="onMoved(list)"
+                                dnd-dragend="list.dragging = false"
+                                dnd-selected="item.selected = !item.selected"
+                                ng-class="{'selected': item.selected}"
+                                ng-hide="list.dragging && item.selected"
+                            >
+                                <div class="md-list-item-text" layout="column">
+                                    <p>{{ item.label }}</p>
+                                </div>
+                                <md-divider ng-if="!$last"></md-divider>
+                            </md-list-item>
+                        </md-list>
+                    </section>
+                </md-content> 
+            </div>
+            <md-divider></md-divider> 
+
+        </div> -->
+
+
             <form class="form-horizontal">
                 <div class="form-group">
                     <label for="reportName" class="col-sm-2 control-label">Report Name</label>
@@ -89,19 +125,18 @@
                     
                     <div class="col-md-12">
                         <div class="row" >
-                        <div > 
+                        <div> 
                             <div ng-repeat="list in models" class="col-md-6">
                                 <div class="panel panel-info">
                                     <div class="panel-heading">
                                         <h3 class="panel-title">Columns {{list.listName}}
-                                            <input type="text" name="query" ng-model="query" >   
                                             <span class="badge bage-info pull-right"  >{{list.items.length}}</span>
                                         </h3>
                                     </div>
                                     <div class="pannel-body" >
-                                       
+
                                     </div>  
-                                       <div class="scroll-body"  slimscroll="{height: 300,railVisible:true}">
+                                       <div class="scroll-body report"  slimscroll="{height: 300,railVisible:true}">
                                        <ul dnd-list class="list-group" dnd-drop="onDrop(list, item, index)" >
                                             
                                             <li ng-repeat="item in list.items | filter:query"
@@ -117,8 +152,6 @@
 
                                                 <span href="javascript:;">
                                                     {{item.label}}
-                                                    <!-- <input type="checkbox" class="pull-right" />
-                                                    <input type="checkbox" class="pull-right" aria-hidden="true"> -->
                                                 </span>
                                             </li>
                                                 

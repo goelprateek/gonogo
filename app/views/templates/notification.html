@@ -1,5 +1,5 @@
 <style>
-/* ****************************************Notification.html********************************************************** */
+
 .scroll-fixed-top {
 	position: fixed;
 	top: 0px;
@@ -171,10 +171,13 @@ svg:not (:root ) {
 					<input class="form-control" type="text" ng-model="search"
 						placeholder="Search Notification..."
 						style="margin: 0px; max-width: 277px; background-color: white;" />
-					
+									
 					<div class="leftbar_scroll">
 						<div class="list-group-item" ng-if="notifyarrey.length==0"
 							style="color: red; text-align: center;">Your Queue is Empty</div>
+						
+						
+
 						<div class="list-group-item"
 							ng-repeat="user in notifyarrey | filter:search as results "
 							ng-click='load_details(user.CUSTOMER.CustID, $event)'
