@@ -407,34 +407,25 @@
 	function polling(minimum) {
 		if($rootScope.template == "notification"){
 
-            var brnchs=[];
-            _.each(user.branches,function(branch){
-                brnchs.push(branch.BRANCH_CODE);
-            });
-
-            var prods=[];
-            _.each(user.products,function(product){
-                prods.push(product.PRODUCT_NAME);
-            });
 			if(!AclService.can('NAPPDATADEF')){
 				if(user.id=="599"){ // PL STP -- CRO9
 					var json ={'sCroID':"STP_PL", 
 							'sInstID':user.institutionID, 
-							'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit,'oCriteria':{"aBranches":brnchs,"aProducts":prods}}
+							'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}}
 				}else{
 					var json ={'sCroID':"STA",  // CRO9
 							'sInstID':user.institutionID,
-							'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit,'oCriteria':{"aBranches":brnchs,"aProducts":prods}}
+							'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}}
 				}
 			}else if(user.id=="586"){
 				var json ={'sCroID':"PL_QUEUE",  // CRO1 PL Normal
 						'sInstID':user.institutionID, 
-						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,'oCriteria':{"aBranches":brnchs,"aProducts":prods}}
+						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}}
 			}
 			else{
                 var json ={'sCroID':"default", // CRO1,CRO2 Normal
 						'sInstID':user.institutionID, 
-						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,'oCriteria':{"aBranches":brnchs,"aProducts":prods}}//,'sCriteria' :"SIKKIM" 
+						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}}//,'sCriteria' :"SIKKIM" 
 			}
 			var URL;
 			if(AclService.can('NCROQUE')){
