@@ -1,5 +1,4 @@
 ;(function(){
-
 	'use strict';
 	var app = angular.module('gonogo.cdl');
 	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"roundProgressService","UserService","AclService", function(
@@ -18,7 +17,6 @@
 		try {
 			//$log.debug("userdata :"+JSON.stringify(userdata));
 			$scope.username = user.username ;
-			$scope.useremail = user.useremail ;
 			$scope.image = user.image;
 			$scope.instImage = user.instImage;
 			$scope.InstitutionID = user.institutionID;
@@ -60,7 +58,7 @@
 	sharedService.setRefID(null);
 	sharedService.setCurrentStage(null);
 
- //HARD CODED
+//  HARD CODED
 //	CustID="VASA000101";
 //	var currentStage = "DE";
 //	CustID="VASA000092";
@@ -68,7 +66,7 @@
 	$scope.statusJSON={};
 	$scope.dcsnPtrn=/(Declined|Approved|OnHold)$/i;
 	$scope.check_status=function(jsonOBJ)
-		{
+	{
 			var json=jsonOBJ ? jsonOBJ:$scope.statusJSON;
 			$("#ErrorContainer").hide();
 	//		var json = $scope.statusJSON;
@@ -222,7 +220,8 @@
 			{
 				$scope.mk = $scope.Response.oReq.oApplication.aAssetDetail[0].sAssetMake;
 				$scope.assetModel($scope.assetCategory,$scope.mk);
-			}}
+			}
+			}
 			catch(Exception)
 			{}
 		//		console.log("Data Asset Make : " + $scope.makeTags);			
@@ -244,7 +243,8 @@
 			for(var i in data)
 			{
 				if(data[i].sMdlNo !=="")
-				{	$scope.modelTags.push(data[i].sMdlNo);
+				{	
+					$scope.modelTags.push(data[i].sMdlNo);
 				}					
 			}
 			$scope.mdl=$scope.modelTags[0];
@@ -548,7 +548,7 @@
 					    "dtSubmit":new Date().getTime(),
 					    "sReqType": "JSON",
 					    "sAppSource" : "WEB",
-					    "sDsaId":$scope.useremail,
+					    "sDsaId":$scope.username,
 					    "sAppID": "",
 					    "sSourceID":"",
 					    "sInstID":$scope.InstitutionID
@@ -580,7 +580,7 @@
 					    "dtSubmit":new Date().getTime(),
 					    "sReqType": "JSON",
 					    "sAppSource" : "WEB",
-					    "sDsaId":$scope.useremail,
+					    "sDsaId":$scope.username,
 					    "sAppID": "",
 					    "sSourceID":"",
 					    "sInstID":$scope.InstitutionID
@@ -617,7 +617,7 @@
 					    "dtSubmit":new Date().getTime(),
 					    "sReqType": "JSON",
 					    "sAppSource" : "WEB",
-					    "sDsaId":$scope.useremail,
+					    "sDsaId":$scope.username,
 					    "sAppID": "",
 					    "sSourceID":"",
 					    "sInstID":$scope.InstitutionID
@@ -693,20 +693,20 @@
 	}*/
 	
 	$scope.otpService=function(){	
-		$scope.ojs={	  "USER_ID":$scope.userid, "PASSWORD":$scope.ePassword,
+		$scope.ojs={	  "USER_ID":$scope.username, "PASSWORD":$scope.ePassword,
 						  "INSTITUTION_ID":$scope.InstitutionID,
 						  "inputJson_":{ "MOBILE-NUMBER":$("#tmob").val() }
 					}	
 		console.log("$scope.ojs :"+JSON.stringify($scope.ojs));
 	
-//		console.log("otp request: "+$scope.useremail);
+//		console.log("otp request: "+$scope.username);
 		/*var jh = LoginService.getCredential();
 		console.log("return :"+jh);*/
 //		console.log("pass: "+$scope.ePassword);
 //		var pass =  $scope.ePassword;
-		console.log("$scope.useremail :"+ $scope.useremail);
+		console.log("$scope.username :"+ $scope.username);
 		$http.defaults.headers.common['token-key']='95957453469767522788';
-		$http.defaults.headers.common['username']=$scope.useremail;
+		$http.defaults.headers.common['username']=$scope.username;
 		$http.defaults.headers.common['password']=$scope.ePassword;
 		var defere = $q.defer();
 		$http.post(APP_CONST.getConst('BASE_URL_GNG')+'get-otp',$scope.ojs).success(function(response){
@@ -721,7 +721,7 @@
 /*		$http({	method : 'POST',
 				url : baseUrl+'get-otp',
 				data :$scope.ojs,
-				headers : {'Content-Type':'application/json','token-key':'95957453469767522788','userName':$scope.useremail,'password':pass}
+				headers : {'Content-Type':'application/json','token-key':'95957453469767522788','userName':$scope.username,'password':pass}
 			 }).success(function(data) 
 			{ 
 				console.log("OTP Response -" + JSON.stringify(data));
@@ -1415,7 +1415,7 @@ $scope.submitApplication=function(UrlKey)
 	modelNo=$("#mdl").val();
 //	assetCat = $("#ast option:selected").val();
 	make = $("#mk").val();
-	$scope.Header={"sAppSource":"WEB","sDsaId":$scope.useremail,"sInstID":$scope.InstitutionID,
+	$scope.Header={"sAppSource":"WEB","sDsaId":$scope.username,"sInstID":$scope.InstitutionID,
 			"sReqType":"JSON","sDealerId":dlrCode};
 	
 	$scope.address={"sLine1":$("#a1").val(),"sLine2":$("#a2").val(),"sCountry":"INDIA","sCity":$("#percity").val(),
@@ -1541,7 +1541,7 @@ $scope.submitApplication=function(UrlKey)
 					    "dtSubmit":new Date().getTime(),
 					    "sReqType": "JSON",
 					    "sAppSource" : "WEB",
-					    "sDsaId":$scope.useremail,
+					    "sDsaId":$scope.username,
 					    "sAppID": "",
 					    "sSourceID":"",
 					    "sInstID":$scope.InstitutionID
@@ -2030,10 +2030,10 @@ $scope.ipaJSonFunction=function()
 	$scope.ipaJson={
 			  "oHeader": {
 				    "sCroId": "default",
-				    "dtSubmit": 1465286225703,
+				    "dtSubmit": new Date().getTime(),
 				    "sReqType":"JSON",
 				    "sAppSource": "WEB",
-				    "sDsaId": $scope.userid,
+				    "sDsaId": $scope.username,
 				    "sAppID": "",
 				    "sDealerId":dlrCode,
 				    "sSourceID":"HDBFS_CDL",
@@ -2064,15 +2064,19 @@ $scope.ipaJSonFunction=function()
 				  "dtDateTime": new Date().getTime()
 				}
 
- console.log("post ipa request"+JSON.stringify($scope.ipaJson));
+ 	console.log("post ipa request"+JSON.stringify($scope.ipaJson));
 }
 
 
 $scope.sendPostIpaMail=function()
 { 
 	var requestJson={"sRefID":$scope.REFID,
-	"oHeader":{"sCroId":"default","dtSubmit":1460633827786,"sReqType":"JSON",
-		"sAppSource":"WEB","sDsaId":$scope.userid,
+	"oHeader":{
+		"sCroId":"default",
+		"dtSubmit":new Date().getTime(),
+		"sReqType":"JSON",
+		"sAppSource":"WEB",
+		"sDsaId":$scope.username,
 	    "sAppID":$scope.userid,
 	    "sSourceID": "02",
 	    "sInstID": $scope.InstitutionID},
@@ -2186,7 +2190,7 @@ $scope.scmService = function(key){
 			    "dtSubmit":new Date().getTime(),
 			    "sReqType":"JSON",
 			    "sAppSource": "WEB",
-			    "sDsaId":$scope.useremail,
+			    "sDsaId":$scope.username,
 			    "sAppID": $scope.REFID,
 			    "sDealerId": dlrCode,
 			    "sSourceID": "GONOGO_HDBFS",
@@ -2211,8 +2215,8 @@ $scope.scmService = function(key){
 		/*$("#scheme").autocomplete({
 			source: $scope.scmTags
 		});*/
-		console.log("Data Scheme master : " + JSON.stringify(data));
-		console.log("Data ScHIT124DBD1heme master : " + $scope.scmTags);
+		//console.log("Data Scheme master : " + JSON.stringify(data));
+		//console.log("Data ScHIT124DBD1heme master : " + $scope.scmTags);
 		
 	}).error(function(data) 
 		{
@@ -2406,7 +2410,7 @@ $scope.resetStatus=function(){
 			    "dtSubmit": new Date().getTime(),
 			    "sReqType": "JSON",
 			    "sAppSource": "WEB",
-			    "sDsaId": $scope.userid,
+			    "sDsaId": $scope.username,
 			    "sAppID": "APPLICANT_1",
 			    "sDealerId": dlrCode,
 			    "sSourceID": "HDBFS_CDL",
@@ -2431,7 +2435,7 @@ $scope.resetStatus=function(){
 				    "dtSubmit":new Date().getTime(),
 				    "sReqType": "JSON",
 				    "sAppSource" : "WEB",
-				    "sDsaId":$scope.useremail,
+				    "sDsaId":$scope.username,
 				    "sAppID": "",
 				    "sSourceID":"",
 				    "sInstID":$scope.InstitutionID
@@ -2547,8 +2551,8 @@ $scope.resetStatus=function(){
 			return message;
 		}*/
 	  
-	  $(document.body).on("click","#homePG",function(){
-			    location.reload();
+	$(document.body).on("click","#homePG",function(){
+	    location.reload();
 	  	});
 	  
 	  $(document.body).on("click","#aSubmitBtn",function(){
@@ -2695,11 +2699,6 @@ $scope.resetStatus=function(){
    		{
    			$interval.cancel(intervalPromise);
    		}
-// ***********************************************************************************************
-
-	  
-	 
+// *********************************************************************************************** 
 }]);
-
-
 }).call(this)
