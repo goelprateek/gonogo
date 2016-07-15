@@ -341,7 +341,7 @@
     $scope.can=AclService.can;
 
     if(user.id){
-        $scope.$emit('onSuccessfulLogin', { message: "Hi" });
+        $scope.$emit('onSuccessfulLogin');
     }
 
     $scope.selectResidence = SelectArrays.getResidenceTypes();
@@ -398,7 +398,6 @@
 	$scope.minVal = 0;
 	$scope.limit = 10;
 	var current1 = 0;
-	var queArray = [];
 	
 	$scope.loadData = function(){
 		 $scope.minVal = $scope.minVal+$scope.limit;
@@ -437,10 +436,7 @@
 			}
 			RestService.saveToServer(URL,json).then(function(data){
 				if(!_.isNull(data) || _.isUndefined(data)){
-					for(var i in data){
-						queArray.push(data[i]);	
-					}
-					$scope.notifarray = queArray;
+                    $scope.notifarray = _.uniq(_.union($scope.notifarray,data));
 					$scope.error ="";
 				}
 
@@ -489,6 +485,7 @@
                                 return arr2obj.sStat == "Reject";
                             });
                             $scope.rejectImgFromServer = filter;
+                            $scope.imageDataArray = array;
 
                         });
     }
@@ -504,7 +501,6 @@
 			if(dedupeflag == "true"){
 				 $scope.isDedupeSelected = true;
                  $scope.backUpDefaultRefId = [];
-				 $("#dedupe , #dedupe1").val("Select");
 			}else{
 				 $scope.isDedupeSelected = false;
 			}
@@ -512,23 +508,40 @@
 			URL = 'application-data-cro2';
 			if(dedupeflag == "true"){
                  $scope.backUpDefaultRefId = [];
-                  //remain 
-				$('#accept , #reject').show();
-				 $("#dedupe , #dedupe1").val("Select");
-			}else{
+				/*$('#accept , #reject').show();*/
+			}/*else{
 				$('#accept , #reject').hide();
-			}
+			}*/
 		}
-		RestService.saveToServer(URL,json).then(function(response){
+		
+        RestService.saveToServer(URL,json).then(function(response){
+            var transfrmedOject ;
+            //console.log(response.aAppScoRslt);
+            if(response){
+                transfrmedOject =  response;
+                transfrmedOject.aAppScoRslt = _.uniq(transfrmedOject.aAppScoRslt,true,function(object){
+                   /* if(object.sFldName  && !_.isEmpty(object.sFldVal))*/
+                    return object;
+                });
+            }
+            //console.log(transfrmedOject.aAppScoRslt);         
+            return transfrmedOject;
+
+        }).then(function(response){
             if(response)
 				$scope.objectSet = response;
 			else
-			$scope.objectSet = NotificationObject.dummy();
+			 $scope.objectSet = NotificationObject.dummy();
 			
             $scope.Picked = CustID;
             $scope.done = '';
             $scope.error = '';
             $scope.dedupeRefArray = [];
+            $scope.isAllImgApprove = true;
+            $scope.showrefid = "true";
+            $scope.croDecision = response.aCroDec;
+            $scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
+
 
             if($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob!=""){
                 $scope.dob = $scope.objectSet.oAppReq.oReq.oApplicant.sDob;
@@ -540,14 +553,13 @@
                 $scope.objectSet.oAppReq.oReq.oApplicant.sDob=dateOfBirth;
             }
 
-			$scope.showrefid = "true";
-			$scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
 			var data = 	$scope.notifarray;
-			for (var j in data)
-			{if(data[j].sRefID ==  $scope.objectSet.oAppReq.sRefID){
-					$scope.applctnstatus = data[j].sStat;}
-			}
-			$scope.croDecision = response.aCroDec;
+			_.each(data ,function(value){
+
+                if(value.sRefID ==  $scope.objectSet.oAppReq.sRefID){
+                    $scope.applctnstatus = value.sStat;}
+            });
+
             try{
                  if($scope.objectSet.oLosDtls.sLosID){
                  $scope.losIdval = true;
@@ -557,11 +569,13 @@
             }catch(e){
                  $scope.losIdval = false;
             }
+
             try{
                  $scope.pdfData ="data:application/pdf;base64,"+$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];             
             }catch(e){
                  $scope.pdfData = '';
             }
+
             try{
                if($scope.objectSet.aDeDupe){
                      _.each($scope.objectSet.aDeDupe,function(val){
@@ -581,17 +595,21 @@
                         return data;
                     });
 
+                $scope.imageDataArray = [];
                 var finalImageArray = _.flatten(_.each(objArray,function(val){
                     return _.each(val,function(val){
                         return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
                             if(!_.isUndefined(data) || !_.isNull(data)){
-                                val["sByteCode"] = "data:image/png;base64,"+data.sByteCode;    
+                                if(!_.isEmpty(data.sByteCode)){
+                                val["sByteCode"] = "data:image/png;base64,"+data.sByteCode; 
+                                 $scope.imageDataArray.push(val); 
+                                }  
                             }
                         });
                     });
                 }));
 
-                $scope.imageDataArray =  finalImageArray;
+               /* $scope.imageDataArray =  finalImageArray;*/
                 var rejectImgFromServer =[];
                 _.each($scope.imageDataArray,function(val){
                     if(val.sStat == "Reject"){
@@ -630,16 +648,24 @@ $scope.scoreTree = function(){
               }
             });
 
-    modalInstance.result.then(function (selected) {
+    /*modalInstance.result.then(function (selected) {
        console.log("successfully");
         }, function () {
           $log.info('Modal dismissed at: ');
-        });
+        });*/
     }
 	
 $scope.cro_action = function(appID, action){ 
 	$scope.appltnID = appID;
-    console.log( $scope.rejectImgFromServer.length);
+    $scope.isAllImgApprove = true;
+     _.each($scope.imageDataArray,function(val){
+        if(val.sStat != "Approve"){
+           $scope.isAllImgApprove = false;
+           return;
+        }
+    });
+      console.log($scope.isAllImgApprove);
+
 	if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!croQueue)){
 		if((appID !== "undefined") && (typeof $scope.objectSet.oAppReq !== "undefined")){
 			 if(action == "OnHold"){
@@ -671,9 +697,6 @@ $scope.cro_action = function(appID, action){
                             "aDedupeRefID": ($scope.dedupeRefArray ? $scope.dedupeRefArray : [])
                         };
                         requestFordclnOnhold(json);
-
-                        }, function () {
-                          $log.info('Modal dismissed at: ' + new Date());
                         });
 			 
 			 }else if(action == "Declined"){
@@ -709,16 +732,12 @@ $scope.cro_action = function(appID, action){
                                     "aCroJustification":arrayDclnDesc, //not yet
                                     "aDedupeRefID ": ($scope.dedupeRefArray ? $scope.dedupeRefArray : [])
                                     };
-                                     console.log(json);
                         requestFordclnOnhold(json);
-
-                        }, function () {
-                          $log.info('Modal dismissed at: ' + new Date());
                         });
                 
 
 			 }else{
-                    if($scope.rejectImgFromServer.length==0){
+                    if($scope.isAllImgApprove){
                      var modalInstance = $uibModal.open({
                       animation: $scope.animationsEnabled,
                       templateUrl: 'views/templates/approve-panel.html',
@@ -759,16 +778,12 @@ $scope.cro_action = function(appID, action){
                             "dEmi":$scope.selected.emi,
                             "aDedupeRefID": ($scope.dedupeRefArray ? $scope.dedupeRefArray : [])
                             }
-                            console.log(json);
                             requestForStatus(json);
 
-                        }, function () {
-                          $log.info('Modal dismissed at: ' + new Date());
                         });
                  }else{
-                        alert("rejectedImage");
+                        alert("Please approve all the images");
                     }
-					/*$scope.toggleApprvPanel = !$scope.toggleApprvPanel;*/
 			}
 
 		}else if($scope.applctnstatus == null){
@@ -778,7 +793,6 @@ $scope.cro_action = function(appID, action){
     		$scope.error = "Application has already taken an action...!!!";
     		$scope.done = "";
     	}
-	   
        $scope.showrefid = "true";
     }
 }
@@ -818,24 +832,6 @@ function requestForStatus(json)
             });
         }
 
-//check if neccessary
-
-	$scope.closeDocument = function(){
-		$scope.toggleDocPanel = !$scope.toggleDocPanel;
-        $scope.holdObject.reqComment ='';
-        for(var j=0; j<$scope.OfferArrey.length ; j++){
-          for (var i = 0; i < $scope.OfferArrey[j].Offers.length ; i++) {
-              if( $scope.OfferArrey[j].Offers[i].selected)
-                 $scope.OfferArrey[j].Offers[i].selected = false;
-          } 
-        }
-        $scope.tabIndex = undefined;
-        $scope.isCurrTab(0);
-        $scope.AvailebleOffers = docData[0].Offers;
-        if($scope.invalidMsg)
-		 $scope.invalidMsg = !$scope.invalidMsg;
-	};
-
   $scope.losStatusChange=function(status){
     var utr =  $scope.objectSet.oLosDtls.sUtr;
      if(status == "LOS_DISB" &&   $scope.applctnstatus.toUpperCase()=="APPROVED"){ //
@@ -847,7 +843,6 @@ function requestForStatus(json)
         }else{
              // $scope.isUtrEdit = true;
              $scope.utrVal = true; 
-             $(document.body).find('#utrData').css("border","1px solid #cfcfcf");
         }
         /* $('#losStatusId1').val(this.value);
         $scope.objectSet.oLosDtls.sStat =this.value;*/
@@ -855,24 +850,13 @@ function requestForStatus(json)
 
   $scope.onchange = function(id) {
         $scope.backUpDefaultRefId.push($scope.objectSet);
-        console.log($scope.backUpDefaultRefId);
         if(id!='Select'){
         $scope.load_details(id,"false");
         }else{
             $scope.defaultRefId= $scope.backUpDefaultRefId[0].oAppReq.sRefID;
-             console.log( $scope.defaultRefId);
             $scope.load_details($scope.defaultRefId,"true");
         }
         }
-	
-	$(function() {
-		$('#chat_window').hide();
-		if(navigator.platform.toUpperCase().indexOf('MAC') !== -1)
-		{
-			$('.leftbar_scroll').css("margin","0px");			
-		}
-	});
-	
 
 	$scope.updateLosData = function(status){
 	var losStat = status;
@@ -896,11 +880,9 @@ function requestForStatus(json)
     				        "sStat":losStat,
     				        "sUtr":utr
     				    }
-    				};
-                      console.log(jsondata);	 
+    				};	 
     		 var URL='update-los-details';
     		 RestService.saveToServer(URL,jsondata).then(function(Response){
-    				console.log("Response: "+JSON.stringify(Response));
     				if(Response.status == "SUCCESS"){
     					alert("LOS Status updated successfully");
     					 $scope.losIdval = true;
@@ -915,8 +897,8 @@ function requestForStatus(json)
 	}
 }
 	
-	
-	$(document).on('click', '#btn_close', function(e) {
+	//code for chatting application
+	/*$(document).on('click', '#btn_close', function(e) {
 		e.preventDefault();
 		$(this).parent().parent().hide();
 	});
@@ -933,12 +915,8 @@ function requestForStatus(json)
 			height : '250px'
 		}, 200);
 		e.preventDefault();
-	});
+	});*/
 	 
-	/* $("#loadMoreRecord").click(function(){
-		 $scope.minVal = $scope.minVal+ $scope.limit; 
-		 polling($scope.minVal);
-	 });*/
 	/******************* Reinitiate & Update *****************/
 	$scope.dobFormat = "dd/MM/yyyy";
     $scope.dobPopup = {
@@ -1160,10 +1138,8 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
     }
 
     $scope.imageService = function(json,object){
-        console.log(json);
          var URL ='update-image-status';
          RestService.saveToServer(URL,json).then(function(Response){
-                console.log(Response);
                 if(Response.sStatus == "SUCCESS"){
                    /* if(json.oUpldDtl.sStat == "Reject"){
                         rejectedImgArray.push(object);
@@ -1230,7 +1206,6 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
                                                 $scope.slides[imageIndex].evdncArray.push(evdcJson);
                                                 evdcJson.id = $scope.slides.length ;
                                                 $scope.slides.push(evdcJson);
-                                                 console.log($scope.slides);
                                             }else{
                                                 alert("You have max limit of 2 images!");
                                             }
@@ -1260,7 +1235,6 @@ app.controller('ModalInstanceCtrl', ['$scope','$rootScope','NotificationObject',
      $scope.approvemsg = false;
 
     $scope.saveApprvPanel = function () {
-        console.log($scope.modalFeed.apprvRemark );
          if($scope.modalFeed.apprvRemark !=undefined && $scope.modalFeed.apprvRemark !=''){
              if($scope.modalFeed.apprvSubTo!=undefined && $scope.modalFeed.apprvSubTo!=''){
                 if(modalFeed.approveAmt !='' && modalFeed.emi!='' && modalFeed.tenor!=''){
@@ -1286,9 +1260,7 @@ app.controller('ModalInstanceCtrl', ['$scope','$rootScope','NotificationObject',
 app.controller('scoreTreeCtr', ['$scope','$uibModalInstance','treeFeed', 
     function($scope,$uibModalInstance,treeFeed){ 
        
-    $scope.treeFeed = treeFeed.treeData;
-    console.log(treeFeed);
-    
+    $scope.treeFeed = treeFeed.treeData;    
     $scope.closeTreePanel = function () {
         $uibModalInstance.dismiss('cancel');
     };
@@ -1316,67 +1288,9 @@ app.controller('DeclInstanceCtrl', ['$scope','$rootScope','NotificationObject',
 }]);
 
 app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
-   '$uibModalInstance','holdModelFeed', function($scope, $rootScope,NotificationObject,$uibModalInstance,holdModelFeed){ 
+   '$uibModalInstance','holdModelFeed','SelectArrays', function($scope, $rootScope,NotificationObject,$uibModalInstance,holdModelFeed,SelectArrays){ 
        
-    var docData = [{'Name':'Address Proof',
-        'ID':'0',
-        'Icon':'images/address-proof.png',
-        'Count':'1',
-        'Type' : 'Approve',
-        'Offers':[{'Name':'Valid Passport','Icon':'images/address-proof.png','Code':'101'},
-                    {'Name':'Latest Electricity Bill','Icon':'images/address-proof.png','Code':'102'},
-                    {'Name':'Telephone Bill','Icon':'images/address-proof.png','Code':'103'},
-                    {'Name':'Driving License','Icon':'images/address-proof.png','Code':'104'},
-                    {'Name':'Ration Card','Icon':'images/address-proof.png','Code':'105'},
-                    {'Name':'Bank Account Statement/Pass Book 1st page','Icon':'images/address-proof.png','Code':'106'},
-                    {'Name':'Rent Agreement','Icon':'images/address-proof.png','Code':'107'},
-                    {'Name':'Gas Connection Bill or Post Paid Mobile Bill with full address ','Icon':'images/address-proof.png','Code':'108'},
-                    {'Name':'Property Tax receipt or Water Bill','Icon':'images/address-proof.png','Code':'109'},
-                    {'Name':'Voter’s Identity card','Icon':'images/address-proof.png','Code':'110'},
-                    {'Name':'Aadhar UID Card','Icon':'images/address-proof.png','Code':'111'}]
-    },
-    {'Name':'DOB Proof',
-        'ID':'1',
-        'Icon':'images/date of birth proof.png',
-        'Count':'2',
-        'Type' : 'Approve',
-        'Offers':[{'Name':'Valid Passport','Icon':'images/date of birth proof.png','Code':'101'},
-                    {'Name':'PAN Card','Icon':'images/date of birth proof.png','Code':'112'},
-                    {'Name':'Driving License','Icon':'images/date of birth proof.png','Code':'104'},
-                    {'Name':'Birth Certificate (Govt agency)','Icon':'images/date of birth proof.png','Code':'113'},
-                    {'Name':'School Leaving certificate (10th/12th)','Icon':'images/date of birth proof.png','Code':'114'},
-                    {'Name':'Voter ID Card','Icon':'images/date of birth proof.png','Code':'110'},
-                    {'Name':'Pension Certificate / Govt. ID Card / Aadhar UID Card','Icon':'images/date of birth proof.png','Code':'111'}]
-    },
-    {'Name':'Identification Proof',
-        'ID':'2',
-        'Icon':'images/identification number.png',
-        'Count':'3',
-        'Type' : 'Approve',
-        'Offers':[{'Name':'Valid Passport','Icon':'images/identification number.png','Code':'101'},
-                    {'Name':'PAN Card','Icon':'images/identification number.png','Code':'112'},
-                    {'Name':'Driving License','Icon':'images/identification number.png','Code':'104'},
-                    {'Name':'Voter’s Identity Card','Icon':'images/identification number.png','Code':'110'},
-                    {'Name':'Aadhar UID card','Icon':'images/identification number.png','Code':'111'},
-                    {'Name':'Bank Passbook with photo','Icon':'images/identification number.png','Code':'115'}]
-    },
-    {'Name':'Signature Proof',
-        'ID':'3',
-        'Icon':'images/signature proof.png',
-        'Count':'4',
-        'Offers':[{'Name':'Signature verification from bank','Icon':'images/signature proof.png','Code':'116'},
-                    {'Name':'Passport Copy','Icon':'images/signature proof.png','Code':'101'},
-                    {'Name':'PAN Card','Icon':'images/signature proof.png','Code':'112'},
-                    {'Name':'Driving license with photograph and signature','Icon':'images/signature proof.png','Code':'104'},
-                    {'Name':'Clearance of processing fees cheque','Icon':'images/signature proof.png','Code':'117'}]
-    },
-    {'Name':'Rejected Proof',
-        'ID':'4',
-        'Icon':'images/rejected proof.png',
-        'Count':'5',
-        'Offers':[]
-    }];
-
+    var docData =  SelectArrays.getOfferData();
      $scope.OfferArrey =docData ;
      $scope.AvailebleOffers = $scope.OfferArrey[0].Offers;
      $scope.ID = 0;
@@ -1416,7 +1330,6 @@ app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
     }
     
     $scope.checkboxUpdate = function(obj,id){ 
-        console.log(obj);
         if(obj){
             if (typeof docData[$scope.ID].selected != "undefined") {
 

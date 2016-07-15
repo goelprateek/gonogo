@@ -8,12 +8,12 @@
 		'$timeout','Validation',function($scope, $rootScope ,$http , $timeout,Validation,BASE_URL_DEMO){
 
 	
-	if(typeof $scope.InstitutionID != 'undefined'){
+	// if(typeof $scope.InstitutionID != 'undefined'){
 
-		if($scope.InstitutionID==3988 || $scope.InstitutionID==4011){
-			$("#logo.img-responsive").css("padding","1");
-		}		
-	}
+	// 	if($scope.InstitutionID==3988 || $scope.InstitutionID==4011){
+	// 		$("#logo.img-responsive").css("padding","1");
+	// 	}		
+	// }
 	
 	//check offers access to this user.
 	var offersAllowed = $scope.authenticate('NOFRS');

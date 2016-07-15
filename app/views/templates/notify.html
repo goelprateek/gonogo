@@ -407,23 +407,23 @@ font-size:14px;}
 						</div>
 					<div class="col-md-4 column">
 						<div class="scroll-divs-outer">
-							<label class="div-heading cir">SCORE<span
+							<label class="div-heading cir">SCORE <span
 								class="badge"></span></label>
 							<div class="scroll-divs" style="height: 158px;">
-							<div ng-repeat="bureauData in objectSet.aAppScoRslt" ng-if="bureau.length != 0">
+							<div ng-repeat="bureauData in objectSet.aAppScoRslt" ng-if="objectSet.aAppScoRslt.length != 0">
 								
 								<div class="list-group-item" ng-if="bureauData.sFldName =='Application Score'" 
 								style="border-bottom: 1px solid #ddd;">
 									<span>Application Score : {{bureauData.sFldVal}}</span>
 								</div>
-								<div class="list-group-item" ng-if="bureauData.sFldName =='Residential Address Score'"	style="border-bottom: 1px solid #ddd;">
+								<div class="list-group-item" ng-if="bureauData.sFldName =='Residential Address Score'"	style="border-bottom: 1px solid #ddd;border: none;">
 									<span>Res Addr Score : {{bureauData.sFldVal}}</span>
 								</div> 
 								<div class="list-group-item" ng-if="bureauData.sFldName =='Office Address Score'"	style="border-bottom: 1px solid #ddd;">
 									<span>Off Addr Score : {{bureauData.sFldVal}}</span>
 								</div>
 							</div>
-							<div class="list-group-item" ng-if="objectSet.oIntrmStat.oCibilResult.sFldVal">
+							<div class="list-group-item" style="border: none;" ng-if="objectSet.oIntrmStat.oCibilResult.sFldVal">
 									<span>CIBIL Score : {{objectSet.oIntrmStat.oCibilResult.sFldVal}}</span>
 							</div>
 							<div class="list-group-item">
@@ -563,7 +563,8 @@ font-size:14px;}
 											<span>Eligibility Amount : {{cro.dEligibleAmt}}</span>
 										</div>
 										<div class="list-group-item">
-											<span>FOIR : </span>
+					<span>FOIR : 
+					{{objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']}}</span>
 										</div>
 										<div class="list-group-item">
 											<span>Approved Amount : {{cro.dAmtAppr}}</span>
@@ -635,7 +636,9 @@ font-size:14px;}
 	</div>
 </div>
 <!-- end of controller -->
-	<div id="chat_window" class="row clearfix">
+<!-- commented as chat appplication is no longer in use -->
+
+	<!-- <div id="chat_window" class="row clearfix">
 		<div class="chat_header_box" style="font-weight: bold;">
 			<a id="minimize"
 				style="vertical-align: middle; border: 1px solid #fff; color: #fff; padding: 0px 5px 0px 5px; text-decoration: none;">-</a>
@@ -659,16 +662,4 @@ font-size:14px;}
 				</form>
 			</div>
 		</div>
-	</div>
-	<div id="checkConfirmation" class="modal fade">
-		<div id="confirm-title" class="modal-header btn-danger" style="padding: 6px 12px;">
-			<h4 class="modal-title">Are you Sure...?</h4>
-		</div>
-		<div class="modal-body">
-			<p id="confirm-msg"></p>
-		</div>
-		<div class="modal-footer" style="margin-top: 17px;">
-    		<button type="button" data-dismiss="modal" class="btn btn-danger" id="saveLosData">Ok</button>
-    		<button type="button" data-dismiss="modal" class="btn btn-info">Cancel</button>
-  		</div>
-	</div> 
+	</div> -->

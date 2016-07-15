@@ -6,8 +6,7 @@
 
 	app.factory("APP_CONST", function () {
 		var END_POINT = {
-			//BASE_URL_GNG : "http://172.26.1.211:9090/GoNoGo/",
-		    BASE_URL_GNG : "http://gng.softcell.in/GoNoGo/",
+		        BASE_URL_GNG : "http://gng.softcell.in/GoNoGo/",
 			BASE_URL_SCORE:'http://gng.softcell.in/AppScoringV2Git/api/ScoringV3/',
 			BASE_URL_DEMO: 'http://gng.softcell.in/GoNoGoV3/api/GoNoGoV3/',
 			BASE_URL_DMI: 'http://gng.softcell.in/gonogo_dmi/',
@@ -162,7 +161,7 @@
 				user.institutionID = userdata.InstitutionID;
 				user.id = userdata.userid;
 				user.color = userdata.color;
-				//user.ePassword = userdata.ePassword;
+				user.ePassword = userdata.ePassword;
 
 				var dealers = localStorage.getItem('DEALERS');
 				if (dealers) {
@@ -176,9 +175,9 @@
 				
 				//user.roles = localStorage.getItem('ACTIONS');
 
-				if (user.useremail && user.useremail.indexOf("CRO1") > - 1) {
-					user.roles = ["CRO1"];
-				}
+				// if (user.useremail && user.useremail.indexOf("CRO1") > - 1) {
+				// 	user.roles = ["CRO1"];
+				// }
 
 				user.roles.push(user.id);
 
@@ -224,7 +223,6 @@
 		AclService.addRole("4019");
 		AclService.addRole("CRO1");
 
-		AclService.addResource("DEApplication");
 		AclService.addResource("APAN");
 		AclService.addResource("CATADD");
 		AclService.addResource("PAPRV");
@@ -296,8 +294,5 @@
 		AclService.addResource("CONREQ");
 		AclService.addResource("NAPPDATASTA");
 		AclService.addResource("RTREE");
-
-		AclService.allow("CRO1","DEApplication","Reinitiate");
-		AclService.allow("CRO1","DEApplication","Update");
 	}]);
 }).call(this);
