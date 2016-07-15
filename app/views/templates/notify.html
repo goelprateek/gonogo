@@ -251,7 +251,8 @@ font-size:14px;}
 					<div class="leftbar_scroll" style="height: 512px;" when-scrolled="loadData()">
 						<div class="list-group-item" ng-if="notifarray.length==0"
 								style="color: red; text-align: center;">Your Queue is Empty</div>
-						<div class="list-group-item" style="padding: 0px;border-bottom: 1px solid #ddd;margin-bottom: 0px;" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" > <!-- ['-refId','-dateTime'] -->
+						
+						<div class="list-group-item" style="padding: 0px;border-bottom: 1px solid #ddd;margin-bottom: 0px;" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" > 
 							<div class="list-group-item" style="border-bottom: 1px solid #ddd;margin-bottom: 0px;border: 0px solid #ddd;"
 								ng-click='load_details(user.sRefID,"true")'
 								ng-class='{picked: user.sRefID==Picked}'>

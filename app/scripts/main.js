@@ -12,11 +12,7 @@ var access2;
 var id_type='';
 var name = '';
 var id ='';
-// socket connection url and port
-//var socket_url = 'localhost'; //local
-//var socket_url = 'http://gng.softcell.in'; //uat
-//var port = '8080'; //local
-//var port = '80'; //uat
+
 var userdata = JSON.parse(localStorage.getItem('lists'));
 //console.log("login id:"+JSON.stringify(userdata.userid));
  

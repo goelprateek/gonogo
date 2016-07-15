@@ -3,7 +3,7 @@
 describe('Controller: AboutCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('goNoGoV3App'));
+  beforeEach(module('gonogo'));
 
   var AboutCtrl,
     scope;
