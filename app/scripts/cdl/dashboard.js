@@ -15,8 +15,8 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 	$scope.duration="LastYear";
 	$scope.dashboardResult=[];
 
-	console.log("Scope :");
-	console.log($scope);
+	//console.log("Scope :");
+	//console.log($scope);
 
 	$scope.sortType     = 'dDate'; // set the default sort type
 	$scope.sortDesc  = true;  // set the default sort order
@@ -51,7 +51,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 		
 //		alert($scope.useremail.toLowerCase());
 //		alert($scope.useremail.toLowerCase().indexOf("dsa"));
-		if($scope.useremail==null || $scope.useremail=="" || !($scope.useremail.toLowerCase().indexOf("dsa")>-1))
+		if(currentUser.role!="DSA")
 		{
 //			console.log();
 //			alert("Moving to root");
@@ -74,7 +74,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 		var fromDateStr = $filter('date')(fromDate,'yyyy-MM-dd');
 		
 		//TODO Get sDsaId
-		dashboardJson={"iLimit":10000,"dtToDate":todayStr,"sDsaId":$scope.useremail,"iSkip":0,"dtFromDate":fromDateStr};
+		dashboardJson={"iLimit":10000,"dtToDate":todayStr,"sDsaId":$scope.username,"iSkip":0,"dtFromDate":fromDateStr};
 		
 		var dashboardJson=JSON.stringify(dashboardJson);
 		// var urlConst= APP_CONST.getConst('BASE_URL_GNG');

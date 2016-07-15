@@ -292,7 +292,7 @@ font-size:14px;}
 									<span>Name : <span >{{name}}
 
 									</span></span></div>
-								<div class="list-group-item"><span>D.O.B : {{dob | dateFilter}}</span></div>
+								<div class="list-group-item"><span>D.O.B : {{objectSet.oAppReq.oReq.oApplicant.sDob | dateFilter}}</span></div>
 
 								<div class="list-group-item" ng-repeat="data in objectSet.oAppReq.oReq.oApplicant.aPhone" ng-if="data.sPhoneType=='PERSONAL_MOBILE' || data.sPhoneType=='Personal Mobile'">
 									<span >Mobile : {{data.sPhoneNumber}}

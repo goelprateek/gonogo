@@ -163,6 +163,8 @@
 				user.color = userdata.color;
 				user.ePassword = userdata.ePassword;
 
+				user.role = JSON.parse(atob(localStorage.getItem('ROLES')));
+
 				var dealers = localStorage.getItem('DEALERS');
 				if (dealers) {
 					user.dealers = JSON.parse(atob(dealers));

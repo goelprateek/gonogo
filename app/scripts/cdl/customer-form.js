@@ -20,8 +20,8 @@ app.controller('PDFViewerModalCtrl', [
 				sCroId:"default",
 				dtSubmit:new Date().getTime(),
 				sReqType:null,
-				sAppSource:"Web",
-				sDsaId:user.useremail,
+				sAppSource:"WEB",
+				sDsaId:user.username,
 				sAppID:"",
 				sDealerId:null,
 				sSourceID:null,
@@ -32,7 +32,7 @@ app.controller('PDFViewerModalCtrl', [
 		};
 
 		URL = 'send-mail-pdf';
-		RestService.postDataWithHeaders(URL,JSON.stringify(mailRequest),user.useremail,user.ePassword).then(function(Response){
+		RestService.postDataWithHeaders(URL,JSON.stringify(mailRequest),user.username,user.ePassword).then(function(Response){
 
 			if(Response){}
 		});	
@@ -868,8 +868,8 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 				sCroId:"default",
 				dtSubmit:new Date().getTime(),
 				sReqType:null,
-				sAppSource:"Web",
-				sDsaId:$scope.useremail,
+				sAppSource:"WEB",
+				sDsaId:$scope.username,
 				sAppID:"",
 				sDealerId:null,
 				sSourceID:null,

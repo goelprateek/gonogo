@@ -493,7 +493,10 @@
 	$scope.load_details = function(CustID,dedupeflag)
 	{  
         $scope.currentApplicationFormRefID=CustID;
-		var URL='';
+
+        $scope.isUpdating=false;        
+		
+        var URL='';
 		var json ={'sRefID':CustID};	
 		if(croQueue)//for CRO1
 		{ 
@@ -544,13 +547,17 @@
 
 
             if($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob!=""){
-                $scope.dob = $scope.objectSet.oAppReq.oReq.oApplicant.sDob;
+
                 var dateOfBirth=new Date();
                 dateOfBirth.setFullYear(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4)));
                 dateOfBirth.setDate(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)));
                 dateOfBirth.setMonth((parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4))-1));
                 
-                $scope.objectSet.oAppReq.oReq.oApplicant.sDob=dateOfBirth;
+                // $scope.objectSet.oAppReq.oReq.oApplicant.sDob =$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)
+                //                                                 +"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4)
+                //                                                 +"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4);
+
+                $scope.app_form={pickerDob:dateOfBirth};
             }
 
 			var data = 	$scope.notifarray;
@@ -903,7 +910,6 @@ function requestForStatus(json)
 		$(this).parent().parent().hide();
 	});
 
-
 	$(document).on('click', '#minimize', function(e) {
 		$(this).parent().parent().animate({
 			height : '30px'
@@ -939,20 +945,28 @@ function requestForStatus(json)
     };
 
     $scope.enableForm=function(){
-        $scope.nameOld=$scope.name;
-        $scope.dobOld=$scope.dob;
-        
-        $scope.resAddr1Old=$scope.dob;
-        $scope.resAddr2Old=$scope.dob;
-        $scope.resAddr3Old=$scope.dob;
-        $scope.resCityOld=$scope.dob;
-        $scope.resStateOld=$scope.dob;
-        $scope.resPincodeOld=$scope.dob;
-        $scope.resMonthlyRentOld=$scope.dob;
-        $scope.resAddrTypeOld=$scope.dob;
-        $scope.resStayMonthOld=$scope.dob;
-        $scope.resCityStayMonthOld=$scope.dob;
-        
+
+        $scope.fieldsUpdated={
+            isNameUpdated:false,
+            isResAddressUpdated:false,
+            isOffAddressUpdated:false,
+            isPanUpdated:false,
+            isVoterIDUpdated:false,
+            isAadhaarUpdated:false,
+            isDobUpdated:false
+        }
+        $scope.dobOld=$scope.app_form.pickerDob;
+
+        _.each($scope.objectSet.oAppReq.oReq.oApplicant.aAddr,function(addr){
+            if(addr.sAddrType.toLowerCase()=="residence"){
+                $scope.oldResPincode=addr.iPinCode;
+            }else if(addr.sAddrType.toLowerCase()=="office"){
+                $scope.oldOffPincode=addr.iPinCode;
+            }
+        });
+
+        //$scope.oldPinCode=;
+
         $scope.isUpdating=!$scope.isUpdating;
         
         if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs!=null){
@@ -1018,25 +1032,51 @@ function requestForStatus(json)
 
     $scope.updateForm=function(){
         
-        var dobFormatted=$filter('date')($scope.objectSet.oAppReq.oReq.oApplicant.sDob,"dd:MM:yyyy")
+        var dobFormatted=$filter('date')($scope.app_form.pickerDob,"dd/MM/yyyy")
         if(dobFormatted && dobFormatted!="")
         {
-            $scope.objectSet.oAppReq.oReq.oApplicant.sDob=dobFormatted.replace(/:/g,"");
+            $scope.objectSet.oAppReq.oReq.oApplicant.sDob=dobFormatted.replace(/\//g,"");
         }
+
+        if($scope.objectSet.oAppReq.oReq.oApplicant.sDob!=dobFormatted){
+             $scope.fieldsUpdated.isDobUpdated=true;
+        }
+
+        _.each($scope.objectSet.oAppReq.oReq.oApplicant.aAddr,function(addr){
+            if(addr.sAddrType.toLowerCase()=="residence" && addr.iPinCode != $scope.oldResPincode){
+                $scope.fieldsUpdated.isResAddressUpdated=true;
+            }else if(addr.sAddrType.toLowerCase()=="office" && addr.iPinCode != $scope.oldOffPincode){
+                $scope.fieldsUpdated.isOffAddressUpdated=true;
+            }
+        });
 
         $scope.isUpdating=!$scope.isUpdating;
         
         console.log("Updating form : ");
         console.log($scope.objectSet);
         
-        $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet.oAppReq);
+        $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet.oAppReq,$scope.fieldsUpdated);
     };
     
     $scope.onValueChanged=function(valueChanged){
         console.log("Value Changed :"+valueChanged);
+
+        if(valueChanged == "name"){
+            $scope.fieldsUpdated.isNameUpdated=true;
+        }else if(valueChanged == "resAddress"){
+            $scope.fieldsUpdated.isResAddressUpdated=true;
+        }else if(valueChanged == "offAddress"){
+            $scope.fieldsUpdated.isOffAddressUpdated=true;
+        }else if(valueChanged == "pan"){
+            $scope.fieldsUpdated.isPanUpdated=true;
+        }else if(valueChanged == "aadhaar"){
+            $scope.fieldsUpdated.isAadhaarUpdated=true;
+        }else if(valueChanged == "voter"){
+            $scope.fieldsUpdated.isVoterIDUpdated=true;
+        }
     };  
     
-    $scope.showReinitiateModal = function (size,refID,applicantFormObject) {
+    $scope.showReinitiateModal = function (size,refID,applicantFormObject,fieldsUpdated) {
          //alert('modal baseURL'+baseURL);
          var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
@@ -1049,6 +1089,9 @@ function requestForStatus(json)
                 },
                 applicantFormObject:function(){
                     return applicantFormObject;
+                },
+                fieldsUpdated:function(){
+                    return fieldsUpdated;
                 }
             }
          });
@@ -1403,9 +1446,10 @@ app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
       };
     }]);
 
-app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantFormObject","$uibModalInstance",function($scope,RestService,refID,applicantFormObject,$uibModalInstance){
+app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantFormObject","$uibModalInstance","fieldsUpdated",function($scope,RestService,refID,applicantFormObject,$uibModalInstance,fieldsUpdated){
     $scope.refID = refID;
     $scope.applicantFormObject = applicantFormObject;
+    $scope.fieldsUpdated=fieldsUpdated;
     
     var requestReinitiateModules=[];
 
@@ -1428,7 +1472,9 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
                          {main:"SOBRE" , subs: [{name:"Verificaton scoring",id:401,isSuccess:true},
                                                 {name:"Application scoring",id:402,isSuccess:true}]}
                       ];
-    $scope.tab = 0;
+
+    $scope.fieldModule={};
+    $scope.tab = $scope.reinitiateModules[0].main;
 
     $scope.tags = [];
 
