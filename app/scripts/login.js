@@ -77,7 +77,7 @@
 							
 							var details = data.USER_DETAILS[0];
 							var listvalues = {
-								'name': details.USER_NAME,
+								'name': data.USERNAME,
 								'email': details.EMAIL,
 								'InstitutionID': details.INSTITUTION_ID,
 								'instImage': details.INSTITUTE_IMAGE,

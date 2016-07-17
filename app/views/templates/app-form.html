@@ -652,7 +652,7 @@
 						<label class="control-label">{{kyc.sKycName}} NUMBER</label>
 						<input class="form-control" type="text" ng-model="kyc.sKycNumber" ng-disabled="!isUpdating" change-on-blur="onValueChanged('voter')"/>
 					</div>
-					<div ng-if="kyc.sKycName!='AADHAR' && kyc.sKycName!='AADHAAR' && kyc.sKycName!='PAN'">
+					<div ng-if="kyc.sKycName!='AADHAR' && kyc.sKycName!='AADHAAR' && kyc.sKycName!='PAN' && kyc.sKycName!='VOTERID'">
 						<label class="control-label">{{kyc.sKycName}} NUMBER</label>
 						<input class="form-control" type="text" ng-model="kyc.sKycNumber" ng-disabled="!isUpdating" change-on-blur="onValueChanged('KYC')"/>
 					</div>
