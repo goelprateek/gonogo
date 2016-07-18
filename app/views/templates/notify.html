@@ -562,8 +562,8 @@ font-size:14px;}
 											<span>Eligibility Amount : {{cro.dEligibleAmt}}</span>
 										</div>
 										<div class="list-group-item">
-					<span>FOIR : 
-					{{objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']}}</span>
+											<span>FOIR : 
+											{{objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']}}</span>
 										</div>
 										<div class="list-group-item">
 											<span>Approved Amount : {{cro.dAmtAppr}}</span>
@@ -580,8 +580,8 @@ font-size:14px;}
 									    <span>FOIR : {{objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']}}</span>
 									</div> -->
 									<div class="list-group-item" 
-									ng-if="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['RULE-SEQ']">
-									    <span>Eligibility Grid : {{objectSet.oCompRes.scoringServiceResponse["ELIGIBILITY_RESPONSE"]["RULE-SEQ"]}}</span>
+									ng-if="objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE">
+									    <span>Eligibility Grid : {{ElgbltyGrid}}</span>
 										<span ng-if="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE'].REMARK">Remark : {{objectSet.oCompRes.scoringServiceResponse["ELIGIBILITY_RESPONSE"].REMARK}}</span>
 									</div>
 									 <div class="list-group-item"  

@@ -95,9 +95,8 @@
 					$('#stackThumbnail').remove();
 					//remove back button
 					$rootScope.tabledata =[];
-					if(email.indexOf("dsa") > -1 || email.indexOf("DSA") > -1)
-						{var json={"sInstID" : $scope.InstitutionID,"sDsaID":email};}
-					else{var json={"sInstID" : $scope.InstitutionID};}
+
+					var json={"sInstID" : $scope.InstitutionID};
 					
 					var URL = "stack-graph";
 					
@@ -289,11 +288,9 @@
 						$('body #Loader').show();
 					
 						if( $scope.InstitutionID=='4019'){
-							if(email.indexOf("dsa") > -1 || email.indexOf("DSA") > -1)
-							{var json={"dtDate":d.time,"sStat":d.status,'sInstID':$scope.InstitutionID,"sDsaID":email};
-							}
-							else{var json={"dtDate":d.time,"sStat":d.status,'sInstID':$scope.InstitutionID};
-							}
+							
+							var json={"dtDate":d.time,"sStat":d.status,'sInstID':$scope.InstitutionID};
+							
 							var URL ="table-view";
 							RestService.saveToServer(URL,json).then(function(tableData){
 //								console.log("table data : "+JSON.stringify(tableData));
