@@ -17,14 +17,13 @@
 			</div>
 		</div>
 		<div class="col-md-4 text-right" id="top-fixed">
-			<a class="add-button-div-notification"
-				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('NRPRCS') && isUpdating && ApplicantForm.$valid" ng-click="updateForm();">Save</a>					
+			<!-- <a class="add-button-div-notification"
+				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('Application', 'Update') && isUpdating && ApplicantForm.$valid" ng-click="updateForm();">Save</a> -->
 			<a class="add-button-div-notification"
 				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('NRPRCS') && !isUpdating" ng-click="enableForm();">Update</a>
 			<a class="add-button-div-notification"
-				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('NRPRCS')" ng-click="showReinitiateModal('lg',currentApplicationFormRefID);">Reinitiate</a>
-			<a class="add-button-div-notification"
-				style="width: 100px; display: inline-block;" ng-click="toggleForm()">Back</a>
+				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('NRPRCS') && ((isUpdating && ApplicantForm.$valid) || !isUpdating)" ng-click="updateForm();">Reinitiate</a>
+			<a class="add-button-div-notification" style="width: 100px; display: inline-block;" ng-click="toggleForm()">Back</a>
 				<!-- <a class="add-button-div-notification"
 				style="width: 100px; display: inline-block;" ng-show="{{InstitutionID==4019 && (userid != '493')}}" id="submit">Submit</a> -->
 		</div>
@@ -362,55 +361,56 @@
 				</div>
 				<div ng-if="addr_type.value == 'Permanent' && findAddressType(addr_type.value,address.sAddrType)">
 					<div class="row clearfix">
-					<div class="col-md-3">
-						<label class="control-label">Address Line 1</label> <input
-							class="form-control" ng-model="address.sLine1" type="text"
-							 disabled="disabled">
-					</div>
-					<div class="col-md-3">
-						<label class="control-label">Address Line 2</label> <input
-							class="form-control" ng-model="address.sLine2" type="text"
-							disabled="disabled" >
-					</div>
-					<div class="col-md-3">
-						<label class="control-label">Address Line 3</label> <input
-							class="form-control" ng-model="address.sLine3" type="text"
-							disabled="disabled" >
-					</div>
-					<div class="col-md-3">
-						<label class="control-label">City</label> <input
-							class="form-control" ng-model="address.sCity" type="text" disabled="disabled">
-					</div>
-				</div>
-				<div class="row clearfix">
-					<div class="col-md-3">
-						<label class="control-label" style="float: none;">State </label>
-					 	<input	id="statelist" class="form-control" ng-model="address.sState" type="text" name="State" disabled="disabled">
-					</div>
-					<div class="col-md-3">
-						<label class="control-label">Pin Code</label> <input
-							class="form-control" ng-model="address.iPinCode" value="" type="text" name="PinCode" maxlength="6"  disabled="disabled">
-					</div>
-					<div class="col-md-3">
-						<label class="control-label">Monthly Rent</label>
-						<input class="form-control" ng-model="address.dRentAmt" type="text" 
-						maxlength="6"  disabled="disabled">
-					</div>
-					<div class="col-md-3">
-						<label class="control-label">Resi Addr Type</label> <input
-							class="form-control" ng-model="address.sResAddrType" type="text"
-							maxlength="6"  disabled="disabled">
-					</div>
-				
-					<div class="row clearfix">
 						<div class="col-md-3">
-							<label class="control-label">Month at addr</label> <input
-							class="form-control" ng-model="address.iMonthAtAddr" type="text"  disabled="disabled">
+							<label class="control-label">Address Line 1</label> <input
+								class="form-control" ng-model="address.sLine1" type="text"
+								 disabled="disabled">
 						</div>
 						<div class="col-md-3">
-							<label class="control-label">Month at city</label> <input
-							class="form-control" type="text"  ng-model="address.iMonthAtCity"
-							 disabled="disabled">
+							<label class="control-label">Address Line 2</label> <input
+								class="form-control" ng-model="address.sLine2" type="text"
+								disabled="disabled" >
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Address Line 3</label> <input
+								class="form-control" ng-model="address.sLine3" type="text"
+								disabled="disabled" >
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">City</label> <input
+								class="form-control" ng-model="address.sCity" type="text" disabled="disabled">
+						</div>
+					</div>
+					<div class="row clearfix">
+						<div class="col-md-3">
+							<label class="control-label" style="float: none;">State </label>
+						 	<input	id="statelist" class="form-control" ng-model="address.sState" type="text" name="State" disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Pin Code</label> <input
+								class="form-control" ng-model="address.iPinCode" value="" type="text" name="PinCode" maxlength="6"  disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Monthly Rent</label>
+							<input class="form-control" ng-model="address.dRentAmt" type="text" 
+							maxlength="6"  disabled="disabled">
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Resi Addr Type</label> <input
+								class="form-control" ng-model="address.sResAddrType" type="text"
+								maxlength="6"  disabled="disabled">
+						</div>
+					
+						<div class="row clearfix">
+							<div class="col-md-3">
+								<label class="control-label">Month at addr</label> <input
+								class="form-control" ng-model="address.iMonthAtAddr" type="text"  disabled="disabled">
+							</div>
+							<div class="col-md-3">
+								<label class="control-label">Month at city</label> <input
+								class="form-control" type="text"  ng-model="address.iMonthAtCity"
+								 disabled="disabled">
+							</div>
 						</div>
 					</div>
 				</div>
@@ -547,12 +547,10 @@
 				</div>
 				<div ng-repeat="data in objectSet.aAppScoRslt" ng-if="objectSet.aAppScoRslt!=''">
 				<div class="col-md-3">
-					<label class="control-label">{{data.sFldName}}</label> <input ng-if="data.sFldName!='PAN Verification'" ng-model="data.sFldVal" class="form-control" type="text"
-						 disabled="disabled">
-						
-						<input ng-if="data.sFldName =='PAN Verification'"
-						ng-model="data.sMsg" class="form-control" type="text"
-						 disabled="disabled">
+					<label class="control-label">{{data.sFldName}}</label>
+					<input ng-if="data.sFldName!='PAN Verification'" ng-model="data.sFldVal" class="form-control" type="text" disabled="disabled">	
+					<input ng-if="data.sFldName =='PAN Verification'"
+					ng-model="data.sMsg" class="form-control" type="text" disabled="disabled">
 				</div>
 				<div class="col-md-3" ng-if="data.sFldName =='PAN Verification'">
 					<label class="control-label">PAN Score</label> <input
@@ -639,6 +637,7 @@
 						<input class="form-control" name="pan_number" type="text" ng-model="kyc.sKycNumber" ng-disabled="!isUpdating" maxlength="10" ng-pattern="/^[A-Z]{3}[P][A-Z]\d{4}[A-Z]/i" change-on-blur="onValueChanged('pan')" capitalize/>
 						<div ng-messages="ApplicantForm.pan_number.$touched && ApplicantForm.pan_number.$error" class="errorMsg">
 		   					<p ng-message="maxlength">Please enter valid pan number</p>
+		   					<p ng-message="pattern">Please enter valid pan number</p>
 						</div>
 					</div>
 					<div ng-if="kyc.sKycName=='AADHAR' || kyc.sKycName=='AADHAAR'">

@@ -969,8 +969,7 @@ function requestForStatus(json)
         minDate: minDa,
         startingDay: 1
     };
-
-    $scope.enableForm=function(){
+ $scope.enableForm=function(){
 
         $scope.fieldsUpdated={
             isNameUpdated:false,
@@ -981,7 +980,7 @@ function requestForStatus(json)
             isAadhaarUpdated:false,
             isDobUpdated:false
         }
-        $scope.dobOld=$scope.app_form.pickerDob;
+        $scope.dobOld=$scope.dob;
 
         _.each($scope.objectSet.oAppReq.oReq.oApplicant.aAddr,function(addr){
             if(addr.sAddrType.toLowerCase()=="residence"){
@@ -1057,31 +1056,38 @@ function requestForStatus(json)
     };
 
     $scope.updateForm=function(){
+        if($scope.objectSet.iNoReTry>=2){
+            alert("This application is already re-initiated twice.");
+        }else{
+            if($scope.isUpdating){
+                var dobFormatted=$filter('date')($scope.app_form.pickerDob,"dd/MM/yyyy")
+                if(dobFormatted && dobFormatted!="")
+                {
+                    $scope.objectSet.oAppReq.oReq.oApplicant.sDob=dobFormatted.replace(/\//g,"");
+                }
         
-        var dobFormatted=$filter('date')($scope.app_form.pickerDob,"dd/MM/yyyy")
-        if(dobFormatted && dobFormatted!="")
-        {
-            $scope.objectSet.oAppReq.oReq.oApplicant.sDob=dobFormatted.replace(/\//g,"");
-        }
-
-        if($scope.objectSet.oAppReq.oReq.oApplicant.sDob!=dobFormatted){
-             $scope.fieldsUpdated.isDobUpdated=true;
-        }
-
-        _.each($scope.objectSet.oAppReq.oReq.oApplicant.aAddr,function(addr){
-            if(addr.sAddrType.toLowerCase()=="residence" && addr.iPinCode != $scope.oldResPincode){
-                $scope.fieldsUpdated.isResAddressUpdated=true;
-            }else if(addr.sAddrType.toLowerCase()=="office" && addr.iPinCode != $scope.oldOffPincode){
-                $scope.fieldsUpdated.isOffAddressUpdated=true;
+                if($scope.objectSet.oAppReq.oReq.oApplicant.sDob!=dobFormatted){
+                     $scope.fieldsUpdated.isDobUpdated=true;
+                }
+        
+                _.each($scope.objectSet.oAppReq.oReq.oApplicant.aAddr,function(addr){
+                    if(addr.sAddrType.toLowerCase()=="residence" && addr.iPinCode != $scope.oldResPincode){
+                        $scope.fieldsUpdated.isResAddressUpdated=true;
+                    }else if(addr.sAddrType.toLowerCase()=="office" && addr.iPinCode != $scope.oldOffPincode){
+                        $scope.fieldsUpdated.isOffAddressUpdated=true;
+                    }
+                });
+        
+                $scope.isUpdating=!$scope.isUpdating;
+                
+        //        console.log("Updating form : ");
+        //        console.log($scope.objectSet);
+                
+                $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet,$scope.fieldsUpdated);
+            }else{
+                 $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet);
             }
-        });
-
-        $scope.isUpdating=!$scope.isUpdating;
-        
-        console.log("Updating form : ");
-        console.log($scope.objectSet);
-        
-        $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet.oAppReq,$scope.fieldsUpdated);
+        }
     };
     
     $scope.onValueChanged=function(valueChanged){
@@ -1102,7 +1108,7 @@ function requestForStatus(json)
         }
     };  
     
-    $scope.showReinitiateModal = function (size,refID,applicantFormObject,fieldsUpdated) {
+    $scope.showReinitiateModal = function (size,refID,applicantData,fieldsUpdated) {
          //alert('modal baseURL'+baseURL);
          var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
@@ -1113,8 +1119,8 @@ function requestForStatus(json)
                 refID:function(){
                     return refID;
                 },
-                applicantFormObject:function(){
-                    return applicantFormObject;
+                applicantData:function(){
+                    return applicantData;
                 },
                 fieldsUpdated:function(){
                     return fieldsUpdated;
@@ -1122,7 +1128,7 @@ function requestForStatus(json)
             }
          });
     };
-    
+
     $scope.getStateCity=function($event,address){
         
         console.log("getStateCity");
@@ -1146,6 +1152,79 @@ function requestForStatus(json)
             });
         };
     };
+
+    $scope.showReinitiatedDecisionData=function(size,requestObj){
+//      console.log("showDecisionReinitiatedData");
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: './views/modal-bre-results.html',
+            controller: 'ReinitiatedDecisionModalController',
+            size: size,
+            resolve: {
+                requestObj:function(){
+                    return requestObj;
+                }
+            }
+        });
+    };
+}]);
+
+app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$uibModalInstance","requestObj",function($scope,RestService,$uibModalInstance,requestObj){
+    console.log("ReinitiatedDecisionModalController");
+    console.log(requestObj);
+    
+    $scope.appForms=[];
+    requestObj.elgbltyGrid = ( requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID ? requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID : "" ) 
+                            +"."
+                            + (requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID ? requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID : (requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] ? requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] : "" ));
+    
+    $scope.appForms.push(requestObj);
+    
+//  $scope.bureau = requestObj.aAppScoRslt;
+//
+//  $scope.cibilS = requestObj.oIntrmStat.oCibilResult.sFldVal;
+//
+//  $scope.offAddrStab= requestObj.oIntrmStat.oOffAddressResult.iAddrStblty;
+//
+//  $scope.resAddrStab= requestObj.oIntrmStat.oResAddressResult.iAddrStblty;
+//
+//  $scope.kyc_status = requestObj.oIntrmStat.oPanResult; 
+//
+//  $scope.appldAmount = requestObj.oAppReq.oReq.oApplication.dLoanAmt;
+//
+//  $scope.croDec=requestObj.aCroDec[0];
+//
+//  $scope.offAddrStab= requestObj.oIntrmStat.oOffAddressResult.iAddrStblty;
+//
+//  $scope.resAddrStab= requestObj.oIntrmStat.oResAddressResult.iAddrStblty;
+//
+//  $scope.DetailsResp=requestObj.oCompRes.scoringServiceResponse["DECISION_RESPONSE"].Details;
+//  
+//  if(Response.oCompRes.scoringServiceResponse && Response.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE){
+//      $scope.Eremark = requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.REMARK;
+//      $scope.ElgbltyGrid = ( requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID ? Response.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID : "" ) 
+//                           +"."
+//                           + (requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID ? Response.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID : (Response.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] ? Response.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] : "" ));
+//  }
+
+    //'sAppID':$scope.appltnID,'sInstID':user.institutionID,'sCroId':user.id
+    var requestJson={"oHeader":{"sAppID":requestObj.oAppReq.sRefID,"sInstID":"4019","sSourceID":"WEB","sAppSource":"WEB","sReqType":"JSON","dtSubmit":new Date().getTime(),"sDsaId":null,"sCroId":"NULL","sDealerId":null},"sRefID":requestObj.oAppReq.sRefID,"sProduct":"Consumer Durables","iNoOfRecord":2}
+
+    var URL="worker/bre-audit-data/";
+
+    RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
+        //[{"applicationLog":{},"sRefID":"5788d78b5bc7ec48de2796c2","bStatFlag":false,"iNoReTry":0,"oCompRes":{},"oIntrmStat":{"sRefId":null,"sAppID":null,"sInstID":null,"dtStart":1468681176705,"dtETime":null,"sAppStart":"DEFAULT","sDedupe":"DEFAULT","sEmailStat":"DEFAULT","sOtpStat":"COMPLETE","sAppStat":"DEFAULT","sPanStat":"DEFAULT","sAadharStat":"DEFAULT","sMbStat":"DEFAULT","sVarScoreStat":"DEFAULT","sScoreStat":"DEFAULT","sCblScore":"DEFAULT","sCroStat":"DEFAULT","oPanResult":null,"oCibilResult":null,"oResAddressResult":null,"oOffAddressResult":null,"oScoringResult":null,"oAadharResult":null,"oExperianResult":null,"oEquifaxResult":null,"oCHMResult":null,"oMbResult":null},"bNegPinCodeFlag":false,"aAppScoRslt":[]},{"applicationLog":{},"sRefID":"5788d78b5bc7ec48de2796c3","bStatFlag":false,"iNoReTry":0,"oCompRes":{},"oIntrmStat":{"sRefId":null,"sAppID":null,"sInstID":null,"dtStart":1468681176705,"dtETime":null,"sAppStart":"DEFAULT","sDedupe":"DEFAULT","sEmailStat":"DEFAULT","sOtpStat":"COMPLETE","sAppStat":"DEFAULT","sPanStat":"DEFAULT","sAadharStat":"DEFAULT","sMbStat":"DEFAULT","sVarScoreStat":"DEFAULT","sScoreStat":"DEFAULT","sCblScore":"DEFAULT","sCroStat":"DEFAULT","oPanResult":null,"oCibilResult":null,"oResAddressResult":null,"oOffAddressResult":null,"oScoringResult":null,"oAadharResult":null,"oExperianResult":null,"oEquifaxResult":null,"oCHMResult":null,"oMbResult":null},"bNegPinCodeFlag":false,"aAppScoRslt":[]}]
+        if(Response){
+            _.each(Response,function(resp){
+                resp.elgbltyGrid = ( resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID ? resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID : "" ) 
+                    +"."
+                    + (resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID ? resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID : (resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] ? resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] : "" ));
+
+                appForms.push(resp);
+            });         
+        }
+        $uibModalInstance.dismiss();
+    });
 }]);
 
 app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService',
@@ -1336,9 +1415,7 @@ app.controller('ModalInstanceCtrl', ['$scope','$rootScope','NotificationObject',
     $scope.closeApprvPanel = function () {
         $uibModalInstance.dismiss('cancel');
     };
-
-  }]);
-
+}]);
 
 app.controller('scoreTreeCtr', ['$scope','$uibModalInstance','treeFeed', 
     function($scope,$uibModalInstance,treeFeed){ 
@@ -1465,34 +1542,38 @@ app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
      $scope.offrData = offers.documents; 
 }
 
-    $scope.requestDoc = function () {
-          if($scope.holdObject.reqComment != '' && $scope.holdObject.reqComment != undefined){
-            $scope.setSelected();
-            var data = $scope.offrData;
-            var arrayDesc = [];
-             for (var j in data){
-                arrayDesc.push({sJCode:data[j].Code,sDescrip:$scope.holdObject.reqComment,sDocName:data[j].Name});
-              }
-              if( $scope.invalidMsg == true)
-                 $scope.invalidMsg = !$scope.invalidMsg;
-            $uibModalInstance.close(arrayDesc);
-         }else{
+$scope.requestDoc = function () {
+      if($scope.holdObject.reqComment != '' && $scope.holdObject.reqComment != undefined){
+        $scope.setSelected();
+        var data = $scope.offrData;
+        var arrayDesc = [];
+         for (var j in data){
+            arrayDesc.push({sJCode:data[j].Code,sDescrip:$scope.holdObject.reqComment,sDocName:data[j].Name});
+          }
+          if( $scope.invalidMsg == true)
              $scope.invalidMsg = !$scope.invalidMsg;
-         }
-    };
+        $uibModalInstance.close(arrayDesc);
+     }else{
+         $scope.invalidMsg = !$scope.invalidMsg;
+     }
+};
 
-    $scope.closeDocument = function () {
-        $uibModalInstance.dismiss('cancel');
-      };
-    }]);
+$scope.closeDocument = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
+}]);
 
-app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantFormObject","$uibModalInstance","fieldsUpdated",function($scope,RestService,refID,applicantFormObject,$uibModalInstance,fieldsUpdated){
+app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantData","$uibModalInstance","fieldsUpdated",function($scope,RestService,refID,applicantData,$uibModalInstance,fieldsUpdated){
     $scope.refID = refID;
-    $scope.applicantFormObject = applicantFormObject;
+    $scope.applicantData = applicantData;
     $scope.fieldsUpdated=fieldsUpdated;
+
+    $scope.fieldModule={};
+    
+    $scope.tags = [];
     
     var requestReinitiateModules=[];
-
+    
     // var requestReinitiateModules=[
     //                              {sModuleName : "101", bRunModule : false},
     //                              {sModuleName : "201", bRunModule : false},
@@ -1504,19 +1585,54 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
     //                          ];
 
     $scope.reinitiateModules=[
-                         {main:"MB" ,subs: [{name:"Cibil",id:101,isSuccess:false}]},
+                         {main:"MB" ,subs: [{name:"Cibil",id:101,isSuccess:true}]},
                          {main:"KYC" , subs: [{name:"PAN",id:201,isSuccess:true},
-                                              {name:"Aadhaar",id:202,isSuccess:false}]},
+                                              {name:"Aadhaar",id:202,isSuccess:true}]},
                          {main:"Dedupe" , subs: [{name:"Dedupe",id:301,isSuccess:true},
                                                  {name:"Negative Pin Code",id:302,isSuccess:true}]},
                          {main:"SOBRE" , subs: [{name:"Verificaton scoring",id:401,isSuccess:true},
                                                 {name:"Application scoring",id:402,isSuccess:true}]}
                       ];
-
-    $scope.fieldModule={};
+    
     $scope.tab = $scope.reinitiateModules[0].main;
+    
+    //Hard Coded for testing
+//    var requestReinitiateModules=[
+//                                  {sModuleName : "101", bRunModule : true},
+//                                  {sModuleName : "201", bRunModule : true},
+//                                  {sModuleName : "202", bRunModule : true},
+//                                  {sModuleName : "301", bRunModule : true},
+//                                  {sModuleName : "302", bRunModule : false},
+//                                  {sModuleName : "401", bRunModule : true},
+//                                  {sModuleName : "402", bRunModule : false}
+//                              ];
+//    $scope.applicantData.oWorkFlowConfig = {
+//        sGngRefId : $scope.refID,
+//        aModuleConfig : requestReinitiateModules
+//    };
+    //Hard Coded for testing
 
-    $scope.tags = [];
+    
+    if($scope.applicantData.oWorkFlowConfig && $scope.applicantData.oWorkFlowConfig.aModuleConfig){
+        _.each($scope.applicantData.oWorkFlowConfig.aModuleConfig, function(mConfig){
+            _.each($scope.reinitiateModules,function(module){
+                _.each(module.subs,function(subModule){
+                    if((subModule.id+"")==mConfig.sModuleName){
+                        subModule.isSuccess=mConfig.bRunModule;
+                    }
+                });
+            });
+        });
+    }
+    
+    //If Fields updated then add all into processing
+    if($scope.fieldsUpdated && ($scope.fieldsUpdated.isNameUpdated || $scope.fieldsUpdated.isResAddressUpdated || $scope.fieldsUpdated.isOffAddressUpdated || $scope.fieldsUpdated.isPanUpdated || $scope.fieldsUpdated.isVoterIDUpdated || $scope.fieldsUpdated.isAadhaarUpdated || $scope.fieldsUpdated.isDobUpdated)){
+        for(var i=0;i<$scope.reinitiateModules.length;i++) {
+            for(var j=0;j<$scope.reinitiateModules[i].subs.length;j++) {
+                $scope.tags.push({text: $scope.reinitiateModules[i].subs[j].name,id:$scope.reinitiateModules[i].subs[j].id});
+            }
+        }
+    }
 
     $scope.setTab = function(newTab){
         $scope.tab = newTab;
@@ -1639,33 +1755,41 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
         //         }          
         //     }
         // }
-        
-        if(applicantFormObject==null){
-            var requestJson={
-                sGngRefId:$scope.refID,
-                aModuleConfig:requestReinitiateModules
-            };
-
-            var URL="/worker/reprocess-by-id/";
-
-            RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
-                if(Response !=null || Response!= undefined || Response!=""){
-                }
-            });
-        }else{
+        if($scope.fieldsUpdated && ($scope.fieldsUpdated.isNameUpdated || $scope.fieldsUpdated.isResAddressUpdated || $scope.fieldsUpdated.isOffAddressUpdated || $scope.fieldsUpdated.isPanUpdated || $scope.fieldsUpdated.isVoterIDUpdated || $scope.fieldsUpdated.isAadhaarUpdated || $scope.fieldsUpdated.isDobUpdated)){
             var requestJson={
                 oWorkFlowConfig : {
                     sGngRefId : $scope.refID,
                     aModuleConfig : requestReinitiateModules
                 },
-                oApplicationRequest : applicantFormObject
+                oApplicationRequest : applicantData.oAppReq
             };
 
             var URL="/worker/reprocess-updated/";
 
             RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
-                if(Response !=null || Response!= undefined || Response!=""){
+                if(Response && Response.sStat=="SUCCESS"){
+                    alert("Application has been reinitiated successfully.");
+                }else{
+                    alert("Error occured while reinitiating.");
                 }
+                $uibModalInstance.dismiss();
+            });
+        }
+        else{
+            var requestJson={
+                sGngRefId:$scope.refID,
+                aModuleConfig:requestReinitiateModules
+            };
+
+            var URL="worker/reprocess-by-id/";
+
+            RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
+                if(Response && Response.sStat=="SUCCESS"){
+                    alert("Application has been reinitiated successfully.");
+                }else{
+                    alert("Error occured while reinitiating.");
+                }
+                $uibModalInstance.dismiss();
             });
         }
     };
