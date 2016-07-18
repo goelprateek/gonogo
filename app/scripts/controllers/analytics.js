@@ -2,7 +2,7 @@
 	
 	'use strict';
 	
-	var app = angular.module('gonogo.analytics' ,['gonogo-directives','dndLists','ui.slimscroll`','ngMaterial']);
+	var app = angular.module('gonogo.analytics' ,['gonogo-directives','dndLists','ui.slimscroll','ngMaterial']);
 
     app.factory("AnalyticsObject",function(){
         var _obj = {
@@ -331,6 +331,63 @@
        }
     
     }),
+
+    app.factory("ReportStorage",function(){
+        var reportConfig ;
+        return reportConfig = {
+              "oColumns": [
+                {
+                  "sCloumnKey": "",
+                  "sColDispName": "",
+                  "sColIndex": 0,
+                  "bViewable": false,
+                  "bDownloadable": false
+                }],
+              "oReports": [
+                {
+                  "oHeader": {
+                    "sAppID": null,
+                    "sInstID": "",
+                    "sSourceID": null,
+                    "sAppSource": null,
+                    "sReqType": null,
+                    "dtSubmit": "",
+                    "sDsaId": "",
+                    "sCroId": null,
+                    "sDealerId": null
+                  },
+                  "sReportId": "",
+                  "aProductType": [
+                    "Consumer Durables"
+                  ],
+                  "aFlatConfig": {
+                    "fileHeader": "Phone1,Phone2,Phone2,Phone3,Date",
+                    "mHeaderMap": {
+                      "0": {
+                        "sCloumnKey": "",
+                        "sColDispName": "",
+                        "sColIndex": 0,
+                        "bViewable": false,
+                        "bDownloadable": false
+                      }
+                    },
+                    "sReportName": null,
+                    "sReportType": null,
+                    "sReportFomat": null,
+                    "sHeader": null,
+                    "sSeperator": ","
+                  },
+                  "sBranchId": null,
+                  "sUserId": "",
+                  "oPaggination": {
+                    "iPageId": 1,
+                    "iLimit": 1,
+                    "iSkip": 0
+                  }
+                },
+               ]
+              }
+    }), 
 	
 
     app.controller('AnalyticsController',['$scope','$rootScope','Rules','Score', 'Policy','Decision', '$http', '$timeout',
@@ -427,11 +484,37 @@
 		// custom report modal
 
 		$scope.openCustomReportDesigner = function(){
+            var _serviceinput = {                  
+                        "oHeader" : {                 
+                                    "sAppID" :"",     
+                                    "sInstID" :"4019",    
+                                    "sSourceID" :"",  
+                                    "sAppSource" :"WEB", 
+                                    "sReqType":"",    
+                                    "dtSubmit":"",    
+                                    "sDsaId" :"",     
+                                 "sCroId":"",      
+                                 "sDealerId":""    
+                                  },                
+                         "sBranchId" : "",             
+                         "sUserId" :"",                
+                         "aProductType" :["CONSUMER DURABLE"],           
+                         "dtAccessDate":""             
+                        } ;
+
 			var modalInstance = $uibModal.open({
 							      animation: true,
 							      templateUrl: 'views/templates/report-modal.html',
 							      controller: 'CustomReportController',
 							      size: 'lg',
+                                  resolve:{
+                                    data : function(){
+                                        return RestService.saveToServer('report/reporting-Dimension',_serviceinput).then(function(data){
+                                            console.log(data);
+                                            return data;
+                                        })
+                                    }
+                                   }
 							    });	
 
 			modalInstance.result.then(function (selectedItem) {
@@ -4158,44 +4241,18 @@
 	});
 
 
-	app.controller("CustomReportController", [ '$scope','$log','$uibModalInstance' ,'RestService', function($scope,$log,$uibModalInstance,RestService){
+	app.controller("CustomReportController", [ '$scope','$log','$uibModalInstance' ,'RestService', 'ReportStorage','data',function($scope,$log,$uibModalInstance,RestService,ReportStorage,data){
 
 		$log.log('modal controller hitted');
 
 
-        $scope.selected = undefined;
-
-        $scope.getLocation = function(val) {
-            return RestService.jsonpReq('//maps.googleapis.com/maps/api/geocode/json', {
-              params: {
-                address: val,
-                sensor: false
-              }
-            }).then(function(response){
-              return response.data.results.map(function(item){
-                return item.formatted_address;
-              });
-            });
-          };
-
 		$scope.models = [
-	        {listName: "A", items: [], dragging: false},
-      		{listName: "B", items: [], dragging: false}	
+	        {listName: "A", items: data.oColumns, dragging: false},
+      		{listName: "B", items: _.filter(data.oColumns, function(object){return object.bViewable == true}), dragging: false}	
 	        
 	    ];
 
-	    $scope.selectAll = function(list,checkit){
-	    	if(checkit){
-	    		return _.each(list.items,function(value,key){
-	    			value["selected"] = true;	
-	    		});
-	    	}else{
-	    		return _.each(list.items,function(value,key){
-	    			value["selected"] = false;	
-	    		});
-	    	}
-	    	
-	    }
+        console.log($scope.models)
 
 	    $scope.getSelectedItemsIncluding = function(list, item) {
 	      item.selected = true;
