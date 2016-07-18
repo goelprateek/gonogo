@@ -10,10 +10,13 @@ app.controller('DecisionViewController', function ($scope,$uibModalInstance, dat
 //	 };
 });
 
-app.controller("DashboardController",["$scope","$filter",'sharedService','$location',"$uibModal",'APP_CONST',"RestService","UserService",function($scope,$filter,sharedService,$location,$uibModal,APP_CONST,RestService,UserService){
+app.controller("DashboardController",["$scope","$filter",'sharedService','$location',"$uibModal",'APP_CONST',"RestService","UserService","$rootScope",function($scope,$filter,sharedService,$location,$uibModal,APP_CONST,RestService,UserService,$rootScope){
 	$scope.applicationList="ApplicationList";
 	$scope.duration="LastYear";
 	$scope.dashboardResult=[];
+
+	$rootScope.errHead="";
+	$rootScope.errorMsg="";
 
 	//console.log("Scope :");
 	//console.log($scope);

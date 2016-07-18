@@ -804,7 +804,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 //			alert("Your Application for loan has been declined.");
 //		}
 		//alert($scope.currStage);
-		if($scope.currStage.startsWith("LOS_")){
+		if($scope.currStage && $scope.currStage.startsWith("LOS_")){
 			$scope.loadPDF();
 		}else if($scope.currStage=="APRV"){
 			$rootScope.DashFlag = true;

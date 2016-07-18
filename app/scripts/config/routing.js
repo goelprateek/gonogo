@@ -39,8 +39,6 @@
 			templateUrl: 'views/cdl/customer-form.html',
 			controller: 'CustomerFormCntrolr'
 		}).otherwise({ redirectTo: '/' })
-
-		
 	}]);
 	
 	

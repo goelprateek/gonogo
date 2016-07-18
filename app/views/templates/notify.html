@@ -248,7 +248,7 @@ font-size:14px;}
 						</div>
 					</form>	
 					
-					<div class="leftbar_scroll" style="height: 512px;" when-scrolled="loadData()">
+					<div slimscroll="{height: 512,railVisible:true}"  when-scrolled="loadData()">
 						<div class="list-group-item" ng-if="notifarray.length==0"
 								style="color: red; text-align: center;">Your Queue is Empty</div>
 						
@@ -287,7 +287,7 @@ font-size:14px;}
 					<div class="col-md-4 column">
 						<div class="scroll-divs-outer">
 							<label class="div-heading customer">DEMOGRAPHICS</label>
-							<div id="customer" class="scroll-divs" style="height: 158px;">
+							<div id="customer"  slimscroll="{height: 158,railVisible:true}">
 								<div class="list-group-item">
 									<span>Name : <span >{{name}}
 
@@ -409,7 +409,7 @@ font-size:14px;}
 						<div class="scroll-divs-outer">
 							<label class="div-heading cir">SCORE <span
 								class="badge"></span></label>
-							<div class="scroll-divs" style="height: 158px;">
+							<div slimscroll="{height: 158,railVisible:true}">
 							<div ng-repeat="bureauData in objectSet.aAppScoRslt" ng-if="objectSet.aAppScoRslt.length != 0">
 								
 								<div class="list-group-item" ng-if="bureauData.sFldName =='Application Score'" 
@@ -470,9 +470,8 @@ font-size:14px;}
 					<div class="row clearfix" style="margin-left: 0px; margin-right: 0px;">
 						<div class="col-md-4 column">
 							<div class="scroll-divs-outer">
-								<label class="div-heading property">ASSET <span
-									class="badge"></span></label>
-								<div id="property" class="scroll-divs">
+								<label class="div-heading property">ASSET </label>
+								<div id="property" slimscroll="{height: 210,railVisible:true}">
 								<div ng-repeat="asset in objectSet.oAppReq.oReq.oApplication.aAssetDetail" ng-if=" objectSet.oAppReq.oReq.oApplication.aAssetDetail" >
 									<div class="list-group-item" style="border-top: 2px solid rgb(221, 221, 221);">
 										<span>Asset Category : {{asset.sAssetCtg}}</span>
@@ -523,7 +522,7 @@ font-size:14px;}
 							<div class="scroll-divs-outer">
 								<label class="div-heading agent">SOURCING <span
 									class="badge"></span></label>
-								<div id="agent" class="scroll-divs">
+								<div id="agent" slimscroll="{height: 210,railVisible:true}">
 									<div class="list-group-item">
 										<span>Sales Executive : {{objectSet.oAppReq.oHeader.sDsaId.split("@")[0]}}</span>
 									</div>
@@ -554,7 +553,7 @@ font-size:14px;}
 						<div class="col-md-4 column">
 							<div class="scroll-divs-outer">
 								<label class="div-heading kyc">DECISION</label>
-								<div id="KYC" class="scroll-divs" style="width: 106.5%;">
+								<div id="KYC" style="width: 106.5%;" slimscroll="{height: 210,railVisible:true}">
 									<div class="list-group-item">
 										<span>Applied Amount : {{objectSet.oAppReq.oReq.oApplication.dLoanAmt}}</span>
 									</div>
@@ -563,8 +562,8 @@ font-size:14px;}
 											<span>Eligibility Amount : {{cro.dEligibleAmt}}</span>
 										</div>
 										<div class="list-group-item">
-					<span>FOIR : 
-					{{objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']}}</span>
+											<span>FOIR : 
+											{{objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']}}</span>
 										</div>
 										<div class="list-group-item">
 											<span>Approved Amount : {{cro.dAmtAppr}}</span>
@@ -581,8 +580,8 @@ font-size:14px;}
 									    <span>FOIR : {{objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']}}</span>
 									</div> -->
 									<div class="list-group-item" 
-									ng-if="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['RULE-SEQ']">
-									    <span>Eligibility Grid : {{objectSet.oCompRes.scoringServiceResponse["ELIGIBILITY_RESPONSE"]["RULE-SEQ"]}}</span>
+									ng-if="objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE">
+									    <span>Eligibility Grid : {{ElgbltyGrid}}</span>
 										<span ng-if="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE'].REMARK">Remark : {{objectSet.oCompRes.scoringServiceResponse["ELIGIBILITY_RESPONSE"].REMARK}}</span>
 									</div>
 									 <div class="list-group-item"  

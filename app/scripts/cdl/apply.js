@@ -2,7 +2,7 @@
 	'use strict';
 	var app = angular.module('gonogo.cdl');
 	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"roundProgressService","UserService","AclService", function(
-	 $scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,roundProgressService,UserService,AclService) {
+	 									$scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,roundProgressService,UserService,AclService) {
 	
 	var user=UserService.getCurrentUser();
     $scope.can=AclService.can;
@@ -785,8 +785,9 @@ case "verifybtn":
 		$scope.submitApplication("step1");
 	  }
 	  else
-	  {  $(".otp").val("");
-		 $rootScope.errHead="OTP";
+	  { 
+	  	$(".otp").val("");
+		$rootScope.errHead="OTP";
 		$rootScope.errorMsg="Please enter valid OTP";
 	  }
 	}else{
@@ -1105,11 +1106,11 @@ $(".previous").click(function() {
 // var countimg=0;
 $scope.onselectImg = function($files,type,index) 
 {           //console.log("inside file select"+type+" file:"+$files[0].name);
-			alert("Hello");
+			//alert("Hello");
 			var img_type ='';
 			for (var i = 0; i < $files.length; i++) 
 			{    	
-				fname=$files[0].name;
+				var fname=$files[0].name;
 // countimg++;
 //		    	var re = (/\.(gif|jpg|jpeg|tiff|png)$/i);
 		    	var re = (/\.(jpg)$/i);
@@ -2207,7 +2208,8 @@ $scope.scmService = function(key){
 		data :$scope.scmJson,
 		headers : {'Content-Type' : 'application/json'}
 	}).success(function(data)
-	 {	$scope.allSchemes = data;
+	 {	
+	 	$scope.allSchemes = data;
 	 	$scope.scmTags=[];
 		for(var i in data){   
 			$scope.scmTags.push(data[i].sSchDes)
@@ -2235,12 +2237,13 @@ $scope.scmService = function(key){
 // to set the emi and other value for selected scheme
 // $('#scheme').on('autocompleteselect', function (e, ui) 
 $scope.selectScheme =function(ui)
-{	$scope.SchemeObject = "";
-	for(var Object in $scope.allSchemes)
+{	
+	$scope.SchemeObject = "";
+	for(var key in $scope.allSchemes)
 		{
-		 if(Object.sSchDes==ui)
+		 if($scope.allSchemes[key].sSchDes==ui)
 			 {
-			 	$scope.SchemeObject=Object;
+			 	$scope.SchemeObject=$scope.allSchemes[key];
 //			 	console.log("$scope.SchemeObject : "+ JSON.stringify($scope.SchemeObject));
 			 	break;
 			 }
