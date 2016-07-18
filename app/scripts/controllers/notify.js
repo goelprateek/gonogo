@@ -381,8 +381,6 @@
 
 	$scope.countSelected="Select";
 	var offersAllowed = AclService.can('NOFRS');
-	var crodefault = AclService.can('NAPPDATADEF'); 
-	var croQueue = AclService.can('NCROQUE'); 
     //check
 	var treeData = [], map;
 	$rootScope.template ="notification";
@@ -398,38 +396,39 @@
 	
 	function polling(minimum) {
 		if($rootScope.template == "notification"){
-			if(!crodefault){
-				if(user.id=="599"){
+
+			if(!AclService.can('NAPPDATADEF')){
+				if(user.id=="599"){ // PL STP -- CRO9
 					var json ={'sCroID':"STP_PL", 
 							'sInstID':user.institutionID, 
-							'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit }
+							'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}}
 				}else{
-					var json ={'sCroID':"STA", 
+					var json ={'sCroID':"STA",  // CRO9
 							'sInstID':user.institutionID,
-							'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit}
+							'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}}
 				}
 			}else if(user.id=="586"){
-				var json ={'sCroID':"PL_QUEUE", 
+				var json ={'sCroID':"PL_QUEUE",  // CRO1 PL Normal
 						'sInstID':user.institutionID, 
-						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit }
+						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}}
 			}
-			else{var json ={'sCroID':"default", 
+			else{
+                var json ={'sCroID':"default", // CRO1,CRO2 Normal
 						'sInstID':user.institutionID, 
-						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit }//,'sCriteria' :"SIKKIM" 
-				}
+						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}}//,'sCriteria' :"SIKKIM" 
+			}
 			var URL;
-			if(croQueue){
-				URL = 'cro-queue';
+			if(AclService.can('NCROQUE')){
+				URL = 'cro-queue'; //All 
 				//URL = 'cro-queue-criteria';
 			}else{
-				URL = 'cro2-queue';
+				URL = 'cro2-queue'; // Only CRO2
 			}
 			RestService.saveToServer(URL,json).then(function(data){
 				if(!_.isNull(data) || _.isUndefined(data)){
                     $scope.notifarray = _.union($scope.notifarray,data);
 					$scope.error ="";
 				}
-
 			});	
   		}
 	}
@@ -489,7 +488,7 @@
 		
         var URL='';
 		var json ={'sRefID':CustID};	
-		if(croQueue)//for CRO1
+		if(AclService.can('NCROQUE'))//for CRO1
 		{ 
 			URL = 'application-data';
 			if(dedupeflag == "true"){
@@ -656,7 +655,7 @@
  }
 
 $scope.newApplication = function(){ 
-	if(croQueue){
+	if(AclService.can('NCROQUE')){
 	   $scope.container = false;
 	}		
 }
@@ -700,7 +699,7 @@ $scope.cro_action = function(appID, action){
     });
       console.log($scope.isAllImgApprove);
 
-	if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!croQueue)){
+	if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!AclService.can('NCROQUE'))){
 		if((appID !== "undefined") && (typeof $scope.objectSet.oAppReq !== "undefined")){
 			 if(action == "OnHold"){
 				/* $scope.toggleDocPanel = !$scope.toggleDocPanel;
