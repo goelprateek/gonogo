@@ -6,13 +6,8 @@
 
 	app.factory("APP_CONST", function () {
 		var END_POINT = {
-<<<<<<< HEAD
 			BASE_URL_GNG : "http://localhost:8080/GoNoGo/",
 		    //BASE_URL_GNG : "http://gng.softcell.in/GoNoGo/",
-=======
-			//BASE_URL_GNG : "http://172.26.1.211:9090/GoNoGo/",
-		    BASE_URL_GNG : "http://gng.softcell.in/GoNoGo/",
->>>>>>> 0a241bcd9e4ec4bd18ad36dd82e152f897b7230b
 			BASE_URL_SCORE:'http://gng.softcell.in/AppScoringV2Git/api/ScoringV3/',
 			BASE_URL_DEMO: 'http://gng.softcell.in/GoNoGoV3/api/GoNoGoV3/',
 			BASE_URL_DMI: 'http://gng.softcell.in/gonogo_dmi/',
