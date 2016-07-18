@@ -158,10 +158,12 @@
 							.style("opacity", 0); 
 						})
 						.on("click", function(d){
-							var json={"dtDate":d.time,"sStat":d.status,'sInstID':user.institutionID};//
-							RestService.saveToServer("table-view",json).then(function(tableData){
-								scope.isolatedTableData({parameter:tableData});
-							});
+							if(user.role!="DSA"){
+								var json={"dtDate":d.time,"sStat":d.status,'sInstID':user.institutionID};//
+								RestService.saveToServer("table-view",json).then(function(tableData){
+									scope.isolatedTableData({parameter:tableData});
+								});
+							}
 						})
 						.style("fill-opacity",1e-6)
 						.transition()

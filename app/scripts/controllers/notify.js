@@ -600,10 +600,8 @@
                  _.each(_.flatten(objArray),function(val){
                      if(val.sImgType.indexOf("_EVIDENCE") > -1){
                         evidenceData.push(val);
-                         maindata.push(val);
-                     }else{
-                        maindata.push(val);
                      }
+                      maindata.push(val);
                  });
     
                  _.each(evidenceData,function(val){
@@ -616,7 +614,7 @@
                         }
                     });
                  });
-                  console.log(maindata);
+                  
                     _.each(maindata,function(val){
                         return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
                             if(!_.isUndefined(data) || !_.isNull(data)){
@@ -628,22 +626,6 @@
                         });
                     });
 
-
-               /* var finalImageArray = _.flatten(_.each(objArray,function(val){
-                    return _.each(val,function(val){
-                        return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
-                            if(!_.isUndefined(data) || !_.isNull(data)){
-                                if(!_.isEmpty(data.sByteCode)){
-                                val["sByteCode"] = "data:image/png;base64,"+data.sByteCode; 
-                                 $scope.imageDataArray.push(val); 
-                                }  
-                            }
-                        });
-                    });
-                }));
-                console.log(finalImageArray);*/
-
-               /* $scope.imageDataArray =  finalImageArray;*/
                 var rejectImgFromServer =[];
                 _.each($scope.imageDataArray,function(val){
                     if(val.sStat == "Reject"){
@@ -681,12 +663,6 @@ $scope.scoreTree = function(){
                 }
               }
             });
-
-    /*modalInstance.result.then(function (selected) {
-       console.log("successfully");
-        }, function () {
-          $log.info('Modal dismissed at: ');
-        });*/
     }
 	
 $scope.cro_action = function(appID, action){ 
