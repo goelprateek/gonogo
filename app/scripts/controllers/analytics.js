@@ -510,7 +510,6 @@
                                   resolve:{
                                     data : function(){
                                         return RestService.saveToServer('report/reporting-Dimension',_serviceinput).then(function(data){
-                                            console.log(data);
                                             return data;
                                         })
                                     }
@@ -666,25 +665,6 @@
 		$scope.appView = true;
 		var URL='application-data';
 		var json ={'sRefID':CustID};	
-		/*if(croQueue)//for CRO1
-		{ 
-			URL = 'application-data';
-			if(dedupeflag == "true"){
-				 $scope.isDedupeSelected = true;
-				 $("#dedupe , #dedupe1").val("Select");
-			}else{
-				 $scope.isDedupeSelected = false;
-			}
-		}else{
-			URL = 'application-data-cro2';
-			if(dedupeflag == "true"){
-                  //remain 
-				$('#accept , #reject').show();
-				 $("#dedupe , #dedupe1").val("Select");
-			}else{
-				$('#accept , #reject').hide();
-			}
-		}*/
 		RestService.saveToServer(URL,json).then(function(response){
             if(response)
 				$scope.objectSet = response;
@@ -763,7 +743,7 @@
 			$scope.isTableData = false;
 			$scope.appView = !$scope.appView;
 		}
-        
+
 		$scope.dashboardType = function(value) {
 			if(value === 'Requests Summary')
 			{	$('#Loader').show();
@@ -809,7 +789,8 @@
 				scrollTop: $("#second_row").offset().top},
 			'slow');
 			$("#Simulator_container, #mtd_container, #ytd_container, #scorecard_container").hide();
-			$("#chaid-container, #matrix-container, #matrixbtn").hide();
+			
+            $("#chaid-container, #matrix-container, #matrixbtn").hide();
 			$("#dashboard_container, #portfolio_container").show();
 			$('#Loader').hide(3000);
 			
@@ -850,18 +831,8 @@
 				}
 		
 		
-                	if(typeof user.institutionID != 'undefined')
-                	{
-                		var email = $scope.useremail;
-                		if(email.indexOf("dsa") > -1 || email.indexOf("DSA") > -1)
-                		{
-                			$scope.reportList=[];
-                			$scope.$on('myEvent', function(events, args){
-                				 var min = args.min;
-                				 var max = args.max;
-                				getReportData(min,max);
-                			});
-                		}
+                	if(typeof user.institutionID != 'undefined'){
+                		
                 		$rootScope.tabledata =[];
                 		$scope.type = "mtd";
                 		var URL ="http://localhost:8080/GoNoGo";
@@ -4234,16 +4205,23 @@
 
 	app.controller("CustomReportController", [ '$scope','$log','$uibModalInstance' ,'RestService', 'ReportStorage','data',function($scope,$log,$uibModalInstance,RestService,ReportStorage,data){
 
-		$log.log('modal controller hitted');
+		/*$log.log(_.each(data.oColumns,function(value,key){console.log(value);}));*/
 
 
 		$scope.models = [
-	        {listName: "A", items: data.oColumns, dragging: false},
-      		{listName: "B", items: _.filter(data.oColumns, function(object){return object.bViewable == true}), dragging: false}	
+	        {listName: "Available", items: data.oColumns, dragging: false},
+      		{listName: "Selected", items: data.oColumns, dragging: false}	
 	        
 	    ];
 
-        console.log($scope.models)
+        console.log($scope.models);
+
+        $scope.getReportConfiguration = function(viewValue){
+            
+            RestService.saveToServer('report/reports',{"reportName":viewValue}).then(function(data){
+                console.log(data);
+            })
+        }
 
 	    $scope.getSelectedItemsIncluding = function(list, item) {
 	      item.selected = true;
@@ -4269,12 +4247,6 @@
 	    };
 
 	    
-	    angular.forEach($scope.models, function(list) {
-	      for (var i = 1; i <= 4; ++i) {
-	          list.items.push({label: "Item " + list.listName + i});
-	      }
-	    });
-
 	    
 	    $scope.$watch('models', function(model) {
 	        $scope.modelAsJson = angular.toJson(model, true);
