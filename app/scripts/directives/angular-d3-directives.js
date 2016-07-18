@@ -2,7 +2,6 @@
 	
 	'use strict';
 	
-	
 	var app = angular.module('gonogo-directives',["d3"]);
 	app.directive('gngStackedBarGraph',['d3','RestService','UserService',function(d3,RestService,UserService){
 		console.log("gngStackedBarGraph bar graph");
@@ -159,10 +158,10 @@
 						})
 						.on("click", function(d){
 							if(user.role!="DSA"){
-								var json={"dtDate":d.time,"sStat":d.status,'sInstID':user.institutionID};//
-								RestService.saveToServer("table-view",json).then(function(tableData){
-									scope.isolatedTableData({parameter:tableData});
-								});
+								var json={"dtDate":d.time,"sStat":d.status,'sInstID':user.institutionID,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};//
+							RestService.saveToServer("table-view",json).then(function(tableData){
+								scope.isolatedTableData({parameter:tableData});
+							});
 							}
 						})
 						.style("fill-opacity",1e-6)
