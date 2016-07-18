@@ -312,7 +312,7 @@ font-size:14px;}
 							<div class="notify-scroll-container" >
 								 <ul> 
 									<li ng-repeat="d in imageDataArray">
-										<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index)"><img ng-src="{{d.sByteCode}}"> </a>
+										<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index,true)"><img ng-src="{{d.sByteCode}}"> </a>
 									</li>
 								 </ul> 
 							</div>
@@ -502,7 +502,7 @@ font-size:14px;}
 									</div>
 
 								</div>
-								<div ng-if="!objectSet.oAppReq.oReq.oApplication.aAssetDetail && objectSet.oAppReq.oReq.oApplication.sLnPurp==null">
+								<div ng-if="!objectSet.oAppReq.oReq.oApplication.aAssetDetail && objectSet.oAppReq.oReq.oApplication.sLnPurp==null || objectSet.oAppReq.oReq.oApplication.aAssetDetail.length==0">
 									<div class="list-group-item" style="border-top: 2px solid rgb(221, 221, 221);">
 										<span>Asset Category : </span>
 									</div>

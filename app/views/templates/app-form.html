@@ -545,7 +545,7 @@
 						class="form-control" ng-model="currStage" type="text"
 						 disabled="disabled">
 				</div>
-				<div ng-repeat="data in objectSet.aAppScoRslt ">
+				<div ng-repeat="data in objectSet.aAppScoRslt" ng-if="objectSet.aAppScoRslt!=''">
 				<div class="col-md-3">
 					<label class="control-label">{{data.sFldName}}</label> <input ng-if="data.sFldName!='PAN Verification'" ng-model="data.sFldVal" class="form-control" type="text"
 						 disabled="disabled">
@@ -670,7 +670,7 @@
 				<div class="notify-scroll-container" data-ng-if="imageDataArray">
 					 <ul> 
 						<li ng-repeat="d in imageDataArray">
-							<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index)"><img ng-src="{{d.sByteCode}}"> </a>
+							<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index,false)"><img ng-src="{{d.sByteCode}}"> </a>
 						</li>
 					 </ul> 
 				</div>

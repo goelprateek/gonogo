@@ -631,6 +631,8 @@
             }
 
 			$scope.showrefid = "true";
+            $scope.utrVal = true;
+            $scope.losIdval = true;
 			$scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
 			var data = 	$scope.notifarray;
 			for (var j in data)
@@ -638,7 +640,7 @@
 					$scope.applctnstatus = data[j].sStat;}
 			}
 			$scope.croDecision = response.aCroDec;
-            try{
+           /* try{
                  if($scope.objectSet.oLosDtls.sLosID){
                  $scope.losIdval = true;
                  }else{
@@ -646,7 +648,7 @@
                  }   
             }catch(e){
                  $scope.losIdval = false;
-            }
+            }*/
             try{
                  $scope.pdfData ="data:application/pdf;base64,"+$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];             
             }catch(e){
@@ -775,7 +777,7 @@
 			}
 				}
 		
-		
+		// useremail is read from localstorage
                 	if(typeof user.institutionID != 'undefined')
                 	{
                 		var email = $scope.useremail;
