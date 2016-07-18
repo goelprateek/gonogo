@@ -395,6 +395,11 @@
                                             function($scope,$rootScope, Rules,Score,Policy,Decision, $http, $timeout,
                                                 RestService,$filter,APP_CONST,$uibModal,UserService,$log,AnalyticsObject,SelectArrays) {
 
+        var user=UserService.getCurrentUser();
+        
+        if(user.id){
+            $scope.$emit('onSuccessfulLogin');
+        }
 
 		// chart functionality
 		var user=UserService.getCurrentUser();
@@ -443,7 +448,7 @@
                         });
     } 
 
-		var json = {'sInstID':user.institutionID};
+		var json = {'sInstID':user.institutionID,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};
 
 		RestService.saveToServer("stack-graph",json).then(function(data){
 			$scope.orignalData = data;
@@ -536,7 +541,7 @@
 			$scope.isTableData = !$scope.isTableData;
 			
 			if($scope.isTableData == false){
-				var json = {'sInstID':user.institutionID,'iSkip':"0",'iLimit':"100"};
+				var json = {'sInstID':user.institutionID,'iSkip':"0",'iLimit':"100",'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};
 				RestService.saveToServer('score-log',json).then(function(data){
 				 if(data){
 				 	  	//sort data in reverse chronological order
@@ -684,6 +689,8 @@
             }
 
 			$scope.showrefid = "true";
+            $scope.utrVal = true;
+            $scope.losIdval = true;
 			$scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
 			var data = 	$scope.notifarray;
 			for (var j in data)
@@ -691,7 +698,7 @@
 					$scope.applctnstatus = data[j].sStat;}
 			}
 			$scope.croDecision = response.aCroDec;
-            try{
+           /* try{
                  if($scope.objectSet.oLosDtls.sLosID){
                  $scope.losIdval = true;
                  }else{
@@ -699,7 +706,7 @@
                  }   
             }catch(e){
                  $scope.losIdval = false;
-            }
+            }*/
             try{
                  $scope.pdfData ="data:application/pdf;base64,"+$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];             
             }catch(e){
@@ -830,9 +837,7 @@
 			}
 				}
 		
-		
-                	if(typeof user.institutionID != 'undefined'){
-                		
+
                 		$rootScope.tabledata =[];
                 		$scope.type = "mtd";
                 		var URL ="http://localhost:8080/GoNoGo";
@@ -3044,7 +3049,7 @@
             		$scope.reportList =[];
             		//sayali
             		if(user.institutionID == '4019'){
-            			var json = {'sInstID':user.institutionID,'iSkip':min,'iLimit':max};
+            			var json = {'sInstID':user.institutionID,'iSkip':min,'iLimit':max,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};
             			var URL = 'score-log';
             			RestService.saveToServer(URL,json).then(function(Response){
             				/*if(data.StatusCode === 101)

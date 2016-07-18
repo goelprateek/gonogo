@@ -19,9 +19,6 @@
 
 		}).call(this);
 
-
-
-
 		var expireDate = new Date();
 
 		$scope.isForgotOpen = false;
@@ -83,7 +80,10 @@
 								'instImage': details.INSTITUTE_IMAGE,
 								'userImage': details.USER_IMAGE,
 								'userid': details.USER_ID,
-								'color': details.COLOR
+								'color': details.COLOR,
+								'branches': data.BRANCHES,
+								'products': data.PRODUCTS,
+								'ePassword': SHA1($scope.login.password)
 							};
 
 							$rootScope.loggedInUser = listvalues;

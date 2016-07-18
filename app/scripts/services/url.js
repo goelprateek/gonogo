@@ -6,8 +6,13 @@
 
 	app.factory("APP_CONST", function () {
 		var END_POINT = {
+<<<<<<< HEAD
 			BASE_URL_GNG : "http://localhost:8080/GoNoGo/",
 		    //BASE_URL_GNG : "http://gng.softcell.in/GoNoGo/",
+=======
+			//BASE_URL_GNG : "http://172.26.1.211:9090/GoNoGo/",
+		    BASE_URL_GNG : "http://gng.softcell.in/GoNoGo/",
+>>>>>>> 0a241bcd9e4ec4bd18ad36dd82e152f897b7230b
 			BASE_URL_SCORE:'http://gng.softcell.in/AppScoringV2Git/api/ScoringV3/',
 			BASE_URL_DEMO: 'http://gng.softcell.in/GoNoGoV3/api/GoNoGoV3/',
 			BASE_URL_DMI: 'http://gng.softcell.in/gonogo_dmi/',
@@ -162,9 +167,29 @@
 				user.institutionID = userdata.InstitutionID;
 				user.id = userdata.userid;
 				user.color = userdata.color;
+				user.branches = userdata.branches;
+				user.products = userdata.products;
 				user.ePassword = userdata.ePassword;
 
 				user.role = JSON.parse(atob(localStorage.getItem('ROLES')));
+
+				user.getBranchCodes=function(){
+					var brnchs=[];
+		            _.each(user.branches,function(branch){
+		                brnchs.push(branch.BRANCH_CODE);
+		            });
+		            
+		            return brnchs;
+				};
+				
+				user.getProductNames=function(){
+					var prods=[];
+		            _.each(user.products,function(product){
+		                prods.push(product.PRODUCT_NAME);
+		            });
+		            
+		            return prods;
+				};
 
 				var dealers = localStorage.getItem('DEALERS');
 				if (dealers) {
@@ -234,7 +259,9 @@
 		   "NOFRS", "PDLT", "CATDLT", "ATRDLT", "RVIEW", "PIFFAPRV", "PEDIT", "NHOLD", "PIFFVIEW",
 		   "STVIEW", "ATERMS", "PIFFEDIT", "PPOLICY", "NOTIFICATION", "STDLT", "STAPRV", "NRPRCS",
 		   "ANALYTCS", "ATREDIT", "PVIEW", "REDIT", "NACCEPT", "NREJECT", "NCHAT", "ADEFBUR", "ABRDT", 
-		   "EDFBUR", "APPLICATION", "ABURCOMM", "CONREQ", "NAPPDATASTA", "RTREE"].map(function(data){
+		   "EDFBUR", "APPLICATION", "ABURCOMM", "CONREQ", "NAPPDATASTA", "RTREE","RSTPWD","NAPPDATASALE","UPDTUP",
+		   "ENDEU","Create User Profile","CRTUP","Enable And Disable","Reset Password","Update User Profile"].map(function(data){
+
 			AclService.addResource(data);
 		});
 		

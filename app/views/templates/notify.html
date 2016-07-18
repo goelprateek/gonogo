@@ -312,7 +312,7 @@ font-size:14px;}
 							<div class="notify-scroll-container" >
 								 <ul> 
 									<li ng-repeat="d in imageDataArray">
-										<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index)"><img ng-src="{{d.sByteCode}}"> </a>
+										<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index,true)"><img ng-src="{{d.sByteCode}}"> </a>
 									</li>
 								 </ul> 
 							</div>
@@ -501,7 +501,7 @@ font-size:14px;}
 									</div>
 
 								</div>
-								<div ng-if="!objectSet.oAppReq.oReq.oApplication.aAssetDetail && objectSet.oAppReq.oReq.oApplication.sLnPurp==null">
+								<div ng-if="!objectSet.oAppReq.oReq.oApplication.aAssetDetail && objectSet.oAppReq.oReq.oApplication.sLnPurp==null || objectSet.oAppReq.oReq.oApplication.aAssetDetail.length==0">
 									<div class="list-group-item" style="border-top: 2px solid rgb(221, 221, 221);">
 										<span>Asset Category : </span>
 									</div>
@@ -552,7 +552,7 @@ font-size:14px;}
 						</div>
 						<div class="col-md-4 column">
 							<div class="scroll-divs-outer">
-								<label class="div-heading kyc">DECISION</label>
+								<div class="div-heading kyc"><label>DECISION</label><a ng-if="objectSet" style="float: right;padding-right: 10px;color: white;" ng-click="showReinitiatedDecisionData('lg',objectSet)">View Old</a></div>
 								<div id="KYC" style="width: 106.5%;" slimscroll="{height: 210,railVisible:true}">
 									<div class="list-group-item">
 										<span>Applied Amount : {{objectSet.oAppReq.oReq.oApplication.dLoanAmt}}</span>
@@ -561,9 +561,8 @@ font-size:14px;}
 									 	<div class="list-group-item">
 											<span>Eligibility Amount : {{cro.dEligibleAmt}}</span>
 										</div>
-										<div class="list-group-item">
-											<span>FOIR : 
-											{{objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']}}</span>
+										<div class="list-group-item" ng-if="objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT">
+											<span>FOIR :{{objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT}}</span>
 										</div>
 										<div class="list-group-item">
 											<span>Approved Amount : {{cro.dAmtAppr}}</span>

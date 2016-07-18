@@ -2250,19 +2250,19 @@ $scope.selectScheme =function(ui)
 		}
 	var taprAmt = parseFloat($("#apvAmt").val().toString().replace(/,/g,""));
 	var ttlAsstCst = parseFloat($("#astCst").val().toString().replace(/,/g,""));
-	if($scope.SchemeObject.sMxTenu==null||typeof $scope.SchemeObject.sMxTenu=='undefined')
+	if($scope.SchemeObject.sMxTenu)
 	{
 		$scope.SchemeObject.sMxTenu=0;
 	}
-	if($scope.SchemeObject.sMinTenu==null||typeof $scope.SchemeObject.sMinTenu=='undefined')
+	if($scope.SchemeObject.sMinTenu)
 	{
 		$scope.SchemeObject.sMinTenu=0;
 	}
-	if($scope.SchemeObject.sDint==null||typeof $scope.SchemeObject.sDint=='undefined')
+	if($scope.SchemeObject.sDint)
 	{
 		$scope.SchemeObject.sDint=0;
 	}	
-	if($scope.SchemeObject.sMinAmt==null||typeof $scope.SchemeObject.sMinAmt=='undefined')
+	if($scope.SchemeObject.sMinAmt)
 	{
 		$scope.SchemeObject.sMinAmt=0;
 	}	
@@ -2314,19 +2314,19 @@ $("#astCst").keyup(function(){
 		}
 	/*var taprAmt = parseFloat($("#apvAmt").val().toString().replace(/,/g,""));
 	var ttlAsstCst = parseFloat($("#astCst").val().toString().replace(/,/g,""));*/
-	if($scope.SchemeObject.sMxTenu==null||typeof $scope.SchemeObject.sMxTenu=='undefined')
+	if($scope.SchemeObject.sMxTenu)
 	{
 		$scope.SchemeObject.sMxTenu=0;
 	}
-	if($scope.SchemeObject.sMinTenu==null||typeof $scope.SchemeObject.sMinTenu=='undefined')
+	if($scope.SchemeObject.sMinTenu)
 	{
 		$scope.SchemeObject.sMinTenu=0;
 	}
-	if($scope.SchemeObject.sDint==null||typeof $scope.SchemeObject.sDint=='undefined')
+	if($scope.SchemeObject.sDint)
 	{
 		$scope.SchemeObject.sDint=0;
 	}	
-	if($scope.SchemeObject.sMinAmt==null||typeof $scope.SchemeObject.sMinAmt=='undefined')
+	if($scope.SchemeObject.sMinAmt)
 	{
 		$scope.SchemeObject.sMinAmt=0;
 	}	
