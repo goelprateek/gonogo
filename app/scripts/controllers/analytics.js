@@ -525,9 +525,6 @@
 		};
 
 
-		
-		
-		
 		var kyc_array=[];var appForm_array=[];var disburst_array=[];var agreement_array=[];var extra_array=[];var evidence_array=[];
 		var ach_array=[];var addkyc_array=[];var ach_array=[];var arrayDesc=[];var custImg_array=[];
 		
@@ -662,13 +659,6 @@
 		          };
 		   };
 		   
-		$scope.xlsData = function(){
-			alasql('select * INTO XLSX("ScoreLog.xlsx",{headers:true}) FROM ?',[$scope.stores]); 
-		}
-		
-		$scope.csvData = function(){
-			alasql('select * INTO CSV("ScoreLog.csv",{headers:true}) FROM ?',[$scope.stores]);
-		}
 		
 		$scope.viewApplication = function(CustID,status){
 		$scope.addrType = SelectArrays.getAddrType();
@@ -773,6 +763,7 @@
 			$scope.isTableData = false;
 			$scope.appView = !$scope.appView;
 		}
+        
 		$scope.dashboardType = function(value) {
 			if(value === 'Requests Summary')
 			{	$('#Loader').show();
