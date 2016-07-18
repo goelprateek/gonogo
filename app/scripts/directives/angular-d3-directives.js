@@ -4,7 +4,7 @@
 	
 	
 	var app = angular.module('gonogo-directives',["d3"]);
-	app.directive('gngStackedBarGraph',['d3','RestService',function(d3,RestService){
+	app.directive('gngStackedBarGraph',['d3','RestService','UserService',function(d3,RestService,UserService){
 		console.log("gngStackedBarGraph bar graph");
 		return {
 			restrict:"EA",
@@ -20,7 +20,7 @@
 		    priority:10, 
 		    terminal:false,
 		    link : function(scope,element,attribute, controller){
-
+		    	var user=UserService.getCurrentUser();
 		    	var element = element[0],
 		    		width = 1000,
 		    		height = 300,
@@ -158,7 +158,7 @@
 							.style("opacity", 0); 
 						})
 						.on("click", function(d){
-							var json={"dtDate":d.time,"sStat":d.status,'sInstID':scope.institutionId};//
+							var json={"dtDate":d.time,"sStat":d.status,'sInstID':user.institutionID};//
 							RestService.saveToServer("table-view",json).then(function(tableData){
 								scope.isolatedTableData({parameter:tableData});
 							});
