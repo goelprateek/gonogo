@@ -233,7 +233,9 @@
 		   "NOFRS", "PDLT", "CATDLT", "ATRDLT", "RVIEW", "PIFFAPRV", "PEDIT", "NHOLD", "PIFFVIEW",
 		   "STVIEW", "ATERMS", "PIFFEDIT", "PPOLICY", "NOTIFICATION", "STDLT", "STAPRV", "NRPRCS",
 		   "ANALYTCS", "ATREDIT", "PVIEW", "REDIT", "NACCEPT", "NREJECT", "NCHAT", "ADEFBUR", "ABRDT", 
-		   "EDFBUR", "APPLICATION", "ABURCOMM", "CONREQ", "NAPPDATASTA", "RTREE"].map(function(data){
+		   "EDFBUR", "APPLICATION", "ABURCOMM", "CONREQ", "NAPPDATASTA", "RTREE","RSTPWD","NAPPDATASALE","UPDTUP",
+		   "ENDEU","Create User Profile","CRTUP","Enable And Disable","Reset Password","Update User Profile"].map(function(data){
+
 			AclService.addResource(data);
 		});
 		
