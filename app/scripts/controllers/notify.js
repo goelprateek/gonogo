@@ -401,21 +401,21 @@
 				if(user.id=="599"){ // PL STP -- CRO9
 					var json ={'sCroID':"STP_PL", 
 							'sInstID':user.institutionID, 
-							'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}}
+							'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit} //,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}
 				}else{
 					var json ={'sCroID':"STA",  // CRO9
 							'sInstID':user.institutionID,
-							'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}}
+							'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit}//,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}
 				}
 			}else if(user.id=="586"){
 				var json ={'sCroID':"PL_QUEUE",  // CRO1 PL Normal
 						'sInstID':user.institutionID, 
-						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}}
+						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit}//,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}
 			}
 			else{
                 var json ={'sCroID':"default", // CRO1,CRO2 Normal
 						'sInstID':user.institutionID, 
-						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}}//,'sCriteria' :"SIKKIM" 
+						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit} //,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()} //,'sCriteria' :"SIKKIM" 
 			}
 			var URL;
 			if(AclService.can('NCROQUE')){
@@ -424,6 +424,7 @@
 			}else{
 				URL = 'cro2-queue'; // Only CRO2
 			}
+            console.log(JSON.stringify(json));
 			RestService.saveToServer(URL,json).then(function(data){
 				if(!_.isNull(data) || _.isUndefined(data)){
                     $scope.notifarray = _.union($scope.notifarray,data);
@@ -470,13 +471,15 @@
 
          modalInstance.result.then(function (selected) {
                         }, function (array) {
-                            $log.info($scope.rejectImgFromServer);
-                             var filter = _.filter(array,function(arr2obj){
-                                return arr2obj.sStat == "Reject";
-                            });
-                            $scope.rejectImgFromServer = filter;
-                            $scope.imageDataArray = array;
-
+                            if(isImgFlag
+                                ){
+                                $log.info($scope.rejectImgFromServer);
+                                 var filter = _.filter(array,function(arr2obj){
+                                    return arr2obj.sStat == "Reject";
+                                });
+                                $scope.rejectImgFromServer = filter;
+                                $scope.imageDataArray = array;
+                            }
                         });
     }
 
