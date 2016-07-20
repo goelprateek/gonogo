@@ -303,19 +303,19 @@
 						<div class="col-md-3">
 							<label class="control-label">Month at city</label>
 							<input
-								class="form-control" name="currentCityPeriod" ng-model="address.iMonthAtCity" type="text" change-on-blur="onValueChanged('resAddress')"
+								class="form-control" name="perCityPeriod" ng-model="address.iMonthAtCity" type="text" change-on-blur="onValueChanged('perAddress')"
 								ng-disabled="!isUpdating" maxlength="3"  ng-pattern="/^[0-9\d]+$/" required only-digits />
-							<div ng-messages="ApplicantForm.currentCityPeriod.$error" ng-show="ApplicantForm.currentCityPeriod.$touched" class="errorMsg" >
+							<div ng-messages="ApplicantForm.perCityPeriod.$error" ng-show="ApplicantForm.perCityPeriod.$touched" class="errorMsg" >
 								<p ng-message="required">Please enter Period of Stay</p>
 								<p ng-message="pattern">Please enter valid Period of Stay</p>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<label class="control-label">Month at addr</label>
-							<input class="form-control" name="currentResidencePeriod" ng-model="address.iMonthAtAddr" type="text"
-							ng-disabled="!isUpdating" change-on-blur="onValueChanged('resAddress')"
+							<input class="form-control" name="perResidencePeriod" ng-model="address.iMonthAtAddr" type="text"
+							ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')"
 							this-earlier-than="address.iMonthAtCity" maxlength="3" ng-pattern="/^[0-9\d]+$/" required only-digits>
-							<div ng-messages="ApplicantForm.currentResidencePeriod.$error" ng-show="ApplicantForm.currentResidencePeriod.$touched" class="errorMsg" >
+							<div ng-messages="ApplicantForm.perResidencePeriod.$error" ng-show="ApplicantForm.perResidencePeriod.$touched" class="errorMsg" >
 								<p ng-message="required">Please enter Period of Stay</p>
 								<p ng-message="pattern">Please enter valid Period of Stay</p>
 								<p ng-message="thisEarlierThan">Residence stay should be less than city stay </p>
@@ -365,52 +365,70 @@
 						<div class="col-md-3">
 							<label class="control-label">Address Line 1</label> <input
 								class="form-control" ng-model="address.sLine1" type="text"
-								 disabled="disabled">
+								name="address1" ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')">
 						</div>
 						<div class="col-md-3">
-							<label class="control-label">Address Line 2</label> <input
-								class="form-control" ng-model="address.sLine2" type="text"
-								disabled="disabled" >
+							<label class="control-label">Address Line 2</label>
+							<input class="form-control" ng-model="address.sLine2" type="text" name="address2" ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')">
 						</div>
 						<div class="col-md-3">
-							<label class="control-label">Address Line 3</label> <input
-								class="form-control" ng-model="address.sLine3" type="text"
-								disabled="disabled" >
+							<label class="control-label">Address Line 3</label>
+							<input class="form-control" ng-model="address.sLine3" type="text" name="address3" ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')">
 						</div>
 						<div class="col-md-3">
-							<label class="control-label">City</label> <input
-								class="form-control" ng-model="address.sCity" type="text" disabled="disabled">
+							<label  id="CurrentPincode" class="control-label">Pincode</label> <input
+								class="form-control" ng-model="address.iPinCode" type="text" name="PinCode"
+								maxlength="6"  ng-disabled="!isUpdating" ng-keyup="getStateCity($event,address)">
 						</div>
 					</div>
 					<div class="row clearfix">
 						<div class="col-md-3">
 							<label class="control-label" style="float: none;">State </label>
-						 	<input	id="statelist" class="form-control" ng-model="address.sState" type="text" name="State" disabled="disabled">
+						 	<input
+								id="statelist" class="form-control" ng-model="address.sState" type="text" name="State" ng-disabled="true">
 						</div>
 						<div class="col-md-3">
-							<label class="control-label">Pin Code</label> <input
-								class="form-control" ng-model="address.iPinCode" value="" type="text" name="PinCode" maxlength="6"  disabled="disabled">
+							<label class="control-label">City</label> <input
+								class="form-control" ng-model="address.sCity" type="text" ng-disabled="true" change-on-blur="onValueChanged('perAddress')">
 						</div>
 						<div class="col-md-3">
-							<label class="control-label">Monthly Rent</label>
-							<input class="form-control" ng-model="address.dRentAmt" type="text" 
-							maxlength="6"  disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label class="control-label">Resi Addr Type</label> <input
-								class="form-control" ng-model="address.sResAddrType" type="text"
-								maxlength="6"  disabled="disabled">
-						</div>
-					
-						<div class="row clearfix">
-							<div class="col-md-3">
-								<label class="control-label">Month at addr</label> <input
-								class="form-control" ng-model="address.iMonthAtAddr" type="text"  disabled="disabled">
+							<label class="control-label">Residence Address Type</label>
+							<select id="ResidentType" name="residentType" ng-model="address.sResAddrType"
+								class="form-control control-select inputMaterial" ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')" select-required>
+								<option value="">Select Resident Type</option>
+								<option ng-repeat="obj in selectResidence" value="{{obj.value}}">{{obj.text}}</option>
+							</select>
+							<div ng-messages="ApplicantForm.residentType.$error" ng-show="ApplicantForm.residentType.$touched" class="errorMsg">
+								<p ng-message="selectrequired">Please select Current Resident Type </p>
 							</div>
-							<div class="col-md-3">
-								<label class="control-label">Month at city</label> <input
-								class="form-control" type="text"  ng-model="address.iMonthAtCity"
-								 disabled="disabled">
+						</div>					
+						<div class="col-md-3" ng-if="address.sResAddrType.indexOf('RENTED') != -1">
+							<label class="control-label">Monthly Rent</label>
+							<input
+								class="form-control" ng-model="address.dRentAmt" type="text" 
+								 ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')">
+						</div>
+					</div>
+					<div class="row clearfix">						
+						<div class="col-md-3">
+							<label class="control-label">Month at city</label>
+							<input
+								class="form-control" name="currentCityPeriod" ng-model="address.iMonthAtCity" type="text" change-on-blur="onValueChanged('perAddress')"
+								ng-disabled="!isUpdating" maxlength="3"  ng-pattern="/^[0-9\d]+$/" required only-digits />
+							<div ng-messages="ApplicantForm.currentCityPeriod.$error" ng-show="ApplicantForm.currentCityPeriod.$touched" class="errorMsg" >
+								<p ng-message="required">Please enter Period of Stay</p>
+								<p ng-message="pattern">Please enter valid Period of Stay</p>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Month at addr</label>
+							<input class="form-control" name="currentResidencePeriod" ng-model="address.iMonthAtAddr" type="text"
+							ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')"
+							this-earlier-than="address.iMonthAtCity" maxlength="3" ng-pattern="/^[0-9\d]+$/" required only-digits>
+							<div ng-messages="ApplicantForm.currentResidencePeriod.$error" ng-show="ApplicantForm.currentResidencePeriod.$touched" class="errorMsg" >
+								<p ng-message="required">Please enter Period of Stay</p>
+								<p ng-message="pattern">Please enter valid Period of Stay</p>
+								<p ng-message="thisEarlierThan">Residence stay should be less than city stay </p>
 							</div>
 						</div>
 					</div>

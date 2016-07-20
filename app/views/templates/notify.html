@@ -552,7 +552,7 @@ font-size:14px;}
 						</div>
 						<div class="col-md-4 column">
 							<div class="scroll-divs-outer">
-								<div class="div-heading kyc"><label>DECISION</label><a ng-if="objectSet" style="float: right;padding-right: 10px;color: white;" ng-click="showReinitiatedDecisionData('lg',objectSet)">View Old</a></div>
+								<div class="div-heading kyc"><label>DECISION</label><a ng-if="objectSet && objectSet.iNoReTry>=1" style="float: right;padding-right: 10px;color: white;" ng-click="showReinitiatedDecisionData('lg',objectSet)">View Old</a></div>
 								<div id="KYC" style="width: 106.5%;" slimscroll="{height: 210,railVisible:true}">
 									<div class="list-group-item">
 										<span>Applied Amount :  &#8377;&nbsp;{{objectSet.oAppReq.oReq.oApplication.dLoanAmt}}</span>
