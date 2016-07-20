@@ -399,23 +399,39 @@
 
 			if(!AclService.can('NAPPDATADEF')){
 				if(user.id=="599"){ // PL STP -- CRO9
-					var json ={'sCroID':"STP_PL", 
-							'sInstID':user.institutionID, 
-							'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}}
+					// var json ={'sCroID':"STP_PL", 
+					// 		'sInstID':user.institutionID, 
+					// 		'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};
+
+                    var json ={'sCroID':"STP_PL", 
+                    'sInstID':user.institutionID, 
+                    'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit}
 				}else{
-					var json ={'sCroID':"STA",  // CRO9
-							'sInstID':user.institutionID,
-							'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}}
+					// var json ={'sCroID':"STA",  // CRO9
+					// 		'sInstID':user.institutionID,
+					// 		'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};
+
+                    var json ={'sCroID':"STA",  // CRO9
+                    'sInstID':user.institutionID,
+                    'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit};
 				}
 			}else if(user.id=="586"){
-				var json ={'sCroID':"PL_QUEUE",  // CRO1 PL Normal
-						'sInstID':user.institutionID, 
-						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}}
-			}
+				// var json ={'sCroID':"PL_QUEUE",  // CRO1 PL Normal
+				// 		'sInstID':user.institutionID, 
+				// 		'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};
+
+                var json ={'sCroID':"PL_QUEUE",  // CRO1 PL Normal
+                        'sInstID':user.institutionID, 
+                        'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit};
+            }
 			else{
+      //           var json ={'sCroID':"default", // CRO1,CRO2 Normal
+						// 'sInstID':user.institutionID, 
+						// 'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};//,'sCriteria' :"SIKKIM"
+                
                 var json ={'sCroID':"default", // CRO1,CRO2 Normal
-						'sInstID':user.institutionID, 
-						'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}}//,'sCriteria' :"SIKKIM" 
+                        'sInstID':user.institutionID, 
+                        'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit}
 			}
 			var URL;
 			if(AclService.can('NCROQUE')){
@@ -531,7 +547,7 @@
             $scope.croDecision = response.aCroDec;
             $scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
 
-            if($scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE){
+            if($scope.objectSet.oCompRes.scoringServiceResponse && $scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE){
                 $scope.ElgbltyGrid = ( $scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID ? $scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID : "" ) 
                                      +"."
                                      + ($scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID ? $scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID : ($scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] ? $scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] : "" ));
@@ -969,90 +985,93 @@ function requestForStatus(json)
         minDate: minDa,
         startingDay: 1
     };
- $scope.enableForm=function(){
+    $scope.enableForm=function(){
+        if($scope.objectSet.iNoReTry>=2){
+                alert("This application is already re-initiated twice.");
+        }else{
+            $scope.fieldsUpdated={
+                isNameUpdated:false,
+                isResAddressUpdated:false,
+                isOffAddressUpdated:false,
+                isPanUpdated:false,
+                isVoterIDUpdated:false,
+                isAadhaarUpdated:false,
+                isDobUpdated:false
+            }
+            $scope.dobOld=$scope.dob;
 
-        $scope.fieldsUpdated={
-            isNameUpdated:false,
-            isResAddressUpdated:false,
-            isOffAddressUpdated:false,
-            isPanUpdated:false,
-            isVoterIDUpdated:false,
-            isAadhaarUpdated:false,
-            isDobUpdated:false
+            _.each($scope.objectSet.oAppReq.oReq.oApplicant.aAddr,function(addr){
+                if(addr.sAddrType.toLowerCase()=="residence"){
+                    $scope.oldResPincode=addr.iPinCode;
+                }else if(addr.sAddrType.toLowerCase()=="office"){
+                    $scope.oldOffPincode=addr.iPinCode;
+                }
+            });
+
+            //$scope.oldPinCode=;
+
+            $scope.isUpdating=!$scope.isUpdating;
+            
+            if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs!=null){
+                var isAadhaarPresent=false;
+                var isVoterPresent=false;
+                var isPanPresent=false;
+
+                for(var i=0;i<$scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.length;i++){
+                    if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("aadhar")>=0){
+                        isAadhaarPresent=true;
+                    }
+
+                    if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("pan")>=0){
+                        isPanPresent=true;
+                    }
+
+                    if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("voter")>=0){
+                        isVoterPresent=true;
+                    }
+                }
+                
+                if(!isAadhaarPresent){
+                    var newKYC={
+                        sExpiryDate:null,
+                        sIssueDate:null,
+                        sKycName:"AADHAR",
+                        sKycNumber:"",
+                        sKycStat:null
+                    }
+                    
+                    $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
+                }
+                
+                if(!isVoterPresent){
+                    var newKYC={
+                        sExpiryDate:null,
+                        sIssueDate:null,
+                        sKycName:"VOTERID",
+                        sKycNumber:"",
+                        sKycStat:null
+                    }
+                    $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
+                }
+                
+                if(!isPanPresent){
+                    var newKYC={
+                        sExpiryDate:null,
+                        sIssueDate:null,
+                        sKycName:"PAN",
+                        sKycNumber:"",
+                        sKycStat:null
+                    }
+                    $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
+                }
+            }
+            /* dob popup */     
+            $scope.openDOBDialog=function(){
+                
+                $scope.dobPopup.opened = true;          
+            };      
+            /* dob popup */
         }
-        $scope.dobOld=$scope.dob;
-
-        _.each($scope.objectSet.oAppReq.oReq.oApplicant.aAddr,function(addr){
-            if(addr.sAddrType.toLowerCase()=="residence"){
-                $scope.oldResPincode=addr.iPinCode;
-            }else if(addr.sAddrType.toLowerCase()=="office"){
-                $scope.oldOffPincode=addr.iPinCode;
-            }
-        });
-
-        //$scope.oldPinCode=;
-
-        $scope.isUpdating=!$scope.isUpdating;
-        
-        if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs!=null){
-            var isAadhaarPresent=false;
-            var isVoterPresent=false;
-            var isPanPresent=false;
-
-            for(var i=0;i<$scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.length;i++){
-                if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("aadhar")>=0){
-                    isAadhaarPresent=true;
-                }
-                
-                if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("pan")>=0){
-                    isPanPresent=true;
-                }
-                
-                if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("voter")>=0){
-                    isVoterPresent=true;
-                }
-            }
-            
-            if(!isAadhaarPresent){
-                var newKYC={
-                    sExpiryDate:null,
-                    sIssueDate:null,
-                    sKycName:"AADHAR",
-                    sKycNumber:"",
-                    sKycStat:null
-                }
-                
-                $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
-            }
-            
-            if(!isVoterPresent){
-                var newKYC={
-                    sExpiryDate:null,
-                    sIssueDate:null,
-                    sKycName:"VOTERID",
-                    sKycNumber:"",
-                    sKycStat:null
-                }
-                $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
-            }
-            
-            if(!isPanPresent){
-                var newKYC={
-                    sExpiryDate:null,
-                    sIssueDate:null,
-                    sKycName:"PAN",
-                    sKycNumber:"",
-                    sKycStat:null
-                }
-                $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
-            }
-        }
-        /* dob popup */     
-        $scope.openDOBDialog=function(){
-            
-            $scope.dobPopup.opened = true;          
-        };      
-        /* dob popup */
     };
 
     $scope.updateForm=function(){
@@ -1099,6 +1118,8 @@ function requestForStatus(json)
             $scope.fieldsUpdated.isResAddressUpdated=true;
         }else if(valueChanged == "offAddress"){
             $scope.fieldsUpdated.isOffAddressUpdated=true;
+        }else if(valueChanged == "perAddress"){
+            $scope.fieldsUpdated.isPerAddressUpdated=true;
         }else if(valueChanged == "pan"){
             $scope.fieldsUpdated.isPanUpdated=true;
         }else if(valueChanged == "aadhaar"){
@@ -1169,15 +1190,19 @@ function requestForStatus(json)
     };
 }]);
 
-app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$uibModalInstance","requestObj",function($scope,RestService,$uibModalInstance,requestObj){
+app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$uibModalInstance","requestObj","UserService",function($scope,RestService,$uibModalInstance,requestObj,UserService){
     console.log("ReinitiatedDecisionModalController");
     console.log(requestObj);
     
+    var user=UserService.getCurrentUser();
+
     $scope.appForms=[];
-    requestObj.elgbltyGrid = ( requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID ? requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID : "" ) 
-                            +"."
-                            + (requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID ? requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID : (requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] ? requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] : "" ));
-    
+
+    if(requestObj.oCompRes.scoringServiceResponse && requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE){
+        requestObj.elgbltyGrid = ( requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID ? requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID : "" ) 
+                                +"."
+                                + (requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID ? requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID : (requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] ? requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] : "" ));
+    }
     $scope.appForms.push(requestObj);
     
 //  $scope.bureau = requestObj.aAppScoRslt;
@@ -1208,7 +1233,7 @@ app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$ui
 //  }
 
     //'sAppID':$scope.appltnID,'sInstID':user.institutionID,'sCroId':user.id
-    var requestJson={"oHeader":{"sAppID":requestObj.oAppReq.sRefID,"sInstID":"4019","sSourceID":"WEB","sAppSource":"WEB","sReqType":"JSON","dtSubmit":new Date().getTime(),"sDsaId":null,"sCroId":"NULL","sDealerId":null},"sRefID":requestObj.oAppReq.sRefID,"sProduct":"Consumer Durables","iNoOfRecord":2}
+    var requestJson={"oHeader":{"sAppID":requestObj.oAppReq.sRefID,"sInstID":user.institutionID,"sSourceID":"WEB","sAppSource":"WEB","sReqType":"JSON","dtSubmit":new Date().getTime(),"sDsaId":null,"sCroId":user.id,"sDealerId":null},"sRefID":requestObj.oAppReq.sRefID,"sProduct":"Consumer Durables","iNoOfRecord":2}
 
     var URL="worker/bre-audit-data/";
 
@@ -1216,14 +1241,15 @@ app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$ui
         //[{"applicationLog":{},"sRefID":"5788d78b5bc7ec48de2796c2","bStatFlag":false,"iNoReTry":0,"oCompRes":{},"oIntrmStat":{"sRefId":null,"sAppID":null,"sInstID":null,"dtStart":1468681176705,"dtETime":null,"sAppStart":"DEFAULT","sDedupe":"DEFAULT","sEmailStat":"DEFAULT","sOtpStat":"COMPLETE","sAppStat":"DEFAULT","sPanStat":"DEFAULT","sAadharStat":"DEFAULT","sMbStat":"DEFAULT","sVarScoreStat":"DEFAULT","sScoreStat":"DEFAULT","sCblScore":"DEFAULT","sCroStat":"DEFAULT","oPanResult":null,"oCibilResult":null,"oResAddressResult":null,"oOffAddressResult":null,"oScoringResult":null,"oAadharResult":null,"oExperianResult":null,"oEquifaxResult":null,"oCHMResult":null,"oMbResult":null},"bNegPinCodeFlag":false,"aAppScoRslt":[]},{"applicationLog":{},"sRefID":"5788d78b5bc7ec48de2796c3","bStatFlag":false,"iNoReTry":0,"oCompRes":{},"oIntrmStat":{"sRefId":null,"sAppID":null,"sInstID":null,"dtStart":1468681176705,"dtETime":null,"sAppStart":"DEFAULT","sDedupe":"DEFAULT","sEmailStat":"DEFAULT","sOtpStat":"COMPLETE","sAppStat":"DEFAULT","sPanStat":"DEFAULT","sAadharStat":"DEFAULT","sMbStat":"DEFAULT","sVarScoreStat":"DEFAULT","sScoreStat":"DEFAULT","sCblScore":"DEFAULT","sCroStat":"DEFAULT","oPanResult":null,"oCibilResult":null,"oResAddressResult":null,"oOffAddressResult":null,"oScoringResult":null,"oAadharResult":null,"oExperianResult":null,"oEquifaxResult":null,"oCHMResult":null,"oMbResult":null},"bNegPinCodeFlag":false,"aAppScoRslt":[]}]
         if(Response){
             _.each(Response,function(resp){
-                resp.elgbltyGrid = ( resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID ? resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID : "" ) 
-                    +"."
-                    + (resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID ? resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID : (resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] ? resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] : "" ));
-
-                appForms.push(resp);
+                if(resp.oCompRes.scoringServiceResponse && resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE){
+                    resp.elgbltyGrid = ( resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID ? resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID : "" ) 
+                        +"."
+                        + (resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID ? resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID : (resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] ? resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] : "" ));
+                }
+                $scope.appForms.push(resp);
             });         
         }
-        $uibModalInstance.dismiss();
+        //$uibModalInstance.dismiss();
     });
 }]);
 
@@ -1626,7 +1652,7 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
     }
     
     //If Fields updated then add all into processing
-    if($scope.fieldsUpdated && ($scope.fieldsUpdated.isNameUpdated || $scope.fieldsUpdated.isResAddressUpdated || $scope.fieldsUpdated.isOffAddressUpdated || $scope.fieldsUpdated.isPanUpdated || $scope.fieldsUpdated.isVoterIDUpdated || $scope.fieldsUpdated.isAadhaarUpdated || $scope.fieldsUpdated.isDobUpdated)){
+    if($scope.fieldsUpdated && ($scope.fieldsUpdated.isNameUpdated || $scope.fieldsUpdated.isResAddressUpdated || $scope.fieldsUpdated.isOffAddressUpdated || $scope.fieldsUpdated.isPerAddressUpdated || $scope.fieldsUpdated.isPanUpdated || $scope.fieldsUpdated.isVoterIDUpdated || $scope.fieldsUpdated.isAadhaarUpdated || $scope.fieldsUpdated.isDobUpdated)){
         for(var i=0;i<$scope.reinitiateModules.length;i++) {
             for(var j=0;j<$scope.reinitiateModules[i].subs.length;j++) {
                 $scope.tags.push({text: $scope.reinitiateModules[i].subs[j].name,id:$scope.reinitiateModules[i].subs[j].id});
@@ -1755,7 +1781,7 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
         //         }          
         //     }
         // }
-        if($scope.fieldsUpdated && ($scope.fieldsUpdated.isNameUpdated || $scope.fieldsUpdated.isResAddressUpdated || $scope.fieldsUpdated.isOffAddressUpdated || $scope.fieldsUpdated.isPanUpdated || $scope.fieldsUpdated.isVoterIDUpdated || $scope.fieldsUpdated.isAadhaarUpdated || $scope.fieldsUpdated.isDobUpdated)){
+        if($scope.fieldsUpdated && ($scope.fieldsUpdated.isNameUpdated || $scope.fieldsUpdated.isResAddressUpdated || $scope.fieldsUpdated.isOffAddressUpdated || $scope.fieldsUpdated.isPerAddressUpdated || $scope.fieldsUpdated.isPanUpdated || $scope.fieldsUpdated.isVoterIDUpdated || $scope.fieldsUpdated.isAadhaarUpdated || $scope.fieldsUpdated.isDobUpdated)){
             var requestJson={
                 oWorkFlowConfig : {
                     sGngRefId : $scope.refID,
