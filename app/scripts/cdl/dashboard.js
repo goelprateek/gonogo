@@ -11,7 +11,23 @@ app.controller('DecisionViewController', function ($scope,$uibModalInstance, dat
 });
 
 app.controller("DashboardController",["$scope","$filter",'sharedService','$location',"$uibModal",'APP_CONST',"RestService","UserService","$rootScope",function($scope,$filter,sharedService,$location,$uibModal,APP_CONST,RestService,UserService,$rootScope){
+	 //sayali (added stacked graph service using directive)
+	var user=UserService.getCurrentUser();
 	$scope.applicationList="ApplicationList";
+	$scope.trueAppList = true;
+	$scope.applnOptionChange=function(value){
+	   if(value == 'ApplicationList'){
+	   		$scope.trueAppList = true;
+	   }else{
+		var json = {'sInstID':user.institutionID,'sDsaId':user.username};
+			RestService.saveToServer("stack-graph",json).then(function(data){
+				$scope.orignalData = data;
+			});
+	   		$scope.trueAppList = false;
+	   }
+	  }
+	//end
+
 	$scope.duration="LastYear";
 	$scope.dashboardResult=[];
 
@@ -85,8 +101,8 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 		RestService.saveToServer("dashboard-detail",dashboardJson)
 
 		.then(function(data){
-			console.log("dashboard-detail response:");
-			console.log(data);
+			//console.log("dashboard-detail response:");
+			//console.log(data);
 			$scope.dashboardResult=data;
 		});
 	};

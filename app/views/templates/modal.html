@@ -22,7 +22,7 @@ border-color: #EF160B;
 	<div class="modal-body" >
 		<div class="row clearfix" >
 
-			 <uib-carousel  ng-if="imageTag" active="active" interval="myInterval" no-wrap="noWrapSlides">
+			 <uib-carousel  ng-if="imageTag" active="active" interval="myInterval" no-wrap="noWrapSlides" no-transition="true">
 			      <uib-slide ng-repeat="slide in slides  track by slide.id" index="slide.id">
 			      <h4>{{slide.sImgType}}</h4>
 			       <img  ng-src="{{slide.sByteCode}}" ng-modal="slide.sImgType"

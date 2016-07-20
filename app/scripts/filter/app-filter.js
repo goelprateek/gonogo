@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	angular.module('gonogo').filter('time', function() {
+ angular.module('gonogo').filter('time', function() {
 	return function(item) {
 		var timereg = /^[0-2][0-9]:[0-5][0-9]:[0-5][0-9]+\s?(?:am|pm)?/;
 		var datereg = /^[0-3][0-9]:[0-3][0-9]:(?:[0-9][0-9])?[0-9][0-9]$/;
@@ -19,7 +19,7 @@
 		}
 		return item;
 	};
-});
+}),
 
 angular.module('gonogo').filter('rupee', function() {
 	return function(value, symbol) {
@@ -37,7 +37,7 @@ angular.module('gonogo').filter('rupee', function() {
 		}
 		return value;		
 	};
-});
+}),
 
 angular.module('gonogo').filter('index', function() {
 	return function(value) {
@@ -47,7 +47,8 @@ angular.module('gonogo').filter('index', function() {
 		return value;
 		
 	};
-});
+}),
+
 angular.module('gonogo').filter('operator', function() {
 	return function(value) {
 		if (value != undefined) {
@@ -59,7 +60,7 @@ angular.module('gonogo').filter('operator', function() {
 		return value;
 		
 	};
-});
+}),
 
 angular.module('gonogo').filter('format', function() {
 	return function(value, type) {
@@ -73,7 +74,8 @@ angular.module('gonogo').filter('format', function() {
 			return value;
 		}
 	};
-});
+}),
+
 angular.module('gonogo').filter('expression', function() {
 	return function(value) {
 		if (value != undefined) {
@@ -90,6 +92,19 @@ angular.module('gonogo').filter('expression', function() {
 			
 			return value;
 		}
+	};
+}),
+
+angular.module('gonogo').filter('dateFormat', function() {
+	var result, month;
+	return function(item) {
+		if(item){
+			 month = new Date(item).getMonth()+1;
+		     result  = new Date(item).getDate()+"/"+month+"/"+new Date(item).getFullYear();	
+		}
+		
+
+		return result;
 	};
 });
 

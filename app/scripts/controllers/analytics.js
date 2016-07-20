@@ -410,7 +410,7 @@
             
         }
 
-    	$scope.showimage = function(obj,isImgFlag,index){
+    	$scope.showimage = function(obj,isImgFlag,index,editMode){
         var modalInstance = $uibModal.open({
                       animation: $scope.animationsEnabled,
                       templateUrl: 'views/templates/modal.html',
@@ -426,7 +426,8 @@
                                 applicationId : $scope.objectSet.oAppReq.oHeader.sAppID,
                                 applicantId : $scope.objectSet.oAppReq.oReq.oApplicant.sApplID,
                                 institutionId : $scope.InstitutionID,
-                                refId : $scope.objectSet.oAppReq.sRefID
+                                refId : $scope.objectSet.oAppReq.sRefID,
+                                editMode : editMode
                             }
                         }
                       }
@@ -450,13 +451,6 @@
 		});
 
 
-		$scope.fileTypeMetaData=[{
-			viewVal:'XLS'
-		},
-		{
-			viewVal:'CSV'
-		}];
-		
 		
 		$scope.reportDownload = function(){
 			
@@ -524,8 +518,6 @@
 		};
 
 
-		var kyc_array=[];var appForm_array=[];var disburst_array=[];var agreement_array=[];var extra_array=[];var evidence_array=[];
-		var ach_array=[];var addkyc_array=[];var ach_array=[];var arrayDesc=[];var custImg_array=[];
 		
 	    $scope.appView = false;
 		$scope.isTableData = true,
@@ -539,7 +531,6 @@
 				var json = {'sInstID':user.institutionID,'iSkip':"0",'iLimit':"100"};
 				RestService.saveToServer('score-log',json).then(function(data){
 				 if(data){
-				 	  	//sort data in reverse chronological order
 			          	data.sort(SortByDate);
 							function SortByDate(x,y) {
 								return ((x.date == y.date) ? 0 : ((x.date < y.date) ? 1 : -1 ));
@@ -595,7 +586,7 @@
 		
 
 		//TODO stack bar click event 
-		 $scope.updateData = function (parameter) { 
+		 $scope.updateData = function (parameter) {
 			 parameter.sort(SortByDate);
 				function SortByDate(x,y) {
 					return ((x.date == y.date) ? 0 : ((x.date < y.date) ? 1 : -1 ));
@@ -664,7 +655,7 @@
 		$scope.addr_type = $scope.addrType[1]; 
 		$scope.appView = true;
 		var URL='application-data';
-		var json ={'sRefID':CustID};	
+		var json ={'sRefID':CustID};
 		RestService.saveToServer(URL,json).then(function(response){
             if(response)
 				$scope.objectSet = response;
@@ -709,22 +700,43 @@
 			
 		}).then(function(data){
 
-            if(data){            
-                var objArray = _.map(_.pluck(data.aAppImgDtl, 'aImgMap'),function(data){
+            if(data){   
+               var objArray = _.map(_.pluck(data.aAppImgDtl, 'aImgMap'),function(data){
                         return data;
                     });
 
-                var finalImageArray = _.flatten(_.each(objArray,function(val){
-                    return _.each(val,function(val){
+                $scope.imageDataArray = [];
+                var evidenceData = [];
+                var maindata = [];
+                 _.each(_.flatten(objArray),function(val){
+                     if(val.sImgType.indexOf("_EVIDENCE") > -1){
+                        evidenceData.push(val);
+                     }
+                      maindata.push(val);
+                 });
+    
+                 _.each(evidenceData,function(val){
+                     var whosEvdnc = val.sImgType.slice(0,-10);
+                     _.each(maindata,function(data){
+                        if(data.sImgType == whosEvdnc){
+                            if(!data.evdncArray)
+                              data.evdncArray = [];
+                            data.evdncArray.push(val);                           
+                        }
+                    });
+                 });
+                  
+                    _.each(maindata,function(val){
                         return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
                             if(!_.isUndefined(data) || !_.isNull(data)){
-                                val["sByteCode"] = "data:image/png;base64,"+data.sByteCode;    
+                                if(!_.isEmpty(data.sByteCode)){
+                                val["sByteCode"] = "data:image/png;base64,"+data.sByteCode; 
+                                 $scope.imageDataArray.push(val); 
+                                }  
                             }
                         });
                     });
-                }));
 
-                $scope.imageDataArray =  finalImageArray;
                 var rejectImgFromServer =[];
                 _.each($scope.imageDataArray,function(val){
                     if(val.sStat == "Reject"){
@@ -737,7 +749,6 @@
  
 		}
 
-		
 		
 		$scope.back = function(){
 			$scope.isTableData = false;
@@ -4136,36 +4147,10 @@
             		});	 
 
             	}
-                	
-            	$scope.clsRemark = function(){
-            		 $('#remarkData').slideUp();
-            		 $("#remarkData").hide();
-            	}
-            	 $scope.getRemark = function(data) {
-            		   /* if($scope.reportList.croJustificationList == '') {
-            		      return $scope.adultBooks;
-            		    } else {
-            		      return $scope.childBooks;
-            		    }*/
-//            		 $scope.remarkData = true;
-            		 $('#remarkData').slideDown();
-            		 console.log("data: "+JSON.stringify(data));
-            	}
-            	 $scope.stackView= function() {
-            		 $rootScope.tabledata = [];
-            		 $('#graph').html("").hide();
-            			$('#scoring_table').hide();
-            			$('#scoring_table').hide();
-            			$('#stackThumbnail').remove();
-            			$('#tableDataThumbnail').remove();
-            			$('#treeThumbnail').remove();
-            			$('#mbars,#legendGroup').show();
-            			$(document.body).find('#mtd-box .CatError').hide();
-            			$(document.body).find("#scoringdiv").css("overflow-x","hidden");
-            	 }
+            	
             }]);
 
-	app.controller("imagesCtr",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService',
+ app.controller("imagesCtr",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService',
     function($scope,ImageFeed,$uibModalInstance,$timeout,RestService){
     /*$scope.myInterval = 5000;*/
     $scope.noWrapSlides = true;
@@ -4193,14 +4178,7 @@
 
 }]);
 
-	app.filter('dateFormat', function() {
-		return function(item) {
-			var month = new Date(item).getMonth()+1;
-			var result  = new Date(item).getDate()+"/"+month+"/"+new Date(item).getFullYear();
 	
-			return result;
-		};
-	});
 
 
 	app.controller("CustomReportController", [ '$scope','$log','$uibModalInstance' ,'RestService', 'ReportStorage','data',function($scope,$log,$uibModalInstance,RestService,ReportStorage,data){

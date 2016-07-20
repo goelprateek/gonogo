@@ -305,7 +305,7 @@ font-size:14px;}
 									<span>Address Line1 : {{objectSet.oAppReq.oReq.oApplicant.aAddr[0].sLine1}}</span>
 								</div>
 							 	<div class="list-group-item" ng-if="applicant.aAddr[0].sLine2 !=''">
-									<span>Address Line2 : {{objectSet.oAppReq.oReq.oApplicant.aAdr[0].sLine2}}</span>
+									<span>Address Line2 : {{objectSet.oAppReq.oReq.oApplicant.aAddr[0].sLine2}}</span>
 								</div> 
 							</div>
 							<div data-ng-if="imageDataArray.length!=0" style=" overflow-y: scroll;height: 54px;">
@@ -362,11 +362,11 @@ font-size:14px;}
 									<span>Gross Annual : {{ emp.dGrossSal | rupee:"&#x20B9; "}}</span>
 								</div> -->
 								<div class="list-group-item" ng-if="emp.sConst.toUpperCase()=='SELF-EMPLOYED'">
-									<span>IT Amount : {{emp.dItrAmt}}</span> 
+									<span>ITR Amount : &#8377;&nbsp;{{emp.dItrAmt}}</span> 
 								</div>
 								<div class="list-group-item" ng-if="emp.sConst.toUpperCase()!='SELF-EMPLOYED'">
-									<span ng-if="emp.dmonthSal != 0">Monthly Income : {{emp.dmonthSal | rupee:"&#x20B9; "}}</span>
-										<span ng-if="emp.dmonthSal == 0">Yearly Income : {{emp.dGrossSal | rupee:"&#x20B9; "}}</span>
+									<span ng-if="emp.dmonthSal != 0">Monthly Income : &#8377;&nbsp;{{emp.dmonthSal | rupee:"&#x20B9; "}}</span>
+										<span ng-if="emp.dmonthSal == 0">Yearly Income : &#8377;&nbsp;{{emp.dGrossSal | rupee:"&#x20B9; "}}</span>
 								</div>
 								<div class="list-group-item">
 									<span>Employer : {{ emp.sEmplName}}</span> 
@@ -377,7 +377,7 @@ font-size:14px;}
 								</div>
 								</div>
 <!-- 								<div class="list-group-item" style="border-bottom: none"> -->
-								<div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">
+								<!-- <div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">
 								   <div class="col-md-4" ng-if="extraPresent" style="padding: 0px">
 									<a ><img 
 										alt="Preview Not Availeble" title="EXTRA IMAGES"
@@ -402,7 +402,7 @@ font-size:14px;}
 										data-target="#myModalnew" class="custom_img_rounded arrow" title="{{evidencename}}"
 										ng-src="{{evidence}}" usermap="{{evdnId}}" style="float: left;margin: 3px;"></a>
 										</div>
-								</div>			
+								</div> -->			
 							</div>
 						</div>
 					<div class="col-md-4 column">
@@ -555,17 +555,17 @@ font-size:14px;}
 								<div class="div-heading kyc"><label>DECISION</label><a ng-if="objectSet && objectSet.iNoReTry>=1" style="float: right;padding-right: 10px;color: white;" ng-click="showReinitiatedDecisionData('lg',objectSet)">View Old</a></div>
 								<div id="KYC" style="width: 106.5%;" slimscroll="{height: 210,railVisible:true}">
 									<div class="list-group-item">
-										<span>Applied Amount : {{objectSet.oAppReq.oReq.oApplication.dLoanAmt}}</span>
+										<span>Applied Amount :  &#8377;&nbsp;{{objectSet.oAppReq.oReq.oApplication.dLoanAmt}}</span>
 									</div>
 									<div ng-repeat="cro in objectSet.aCroDec">
 									 	<div class="list-group-item">
-											<span>Eligibility Amount : {{cro.dEligibleAmt}}</span>
+											<span>Eligibility Amount : &#8377;&nbsp;{{cro.dEligibleAmt}}</span>
 										</div>
 										<div class="list-group-item" ng-if="objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT">
 											<span>FOIR :{{objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT}}</span>
 										</div>
 										<div class="list-group-item">
-											<span>Approved Amount : {{cro.dAmtAppr}}</span>
+											<span>Approved Amount :&#8377;&nbsp; {{cro.dAmtAppr}}</span>
 										</div>
 										<div class="list-group-item">
 											<span>Tenor : {{cro.iTenor}}</span>

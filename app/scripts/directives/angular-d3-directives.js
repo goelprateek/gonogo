@@ -157,10 +157,12 @@
 							.style("opacity", 0); 
 						})
 						.on("click", function(d){
-							var json={"dtDate":d.time,"sStat":d.status,'sInstID':scope.institutionId,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};//
+							if(user.role!="DSA"){
+								var json={"dtDate":d.time,"sStat":d.status,'sInstID':user.institutionID,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};//
 							RestService.saveToServer("table-view",json).then(function(tableData){
 								scope.isolatedTableData({parameter:tableData});
 							});
+							}
 						})
 						.style("fill-opacity",1e-6)
 						.transition()
