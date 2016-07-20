@@ -401,6 +401,8 @@
 		var object  = AnalyticsObject.dummy;
 		$scope.objectSet =  object; 
 		$scope.isImg = true;
+         $scope.losIdval = true;
+         $scope.utrVal = true;
 		$scope.findAddressType = function(orignal,final){
     		return (angular.lowercase(orignal) == angular.lowercase(final));
     	}	
@@ -682,7 +684,7 @@
 					$scope.applctnstatus = data[j].sStat;}
 			}
 			$scope.croDecision = response.aCroDec;
-            try{
+           /* try{
                  if($scope.objectSet.oLosDtls.sLosID){
                  $scope.losIdval = true;
                  }else{
@@ -690,7 +692,7 @@
                  }   
             }catch(e){
                  $scope.losIdval = false;
-            }
+            }*/
             try{
                  $scope.pdfData ="data:application/pdf;base64,"+$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];             
             }catch(e){

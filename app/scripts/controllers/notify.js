@@ -452,6 +452,7 @@
                       templateUrl: 'views/templates/modal.html',
                       controller: 'supportedDocuments',
                       size: 'lg',
+                      backdrop: 'static',
                       resolve:{
                         ImageFeed : function (){
                             var imageData;
@@ -656,6 +657,7 @@ $scope.scoreTree = function(){
               templateUrl: 'views/templates/score-tree.html',
               controller: 'scoreTreeCtr',
               size: 'lg',
+              backdrop: 'static',
               resolve:{
                 treeFeed : function (){
                     var scoreTree;
@@ -667,8 +669,8 @@ $scope.scoreTree = function(){
             });
     }
 	
-$scope.cro_action = function(appID, action){ 
-	$scope.appltnID = appID;
+$scope.cro_action = function(refID, action){ 
+	/*$scope.appltnID = appID;*/
     $scope.isAllImgApprove = true;
      _.each($scope.imageDataArray,function(val){
         if(val.sStat != "Approve"){
@@ -678,8 +680,8 @@ $scope.cro_action = function(appID, action){
     });
       console.log($scope.isAllImgApprove);
 
-	if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!AclService.can('NCROQUE'))){
-		if((appID !== "undefined") && (typeof $scope.objectSet.oAppReq !== "undefined")){
+		if(refID !== ""){
+            if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!AclService.can('NCROQUE'))){
 			 if(action == "OnHold"){
 				/* $scope.toggleDocPanel = !$scope.toggleDocPanel;
 				 $scope.docOfferFlag = true;*/
@@ -688,6 +690,7 @@ $scope.cro_action = function(appID, action){
                       templateUrl: 'views/templates/onhold-panel.html',
                       controller: 'onholdModelCtrl',
                       size: 'lg',
+                      backdrop: 'static',
                       resolve: {
                         holdModelFeed : function (){
                             var dataForModel;
@@ -718,6 +721,7 @@ $scope.cro_action = function(appID, action){
                       templateUrl: 'views/templates/decline-panel.html',
                       controller: 'DeclInstanceCtrl',
                       size: 'lg',
+                      backdrop: 'static',
                       resolve: {
                          dclnModelFeed : function (){
                             var dataForDcl;
@@ -755,6 +759,7 @@ $scope.cro_action = function(appID, action){
                       templateUrl: 'views/templates/approve-panel.html',
                       controller: 'ModalInstanceCtrl',
                       size: 'lg',
+                      backdrop: 'static',
                       resolve: {
                         modalFeed : function (){
                             var dataForModel;
@@ -796,17 +801,20 @@ $scope.cro_action = function(appID, action){
                  }else{
                         alert("Please approve all the images");
                     }
-			}
-
-		}else if($scope.applctnstatus == null){
-    		$scope.error = "Application status is not defined...!!!";
-    		$scope.done = "";
-    	}else{
-    		$scope.error = "Application has already taken an action...!!!";
-    		$scope.done = "";
-    	}
-       $scope.showrefid = "true";
+			  }
+          }else if($scope.applctnstatus == null){
+            $scope.error = "Application status is not defined...!!!";
+            $scope.done = "";
+        }else{
+            $scope.error = "Application has already taken an action...!!!";
+            $scope.done = "";
+         }
+	  }else{
+        $scope.error = "Please select enquiry from Queue...!!!";
+        $scope.done = "";
     }
+    // $scope.showrefid = "true";
+       
 }
 
 function requestForStatus(json)
@@ -816,7 +824,7 @@ function requestForStatus(json)
         if(Response.status == "OK UPDATE SUCCESSFULLY")                     
         {
           _.each($scope.notifarray,function(value,key){
-                        if($scope.notifarray[key].sAppId == $scope.objectSet.oAppReq.oHeader.sAppID){
+                        if($scope.notifarray[key].sRefID == $scope.objectSet.oAppReq.sRefID){
                             return($scope.notifarray[key].sStat = json.sAppStat);
                         }  
                   });
