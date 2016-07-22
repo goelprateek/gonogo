@@ -1,8 +1,8 @@
 ;(function(){
 	'use strict';
 	var app = angular.module('gonogo.cdl');
-	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"roundProgressService","UserService","AclService", function(
-	 									$scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,roundProgressService,UserService,AclService) {
+	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"roundProgressService","UserService","AclService","GNG_GA", function(
+	 									$scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,roundProgressService,UserService,AclService,GNG_GA) {
 	
 	var user=UserService.getCurrentUser();
     $scope.can=AclService.can;
@@ -776,20 +776,21 @@ case "verifybtn":
 	$(".getheight").css("height",containerHeight+"px");*/
 	var otp=$("#txt1").val()+$("#txt2").val()+$("#txt3").val()+$("#txt4").val()+$("#txt5").val();
 	if(otp.length==5)
-	{	if(otp ==$scope.otp || otp=="11111")
-	  {	
-		$("#msgContainer").css({"left":"32%"});		
-		$("#basicInfo").hide();
-		$("#progressDiv ,#showApplicant").show();
-		$("#kyccontainer,#ErrorContainer").show();
-		$scope.submitApplication("step1");
-	  }
-	  else
-	  { 
-	  	$(".otp").val("");
-		$rootScope.errHead="OTP";
-		$rootScope.errorMsg="Please enter valid OTP";
-	  }
+	{	
+		if(otp ==$scope.otp || otp=="11111")
+		{	
+			$("#msgContainer").css({"left":"32%"});		
+			$("#basicInfo").hide();
+			$("#progressDiv ,#showApplicant").show();
+			$("#kyccontainer,#ErrorContainer").show();
+			$scope.submitApplication("step1");
+		}
+		else
+		{ 
+			$(".otp").val("");
+			$rootScope.errHead="OTP";
+			$rootScope.errorMsg="Please enter valid OTP";
+		}
 	}else{
 		$("input[class='otp'][value='']").focus();
 		$rootScope.errHead="OTP";
@@ -1526,8 +1527,13 @@ $scope.submitApplication=function(UrlKey)
 		url : APP_CONST.getConst('BASE_URL_GNG')+'submit-application/'+UrlKey,
 		data :$scope.object,
 		headers : {'Content-Type':'application/json'}
-	}).success(function(data){ 
-		if(UrlKey=="step4"){
+	}).success(function(data){
+
+		if(UrlKey=="step1"){
+			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP1"),1,"submit-application","",data.sRefID);
+		}else if(UrlKey=="step4"){
+
+			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP4"),1,"submit-application","",data.sRefID);
 				
 			$("#infoContainer , #ErrorContainer").hide();
 			
@@ -1564,6 +1570,14 @@ $scope.submitApplication=function(UrlKey)
 		$scope.REFID = data.sRefID;
 
 	}).error(function(data){
+
+		if(UrlKey=="step1"){
+			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP1"),1,"submit-application","",data.sRefID);
+		}else if(UrlKey=="step4"){
+
+			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP4"),1,"submit-application","",data.sRefID);
+		}
+
 		$scope.serviceHitCount=$scope.serviceHitCount+1;
 		if($scope.serviceHitCount<=3)
 			{

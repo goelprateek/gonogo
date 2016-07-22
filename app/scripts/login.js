@@ -1,12 +1,10 @@
 ; (function (window, document, undefined) {
 
 
-	var app = angular.module("gonogo.login", []);
+	var app = angular.module("gonogo.login",['gng-ga']);
 
-	app.controller("loginController", ['$scope', '$rootScope', '$cookies', 'RestService', 'APP_CONST', 'UserService', 
-	function ($scope, $rootScope, $cookies, RestService, APP_CONST, UserService) {
-
-
+	app.controller("loginController", ['$scope', '$rootScope', '$cookies', 'RestService', 'APP_CONST', 'UserService', 'GNG_GA',
+	function ($scope, $rootScope, $cookies, RestService, APP_CONST, UserService,GNG_GA) {
 
 		(function () {
 
@@ -33,12 +31,9 @@
 			}
 		}
 
-
-
 		if ($cookies.get("RMID") !== undefined) {
 			$scope.username = atob($cookies.get("RMID"));
 		}
-
 
 		//changeErrorMsg();
 		
@@ -47,75 +42,80 @@
 			return $scope.submitted || field.$dirty;
 		};
 
-
-
 		$scope.login = {
 			'userName': 'HDBFS_DSA1@softcell.com',
 			'password': 'Qh@459',
 			'rememberme': ''
 		},
 
-			$scope.submit = function () {
+		$scope.submit = function () {
 
-				if ($scope.login.rememberme) {
-					expireDate.setDate(expireDate.getDate() + 45);
-					$cookies.put('RMID', btoa($scope.login.userName), { 'expires': expireDate });
-				}
+			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_LOGIN"),
+							 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
+							 GNG_GA.getConstAction("ACTION_CLICK_LOGIN"),
+							 "Login Button Clicked",1);
 
-				UserService.cleanUpUserDetails();
+			if ($scope.login.rememberme) {
+				expireDate.setDate(expireDate.getDate() + 45);
+				$cookies.put('RMID', btoa($scope.login.userName), { 'expires': expireDate });
+			}
 
-				var _data = { 'userName': $scope.login.userName, 'password': SHA1($scope.login.password) };
+			UserService.cleanUpUserDetails();
 
-				RestService.saveToServer("login-web", _data).then(function (data) {
+			var _data = { 'userName': $scope.login.userName, 'password': SHA1($scope.login.password) };
 
-					if (data.STATUS == "SUCCESS") {
+			RestService.saveToServer("login-web", _data).then(function (data) {
 
-						if (data.USER_DETAILS.length > 0) {
-							
-							var details = data.USER_DETAILS[0];
-							var listvalues = {
-								'name': data.USERNAME,
-								'email': details.EMAIL,
-								'InstitutionID': details.INSTITUTION_ID,
-								'instImage': details.INSTITUTE_IMAGE,
-								'userImage': details.USER_IMAGE,
-								'userid': details.USER_ID,
-								'color': details.COLOR,
-								'branches': data.BRANCHES,
-								'products': data.PRODUCTS,
-								'ePassword': SHA1($scope.login.password)
-							};
+				if (data.STATUS == "SUCCESS") {
+					GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_LOGIN"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_LOGIN"),1,"login-web");
 
-							$rootScope.loggedInUser = listvalues;
+					if (data.USER_DETAILS.length > 0) {
+						
+						var details = data.USER_DETAILS[0];
+						var listvalues = {
+							'name': data.USERNAME,
+							'email': details.EMAIL,
+							'InstitutionID': details.INSTITUTION_ID,
+							'instImage': details.INSTITUTE_IMAGE,
+							'userImage': details.USER_IMAGE,
+							'userid': details.USER_ID,
+							'color': details.COLOR,
+							'branches': data.BRANCHES,
+							'products': data.PRODUCTS,
+							'ePassword': SHA1($scope.login.password)
+						};
 
-							instid = details.INSTITUTION_ID;
+						$rootScope.loggedInUser = listvalues;
 
-							usid = details.USER_ID;
+						instid = details.INSTITUTION_ID;
 
-							expireDate.setDate(expireDate.getDate() + 30)
+						usid = details.USER_ID;
 
-							$cookies.put('UID', btoa(data.USER_DETAILS[0].USER_NAME), { 'expires': expireDate });
-							UserService.persistDataTolocalStorage('GUID', btoa(JSON.stringify(listvalues)));
-							UserService.persistDataTolocalStorage('DEALERS', btoa(JSON.stringify(data.DEALERS)));
-							UserService.persistDataTolocalStorage('ROLES', btoa(JSON.stringify(data.ROLES)));
-							UserService.persistDataTolocalStorage('DETAILS', btoa(JSON.stringify(data.USER_DETAILS)));
-							UserService.persistDataTolocalStorage('ACTIONS', btoa(JSON.stringify(data.ACTION)))
+						expireDate.setDate(expireDate.getDate() + 30)
 
-							if (!_.isUndefined(data.ACTION)) {
-								router(data.ACTION);
-							}
-						} else {
-							$scope.alert = "Sorry ! User Details are not availeble.\n Please contact system admin";
+						$cookies.put('UID', btoa(data.USER_DETAILS[0].USER_NAME), { 'expires': expireDate });
+						UserService.persistDataTolocalStorage('GUID', btoa(JSON.stringify(listvalues)));
+						UserService.persistDataTolocalStorage('DEALERS', btoa(JSON.stringify(data.DEALERS)));
+						UserService.persistDataTolocalStorage('ROLES', btoa(JSON.stringify(data.ROLES)));
+						UserService.persistDataTolocalStorage('DETAILS', btoa(JSON.stringify(data.USER_DETAILS)));
+						UserService.persistDataTolocalStorage('ACTIONS', btoa(JSON.stringify(data.ACTION)))
+
+						if (!_.isUndefined(data.ACTION)) {
+							router(data.ACTION);
 						}
-
-					} else if (data.ERRORS.length > 0) {
-						$scope.alert = data.ERRORS[0].DESCRIPTION;
+					} else {
+						$scope.alert = "Sorry ! User Details are not availeble.\n Please contact system admin";
 					}
 
-				}, function (error) {
-					$scope.alert = "Sorry ! System is under maintenance.\n\t Please try later.";
-				});
-			}
+				} else if (data.ERRORS.length > 0) {
+					GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_LOGIN"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_FAIL"),GNG_GA.getConstAction("API_LOGIN"),1,"login-web");
+					$scope.alert = data.ERRORS[0].DESCRIPTION;
+				}
+
+			}, function (error) {
+				$scope.alert = "Sorry ! System is under maintenance.\n\t Please try later.";
+			});
+		}
 
 		// action contains {APPLICATION,NOTIFICATION}
 
@@ -300,12 +300,5 @@
 
 			return temp.toLowerCase();
 		}
-
 	}]);
-
-}).call(window, document)
-
-
-
-
-
+}).call(window, document);
