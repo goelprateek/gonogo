@@ -1116,7 +1116,7 @@ $scope.updateLosData = function(status){
          //alert('modal baseURL'+baseURL);
          var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
-            templateUrl: './views/modal-reinitiate.html',
+            templateUrl: 'views/modal-reinitiate.html',
             controller: 'ReinitiateModalController',
             size: size,
             resolve: {
@@ -1161,7 +1161,7 @@ $scope.updateLosData = function(status){
 //      console.log("showDecisionReinitiatedData");
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
-            templateUrl: './views/modal-bre-results.html',
+            templateUrl: 'views/modal-bre-results.html',
             controller: 'ReinitiatedDecisionModalController',
             size: size,
             resolve: {
@@ -1220,11 +1220,13 @@ app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$ui
 
     var URL="worker/bre-audit-data/";
 
-    RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
+     RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
         //[{"applicationLog":{},"sRefID":"5788d78b5bc7ec48de2796c2","bStatFlag":false,"iNoReTry":0,"oCompRes":{},"oIntrmStat":{"sRefId":null,"sAppID":null,"sInstID":null,"dtStart":1468681176705,"dtETime":null,"sAppStart":"DEFAULT","sDedupe":"DEFAULT","sEmailStat":"DEFAULT","sOtpStat":"COMPLETE","sAppStat":"DEFAULT","sPanStat":"DEFAULT","sAadharStat":"DEFAULT","sMbStat":"DEFAULT","sVarScoreStat":"DEFAULT","sScoreStat":"DEFAULT","sCblScore":"DEFAULT","sCroStat":"DEFAULT","oPanResult":null,"oCibilResult":null,"oResAddressResult":null,"oOffAddressResult":null,"oScoringResult":null,"oAadharResult":null,"oExperianResult":null,"oEquifaxResult":null,"oCHMResult":null,"oMbResult":null},"bNegPinCodeFlag":false,"aAppScoRslt":[]},{"applicationLog":{},"sRefID":"5788d78b5bc7ec48de2796c3","bStatFlag":false,"iNoReTry":0,"oCompRes":{},"oIntrmStat":{"sRefId":null,"sAppID":null,"sInstID":null,"dtStart":1468681176705,"dtETime":null,"sAppStart":"DEFAULT","sDedupe":"DEFAULT","sEmailStat":"DEFAULT","sOtpStat":"COMPLETE","sAppStat":"DEFAULT","sPanStat":"DEFAULT","sAadharStat":"DEFAULT","sMbStat":"DEFAULT","sVarScoreStat":"DEFAULT","sScoreStat":"DEFAULT","sCblScore":"DEFAULT","sCroStat":"DEFAULT","oPanResult":null,"oCibilResult":null,"oResAddressResult":null,"oOffAddressResult":null,"oScoringResult":null,"oAadharResult":null,"oExperianResult":null,"oEquifaxResult":null,"oCHMResult":null,"oMbResult":null},"bNegPinCodeFlag":false,"aAppScoRslt":[]}]
         if(Response){
             _.each(Response,function(resp){
-                if(resp.oCompRes.scoringServiceResponse && resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE){
+                resp=resp.auditData;
+                if(resp.oCompRes.scoringServiceResponse && resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE)
+                {
                     resp.elgbltyGrid = ( resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID ? resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID : "" ) 
                         +"."
                         + (resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID ? resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID : (resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] ? resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] : "" ));
@@ -1232,7 +1234,6 @@ app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$ui
                 $scope.appForms.push(resp);
             });         
         }
-        //$uibModalInstance.dismiss();
     });
 }]);
 
