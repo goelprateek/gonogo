@@ -499,29 +499,38 @@
                         });
     }
 
-	$scope.load_details = function(CustID,dedupeflag)
+	$scope.load_details = function(CustID,dedupeflag,applicationRequestType)
 	{  
         $scope.currentApplicationFormRefID=CustID;
 
         $scope.isUpdating=false;        
 		
         var URL='';
-		var json ={'sRefID':CustID};	
-		if(AclService.can('NCROQUE'))//for CRO1
-		{ 
-			URL = 'application-data';
-			if(dedupeflag == "true"){
-				 $scope.isDedupeSelected = true;
-                 $scope.backUpDefaultRefId = [];
-			}else{
-				 $scope.isDedupeSelected = false;
-			}
-		}else{
-			URL = 'application-data-cro2';
-			if(dedupeflag == "true"){
-                 $scope.backUpDefaultRefId = [];
-			}
-		}
+		var json ={'sRefID':CustID};
+
+        //applicationRequestType= sRqTyp introducted in PL Salary
+        //PS=Partial Save & FP=Fully processed
+        if(applicationRequestType && applicationRequestType=="PS"){
+            URL = 'application-data-partial';
+        }else if(applicationRequestType && applicationRequestType=="FP"){
+            URL = 'application-data';
+        }else{
+    		if(AclService.can('NCROQUE'))//for CRO1
+    		{ 
+    			URL = 'application-data';
+    			if(dedupeflag == "true"){
+    				 $scope.isDedupeSelected = true;
+                     $scope.backUpDefaultRefId = [];
+    			}else{
+    				 $scope.isDedupeSelected = false;
+    			}
+    		}else{
+    			URL = 'application-data-cro2';
+    			if(dedupeflag == "true"){
+                     $scope.backUpDefaultRefId = [];
+    			}
+    		}
+        }
 		
         RestService.saveToServer(URL,json).then(function(response){
             var transfrmedOject ;
@@ -1172,7 +1181,7 @@ function requestForStatus(json)
 app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$uibModalInstance","requestObj","UserService",function($scope,RestService,$uibModalInstance,requestObj,UserService){
     console.log("ReinitiatedDecisionModalController");
     console.log(requestObj);
-    
+
     var user=UserService.getCurrentUser();
 
     $scope.appForms=[];

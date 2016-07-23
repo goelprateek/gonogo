@@ -457,7 +457,7 @@
 			var _data = {
 					'sInstId': user.institutionID,
 					'sReportType': 'Credit Report',
-					'sProductType':'Consumer Durable',
+					'sProductType':'Consumer Durables',
 					'sReportCycle': 'MTD'
 			}
 			
