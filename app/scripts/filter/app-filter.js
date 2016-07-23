@@ -96,14 +96,25 @@ angular.module('gonogo').filter('expression', function() {
 }),
 
 angular.module('gonogo').filter('dateFormat', function() {
-	var result, month;
 	return function(item) {
-		if(item){
-			 month = new Date(item).getMonth()+1;
-		     result  = new Date(item).getDate()+"/"+month+"/"+new Date(item).getFullYear();	
-		}
+		var month = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug','Sep', 'Oct', 'Nov', 'Dec' ];
+		var result;
+		var curdate= new Date(new Date());
+		var dt=curdate.getDate();
+		var mnth=curdate.getMonth()+1;
+		var year=curdate.getFullYear();
 		
-
+		var receivedDay = new Date(item).getDate();
+		var receivedMon = new Date(item).getMonth()+1;
+		
+		if(receivedDay == dt && receivedMon== mnth){
+			var time = new Date(item).getHours()+":"+new Date(item).getMinutes()+":"+new Date(item).getSeconds();
+			result = time;
+		}else if(receivedDay == dt-1 && receivedMon== mnth){
+			result='Yesterday';	
+		}else{
+			result  = receivedDay+"-"+month[new Date(item).getMonth()]+"-"+new Date(item).getFullYear();
+		}	
 		return result;
 	};
 });

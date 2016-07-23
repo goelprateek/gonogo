@@ -401,8 +401,9 @@
 		var object  = AnalyticsObject.dummy;
 		$scope.objectSet =  object; 
 		$scope.isImg = true;
-         $scope.losIdval = true;
-         $scope.utrVal = true;
+        $scope.losIdval = true;
+        $scope.utrVal = true;
+        $scope.editLosStat = true;
 		$scope.findAddressType = function(orignal,final){
     		return (angular.lowercase(orignal) == angular.lowercase(final));
     	}	
@@ -577,7 +578,7 @@
 			              $scope.dataSourceCol = [],
 
 			              ($scope.init = function() {
-			                  return $scope.search(), $scope.select($scope.currentPage) , $scope.order("applicationId");
+			                  return $scope.search(), $scope.select($scope.currentPage);
 			              })();
 
 			          };

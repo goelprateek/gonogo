@@ -329,7 +329,6 @@
                                     $uibModal,SelectArrays,$log){
 	var user=UserService.getCurrentUser();
     $scope.can=AclService.can;
-   // $scope.InstitutionID=user.institutionID;
 
     if(user.id){
         $scope.$emit('onSuccessfulLogin');
@@ -337,7 +336,7 @@
 
     $scope.selectResidence = SelectArrays.getResidenceTypes();
 
-    $scope.isDisabled=true;
+   /* $scope.isDisabled=true;*/
     $scope.isUpdating = false;
 
     if(_.isUndefined(user.id) ){
@@ -374,10 +373,7 @@
 
     $scope.utrVal = true;
     $scope.losIdval = false;
-	var height=$(window).height()-200;
-
-	$scope.currImg= 0;
-	$scope.appStatflag = '';
+    $scope.editLosStat = false;
 
 	$scope.countSelected="Select";
 	var offersAllowed = AclService.can('NOFRS');
@@ -386,7 +382,7 @@
 	$rootScope.template ="notification";
 	$scope.minVal = 0;
 	$scope.limit = 10;
-	var current1 = 0;
+
 	$scope.loadData = function(){
 		 $scope.minVal = $scope.minVal+$scope.limit;
 		 polling($scope.minVal);
@@ -440,7 +436,6 @@
 			}else{
 				URL = 'cro2-queue'; // Only CRO2
 			}
-            console.log(JSON.stringify(json));
 			RestService.saveToServer(URL,json).then(function(data){
 				if(!_.isNull(data) || _.isUndefined(data)){
                     $scope.notifarray = _.union($scope.notifarray,data);
@@ -511,7 +506,7 @@
 		if(AclService.can('NCROQUE'))//for CRO1
 		{ 
 			URL = 'application-data';
-			if(dedupeflag == "true"){
+			if(dedupeflag){
 				 $scope.isDedupeSelected = true;
                  $scope.backUpDefaultRefId = [];
 			}else{
@@ -519,7 +514,7 @@
 			}
 		}else{
 			URL = 'application-data-cro2';
-			if(dedupeflag == "true"){
+			if(dedupeflag){
                  $scope.backUpDefaultRefId = [];
 			}
 		}
@@ -547,7 +542,7 @@
             $scope.error = '';
             $scope.dedupeRefArray = [];
             $scope.isAllImgApprove = true;
-            $scope.showrefid = "true";
+            $scope.showrefid = true;
             $scope.croDecision = response.aCroDec;
             $scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
 
@@ -580,7 +575,7 @@
 
             try{
                  if($scope.objectSet.oLosDtls.sLosID){
-                 $scope.losIdval = true;
+                    $scope.losIdval = true;
                  }else{
                      $scope.losIdval = false;
                  }   
@@ -819,8 +814,8 @@ $scope.cro_action = function(refID, action){
                     }
 			  }
           }else if($scope.applctnstatus == null){
-            $scope.error = "Application status is not defined...!!!";
-            $scope.done = "";
+                $scope.error = "Application status is not defined...!!!";
+                $scope.done = "";
         }else{
             $scope.error = "Application has already taken an action...!!!";
             $scope.done = "";
@@ -828,13 +823,10 @@ $scope.cro_action = function(refID, action){
 	  }else{
         $scope.error = "Please select enquiry from Queue...!!!";
         $scope.done = "";
-    }
-    // $scope.showrefid = "true";
-       
+    }       
 }
 
-function requestForStatus(json)
-    {
+function requestForStatus(json){
     var URL = 'cro-approval';
     RestService.saveToServer(URL,json).then(function(Response){
         if(Response.status == "OK UPDATE SUCCESSFULLY")                     
@@ -847,110 +839,91 @@ function requestForStatus(json)
             $scope.done = "Application is successfully "+json.sAppStat+""; 
         }
         else{
-            $scope.error= "Sorry...Unable to update your action !!";
+            $scope.error= "Sorry...Unable to Approve your application !!";
         }
     setTimeout(function() { $scope.error = "";},1500);
     }); 
-  }
+}
 
- function  requestFordclnOnhold(json){
-            var URL='cro-onhold';
-            RestService.saveToServer(URL,json).then(function(Response){
-                if(Response.status == "OK UPDATE SUCCESSFULLY")                     
-                {
-                      _.each($scope.notifarray,function(value,key){
-                            if($scope.notifarray[key].sRefID ==  $scope.objectSet.oAppReq.sRefID){
-                                return($scope.notifarray[key].sStat = json.sAppStat);
-                            }  
-                      });
-                    $scope.done = "Application is successfully "+json.sAppStat+""; 
-                }
-            });
+function requestFordclnOnhold(json){
+    var URL='cro-onhold';
+    RestService.saveToServer(URL,json).then(function(Response){
+        if(Response.status == "OK UPDATE SUCCESSFULLY")                     
+        {
+              _.each($scope.notifarray,function(value,key){
+                    if($scope.notifarray[key].sRefID ==  $scope.objectSet.oAppReq.sRefID){
+                        return($scope.notifarray[key].sStat = json.sAppStat);
+                    }  
+              });
+            $scope.done = "Application is successfully "+json.sAppStat+""; 
         }
+        else{
+            $scope.error= "Sorry...Unable to update your action !!";
+        }
+    });
+}
 
-  $scope.losStatusChange=function(status){
+$scope.losStatusChange=function(status){
     var utr =  $scope.objectSet.oLosDtls.sUtr;
      if(status == "LOS_DISB" &&   $scope.applctnstatus.toUpperCase()=="APPROVED"){ //
             //$scope.isUtrEdit = false; //&& (utr=='' || utr==null)//can edit
             if(utr=='' || utr==null){
                  $scope.isUtr();
-                $scope.utrVal = false;        
+                $scope.utrVal = false; //enable utr field to edit       
             }
         }else{
              // $scope.isUtrEdit = true;
              $scope.utrVal = true; //disable utr field
         }
-        /* $('#losStatusId1').val(this.value);
-        $scope.objectSet.oLosDtls.sStat =this.value;*/
-  }
+}
 
-  $scope.onchange = function(id) {
+//clicking refId from drop down of dedupe cases
+$scope.onchange = function(id) {
         $scope.backUpDefaultRefId.push($scope.objectSet);
         if(id!='Select'){
-        $scope.load_details(id,"false");
+             $scope.load_details(id,false);
         }else{
             $scope.defaultRefId= $scope.backUpDefaultRefId[0].oAppReq.sRefID;
-            $scope.load_details($scope.defaultRefId,"true");
+            $scope.load_details($scope.defaultRefId,true);
         }
-        }
+}
 
-	$scope.updateLosData = function(status){
+$scope.updateLosData = function(status){
 	var losStat = status;
 	var losId = $scope.objectSet.oLosDtls.sLosID;
 	var utr = $scope.objectSet.oLosDtls.sUtr;
 
-    if(($scope.utrVal==false && utr!='') || ($scope.utrVal == true && (utr=='' || utr!=''))){
+    if((!$scope.utrVal && utr!='') || ($scope.utrVal && (utr=='' || utr!=''))){
     	if(losId != "" && losStat !="Select"){
     		 var jsondata=	 {
-    				    "sRefID":$scope.objectSet.sRefID,
-    				    "oHeader":{
-    				         "sAppID":$scope.objectSet.oAppReq.oHeader.sAppID,
-    				         "sInstID":user.institutionID,
-    				         "sSourceID":"WEB",
-    				         "sAppSource":"WEB",
-    				         "sReqType":"JSON",
-    				         "sCroId":user.id
-    				    },
-    				    "oLosDtls":{
-    				        "sLosID":losId,
-    				        "sStat":losStat,
-    				        "sUtr":utr
-    				    }
-    				};	 
+			    "sRefID":$scope.objectSet.sRefID,
+			    "oHeader":{
+			         "sAppID":$scope.objectSet.oAppReq.oHeader.sAppID,
+			         "sInstID":user.institutionID,
+			         "sSourceID":"WEB",
+			         "sAppSource":"WEB",
+			         "sReqType":"JSON",
+			         "sCroId":user.id
+			    },
+			    "oLosDtls":{
+			        "sLosID":losId,
+			        "sStat":losStat,
+			        "sUtr":utr
+			    }
+			};	 
     		 var URL='update-los-details';
     		 RestService.saveToServer(URL,jsondata).then(function(Response){
     				if(Response.status == "SUCCESS"){
     					alert("LOS Status updated successfully");
-    					 $scope.losIdval = true;
-                         $scope.utrVal = true;
-    					 $(document.body).find('#utrData').css("border","1px solid #cfcfcf");
-    					 $(document.body).find('#losId').css("border","1px solid #cfcfcf");
+    					$scope.losIdval = true;
+                        $scope.utrVal = true;
     				}else{
     					alert("LOS Status is not updated successfully");
     				}
     		 });
-    		}
+    	}
 	}
 }
-	
-	//code for chatting application
-	/*$(document).on('click', '#btn_close', function(e) {
-		e.preventDefault();
-		$(this).parent().parent().hide();
-	});
-
-	$(document).on('click', '#minimize', function(e) {
-		$(this).parent().parent().animate({
-			height : '30px'
-		}, 200);
-		e.preventDefault();
-	});
-	$(document).on('click', '#maxmize', function(e) {
-		$(this).parent().parent().animate({
-			height : '250px'
-		}, 200);
-		e.preventDefault();
-	});*/
 	 
 	/******************* Reinitiate & Update *****************/
 	$scope.dobFormat = "dd/MM/yyyy";
@@ -1247,7 +1220,7 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
     $scope.isReject = false;
     $scope.active = ImageFeed.index;
     var rejectedImgArray = [];
-    console.log(ImageFeed.editMode);
+    $scope.iseditMode = ImageFeed.editMode;
     
     if(ImageFeed.isImage){
         $scope.imageTag = 1;
@@ -1263,16 +1236,16 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
         if(ImageFeed.editMode){
             $scope.slides[index].sStat = "Approve";
              var json ={
-                          "oHeader": {
-                            "sAppID": ImageFeed.applicationId,
-                            "sApplID": ImageFeed.applicantId
-                          },
-                          "sRefID": ImageFeed.refId,
-                          "sImageID":$scope.slides[index].sImgID,
-                          "oUpldDtl": {
-                            "sStat": "Approve",
-                            "sReason":""
-                          }
+                  "oHeader": {
+                    "sAppID": ImageFeed.applicationId,
+                    "sApplID": ImageFeed.applicantId
+                  },
+                  "sRefID": ImageFeed.refId,
+                  "sImageID":$scope.slides[index].sImgID,
+                  "oUpldDtl": {
+                    "sStat": "Approve",
+                    "sReason":""
+                  }
             };
             $scope.imageService(json,$scope.slides[index]);
         }
@@ -1299,8 +1272,7 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
                         "sReason":$scope.slides[index].sReason
                       }
                     };
-                    $scope.imageService(json,$scope.slides[index]);
-        //             rejectArray.push({Name: imageName,Image:"",Reason:reason});
+            $scope.imageService(json,$scope.slides[index]);
          }
     }
 
@@ -1322,8 +1294,7 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
     $scope.onFileSelect = function($files,imageName,imageIndex){
                // $files: an array of files selected, each file has
            if(ImageFeed.editMode){
-                for (var i = 0; i < $files.length; i++) 
-                {       
+                for (var i = 0; i < $files.length; i++){       
                     var fname=$files[0].name
                     var re = (/\.(jpg)$/i);
                     if(!re.exec(fname))
@@ -1334,7 +1305,7 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
                     var $file = $files[i];
                     var base64;
                     var  reader=new FileReader();
-                    if ($files[i] && $file) {
+                    if ($files[i] && $file){
                         var binaryString;
                         reader.onload = function(readerEvt) {
                             binaryString = readerEvt.target.result;
@@ -1344,58 +1315,55 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
                                                   $scope.slides[imageIndex]["evdncArray"]=[];
                                     }
                                  var json ={
-                                          "oHeader": {
-                                            "sAppID": ImageFeed.applicationId,
-                                            "sApplID": ImageFeed.applicantId,
-                                            "sInstID": ImageFeed.institutionId
-                                          },
-                                          "sRefID": ImageFeed.refId,
-                                          "oUpldDtl": {
-                                            "sFileID": "1",
-                                            "sFileName": $scope.slides[imageIndex].sImgType+"_EVIDENCE"+($scope.slides[imageIndex].evdncArray.length+1),
-                                            "sFileType": "JPG",
-                                            "sfileData": base64.split(",")[1],
-                                            "sStat": "",
-                                            "sReason":""
-                                          }
-                                        };
-                                        console.log($scope.slides[imageIndex]["evdncArray"].length);
-                                        if($scope.slides[imageIndex]["evdncArray"].length < 2){
-                                             var URL = 'upload-image';
-                                             RestService.saveToServer(URL,json).then(function(Response){
-                                                    if(Response.sStatus == 'SUCCESS'){
-                                                        if(!$scope.slides[imageIndex]["evdncArray"]){
-                                                              $scope.slides[imageIndex]["evdncArray"]=[];
-                                                        }
-                                                            var evdcJson = {
-                                                                "id" : $scope.slides[imageIndex]["evdncArray"].length,
-                                                                "sByteCode" : base64,
-                                                                "sImgID" : '',
-                                                                "sImgType" : $scope.slides[imageIndex].sImgType+"_EVIDENCE"+($scope.slides[imageIndex].evdncArray.length+1),
-                                                                "sReason" : '',
-                                                                "sStat" : ''
-                                                            };
-                                                            $scope.slides[imageIndex].evdncArray.push(evdcJson);
-                                                            evdcJson.id = $scope.slides.length ;
-                                                            $scope.slides.push(evdcJson);
-                                                     }
-                                                 }); 
-                                              }else{
+                                      "oHeader": {
+                                        "sAppID": ImageFeed.applicationId,
+                                        "sApplID": ImageFeed.applicantId,
+                                        "sInstID": ImageFeed.institutionId
+                                      },
+                                      "sRefID": ImageFeed.refId,
+                                      "oUpldDtl": {
+                                        "sFileID": "1",
+                                        "sFileName": $scope.slides[imageIndex].sImgType+"_EVIDENCE"+($scope.slides[imageIndex].evdncArray.length+1),
+                                        "sFileType": "JPG",
+                                        "sfileData": base64.split(",")[1],
+                                        "sStat": "",
+                                        "sReason":""
+                                      }
+                                    };
+                                    if($scope.slides[imageIndex]["evdncArray"].length < 2){
+                                         var URL = 'upload-image';
+                                         RestService.saveToServer(URL,json).then(function(Response){
+                                                if(Response.sStatus == 'SUCCESS'){
+                                                    if(!$scope.slides[imageIndex]["evdncArray"]){
+                                                          $scope.slides[imageIndex]["evdncArray"]=[];
+                                                    }
+                                                    var evdcJson = {
+                                                        "id" : $scope.slides[imageIndex]["evdncArray"].length,
+                                                        "sByteCode" : base64,
+                                                        "sImgID" : '',
+                                                        "sImgType" : $scope.slides[imageIndex].sImgType+"_EVIDENCE"+($scope.slides[imageIndex].evdncArray.length+1),
+                                                        "sReason" : '',
+                                                        "sStat" : ''
+                                                    };
+                                                    $scope.slides[imageIndex].evdncArray.push(evdcJson);
+                                                    evdcJson.id = $scope.slides.length ;
+                                                    $scope.slides.push(evdcJson);
+                                                 }
+                                             }); 
+                                          }else{
                                                 alert("You have max limit of 2 images!");
-                                              }
-                                           }else{
-                                                    alert("File Type Not Supported");
-                                               }
-                                        };
-                                        reader.readAsDataURL($files[i]);
-                                        $timeout(function() {
-                                        }, 3000);
-                                }
+                                          }
+                                }else{
+                                    alert("File Type Not Supported");
+                            }
+                        };
+                        reader.readAsDataURL($files[i]);
+                        $timeout(function() {
+                        }, 3000);
+                    }
+                }
             }
-        }else{
-            alert("not edit");
-        }
-      }
+    }
 
     $scope.closeModal = function(){
           $uibModalInstance.dismiss($scope.slides);
@@ -1407,12 +1375,12 @@ app.controller('ModalInstanceCtrl', ['$scope','$rootScope','NotificationObject',
    '$uibModalInstance','$log', function($scope, $rootScope,NotificationObject,modalFeed,$uibModalInstance,$log){
    
     $scope.modalFeed = modalFeed;
-     $scope.approvemsg = false;
+    $scope.approvemsg = false;
 
     $scope.saveApprvPanel = function () {
          if($scope.modalFeed.apprvRemark !=undefined && $scope.modalFeed.apprvRemark !=''){
              if($scope.modalFeed.apprvSubTo!=undefined && $scope.modalFeed.apprvSubTo!=''){
-                if(modalFeed.approveAmt !='' && modalFeed.emi!='' && modalFeed.tenor!=''){
+                if(modalFeed.approveAmt !=undefined && modalFeed.emi!=undefined && modalFeed.tenor!=undefined){
                     $uibModalInstance.close($scope.modalFeed);   
                 }else{
                     $scope.approvemsg = true;
@@ -1505,14 +1473,9 @@ app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
     $scope.checkboxUpdate = function(obj,id){ 
         if(obj){
             if (typeof docData[$scope.ID].selected != "undefined") {
-
-                /*if($.inArray(id, docData[$scope.ID].selected),1)
-                delete docData[$scope.ID].selected[id];
-                else{*/
                     docData[$scope.ID].selected.push(id);   
                     if(typeof docData[$scope.ID].Offers[id].selected == "undefined"){ 
                         $.extend( docData[$scope.ID].Offers[id], {'selected':'true'});
-                /*  }*/
                 }
 
             } else {
@@ -1531,28 +1494,24 @@ app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
       }
          $scope.isSelected($scope.ID);
          $scope.OfferArrey = docData;
-      /*} else {
-        $('#active'+$scope.ID+'').css("background-color","#fff");
-      }*/
     }
 
-    $scope.setSelected=function() {  
+$scope.setSelected=function() {  
     var offers={'offers':[],'documents':[]};
-      for(var i=0;i<docData.length;i++)
-      {for(var j=0;j<docData[i].Offers.length;j++)
-       {if((typeof docData[i].Offers[j].selected != 'undefined'))
-        {
-           if($scope.docOfferFlag == true){
-                offers.documents.push(docData[i].Offers[j]);
-                $scope.docOfferFlag == false;
-           }
-           else{
-                offers.offers.push(docData[i].Offers[j]);
-           }
+    for(var i=0;i<docData.length;i++){
+        for(var j=0;j<docData[i].Offers.length;j++){
+            if((typeof docData[i].Offers[j].selected != 'undefined')){
+               if($scope.docOfferFlag == true){
+                    offers.documents.push(docData[i].Offers[j]);
+                    $scope.docOfferFlag == false;
+               }
+               else{
+                    offers.offers.push(docData[i].Offers[j]);
+               }
+            }
         }
-       }
-      }
-     $scope.offrData = offers.documents; 
+    }
+    $scope.offrData = offers.documents; 
 }
 
 $scope.requestDoc = function () {
@@ -1924,10 +1883,10 @@ app.filter('dateFilter', function() {
     };
 });
 
-app.filter('dateFormat', function() {
+/*app.filter('dateFormat', function() {
 	return function(item) {
 		var month = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug','Sep', 'Oct', 'Nov', 'Dec' ];
-
+console.log(item);
 		var curdate= new Date(new Date());
 		var dt=curdate.getDate();
 		var mnth=curdate.getMonth()+1;
@@ -1946,7 +1905,7 @@ app.filter('dateFormat', function() {
 		}	
 		return result;
 	};
-});
+});*/
 
 app.filter('currency', function() {
 	return function(value, symbol) {

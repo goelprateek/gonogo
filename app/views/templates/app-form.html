@@ -42,7 +42,7 @@
 			</div>
 			<div class="col-md-3">
 				<label class="control-label">LOS Status</label> 		
-					<select class="form-control" ng-model="objectSet.oLosDtls.sStat" data-ng-change="losStatusChange(objectSet.oLosDtls.sStat)" >
+					<select class="form-control" ng-disabled="editLosStat" ng-model="objectSet.oLosDtls.sStat" data-ng-change="losStatusChange(objectSet.oLosDtls.sStat)" >
 						<option value="">Please Select LOS Status</option>
 						<option value="LOS_QDE">LOS_QDE</option>
 						<option value="LOS_APRV">LOS_APRV</option>
@@ -572,7 +572,8 @@
 				</div>
 				<div ng-repeat="data in objectSet.aAppScoRslt" ng-if="objectSet.aAppScoRslt!=''">
 					<div class="col-md-3">
-						<label class="control-label">{{data.sFldName}}</label>
+						<label class="control-label" ng-if="data.sFldName=='Residential Address Score'">Residential Addr Score</label>
+						<label class="control-label" ng-if="data.sFldName!='Residential Address Score'">{{data.sFldName}}</label>
 						<input ng-if="data.sFldName!='PAN Verification'" ng-model="data.sFldVal" class="form-control" type="text" disabled="disabled">	
 						<input ng-if="data.sFldName =='PAN Verification'"
 						ng-model="data.sMsg" class="form-control" type="text" disabled="disabled">

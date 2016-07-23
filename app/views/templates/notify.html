@@ -254,7 +254,7 @@ font-size:14px;}
 						
 						<div class="list-group-item" style="padding: 0px;border-bottom: 1px solid #ddd;margin-bottom: 0px;" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" > 
 							<div class="list-group-item" style="border-bottom: 1px solid #ddd;margin-bottom: 0px;border: 0px solid #ddd;"
-								ng-click='load_details(user.sRefID,"true")'
+								ng-click='load_details(user.sRefID,true)'
 								ng-class='{picked: user.sRefID==Picked}'>
 								<span class="img-circle dsa_profile_icon" style="box-shadow: 0px 0px 2px #888;" >
 									<h5><i class="fa fa-user"></i></h5>
@@ -308,9 +308,9 @@ font-size:14px;}
 									<span>Address Line2 : {{objectSet.oAppReq.oReq.oApplicant.aAddr[0].sLine2}}</span>
 								</div> 
 							</div>
-							<div data-ng-if="imageDataArray.length!=0" style=" overflow-y: scroll;height: 54px;">
+							<div data-ng-if="imageDataArray.length!=0"  slimscroll="{height: 54,railVisible:true}">
 							<div class="notify-scroll-container" >
-								 <ul> 
+								 <ul style="padding: 0px;"> 
 									<li ng-repeat="d in imageDataArray">
 										<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index,true)"><img ng-src="{{d.sByteCode}}"> </a>
 									</li>
@@ -561,7 +561,8 @@ font-size:14px;}
 									 	<div class="list-group-item">
 											<span>Eligibility Amount : &#8377;&nbsp;{{cro.dEligibleAmt}}</span>
 										</div>
-										<div class="list-group-item" ng-if="objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT">
+										<!-- ng-if="objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT" -->
+										<div class="list-group-item">
 											<span>FOIR :{{objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT}}</span>
 										</div>
 										<div class="list-group-item">
