@@ -382,6 +382,7 @@
 	$rootScope.template ="notification";
 	$scope.minVal = 0;
 	$scope.limit = 10;
+    $scope.notifarray = [];
 
 	$scope.loadData = function(){
 		 $scope.minVal = $scope.minVal+$scope.limit;
@@ -391,6 +392,7 @@
 	polling($scope.minVal);
 	
 	function polling(minimum) {
+        console.log("minimum :"+minimum);
 		if($rootScope.template == "notification"){
 
 			if(!AclService.can('NAPPDATADEF')){
@@ -438,13 +440,20 @@
 			}
 			RestService.saveToServer(URL,json).then(function(data){
 				if(!_.isNull(data) || _.isUndefined(data)){
-                    $scope.notifarray = _.union($scope.notifarray,data);
+                    var queArray = _.union($scope.notifarray,data);
+                    //only union, after interval adds +10 element in queue
+                    var filteredData = _.uniq(queArray, function(item, key, sRefID) { 
+                        return item.sRefID;
+                    });//only unique will fix length of data in queue
+                    $scope.notifarray = filteredData;
 					$scope.error ="";
+                     console.log($scope.notifarray.length);
 				}
 			});	
   		}
-	}
 
+	}
+    setInterval(polling, 30000,0);
     $scope.addrType = SelectArrays.getAddrType();
 	$scope.addr_type = $scope.addrType[1];   //to set default address
 	$scope.aplcntType=[{value:"SAL","text":"Salaried"},
@@ -464,6 +473,7 @@
                       controller: 'supportedDocuments',
                       size: 'lg',
                       backdrop: 'static',
+                      keyboard: false,
                       resolve:{
                         ImageFeed : function (){
                             var imageData;
@@ -669,6 +679,7 @@ $scope.scoreTree = function(){
               controller: 'scoreTreeCtr',
               size: 'lg',
               backdrop: 'static',
+              keyboard: false,
               resolve:{
                 treeFeed : function (){
                     var scoreTree;
@@ -702,6 +713,7 @@ $scope.cro_action = function(refID, action){
                       controller: 'onholdModelCtrl',
                       size: 'lg',
                       backdrop: 'static',
+                      keyboard: false,
                       resolve: {
                         holdModelFeed : function (){
                             var dataForModel;
@@ -733,6 +745,7 @@ $scope.cro_action = function(refID, action){
                       controller: 'DeclInstanceCtrl',
                       size: 'lg',
                       backdrop: 'static',
+                      keyboard: false,
                       resolve: {
                          dclnModelFeed : function (){
                             var dataForDcl;
@@ -771,6 +784,7 @@ $scope.cro_action = function(refID, action){
                       controller: 'ModalInstanceCtrl',
                       size: 'lg',
                       backdrop: 'static',
+                      keyboard: false,
                       resolve: {
                         modalFeed : function (){
                             var dataForModel;
@@ -1217,7 +1231,6 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
     function($scope,ImageFeed,$uibModalInstance,$timeout,RestService){
     /*$scope.myInterval = 5000;*/
     $scope.noWrapSlides = true;
-    $scope.isReject = false;
     $scope.active = ImageFeed.index;
     var rejectedImgArray = [];
     $scope.iseditMode = ImageFeed.editMode;
@@ -1254,7 +1267,6 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
     $scope.rejectImg = function(index){
         if(ImageFeed.editMode){
             $scope.slides[index].sStat = "Reject";
-            $scope.isReject = true;
         }
     }
 
