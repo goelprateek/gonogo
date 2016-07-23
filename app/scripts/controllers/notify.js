@@ -903,12 +903,19 @@ $scope.onchange = function(id) {
 }
 
 $scope.updateLosData = function(status){
+    console.log(status);
+    console.log($scope.objectSet.oLosDtls);
 	var losStat = status;
-	var losId = $scope.objectSet.oLosDtls.sLosID;
-	var utr = $scope.objectSet.oLosDtls.sUtr;
+    var losId = '';
+     var utr = '';
+    if($scope.objectSet.oLosDtls){
+        losId = $scope.objectSet.oLosDtls.sLosID;
+        utr = $scope.objectSet.oLosDtls.sUtr;
+    }
+    console.log($scope.utrVal);
 
-    if((!$scope.utrVal && utr!='') || ($scope.utrVal && (utr=='' || utr!=''))){
-    	if(losId != "" && losStat !="Select"){
+    if((!$scope.utrVal && ( utr!=null && utr!='')) || ($scope.utrVal)){
+    	if((losId !=null && losId != "") && (losStat !=null && losStat !='')){
     		 var jsondata=	 {
 			    "sRefID":$scope.objectSet.sRefID,
 			    "oHeader":{
@@ -925,8 +932,9 @@ $scope.updateLosData = function(status){
 			        "sUtr":utr
 			    }
 			};	 
+            console.log(jsondata);
     		 var URL='update-los-details';
-    		 RestService.saveToServer(URL,jsondata).then(function(Response){
+    		/* RestService.saveToServer(URL,jsondata).then(function(Response){
     				if(Response.status == "SUCCESS"){
     					alert("LOS Status updated successfully");
     					$scope.losIdval = true;
@@ -934,7 +942,7 @@ $scope.updateLosData = function(status){
     				}else{
     					alert("LOS Status is not updated successfully");
     				}
-    		 });
+    		 });*/
     	}
 	}
 }
