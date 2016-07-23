@@ -15,6 +15,9 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 	var user=UserService.getCurrentUser();
 	$scope.applicationList="ApplicationList";
 	$scope.trueAppList = true;
+
+	$scope.isLoadingDashboardData=true;
+
 	$scope.applnOptionChange=function(value){
 	   if(value == 'ApplicationList'){
 	   		$scope.trueAppList = true;
@@ -25,7 +28,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 			});
 	   		$scope.trueAppList = false;
 	   }
-	  }
+  	}
 	//end
 
 	$scope.duration="LastYear";
@@ -45,32 +48,30 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 	$scope.fetchDashboardList=function(){
 		//alert("Search String: "+$scope.searchText+" Duration: "+$scope.duration);
 		
-	var currentUser=UserService.getCurrentUser();
-
-		if(!_.isUndefined(currentUser.id) )
+		if(!_.isUndefined(user.id) )
 		{
-			if(currentUser.actions && currentUser.actions.length!=0)
+			if(user.actions && user.actions.length!=0)
 			{ 
-				$scope.app=_.contains(currentUser.actions,'APPLICATION' );
-				$scope.notif=_.contains(currentUser.actions,'NOTIFICATION');
-				$scope.policy=_.contains(currentUser.actions,'POLICY' );
-				$scope.analytics=_.contains(currentUser.actions,'ANALYTCS');
+				$scope.app=_.contains(user.actions,'APPLICATION' );
+				$scope.notif=_.contains(user.actions,'NOTIFICATION');
+				$scope.policy=_.contains(user.actions,'POLICY' );
+				$scope.analytics=_.contains(user.actions,'ANALYTCS');
 			}
 
-			$scope.username = currentUser.username;
-			$scope.useremail = currentUser.useremail;
-			$scope.image = currentUser.image;	
-			$scope.instImage = currentUser.instImage;
-			$scope.InstitutionID = currentUser.InstitutionID;
-			$scope.userid = currentUser.userid;
-			$scope.color = currentUser.color;
+			$scope.username = user.username;
+			$scope.useremail = user.useremail;
+			$scope.image = user.image;	
+			$scope.instImage = user.instImage;
+			$scope.InstitutionID = user.InstitutionID;
+			$scope.userid = user.userid;
+			$scope.color = user.color;
 		}else{
 			$location.path(APP_CONST.getConst('APP_CONTEXT'));
 		}
-		
+
 //		alert($scope.useremail.toLowerCase());
 //		alert($scope.useremail.toLowerCase().indexOf("dsa"));
-		if(currentUser.role!="DSA")
+		if(user.role!="DSA")
 		{
 //			console.log();
 //			alert("Moving to root");
@@ -98,11 +99,11 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 		var dashboardJson=JSON.stringify(dashboardJson);
 		// var urlConst= APP_CONST.getConst('BASE_URL_GNG');
 		console.log("APP_CONST.getConst('BASE_URL_GNG')" + APP_CONST.getConst('BASE_URL_GNG'));
-		RestService.saveToServer("dashboard-detail",dashboardJson)
-
-		.then(function(data){
+		RestService.saveToServer("dashboard-detail",dashboardJson).then(function(data){
 			//console.log("dashboard-detail response:");
 			//console.log(data);
+			$scope.isLoadingDashboardData=false;
+
 			$scope.dashboardResult=data;
 		});
 	};

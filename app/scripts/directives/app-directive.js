@@ -107,9 +107,9 @@
 		var linker = function(scope, element, attrs) {
 			var template = '<div class="row clearfix" style="padding: 8px;">';
 			template=template+'<div class="preview" id="{{item.value}}{{item.index}}">';
-			template=template+'<input id="{{item.value}}l{{item.index}}" type="file" ng-file-select="onselectImg($files,'+"'{{item.value}}'"+','+"'{{item.index}}'"+')">';
+			template=template+'<input id="{{item.value}}l{{item.index}}" type="file" ngf-select="onselectImg($files,'+"'{{item.value}}'"+','+"'{{item.index}}'"+')">';
 			template=template+'<label for="{{item.value}}l{{item.index}}" id="{{item.value}}{{item.index}}label">';
-			template=template+'<img alt="" src="../img/camera-128.png" class="img_icon"></label></div>';
+			template=template+'<img alt="" src="../images/camera-128.png" class="img_icon"></label></div>';
 			template=template+'<small id="{{item.value}}{{item.index}}size" class="size"></small>';
 			template=template+'<div style="height:20px;"><a class="remove_image" id="{{item.value}}{{item.index}}remove" name="{{item.value}}{{item.index}}" style="display:none">Remove</a></div></div>';
 			element.html(template); 

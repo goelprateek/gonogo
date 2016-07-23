@@ -254,7 +254,7 @@ font-size:14px;}
 						
 						<div class="list-group-item" style="padding: 0px;border-bottom: 1px solid #ddd;margin-bottom: 0px;" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" > 
 							<div class="list-group-item" style="border-bottom: 1px solid #ddd;margin-bottom: 0px;border: 0px solid #ddd;"
-								ng-click='load_details(user.sRefID,true)'
+								ng-click='load_details(user.sRefID,true,user.sRqTyp)'
 								ng-class='{picked: user.sRefID==Picked}'>
 								<span class="img-circle dsa_profile_icon" style="box-shadow: 0px 0px 2px #888;" >
 									<h5><i class="fa fa-user"></i></h5>
@@ -287,7 +287,7 @@ font-size:14px;}
 					<div class="col-md-4 column">
 						<div class="scroll-divs-outer">
 							<label class="div-heading customer">DEMOGRAPHICS</label>
-							<div id="customer"  slimscroll="{height: 158,railVisible:true}">
+							<div id="customer" slimscroll="{height: 158,railVisible:true}">
 								<div class="list-group-item">
 									<span>Name : <span >{{name}}
 
