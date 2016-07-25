@@ -362,11 +362,11 @@ font-size:14px;}
 									<span>Gross Annual : {{ emp.dGrossSal | rupee:"&#x20B9; "}}</span>
 								</div> -->
 								<div class="list-group-item" ng-if="emp.sConst.toUpperCase()=='SELF-EMPLOYED'">
-									<span>ITR Amount : &#8377;&nbsp;{{emp.dItrAmt}}</span> 
+									<span>ITR Amount : {{emp.dItrAmt | currency:'&#8377;'}}</span> 
 								</div>
 								<div class="list-group-item" ng-if="emp.sConst.toUpperCase()!='SELF-EMPLOYED'">
-									<span ng-if="emp.dmonthSal != 0">Monthly Income : &#8377;&nbsp;{{emp.dmonthSal | rupee:"&#x20B9; "}}</span>
-										<span ng-if="emp.dmonthSal == 0">Yearly Income : &#8377;&nbsp;{{emp.dGrossSal | rupee:"&#x20B9; "}}</span>
+									<span ng-if="emp.dmonthSal != 0">Monthly Income :{{emp.dmonthSal | currency:'&#8377;'}}</span>
+										<span ng-if="emp.dmonthSal == 0">Yearly Income :{{emp.dGrossSal | currency:'&#8377;'}}</span>
 								</div>
 								<div class="list-group-item">
 									<span>Employer : {{ emp.sEmplName}}</span> 
@@ -555,24 +555,24 @@ font-size:14px;}
 								<div class="div-heading kyc"><label>DECISION</label><a ng-if="objectSet && objectSet.iNoReTry>=1" style="float: right;padding-right: 10px;color: white;" ng-click="showReinitiatedDecisionData('lg',objectSet)">View Old</a></div>
 								<div id="KYC" style="width: 106.5%;" slimscroll="{height: 210,railVisible:true}">
 									<div class="list-group-item">
-										<span>Applied Amount :  &#8377;&nbsp;{{objectSet.oAppReq.oReq.oApplication.dLoanAmt}}</span>
+										<span>Applied Amount :{{objectSet.oAppReq.oReq.oApplication.dLoanAmt | currency:'&#8377;'}}</span>
 									</div>
 									<div ng-repeat="cro in objectSet.aCroDec">
 									 	<div class="list-group-item">
-											<span>Eligibility Amount : &#8377;&nbsp;{{cro.dEligibleAmt}}</span>
+											<span>Eligibility Amount :{{cro.dEligibleAmt | currency:'&#8377;'}}</span>
 										</div>
 										<!-- ng-if="objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT" -->
 										<div class="list-group-item">
 											<span>FOIR :{{objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT}}</span>
 										</div>
 										<div class="list-group-item">
-											<span>Approved Amount :&#8377;&nbsp; {{cro.dAmtAppr}}</span>
+											<span>Approved Amount :{{cro.dAmtAppr | currency:'&#8377;'}}</span>
 										</div>
 										<div class="list-group-item">
 											<span>Tenor : {{cro.iTenor}}</span>
 										</div>
 										<div class="list-group-item">
-											<span>EMI :&#8377;&nbsp;{{cro.dEmi}}</span>
+											<span>EMI :{{cro.dEmi | currency:'&#8377;'}}</span>
 										</div>
 									</div>
 									<!-- <div class="list-group-item" 
