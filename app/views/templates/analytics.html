@@ -53,13 +53,7 @@ font-size:14px;}
  
 
 <div data-ng-controller="AnalyticsController" id="analyticsContainer"  class="col-md-12 pull-left">
-	<div class="col-md-10 col-md-offset-1"  id="second_row" contextmenu="blur" accesskey={{InstitutionID}}>
-		<!-- <div class="col-md-2" id="application_process">
-			<label style="font-size: 20px; padding: 12px 0px 8px 19px;">
-				Application Analytics
-			</label>
-		</div> -->
-
+	<!-- <div class="col-md-10 col-md-offset-1"  id="second_row" contextmenu="blur" accesskey={{InstitutionID}}>
 		<div class="col-md-8 " style="padding-top: 20px;    padding-right: 0px;">
 			<img src="images/loading.gif" style="width: 25px; display: none;" id="Loader">
 			<div class="btn-group btn-group-sm medium-button" role="group" aria-label="..." style="top: -5px;right: 9px;">
@@ -73,12 +67,12 @@ font-size:14px;}
 				<a class="btn table-btn" id="Simulator" ng-click="open_tab('Simulator')" ng-if="authenticate('ANSIM')">Simulator</a>
 			</div>
 		</div>
-	</div>
+	</div> -->
 	
 	<div class="col-md-12" contextmenu="blur">
-		<div >
+		<div class="row">
 			<div class="table-panel hiden" id="dashboard_container">
-				<div class="row clearfix" id="btn-row" style="margin-bottom: 20px;display: none;">
+				<!-- <div class="row clearfix" id="btn-row" style="margin-bottom: 20px;display: none;">
 					<div class="col-md-2">
 						<label>Dashboard</label> 
 					</div>
@@ -119,18 +113,28 @@ font-size:14px;}
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
 	<div class="row" >
 		<section class="content-container animate-fade-up" >
 			 <div class="col-md-12 pull-left">&nbsp;&nbsp;&nbsp;&nbsp;</div>
-			 <div class="col-md-12 pull-left" data-ng-if="isTableData ">
-		       <div class="col-md-12 pull-left">
-		       		<a href="javascript:;" class="btn-icon btn-icon-sm pull-right" data-ng-click="toggleView()">
+			 <div class="col-md-12 pull-left" data-ng-if="isTableData" >
+			 	
+			 	<div class="col-md-6 ">
+			 		<select id="dashboardType" class="form-control" ng-model="type" ng-init="type='application'" >
+						<option ng-selected="true" value="application" >Application Logs</option>
+					</select>
+			 	</div>
+			 	<div class="col-md-5">&nbsp;&nbsp;&nbsp;</div>
+		        <div class="col-md-1">
+		       		<a href="javascript:;" class="btn-icon btn-icon-sm pull-left" data-ng-click="toggleView()">
 		       			<i class="fa fa-table" style="font-size:18px;"></i>
 		       		</a>
 		       </div>
-				<div class="row" >
+			   
+			   <div class="col-md-12" style="height:40px;">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+
+			   <div class="row" >
 					<div id="mainTable"  gng-stacked-bar-graph data-ng-model="stackedChart1"  graph-data="orignalData" style="margin-left:20px;" 
 					institution-id="{{InstitutionID}}" test-data="dataFromDirective" isolated-table-data="updateData(parameter)"></div>
 				</div>
@@ -145,11 +149,16 @@ font-size:14px;}
 			</div>
 			
 			
-
-			
-			<div class="col-md-12" data-ng-if="!isTableData && !appView" style="padding: 0px;" >
+			<div class="col-md-12 " data-ng-if="!isTableData && !appView" style="padding: 0px;" >
 				 <div class="col-md-12 pull-left" fix-to-top="fix-to-top"  padding-when-at-top="50">
-					<div class="col-sm-3 col-md-offset-5 col-xs-6"  style="padding: 0px;">
+
+				 	<div class="col-md-3 ">
+			       		<select id="dashboardType" class="form-control" ng-model="type" ng-init="type='application'" >
+							<option ng-selected="true" value="application">Application Logs</option>
+						</select>
+		       		</div>
+
+					<div class="col-sm-3 col-md-offset-2 col-xs-6"  style="padding: 0px;">
 						<form name="gridsearch" autocomplete="off"  class="form-group form-inline">
 							<div class="input-group">
 								<input type="text" name="searchKeywords"  placeholder="Search..." autofocus
@@ -162,11 +171,9 @@ font-size:14px;}
 						</form>
 						<span data-ng-show="searchKeywords.length >= 1"> Showing {{filteredStores.length}}/{{stores.length}} entries </span>
 					</div>
-					<!-- <div class="col-sm-3 col-xs-6 filter-result-info">
-						<span> Showing {{filteredStores.length}}/{{stores.length}} entries </span>
-					</div>  -->
-
-					<div class="panel-bttn" style="float:right; margin-top: 0px;">
+					
+					<div class="col-md-3 " >
+					<div class="panel-bttn pull-right" >
 						<div class="btn-group">
 						  <button type="button" class="btn  btn-sm btn-default"><i class="fa fa-download"></i></button>
 						  <button type="button" class="btn btn-default  btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -184,12 +191,17 @@ font-size:14px;}
 						    </li>
 						  </ul>
 						</div>
-						<a href="javascript:;" class="btn-icon btn-icon-sm pull-right" data-ng-click="toggleView()">
+						
+        			</div>
+        			</div>
+        			<div class="col-md-1 ">
+        				<a href="javascript:;" class="btn-icon btn-icon-sm pull-left" data-ng-click="toggleView()">
 		       				<i class="fa fa-bar-chart" style="font-size:18px;"></i>
 		       			</a>
         			</div>
-						</div>
-				 <div class="col-md-12 pull-left">
+				 </div>
+				 <div class="col-md-12"> &nbsp;&nbsp;&nbsp;</div>
+				 <div class="col-md-12 pull-left ">
 					<table class="table table-striped table-responsive table-condensed table-hover" style="height: auto;white-space: nowrap;">
 			            <thead>
 			                <tr>

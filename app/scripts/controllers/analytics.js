@@ -401,14 +401,12 @@
 		var object  = AnalyticsObject.dummy;
 		$scope.objectSet =  object; 
 		$scope.isImg = true;
+
 		$scope.findAddressType = function(orignal,final){
     		return (angular.lowercase(orignal) == angular.lowercase(final));
     	}	
 
 
-        $scope.findHeight = function(){
-            
-        }
 
     	$scope.showimage = function(obj,isImgFlag,index){
         var modalInstance = $uibModal.open({
@@ -449,22 +447,14 @@
 			$scope.orignalData = data;
 		});
 
-
-		$scope.fileTypeMetaData=[{
-			viewVal:'XLS'
-		},
-		{
-			viewVal:'CSV'
-		}];
-		
 		
 		$scope.reportDownload = function(){
 			
 			var _data = {
 					'sInstId': user.institutionID,
 					'sReportType': 'Credit Report',
-					'sProductType':'Consumer Durable',
-					'sReportCycle': 'MTD'
+					'sProductType':'Consumer Durables',
+					'sReportCycle': 'YTD'
 			}
 			
 			RestService.getStreamFromServer(APP_CONST.getConst('BASE_URL_GNG')+"report/download-credit",_data).then(function(data){
@@ -498,7 +488,7 @@
                                   },                
                          "sBranchId" : "",             
                          "sUserId" :"",                
-                         "aProductType" :["CONSUMER DURABLE"],           
+                         "aProductType" :["CONSUMER DURABLE"],              
                          "dtAccessDate":""             
                         } ;
 
@@ -510,6 +500,7 @@
                                   resolve:{
                                     data : function(){
                                         return RestService.saveToServer('report/reporting-Dimension',_serviceinput).then(function(data){
+                                            console.log(data);
                                             return data;
                                         })
                                     }
