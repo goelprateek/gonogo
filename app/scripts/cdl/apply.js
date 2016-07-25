@@ -1240,14 +1240,10 @@ $scope.onselectImg = function($files,type,index)
 		}
 }
 
-/*
- * Author Sayali uploadallimg function to upload img one by one
- */
 function UploadAllImgs(Ref,array,callType)
 {
 	// console.log("upload Image array :"+array.length);
 	for(var i=0 ; i<array.length ; i++){
-		if(array[i] != null){
 		var json ={
 				  "oHeader": {
 				    "sAppID": Ref,  // application id
@@ -1264,8 +1260,7 @@ function UploadAllImgs(Ref,array,callType)
 				  }
 				};
 //		console.log("image JSon : "+JSON.stringify(json));
-		uploadImage(json,callType);	
-		}	
+		uploadImage(json,callType);		
 	}
 	if(callType=="ipa")
 		{
@@ -1958,7 +1953,6 @@ $scope.remove_file = function(filetype, id, index) {
 		for(var i=0; i<img_array.length;i++){
 	       if(img_array[i] != null){
 	       	if(img_array[i].kyc_name == filetype){
-	              /*delete img_array[i];*/
 	              img_array.splice(i,1);
 	          }
 	      }

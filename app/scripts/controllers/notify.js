@@ -621,7 +621,6 @@
             return response;
 			
 		}).then(function(data){
-
             if(data){            
                 var objArray = _.map(_.pluck(data.aAppImgDtl, 'aImgMap'),function(data){
                         return data;
@@ -653,6 +652,9 @@
                             if(!_.isUndefined(data) || !_.isNull(data)){
                                 if(!_.isEmpty(data.sByteCode)){
                                 val["sByteCode"] = "data:image/png;base64,"+data.sByteCode; 
+                                if(val.sReason == null){
+                                    val.sReason = "";
+                                }
                                  $scope.imageDataArray.push(val); 
                                 }  
                             }
@@ -1249,6 +1251,7 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
     $scope.active = ImageFeed.index;
     var rejectedImgArray = [];
     $scope.iseditMode = ImageFeed.editMode;
+    var backUpImgData = angular.copy(ImageFeed.docData);
     
     if(ImageFeed.isImage){
         $scope.imageTag = 1;
@@ -1275,7 +1278,7 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
                     "sReason":""
                   }
             };
-            $scope.imageService(json,$scope.slides[index]);
+            $scope.imageService(json,$scope.slides[index],index);
         }
     }
 
@@ -1299,22 +1302,19 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
                         "sReason":$scope.slides[index].sReason
                       }
                     };
-            $scope.imageService(json,$scope.slides[index]);
+            $scope.imageService(json,$scope.slides[index],index);
          }
     }
 
-    $scope.imageService = function(json,object){
+    $scope.imageService = function(json,object,index){
          var URL ='update-image-status';
          RestService.saveToServer(URL,json).then(function(Response){
                 if(Response.sStatus == "SUCCESS"){
-                   /* if(json.oUpldDtl.sStat == "Reject"){
-                        rejectedImgArray.push(object);
-                        console.log(rejectedImgArray);
-                    }*/
+                    backUpImgData[index].sStat = json.oUpldDtl.sStat;
+                     backUpImgData[index].sReason = json.oUpldDtl.sReason;
                 }else{
-                    $scope.slides[index].sReason = '';
+                    $scope.slides[index].sStat = backUpImgData[index].sStat;
                 }
-                   
         });
     }
 
@@ -1393,7 +1393,7 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
     }
 
     $scope.closeModal = function(){
-          $uibModalInstance.dismiss($scope.slides);
+          $uibModalInstance.dismiss(backUpImgData);
     };
 
 }]),
