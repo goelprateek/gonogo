@@ -787,7 +787,7 @@
 									<div class="row clearfix customRow">
 										<div class="col-md-12 height">
 											<help>Asset Category*</help>
-											<select id="ast" ng-model="assetCategory" class="ast customSelect" ng-options = "d for d in assetArray track by d">
+											<select id="ast" ng-model="assetCategory" class="ast customSelect" ng-options = "d for d in assetArray track by d" ng-change="fetchAssetMake(assetCategory)">
 												 <option value="" >Select Category</option>
 											</select>
 											<img alt="" src="images/select-arrow.png" class="customarrow"
@@ -800,7 +800,7 @@
 											<help>Make*</help>
 											<!-- <input type="text" id="mk" ng-model="mk" class="customInput"
 												placeholder="Make*" /> -->
-												<select id="mk" ng-model="mk" class="mk customSelect" ng-options = "d for d in makeTags track by d" ng-change="assetModel(assetCategory,mk)">
+												<select id="mk" ng-model="mk" class="mk customSelect" ng-options = "d for d in makeTags track by d" ng-change="fetchAssetModel(assetCategory,mk)">
 												 	<option value="" >Select Make</option>
 											    </select> 
 											        <img alt="" src="images/select-arrow.png" class="customarrow"
@@ -1441,7 +1441,7 @@
 									<help>Make*</help>
 									<!-- <input type="text" id="mk1" ng-model="mk" class="customInput"
 										placeholder="Make*" /> -->
-										<select id="mk1" ng-model="mk" class="mk customSelect" ng-options = "d for d in makeTags track by d" ng-change="assetModel(assetCategory,mk)">
+										<select id="mk1" ng-model="mk" class="mk customSelect" ng-options = "d for d in makeTags track by d" ng-change="fetchAssetModel(assetCategory,mk)">
 											<option value="">Select Make</option>
 										</select> <img alt="" src="images/select-arrow.png" class="customarrow"
 																style="right: 13%" />
