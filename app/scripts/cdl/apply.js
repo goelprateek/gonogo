@@ -507,7 +507,7 @@
 								{
 									var data = Response;
 									if(data[0]){
-										for(info=0; info<data[0].aImgMap.length; info++)
+										for(var info=0; info<data[0].aImgMap.length; info++)
 										{
 											// console.log("Response[applicant].aImgMap[info].sImgType :"+data[0].aImgMap[info].sImgType);
 											kyc_img(data[0].aImgMap[info].sImgType , data[0].aImgMap[info].sImgID, data[0].aImgMap[info].sStat, data[0].aImgMap[info].sReason, data[0].aImgMap[info].sImgVal);
@@ -560,7 +560,7 @@
 					$scope.check_status(statusJSON);
 				},3000);
 //				$scope.statusObject.sAppStat="Decline";
-				  $("#afterSubmit").show();
+			  	$("#afterSubmit").show();
 			}
 			else if(currentStage=="CR_Q")
 			{	$scope.fname = Response.oReq.oApplicant.oApplName.sFirstName;
@@ -2393,11 +2393,12 @@ $("#astCst").keyup(function(){
 });
 // ****************************************** ASSET MODEL
 $scope.modelTags = [];
-$(".ast").change(function()
-{
-	$scope.assetCategory=$(this[this.selectedIndex]).val();
-	$scope.fetchAssetMake($scope.assetCategory);
-});
+
+// $(".ast").change(function()
+// {
+// 	$scope.assetCategory=$(this[this.selectedIndex]).val();
+// 	$scope.fetchAssetMake($scope.assetCategory);
+// });
 
 //to get all model for selected make
 /*$('#mk1').on('autocompleteselect', function (e, ui) {
