@@ -161,11 +161,12 @@
 				/*$analytics.eventTrack(pAction, {  category: pCategory, label: pLabel });*/
 
 				var dimensions={};
-				dimensions['dimension'+ this.getConstDimension("DIMEN_REFERENCE_ID")]="1.0";
+				dimensions['dimension'+ this.getConstDimension("DIMEN_VERSION_NAME")]="1.0";
 				dimensions['dimension'+ this.getConstDimension("DIMEN_USER_ID")]=UserService.getCurrentUser().username;
 				dimensions['dimension'+ this.getConstDimension("DIMEN_API_CALL")]=pApiName;
 				dimensions['dimension'+ this.getConstDimension("DIMEN_SCREEN_NAME")]=pScreenName;
 				dimensions['dimension'+ this.getConstDimension("DIMEN_BROWSER")]=WEB_UTILS.getBrowser();
+				dimensions['dimension'+ this.getConstDimension("DIMEN_REFERENCE_ID")]=pReferenceID;
 
 				ga('send', 'event', pCategory, pAction, dimensions);
 			}
