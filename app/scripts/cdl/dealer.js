@@ -43,6 +43,11 @@
 		$scope.onDealerSelected=function(dealerSelected){
 			
 			if(!_.isUndefined(dealerSelected)) {
+
+				GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_DEALER"),
+							 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
+							 GNG_GA.getConstAction("ACTION_CLICK_VERIFY_OTP"),
+							 "Verify OTP Clicked",1);
 				
 				var dealerObj = JSON.parse(dealerSelected);
 

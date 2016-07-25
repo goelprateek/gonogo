@@ -692,7 +692,13 @@
 		$("#KYCList").addClass("active");
 	}*/
 	
-	$scope.otpService=function(){	
+	$scope.otpService=function(){
+
+		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),
+							 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
+							 GNG_GA.getConstAction("ACTION_CLICK_GET_OTP"),
+							 "Get OTP Button Clicked",1);
+
 		$scope.ojs={	  "USER_ID":$scope.username, "PASSWORD":$scope.ePassword,
 						  "INSTITUTION_ID":$scope.InstitutionID,
 						  "inputJson_":{ "MOBILE-NUMBER":$("#tmob").val() }
@@ -762,6 +768,12 @@ $scope.clickEvent = function(type)
 switch (type) {
 case "getOTP":
 //	changees
+	
+	GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),
+					 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
+					 GNG_GA.getConstAction("ACTION_CLICK_GET_OTP"),
+					 "Get OTP Button Clicked",1);
+
 	var bool= validation();
 //	var bool= true;
 	if(bool)
@@ -774,6 +786,12 @@ case "getOTP":
 case "verifybtn":
 	/*containerHeight=containerHeight-40;
 	$(".getheight").css("height",containerHeight+"px");*/
+
+	GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),
+				 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
+				 GNG_GA.getConstAction("ACTION_CLICK_VERIFY_OTP"),
+				 "Verify OTP Clicked",1);
+
 	var otp=$("#txt1").val()+$("#txt2").val()+$("#txt3").val()+$("#txt4").val()+$("#txt5").val();
 	if(otp.length==5)
 	{	
@@ -799,7 +817,13 @@ case "verifybtn":
 //		$("#main_error").text("Please enter OTP");
 	}
 	break;	
-case "Resend":
+	case "Resend":
+	
+		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),
+				 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
+				 GNG_GA.getConstAction("ACTION_CLICK_RESEND_OTP"),
+				 "Resend OTP Clicked",1);
+
 			$rootScope.errHead="";
 			$rootScope.errorMsg="";
 			$scope.otpService();
@@ -809,6 +833,11 @@ case "Resend":
 			$("#Skip").show();
 			break;
 case "Skip":
+		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),
+				 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
+				 GNG_GA.getConstAction("ACTION_CLICK_SKIP_OTP"),
+				 "Skip OTP Clicked",1);
+
 			$scope.verif=false;
 			$(".otp").val("");
 			/*containerHeight=containerHeight-40;

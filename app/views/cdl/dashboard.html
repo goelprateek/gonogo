@@ -1,13 +1,13 @@
 <div class="col-md-12">
 	<div style="margin-top:50px;" class="row clearfix" >
 		<div class="form-group col-md-4">
-			<select id="DisplayType" name="ApplicationList" ng-model="applicationList" class="form-control control-select inputMaterial">
+			<select id="DisplayType" name="ApplicationList" ng-model="dashboardType" class="form-control control-select inputMaterial" ng-change="onDashboardTypeChange()">
 				<option value="ApplicationList">Application List</option>
 				<option value="ApplicationSummary">Application Summary</option>
 			</select>
 			<label>Type</label>
 		</div>
-		<div class="form-group col-md-4" ng-if="applicationList=='ApplicationList'">			
+		<div class="form-group col-md-4" ng-if="dashboardType=='ApplicationList'">			
 			<select id="Duration" name="Duration" ng-model="$parent.duration" class="form-control control-select inputMaterial" ng-change="fetchDashboardList()">
 				<option value="LastWeek">Last Week</option>
 				<option value="LastMonth">Last Month</option>
@@ -15,17 +15,17 @@
 			</select>
 			<label>Duration</label>
 		</div>
-		<div class="form-group col-md-4" ng-if="applicationList=='ApplicationList'"><!--  -->
+		<div class="form-group col-md-4" ng-if="dashboardType=='ApplicationList'"><!--  -->
 			<input type="text" name="search" id="search" ng-model-onblur fetch-dashboard="fetchDashboardList()" class="form-control inputMaterial" ng-model="$parent.searchText" duration-selected="duration" required >
 			<label>Search</label>
 		</div>
 	</div>	
-	<div class="row clearfix" id="mtd_container" ng-controller="BarGraphController" ng-if="applicationList=='ApplicationSummary'">
+	<div class="row clearfix" id="mtd_container" ng-controller="BarGraphController" ng-if="dashboardType=='ApplicationSummary'">
 		<div class="col-md-12" style="overflow: hidden;" id="mtd-box">
 			<span class="CatError"></span>
 		</div>
 	</div>
-	<div class="form-group" style="height:430px;overflow-y: auto;" ng-if="applicationList=='ApplicationList'">
+	<div class="form-group" style="height:430px;overflow-y: auto;" ng-if="dashboardType=='ApplicationList'">
 		<table class="table table-striped" style="margin-top:30px;overflow-x:auto;">
 			<thead>
 				<tr>

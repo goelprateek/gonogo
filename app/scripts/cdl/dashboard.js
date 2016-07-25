@@ -10,8 +10,9 @@ app.controller('DecisionViewController', function ($scope,$uibModalInstance, dat
 //	 };
 });
 
-app.controller("DashboardController",["$scope","$filter",'sharedService','$location',"$uibModal",'APP_CONST',"RestService","UserService","$rootScope",function($scope,$filter,sharedService,$location,$uibModal,APP_CONST,RestService,UserService,$rootScope){
-	$scope.applicationList="ApplicationList";
+app.controller("DashboardController",["$scope","$filter",'sharedService','$location',"$uibModal",'APP_CONST',"RestService","UserService","$rootScope","GNG_GA",
+							function($scope,$filter,sharedService,$location,$uibModal,APP_CONST,RestService,UserService,$rootScope,GNG_GA){
+	$scope.dashboardType="ApplicationList";
 	$scope.duration="LastYear";
 	$scope.dashboardResult=[];
 
@@ -26,10 +27,17 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 	$scope.searchText   = '';     // set the default search/filter term
 	$scope.query   = '';
 
+	$scope.onDashboardTypeChange=function(){
+		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_DASHBOARD"),
+				 		GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
+				 		GNG_GA.getConstAction("ACTION_CLICK_DASHBOARD_DATA_TYPE"),
+				 		$scope.dashboardType,1);
+	}
+
 	$scope.fetchDashboardList=function(){
 		//alert("Search String: "+$scope.searchText+" Duration: "+$scope.duration);
-		
-	var currentUser=UserService.getCurrentUser();
+	
+		var currentUser=UserService.getCurrentUser();
 
 		if(!_.isUndefined(currentUser.id) )
 		{
@@ -82,16 +90,22 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 		var dashboardJson=JSON.stringify(dashboardJson);
 		// var urlConst= APP_CONST.getConst('BASE_URL_GNG');
 		console.log("APP_CONST.getConst('BASE_URL_GNG')" + APP_CONST.getConst('BASE_URL_GNG'));
-		RestService.saveToServer("dashboard-detail",dashboardJson)
 
+		RestService.saveToServer("dashboard-detail",dashboardJson)
 		.then(function(data){
-			console.log("dashboard-detail response:");
-			console.log(data);
+			// console.log("dashboard-detail response:");
+			// console.log(data);
 			$scope.dashboardResult=data;
 		});
 	};
 	
 	$scope.loadCDLForm=function(refID,decisionStatus){
+
+		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_DEALER"),
+					 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
+					 GNG_GA.getConstAction("ACTION_CLICK_DASHBOARD_APPLICATION_CLICKED"),
+					 "Dashboard Application Clicked",1,"","",refID);
+
 		sharedService.setRefID(refID);
 		sharedService.setDecisionStatus(decisionStatus);
 		$location.path( "/cdl/customerForm" );
@@ -102,24 +116,29 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
     $scope.search = function (row) {
 //    	console.log("Row:");
 //    	console.log(row);
-    	
+
     	var name=row.sName;
     	name=name.toLowerCase();
-    	
+
     	var query=$scope.query || "";
     	query=query.toLowerCase();
 
     	var stage=row.sStages;
     	stage=stage.toLowerCase();
-    	
+
     	var refID=row.sRefId;
     	refID=refID.toLowerCase();
-    	
+
     	var amt=row.dAmtApprvd;
-    	
+
     	var scheme=row.sScheme;
     	scheme=scheme.toLowerCase();
-    	
+
+		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_DEALER"),
+					 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
+					 GNG_GA.getConstAction("ACTION_CLICK_DASHBOARD_SEARCH"),
+					 "Dashboard Search Clicked",1);
+
         return !!((name.indexOf(query || '') !== -1 
         		|| stage.indexOf(query || '') !== -1
         		|| refID.indexOf(query || '') !== -1
@@ -127,7 +146,13 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
         		|| scheme.indexOf(query || '') !== -1));
     };
 
-    $scope.moreClicked=function(decision,remark,subject){    	
+    $scope.moreClicked=function(decision,remark,subject){ 
+
+		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_DEALER"),
+					 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
+					 GNG_GA.getConstAction("ACTION_CLICK_DASHBOARD_APPLICATION_MORE_CLICKED"),
+					 "Dashboard Application More Clicked",1);
+   	
     	var data={
 			decision:decision,
 			remark:remark,
@@ -138,7 +163,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
     
 	$scope.shwDecisionModal = function (size,data) {
 		 //alert('modal baseURL'+baseURL);
-		 var modalInstance = $uibModal.open({
+	 	var modalInstance = $uibModal.open({
 	 		animation: true,
 	 		templateUrl: 'views/cdl/dashboard-result.html',
 	 		controller: 'DecisionViewController',
@@ -149,7 +174,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 	 				return data;
 	 			}
 	 		}
-		 });
+		});
 	};
 }]);
 

@@ -20,10 +20,9 @@
 	    SCREEN={
 		    SCRN_LOGIN : "Login Screen",
 		    SCRN_CDL_APPLY : "CDL Apply Screen",
-		    CAT_EXCEPTION : "Exception",
-		    CAT_INTERNET_CHECK : "Internet_Check",
-		    CAT_WEB_EVENT : "Web_Event",
-		    CAT_PACKAGE_INFO : "package_info",
+		    SCRN_CDL_DEALER : "CDL Dealer Screen",
+		    SCRN_CDL_DASHBOARD : "CDL Dashboard Screen",
+		    SCRN_CDL_CUSTOMER_FORM : "CDL Customer Form Screen"
 		},
 	    CATEGORY={
 		    CAT_BUTTON_CLICK : "Button_Click",
