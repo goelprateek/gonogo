@@ -419,6 +419,8 @@
                       templateUrl: 'views/templates/modal.html',
                       controller: 'imagesCtr',
                       size: 'lg',
+                      backdrop: 'static',
+                      keyboard: false,
                       resolve:{
                         ImageFeed : function (){
                             var imageData;

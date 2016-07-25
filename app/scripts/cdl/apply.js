@@ -1247,6 +1247,7 @@ function UploadAllImgs(Ref,array,callType)
 {
 	// console.log("upload Image array :"+array.length);
 	for(var i=0 ; i<array.length ; i++){
+		if(array[i] != null){
 		var json ={
 				  "oHeader": {
 				    "sAppID": Ref,  // application id
@@ -1263,7 +1264,8 @@ function UploadAllImgs(Ref,array,callType)
 				  }
 				};
 //		console.log("image JSon : "+JSON.stringify(json));
-		uploadImage(json,callType);		
+		uploadImage(json,callType);	
+		}	
 	}
 	if(callType=="ipa")
 		{
@@ -1570,7 +1572,7 @@ $scope.submitApplication=function(UrlKey)
 			$rootScope.errHead = "Status"
 			$rootScope.errorMsg = "Data Saved Successfully.";
 		}
-		
+		 console.log("before upload:"+img_array.length);
 		UploadAllImgs(data.sRefID,img_array,"submit");
 		
 		$scope.REFID = data.sRefID;
@@ -1952,6 +1954,15 @@ $scope.remove_file = function(filetype, id, index) {
 				$("#selectImgInit").attr("src","");
 				$scope.profileImage=false;
 		}
+	console.log(img_array.length);
+		for(i=0; i<img_array.length;i++){
+	       if(img_array[i] != null){
+	       	if(img_array[i].kyc_name == filetype){
+	              delete img_array[i];
+	          }
+	      }
+	  }
+	  console.log(img_array.length);
 		
 };// end file remove method
 
