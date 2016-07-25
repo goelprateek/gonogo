@@ -1955,10 +1955,11 @@ $scope.remove_file = function(filetype, id, index) {
 				$scope.profileImage=false;
 		}
 	console.log(img_array.length);
-		for(i=0; i<img_array.length;i++){
+		for(var i=0; i<img_array.length;i++){
 	       if(img_array[i] != null){
 	       	if(img_array[i].kyc_name == filetype){
-	              delete img_array[i];
+	              /*delete img_array[i];*/
+	              img_array.splice(i,1);
 	          }
 	      }
 	  }

@@ -912,8 +912,6 @@ $scope.onchange = function(id) {
 }
 
 $scope.updateLosData = function(status){
-    console.log(status);
-    console.log($scope.objectSet.oLosDtls);
 	var losStat = status;
     var losId = '';
      var utr = '';
@@ -921,7 +919,6 @@ $scope.updateLosData = function(status){
         losId = $scope.objectSet.oLosDtls.sLosID;
         utr = $scope.objectSet.oLosDtls.sUtr;
     }
-    console.log($scope.utrVal);
 
     if((!$scope.utrVal && ( utr!=null && utr!='')) || ($scope.utrVal)){
     	if((losId !=null && losId != "") && (losStat !=null && losStat !='')){
@@ -943,7 +940,7 @@ $scope.updateLosData = function(status){
 			};	 
             console.log(jsondata);
     		 var URL='update-los-details';
-    		/* RestService.saveToServer(URL,jsondata).then(function(Response){
+    		RestService.saveToServer(URL,jsondata).then(function(Response){
     				if(Response.status == "SUCCESS"){
     					alert("LOS Status updated successfully");
     					$scope.losIdval = true;
@@ -951,7 +948,7 @@ $scope.updateLosData = function(status){
     				}else{
     					alert("LOS Status is not updated successfully");
     				}
-    		 });*/
+    		 });
     	}
 	}
 }
