@@ -6,7 +6,8 @@
 	
 	var app = angular.module("gng.cdl.dealer",[]);
 
-	app.controller("DealerController",["$rootScope","$scope","$location",'UserService','APP_CONST',function($rootScope,$scope,$location,UserService,APP_CONST){
+	app.controller("DealerController",["$rootScope","$scope","$location",'UserService','APP_CONST','GNG_GA',
+							function($rootScope,$scope,$location,UserService,APP_CONST,GNG_GA){
 
 		var user = UserService.getCurrentUser();
 
@@ -39,7 +40,6 @@
 			$location.path(APP_CONST.getConst('APP_CONTEXT'));
 		}
 
-		
 		$scope.onDealerSelected=function(dealerSelected){
 			
 			if(!_.isUndefined(dealerSelected)) {
@@ -66,6 +66,4 @@
 			}
 		}
 	}]);
-
-
 }).call(this)

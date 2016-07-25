@@ -89,7 +89,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 		
 		var dashboardJson=JSON.stringify(dashboardJson);
 		// var urlConst= APP_CONST.getConst('BASE_URL_GNG');
-		console.log("APP_CONST.getConst('BASE_URL_GNG')" + APP_CONST.getConst('BASE_URL_GNG'));
+		//console.log("APP_CONST.getConst('BASE_URL_GNG')" + APP_CONST.getConst('BASE_URL_GNG'));
 
 		RestService.saveToServer("dashboard-detail",dashboardJson)
 		.then(function(data){
@@ -110,7 +110,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 		sharedService.setDecisionStatus(decisionStatus);
 		$location.path( "/cdl/customerForm" );
 	};
-	
+
 	$scope.fetchDashboardList();
 
     $scope.search = function (row) {
@@ -134,16 +134,11 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
     	var scheme=row.sScheme;
     	scheme=scheme.toLowerCase();
 
-		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_DEALER"),
-					 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
-					 GNG_GA.getConstAction("ACTION_CLICK_DASHBOARD_SEARCH"),
-					 "Dashboard Search Clicked",1);
-
-        return !!((name.indexOf(query || '') !== -1 
+        return (name.indexOf(query || '') !== -1 
         		|| stage.indexOf(query || '') !== -1
         		|| refID.indexOf(query || '') !== -1
         		|| amt==query
-        		|| scheme.indexOf(query || '') !== -1));
+        		|| scheme.indexOf(query || '') !== -1);
     };
 
     $scope.moreClicked=function(decision,remark,subject){ 
@@ -178,7 +173,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 	};
 }]);
 
-app.directive('ngModelOnblur', function() {
+app.directive('ngModelOnblur',['GNG_GA', function(GNG_GA) {
     return {
         restrict: 'A',
         require: 'ngModel',
@@ -195,10 +190,15 @@ app.directive('ngModelOnblur', function() {
                 	ngModelCtrl.$setViewValue(elm.val());
                 	if(elm.val().length>=0)
                 	{
+						GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_DEALER"),
+									 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
+									 GNG_GA.getConstAction("ACTION_CLICK_DASHBOARD_SEARCH"),
+									 "Dashboard Search Clicked",1);
+
                 		scope.fetchDashboard();
                 	}                   
                 });         
             });
         }
     };
-});
+}]);
