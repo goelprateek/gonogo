@@ -8,7 +8,7 @@
 		  getAllpolicy: function(InstitutionID ,callback) {
 			return	$http({
 					method : 'GET',
-					url : APP_CONST.getConst('BASE_URL_SCOR')+'GetAllPolicy',
+					url : APP_CONST.getConst('BASE_URL_SCORE')+'GetAllPolicy',
 					params : {'INSTITUTION_ID': InstitutionID},
 					headers : {'Content-Type' : 'application/json'}
 				   
