@@ -42,7 +42,7 @@
 			</div>
 			<div class="col-md-3">
 				<label class="control-label">LOS Status</label> 		
-					<select class="form-control" ng-model="objectSet.oLosDtls.sStat" data-ng-change="losStatusChange(objectSet.oLosDtls.sStat)" >
+					<select class="form-control" ng-disabled="editLosStat" ng-model="objectSet.oLosDtls.sStat" data-ng-change="losStatusChange(objectSet.oLosDtls.sStat)" >
 						<option value="">Please Select LOS Status</option>
 						<option value="LOS_QDE">LOS_QDE</option>
 						<option value="LOS_APRV">LOS_APRV</option>
@@ -52,7 +52,7 @@
 					</select>
 			</div>
 		</div>
-		<div class="row clearfix">
+		<div class="row clearfix" ng-if="template == 'notification'">
 			<div class="col-md-3" style="float: right;">
 				<a class="add-button-div-notification" ng-click="updateLosData(objectSet.oLosDtls.sStat)"
 				style="float: right;margin-top: 7px;margin-bottom: -4px; width: 35%;">Update</a>
@@ -119,22 +119,21 @@
 					    <p ng-message="pattern">Please select valid date of birth</p>
 					    <p ng-message="required">Please select date of birth</p>
 					</div>
-				</div>
-					<div class="col-md-3">
-					<label class="control-label">Gender</label><br /> <input
+				</div>				
+			</div>
+			<div class="row clearfix">
+				<div class="col-md-3">
+					<label class="control-label">Gender</label> <input
 						type="radio" name="Gender" checked="checked" value="Male"
 						ng-model="objectSet.oAppReq.oReq.oApplicant.sApplGndr" disabled="disabled" /> Male &nbsp; <input type="radio"
 						name="Gender" value="Female" ng-model="objectSet.oAppReq.oReq.oApplicant.sApplGndr" disabled="disabled" /> Female
 				</div>
 				<div class="col-md-3">
-					<label class="control-label">Marital Status</label><br /> <input
+					<label class="control-label">Marital Status</label><input
 						type="radio" name="mstatus" checked="checked" value="Married"
 						ng-model="objectSet.oAppReq.oReq.oApplicant.sMarStat" disabled="disabled" /> Married &nbsp; <input type="radio"
 						 value="Single" ng-model="objectSet.oAppReq.oReq.oApplicant.sMarStat" disabled="disabled" /> Single
 				</div>
-				
-			</div>
-			<div class="row clearfix">
 				<div class="col-md-3">
 					<label class="control-label">Credit Card No</label><input
 						class="form-control" ng-model="objectSet.oAppReq.oReq.oApplicant.sCreditCardNum" type="text" 
@@ -145,34 +144,36 @@
 						class="form-control" ng-model="objectSet.oAppReq.oReq.oApplication.iLoanTenor" type="text" 
 						maxlength="6"  disabled="disabled">
 				</div>
+			</div>
+			<div class="row clearfix">
 				<div class="col-md-3">
 					<label class="control-label">Constitution</label><input
 						class="form-control" type="text"  ng-model="objectSet.oAppReq.oReq.oApplicant.aEmpl[0].sConst"
 						 disabled="disabled">
 				</div>
-			<div class="col-md-3">
-					<label class="control-label">Education</label><input
-						class="form-control" type="text" ng-model="objectSet.oAppReq.oReq.oApplicant.sEdu"
-						 disabled="disabled">
+				<div class="col-md-3">
+						<label class="control-label">Education</label><input
+							class="form-control" type="text" ng-model="objectSet.oAppReq.oReq.oApplicant.sEdu"
+							 disabled="disabled">
+					</div>
+				<div class="col-md-3">
+						<label class="control-label">Age</label><input
+							class="form-control" type="text" ng-model="objectSet.oAppReq.oReq.oApplicant.iAge"
+							 disabled="disabled">
+				</div>
+				<div class="col-md-3">
+					<label class="control-label">Refer To Credit</label><input
+						class="form-control" type="text" ng-model="objectSet.oAppReq.oReq.sSuspAct"
+						disabled="disabled">
 				</div>
 			</div>
 			<div class="row clearfix">
-			<div class="col-md-3">
-					<label class="control-label">Age</label><input
-						class="form-control" type="text" ng-model="objectSet.oAppReq.oReq.oApplicant.iAge"
-						 disabled="disabled">
+				<div class="col-md-3">
+					<label class="control-label">DSA Name</label><input
+						class="form-control" type="text" ng-model="objectSet.oAppReq.oHeader.sDsaId.split('@')[0]"
+						disabled="disabled">
+				</div>
 			</div>
-			<div class="col-md-3">
-				<label class="control-label">Refer To Credit</label><input
-					class="form-control" type="text" ng-model="objectSet.oAppReq.oReq.sSuspAct"
-					disabled="disabled">
-			</div>
-			<div class="col-md-3">
-				<label class="control-label">DSA Name</label><input
-					class="form-control" type="text" ng-model="objectSet.oAppReq.oHeader.sDsaId"
-					disabled="disabled">
-			</div>
-		</div>
 		</fieldset>
 		<fieldset class="formfield" style="display: block;">
 			<legend>Email Information</legend>
@@ -283,7 +284,7 @@
 						<div class="col-md-3">
 							<label class="control-label">Resi Addr Type</label>
 							<select id="ResidentType" name="residentType" ng-model="address.sResAddrType"
-								class="form-control control-select inputMaterial" ng-disabled="!isUpdating" change-on-blur="onValueChanged('resAddress')" select-required>
+								class="form-control" ng-disabled="!isUpdating" change-on-blur="onValueChanged('resAddress')" select-required>
 								<option value="">Select Resident Type</option>
 								<option ng-repeat="obj in selectResidence" value="{{obj.value}}">{{obj.text}}</option>
 							</select>
@@ -302,19 +303,19 @@
 						<div class="col-md-3">
 							<label class="control-label">Month at city</label>
 							<input
-								class="form-control" name="currentCityPeriod" ng-model="address.iMonthAtCity" type="text" change-on-blur="onValueChanged('resAddress')"
+								class="form-control" name="perCityPeriod" ng-model="address.iMonthAtCity" type="text" change-on-blur="onValueChanged('perAddress')"
 								ng-disabled="!isUpdating" maxlength="3"  ng-pattern="/^[0-9\d]+$/" required only-digits />
-							<div ng-messages="ApplicantForm.currentCityPeriod.$error" ng-show="ApplicantForm.currentCityPeriod.$touched" class="errorMsg" >
+							<div ng-messages="ApplicantForm.perCityPeriod.$error" ng-show="ApplicantForm.perCityPeriod.$touched" class="errorMsg" >
 								<p ng-message="required">Please enter Period of Stay</p>
 								<p ng-message="pattern">Please enter valid Period of Stay</p>
 							</div>
 						</div>
 						<div class="col-md-3">
 							<label class="control-label">Month at addr</label>
-							<input class="form-control" name="currentResidencePeriod" ng-model="address.iMonthAtAddr" type="text"
-							ng-disabled="!isUpdating" change-on-blur="onValueChanged('resAddress')"
+							<input class="form-control" name="perResidencePeriod" ng-model="address.iMonthAtAddr" type="text"
+							ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')"
 							this-earlier-than="address.iMonthAtCity" maxlength="3" ng-pattern="/^[0-9\d]+$/" required only-digits>
-							<div ng-messages="ApplicantForm.currentResidencePeriod.$error" ng-show="ApplicantForm.currentResidencePeriod.$touched" class="errorMsg" >
+							<div ng-messages="ApplicantForm.perResidencePeriod.$error" ng-show="ApplicantForm.perResidencePeriod.$touched" class="errorMsg" >
 								<p ng-message="required">Please enter Period of Stay</p>
 								<p ng-message="pattern">Please enter valid Period of Stay</p>
 								<p ng-message="thisEarlierThan">Residence stay should be less than city stay </p>
@@ -364,52 +365,70 @@
 						<div class="col-md-3">
 							<label class="control-label">Address Line 1</label> <input
 								class="form-control" ng-model="address.sLine1" type="text"
-								 disabled="disabled">
+								name="address1" ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')">
 						</div>
 						<div class="col-md-3">
-							<label class="control-label">Address Line 2</label> <input
-								class="form-control" ng-model="address.sLine2" type="text"
-								disabled="disabled" >
+							<label class="control-label">Address Line 2</label>
+							<input class="form-control" ng-model="address.sLine2" type="text" name="address2" ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')">
 						</div>
 						<div class="col-md-3">
-							<label class="control-label">Address Line 3</label> <input
-								class="form-control" ng-model="address.sLine3" type="text"
-								disabled="disabled" >
+							<label class="control-label">Address Line 3</label>
+							<input class="form-control" ng-model="address.sLine3" type="text" name="address3" ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')">
 						</div>
 						<div class="col-md-3">
-							<label class="control-label">City</label> <input
-								class="form-control" ng-model="address.sCity" type="text" disabled="disabled">
+							<label  id="CurrentPincode" class="control-label">Pincode</label> <input
+								class="form-control" ng-model="address.iPinCode" type="text" name="PinCode"
+								maxlength="6"  ng-disabled="!isUpdating" ng-keyup="getStateCity($event,address)">
 						</div>
 					</div>
 					<div class="row clearfix">
 						<div class="col-md-3">
 							<label class="control-label" style="float: none;">State </label>
-						 	<input	id="statelist" class="form-control" ng-model="address.sState" type="text" name="State" disabled="disabled">
+						 	<input
+								id="statelist" class="form-control" ng-model="address.sState" type="text" name="State" ng-disabled="true">
 						</div>
 						<div class="col-md-3">
-							<label class="control-label">Pin Code</label> <input
-								class="form-control" ng-model="address.iPinCode" value="" type="text" name="PinCode" maxlength="6"  disabled="disabled">
+							<label class="control-label">City</label> <input
+								class="form-control" ng-model="address.sCity" type="text" ng-disabled="true" change-on-blur="onValueChanged('perAddress')">
 						</div>
 						<div class="col-md-3">
-							<label class="control-label">Monthly Rent</label>
-							<input class="form-control" ng-model="address.dRentAmt" type="text" 
-							maxlength="6"  disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label class="control-label">Resi Addr Type</label> <input
-								class="form-control" ng-model="address.sResAddrType" type="text"
-								maxlength="6"  disabled="disabled">
-						</div>
-					
-						<div class="row clearfix">
-							<div class="col-md-3">
-								<label class="control-label">Month at addr</label> <input
-								class="form-control" ng-model="address.iMonthAtAddr" type="text"  disabled="disabled">
+							<label class="control-label">Residence Address Type</label>
+							<select id="ResidentType" name="residentType" ng-model="address.sResAddrType"
+								class="form-control control-select inputMaterial" ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')" select-required>
+								<option value="">Select Resident Type</option>
+								<option ng-repeat="obj in selectResidence" value="{{obj.value}}">{{obj.text}}</option>
+							</select>
+							<div ng-messages="ApplicantForm.residentType.$error" ng-show="ApplicantForm.residentType.$touched" class="errorMsg">
+								<p ng-message="selectrequired">Please select Current Resident Type </p>
 							</div>
-							<div class="col-md-3">
-								<label class="control-label">Month at city</label> <input
-								class="form-control" type="text"  ng-model="address.iMonthAtCity"
-								 disabled="disabled">
+						</div>					
+						<div class="col-md-3" ng-if="address.sResAddrType.indexOf('RENTED') != -1">
+							<label class="control-label">Monthly Rent</label>
+							<input
+								class="form-control" ng-model="address.dRentAmt" type="text" 
+								 ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')">
+						</div>
+					</div>
+					<div class="row clearfix">						
+						<div class="col-md-3">
+							<label class="control-label">Month at city</label>
+							<input
+								class="form-control" name="currentCityPeriod" ng-model="address.iMonthAtCity" type="text" change-on-blur="onValueChanged('perAddress')"
+								ng-disabled="!isUpdating" maxlength="3"  ng-pattern="/^[0-9\d]+$/" required only-digits />
+							<div ng-messages="ApplicantForm.currentCityPeriod.$error" ng-show="ApplicantForm.currentCityPeriod.$touched" class="errorMsg" >
+								<p ng-message="required">Please enter Period of Stay</p>
+								<p ng-message="pattern">Please enter valid Period of Stay</p>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<label class="control-label">Month at addr</label>
+							<input class="form-control" name="currentResidencePeriod" ng-model="address.iMonthAtAddr" type="text"
+							ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')"
+							this-earlier-than="address.iMonthAtCity" maxlength="3" ng-pattern="/^[0-9\d]+$/" required only-digits>
+							<div ng-messages="ApplicantForm.currentResidencePeriod.$error" ng-show="ApplicantForm.currentResidencePeriod.$touched" class="errorMsg" >
+								<p ng-message="required">Please enter Period of Stay</p>
+								<p ng-message="pattern">Please enter valid Period of Stay</p>
+								<p ng-message="thisEarlierThan">Residence stay should be less than city stay </p>
 							</div>
 						</div>
 					</div>
@@ -476,11 +495,17 @@
 						id="projectname" ng-model="dealer.sAssetMake" class="form-control"
 						type="text" name="Project" disabled="disabled">
 				</div>
-					<div class="col-md-3">
+				<div class="col-md-3">
 					<label class="control-label">Model</label> <input
 						 ng-model="dealer.sModelNo" class="form-control"
 						type="text" disabled="disabled">
 				</div>
+				<div class="col-md-3">
+					<label class="control-label">Price</label> <input
+						 ng-model="dealer.sPrice" class="form-control"
+						type="text" disabled="disabled">
+				</div>
+
 			</div>
 			<div class="row clearfix" ng-if="objectSet.oAppReq.oReq.oApplication.sLnPurp!=null">
 				<div class="col-md-3">
@@ -542,31 +567,30 @@
 				<div class="row clearfix">
 				<div class="col-md-3">
 					<label class="control-label">Current Stage</label> <input
-						class="form-control" ng-model="currStage" type="text"
+						class="form-control" ng-model="objectSet.oAppReq.sCurrentStageId" type="text"
 						 disabled="disabled">
 				</div>
 				<div ng-repeat="data in objectSet.aAppScoRslt" ng-if="objectSet.aAppScoRslt!=''">
-				<div class="col-md-3">
-					<label class="control-label">{{data.sFldName}}</label>
-					<input ng-if="data.sFldName!='PAN Verification'" ng-model="data.sFldVal" class="form-control" type="text" disabled="disabled">	
-					<input ng-if="data.sFldName =='PAN Verification'"
-					ng-model="data.sMsg" class="form-control" type="text" disabled="disabled">
+					<div class="col-md-3">
+						<label class="control-label" ng-if="data.sFldName=='Residential Address Score'">Residential Addr Score</label>
+						<label class="control-label" ng-if="data.sFldName!='Residential Address Score'">{{data.sFldName}}</label>
+						<input ng-if="data.sFldName!='PAN Verification'" ng-model="data.sFldVal" class="form-control" type="text" disabled="disabled">	
+						<input ng-if="data.sFldName =='PAN Verification'"
+						ng-model="data.sMsg" class="form-control" type="text" disabled="disabled">
+					</div>
+					<div class="col-md-3" ng-if="data.sFldName =='PAN Verification'">
+						<label class="control-label">PAN Score</label> <input
+							ng-model="data.fNameScore" class="form-control" type="text"
+							 disabled="disabled">
+					</div>
 				</div>
-				<div class="col-md-3" ng-if="data.sFldName =='PAN Verification'">
-					<label class="control-label">PAN Score</label> <input
-						ng-model="data.fNameScore" class="form-control" type="text"
-						 disabled="disabled">
-				</div>
-				</div>
-				<div  class="row clearfix"> 
 					<div class="col-md-3">
 					<a> 
 						<img alt="CIBIL CIR" ng-if="objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]['PDF REPORT']" name="{{pdf}}" data-ng-click="showimage(pdfData,!isImg)"
 						class="custom_img_rounded Report-Icon"
 						src="images/cibil_logo.png"></a> 
+					</div>
 				</div>
-				</div>
-			</div>
 		</fieldset>
 		<fieldset class="formfield" style="display: block;">
 			<legend>Decision</legend>
@@ -619,12 +643,14 @@
 					   	<div class="col-md-3"  ng-repeat="decision in objectSet.oCompRes.scoringServiceResponse['DECISION_RESPONSE'].Details" ng-if="decision.Outcome!=' '">
 							<label class="control-label">Reason </label> <input
 								value="{{decision.RuleName}} : {{decision.Remark}}" class="form-control" type="text" disabled="disabled">
+								<!-- <textarea class="form-control" rows="1" readonly>{{decision.RuleName}} : {{decision.Remark}}</textarea> -->
 						</div>
 					
 						<div class="col-md-3" ng-repeat="outcome in objectSet.oCompRes.scoringServiceResponse['DECISION_RESPONSE'].Details" ng-if="outcome.Outcome!=' '">
 							<label class="control-label"> Outcome</label> <input
 								value="Criteria {{outcome.CriteriaID}} , Outcome :{{outcome.Outcome}} " class="form-control" type="text"
 								 disabled="disabled">
+								<!--  <textarea class="form-control" rows="1" readonly>Criteria {{outcome.CriteriaID}} , Outcome :{{outcome.Outcome}}</textarea> -->
 						</div>
 				</div>
 		</fieldset>				
@@ -662,21 +688,6 @@
 		<!-- 								name="Aadhar Number" placeholder="XXXX XXXX XXXX"> -->
 		<!-- 						</div> -->
 			</div>
-		</fieldset>
-		<fieldset class="formfield" id="kyc_fielset"
-			style="margin-bottom: 40px; display: block;">
-			<legend>KYC Document</legend>
-				<div class="notify-scroll-container" data-ng-if="imageDataArray">
-					 <ul> 
-						<li ng-repeat="d in imageDataArray">
-							<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index,false)"><img ng-src="{{d.sByteCode}}"> </a>
-						</li>
-					 </ul> 
-				</div>
-				<!-- <a>
-					<img alt="CIBIL CIR" ng-if="objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]['PDF REPORT']" name="{{pdf}}" data-ng-click="showimage(pdfData,!isImg)"
-							class="custom_img_rounded Report-Icon"
-							src="images/cibil_logo.png"></a>  -->
 		</fieldset>
 		<fieldset class="formfield" style="display: block;">
 			<legend>IPA Details</legend>
@@ -752,7 +763,18 @@
 				</div>
 				</div>
 		</fieldset>
-		<fieldset class="formfield" id="addtnal_docs"
+		<fieldset class="formfield" id="kyc_fielset" data-ng-if="imageDataArray && imageDataArray.length!=0"
+			style="margin-bottom: 40px; display: block;">
+			<legend>Uploaded Documents</legend>
+				<div class="notify-scroll-container">
+					 <ul style="padding: 0px;"> 
+						<li ng-repeat="d in imageDataArray">
+							<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index,false)"><img ng-src="{{d.sByteCode}}"> </a>
+						</li>
+					 </ul> 
+				</div>
+		</fieldset>
+		<!-- <fieldset class="formfield" id="addtnal_docs"
 			style="margin-bottom: 0px; display: block;">
 			<legend>Additional Documents</legend>
 			<div class="row clearfix">
@@ -805,5 +827,5 @@
 				</a>
 			</div>
 		</div>
-	</fieldset>
+	</fieldset> -->
 </form>

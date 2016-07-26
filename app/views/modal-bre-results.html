@@ -17,14 +17,20 @@
     float: left;
     margin-top: 20px;
     margin-bottom: 20px;
+   	margin-right: 10px;
 }
 
 .modal-lg{
 	width:900px;
 }
+
+.list-group-item{
+	height:62px;
+}
 </style>
-<div style="overflow:auto;margin-left: 10px;height: 500px;width: 900px;">
+<div style="margin-left: 10px;height: 500px;width: 900px;"  slimscroll="{height: 520,railVisible:true}">
 	<div class="bre-result-div" ng-repeat="appform in appForms">
+		<label>Application : {{($index+1)}}</label>
 		<div ng-repeat="bureauData in appform.aAppScoRslt" ng-if="bureau.length != 0">
 			<!-- <div class="list-group-item">
 				<span ng-if="bureauData.sFldName == 'PAN Verification'">{{bureauData.sFldName}}:{{bureauData.sMsg}}<br>{{bureauData.sFldVal}}</span>

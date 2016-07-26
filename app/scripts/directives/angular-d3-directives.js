@@ -148,8 +148,8 @@
 							.duration(100)      
 							.style("opacity", .9);     
 							div.html(d.y)  
-							.style("left", (d3.event.pageX-90) + "px")     
-							.style("top", (d3.event.pageY -230) + "px"); 
+							.style("left", (d3.event.pageX-105) + "px")     
+							.style("top", (d3.event.pageY +150) + "px"); 
 						})      
 						.on("mouseout", function(d) {       
 							div.transition()        
@@ -157,10 +157,12 @@
 							.style("opacity", 0); 
 						})
 						.on("click", function(d){
-							var json={"dtDate":d.time,"sStat":d.status,'sInstID':scope.institutionId,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};//
+							if(user.role!="DSA"){
+								var json={"dtDate":d.time,"sStat":d.status,'sInstID':user.institutionID,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};//
 							RestService.saveToServer("table-view",json).then(function(tableData){
 								scope.isolatedTableData({parameter:tableData});
 							});
+							}
 						})
 						.style("fill-opacity",1e-6)
 						.transition()

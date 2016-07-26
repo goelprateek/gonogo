@@ -94,7 +94,7 @@ svg:not (:root ) {
 	overflow: visible;
 }
 
-#tooltip {
+/*#tooltip {
 	position: absolute;
 	height: auto;
 	padding: 10px;
@@ -105,7 +105,7 @@ svg:not (:root ) {
 	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
 	z-index: 1;
 }
-
+*/
 .tooltipExp {
 	word-spacing: 5px;
 	letter-spacing: 1px;
@@ -114,10 +114,10 @@ svg:not (:root ) {
 }
 
 
-#tooltip.hidden {
+/*#tooltip.hidden {
 	display: none;
 }
-
+*/
 .nhr a {
 	color: #777;
 }
@@ -206,15 +206,15 @@ font-size:14px;}
 							<li><a id="dsa_chat" ng-if="can('NCHAT')">DSA Chat</a></li>
 							<li ><a id="onhold" title="{{objectSet.oAppReq.sRefID}}"
 								ng-if="can('NHOLD') && isDedupeSelected"  
-								ng-click='cro_action(objectSet.oAppReq.oHeader.sAppID, "OnHold")'>OnHold</a><!-- 27 -->
+								ng-click='cro_action(objectSet.oAppReq.sRefID, "OnHold")'>OnHold</a><!-- 27 -->
 							</li>
 							<li ><a id="approve" title="{{objectSet.oAppReq.sRefID}}"
 								ng-if="can('NAPPROVE') && isDedupeSelected"
-								ng-click='cro_action(objectSet.oAppReq.oHeader.sAppID, "Approved")'>Approve</a>
+								ng-click='cro_action(objectSet.oAppReq.sRefID, "Approved")'>Approve</a>
 							</li>
 							<li ><a id="decline" title="{{objectSet.oAppReq.sRefID}}"
 								ng-if="can('NDECLINE') && isDedupeSelected"
-								ng-click='cro_action(objectSet.oAppReq.oHeader.sAppID, "Declined")'>Decline</a>
+								ng-click='cro_action(objectSet.oAppReq.sRefID, "Declined")'>Decline</a>
 							</li>
 							<!-- <li ><a id="accept" title="{{refID}}"
 								ng-if="authenticate('NACCEPT')"
@@ -254,14 +254,14 @@ font-size:14px;}
 						
 						<div class="list-group-item" style="padding: 0px;border-bottom: 1px solid #ddd;margin-bottom: 0px;" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" > 
 							<div class="list-group-item" style="border-bottom: 1px solid #ddd;margin-bottom: 0px;border: 0px solid #ddd;"
-								ng-click='load_details(user.sRefID,"true")'
+								ng-click='load_details(user.sRefID,true,user.sRqTyp)'
 								ng-class='{picked: user.sRefID==Picked}'>
 								<span class="img-circle dsa_profile_icon" style="box-shadow: 0px 0px 2px #888;" >
 									<h5><i class="fa fa-user"></i></h5>
 								</span>	
 
 								<div class="notify-name">{{user.sDsaName.split("@")[0]}}</div>
-								<div class="status" id="{{user.sAppId}}" ng-model="user.sAppId"
+								<div class="status" id="{{user.sRefID}}" ng-model="user.sRefID"
 									ng-class="{Pending: user.sStat.toUpperCase() == 'ONHOLD', Approved: user.sStat.toUpperCase() == 'APPROVED', Declined:user.sStat.toUpperCase()== 'DECLINED'} "style="margin-top: 2px"></div>
 								<div class="notify-time" style="position: absolute;right: 7px;width:32%;margin-right: 3%;font-size: 12px">{{user.dtDateTime | dateFormat }}</div>
 								<div class="property_location" style="font-size: 10px;  min-width: 60px;" ng-if="user.sStage!=null && !can('NCROQUE')">{{user.sStage}}</div>
@@ -287,7 +287,7 @@ font-size:14px;}
 					<div class="col-md-4 column">
 						<div class="scroll-divs-outer">
 							<label class="div-heading customer">DEMOGRAPHICS</label>
-							<div id="customer"  slimscroll="{height: 158,railVisible:true}">
+							<div id="customer" slimscroll="{height: 158,railVisible:true}">
 								<div class="list-group-item">
 									<span>Name : <span >{{name}}
 
@@ -305,12 +305,12 @@ font-size:14px;}
 									<span>Address Line1 : {{objectSet.oAppReq.oReq.oApplicant.aAddr[0].sLine1}}</span>
 								</div>
 							 	<div class="list-group-item" ng-if="applicant.aAddr[0].sLine2 !=''">
-									<span>Address Line2 : {{objectSet.oAppReq.oReq.oApplicant.aAdr[0].sLine2}}</span>
+									<span>Address Line2 : {{objectSet.oAppReq.oReq.oApplicant.aAddr[0].sLine2}}</span>
 								</div> 
 							</div>
-							<div data-ng-if="imageDataArray.length!=0" style=" overflow-y: scroll;height: 54px;">
+							<div data-ng-if="imageDataArray.length!=0"  slimscroll="{height: 54,railVisible:true}">
 							<div class="notify-scroll-container" >
-								 <ul> 
+								 <ul style="padding: 0px;"> 
 									<li ng-repeat="d in imageDataArray">
 										<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index,true)"><img ng-src="{{d.sByteCode}}"> </a>
 									</li>
@@ -362,11 +362,11 @@ font-size:14px;}
 									<span>Gross Annual : {{ emp.dGrossSal | rupee:"&#x20B9; "}}</span>
 								</div> -->
 								<div class="list-group-item" ng-if="emp.sConst.toUpperCase()=='SELF-EMPLOYED'">
-									<span>IT Amount : {{emp.dItrAmt}}</span> 
+									<span>ITR Amount : {{emp.dItrAmt | currency:'&#8377;'}}</span> 
 								</div>
 								<div class="list-group-item" ng-if="emp.sConst.toUpperCase()!='SELF-EMPLOYED'">
-									<span ng-if="emp.dmonthSal != 0">Monthly Income : {{emp.dmonthSal | rupee:"&#x20B9; "}}</span>
-										<span ng-if="emp.dmonthSal == 0">Yearly Income : {{emp.dGrossSal | rupee:"&#x20B9; "}}</span>
+									<span ng-if="emp.dmonthSal != 0">Monthly Income :{{emp.dmonthSal | currency:'&#8377;'}}</span>
+										<span ng-if="emp.dmonthSal == 0">Yearly Income :{{emp.dGrossSal | currency:'&#8377;'}}</span>
 								</div>
 								<div class="list-group-item">
 									<span>Employer : {{ emp.sEmplName}}</span> 
@@ -377,7 +377,7 @@ font-size:14px;}
 								</div>
 								</div>
 <!-- 								<div class="list-group-item" style="border-bottom: none"> -->
-								<div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">
+								<!-- <div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">
 								   <div class="col-md-4" ng-if="extraPresent" style="padding: 0px">
 									<a ><img 
 										alt="Preview Not Availeble" title="EXTRA IMAGES"
@@ -402,7 +402,7 @@ font-size:14px;}
 										data-target="#myModalnew" class="custom_img_rounded arrow" title="{{evidencename}}"
 										ng-src="{{evidence}}" usermap="{{evdnId}}" style="float: left;margin: 3px;"></a>
 										</div>
-								</div>			
+								</div> -->			
 							</div>
 						</div>
 					<div class="col-md-4 column">
@@ -552,26 +552,27 @@ font-size:14px;}
 						</div>
 						<div class="col-md-4 column">
 							<div class="scroll-divs-outer">
-								<div class="div-heading kyc"><label>DECISION</label><a ng-if="objectSet" style="float: right;padding-right: 10px;color: white;" ng-click="showReinitiatedDecisionData('lg',objectSet)">View Old</a></div>
+								<div class="div-heading kyc"><label>DECISION</label><a ng-if="objectSet && objectSet.iNoReTry>=1" style="float: right;padding-right: 10px;color: white;" ng-click="showReinitiatedDecisionData('lg',objectSet)">View Old</a></div>
 								<div id="KYC" style="width: 106.5%;" slimscroll="{height: 210,railVisible:true}">
 									<div class="list-group-item">
-										<span>Applied Amount : {{objectSet.oAppReq.oReq.oApplication.dLoanAmt}}</span>
+										<span>Applied Amount :{{objectSet.oAppReq.oReq.oApplication.dLoanAmt | currency:'&#8377;'}}</span>
 									</div>
 									<div ng-repeat="cro in objectSet.aCroDec">
 									 	<div class="list-group-item">
-											<span>Eligibility Amount : {{cro.dEligibleAmt}}</span>
+											<span>Eligibility Amount :{{cro.dEligibleAmt | currency:'&#8377;'}}</span>
 										</div>
-										<div class="list-group-item" ng-if="objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT">
+										<!-- ng-if="objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT" -->
+										<div class="list-group-item">
 											<span>FOIR :{{objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT}}</span>
 										</div>
 										<div class="list-group-item">
-											<span>Approved Amount : {{cro.dAmtAppr}}</span>
+											<span>Approved Amount :{{cro.dAmtAppr | currency:'&#8377;'}}</span>
 										</div>
 										<div class="list-group-item">
 											<span>Tenor : {{cro.iTenor}}</span>
 										</div>
 										<div class="list-group-item">
-											<span>EMI :{{cro.dEmi}}</span>
+											<span>EMI :{{cro.dEmi | currency:'&#8377;'}}</span>
 										</div>
 									</div>
 									<!-- <div class="list-group-item" 

@@ -232,7 +232,7 @@ font-size:14px;}
 			                    </th>
 			                    <th>
 			                        <div class="th">
-			                           Income
+			                           Aprv Amt
 			                        </div>
 			                    </th>
 			                     <th>
@@ -272,12 +272,15 @@ font-size:14px;}
 			                    <td ><a ng-click="viewApplication(store.applicationId,store.applicationStatus)">{{store.applicationId}}</a></td>
 			                    <td>{{store.date | dateFormat}}</td>
 			                    <td>{{store.city.toUpperCase()}}</td>
-			                    <td>{{store.applicantName.split(' ')[0].toUpperCase()}}</td>
+			                    <td>{{store.applicantName}}</td>
 			                    <td>{{store.loanAmount}}</td>
-			                    <td>{{store.income}}</td>
+			                    <td>{{store.approvedAmount}}</td>
 			                    <td>{{store.bureauScore}}</td>
 			                    <td>{{store.applicationScore}}</td>
-			                    <td><span class="label"  data-ng-class="{'label-danger' : store.applicationStatus == 'Declined', 'label-success' : store.applicationStatus == 'Approved' , 'label-warning' : store.applicationStatus == 'Queue'}"  >{{store.applicationStatus.toUpperCase()}}</span></td>
+			                    <td>
+			                    	<span class="label"  data-ng-class="{'label-danger' : store.applicationStatus.toUpperCase() == 'DECLINED', 'label-success' : store.applicationStatus.toUpperCase() == 'APPROVED' , 'label-warning' : store.applicationStatus.toUpperCase() == 'QUEUE'}"  >{{store.applicationStatus.toUpperCase()}}
+			                    	</span>
+			                    </td>
 			                    <td>{{store.stageID}}</td>
 			                    <td>{{store.dealerId}}</td>
 			                    <td>{{store.dsaId.split("@")[0].toUpperCase()}}</td>

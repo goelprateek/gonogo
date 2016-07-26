@@ -22,7 +22,7 @@ border-color: #EF160B;
 	<div class="modal-body" >
 		<div class="row clearfix" >
 
-			 <uib-carousel  ng-if="imageTag" active="active" interval="myInterval" no-wrap="noWrapSlides">
+			 <uib-carousel  ng-if="imageTag" active="active" interval="myInterval" no-wrap="noWrapSlides" no-transition="true">
 			      <uib-slide ng-repeat="slide in slides  track by slide.id" index="slide.id">
 			      <h4>{{slide.sImgType}}</h4>
 			       <img  ng-src="{{slide.sByteCode}}" ng-modal="slide.sImgType"
@@ -53,7 +53,7 @@ border-color: #EF160B;
 							class="custom_img_rounded" ng-src="{{data.sByteCode}}"
 							style="margin: 0px; margin-top: -4px;"></a>
 					</div>
-					<div class="col-md-1" id="upload_button"
+					<div class="col-md-1" id="upload_button" ng-if="iseditMode"
 						style="padding: 0px; width: 10%; top: 8px;">
 						<input type="submit" class="form-control upload"
 							value="Upload Image" dropzone="FileDropZone"

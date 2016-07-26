@@ -49,7 +49,9 @@ app.controller('PDFViewerModalCtrl', [
 	 };
 }]);
 
-app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"RestService","APP_CONST","$location","$uibModal",function($scope,$rootScope,sharedService, RestService, APP_CONST, $location,$uibModal){
+app.controller("CustomerFormCntrolr",
+	['$scope','$rootScope','sharedService',"RestService","APP_CONST","$location","$uibModal","GNG_GA",
+	function($scope,$rootScope,sharedService, RestService, APP_CONST, $location,$uibModal,GNG_GA){
 	
 	var CustID=sharedService.getRefID();
 	sharedService.setRefID(null);
@@ -143,7 +145,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 	                  {value:'Residence', name:'Residence'},
 	                  {value:'Office', name:'Office'},
 	                  {value:'Permanent', name:'Permanent'}];
-	
+
 	$scope.phoneData = [{value:'OFFICE_PHONE', name:'Office Phone'},
                       {value:'RESIDENCE_PHONE',name:'Residence Phone'},
                       {value:'PERSONAL_PHONE',name:'Personal Phone'},
@@ -155,7 +157,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 	$scope.employment_type = $scope.jobType[0];
 	$scope.addr_type = $scope.addrType[0].value;
 	$scope.time_employer =  $scope.timeataddress[0];
-	
+
 	RestService.saveToServer(URL,json).then(function(Response){
 		if(Response){
 			$scope.applicant = Response.oReq.oApplicant;
@@ -791,9 +793,13 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 	},function(error){
 		$scope.error = "Sorry...System is under maintenance !!";					
 	});
-	
+
 	$scope.restartClicked=function(){
-	
+		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_CUSTOMER_FORM"),
+		 		GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
+		 		GNG_GA.getConstAction("ACTION_CLICK_DASHBOARD_RESTART"),
+		 		$scope.refID,1);
+
 //		if($scope.currStage=="DE"){
 //			$location.path("/apply");
 //		}else if($scope.currStage=="PD_DE"){
@@ -803,6 +809,7 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 //		}else if($scope.currStage=="DCLN"){
 //			alert("Your Application for loan has been declined.");
 //		}
+
 		//alert($scope.currStage);
 		if($scope.currStage && $scope.currStage.startsWith("LOS_")){
 			$scope.loadPDF();
@@ -832,6 +839,11 @@ app.controller("CustomerFormCntrolr",['$scope','$rootScope','sharedService',"Res
 	}
 	
 	$scope.shwPDFModal = function (size,response,refID) {
+		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_CUSTOMER_FORM"),
+		 		GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
+		 		GNG_GA.getConstAction("ACTION_CLICK_DASHBOARD_DO_PDF"),
+		 		$scope.dashboardType,1);
+
 		 //alert('modal baseURL'+baseURL);
 		 var modalInstance = $uibModal.open({
 	 		animation: $scope.animationsEnabled,

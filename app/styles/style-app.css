@@ -1427,6 +1427,8 @@ text-align: justify;*/
 
 .div-heading.kyc {
 	background: none repeat scroll 0% 0% rgb(255, 112, 67);
+	padding: 9px 0px 4px 12px;
+	/*to remove extra padding at bottom of view old*/
 }
 
 .div-heading.property {
