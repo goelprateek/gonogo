@@ -682,11 +682,12 @@
 
 			$scope.showrefid = "true";
 			$scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
-			var data = 	$scope.notifarray;
-			for (var j in data)
-			{if(data[j].sRefID ==  $scope.objectSet.oAppReq.sRefID){
-					$scope.applctnstatus = data[j].sStat;}
-			}
+			var data = 	$scope.dataSourceCol;
+			_.each(data,function(value,key){
+                if(value.applicationId ==  $scope.objectSet.oAppReq.sRefID){
+					$scope.applctnstatus = value.applicationStatus;
+                }
+			});
 			$scope.croDecision = response.aCroDec;
            /* try{
                  if($scope.objectSet.oLosDtls.sLosID){
