@@ -26,6 +26,9 @@
 			templateUrl: 'views/templates/analytics.html',
 		}).when('/cdl/dealer',{
 			templateUrl: 'views/cdl/dealer.html'
+		}).when('/cdl/basic-de',{
+			templateUrl: 'views/cdl/basic-de.html',
+			controller: 'BasicDEController'
 		}).when('/cdl/apply', {
 			templateUrl: 'views/cdl/apply.html',
 			controller: 'ApplyController'
@@ -63,7 +66,6 @@
 
 				return $q.reject(response);
 			}
-
 		};
 	});
 
@@ -79,8 +81,6 @@
 		
 	}]);
 
-	
-
 	app.run(function($rootScope, $location, APP_CONST){
 
 		$rootScope.$on('$routeChangeStart', function(event, nextLoc, currentLoc){
@@ -90,7 +90,4 @@
 			}	
 		})		
 	});
-
-	
-}).call(this)
-
+}).call(this);

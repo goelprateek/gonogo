@@ -27,16 +27,3 @@ fieldset label {
     font-weight: normal;
     margin: 5px 0px 0px;
 }
-
-.control-select{
-	/*for firefox*/
-    -moz-appearance: none;
-    /*for chrome*/
-    -webkit-appearance:none;
-	padding-bottom: 0px;
-	background: url("../img/arrow_select.png") no-repeat right #FFFFFF;
-	border:0px;
-	border-bottom: 1px solid #004d82;
-	border-radius: 0px;
-	padding-top: 0px;
-}

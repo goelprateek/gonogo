@@ -5,26 +5,65 @@
 	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"roundProgressService","UserService","AclService","GNG_GA", function(
 	 									$scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,roundProgressService,UserService,AclService,GNG_GA) {
 
-	var user=UserService.getCurrentUser();
-    $scope.can=AclService.can;
+		var dlrCode =null;
 
-    if(user.id){
-        $scope.$emit('onSuccessfulLogin');
-    }
+		var user=UserService.getCurrentUser();
+    	$scope.can=AclService.can;
+
+    	if(user.id){
+        	$scope.$emit('onSuccessfulLogin');
+   		}
+
+    	// Start : If from step 1 screen
+		if(sharedService.getRefID()){
+			$scope.referenceID=sharedService.getRefID();
+		}else{
+			$location.path("/cdl/basic-de");
+		}
+
+		if(sharedService.getApplicationID()){
+			$scope.applicationID=sharedService.getApplicationID();
+		}
+
+		if(sharedService.getStep1Object()){
+			$scope.applicationObject=sharedService.getStep1Object();
+
+			var _applicant=$scope.applicationObject.oReq.oApplicant;
+			$scope.fname=_applicant.oApplName.sFirstName;
+	  		$scope.mname=_applicant.oApplName.sMiddleName;
+	  		$scope.lname=_applicant.oApplName.sLastName;
+
+	  		dlrCode=$scope.applicationObject.oHeader.sDealerId;
+	  		$scope.dealerName=$scope.applicationObject.oReq.oApplication.aAssetDetail[0].sDlrName;
+			$scope.tmob=_applicant.aPhone[0].sPhoneNumber;
+
+			for(var i=0;i<_applicant.aKycDocs.length;i++){
+  				if(_applicant.aKycDocs[i].sKycName==="PAN"){
+  					$scope.pan=_applicant.aKycDocs[i].sKycNumber;
+  				}
+  				
+  				if(_applicant.aKycDocs[i].sKycName==="AADHAAR"){
+  					$scope.aadhar=_applicant.aKycDocs[i].sKycNumber;
+  				}
+  			}
+
+  			$scope.productType=$scope.applicationObject.oReq.oApplication.sLoanType;
+		}
+		// End : If from step 1 screen
+	
+
+    
 
 	var poller;
 	$scope.dealerArr = [];
 	$scope.assetArray = [];
+
 	try {
 		//$log.debug("userdata :"+JSON.stringify(userdata));
 		$scope.username = user.username ;
-		$scope.image = user.image;
-		$scope.instImage = user.instImage;
 		$scope.InstitutionID = user.institutionID;
 		$scope.userid = user.id;
-		$scope.color = user.color;
 		$scope.ePassword = user.ePassword;
-		$scope.productType="";
 		$scope.suspAct="No";
 		$scope.edu="";
 		$rootScope.errHead="";
@@ -35,7 +74,7 @@
 	    $scope.assetCategory="";
 	    $scope.astCst=0;
 		$scope.dealerArr=JSON.parse(atob(localStorage.getItem('DEALERS')));
-		var dlrCode =null;
+
 		var status=null;
 		var modelNo=null;
 		var make=null;
@@ -52,9 +91,9 @@
 	}
 
 	var CustID=sharedService.getRefID();
-	
+
 	var currentStage=sharedService.getCurrentStage();
-	
+
 	sharedService.setRefID(null);
 	sharedService.setCurrentStage(null);
 
@@ -264,7 +303,7 @@
 		});
 	}
 
-	if(CustID!=null && CustID!="") {
+	if($scope.applicationObject==null && CustID!=null && CustID!="") {
 		var URL='';
 		var json ={'sRefID':CustID};
 		URL = 'dashboard-application-data';
@@ -647,13 +686,13 @@
 	}else{
 		if(localStorage.getItem('CURRENT_DEALER')){
 			var dealerCurrent = JSON.parse(atob(localStorage.getItem('CURRENT_DEALER')));
-			
+
 			dlrCode=dealerCurrent["DEALER_CODE"];
 			$scope.dealerName=dealerCurrent["DEALER_NAME"];
 		}else{
 			$location.path("/cdl/dealer");
 		}
-		
+
 		$("#nmCntnr").show();
 	}
 
@@ -704,54 +743,7 @@
 		$("#KYCList , #personalList , #employmentList , #IncomeList , #BankingList ,#ProductList ,#CalculationList ,#OtherList").removeClass("active");
 		$("#KYCList").addClass("active");
 	}*/
-	
-	$scope.otpService=function(){
 
-		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),
-							 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
-							 GNG_GA.getConstAction("ACTION_CLICK_GET_OTP"),
-							 "Get OTP Button Clicked",1);
-
-		$scope.ojs={	  "USER_ID":$scope.username, "PASSWORD":$scope.ePassword,
-						  "INSTITUTION_ID":$scope.InstitutionID,
-						  "inputJson_":{ "MOBILE-NUMBER":$("#tmob").val() }
-					}	
-		// console.log("$scope.ojs :"+JSON.stringify($scope.ojs));
-	
-//		console.log("otp request: "+$scope.username);
-		/*var jh = LoginService.getCredential();
-		console.log("return :"+jh);*/
-//		console.log("pass: "+$scope.ePassword);
-//		var pass =  $scope.ePassword;
-		// console.log("$scope.username :"+ $scope.username);
-		$http.defaults.headers.common['token-key']='95957453469767522788';
-		$http.defaults.headers.common['username']=$scope.username;
-		$http.defaults.headers.common['password']=$scope.ePassword;
-		var defere = $q.defer();
-		$http.post(APP_CONST.getConst('BASE_URL_GNG')+'get-otp',$scope.ojs).success(function(response){
-			defere.resolve(response);
-//			console.log("OTP Response -" + JSON.stringify(response));
-			$scope.otp=response.OTP;
-		}).error(function(error){
-			defere.reject(error);
-		});
-//		return defere.promise;
-		
-/*		$http({	method : 'POST',
-				url : baseUrl+'get-otp',
-				data :$scope.ojs,
-				headers : {'Content-Type':'application/json','token-key':'95957453469767522788','userName':$scope.username,'password':pass}
-			 }).success(function(data) 
-			{ 
-				console.log("OTP Response -" + JSON.stringify(data));
-				$scope.otp=data.OTP;						
-			}).error(function(data) 
-			{	console.log("Getting Error...");
-			});*/
-		$("#getOTP").hide();
-		$("#otpContainer,#pwdInfo, #ResendCntnr").show();	
-	}
-	
 //	$scope.onDealerSelected=function(dealerSelected){
 //		console.log("Dealer Selected  :");
 //		console.log(dealerSelected);
@@ -779,112 +771,29 @@
 $scope.clickEvent = function(type)
 {
 switch (type) {
-case "getOTP":
-//	changees
-	
-	GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),
-					 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
-					 GNG_GA.getConstAction("ACTION_CLICK_GET_OTP"),
-					 "Get OTP Button Clicked",1);
-
-	var bool= validation();
-//	var bool= true;
-	if(bool)
-	{
-		$scope.otpService();
-		$("#getOTP").hide();
-		$("#otpContainer,#pwdInfo, #ResendCntnr").show();	
-	}
-	break;
-case "verifybtn":
-	/*containerHeight=containerHeight-40;
-	$(".getheight").css("height",containerHeight+"px");*/
-
-	GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),
-				 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
-				 GNG_GA.getConstAction("ACTION_CLICK_VERIFY_OTP"),
-				 "Verify OTP Clicked",1);
-
-	var otp=$("#txt1").val()+$("#txt2").val()+$("#txt3").val()+$("#txt4").val()+$("#txt5").val();
-	if(otp.length==5)
-	{	
-		if(otp ==$scope.otp || otp=="11111")
-		{	
-			$("#msgContainer").css({"left":"32%"});		
-			$("#basicInfo").hide();
-			$("#progressDiv ,#showApplicant").show();
-			$("#kyccontainer,#ErrorContainer").show();
-			$scope.submitApplication("step1");
-		}
-		else
-		{ 
-			$(".otp").val("");
-			$rootScope.errHead="OTP";
-			$rootScope.errorMsg="Please enter valid OTP";
-		}
-	}else{
-		$("input[class='otp'][value='']").focus();
-		$rootScope.errHead="OTP";
-		$rootScope.errorMsg="Please enter OTP";
-//		$("#errorHeading").text("OTP : ");
-//		$("#main_error").text("Please enter OTP");
-	}
-	break;	
-	case "Resend":
-	
-		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),
-				 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
-				 GNG_GA.getConstAction("ACTION_CLICK_RESEND_OTP"),
-				 "Resend OTP Clicked",1);
-
-			$rootScope.errHead="";
-			$rootScope.errorMsg="";
-			$scope.otpService();
-			$("#Resend").hide();
-			$(".otp").val("");
-			$(".otp:first").focus();
-			$("#Skip").show();
+	case "anotherAsset":
+				var dom =$("#assetObj").clone();
+				lcount=lcount+1;
+				dom.find("legend ").text("Asset "+lcount);
+				$("#assetContainer").children(" :last").after(dom);
+				break;
+	/*case "Applicant":
+				$("fieldset").css({"transform":"initial","opacity":"initial"});
+				$("#coApplicantArray").hide();
+				$("#kyccontainer").show();
+				$("#employmentList , #IncomeList , #BankingList ,#ProductList ,#CalculationList ,#OtherList").show();
+				var display =$("#coApplicantArray").css("display");
+			//	console.log("display css="+display);
+				refreshPLst();
+				break;*/
+	/*case "addAddress":
+			$("#PermanentAddressContainer").toggle();
 			break;
-case "Skip":
-		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),
-				 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
-				 GNG_GA.getConstAction("ACTION_CLICK_SKIP_OTP"),
-				 "Skip OTP Clicked",1);
-
-			$scope.verif=false;
-			$(".otp").val("");
-			/*containerHeight=containerHeight-40;
-			$(".getheight").css("height",containerHeight+"px");*/
-			$("#msgContainer").css({"left":"32%"});		
-			$("#basicInfo").hide();
-			$("#progressDiv ,#showApplicant").show();
-			$("#kyccontainer,#ErrorContainer").show();
-			$scope.verifyMob=false;
-			$scope.submitApplication("step1");
-			break;
-case "anotherAsset":
-			var dom =$("#assetObj").clone();
-			lcount=lcount+1;
-			dom.find("legend ").text("Asset "+lcount);
-			$("#assetContainer").children(" :last").after(dom);
-			break;
-/*case "Applicant":
-			$("fieldset").css({"transform":"initial","opacity":"initial"});
-			$("#coApplicantArray").hide();
-			$("#kyccontainer").show();
-			$("#employmentList , #IncomeList , #BankingList ,#ProductList ,#CalculationList ,#OtherList").show();
-			var display =$("#coApplicantArray").css("display");
-		//	console.log("display css="+display);
-			refreshPLst();
+	case "moreReference":
+			$("#reference2").toggle();
 			break;*/
-/*case "addAddress":
-		$("#PermanentAddressContainer").toggle();
-		break;
-case "moreReference":
-		$("#reference2").toggle();
-		break;*/
 
-}	
+	}
 }
 
 $scope.changeEvent=function(type,val)
@@ -1510,12 +1419,11 @@ $scope.submitApplication=function(UrlKey)
 	$scope.kyc.aKycDocs.push($scope.kyc2);
 	$scope.mobileVer={"bMobVer":$scope.verifyMob};
 	$scope.asset={"aAssetDetail":[]};
-	
-	
+
 	$scope.asset1={"sAssetCtg":$scope.assetCategory,"sAssetMake":$("#mk").val(),"sDlrName":$scope.dealerName,
 					"sModelNo":$("#mdl").val(),"sPrice":""};
 	$scope.asset.aAssetDetail.push($scope.asset1);
-	
+
 	$scope.emp={"aEmpl":[]};
 	$scope.emp1={"sConst": $("#constitution").val(),"sEmplName":$("#wrkename").val(),"sEmplType":$scope.wrketype,
 			"iTmWithEmplr":$("#wrktwe").val(),"dmonthSal":$("#wrkLstMnthSal").val().replace(/,/g,""),"dGrossSal":"",
@@ -1608,7 +1516,7 @@ $scope.submitApplication=function(UrlKey)
 			$rootScope.errHead = "Status"
 			$rootScope.errorMsg = "Data Saved Successfully.";
 		}
-		 console.log("before upload:"+img_array.length);
+		//console.log("before upload:"+img_array.length);
 		UploadAllImgs(data.sRefID,img_array,"submit");
 		
 		$scope.REFID = data.sRefID;
@@ -1633,8 +1541,6 @@ $scope.submitApplication=function(UrlKey)
 		}	
 	});
 };
-
-
 
 var timer = null, startTime = null;
 /*var progress = $("#progress").shieldProgressBar(
@@ -1676,7 +1582,6 @@ function updateProgress() {
 		return 0;
 	}
 }
-
 
 function validation()
 {

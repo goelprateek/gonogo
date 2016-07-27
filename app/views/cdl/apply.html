@@ -34,7 +34,7 @@
 	.holdTmplt{
 		padding:0px;
 	}
-	/* 			**************progress bar css ******************************** */
+/************************ progress bar css *********************************/
 	.progress-wrapper {
 	    position: absolute;
 	    font-size: 40px;
@@ -54,173 +54,42 @@
         margin:50px auto 100px;
         text-align: center;
     }
-        /**********************************************************************/
+/**********************************************************************/
 </style>
-			
-			<!-- <div class="row clearfix" style="margin-top: 4%;" id="dlrContainer" >
-				<div class="col-md-8 col-md-offset-2">
-					<div class="panel panel-default">
-						<div class="panel-heading "
-							style="text-align: center; font-size: 16px">Dealer Name</div>
-						<div class="panel-body" style="height: 185px; overflow-y: scroll;">
-							<table class="table table-striped table-hover">
-								<tbody>
-									<tr ng-repeat="object in dealerArr">
-										<td><label style="width: 100%" for="delr{{$index}}">
-												<input id="delr{{$index}}" type="radio"
-												ng-model="$parent.currentDealer" name="name" value="{{object}}" />
-												{{object.DEALER_NAME}}
-										</label></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div class="panel-footer" style="text-align: center;">
-							<button class="customButton" id="slcDlr" ng-click="onDealerSelected(currentDealer)">Continue</button>
-						</div>
-					</div>
-				</div>
-			</div> -->
-			<div >
-			<div class="row clearfix" id="nmCntnr">
-				<div class="col-md-8 col-md-offset-2" id="middleContainer">
-					<div class="row clearfix containerBorder">
-						<div class="col-md-10 col-md-offset-2">
-							<div id="basicInfo" style="margin-top: 25%">
-								<div class="row clearfix customRow">
-									<!-- <div class="col-md-5 customDiv"><label  > First Name</label></div>
-									<div class="col-md-7"><input type="text" class="customInput" /> </div> -->
-									<div class="col-md-4 height">
-										<help>First Name*</help>
-										<input id="fname" ng-model="fname" type="text"
-											class="customInput" placeholder="First Name*" capitalize />
-									</div>
-									<div class="col-md-4 height">
-										<help>Middle Name</help>
-										<input id="mname" ng-model="mname" type="text"
-											class="customInput" placeholder="Middle Name" capitalize />
-									</div>
-									<div class="col-md-4 height">
-										<help>Last Name*</help>
-										<input id="lname" ng-model="lname" type="text"
-											class="customInput" placeholder="Last Name*" capitalize />
-									</div>
-								</div>
-
-								<div class="row clearfix customRow">
-									<div class="col-md-4 height">
-										<help>Mobile Number*</help>
-										<input type="text" id="tmob" ng-model="tmob"
-											class="customInput" placeholder="Mobile Number*"
-											maxlength="10" />
-									</div>
-									<div class="col-md-4 height">
-										<help>Aadhaar Number</help>
-										<input type="text" id="aadhar" name="Aadhar Number" ng-model="aadhar" class="customInput aadhaar" placeholder="Aadhar Number" maxlength="12" />
-									</div>
-									<div class="col-md-4 height">
-										<help>Pan</help>
-										<input type="text" id="pan" ng-model="pan" name="Pan Number" class="customInput pan" placeholder="Pan" maxlength="10" capitalize />
-									</div>
-								</div>
-
-								<div class="row clearfix customRow">
-									<div class="col-md-4 height">
-										<help>Product Type*</help>
-										<select class="customSelect" id="cdl" ng-model="productType">
-											<option selected="selected" value="">Select
-												Product Type</option>
-											<option value="Consumer Durables">Consumer Durables</option>
-										</select> <img alt="" src="images/select-arrow.png" class="customarrow" />
-									</div>
-								</div>
-								<div class="row clearfix" style="margin-bottom: 15px">
-									<div class="col-md-5 "></div>
-									<div class="col-md-7" style="text-align: right;">
-										<button id="getOTP" class="customButton" style="float: right;"
-											ng-click="clickEvent('getOTP')">Get OTP</button>
-										<div id="otpContainer" style="display: none;">
-											<input class="form-control otp" id='txt1' type="password"
-												maxlength="1" name="OTP"> <input
-												class="form-control otp" id='txt2' type="password"
-												maxlength="1" name="OTP"> <input
-												class="form-control otp" id='txt3' type="password"
-												maxlength="1" name="OTP"> <input
-												class="form-control otp" id='txt4' type="password"
-												maxlength="1" name="OTP"> <input
-												class="form-control otp" id='txt5' type="password"
-												maxlength="1" name="OTP">
-											<button id="verifybtn" class="customButton"
-												ng-click="clickEvent('verifybtn')">Verify</button>
-										</div>
-									</div>
-								</div>
-
-								<div class="row clearfix" style="margin-bottom: 15px">
-									<div class="col-md-5 "></div>
-									<div class="col-md-7" style="text-align: right;">
-										<div id="ResendCntnr" style="display: none;">
-											<button id="Resend" class="customButton"
-												ng-click="clickEvent('Resend')" style="padding: 4px 11px;">Resend
-											</button>
-											<button id="Skip" class="customButton"
-												ng-click="clickEvent('Skip')"
-												style="padding: 4px 20px; display: none;">Skip</button>
-										</div>
-									</div>
-								</div>
-
-								<div class="row clearfix" style="margin-bottom: 15px">
-									<div class="col-md-12"></div>
-								</div>
-							</div>
-							<!-- End of basic info container -->
-						</div>
-					</div>
-				</div>
-				<div class="col-md-2" id="rightbarContainer"
-					style="text-align: center;"></div>
-
+<div class="row clearfix" id="infoContainer" style="padding-top: 20px;">
+	<div class="col-sm-4 col-md-3" id="progressDiv"	style="border-right: 01px solid #24a1ed; padding-right: 0px; padding-top: 22px;">
+		<div id="responsive">
+			<div style="padding-left: 30%">
+				<div style="display: inline-block; color: #24a1ed; float: left;">Name
+					: </div>
+				<div style="display: inline-block; width: 75%;"> {{ fname +"
+					"+ mname +" "+ lname}}</div>
 			</div>
-			<!-- end of first page -->
-
-			<div class="row clearfix" id="infoContainer" style="padding-top: 20px;">
-
-				<div class="col-sm-4 col-md-3" id="progressDiv"
-					style="border-right: 01px solid #24a1ed; padding-right: 0px; display: none;padding-top: 22px;">
-					<div id="responsive">
-						<div style="padding-left: 30%">
-							<div style="display: inline-block; color: #24a1ed; float: left;">Name
-								: </div>
-							<div style="display: inline-block; width: 75%;"> {{ fname +"
-								"+ mname +" "+ lname}}</div>
-						</div>
-						<div style="margin-top: 10px; padding-left: 30%">
-							<div style="display: inline-block; color: #24a1ed; float: left;">Ref ID: </div>
-							<div style="display: inline-block; width: 75%;"> {{ REFID }}</div>
-						</div>
-						<!-- <div style="margin-top: 10px; padding-left: 30%">
-							<div style="display: inline-block; color: #24a1ed; float: left;">Dealer Name: </div>
-							<div style="display: inline-block; width: 75%;"> {{dlrName}}</div>
-						</div> -->
-						<div style="margin-top: 10px; padding-left: 30%">
-							<div style="display: inline-block; color: #24a1ed; float: left;">Product: </div>
-							<div style="display: inline-block; width: 75%;"> {{productType}}</div>
-						</div>
-						<div style="margin-top: 18%;">
-							<ul class="progressbar">
-								<li id="KYCList" class="active">PERSONAL DETAILS</li>
-								<li id="personalList">ADDRESS DETAILS</li>
-								<li id="employmentList">WORK DETAILS</li>
-								<li id="IncomeList">ASSET DETAILS</li>
-								<li id="BankingList">PROOF</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class=" col-sm-8 col-md-9">
-					<fieldset id="kyccontainer" style="display: none;">
-
+			<div style="margin-top: 10px; padding-left: 30%">
+				<div style="display: inline-block; color: #24a1ed; float: left;">Ref ID: </div>
+				<div style="display: inline-block; width: 75%;"> {{ referenceID }}</div>
+			</div>
+			<!-- <div style="margin-top: 10px; padding-left: 30%">
+				<div style="display: inline-block; color: #24a1ed; float: left;">Dealer Name: </div>
+				<div style="display: inline-block; width: 75%;"> {{dlrName}}</div>
+			</div> -->
+			<div style="margin-top: 10px; padding-left: 30%">
+				<div style="display: inline-block; color: #24a1ed; float: left;">Product: </div>
+				<div style="display: inline-block; width: 75%;"> {{productType}}</div>
+			</div>
+			<div style="margin-top: 18%;">
+				<ul class="progressbar">
+					<li id="KYCList" class="active">PERSONAL DETAILS</li>
+					<li id="personalList">ADDRESS DETAILS</li>
+					<li id="employmentList">WORK DETAILS</li>
+					<li id="IncomeList">ASSET DETAILS</li>
+					<li id="BankingList">PROOF</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class=" col-sm-8 col-md-9">
+		<fieldset id="kyccontainer">
 			<div class="getheight" id="kycHeight">
 				<div class="row clearfix ">
 					<!-- <div class="col-sm-8 col-md-8" id="kycDataContainer" style="margin-left: 5%"></div>   end odf col-md-8 -->
@@ -354,15 +223,12 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
-
 			</div>
 			<div class="row clearfix ">
 				<div class="col-md-10 col-md-offset-1">
 					<button class="customButton next" id="fromKYC">Next</button>
-					<button class="customButton save" id="save"
-						ng-click="submitApplication('step3')">Save</button>
+					<button class="customButton save" id="save" ng-click="submitApplication('step3')">Save</button>
 				</div>
 			</div>
 		</fieldset>

@@ -62,7 +62,7 @@
 
 		$scope.isCdlPage = function() {
 			var path;
-			return path = $location.path(),  _.contains(["/cdl/dealer","/cdl/apply",'/cdl/dashboard','/cdl/assetMaster','/cdl/customerForm'], path);
+			return path = $location.path(),  _.contains(["/cdl/dealer","/cdl/apply",'/cdl/dashboard','/cdl/assetMaster','/cdl/customerForm','/cdl/basic-de'], path);
 		}
 
 		$scope.logout = function() {

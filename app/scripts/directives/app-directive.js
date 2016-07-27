@@ -34,23 +34,23 @@
 		});
 	
 	app.directive('capital', function() {
-		   return {
-		     require: 'ngModel',
-		     link: function(scope, element, attrs, modelCtrl) {
-		        var capitalize = function(inputValue) {
-		           if(inputValue == undefined) inputValue = '';
-		           var capitalized = inputValue.toUpperCase(); 
-		           if(capitalized !== inputValue) {
-		              modelCtrl.$setViewValue(capitalized);
-		              modelCtrl.$render();
-		            }         
-		            return capitalized;
-		         }
-		         modelCtrl.$parsers.push(capitalize);
-		         capitalize(scope[attrs.ngModel]);  // capitalize initial value
-		     }
-		   };
-		});
+	   return {
+	     require: 'ngModel',
+	     link: function(scope, element, attrs, modelCtrl) {
+	        var capitalize = function(inputValue) {
+	           if(inputValue == undefined) inputValue = '';
+	           var capitalized = inputValue.toUpperCase(); 
+	           if(capitalized !== inputValue) {
+	              modelCtrl.$setViewValue(capitalized);
+	              modelCtrl.$render();
+	            }         
+	            return capitalized;
+	         }
+	         modelCtrl.$parsers.push(capitalize);
+	         capitalize(scope[attrs.ngModel]);  // capitalize initial value
+	     }
+	   };
+	});
 
 	app.directive('initcap', function () {
 	return {
@@ -146,8 +146,7 @@
 	//     directive.templateUrl = 'views/templates/matrix.html';
 	//     return directive;
 	// });
-	
-	
+
 	app.directive("customBackground",function(){
 		return {
             restrict: "A",
@@ -193,8 +192,6 @@
 		}
 	}),
 
-	
-
 	app.directive('onlyDigits', function () {
 	    return {
 	        restrict: 'A',
@@ -211,7 +208,7 @@
 	            });
 	        }
 	    };
-	})
+	});
 
 	app.directive('replace', function() {
 	  return {
@@ -238,5 +235,38 @@
 	  };
 	});
 
-}).call(this)
+	app.directive('autoNext', function() {
+	    return {
+	       	restrict: 'A',
+	       	link: function(scope, element, attr, form) { 
+	           	var tabindex = parseInt(attr.tabindex);
+	           	var maxLength = parseInt(attr.maxlength);
 
+	           	element.on('keyup', function(e) {
+	               	if (element.val().length > maxLength-1) {
+	               		var next = angular.element(document.body).find('[tabindex=' + (tabindex+1) + ']');
+	                  	if (next.length > 0) {
+	                      	next.focus();
+	                      	return true;
+	                  	} else {
+	                      	return false;                          
+	                  	}
+	               	}
+	               	return true;
+	          	});
+	       	}
+	    }
+	});
+
+	app.directive('selectRequired',function(){
+	    return {
+	        restrict: "A",
+	        require:"ngModel",
+	        link: function(element,scope,attr,controller){
+	            controller.$validators.selectrequired = function(modelValue){                   
+	                return modelValue === '' || (modelValue && modelValue.startsWith('Select')) ? false : true;
+	            }
+	        }
+	    }
+	});
+}).call(this);
