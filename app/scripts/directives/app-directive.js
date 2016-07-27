@@ -206,5 +206,50 @@
 	  };
 	});
 
+
+    app.directive('fullscreen', function() {
+            return {
+                restrict: 'AC',
+                template: '<i class="glyphicon glyphicon-fullscreen"></i>',
+                link: function(scope, el, attr) {
+                    el.on('click', function() {
+                        var element = document.documentElement;
+                        if (!$('body')
+                            .hasClass("full-screen")) {
+
+                            $('body')
+                                .addClass("full-screen");
+                            $('#fullscreen-toggler')
+                                .addClass("active");
+                            if (element.requestFullscreen) {
+                                element.requestFullscreen();
+                            } else if (element.mozRequestFullScreen) {
+                                element.mozRequestFullScreen();
+                            } else if (element.webkitRequestFullscreen) {
+                                element.webkitRequestFullscreen();
+                            } else if (element.msRequestFullscreen) {
+                                element.msRequestFullscreen();
+                            }
+
+                        } else {
+
+                            $('body').removeClass("full-screen");
+                            el.removeClass("active");
+
+                            if (document.exitFullscreen) {
+                                document.exitFullscreen();
+                            } else if (document.mozCancelFullScreen) {
+                                document.mozCancelFullScreen();
+                            } else if (document.webkitExitFullscreen) {
+                                document.webkitExitFullscreen();
+                            }
+
+                        }
+                    });
+                }
+            };
+        }
+    );
+
 }).call(this)
 

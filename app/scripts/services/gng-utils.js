@@ -86,7 +86,7 @@
                     logIt(message, "error")
                 }
             }
-        }])
+        }]);
 
 
 }).call(this)
