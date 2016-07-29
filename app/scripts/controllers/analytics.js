@@ -391,14 +391,15 @@
 	
 
     app.controller('AnalyticsController',['$scope','$rootScope','Rules','Score', 'Policy','Decision', '$http', '$timeout',
-                                          'RestService','$filter','APP_CONST', '$uibModal','UserService','$log','AnalyticsObject','SelectArrays',
+                                          'RestService','$filter','APP_CONST', '$uibModal','UserService','$log','AnalyticsObject','SelectArrays','AclService',
                                             function($scope,$rootScope, Rules,Score,Policy,Decision, $http, $timeout,
-                                                RestService,$filter,APP_CONST,$uibModal,UserService,$log,AnalyticsObject,SelectArrays) {
+                                                RestService,$filter,APP_CONST,$uibModal,UserService,$log,AnalyticsObject,SelectArrays,AclService) {
 
 
 		// chart functionality
 		var user=UserService.getCurrentUser();
 		var object  = AnalyticsObject.dummy;
+        $scope.can=AclService.can;
 		$scope.objectSet =  object; 
 		$scope.isImg = true;
 

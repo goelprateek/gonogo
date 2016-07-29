@@ -52,6 +52,7 @@
 					</select>
 			</div>
 		</div>
+	<!-- 	Sayali- used template variable , have to remove further when this template structure is modularised, which is defined in notify.js--> 
 		<div class="row clearfix" ng-if="template == 'notification'">
 			<div class="col-md-3" style="float: right;">
 				<a class="add-button-div-notification" ng-click="updateLosData(objectSet.oLosDtls.sStat)"
@@ -64,7 +65,7 @@
 		<div class="row clearfix">
 			<div ng-repeat="data in objectSet.aCroJustification">
 				<div class="col-md-3" ng-if="data.sRemark!='' && data.sRemark!=null">
-					<label class="control-label">CRO NAME</label>
+					<label class="control-label">CRO Name</label>
 					<textarea class="form-control" rows="1" readonly>{{data.sCroID}}</textarea>
 				</div>
 				<div class="col-md-3" ng-if="data.sRemark!='' && data.sRemark!=null">
