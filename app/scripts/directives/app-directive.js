@@ -122,31 +122,6 @@
 		};
 	});
 
-	// directives from simdirecctive.js (Piyush) (need to disccuss why need all these)
-	// app.directive('policy', function() {
-	//     var directive = {};
-
-	//     directive.restrict = 'E'; 
-	//     directive.templateUrl = 'views/templates/policy-outcome.html';
-	//     return directive;
-	// });
-
-	// app.directive('score', function() {
-	//     var directive = {};
-
-	//     directive.restrict = 'E'; 
-	//     directive.templateUrl = 'views/templates/score-rule.html';
-	//     return directive;
-	// });
-
-	// app.directive('matrix', function() {
-	//     var directive = {};
-
-	//     directive.restrict = 'E'; /* restrict this directive to elements */
-	//     directive.templateUrl = 'views/templates/matrix.html';
-	//     return directive;
-	// });
-	
 	
 	app.directive("customBackground",function(){
 		return {
@@ -226,17 +201,55 @@
 	                    model.$render();
 	                }
 	               return transformedInput;
-	      /*  var regex = new RegExp(scope.regex);
-	        var replaced = val.replace(regex, scope.with); 
-	        if (replaced !== val) {
-	          model.$setViewValue(replaced);
-	          model.$render();
-	        }         
-	        return replaced;  */       
 	      });
 	    }
 	  };
 	});
+
+
+    app.directive('fullscreen', function() {
+            return {
+                restrict: 'AC',
+                template: '<i class="glyphicon glyphicon-fullscreen"></i>',
+                link: function(scope, el, attr) {
+                    el.on('click', function() {
+                        var element = document.documentElement;
+                        if (!$('body')
+                            .hasClass("full-screen")) {
+
+                            $('body')
+                                .addClass("full-screen");
+                            $('#fullscreen-toggler')
+                                .addClass("active");
+                            if (element.requestFullscreen) {
+                                element.requestFullscreen();
+                            } else if (element.mozRequestFullScreen) {
+                                element.mozRequestFullScreen();
+                            } else if (element.webkitRequestFullscreen) {
+                                element.webkitRequestFullscreen();
+                            } else if (element.msRequestFullscreen) {
+                                element.msRequestFullscreen();
+                            }
+
+                        } else {
+
+                            $('body').removeClass("full-screen");
+                            el.removeClass("active");
+
+                            if (document.exitFullscreen) {
+                                document.exitFullscreen();
+                            } else if (document.mozCancelFullScreen) {
+                                document.mozCancelFullScreen();
+                            } else if (document.webkitExitFullscreen) {
+                                document.webkitExitFullscreen();
+                            }
+
+                        }
+                    });
+                }
+            };
+        }
+    );
 
 }).call(this)
 

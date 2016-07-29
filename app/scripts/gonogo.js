@@ -55,6 +55,10 @@
 			}
 		});
 
+
+		$scope.status = {
+		    isopen: false
+		};
 		$scope.isSpecificPage = function() {
 			var path;
 			return path = $location.path(),  _.contains(["/"], path) ;

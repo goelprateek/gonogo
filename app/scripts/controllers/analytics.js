@@ -402,17 +402,16 @@
         $scope.can=AclService.can;
 		$scope.objectSet =  object; 
 		$scope.isImg = true;
+
         $scope.losIdval = true;
         $scope.utrVal = true;
         $scope.editLosStat = true;
+
 		$scope.findAddressType = function(orignal,final){
     		return (angular.lowercase(orignal) == angular.lowercase(final));
     	}	
 
 
-        $scope.findHeight = function(){
-            
-        }
 
     	$scope.showimage = function(obj,isImgFlag,index,editMode){
         var modalInstance = $uibModal.open({
@@ -498,7 +497,7 @@
                                   },                
                          "sBranchId" : "",             
                          "sUserId" :"",                
-                         "aProductType" :["CONSUMER DURABLE"],           
+                         "aProductType" :["CONSUMER DURABLE"],              
                          "dtAccessDate":""             
                         } ;
 
@@ -510,6 +509,7 @@
                                   resolve:{
                                     data : function(){
                                         return RestService.saveToServer('report/reporting-Dimension',_serviceinput).then(function(data){
+                                            console.log(data);
                                             return data;
                                         })
                                     }
@@ -534,13 +534,14 @@
 			$scope.isTableData = !$scope.isTableData;
 			
 			if($scope.isTableData == false){
-				var json = {'sInstID':user.institutionID,'iSkip':"0",'iLimit':"100"};
+				var json = {'sInstID':user.institutionID,'iSkip':"0",'iLimit':"0"};
 				RestService.saveToServer('score-log',json).then(function(data){
+                    console.log("hi");
 				 if(data){
-			          	data.sort(SortByDate);
+			          	/*data.sort(SortByDate);
 							function SortByDate(x,y) {
 								return ((x.date == y.date) ? 0 : ((x.date < y.date) ? 1 : -1 ));
-							}
+							}*/
 						  return  $scope.dataSourceCol = data,
 			              $scope.stores = $scope.dataSourceCol
 			              , $scope.searchKeywords = "", 
