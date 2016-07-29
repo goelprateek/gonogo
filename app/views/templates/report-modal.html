@@ -71,9 +71,6 @@
 <div class="custom-reports">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <button type="button" class="close fullscreen"  aria-hidden="true">
-               <i class="glyphicon glyphicon-fullscreen"></i>  
-            </button>
             <h3 class="modal-title">Custom Report Designer</h3>
         </div>
         <div class="modal-body" style="height:550px;">
@@ -117,7 +114,7 @@
                 <div class="form-group">
                     <label for="reportName" class="col-sm-2 control-label">Report Name</label>
                     <div class="col-md-10">
-                       <input id="reportName" type="text" ng-model="reportName" placeholder="Add report name" uib-typeahead="address for address in getReportConfiguration($viewValue)" typeahead-loading="loadingReports" typeahead-no-results="noResults" class="form-control" typeahead-min-length="3">
+                       <input id="reportName" type="text" ng-model="reportName" placeholder="Add report name" uib-typeahead="report for reports in getReportConfiguration($viewValue)" typeahead-loading="loadingReports" typeahead-no-results="noResults" class="form-control" typeahead-min-length="3">
                         <i ng-show="loadingReports" class="fa fa-refresh"></i>
                         <div ng-show="noResults">
                           <i class="fa fa-remove"></i> No Results Found
