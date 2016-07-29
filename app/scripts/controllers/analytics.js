@@ -4200,9 +4200,17 @@
 	    ];
 
         $scope.getReportConfiguration = function(viewValue){
-            RestService.saveToServer('report/reports',{"reportName":viewValue}).then(function(data){
-                console.log(data);
-            })
+            var searchObj = {
+                "oHeader": {
+                    "sInstID": 4019,
+                },
+                "sReportName":viewValue
+            }
+            return RestService.saveToServer('report/search-report-name',searchObj).then(function(data){
+                return _.map(data, function(item){
+                    return item.reportName;
+                });
+            });
         }
 
 	    $scope.getSelectedItemsIncluding = function(list, item) {
