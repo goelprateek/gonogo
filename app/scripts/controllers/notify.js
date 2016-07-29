@@ -381,9 +381,10 @@
 	var treeData = [], map;
 	$rootScope.template ="notification";
 	$scope.minVal = 0;
-	$scope.limit = 10;
+	$scope.limit = 800;
     $scope.notifarray = [];
 
+    //when to bottom of queue load next records
 	$scope.loadData = function(){
 		 $scope.minVal = $scope.minVal+$scope.limit;
 		 polling($scope.minVal);
@@ -493,8 +494,7 @@
 
          modalInstance.result.then(function (selected) {
                         }, function (array) {
-                            if(isImgFlag
-                                ){
+                            if(isImgFlag){
                                 $log.info($scope.rejectImgFromServer);
                                  var filter = _.filter(array,function(arr2obj){
                                     return arr2obj.sStat == "Reject";
