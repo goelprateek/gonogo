@@ -6,6 +6,7 @@
 
 	app.factory("NotificationObject",function(){
     	var _obj = {
+            
         "applicationLog": {},
         "sRefID": "",
         "bStatFlag": "",
@@ -326,6 +327,7 @@
 								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log',
                                 function($scope, $rootScope, $interval,Validation,$filter,RestService,NotificationObject,UserService,AclService,
                                     $uibModal,SelectArrays,$log){
+
 	var user=UserService.getCurrentUser();
     $scope.can=AclService.can;
 
@@ -450,9 +452,6 @@
 
     polling($scope.minVal);
 
-    
-    
-
     $scope.addrType = SelectArrays.getAddrType();
 	$scope.addr_type = $scope.addrType[1];   //to set default address
 	$scope.aplcntType=[{value:"SAL","text":"Salaried"},
@@ -467,12 +466,9 @@
 
     $scope.showimage = function(obj,isImgFlag,index,editMode){
         var modalInstance = $uibModal.open({
-                      animation: $scope.animationsEnabled,
                       templateUrl: 'views/templates/modal.html',
                       controller: 'supportedDocuments',
                       size: 'lg',
-                      backdrop: 'static',
-                      keyboard: false,
                       resolve:{
                         ImageFeed : function (){
                             var imageData;
@@ -676,12 +672,9 @@ $scope.toggleForm= function(){
 
 $scope.scoreTree = function(){
     var modalInstance = $uibModal.open({
-              animation: $scope.animationsEnabled,
               templateUrl: 'views/templates/score-tree.html',
               controller: 'scoreTreeCtr',
               size: 'lg',
-              backdrop: 'static',
-              keyboard: false,
               resolve:{
                 treeFeed : function (){
                     var scoreTree;
@@ -694,7 +687,6 @@ $scope.scoreTree = function(){
     }
 	
 $scope.cro_action = function(refID, action){ 
-	/*$scope.appltnID = appID;*/
     $scope.isAllImgApprove = true;
      _.each($scope.imageDataArray,function(val){
         if(val.sStat != "Approve"){
@@ -707,15 +699,11 @@ $scope.cro_action = function(refID, action){
 		if(refID !== ""){
             if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!AclService.can('NCROQUE'))){
 			 if(action == "OnHold"){
-				/* $scope.toggleDocPanel = !$scope.toggleDocPanel;
-				 $scope.docOfferFlag = true;*/
+				
                   var modalInstance = $uibModal.open({
-                      animation: $scope.animationsEnabled,
                       templateUrl: 'views/templates/onhold-panel.html',
                       controller: 'onholdModelCtrl',
                       size: 'lg',
-                      backdrop: 'static',
-                      keyboard: false,
                       resolve: {
                         holdModelFeed : function (){
                             var dataForModel;
@@ -740,14 +728,10 @@ $scope.cro_action = function(refID, action){
                         });
 			 
 			 }else if(action == "Declined"){
-			 	/*$scope.toggleDclnPanel = !$scope.toggleDclnPanel;*/
                   var modalInstance = $uibModal.open({
-                      animation: $scope.animationsEnabled,
                       templateUrl: 'views/templates/decline-panel.html',
                       controller: 'DeclInstanceCtrl',
                       size: 'lg',
-                      backdrop: 'static',
-                      keyboard: false,
                       resolve: {
                          dclnModelFeed : function (){
                             var dataForDcl;
@@ -781,7 +765,6 @@ $scope.cro_action = function(refID, action){
 			 }else{
                     if($scope.isAllImgApprove){
                      var modalInstance = $uibModal.open({
-                      animation: $scope.animationsEnabled,
                       templateUrl: 'views/templates/approve-panel.html',
                       controller: 'ModalInstanceCtrl',
                       size: 'lg',
@@ -944,7 +927,6 @@ $scope.updateLosData = function(status){
 	}
 }
 	 
-	/******************* Reinitiate & Update *****************/
 	$scope.dobFormat = "dd/MM/yyyy";
     $scope.dobPopup = {
         opened: false
@@ -1078,9 +1060,6 @@ $scope.updateLosData = function(status){
         
                 $scope.isUpdating=!$scope.isUpdating;
                 
-        //        console.log("Updating form : ");
-        //        console.log($scope.objectSet);
-                
                 $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet,$scope.fieldsUpdated);
             }else{
                  $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet);
@@ -1111,7 +1090,6 @@ $scope.updateLosData = function(status){
     $scope.showReinitiateModal = function (size,refID,applicantData,fieldsUpdated) {
          //alert('modal baseURL'+baseURL);
          var modalInstance = $uibModal.open({
-            animation: $scope.animationsEnabled,
             templateUrl: 'views/modal-reinitiate.html',
             controller: 'ReinitiateModalController',
             size: size,
@@ -1156,7 +1134,6 @@ $scope.updateLosData = function(status){
     $scope.showReinitiatedDecisionData=function(size,requestObj){
 //      console.log("showDecisionReinitiatedData");
         var modalInstance = $uibModal.open({
-            animation: $scope.animationsEnabled,
             templateUrl: 'views/modal-bre-results.html',
             controller: 'ReinitiatedDecisionModalController',
             size: size,
