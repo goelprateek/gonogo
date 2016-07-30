@@ -450,10 +450,9 @@
     } 
 
 		var json = {'sInstID':user.institutionID};
-
 		RestService.saveToServer("stack-graph",json).then(function(data){
-			$scope.orignalData = data;
-		});
+            $scope.chartOptions = data;
+    	});
 
 
 		
@@ -528,6 +527,10 @@
 	    $scope.appView = false;
 		$scope.isTableData = true,
 
+        $scope.$watch($scope.appView,function(valNew,valOld){
+            console.log(valNew);
+        },true);
+
 		$scope.dataSourceCol = [],
 		$scope.toggleView = function(){
 			
@@ -536,125 +539,61 @@
 			if($scope.isTableData == false){
 				var json = {'sInstID':user.institutionID,'iSkip':"0",'iLimit':"0"};
 				RestService.saveToServer('score-log',json).then(function(data){
-                    console.log("hi");
-				 if(data){
-			          	/*data.sort(SortByDate);
-							function SortByDate(x,y) {
-								return ((x.date == y.date) ? 0 : ((x.date < y.date) ? 1 : -1 ));
-							}*/
-						  return  $scope.dataSourceCol = data,
-			              $scope.stores = $scope.dataSourceCol
-			              , $scope.searchKeywords = "", 
-
-			              $scope.filteredStores = [],
-
-			              $scope.row = "", 
-
-			              $scope.select = function(page) {
-			                  var end, start;
-			                  return start = (page - 1) * $scope.numPerPage, end = start + $scope.numPerPage, $scope.dataSourceCol = $scope.filteredStores.slice(start, end);
-			              }, 
-
-			              $scope.onFilterChange = function() {
-			                  return $scope.select(1), $scope.currentPage = 1, $scope.row = "";
-
-			              }, $scope.onNumPerPageChange = function(number) {
-			                  $scope.numPerPage = number;
-			                  return $scope.select(1), $scope.currentPage = 1;
-
-			              }, $scope.onOrderChange = function() {
-
-			                  return $scope.select(1), $scope.currentPage = 1;
-
-			              }, $scope.search = function(value) {
-			                  return $scope.filteredStores = $filter("filter")($scope.stores, value), $scope.onFilterChange();
-
-			              }, $scope.order = function(rowName) {
-
-			                  return $scope.row !== rowName ? ($scope.row = rowName, $scope.filteredStores = $filter("orderBy")($scope.filteredStores, rowName), $scope.onOrderChange()) : void 0;
-
-			              }, $scope.numPerPageOpt = [20,30,50],
-
-			              $scope.numPerPage = $scope.numPerPageOpt[0], 
-
-			              $scope.currentPage = 1, 
-
-			              $scope.dataSourceCol = [],
-
-			              ($scope.init = function() {
-			                  return $scope.search(), $scope.select($scope.currentPage);
-			              })();
-
-			          };
-			});
-			}
-		}
-		
-		
-
-		//TODO stack bar click event 
-		 $scope.updateData = function (parameter) {
-			 parameter.sort(SortByDate);
-				function SortByDate(x,y) {
-					return ((x.date == y.date) ? 0 : ((x.date < y.date) ? 1 : -1 ));
-				}
-		       $scope.isTableData = false;
-		       $scope.stores = parameter;
-		        var data = $scope.stores;
-		       if(data){
-		          	//sort data in chronological order
-		          	data.sort(SortByDate);
-						function SortByDate(x,y) {
-							return ((x.date == y.date) ? 0 : ((x.date < y.date) ? 1 : -1 ));
-						}
-		          	return  $scope.dataSourceCol = data,
-		              $scope.stores = $scope.dataSourceCol 
-		            ,$scope.searchKeywords = "", 
-
-		              $scope.filteredStores = [],
-
-		              $scope.row = "", 
-
-		              $scope.select = function(page) {
-
-		                  var end, start;
-
-		                  return start = (page - 1) * $scope.numPerPage, end = start + $scope.numPerPage, $scope.dataSourceCol = $scope.filteredStores.slice(start, end);
-
-		              }, 
-
-		              $scope.onFilterChange = function() {
-		                  return $scope.select(1), $scope.currentPage = 1, $scope.row = "";
-
-		              }, $scope.onNumPerPageChange = function(number) {
-		                  $scope.numPerPage = number;
-		                  return $scope.select(1), $scope.currentPage = 1;
-
-		              }, $scope.onOrderChange = function() {
-
-		                  return $scope.select(1), $scope.currentPage = 1;
-
-		              }, $scope.search = function(value) {
-		                  return $scope.filteredStores = $filter("filter")($scope.stores, value), $scope.onFilterChange();
-
-		              }, $scope.order = function(rowName) {
-
-		                  return $scope.row !== rowName ? ($scope.row = rowName, $scope.filteredStores = $filter("orderBy")($scope.filteredStores, rowName), $scope.onOrderChange()) : void 0;
-
-		              }, $scope.numPerPageOpt = [20,30,50],
-
-		              $scope.numPerPage = $scope.numPerPageOpt[0], 
-
-		              $scope.currentPage = 1, 
-
-		              $scope.dataSourceCol = [],
-
-		              ($scope.init = function() {
-		                  return $scope.search(), $scope.select($scope.currentPage) , $scope.order("applicationId");
-		              })();
-
+			     if(data){
+		          	$scope.drawTablularData(data);
 		          };
-		   };
+			    });
+			}
+		}		
+
+		
+
+        $scope.drawTablularData = function(data){
+              return  $scope.dataSourceCol = data,
+                          $scope.stores = $scope.dataSourceCol
+                          , $scope.searchKeywords = "", 
+
+                          $scope.filteredStores = [],
+
+                          $scope.row = "", 
+
+                          $scope.select = function(page) {
+                              var end, start;
+                              return start = (page - 1) * $scope.numPerPage, end = start + $scope.numPerPage, $scope.dataSourceCol = $scope.filteredStores.slice(start, end);
+                          }, 
+
+                          $scope.onFilterChange = function() {
+                              return $scope.select(1), $scope.currentPage = 1, $scope.row = "";
+
+                          }, $scope.onNumPerPageChange = function(number) {
+                              $scope.numPerPage = number;
+                              return $scope.select(1), $scope.currentPage = 1;
+
+                          }, $scope.onOrderChange = function() {
+
+                              return $scope.select(1), $scope.currentPage = 1;
+
+                          }, $scope.search = function(value) {
+                              return $scope.filteredStores = $filter("filter")($scope.stores, value), $scope.onFilterChange();
+
+                          }, $scope.order = function(rowName) {
+
+                              return $scope.row !== rowName ? ($scope.row = rowName, $scope.filteredStores = $filter("orderBy")($scope.filteredStores, rowName), $scope.onOrderChange()) : void 0;
+
+                          }, $scope.numPerPageOpt = [20,30,50],
+
+                          $scope.numPerPage = $scope.numPerPageOpt[0], 
+
+                          $scope.currentPage = 1, 
+
+                          $scope.dataSourceCol = [],
+
+                          ($scope.init = function() {
+                              return $scope.search(), $scope.select($scope.currentPage);
+                          })();
+
+        }
+        
 		   
 		
 		$scope.viewApplication = function(CustID,status){
@@ -690,15 +629,7 @@
                 }
 			});
 			$scope.croDecision = response.aCroDec;
-           /* try{
-                 if($scope.objectSet.oLosDtls.sLosID){
-                 $scope.losIdval = true;
-                 }else{
-                     $scope.losIdval = false;
-                 }   
-            }catch(e){
-                 $scope.losIdval = false;
-            }*/
+           
             try{
                  $scope.pdfData ="data:application/pdf;base64,"+$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];             
             }catch(e){
@@ -734,16 +665,16 @@
                     });
                  });
                   
-                    _.each(maindata,function(val){
-                        return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
-                            if(!_.isUndefined(data) || !_.isNull(data)){
-                                if(!_.isEmpty(data.sByteCode)){
-                                val["sByteCode"] = "data:image/png;base64,"+data.sByteCode; 
-                                 $scope.imageDataArray.push(val); 
-                                }  
-                            }
-                        });
+                _.each(maindata,function(val){
+                    return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
+                        if(!_.isUndefined(data) || !_.isNull(data)){
+                            if(!_.isEmpty(data.sByteCode)){
+                            val["sByteCode"] = "data:image/png;base64,"+data.sByteCode; 
+                             $scope.imageDataArray.push(val); 
+                            }  
+                        }
                     });
+                });
 
                 var rejectImgFromServer =[];
                 _.each($scope.imageDataArray,function(val){
@@ -758,7 +689,7 @@
 		}
 
 		
-		$scope.back = function(){
+		$scope.toggleForm = function(){
 			$scope.isTableData = false;
 			$scope.appView = !$scope.appView;
 		}
@@ -997,39 +928,10 @@
                 		$scope.AList = [{'value':'QDE'},{'value':'ADE'},{'value':'SCRUB'},{'value':'GoNoGo'},{'value':'LOS'}];
                 		$scope.OutputList = [{'value':'Approve','color':'#43A443'},{'value':'Decline','color':'#E42E28'},{'value':'Queue','color':'#2196f3'}];
                 		
-//                		$('#recordFrom').datepicker({changeMonth: true, changeYear: true, yearRange: "1945:2016", dateFormat: 'dd:M:yy', defaultDate:(new Date(new Date()).getDate() - 3)});
 
-                /*		$('html,body').animate({
-                			scrollTop: $("#second_row").offset().top},
-                		'slow');
-                *///		$("#recordTo").datepicker();
                 		var sicount=0;
 
-                		//get roles authentication
-//	                                    		$http.get('JSON/Auth.json').success(function(data) {
-//	                                    		$scope.Auth=data[""+user.institutionID+""].roles;
-//	                                    		});
-/*
-                		$("#recordTo").datepicker({
-                			changeMonth: true, changeYear: true, yearRange: "1945:2016", dateFormat: 'dd:M:yy', defaultDate:(new Date(new Date()).getDate() - 3) ,
-                			onSelect: function(dateText, inst) {
-                				// alert('on select triggered');
-                				$('#loading_spinner').show();
-                				setTimeout(function()
-                						{
-                					$('#loading_spinner').hide();
-                					$("#recordCount").val("25568").show();
-                					$("#Total").text("Records");
-                					$("#totalRecordContainer, #Total,#recordCountContainer ").show();
-                					// $('#find"]').prop('disabled', false);
-                					$("#find").removeAttr("disabled")
-                						},1000);	
-
-                			}
-                		});
-*/
-            		// For Hiding the user profile if any time he has seen
-//	                                    		$("#UserContainer").hide();
+                		$("#UserContainer").hide();
 
             		function validation()
             		{  

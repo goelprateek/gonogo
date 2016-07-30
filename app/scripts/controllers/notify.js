@@ -322,10 +322,9 @@
 	
     });
 
-	app.controller('NotifController', ['$scope','$rootScope', '$timeout','Validation','$filter',
+	app.controller('NotifController', ['$scope','$rootScope', '$interval','Validation','$filter',
 								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log',
-                                function($scope, $rootScope, $timeout,Validation,$filter,RestService,NotificationObject,UserService,AclService,
-        
+                                function($scope, $rootScope, $interval,Validation,$filter,RestService,NotificationObject,UserService,AclService,
                                     $uibModal,SelectArrays,$log){
 	var user=UserService.getCurrentUser();
     $scope.can=AclService.can;
@@ -383,78 +382,77 @@
 	$scope.minVal = 0;
 	$scope.limit = 800;
     $scope.notifarray = [];
+    
 
     //when to bottom of queue load next records
 	$scope.loadData = function(){
-		 $scope.minVal = $scope.minVal+$scope.limit;
+         $scope.minVal = $scope.minVal+$scope.limit;
 		 polling($scope.minVal);
 	 }
 	
-	polling($scope.minVal);
-	
-	function polling(minimum) {
-        console.log("minimum :"+minimum);
+    var timer ;
+	function polling (minimum ) {
+        
 		if($rootScope.template == "notification"){
 
 			if(!AclService.can('NAPPDATADEF')){
-				if(user.id=="599"){ // PL STP -- CRO9
-					// var json ={'sCroID':"STP_PL", 
-					// 		'sInstID':user.institutionID, 
-					// 		'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};
-
+				if(user.id=="599"){ 
                     var json ={'sCroID':"STP_PL", 
                     'sInstID':user.institutionID, 
                     'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit}
 				}else{
-					// var json ={'sCroID':"STA",  // CRO9
-					// 		'sInstID':user.institutionID,
-					// 		'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};
-
                     var json ={'sCroID':"STA",  // CRO9
                     'sInstID':user.institutionID,
                     'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit};
 				}
 			}else if(user.id=="586"){
-				// var json ={'sCroID':"PL_QUEUE",  // CRO1 PL Normal
-				// 		'sInstID':user.institutionID, 
-				// 		'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};
-
                 var json ={'sCroID':"PL_QUEUE",  // CRO1 PL Normal
                         'sInstID':user.institutionID, 
                         'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit};
-            }
-			else{
-      //           var json ={'sCroID':"default", // CRO1,CRO2 Normal
-						// 'sInstID':user.institutionID, 
-						// 'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};//,'sCriteria' :"SIKKIM"
-                
+            }else{
                 var json ={'sCroID':"default", // CRO1,CRO2 Normal
                         'sInstID':user.institutionID, 
                         'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit}
 			}
+
 			var URL;
+
 			if(AclService.can('NCROQUE')){
 				URL = 'cro-queue'; //All 
-				//URL = 'cro-queue-criteria';
 			}else{
 				URL = 'cro2-queue'; // Only CRO2
 			}
-			RestService.saveToServer(URL,json).then(function(data){
-				if(!_.isNull(data) || _.isUndefined(data)){
+
+           
+			RestService.fetchDataQuietly(URL,json).then(function(data){
+				
+                if(!_.isNull(data) || !_.isUndefined(data)){
+
                     var queArray = _.union($scope.notifarray,data);
                     //only union, after interval adds +10 element in queue
                     var filteredData = _.uniq(queArray, function(item, key, sRefID) { 
                         return item.sRefID;
-                    });//only unique will fix length of data in queue
+                    });
+
                     $scope.notifarray = filteredData;
-					$scope.error ="";
-                     console.log($scope.notifarray.length);
+                    $scope.error ="";
+                    
 				}
 			});	
+
+            timer  = $interval(function(){
+                polling($scope.minVal);
+            }, 30000, true);
+            
   		}
 
 	}
-    setInterval(polling, 30000,0);
+
+    polling($scope.minVal);
+
+    
+    
+
     $scope.addrType = SelectArrays.getAddrType();
 	$scope.addr_type = $scope.addrType[1];   //to set default address
 	$scope.aplcntType=[{value:"SAL","text":"Salaried"},
@@ -514,8 +512,6 @@
         var URL='';
 		var json ={'sRefID':CustID};	
 
-        //applicationRequestType= sRqTyp introducted in PL Salary
-        //PS=Partial Save & FP=Fully processed
         if(applicationRequestType && applicationRequestType=="PS"){
             URL = 'application-data-partial';
         }else if(applicationRequestType && applicationRequestType=="FP"){
@@ -543,7 +539,6 @@
             if(response){
                 transfrmedOject =  response;
                 transfrmedOject.aAppScoRslt = _.uniq(transfrmedOject.aAppScoRslt,true,function(object){
-                   /* if(object.sFldName  && !_.isEmpty(object.sFldVal))*/
                     return object.sFldName;
                 });
 
@@ -578,10 +573,6 @@
                 dateOfBirth.setDate(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)));
                 dateOfBirth.setMonth((parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4))-1));
                 
-                // $scope.objectSet.oAppReq.oReq.oApplicant.sDob =$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)
-                //                                                 +"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4)
-                //                                                 +"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4);
-
                 $scope.app_form={pickerDob:dateOfBirth};
             }
 
@@ -794,8 +785,6 @@ $scope.cro_action = function(refID, action){
                       templateUrl: 'views/templates/approve-panel.html',
                       controller: 'ModalInstanceCtrl',
                       size: 'lg',
-                      backdrop: 'static',
-                      keyboard: false,
                       resolve: {
                         modalFeed : function (){
                             var dataForModel;
@@ -1178,6 +1167,16 @@ $scope.updateLosData = function(status){
             }
         });
     };
+
+    // destructor function for scope 
+    $scope.$on("$destroy",function(){
+        console.log("destroying timer");
+        if(angular.isDefined(timer)){
+             $interval.cancel(polling);
+             timer = undefined;
+        }
+    });
+
 }]);
 
 app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$uibModalInstance","requestObj","UserService",function($scope,RestService,$uibModalInstance,requestObj,UserService){

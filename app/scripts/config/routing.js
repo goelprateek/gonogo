@@ -67,19 +67,6 @@
 		};
 	});
 
-	app.config([ "$httpProvider", function($httpProvider) {
-		$httpProvider.interceptors.push('Interceptor');
-		
-	}]);
-
-	app.config(['cfpLoadingBarProvider','$compileProvider', function(cfpLoadingBarProvider,$compileProvider) {
-		cfpLoadingBarProvider.includeSpinner = true;
-		cfpLoadingBarProvider.parentSelector = 'nav';
-		$compileProvider.debugInfoEnabled(false);
-		
-	}]);
-
-	
 
 	app.run(function($rootScope, $location, APP_CONST){
 

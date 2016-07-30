@@ -48,64 +48,78 @@
 			return defere.promise;
 		},
 
-			getFromServer = function (url) {
+		getFromServer = function (url) {
 
-				var defere = $q.defer();
+			var defere = $q.defer();
 
-				$http.get(url).success(function (resp) {
-					$log.debug(resp);
-					defere.resolve(resp);
-				}).error(function (error) {
-					$log.error(error);
-					defere.resolve(error);
-				})
-				return defere.promise;
-			},
+			$http.get(url).success(function (resp) {
+				$log.debug(resp);
+				defere.resolve(resp);
+			}).error(function (error) {
+				$log.error(error);
+				defere.resolve(error);
+			})
+			return defere.promise;
+		},
 
-			getStreamFromServer = function (url, data) {
-				var deferred = $q.defer();
-				console.log(data);
-				$http({
-					url: url,
-					method: "POST",
-					data: data,
-					headers: { 'Content-type': 'application/json' },
-					responseType: 'arraybuffer',
-				})
-					.success(function (data) {
-						$log.debug("SUCCESS");
-						deferred.resolve(data);
-					}).error(function (data) {
-						$log.error("ERROR");
-						deferred.reject(data);
-					});
-
-				return deferred.promise;
-
-			},
-
-			postDataWithLoginHeaders = function (url, data, username, pass) {
-				$http.defaults.headers.common['token-key'] = '95957453469767522788';
-				$http.defaults.headers.common['username'] = username;
-				$http.defaults.headers.common['password'] = pass;
-
-				var defer = $q.defer();
-				$http.post(url, data).success(function (data) {
-					$log.info(data);
-					defer.resolve(data);
+		getStreamFromServer = function (url, data) {
+			var deferred = $q.defer();
+			console.log(data);
+			$http({
+				url: url,
+				method: "POST",
+				data: data,
+				headers: { 'Content-type': 'application/json' },
+				responseType: 'arraybuffer',
+			})
+				.success(function (data) {
+					$log.debug("SUCCESS");
+					deferred.resolve(data);
 				}).error(function (data) {
-					$log.error(data);
-					defer.reject(data);
+					$log.error("ERROR");
+					deferred.reject(data);
 				});
-				return defer.promise;
-			};
+
+			return deferred.promise;
+
+		},
+
+		postDataWithLoginHeaders = function (url, data, username, pass) {
+			$http.defaults.headers.common['token-key'] = '95957453469767522788';
+			$http.defaults.headers.common['username'] = username;
+			$http.defaults.headers.common['password'] = pass;
+
+			var defer = $q.defer();
+			$http.post(url, data).success(function (data) {
+				$log.info(data);
+				defer.resolve(data);
+			}).error(function (data) {
+				$log.error(data);
+				defer.reject(data);
+			});
+			return defer.promise;
+		},
+
+		_fetchDataQuietly = function(url, data){
+			var defere = $q.defer(),
+				_url = APP_CONST.getConst('BASE_URL_GNG');
+
+			$http.post(_url + url, data, { ignoreLoadingBar: true }).success(function (response){
+				defere.resolve(response);
+			}).error(function (error) {
+				defere.reject(error);
+			})
+
+			return defere.promise;
+		};
 
 		return {
 			saveToServer: _saveToServer,
 			getFromServer: getFromServer,
 			getStreamFromServer: getStreamFromServer,
 			postDataWithHeaders: postDataWithLoginHeaders,
-			jsonpReq:jsonpReq
+			jsonpReq:jsonpReq,
+			fetchDataQuietly:_fetchDataQuietly
 
 		}
 
