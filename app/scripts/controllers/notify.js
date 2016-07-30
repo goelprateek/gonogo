@@ -441,17 +441,17 @@
                     
 				}
 			});	
-
-            if(_.isUndefined(timer)){
-                timer  = $interval(function(){
-                    polling($scope.minVal);
-                }, 30000, true);    
-            }
-            
             
   		}
 
 	}
+
+    if(_.isUndefined(timer)){
+         console.log("starting timer");
+          timer  = $interval(function(){
+                    polling($scope.minVal);
+          }, 30000, 0,true);    
+    }
 
     polling($scope.minVal);
 
