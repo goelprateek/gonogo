@@ -273,7 +273,7 @@ font-size:14px;}
 					
 					<div slimscroll="{height: 512,railVisible:true}"  when-scrolled="loadData()">
 						<div class="list-group-item" ng-if="notifarray.length==0"
-								style="color: red; text-align: center;">Your Queue is Empty</div>
+								style="color: red; text-align: center;">Please wait while we are populating data</div>
 						
 						<div class="list-group-item" style="padding: 0px;border-bottom: 1px solid #ddd;margin-bottom: 0px;" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" > 
 							<div class="list-group-item" style="border-bottom: 1px solid #ddd;margin-bottom: 0px;border: 0px solid #ddd;"
@@ -386,11 +386,11 @@ font-size:14px;}
 									<span>Gross Annual : {{ emp.dGrossSal | rupee:"&#x20B9; "}}</span>
 								</div> -->
 								<div class="list-group-item" ng-if="emp.sConst.toUpperCase()=='SELF-EMPLOYED'">
-									<span>ITR Amount : {{emp.dItrAmt | currency:'&#8377;'}}</span> 
+									<span>ITR Amount : &nbsp{{emp.dItrAmt | currency:'&#8377;'}}</span> 
 								</div>
 								<div class="list-group-item" ng-if="emp.sConst.toUpperCase()!='SELF-EMPLOYED'">
-									<span ng-if="emp.dmonthSal != 0">Monthly Income :{{emp.dmonthSal | currency:'&#8377;'}}</span>
-										<span ng-if="emp.dmonthSal == 0">Yearly Income :{{emp.dGrossSal | currency:'&#8377;'}}</span>
+									<span ng-if="emp.dmonthSal != 0">Monthly Income :&nbsp{{emp.dmonthSal | currency:'&#8377;'}}</span>
+										<span ng-if="emp.dmonthSal == 0">Yearly Income :&nbsp{{emp.dGrossSal | currency:'&#8377;'}}</span>
 								</div>
 								<div class="list-group-item">
 									<span>Employer : {{ emp.sEmplName}}</span> 
@@ -579,24 +579,24 @@ font-size:14px;}
 								<div class="div-heading kyc"><label>DECISION</label><a ng-if="objectSet && objectSet.iNoReTry>=1" style="float: right;padding-right: 10px;color: white;" ng-click="showReinitiatedDecisionData('lg',objectSet)">View Old</a></div>
 								<div id="KYC" style="width: 106.5%;" slimscroll="{height: 210,railVisible:true}">
 									<div class="list-group-item">
-										<span>Applied Amount :{{objectSet.oAppReq.oReq.oApplication.dLoanAmt | currency:'&#8377;'}}</span>
+										<span>Applied Amount :&nbsp{{objectSet.oAppReq.oReq.oApplication.dLoanAmt | currency:'&#8377;'}}</span>
 									</div>
 									<div ng-repeat="cro in objectSet.aCroDec">
 									 	<div class="list-group-item">
-											<span>Eligibility Amount :{{cro.dEligibleAmt | currency:'&#8377;'}}</span>
+											<span>Eligibility Amount :&nbsp{{cro.dEligibleAmt | currency:'&#8377;'}}</span>
 										</div>
 										<!-- ng-if="objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT" -->
 										<div class="list-group-item">
 											<span>FOIR :{{objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT}}</span>
 										</div>
 										<div class="list-group-item">
-											<span>Approved Amount :{{cro.dAmtAppr | currency:'&#8377;'}}</span>
+											<span>Approved Amount :&nbsp{{cro.dAmtAppr | currency:'&#8377;'}}</span>
 										</div>
 										<div class="list-group-item">
 											<span>Tenor : {{cro.iTenor}}</span>
 										</div>
 										<div class="list-group-item">
-											<span>EMI :{{cro.dEmi | currency:'&#8377;'}}</span>
+											<span>EMI :&nbsp{{cro.dEmi | currency:'&#8377;'}}</span>
 										</div>
 									</div>
 									<!-- <div class="list-group-item" 

@@ -258,7 +258,7 @@
             template: '<i class="fa fa-expand"></i>',
             link: function (scope, el, attr) {
                 el.on('click', function () {
-                    var widget = el.parents(".modal-body").eq(0);
+                    var widget = el.parents(".modal-dialog").eq(0);
                     var button = el.find("i").eq(0);
                     var compress = "fa-compress";
                     var expand = "fa-expand";
@@ -267,17 +267,14 @@
                             button.addClass(expand).removeClass(compress);
                         }
                         widget.removeClass("maximized");
-                        widget.find(".widget-body").css("height", "auto");
+                         widget.find("object").css("height","480px");
                     } else {
                         if (button) {
                             button.addClass(compress).removeClass(expand);
                         }
                         widget.addClass("maximized");
-                        if (widget) {
-                            var windowHeight = $(window).height();
-                            var headerHeight = widget.find(".widget-header").height();
-                            widget.find(".widget-body").height(windowHeight - headerHeight);
-                        }
+                         el.parents("modal-content").css("height", "100%");
+                         widget.find("object").css("height","565px");
                     }
                 });
             }
