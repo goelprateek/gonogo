@@ -6,7 +6,7 @@
 
 	app.factory("NotificationObject",function(){
     	var _obj = {
-            
+
         "applicationLog": {},
         "sRefID": "",
         "bStatFlag": "",
@@ -442,9 +442,12 @@
 				}
 			});	
 
-            timer  = $interval(function(){
-                polling($scope.minVal);
-            }, 30000, true);
+            if(_.isUndefined(timer)){
+                timer  = $interval(function(){
+                    polling($scope.minVal);
+                }, 30000, true);    
+            }
+            
             
   		}
 
