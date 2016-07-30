@@ -250,7 +250,7 @@ font-size:14px;}
 					
 					<div slimscroll="{height: 512,railVisible:true}"  when-scrolled="loadData()">
 						<div class="list-group-item" ng-if="notifarray.length==0"
-								style="color: red; text-align: center;">Your Queue is Empty</div>
+								style="color: red; text-align: center;">Please wait while we are populating data</div>
 						
 						<div class="list-group-item" style="padding: 0px;border-bottom: 1px solid #ddd;margin-bottom: 0px;" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" > 
 							<div class="list-group-item" style="border-bottom: 1px solid #ddd;margin-bottom: 0px;border: 0px solid #ddd;"
