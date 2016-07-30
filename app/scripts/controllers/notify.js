@@ -442,7 +442,7 @@
 
             timer  = $interval(function(){
                 polling($scope.minVal);
-            }, 3000, true);
+            }, 30000, true);
             
   		}
 
@@ -785,8 +785,6 @@ $scope.cro_action = function(refID, action){
                       templateUrl: 'views/templates/approve-panel.html',
                       controller: 'ModalInstanceCtrl',
                       size: 'lg',
-                      backdrop: 'static',
-                      keyboard: false,
                       resolve: {
                         modalFeed : function (){
                             var dataForModel;

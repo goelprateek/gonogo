@@ -54,14 +54,7 @@
 	background-color: red;
 }
 
-.picked {
-	background-color: #CFCFCF;
-	border: 2px solid #fff;
-}
 
-.picked:hover {
-	background-color: #CFCFCF;
-}
 
 .node ellipse {
 	fill: #fff;
@@ -237,8 +230,8 @@ font-size:14px;}
 			                
 			                <ul class="tasks-list" slimscroll="{height: 512,railVisible:true}"  when-scrolled="loadData()">
 
-			                    <li class="task-item" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" >
-			                        <div ng-click='load_details(user.sRefID,true,user.sRqTyp)' ng-class='{picked: user.sRefID==Picked}'>
+			                    <li class="task-item"  ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" >
+			                        <div style="outline:none;" ng-click='load_details(user.sRefID,true,user.sRqTyp)' >
                                         <span class="img-circle dsa_profile_icon" >
 											<h5><i class="fa fa-user"></i></h5>
 										</span>
