@@ -16,16 +16,14 @@
 				<strong>Error ! &nbsp&nbsp&nbsp</strong><span id="error"></span>
 			</div>
 		</div>
-		<div class="col-md-4 text-right" id="top-fixed">
-			<!-- <a class="add-button-div-notification"
-				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('Application', 'Update') && isUpdating && ApplicantForm.$valid" ng-click="updateForm();">Save</a> -->
+		<div class="col-md-4 text-right" id="top-fixed" ng-if="can('NRPRCS')">
+			
 			<a class="add-button-div-notification"
 				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('NRPRCS') && !isUpdating" ng-click="enableForm();">Update</a>
 			<a class="add-button-div-notification"
 				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('NRPRCS') && ((isUpdating && ApplicantForm.$valid) || !isUpdating)" ng-click="updateForm();">Reinitiate</a>
 			<a class="add-button-div-notification" style="width: 100px; display: inline-block;" ng-click="toggleForm()">Back</a>
-				<!-- <a class="add-button-div-notification"
-				style="width: 100px; display: inline-block;" ng-show="{{InstitutionID==4019 && (userid != '493')}}" id="submit">Submit</a> -->
+				
 		</div>
 	</div>
 		<!-- ng-if="!authenticate('NCONTAINER')"  ng-if="objectSet.oLosDtls"-->

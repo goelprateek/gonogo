@@ -3,6 +3,142 @@
 	'use strict';
 	
 	var app = angular.module('gonogo-directives',["d3"]);
+
+	app.directive('hcBarChart',['UserService', 'RestService',function(UserService,RestService){
+		return {
+			restrict: 'EA',
+                    template: '<div></div>',
+                    scope: {
+                        data: '=data'
+
+                    },
+                    replace:true,
+                    link: function (scope,element,attribute, controller) {
+                    	
+                    	var user = UserService.getCurrentUser();
+                    	scope.$watch('data', function(dataNew,dataOld){
+                    		
+                    		if(dataNew){
+
+                    			Highcharts.chart(element[0], {
+					            chart: {
+					                type: 'column',
+					                animation: true,  
+					                reflow: true,  
+					                spacing: [10, 10, 15, 10]					                
+					            },
+					        
+					            title: {
+					                text: ''
+					            },
+					            xAxis: {
+					                 startOnTick:true,
+					                 endOnTick:true,
+					                categories: ["2016-06-27", "2016-06-28", "2016-06-29", "2016-06-30", "2016-07-01", "2016-07-02", "2016-07-03", "2016-07-04", "2016-07-05", "2016-07-06", "2016-07-07", "2016-07-08", "2016-07-09", "2016-07-10", "2016-07-11", "2016-07-12", "2016-07-13", "2016-07-14", "2016-07-15", "2016-07-16", "2016-07-17", "2016-07-18", "2016-07-19", "2016-07-20", "2016-07-21", "2016-07-22", "2016-07-23", "2016-07-24", "2016-07-25", "2016-07-26", "2016-07-27"],
+					                labels: {
+					                   formatter : function(){
+					                        var date = new Date(this.value),
+					                                            day = date.getDate(),
+					                          months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+					                       if(day === 1){
+					                           return months[date.getMonth()] + "-" + day;
+					                       }   
+					                      if(date.getDay() === 5 || date.getDay() === 6){
+					                         return '<span style="font-size:12px; color:maroon;">'+day+'</span>';
+					                      }
+					                      return day;
+					                   }
+					                },
+					                maxStaggerLines: 5, 
+					                type:'datetime'
+					            },
+					            yAxis: {
+					                min: 0,
+					                title: {
+					                    text: ''
+					                },
+					                stackLabels: {
+					                    enabled: false
+					                },
+					                visible : true,
+					                type: 'linear',
+					                gridLineColor:"#DFDFDF",
+					                gridLineWidth: 0.5,
+					                gridZIndex: 1,  
+					            },
+					            plotOptions: {
+					                allowPointSelect: true,
+					                column: {
+					                    stacking: 'normal',
+					                    pointWidth:20,
+					                    dataLabels: {
+					                        enabled: false,
+					                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+					                        style: {
+					                            textShadow: '0 0 3px black'
+					                        }
+					                    },
+					                    point: {
+					                         events: {
+					                            click: function() {
+					                                //alert('Category: ' + this.category + ', value: ' + this.y);
+					                               if( user.role != "DSA" ){
+														var json = { 
+																	"dtDate":this.category,
+																	"sStat":this.series.name,
+																	'sInstID':user.institutionID
+																};
+														RestService.saveToServer("table-view",json).then(function(data){
+															console.log(data);
+															scope.$parent.$parent.drawTablularData(data);
+															scope.$parent.$parent.isTableData = false;
+														});
+													}
+
+					                            }
+					                        }
+					                    }
+					                }
+					            },
+					       
+					            tooltip: {
+					              animation: true,
+					              shadow: true,
+					              useHTML:true,
+					             headerFormat: '<b>{point.x}</b><br/>',
+					                pointFormat: '<span style="color:{series.color}">{series.name}</span>: {point.y} </br>',
+					                footerFormat : 'Total: <b>{point.total}</b>',
+					                shared:true
+					            },
+					        	credits: {
+								      enabled: false
+								},
+					            loading: {
+					              hideDuration: 100,      
+					              showDuration: 100      
+					            },
+					            colors: ["#4CAF50","#F44336","#CCC"],
+					            series: [{
+					                data: dataNew[0].y, 
+					                name: dataNew[0].name
+
+					                },{
+					                    data: dataNew[1].y, 
+					                    name: dataNew[1].name
+					                },{
+					                    data: dataNew[2].y, 
+					                    name: dataNew[2].name,
+					                }]
+
+             
+                        });
+
+                  }
+               },true)
+            }
+		};
+	}]);
+
 	app.directive('gngStackedBarGraph',['d3','RestService','UserService',function(d3,RestService,UserService){
 		console.log("gngStackedBarGraph bar graph");
 		return {

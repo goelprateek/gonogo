@@ -49,6 +49,11 @@ width: 100%; height: 100%; max-height: 400px;
 
 .modal-title h5{
 font-size:14px;}
+
+.highcharts-container{
+	width:100%!important;
+}
+
 </style>
  
 
@@ -135,17 +140,18 @@ font-size:14px;}
 			   <div class="col-md-12" style="height:40px;">&nbsp;&nbsp;&nbsp;&nbsp;</div>
 
 			   <div class="row" >
-					<div id="mainTable"  gng-stacked-bar-graph data-ng-model="stackedChart1"  graph-data="orignalData" style="margin-left:20px;" 
-					institution-id="{{InstitutionID}}" test-data="dataFromDirective" isolated-table-data="updateData(parameter)"></div>
+					<!-- <div id="mainTable"  gng-stacked-bar-graph data-ng-model="stackedChart1"  graph-data="orignalData" style="margin-left:20px;" 
+					institution-id="{{InstitutionID}}" test-data="dataFromDirective" isolated-table-data="updateData(parameter)"></div> -->
+					<div  hc-bar-chart  data="chartOptions" style="height:100%;width:100%;"></div>
 				</div>
 				
-				<div id="legendGroup" class="col-md-8	col-md-offset-4" style="margin-top: 25px">
+				<!-- <div id="legendGroup" class="col-md-8	col-md-offset-4" style="margin-top: 25px">
 					<ul class="legend" >
 						<li><span class="approved"></span> Approved</li>
 						<li><span class="declined"></span> Declined</li>
 						<li><span class="pending"></span>Queue</li>
 					</ul>
-				</div>
+				</div> -->
 			</div>
 			
 			
@@ -315,10 +321,10 @@ font-size:14px;}
 		            </div>
 		       </div>  
 			</div>
-			<div data-ng-if="appView" class="row clearfix" style="margin-right: 0px;">
+			<!-- <div data-ng-if="appView" class="row clearfix" style="margin-right: 0px;">
 					<a class="add-button-div-notification"
 						style="width: 100px; display: inline-block;float: right;margin: 0px" ng-click="back()">Back</a> 
-			</div>
+			</div> -->
 			<div data-ng-if="appView" data-ng-include="'views/templates/app-form.html'"></div>
 		</section>
 		

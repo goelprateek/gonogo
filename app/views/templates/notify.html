@@ -94,18 +94,7 @@ svg:not (:root ) {
 	overflow: visible;
 }
 
-/*#tooltip {
-	position: absolute;
-	height: auto;
-	padding: 10px;
-	background-color: white;
-	border-radius: 10px;
-	-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-	-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-	z-index: 1;
-}
-*/
+
 .tooltipExp {
 	word-spacing: 5px;
 	letter-spacing: 1px;
@@ -114,10 +103,7 @@ svg:not (:root ) {
 }
 
 
-/*#tooltip.hidden {
-	display: none;
-}
-*/
+
 .nhr a {
 	color: #777;
 }
@@ -206,7 +192,7 @@ font-size:14px;}
 							<li><a id="dsa_chat" ng-if="can('NCHAT')">DSA Chat</a></li>
 							<li ><a id="onhold" title="{{objectSet.oAppReq.sRefID}}"
 								ng-if="can('NHOLD') && isDedupeSelected"  
-								ng-click='cro_action(objectSet.oAppReq.sRefID, "OnHold")'>OnHold</a><!-- 27 -->
+								ng-click='cro_action(objectSet.oAppReq.sRefID, "OnHold")'>OnHold</a>
 							</li>
 							<li ><a id="approve" title="{{objectSet.oAppReq.sRefID}}"
 								ng-if="can('NAPPROVE') && isDedupeSelected"
@@ -231,14 +217,51 @@ font-size:14px;}
 		</div>
 	</div>
 	<div class="col-md-10 col-md-offset-1" contextmenu="blur" style="padding: 0px;">
-		<div class="col-md-12" id="notification-main-container"
-			style="border-top: 1px solid #DADADB;padding: 0px;" data-ng-if="container">
+		<div class="col-md-12" id="notification-main-container" style="border-top: 1px solid #DADADB;padding: 0px;" data-ng-if="container">
+
+			<div class="col-lg-3 col-sm-12 col-xs-12" style="padding:0px; margin-top:5px;">
+			    <div class="widget">
+			        <!-- <div class="widget-header bordered-bottom bordered-themeprimary">
+			            <i class="widget-icon fa fa-tasks themeprimary"></i>
+			            <span class="widget-caption themeprimary">Applications</span>
+			        </div> -->
+			        <div class="widget-body no-padding">
+			            <div class="task-container">
+			                <div class="task-search">
+			                    <span class="input-icon">
+			                        <input type="text" class="form-control" placeholder="Search" ng-model="search">
+			                        <i class="fa fa-search gray"></i>
+			                    </span>
+			                </div>
+			                
+			                
+			                <ul class="tasks-list" slimscroll="{height: 512,railVisible:true}"  when-scrolled="loadData()">
+
+			                    <li class="task-item" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" >
+			                        <div ng-click='load_details(user.sRefID,true,user.sRqTyp)' ng-class='{picked: user.sRefID==Picked}'>
+                                        <span class="img-circle dsa_profile_icon" >
+											<h5><i class="fa fa-user"></i></h5>
+										</span>
+										<div class="notify-name">{{user.sDsaName.split("@")[0]}}</div>
+										<div class="status" id="{{user.sRefID}}" ng-model="user.sRefID" ng-class="{Pending: user.sStat.toUpperCase() == 'ONHOLD', Approved: user.sStat.toUpperCase() == 'APPROVED', Declined:user.sStat.toUpperCase()== 'DECLINED'} "></div>
+										<div class="notify-time" >{{user.dtDateTime | dateFormat }}</div>
+										<div class="property_location" style="font-size: 10px;  min-width: 60px;" ng-if="user.sStage!=null && !can('NCROQUE')">{{user.sStage}}</div>
+										<div class="processedBy" ng-if="!can('NCROQUE') && user.sProcBy.toUpperCase()!='DEFAULT'&& user.sProcBy.toUpperCase()!='ERROR'" style="font-size: 10px;left:105px">{{user.sProcBy.toUpperCase()=='STA'?'STP':user.sProcBy.toUpperCase()}}</div>
+										<div class="property_amount" >{{user.dloanAmt | currency:"&#x20B9; "}}</div>
+                                	</div>
+			                    </li>
+			                </ul>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+
+
 			
-			<div class="col-md-3 column" id="leftbar" style="padding: 7px 0px 0px 0px;height: 553px;margin-bottom: 55px;"> <!--  overflow: hidden; margin-bottom: 20px; -->
+			<!-- <div class="col-md-3 column" id="leftbar" style="padding: 7px 0px 0px 0px;height: 553px;margin-bottom: 55px;"> 
 				
 				<div class="list-group" ng-init="names"
 					style="border: 1px solid rgb(218, 218, 219);overflow: hidden;margin-bottom: 0px ;border-radius: 5px;"> 
-					<!-- remove overflow hidden -->
 					<form name="notification_search" autocomplete="off">
                 		<div class="icon-addon addon-lg">
 							<input id="search" class="form-control" type="text" ng-model="search"
@@ -271,9 +294,10 @@ font-size:14px;}
 						</div>
 				</div>
 				</div>
-			</div>
+			</div> -->
+
 <!-- 	userid!='37' -->
-			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden;padding-right: 0px; max-height: 640px;" ng-if="can('NCONTAINER')"> <!-- NCONTAINER  ng-show="{{userid != '494'}}"-->
+			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden;padding-right: 0px; max-height: 640px;" ng-if="can('NCONTAINER')"> 
 				<ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;    height: 38px;   width:98%;">
  				    <li  class="active" style=" margin-top: 7px;"><a id="applicant" style="padding: 6px 10px;font-weight: bold; font-size: 13px;">Applicant</a></li>
 					<select class="form-control" id="dedupe1" ng-if="objectSet.aDeDupe!=''" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
