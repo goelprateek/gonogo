@@ -2,10 +2,11 @@
 	'use strict';
 	var app = angular.module('gonogo.cdl');
 
-	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"roundProgressService","UserService","AclService","GNG_GA", function(
-	 									$scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,roundProgressService,UserService,AclService,GNG_GA) {
+	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA", function(
+	 									$scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA) {
 
 		var dlrCode =null;
+		var CustID=null;
 
 		var user=UserService.getCurrentUser();
     	$scope.can=AclService.can;
@@ -17,16 +18,20 @@
     	// Start : If from step 1 screen
 		if(sharedService.getRefID()){
 			$scope.referenceID=sharedService.getRefID();
+			CustID=sharedService.getRefID()
 		}else{
 			$location.path("/cdl/basic-de");
 		}
+		sharedService.setRefID(null);
 
 		if(sharedService.getApplicationID()){
 			$scope.applicationID=sharedService.getApplicationID();
 		}
+		sharedService.setApplicationID(null);
 
 		if(sharedService.getStep1Object()){
 			$scope.applicationObject=sharedService.getStep1Object();
+			sharedService.setStep1Object(null);
 
 			var _applicant=$scope.applicationObject.oReq.oApplicant;
 			$scope.fname=_applicant.oApplName.sFirstName;
@@ -50,9 +55,6 @@
   			$scope.productType=$scope.applicationObject.oReq.oApplication.sLoanType;
 		}
 		// End : If from step 1 screen
-	
-
-    
 
 	var poller;
 	$scope.dealerArr = [];
@@ -68,7 +70,7 @@
 		$scope.edu="";
 		$rootScope.errHead="";
 		$rootScope.errorMsg="";
-	    $scope.holdStageArr=[];
+	    // $scope.holdStageArr=[];
 	    $scope.holdIndex =[];
 	    $scope.wrketype="";
 	    $scope.assetCategory="";
@@ -90,8 +92,6 @@
 		// 	$location.path("/");
 	}
 
-	var CustID=sharedService.getRefID();
-
 	var currentStage=sharedService.getCurrentStage();
 
 	sharedService.setRefID(null);
@@ -103,103 +103,7 @@
 //	CustID="VASA000092";
 	$scope.dstatus="";
 	$scope.statusJSON={};
-	$scope.dcsnPtrn=/(Declined|Approved|OnHold)$/i;
-	$scope.check_status=function(jsonOBJ)
-	{
-		var json=jsonOBJ ? jsonOBJ:$scope.statusJSON;
-		$("#ErrorContainer").hide();
-//		var json = $scope.statusJSON;
-//		console.log("Check status Input josn: "+JSON.stringify(json));
-		$http({
-			method : 'POST',
-			url : APP_CONST.getConst('BASE_URL_GNG')+'status',
-			data : json,
-			headers : {'Content-Type' : 'application/json'}
-		})
-		.success(function(data) {
-			$scope.holdStageArr=[];
-//				console.log("from data getting score-" + JSON.stringify(data));
-//	 			console.log("data.sAppStat"+data.sAppStat);
-			$scope.statusObject=data;
-			if(typeof data.aCroDec != "undefined" && data.aCroDec != null && data.aCroDec.length >0)
-			{
-				$(document.body).find("#apvAmt").val(data.aCroDec[0].dAmtAppr).siblings("help").show();
-				console.log("data.aCroDec[0].dAmtAppr :" + data.aCroDec[0].dAmtAppr); 
-			}
-			if(typeof data.oIntrmStat != "undefined" && data.oIntrmStat != null)
-			{
-				if(data.oIntrmStat.sPanStat == "COMPLETE")
-				{	$("#vpc").fadeIn("500");
-				$scope.pstatus=data.oIntrmStat.oPanResult.sMsg;
-				}
-				if(data.oIntrmStat.sCblScore == "COMPLETE")
-				{	$("#cs").fadeIn("500");
-				$scope.Cstatus=data.oIntrmStat.oCibilResult.sMsg;
-				}
-			}
-
-			if(data.sAppStat =="Declined")
-			{
-				status = data.sAppStat;
-				$scope.dstatus = data.sAppStat;
-				$("#dimg").attr("src","images/reject.png").show();
-				$("#postIPA").show();
-
-				$("#nmCntnr").hide();
-				$scope.stopTimer();
-			}
-			else if(data.sAppStat =="Approved")
-			{
-				status = data.sAppStat;
-				$scope.dstatus = data.sAppStat;
-				$("#ErrorContainer").show();
-				//					$scope.scmService();
-				$("#dimg").attr("src","images/approve.png").show();
-				$("#postIPA").show();
-				$("#nmCntnr").hide();
-				$scope.stopTimer();
-			}
-			else if(data.sAppStat =="Queue")
-			{
-				status = data.sAppStat;
-				$scope.dstatus = data.sAppStat;
-				$("#dimg").attr("src","images/queue_status.png").show();
-				$("#nmCntnr").hide();
-			}
-			else if(data.sAppStat =="OnHold")
-			{
-				$scope.dstatus = data.sAppStat;
-				$("#dimg").attr("src","images/pending.png").show();
-				$("#postIPA").show();
-				$("#nmCntnr").hide();
-				$scope.stopTimer();
-				for(var i=0; i<data.aCroJustification.length;i++)
-				{
-					var object={"value" : "holdCase",
-							"index" :i+1,
-							"doc"  :data.aCroJustification[i].sDocName
-					};
-					$scope.holdStageArr.push(object);
-				}
-			}
-		}).error(function(data) 
-		{
-			$scope.serviceHitCount=$scope.serviceHitCount+1;
-			if($scope.serviceHitCount<=3)
-			{
-				$scope.check_status();
-			}
-			else{
-				$scope.serviceHitCount=1;
-				$scope.error="Sorry we can not process your Check Status request";
-			}
-		});
-
-		if($scope.dcsnPtrn.test($scope.dstatus))
-		{
-			$interval.cancel(poller);
-		}
-	};
+//	$scope.dcsnPtrn=/(Declined|Approved|OnHold)$/i;
 
 //	 get all asset category from master
 	$scope.fetchAssetCategory = function(){
@@ -354,7 +258,7 @@
 					  				}					  				
 					  			}
 					  		}
-					  		
+
 					  		if(mApplicant.aKycDocs){
 					  			for(var i=0;i<mApplicant.aKycDocs.length;i++){
 					  				if(mApplicant.aKycDocs[i].sKycName==="PAN"){
@@ -366,15 +270,15 @@
 					  				}
 					  			}
 					  		}
-					  		
+
 					  		$scope.same=mApplicant.residenceAddSameAsAbove;
 					  		$scope.productType=Response.oReq.oApplication.sLoanType;
-					  		
+
 							$("#msgContainer").css({"left":"32%"});							
 							$("#progressDiv ,#showApplicant").show();
 							$("#kyccontainer,#ErrorContainer").show();
 							$("#nmCntnr").hide();
-							
+
 							//TODO
 							$scope.REFID=CustID;
 //							console.log("Rquired:"+Response.oReq.sSuspAct +"and"+mApplicant.sCreditCardNum);
@@ -400,13 +304,13 @@
 
 							$scope.constitution=mApplicant.aEmpl[0].sConst;
 							if($scope.constitution == "SELF-EMPLOYED")
-							 {
+							{
 								$("#wrketype").val("SELF-EMPLOYED").attr("disabled","disabled").siblings("help").show();
 								$("#wrketype option[value='SELF-EMPLOYED']").show();
-							 }else{
+							}else{
 								 $("#wrketype").val("").removeAttr("disabled");
 								 $("#wrketype option[value='SELF-EMPLOYED']").hide();
-							 }
+							}
 							$scope.lamt=Response.oReq.oApplication.dLoanAmt;
 							$scope.loanTenure=Response.oReq.oApplication.iLoanTenor;
 
@@ -475,7 +379,7 @@
 								$scope.fetchAssetModel($scope.assetCategory,$scope.mk);
 								$scope.mdl = Response.oReq.oApplication.aAssetDetail[0].sModelNo;
 							}
-							
+
 							//Fetch Images
 							function kyc_img(kycName , imgId ,status , reason,value){
 								var json ={'sImgID':imgId}
@@ -531,7 +435,7 @@
 										else if(kycName =="OTHER"){
 											$scope.otherPresent =  true;
 											$scope.otherData=image;
-											}
+										}
 									}
 								},function(error){
 									$scope.error = "Sorry, unable to fetch images from server !!";					
@@ -539,7 +443,7 @@
 							}
 							URL ='application-images';
 							var json ={'sRefID':CustID};
-							
+
 							RestService.saveToServer(URL,json).then(function(Response){
 								// console.log("Images loaded:");
 								// console.log(JSON.stringify(Response));
@@ -988,8 +892,8 @@ $(".next").click(function() {
 		var animating = true;
 		$rootScope.errHead="";
 		$rootScope.errorMsg="";
-// fieldsetn = fieldsetn + 1;
-// change_header();// change form heading
+		// fieldsetn = fieldsetn + 1;
+		// change_header();// change form heading
 		$(".getheight").scrollTop(0);
 		var current_fs = $(this).parents('fieldset');
 		var next_fs = $(this).parents('fieldset').next();
@@ -1031,7 +935,7 @@ $(".previous").click(function() {
 	var  animating = true;
 	$rootScope.errHead="";
 	$rootScope.errorMsg="";
-	
+
 // fieldsetn = fieldsetn - 1;
 // change_header();
 	$(".getheight").scrollTop(0);
@@ -1150,7 +1054,7 @@ $scope.onselectImg = function($files,type,index)
 							addkyc_array.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
 //							console.log((type+index));
 							break;	
-						
+
 						case "DISBURSEMENT":
 							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
 							$(document.body).find("#"+type+index+"label").hide();
@@ -1236,7 +1140,6 @@ function uploadImage(json,callType)
 				$scope.error="Sorry we can not process your PAN request";
 			}	
 		});
-	
 }
 /*$scope.pdDeStatus = function(){
 	$scope.updateJson ={"sRefID":$scope.REFID};
@@ -1259,7 +1162,7 @@ function uploadImage(json,callType)
 	$scope.finalPdfshowFun = function()
 	{
 		$rootScope.errHead="";
-	     $rootScope.errorMsg="";
+     	$rootScope.errorMsg="";
 	    UploadAllImgs($scope.REFID,addkyc_array,"ipa");
 	    $scope.updateStatus();
 	    // console.log("$scope.dstatus :"+$scope.dstatus);
@@ -1918,20 +1821,18 @@ $scope.remove_file = function(filetype, id, index) {
 
 $(document.body).on("click",".remove_image",function()
 	{
-
 //		console.log($(this).attr("name"));
 		var name=$(this).attr("name");
 		addkyc_array=$.grep(addkyc_array, function(e) { return e.kyc_name!=name });
 //		for(prop of addkyc_array)
 //		{
-//			   if(prop.kyc_name==name)
-//			   {  delete prop;  
+//			if(p.kyc_name==name)
+//			   {  delete prop;
 			    $(document.body).find("#"+name+"").css("background-image", "none");
 				$(document.body).find("#"+name+"label").show();
 				$(document.body).find("#"+name+"remove").hide();
-//			   }
-			
 //			}
+//		}
 //	console.log("kyc Array : "+addkyc_array.length);
 	});
 
@@ -1942,28 +1843,6 @@ $(document.body).on("click","#postNext",function(){
 	{	$scope.ipaService(); }	
 });
 
-$(document.body).on("click","#postIPA",function(){
-		$("#resultPanel").hide();
-		$("#afterSubmit").show();
-		/*//	console.log("Status="+$scope.dstatus);	
-		if($scope.dstatus == "Queue")
-		{   $scope.scmService(); // get all scheme from master
-			$scope.postIpaDisp=$("#mk").val()+" - "+$("#mdl").val();
-			$("#pOrder").show();
-			$("#disImgRw ,#chkImgRw ,#aggImgRw").show();
-		}
-		else
-		{
-		 $("#additionalDoc").show();
-		 $("#disImgRw ,#chkImgRw ,#aggImgRw").hide();
-		// $("#pOrder").show();
-		}*/
-//		changes
-		/*console.log("make : "+$("#mk").val()+" - "+$("#mdl").val())
-		$scope.postIpaDisp=$("#mk").val()+" - "+$("#mdl").val();
-		$("#pOrder").show();
-		$("#disImgRw ,#chkImgRw ,#aggImgRw").show();*/
-});
 //send post ipa data and start flow
 $scope.ipaService = function()
 {	
@@ -2390,56 +2269,56 @@ $scope.updateStatus = function(){
 	});
 }
 
-$scope.resetStatus=function(){
-	$scope.updateJson ={
-			  "sRefID": $scope.REFID,
-			  "sHeader": {
-			    "sCroId": "default",
-			    "dtSubmit": new Date().getTime(),
-			    "sReqType": "JSON",
-			    "sAppSource": "WEB",
-			    "sDsaId": $scope.username,
-			    "sAppID": "APPLICANT_1",
-			    "sDealerId": dlrCode,
-			    "sSourceID": "HDBFS_CDL",
-			    "sInstID":  $scope.InstitutionID
-			  },
-			  "sAppStat": "QUEUE"
-			}
-//	console.log("Input JSON for status update :"+$scope.updateJson);
-	$http({
-		method : 'POST',
-		url : APP_CONST.getConst('BASE_URL_GNG')+"reset-status",
-		data :$scope.updateJson,
-		headers : {'Content-Type' : 'application/json'}
-	}).success(function(data) 
-	{
-//		console.log("$scope.REF :" + $scope.REF);
+// $scope.resetStatus=function(){
+// 	$scope.updateJson ={
+// 			  "sRefID": $scope.REFID,
+// 			  "sHeader": {
+// 			    "sCroId": "default",
+// 			    "dtSubmit": new Date().getTime(),
+// 			    "sReqType": "JSON",
+// 			    "sAppSource": "WEB",
+// 			    "sDsaId": $scope.username,
+// 			    "sAppID": "APPLICANT_1",
+// 			    "sDealerId": dlrCode,
+// 			    "sSourceID": "HDBFS_CDL",
+// 			    "sInstID":  $scope.InstitutionID
+// 			  },
+// 			  "sAppStat": "QUEUE"
+// 			}
+// //	console.log("Input JSON for status update :"+$scope.updateJson);
+// 	$http({
+// 		method : 'POST',
+// 		url : APP_CONST.getConst('BASE_URL_GNG')+"reset-status",
+// 		data :$scope.updateJson,
+// 		headers : {'Content-Type' : 'application/json'}
+// 	}).success(function(data) 
+// 	{
+// //		console.log("$scope.REF :" + $scope.REF);
 		
-		 var statusJSON ={
-				  "sRefID":$scope.REF,
-				  "oHeader": {
-				    "sCroId": "default",
-				    "dtSubmit":new Date().getTime(),
-				    "sReqType": "JSON",
-				    "sAppSource" : "WEB",
-				    "sDsaId":$scope.username,
-				    "sAppID": "",
-				    "sSourceID":"",
-				    "sInstID":$scope.InstitutionID
-				  }
-			}
-		$("#resultPanel").show();
-		$scope.StartTimer(); // 	60 sec timer
-		poller = $interval(function(){
-			$scope.check_status(statusJSON);
-		},3000);
+// 		 var statusJSON ={
+// 				  "sRefID":$scope.REF,
+// 				  "oHeader": {
+// 				    "sCroId": "default",
+// 				    "dtSubmit":new Date().getTime(),
+// 				    "sReqType": "JSON",
+// 				    "sAppSource" : "WEB",
+// 				    "sDsaId":$scope.username,
+// 				    "sAppID": "",
+// 				    "sSourceID":"",
+// 				    "sInstID":$scope.InstitutionID
+// 				  }
+// 			}
+// 		$("#resultPanel").show();
+// 		$scope.StartTimer(); // 	60 sec timer
+// 		poller = $interval(function(){
+// 			$scope.check_status(statusJSON);
+// 		},3000);
 		
-	}).error(function(data)
-	{ 
-	console.log("Getting Error from Reset State.");
-	});
-};
+// 	}).error(function(data)
+// 	{ 
+// 	console.log("Getting Error from Reset State.");
+// 	});
+// };
 
  $("select").change(function(){
 	 $(this).siblings("help").show(); 
@@ -2542,35 +2421,6 @@ $scope.resetStatus=function(){
 	$(document.body).on("click","#homePG",function(){
 	    location.reload();
 	  	});
-	  
-	  $(document.body).on("click","#aSubmitBtn",function(){
-				$("#afterSubmit").hide();
-//				console.log("Status="+ status);	
-				if(status == "Approved")
-				{
-					// $scope.mkVal = $scope.mk;
-					// $scope.mdlVal = $scope.mdl;
-					$("#ErrorContainer").show();
-					$scope.scmService(); // get all scheme from master
-					$scope.postIpaDisp=$("#mk").val()+" - "+$("#mdl").val();
-					$("#pOrder").show();
-					$("#disImgRw ,#chkImgRw ,#aggImgRw").show();
-				}
-				else if(status == "Declined" )
-				{
-					$("#pOrder").hide();
-				 $("#additionalDoc").show();
-				 $("#disImgRw ,#chkImgRw ,#aggImgRw").hide();
-				// $("#pOrder").show();
-				}
-				else if(status == "OnHold")
-				{
-					// console.log("$scope.holdStageArr :"+JSON.stringify($scope.holdStageArr));
-				 $("#HoldStage").show();
-				 $("#disImgRw ,#chkImgRw ,#aggImgRw").hide();
-				// $("#pOrder").show();
-				}
-	  });
 		  
 	  $scope.onSaveAssetClicked=function(){
 		  // $scope.mkVal = $scope.mk;
@@ -2579,20 +2429,15 @@ $scope.resetStatus=function(){
 		  $scope.scmService(json);
 		  $scope.scheme="";
 	  }
-	 $scope.reprocess=function()
-	 {
-		 // console.log("$scope.refid : "+$scope.REFID +" :Cust id ="+CustID);
-		 UploadAllImgs($scope.REF,$scope.holdIndex,"submit");
-		 $scope.resetStatus();
-		 $("#HoldStage").hide();
-		 $("#resultPanel").show();
-	 }
+	 // $scope.reprocess=function()
+	 // {
+		//  // console.log("$scope.refid : "+$scope.REFID +" :Cust id ="+CustID);
+		//  UploadAllImgs($scope.REF,$scope.holdIndex,"submit");
+		//  $scope.resetStatus();
+		//  $("#HoldStage").hide();
+		//  $("#resultPanel").show();
+	 // }
 	 
-	  $scope.$on('$destroy', function() {
-		  $scope.stopTimer();
-		  $interval.cancel(poller);
-	  });
-
 	 	/* dob popup */		
 		$scope.openDOBDialog=function(){
 
@@ -2626,67 +2471,5 @@ $scope.resetStatus=function(){
 		    startingDay: 1
 		};
 		/* End of dob popup */
-
-//		************************Round Progress bar script ****************************************
-
-		   $scope.current =        27;
-           $scope.max =            50;
-           $scope.offset =         0;
-           $scope.timerCurrent =   0;
-           $scope.uploadCurrent =  0;
-           $scope.stroke =         7;
-           $scope.radius =         78;
-           $scope.isSemi =         false;
-           $scope.rounded =        false;
-           $scope.responsive =     false;
-           $scope.clockwise =      true;
-           $scope.currentColor =   '#45ccce';
-           $scope.bgColor =        '#eaeaea';
-           $scope.duration =       800;
-           $scope.currentAnimation = 'easeOutCubic';
-           $scope.animationDelay = 0;
-
-           $scope.getStyle = function(){
-               var transform = ($scope.isSemi ? '' : 'translateY(-50%) ') + 'translateX(-50%)';
-
-               return {
-                   'top': $scope.isSemi ? 'auto' : '50%',
-                   'bottom': $scope.isSemi ? '5%' : 'auto',
-                   'left': '50%',
-                   'transform': transform,
-                   '-moz-transform': transform,
-                   '-webkit-transform': transform,
-                   'font-size': '60px',
-                    'color':'#24A1ED'
-               };
-           };
-           var getPadded = function(val){
-               return val < 10 ? ('0' + val) : val;
-           };
-
-   		var seconds = 1;
-
-		// seconds=59;
-		// $scope.seconds=59;
-		// $scope.time=59;        
-
-   		var intervalPromise;
-   		$scope.StartTimer = function () {
-   	             intervalPromise = $interval(function(){
-   	                var date = new Date();
-   	               $scope.seconds = seconds;
-   	               $scope.time = getPadded(seconds);
-   			seconds = seconds+1;
-   			if( seconds >60)
-   				$scope.stopTimer();
-   	            }, 1000);
-   		};
-   			// $scope.StartTimer();
-   		
-   		$scope.stopTimer = function()
-   		{
-   			$interval.cancel(intervalPromise);
-   		}
-// *********************************************************************************************** 
 }]);
 }).call(this)

@@ -1,60 +1,7 @@
 <style>
-	.afterSubmit{
-		text-align: center;
-		border: 01px solid rgb(36, 161, 237);
-		margin-top: 5%;
-		width: 96%;
-		margin-left: 2%;
-		border-radius: 17px;
-	}
-	.approveSec{
-		color: rgb(36, 161, 237);
-		font-size: 20px;
-		margin: 4px 0px;
-	}
-	.emiSec{
-		margin-bottom: 5px;
-		font-size: 16px;
-	}
-	.rmrkCr
-	{
-		margin: 2%;
-		border-bottom: 01px solid #eae1e1;;
-	}
-	.rmrk
-	{
-		font-size: 18px;
-	}
-	.sbjt
-	{
-		font-size: 16px;
-		color: gray;
-		margin-bottom: 5px;
-	}
 	.holdTmplt{
 		padding:0px;
 	}
-/************************ progress bar css *********************************/
-	.progress-wrapper {
-	    position: absolute;
-	    font-size: 40px;
-	    left: 11%;
-	    top: 84%;
-	}
-
-    .progressFont{
-        position: absolute;
-        font-weight: 100;
-        line-height: 1;
-    }
-
-    .container{
-        width: 100%;
-        max-width: 960px;
-        margin:50px auto 100px;
-        text-align: center;
-    }
-/**********************************************************************/
 </style>
 <div class="row clearfix" id="infoContainer" style="padding-top: 20px;">
 	<div class="col-sm-4 col-md-3" id="progressDiv"	style="border-right: 01px solid #24a1ed; padding-right: 0px; padding-top: 22px;">
@@ -108,8 +55,7 @@
 								<!-- <label ng-hide="image_url2">Present Address</label> -->
 							</div>
 
-							<img ng-model="profileImg" id="selectImgInit" alt="" ng-src="{{profileData}}"
-								ng-if="profileImage" style="width: 17%; height: 113px; margin-left: 3%">
+							<img ng-model="profileImg" id="selectImgInit" alt="" ng-src="{{profileData}}" ng-if="profileImage" style="width: 17%; height: 113px; margin-left: 3%">
 							<div style="height: 20px">
 								<small ng-show="image_url2" class="size">{{file_size2}}</small>
 								<a class="remove_image" ng-show="selectImgInit || profileImage"
@@ -911,233 +857,91 @@
 				</div>
 			</div>
 
-			<div id="resultPanel" style="display: none;position: relative;">
-						 
-					<!--<div id="timer_box" class="">
-						<div class="startTimer">
-							<div class="sui-progressbar sui-progressbar-circular "
-								id="progress"></div>
-						</div>
-					</div> -->
-		<!-- ********************************* angular round ProgressBar ***************************************		 -->
-				<div class="container startTimer">
-					<img class="timerimg" src='images/timer.png'>
-				  	<div class="progress-wrapper">
-	            		<div class="progressFont ng-cloak" ng-style="getStyle()">{{ time }}</div>
-	                    <round-progress
-	                        max="59"
-	                        current="seconds"
-	                        color="#24A1ED"
-	                        bgcolor="transparent"
-	                        radius="{{ radius}}"
-	                        semi="isSemi"
-	                        rounded="rounded"
-	                        clockwise="clockwise"
-	                        responsive="responsive"
-	                        stroke="{{ stroke*1.5 }}"
-	                        animation="{{ currentAnimation }}"
-	                        offset="inherit"></round-progress>
-	             
-			        </div><!-- End of progress wrapper -->
-			    </div>
-
-	 			<div class="row-clearfix">
-					<div class="col-md-6 col-md-offset-3 resultInfo">
-						<h4>Please wait while CRO is analyzing your application.</h4>
-						<h5 style="color: #24A1ED">Your Reference ID is : {{REFID}}</h5>
-						<h5>Your GoNoGo Query is successfully received</h5>
-					</div>
-					<div class="col-md-3"></div>
-				</div> 
-				<div class="row-clearfix">
-					<div class="col-md-7 col-md-offset-2"
-						style="border-bottom: 1px solid rgb(36, 161, 237); margin-left: 20%">
-						<div class="row clearfix ">
-							<div class="col-sm-4 col-md-4" class="progElement"
-								style="border-left: 01px solid rgb(36, 161, 237); text-align: center; height: 140px;">
-								<div class="resultNode">
-									<span></span>
-								</div>
-								<div class="circle">
-									<span>1</span>
-								</div>
-								<span style="color: rgb(36, 161, 237); display: block;">KYC
-									Verification Status</span>
-								<div id="vpc" style="display: none;">
-									<span id="ptext">PAN {{pstatus}}</span>
-								</div>
-							</div>
-							<div class="col-sm-4 col-md-4" class="progElement"
-								style="border-left: 01px solid rgb(36, 161, 237); text-align: center; height: 140px;">
-								<div class="resultNode">
-									<span></span>
-								</div>
-								<div class="circle">
-									<span>2</span>
-								</div>
-								<span style="color: rgb(36, 161, 237); display: block;">Bureau
-									Score</span> <span id="cs" style="display: none;">CIBIL
-									{{Cstatus}}</span>
-							</div>
-							<!-- <div class="col-sm-3 col-md-3" class="progElement" style="border-left: 01px solid rgb(36,161,237);text-align:center;height:140px;">
-								<div class="resultNode"><span></span></div>
-								<div class="circle"><span>3</span></div>
-								<span style="color: rgb(36,161,237);display: block;">Application Score</span>
-								<span id="as" style="display: none;">Completed</span>
-								</div> -->
-							<div class="col-sm-4 col-md-4" class="progElement"
-								style="border-left: 01px solid rgb(36, 161, 237); text-align: center; height: 140px;">
-								<div class="resultNode">
-									<span></span>
-								</div>
-								<div class="circle">
-									<span>3</span>
-								</div>
-								<span style="color: rgb(36, 161, 237); display: block;">Decision</span>
-								<span id="temp2"><img src="images/reject.png" id="dimg"
-									class="dsnimg" style="display: none;" /></span>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="row clearfix ">
-					<div class="col-md-10 col-md-offset-1"
-						style="text-align: center; margin-top: 9%">
-						<!-- <button class="customButton previous">Previous</button> -->
-						<button class="customButton next" id="postIPA"
-							style="float: initial; display: none; margin-top: 5%">Next</button>
-					</div>
-				</div>
-			</div>
-			
-			<div class="container" id="afterSubmit" style="display: none;" >
-			<div class="afterSubmit">
-			<div class="row clearfix approveSec">
-			<div class="col-md-12">
-			<span>Your application has been</span>
-			<span ng-if="statusObject.sAppStat == 'OnHold'"> put on hold. </span>
-			<span ng-if="statusObject.sAppStat == 'Decline'"> declined. </span>
-			<span ng-if="statusObject.sAppStat != 'OnHold' && statusObject.sAppStat != 'Decline'"> {{statusObject.sAppStat}} </span> 
-			</div>
-			</div>
-			<div class="row clearfix emiSec" ng-if="statusObject.sAppStat == 'Approved'">
-				<div class="col-md-4">Approved Amount : {{statusObject.aCroDec[0].dAmtAppr}}</div>
-				<div class="col-md-4">Emi :{{statusObject.aCroDec[0].dEmi}}</div>
-				<div class="col-md-4">Tenor : {{statusObject.aCroDec[0].iTenor}}</div>
-			</div><!-- Emi Saction-->
-			
-			</div><!-- After Submit --> 
-			<div class="row clearfix rmrkCr" ng-repeat="decision in statusObject.aCroJustification" ng-if="statusObject.sAppStat != 'OnHold'">
-			<div class="col-md-12 rmrk">Remark :{{decision.sSubTo}}</div>
-			<div class="col-md-12 sbjt">Subject To : {{decision.sRemark}}</div>
-			</div>
-
-			<div class="row clearfix rmrk" ng-if="statusObject.sAppStat == 'OnHold'" style="text-align: center;margin-top: 10px">List of Documents </div>
-			<div class="row clearfix rmrkCr" ng-repeat="decision in statusObject.aCroJustification" ng-if="statusObject.sAppStat == 'OnHold'">
-				<div class="col-md-12 rmrk">Document :{{decision.sDocName}}</div>
-				<div class="col-md-12 sbjt">Reason : {{decision.sDescrip}}</div>
-			</div>
-
-				<div class="row clearfix ">
-					<div class="col-md-10 col-md-offset-1"
-						style="text-align: center; margin-top: 2%">
-						<!-- <button class="customButton previous">Previous</button> -->
-						<button class="customButton next" id="aSubmitBtn"
-							style="float: right; margin-top: 4%">Next</button>
-					</div>
-				</div>
-			</div>
-			
 			<div id="pOrder" style="display: none">
 <!-- 				<div id="kycHeight"></div> -->
-					<div class="row clearfix ">
-							<div class="col-md-8 col-md-offset-2" id="do">
-								<div class="row clearfix customRow">
-									<div class="col-md-12"
-										style="border: 01px solid #24A1ED; line-height: 4">
-										<span style="color: #24A1ED">{{fname +" "+ mname +"
-											"+lname}}</span> <span style="float: right;">{{mk +" - "+
-											mdl}}</span>
-									</div>
-								</div>
-								<div class="row clearfix">
-								<div class="col-md-12" style="text-align: right;"><button class="customButton" data-toggle="modal" data-target="#assetModel" >Change Asset</button>
-								</div>
-								</div>
-								<div class="row clearfix customRow">
-									<div class="col-md-4 height">
-										<help>Approved Amount*</help>
-										<i class="fa fa-rupee"></i><input type="text" id="apvAmt"
-											ng-model="apvAmt" class="customInput" placeholder="Approved_Amount*" maxlength="10" style="padding-left: 4%" rupees disabled="disabled" />
-									</div>
-									<div class="col-md-4 height">
-										<help>Scheme*</help>
-<!-- 										<input type="text" class="customInput" id="scheme" ng-model="scheme"
-											typeahead="state for state in scmTags | limitTo:8" placeholder="Scheme" /> -->
-											<input type="text" class="customInput" id="scheme" ng-model="scheme" uib-typeahead="schemes for schemes in scmTags"
-											  typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select="onSchemeSelected(scheme)"
-											placeholder="Scheme" />
-									</div>
-									<div class="col-md-4 height">
-										<help style="display:inline">Total Asset Cost*</help>
-										<i class="fa fa-rupee"></i><input type="text"
-											class="customInput" id="astCst" ng-model="astCst"  maxlength="15" placeholder="Total Asset Cost*" style="padding-left: 4%"
-											rupees />
-									</div>
-								</div>
-
-								<div class="row clearfix customRow">
-									<div class="col-md-4 height">
-										<help>Margin Money*</help>
-										<input type="text" class="customInput" id="mrgnMny"
-											ng-model="mrgnMny" placeholder="Margin Money*"
-											style="padding-left: 4%" rupees disabled="disabled" />
-									</div>
-									<div class="col-md-4 height" id="mnyInstrDiv">
-										<help>Margin Money instrument*</help>
-										<select id="mnyInstn" class="customSelect" ng-model="mnyInstn"
-											ng-change="changeEvent('MNY_INTRMNT',mnyInstn)">
-											<option value="" ng-selected="true">Select Margin
-												Money Instrument</option>
-											<option value="Cash">Cash</option>
-											<option value="Cheque">Cheque</option>
-											<option value="Credit Card">Credit Card</option>
-											<option value="NEFT">NEFT</option>
-										</select> <img alt="" src="images/select-arrow.png" class="customarrow" />
-									</div>
-									<div class="col-md-4 height" id="mnyCnfmDiv">
-										<help>Margin Money Confirmation*</help>
-										<input type="text" class="customInput" id="mnyCnfm" ng-model="mnyCnfm"
-											placeholder="Margin Money Confirmation*"
-											style="padding-left: 4%" />
-									</div>
-								</div>
-
-								<div class="row clearfix customRow">
-									<div class="col-md-4 height">
-										<help>EMI*</help>
-										<input type="text" id="emi" class="customInput"
-											placeholder=" EMI" disabled="disabled" />
-									</div>
-									
-									<div class="col-md-4 height">
-										<help>Advance EMI*</help>
-										<input type="text" id="aEMI" class="customInput"
-											placeholder="Advance EMI" disabled="disabled" />
-									</div>
-									<div class="col-md-4 height">
-										<help>Processing Fees*</help>
-										<i class="fa fa-rupee"></i><input type="text"
-											class="customInput" id="prcsfee" ng-model="prcsfee"  maxlength="10" placeholder="Processing Fees" style="padding-left: 4%" rupees disabled="disabled" />
-									</div>
+				<div class="row clearfix ">
+						<div class="col-md-8 col-md-offset-2" id="do">
+							<div class="row clearfix customRow">
+								<div class="col-md-12"
+									style="border: 01px solid #24A1ED; line-height: 4">
+									<span style="color: #24A1ED">{{fname +" "+ mname +"
+										"+lname}}</span> <span style="float: right;">{{mk +" - "+
+										mdl}}</span>
 								</div>
 							</div>
-						<div class="col-md-2"></div>
-					</div>
-			
+							<div class="row clearfix">
+							<div class="col-md-12" style="text-align: right;"><button class="customButton" data-toggle="modal" data-target="#assetModel" >Change Asset</button>
+							</div>
+							</div>
+							<div class="row clearfix customRow">
+								<div class="col-md-4 height">
+									<help>Approved Amount*</help>
+									<i class="fa fa-rupee"></i><input type="text" id="apvAmt"
+										ng-model="apvAmt" class="customInput" placeholder="Approved_Amount*" maxlength="10" style="padding-left: 4%" rupees disabled="disabled" />
+								</div>
+								<div class="col-md-4 height">
+									<help>Scheme*</help>
+<!-- 					<input type="text" class="customInput" id="scheme" ng-model="scheme"
+										typeahead="state for state in scmTags | limitTo:8" placeholder="Scheme" /> -->
+										<input type="text" class="customInput" id="scheme" ng-model="scheme" uib-typeahead="schemes for schemes in scmTags"
+										  typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select="onSchemeSelected(scheme)"
+										placeholder="Scheme" />
+								</div>
+								<div class="col-md-4 height">
+									<help style="display:inline">Total Asset Cost*</help>
+									<i class="fa fa-rupee"></i><input type="text"
+										class="customInput" id="astCst" ng-model="astCst"  maxlength="15" placeholder="Total Asset Cost*" style="padding-left: 4%"
+										rupees />
+								</div>
+							</div>
 
+							<div class="row clearfix customRow">
+								<div class="col-md-4 height">
+									<help>Margin Money*</help>
+									<input type="text" class="customInput" id="mrgnMny"
+										ng-model="mrgnMny" placeholder="Margin Money*"
+										style="padding-left: 4%" rupees disabled="disabled" />
+								</div>
+								<div class="col-md-4 height" id="mnyInstrDiv">
+									<help>Margin Money instrument*</help>
+									<select id="mnyInstn" class="customSelect" ng-model="mnyInstn"
+										ng-change="changeEvent('MNY_INTRMNT',mnyInstn)">
+										<option value="" ng-selected="true">Select Margin Money Instrument</option>
+										<option value="Cash">Cash</option>
+										<option value="Cheque">Cheque</option>
+										<option value="Credit Card">Credit Card</option>
+										<option value="NEFT">NEFT</option>
+									</select> <img alt="" src="images/select-arrow.png" class="customarrow" />
+								</div>
+								<div class="col-md-4 height" id="mnyCnfmDiv">
+									<help>Margin Money Confirmation*</help>
+									<input type="text" class="customInput" id="mnyCnfm" ng-model="mnyCnfm"
+										placeholder="Margin Money Confirmation*"
+										style="padding-left: 4%" />
+								</div>
+							</div>
 
+							<div class="row clearfix customRow">
+								<div class="col-md-4 height">
+									<help>EMI*</help>
+									<input type="text" id="emi" class="customInput"
+										placeholder=" EMI" disabled="disabled" />
+								</div>
+								
+								<div class="col-md-4 height">
+									<help>Advance EMI*</help>
+									<input type="text" id="aEMI" class="customInput"
+										placeholder="Advance EMI" disabled="disabled" />
+								</div>
+								<div class="col-md-4 height">
+									<help>Processing Fees*</help>
+									<i class="fa fa-rupee"></i><input type="text"
+										class="customInput" id="prcsfee" ng-model="prcsfee"  maxlength="10" placeholder="Processing Fees" style="padding-left: 4%" rupees disabled="disabled" />
+								</div>
+							</div>
+						</div>
+					<div class="col-md-2"></div>
+				</div>
 				<div class="row clearfix ">
 					<div class="col-md-10 col-md-offset-1" style="text-align: center;">
 <!-- 						<span style="text-align: center;">Proceed for DDE</span> -->
@@ -1146,7 +950,6 @@
 					</div>
 					<!-- <div class="col-md-4"></div> -->
 				</div>
-
 			</div>
 			<!-- change -->
 			<fieldset id="additionalDoc" style="display: none;">
@@ -1241,7 +1044,6 @@
 					</div>
 					<!-- <div class="col-md-4"></div> -->
 				</div>
-
 			</fieldset>
 			<fieldset id="additionalDocfinal"
 				style="display: none; text-align: center;">
@@ -1265,21 +1067,8 @@
 					</div>
 				</div>
 			</fieldset>
-			
-			<div id="HoldStage" style="display: none;">
-			<div class="row clearfix" >
-			<div class="col-md-4" ng-repeat="item in holdStageArr">
-			<label>{{item.doc}}</label>
-			<content-item content="item"></content-item>
-			</div>
-			</div>	<!-- end of row clearfix -->
-			<div class="row clearfix" style="text-align: center;">
-				<button class="customButton submit" id="reprocess"	ng-click="reprocess()" style="float: inherit;">Submit</button>
-			</div>
-			</div><!-- End of hold stage -->
-			
 			<div class="row clearfix" style="background-color: white;" id="ErrorContainer">
-		</div>		
+		</div>
 		<!-- Modal -->
 		<div class="modal fade" id="assetModel" role="dialog">
 			<div class="modal-dialog">

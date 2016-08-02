@@ -26,9 +26,18 @@
 			templateUrl: 'views/templates/analytics.html',
 		}).when('/cdl/dealer',{
 			templateUrl: 'views/cdl/dealer.html'
+		}).when('/cdl/result',{
+			templateUrl: 'views/cdl/result.html',
+			controller: 'DEResultController'
 		}).when('/cdl/basic-de',{
 			templateUrl: 'views/cdl/basic-de.html',
 			controller: 'BasicDEController'
+		}).when('/cdl/after-submit',{
+			templateUrl: 'views/cdl/after-submit.html',
+			controller: 'AfterSubmitController'
+		}).when('/cdl/hold-stage',{
+			templateUrl: 'views/cdl/hold-stage.html',
+			controller: 'HoldStageController'
 		}).when('/cdl/apply', {
 			templateUrl: 'views/cdl/apply.html',
 			controller: 'ApplyController'

@@ -252,7 +252,6 @@
                     }
                 ],
                 "aOwndAst": ""
-
             },
             "oResAddressResult": {
                 "sCustID": "",
@@ -432,7 +431,11 @@
                         'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit}
 			}
 			var URL;
-			if(AclService.can('NCROQUE')){
+
+            if(user.id=="708"){
+                URL = 'cro3-queue';
+            }
+            else if(AclService.can('NCROQUE')){
 				URL = 'cro-queue'; //All 
 				//URL = 'cro-queue-criteria';
 			}else{
@@ -451,7 +454,6 @@
 				}
 			});	
   		}
-
 	}
     setInterval(polling, 30000,0);
     $scope.addrType = SelectArrays.getAddrType();
@@ -463,8 +465,6 @@
     $scope.findAddressType = function(orignal,final){
     	return (angular.lowercase(orignal) == angular.lowercase(final));
     }				               	
-
-
 
     $scope.showimage = function(obj,isImgFlag,index,editMode){
         var modalInstance = $uibModal.open({
@@ -516,9 +516,9 @@
 
         //applicationRequestType= sRqTyp introducted in PL Salary
         //PS=Partial Save & FP=Fully processed
-        if(applicationRequestType && applicationRequestType=="PS"){
+        if(user.id=="708" && applicationRequestType && applicationRequestType=="PS"){
             URL = 'application-data-partial';
-        }else if(applicationRequestType && applicationRequestType=="FP"){
+        }else if(user.id=="708" && applicationRequestType && applicationRequestType=="FP"){
             URL = 'application-data';
         }else{
     		if(AclService.can('NCROQUE'))//for CRO1
@@ -1793,19 +1793,6 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
         }
     };
 }]);
-
-app.directive('selectRequired',function(){
-    return {
-        restrict: "A",
-        require:"ngModel",
-        link: function(element,scope,attr,controller){
-
-            controller.$validators.selectrequired = function(modelValue){                   
-                return modelValue === '' || modelValue.startsWith('Select') ? false : true;
-            }
-        }
-    }
-});
 
 app.directive('thisEarlierThan', function () {
     return {

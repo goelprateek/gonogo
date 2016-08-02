@@ -90,13 +90,21 @@
 		currentStage="",
 		decisionStatus="",
 		applicationID="",
-		step1Object=null;
+		step1Object=null,
+		dealerCode=null,
+		applicationStatus=null;
 	  	return {
 	        getRefID: function () {
 	            return refID;
 	        },
 	        setRefID: function(value) {
 	            refID = value;	         
+	        },
+	        getDealerCode: function () {
+	            return dealerCode;
+	        },
+	        setDealerCode: function(value) {
+	            dealerCode = value;	         
 	        },
 	        getCurrentStage: function () {
 	            return currentStage;
@@ -121,6 +129,12 @@
 	        },
 	        setStep1Object: function(value) {
 	        	step1Object = value;
+	        },
+	        getApplicationStatus: function () {
+	            return applicationStatus;
+	        },
+	        setApplicationStatus: function(value) {
+	        	applicationStatus = value;
 	        }
 	    };
   	});
@@ -196,7 +210,10 @@
 
 					user.actions = actions;
 					_.each(actions,function(action){
-						AclService.allow(user.id,action);
+						if(AclService.hasResource(action))
+						{
+							AclService.allow(user.id,action);
+						}
 					});
 				}
 
