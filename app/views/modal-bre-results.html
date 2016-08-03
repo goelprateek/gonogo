@@ -29,6 +29,10 @@
 }
 </style>
 <div style="margin-left: 10px;height: 500px;width: 900px;"  slimscroll="{height: 520,railVisible:true}">
+<div class="modal-header">
+		<button type="button" class="close"  ng-click="closeModal()" aria-hidden="true">&times;</button>
+		<h4 class="modal-title">Score Preview</h4>
+	</div>
 	<div class="bre-result-div" ng-repeat="appform in appForms">
 		<label>Application : {{($index+1)}}</label>
 		<div ng-repeat="bureauData in appform.aAppScoRslt" ng-if="bureau.length != 0">

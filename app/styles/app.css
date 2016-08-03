@@ -390,8 +390,9 @@ opacity
 }
 
 .picked {
-	background-color: #CFCFCF;
-	border: 2px solid #fff;
+	/*background-color: #CFCFCF;
+	border: 2px solid #fff;*/
+	border-left: 5px solid rgba(7, 66, 233, 0.73);
 }
 
 .picked:hover {
@@ -1301,14 +1302,14 @@ input[type="radio"] .styled:checked + label::after {
     margin-top: -2px
 }
 
-.widget-body {
+/*.widget-body {
     background-color: #fbfbfb;
     -webkit-box-shadow: 1px 0 10px 1px rgba(0, 0, 0, .3);
     -moz-box-shadow: 1px 0 10px 1px rgba(0, 0, 0, .3);
     box-shadow: 1px 0 10px 1px rgba(0, 0, 0, .3);
     padding: 12px
 }
-
+*/
 .widget-body.bordered-left {
     border-left: 3px solid #fff
 }
@@ -1330,7 +1331,9 @@ input[type="radio"] .styled:checked + label::after {
 }
 
 .widget-body.no-padding {
-    padding: 0
+    padding: 0;
+    border: 1px solid #cac6c6;
+        border-radius: 5px;
 }
 
 .widget-body.no-padding .accordion {
@@ -1372,7 +1375,8 @@ input[type="radio"] .styled:checked + label::after {
 .task-container .task-search {
     padding: 15px 16px 15px;
     background-color: #f3f3f3;
-    border-bottom: 1px solid #eee
+    border-bottom: 1px solid #eee;
+    border-radius: 6px 6px 0px 0px;
 }
 
 .task-container .task-search input {
@@ -1393,7 +1397,8 @@ input[type="radio"] .styled:checked + label::after {
 .task-container .tasks-list .task-item {
     position: relative;
     height: auto;
-    padding:10px;
+  /*  padding:10px;*/
+      padding: 5px 0px 5px 0px;
     border-bottom: 1px solid #e5e5e5
 }
 

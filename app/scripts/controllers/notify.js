@@ -378,8 +378,7 @@
 
 	$scope.countSelected="Select";
 	var offersAllowed = AclService.can('NOFRS');
-    //check
-	var treeData = [], map;
+
 	$rootScope.template ="notification";
 	$scope.minVal = 0;
 	$scope.limit = 800;
@@ -929,11 +928,18 @@ $scope.updateLosData = function(status){
     	}
 	}
 }
-	 
 	$scope.dobFormat = "dd/MM/yyyy";
     $scope.dobPopup = {
         opened: false
     };
+    
+    $scope.datePopup = {
+        opened: false
+    };
+
+     $scope.openDateDialog=function(){
+        $scope.datePopup.opened = true;
+    }; 
     
     var minDa = new Date();
     minDa.setFullYear(minDa.getFullYear()-100);
@@ -949,6 +955,7 @@ $scope.updateLosData = function(status){
         minDate: minDa,
         startingDay: 1
     };
+
     $scope.enableForm=function(){
         if($scope.objectSet.iNoReTry>=2){
                 alert("This application is already re-initiated twice.");
@@ -1037,13 +1044,14 @@ $scope.updateLosData = function(status){
             /* dob popup */
         }
     };
+    
 
     $scope.updateForm=function(){
         if($scope.objectSet.iNoReTry>=2){
             alert("This application is already re-initiated twice.");
         }else{
             if($scope.isUpdating){
-                var dobFormatted=$filter('date')($scope.app_form.pickerDob,"dd/MM/yyyy")
+                var dobFormatted=$filter('date')($scope.app_form.pickerDob,"dd/MM/yyyy");
                 if(dobFormatted && dobFormatted!="")
                 {
                     $scope.objectSet.oAppReq.oReq.oApplicant.sDob=dobFormatted.replace(/\//g,"");
@@ -1148,6 +1156,30 @@ $scope.updateLosData = function(status){
         });
     };
 
+    $scope.saveInvoice = function(invoiceNum,invoiceDate){
+         var dobFormatted=$filter('date')(invoiceDate,"dd-MM-yyyy");
+         console.log(dobFormatted);
+        var json =  {
+                        "oHeader":{
+                        "sInstID":user.institutionID,
+                        "sCroId":user.id,
+                        "sAppSource":"WEB"
+                        },
+                        "sRefID":$scope.objectSet.oAppReq.sRefID,
+                        "oInvDtls":{
+                        "sInvNumber":invoiceNum,
+                        "dtInv":dobFormatted
+                        }
+                    };
+                    console.log(json);
+                    var URL="update-invoice-details";
+
+     RestService.saveToServer(URL,json).then(function(Response){
+        console.log(Response);
+     });
+    };
+   
+
     // destructor function for scope 
     $scope.$on("$destroy",function(){
         console.log("destroying timer");
@@ -1221,6 +1253,10 @@ app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$ui
             });         
         }
     });
+
+     $scope.closeModal = function(){
+          $uibModalInstance.dismiss();
+    };
 }]);
 
 app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService',
@@ -1770,6 +1806,10 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
                 $uibModalInstance.dismiss();
             });
         }
+    };
+
+    $scope.closeModal = function(){
+          $uibModalInstance.dismiss();
     };
 }]);
 

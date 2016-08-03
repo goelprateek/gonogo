@@ -32,20 +32,20 @@
 					                text: ''
 					            },
 					            xAxis: {
-					                 startOnTick:true,
-					                 endOnTick:true,
+					                startOnTick:true,
+					                endOnTick:true,
 					                categories: ["2016-06-27", "2016-06-28", "2016-06-29", "2016-06-30", "2016-07-01", "2016-07-02", "2016-07-03", "2016-07-04", "2016-07-05", "2016-07-06", "2016-07-07", "2016-07-08", "2016-07-09", "2016-07-10", "2016-07-11", "2016-07-12", "2016-07-13", "2016-07-14", "2016-07-15", "2016-07-16", "2016-07-17", "2016-07-18", "2016-07-19", "2016-07-20", "2016-07-21", "2016-07-22", "2016-07-23", "2016-07-24", "2016-07-25", "2016-07-26", "2016-07-27"],
 					                labels: {
 					                   formatter : function(){
 					                        var date = new Date(this.value),
-					                                            day = date.getDate(),
-					                          months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-					                       if(day === 1){
+					                        day = date.getDate(),
+					                        months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+					                        if(day === 1){
 					                           return months[date.getMonth()] + "-" + day;
-					                       }   
-					                      if(date.getDay() === 5 || date.getDay() === 6){
-					                         return '<span style="font-size:12px; color:maroon;">'+day+'</span>';
-					                      }
+					                        }   
+					                        if(date.getDay() === 0 || date.getDay() === 6){
+					                          return '<span style="font-size:12px; color:maroon;">'+day+'</span>';
+					                        }
 					                      return day;
 					                   }
 					                },
