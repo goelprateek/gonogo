@@ -1032,10 +1032,10 @@ legend {
 	background-color: red;
 }
 
-.picked {
+/*.picked {
 	background-color: #CFCFCF;
 	border: 2px solid #fff;
-}
+}*/
 
 .picked:hover {
 	background-color: #CFCFCF;
@@ -1481,7 +1481,7 @@ text-align: justify;*/
 	position: fixed;
 	bottom: 0px;
 	left: 0px;
-	width: 101%;
+	width: 100%;
 	background-color: #F8F8F8;
 	text-align: center;
 	z-index: 1000;

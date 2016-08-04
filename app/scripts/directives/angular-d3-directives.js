@@ -38,14 +38,14 @@
 					                labels: {
 					                   formatter : function(){
 					                        var date = new Date(this.value),
-					                                            day = date.getDate(),
-					                          months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-					                       if(day === 1){
+					                        day = date.getDate(),
+					                        months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+					                        if(day === 1){
 					                           return months[date.getMonth()] + "-" + day;
-					                       }   
-					                      if(date.getDay() === 5 || date.getDay() === 6){
-					                         return '<span style="font-size:12px; color:maroon;">'+day+'</span>';
-					                      }
+					                        }   
+					                        if(date.getDay() === 0 || date.getDay() === 6){
+					                          return '<span style="font-size:12px; color:maroon;">'+day+'</span>';
+					                        }
 					                      return day;
 					                   }
 					                },
