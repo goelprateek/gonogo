@@ -34,7 +34,7 @@
 					            xAxis: {
 					                 startOnTick:true,
 					                 endOnTick:true,
-					                categories: ["2016-06-27", "2016-06-28", "2016-06-29", "2016-06-30", "2016-07-01", "2016-07-02", "2016-07-03", "2016-07-04", "2016-07-05", "2016-07-06", "2016-07-07", "2016-07-08", "2016-07-09", "2016-07-10", "2016-07-11", "2016-07-12", "2016-07-13", "2016-07-14", "2016-07-15", "2016-07-16", "2016-07-17", "2016-07-18", "2016-07-19", "2016-07-20", "2016-07-21", "2016-07-22", "2016-07-23", "2016-07-24", "2016-07-25", "2016-07-26", "2016-07-27"],
+					                categories: dataNew[0].x,
 					                labels: {
 					                   formatter : function(){
 					                        var date = new Date(this.value),
@@ -66,6 +66,15 @@
 					                gridLineWidth: 0.5,
 					                gridZIndex: 1,  
 					            },
+					            navigation : {
+					            	buttonOptions:{
+					            		align:'right'
+					            	},
+					            	menuItemHoverStyle: {
+										background: '#4572A5',
+										color: '#FFFFFF'
+									}
+					            },	
 					            plotOptions: {
 					                allowPointSelect: true,
 					                column: {
@@ -117,7 +126,7 @@
 					              hideDuration: 100,      
 					              showDuration: 100      
 					            },
-					            colors: ["#4CAF50","#F44336","#CCC"],
+					            colors: ["#CCC","#F44336","#4CAF50"],
 					            series: [{
 					                data: dataNew[0].y, 
 					                name: dataNew[0].name

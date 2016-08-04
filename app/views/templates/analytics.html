@@ -144,14 +144,6 @@ font-size:14px;}
 					institution-id="{{InstitutionID}}" test-data="dataFromDirective" isolated-table-data="updateData(parameter)"></div> -->
 					<div  hc-bar-chart  data="chartOptions" style="height:100%;width:100%;"></div>
 				</div>
-				
-				<!-- <div id="legendGroup" class="col-md-8	col-md-offset-4" style="margin-top: 25px">
-					<ul class="legend" >
-						<li><span class="approved"></span> Approved</li>
-						<li><span class="declined"></span> Declined</li>
-						<li><span class="pending"></span>Queue</li>
-					</ul>
-				</div> -->
 			</div>
 			
 			
@@ -166,39 +158,48 @@ font-size:14px;}
 
 					<div class="col-sm-3 col-md-offset-2 col-xs-6"  style="padding: 0px;">
 						<form name="gridsearch" autocomplete="off"  class="form-group form-inline">
-							<div class="input-group">
-								<input type="text" name="searchKeywords"  placeholder="Search..." autofocus
-									class="form-control" data-ng-model="searchKeywords"
+							<div class="input-group" >
+								<div ng-show="search" ng-cloak class="col-md-12">
+									<input type="text"  name="searchKeywords" data-ng-cloak placeholder="Search..." autofocus class="form-control" data-ng-model="searchKeywords"
 									data-ng-keyup="search(searchKeywords)">
+								</div>
+								<div ng-show="datepicker" ng-cloak class="col-md-12">
+									<input date-range-picker  id="daterange"  name="daterange" class="form-control date-picker" type="text" ng-model="datefilter.date" options="datefilter.opts"  placeholder="Pick Date"  max="datefilter.opts.max" clearable="true"/>
+								</div>	
 								<span class="input-group-addon">
-								        <i class="fa fa-search"></i>
+								      <a class="fa fa-search" ng-click="toggleSearch()" ></a>
+								</span>	
+								<span class="input-group-addon"  > 
+								     <a class="fa fa-calendar" ng-click="toggleDatepicker()"></a>
 								</span>	
 							</div>
+							
+
 						</form>
 						<span data-ng-show="searchKeywords.length >= 1"> Showing {{filteredStores.length}}/{{stores.length}} entries </span>
 					</div>
 					
 					<div class="col-md-3 " >
-					<div class="panel-bttn pull-right" >
-						<div class="btn-group">
-						  <button type="button" class="btn  btn-sm btn-default"><i class="fa fa-download"></i></button>
-						  <button type="button" class="btn btn-default  btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						     <span class="caret"></span>
-						  </button>
-						  <ul class="dropdown-menu">
-						    <li>
-						    	<a href="javascript:;" data-ng-click="reportDownload()" >XLS</a>
-						    </li>
-						    <li>
-						    	<a href="javascript:;"  data-ng-click="reportDownload()"  >CSV</a>
-						    </li>
-						    <li>
-						    	<a href="javascript:;"  data-ng-click="openCustomReportDesigner()">Custom Report</a>
-						    </li>
-						  </ul>
-						</div>
-						
-        			</div>
+						<div class="panel-bttn pull-right" >
+							<div class="btn-group">
+							  <!-- <button type="button" class="btn  btn-sm btn-default"><i class="fa fa-download"></i></button> -->
+							  <a type="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							     <i class="fa fa-download" style="font-size:18px;"></i>
+							  </a>
+							  <ul class="dropdown-menu">
+							    <li>
+							    	<a href="javascript:;" data-ng-click="reportDownload()" >XLS</a>
+							    </li>
+							    <li>
+							    	<a href="javascript:;"  data-ng-click="reportDownload()"  >CSV</a>
+							    </li>
+							    <li>
+							    	<a href="javascript:;"  data-ng-click="openCustomReportDesigner()">Custom Report</a>
+							    </li>
+							  </ul>
+							</div>
+							
+	        			</div>
         			</div>
         			<div class="col-md-1 ">
         				<a href="javascript:;" class="btn-icon btn-icon-sm pull-left" data-ng-click="toggleView()">

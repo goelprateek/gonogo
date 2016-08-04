@@ -21,6 +21,8 @@
 
 	var app = angular.module('gonogo.logging',[])
 
+	
+
 
  	angular.module("gonogo.notification", []).factory("notifier", [function() {
             var logIt;

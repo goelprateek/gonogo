@@ -1681,3 +1681,8 @@ span.input-icon {
 .input-icon~.help-inline {
     padding-left: 8px
 }
+
+.btn-group.open .dropdown-toggle{
+	box-shadow: none;
+	-webkit-box-shadow:none;
+}
