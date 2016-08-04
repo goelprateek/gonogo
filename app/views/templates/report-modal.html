@@ -114,7 +114,7 @@
                 <div class="form-group">
                     <label for="reportName" class="col-sm-2 control-label">Report Name</label>
                     <div class="col-md-10">
-                       <input id="reportName" type="text" ng-model="reportName" placeholder="Add report name" uib-typeahead="report for reports in getReportConfiguration($viewValue)" typeahead-loading="loadingReports" typeahead-no-results="noResults" class="form-control" typeahead-min-length="3">
+                       <input id="reportName" type="text" ng-model="reportName" placeholder="Add report name" uib-typeahead="reports.reportName for reports in getReportConfiguration($viewValue) " typeahead-loading="loadingReports" typeahead-no-results="noResults" class="form-control" typeahead-min-length="3" typeahead-on-select="selectedReport($item, $model, $label, $event)" typeahead-show-hint="true">
                         <i ng-show="loadingReports" class="fa fa-refresh"></i>
                         <div ng-show="noResults">
                           <i class="fa fa-remove"></i> No Results Found
@@ -167,7 +167,8 @@
                             </div>
                         </div>
                     </div> 
-                    <div class="form-group">
+
+                   <!--  <div class="form-group">
                         <div class="col-md-12">
                             <div class="row" >
 
@@ -184,14 +185,14 @@
                                 </div>
                             </div>
                         </div>   
-                    </div>             
+                    </div>  -->            
              </form>       
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="ok()">
+            <button class="btn btn-primary" type="button" ng-click="saveConfiguration()">
                 <span class="fa fa-save"> Save</span>
             </button>
-            <button class="btn btn-warning" type="button" ng-click="cancel()">
+            <button class="btn btn-warning" type="button" ng-click="previewConfiguration()">
                 <span class="fa fa-download"> Download</span>
             </button>
         </div>

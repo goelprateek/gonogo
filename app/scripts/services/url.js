@@ -7,7 +7,7 @@
 	app.factory("APP_CONST", function () {
 		var END_POINT = {
 
-			BASE_URL_GNG : "http://localhost:8080/GoNoGo/",
+			BASE_URL_GNG : "http://172.26.1.155:8080/GoNoGo/",
 			BASE_URL_SCORE:'http://gng.softcell.in/AppScoringV2Git/api/ScoringV3/',
 			BASE_URL_DEMO: 'http://gng.softcell.in/GoNoGoV3/api/GoNoGoV3/',
 			BASE_URL_DMI: 'http://gng.softcell.in/gonogo_dmi/',
@@ -27,7 +27,7 @@
 			var defere = $q.defer(),
 				_url = APP_CONST.getConst('BASE_URL_GNG');
 
-			$http.post(_url + url, data).success(function (response) {
+			$http.post(_url + url,data).success(function (response) {
 				defere.resolve(response);
 			}).error(function (error) {
 				defere.reject(error);

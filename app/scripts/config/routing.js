@@ -67,6 +67,9 @@
 		};
 	});
 
+	
+
+	
 
 	app.run(function($rootScope, $location, APP_CONST){
 

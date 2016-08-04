@@ -385,6 +385,36 @@
     $scope.notifarray = [];
     
 
+    // method to implement ELSearch
+
+    $scope.searchNotification = function($viewValue){
+        console.log($viewValue);
+        var _serviceInput = {
+                      "oHeader": {
+                        "sInstID": "4019",
+                        "sSourceID": "WEB",
+                        "sAppSource": "GNG_WEB",
+                        "sReqType": "JSON",
+                      },
+                      "oFilter": {
+                        "sMobileNumber": "9595745346",
+                        "sProduct": "CONSUMER DURABLES"
+                      },
+                      "oCroQueue": "defualt",
+                      "sQuery": $viewValue,
+                      "oPagination": {
+                        "iPageId": 0,
+                        "iLimit": 10,
+                        "iSkip": 0
+                      }
+                    }
+
+        RestService.fetchDataQuietly("/api/es/search",_serviceInput).then(function(data){
+            console.log(data);
+        });
+
+    }
+
     //when to bottom of queue load next records
 	$scope.loadData = function(){
          $scope.minVal = $scope.minVal+$scope.limit;

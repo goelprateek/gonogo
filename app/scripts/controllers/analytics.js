@@ -2,7 +2,7 @@
 	
 	'use strict';
 	
-	var app = angular.module('gonogo.analytics' ,['gonogo-directives','dndLists','ui.slimscroll','ngMaterial']);
+	var app = angular.module('gonogo.analytics' ,['gonogo-directives','dndLists','ui.slimscroll','ngMaterial','daterangepicker']);
 
     app.factory("AnalyticsObject",function(){
         var _obj = {
@@ -407,6 +407,72 @@
         $scope.utrVal = true;
         $scope.editLosStat = true;
 
+        $scope.search = true;
+        $scope.datepicker = false;
+        $scope.toggleSearch = function(){
+            $scope.search = true;
+            if($scope.datepicker)
+               $scope.datepicker = !$scope.datepicker;
+        }
+        $scope.toggleDatepicker = function(){
+            $scope.datepicker = true;
+            $scope.datefilter.date.startDate = undefined;
+            $scope.datefilter.date.endDate=moment();
+            if($scope.search)
+                   $scope.search = !$scope.search; 
+        }
+
+            
+       $scope.datefilter =  {
+                
+                date : {
+                    startDate: null,
+                    endDate: moment()        
+                },
+                opts: {
+                    max: moment().format('YYYY-MM-DD'), 
+                    opens : "center",
+                    linkedCalendars:true,
+                    applyClass: 'btn-primary',
+                    isCustomDate: function(data){
+                        return '';
+                    },
+                    locale: {
+                        separator : " - ",
+                        applyLabel: "Apply",
+                        fromLabel: "From",
+                        format: "YYYY-MM-DD",
+                        toLabel: "To",
+                        cancelLabel: 'Cancel',
+                        customRangeLabel: 'Custom range',
+                        daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+                        monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                        firstDay: 1
+                    }, 
+                    ranges: {
+                       'Today': [moment(), moment()],
+                       'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                       'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                       'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                       'This Month': [moment().startOf('month'), moment().endOf('month')],
+                       'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    },
+                    eventHandlers: {
+                        "apply.daterangepicker" : function(ev, picker){
+                            //TODO call service to fetch data based on date range
+                        },
+                        'show.daterangepicker' : function(ev , picker){
+                            console.log("showing picker");
+                            $scope.datefilter.date.startDate = undefined;
+                            $scope.datefilter.date.startDate = moment();
+                        },
+                        'hide.daterangepicker': function(ev,picker){
+                            console.log('hide picker');
+                        }
+                    }   
+                }
+        };
+
 		$scope.findAddressType = function(orignal,final){
     		return (angular.lowercase(orignal) == angular.lowercase(final));
     	}	
@@ -501,18 +567,17 @@
                         } ;
 
 			var modalInstance = $uibModal.open({
-							      animation: true,
 							      templateUrl: 'views/templates/report-modal.html',
 							      controller: 'CustomReportController',
 							      size: 'lg',
-                                  resolve:{
+                                  /*resolve:{
                                     data : function(){
-                                        return RestService.saveToServer('report/reporting-Dimension',_serviceinput).then(function(data){
+                                        return RestService.saveToServer('report/fetch-report-config',_serviceinput).then(function(data){
                                             console.log(data);
                                             return data;
                                         })
                                     }
-                                   }
+                                   }*/
 							    });	
 
 			modalInstance.result.then(function (selectedItem) {
@@ -4091,18 +4156,17 @@
 	
 
 
-	app.controller("CustomReportController", [ '$scope','$log','$uibModalInstance' ,'RestService', 'ReportStorage','data',function($scope,$log,$uibModalInstance,RestService,ReportStorage,data){
+	app.controller("CustomReportController", [ '$scope','$log','$uibModalInstance' ,'RestService', 'ReportStorage',function($scope,$log,$uibModalInstance,RestService,ReportStorage){
 
-		/*$log.log(_.each(data.oColumns,function(value,key){console.log(value);}));*/
+       
+       /*var viewableColumns = _.filter(data.oColumns, function(item){
+            console.log(item.bViewable);
+            return item.bViewable === true;
+       });*/
 
-
-		$scope.models = [
-	        {listName: "Available", items: data.oColumns, dragging: false},
-      		{listName: "Selected", items: data.oColumns, dragging: false}	
-	        
-	    ];
 
         $scope.getReportConfiguration = function(viewValue){
+            console.log(viewValue);
             var searchObj = {
                 "oHeader": {
                     "sInstID": 4019,
@@ -4110,10 +4174,53 @@
                 "sReportName":viewValue
             }
             return RestService.saveToServer('report/search-report-name',searchObj).then(function(data){
-                return _.map(data, function(item){
-                    return item.reportName;
-                });
+                return  data;
+                
             });
+        }
+
+        $scope.startsWith = function(state, viewValue) {
+          return state.substr(0, viewValue.length).toLowerCase() == viewValue.toLowerCase();
+        } 
+        
+        $scope.selectedReport = function($item, $model, $label, $event){
+           
+            var _serviceinput = {
+                "sReportId":$item.reportId,
+                "oHeader": {
+                    "sInstID": "4019"
+                 }
+            };
+
+            $scope.systemPropertyList = [];
+            $scope.selectedPropertyList = [];
+            
+
+            RestService.saveToServer('report/fetch-report-config',_serviceinput).then(function(data){
+                    
+                    _.map(data[0].aFlatConfig.mHeaderMap,function(item){
+                        
+                        if(item.bViewable){
+                            $scope.selectedPropertyList.push(item);
+                        }
+                            
+                        if(item.bDownloadable && !item.bViewable){
+                            $scope.systemPropertyList.push(item);
+                        }
+                    });
+
+                    $scope.models = [
+                        {listName: "Available", items: $scope.systemPropertyList, dragging: false},
+                        {listName: "Selected", items: $scope.selectedPropertyList, dragging: false} 
+                        
+                    ];
+
+            });
+
+                    
+            
+
+
         }
 
 	    $scope.getSelectedItemsIncluding = function(list, item) {
@@ -4128,7 +4235,24 @@
 	    };
 
 	    $scope.onDrop = function(list, items, index) {
-	      angular.forEach(items, function(item) { item.selected = false; });
+
+           var viewCount = _.countBy(list.items,function(items){
+                return items.bViewable;
+           })
+                
+            
+	      
+          angular.forEach(items, function(item) {
+             item.selected = false;
+
+             if(viewCount < 10){
+                item.bViewable = true;
+             }else{
+                item.bViewable = false;
+             }
+             
+          });
+
 	      list.items = list.items.slice(0, index)
 	                  .concat(items)
 	                  .concat(list.items.slice(index));
@@ -4145,11 +4269,25 @@
 	        $scope.modelAsJson = angular.toJson(model, true);
 	    }, true);
 
-		$scope.ok = function () {
-	    	$uibModalInstance.close();
+		$scope.saveConfiguration = function () {
+
+            var map = {};
+            _.each($scope.models[1].items, function(value,key){
+                map[key] = value;
+            })
+
+            
+
+            var _serviceInput  = {
+                "oHeader": {
+                    "sInstID" : 4019
+                }
+            }
+
+	    	//$uibModalInstance.close();
 	  	};
 
-	  	$scope.cancel = function () {
+	  	$scope.previewConfiguration = function () {
 	    	$uibModalInstance.dismiss('cancel');
 	  	};
 
