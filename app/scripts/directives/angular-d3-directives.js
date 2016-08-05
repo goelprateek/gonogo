@@ -90,7 +90,6 @@
 					                    point: {
 					                         events: {
 					                            click: function() {
-					                                //alert('Category: ' + this.category + ', value: ' + this.y);
 					                               if( user.role != "DSA" ){
 														var json = { 
 																	"dtDate":this.category,
@@ -98,7 +97,6 @@
 																	'sInstID':user.institutionID
 																};
 														RestService.saveToServer("table-view",json).then(function(data){
-															console.log(data);
 															scope.$parent.$parent.drawTablularData(data);
 															scope.$parent.$parent.isTableData = false;
 														});

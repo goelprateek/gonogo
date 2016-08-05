@@ -392,7 +392,8 @@ opacity
 .picked {
 	/*background-color: #CFCFCF;
 	border: 2px solid #fff;*/
-	border-left: 5px solid rgba(7, 66, 233, 0.73);
+	/*border-left: 5px solid rgba(7, 66, 233, 0.73);*/
+	border-left: 5px solid #009688;
 }
 
 .picked:hover {

@@ -566,7 +566,7 @@
             var transfrmedOject ;
             if(response){
                 transfrmedOject =  response;
-                transfrmedOject.aAppScoRslt = _.uniq(transfrmedOject.aAppScoRslt,true,function(object){
+                transfrmedOject.aAppScoRslt = _.uniq(transfrmedOject.aAppScoRslt,function(object,key,sFldName){
                     return object.sFldName;
                 });
 
@@ -1186,10 +1186,10 @@ $scope.updateLosData = function(status){
             }
         });
     };
-
+    //sayali invoice service check if any application is selected from queue
     $scope.saveInvoice = function(invoiceNum,invoiceDate){
          var dobFormatted=$filter('date')(invoiceDate,"dd-MM-yyyy");
-         console.log(dobFormatted);
+         console.log(new Date());
         var json =  {
                         "oHeader":{
                         "sInstID":user.institutionID,

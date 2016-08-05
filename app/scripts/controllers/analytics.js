@@ -570,14 +570,7 @@
 							      templateUrl: 'views/templates/report-modal.html',
 							      controller: 'CustomReportController',
 							      size: 'lg',
-                                  /*resolve:{
-                                    data : function(){
-                                        return RestService.saveToServer('report/fetch-report-config',_serviceinput).then(function(data){
-                                            console.log(data);
-                                            return data;
-                                        })
-                                    }
-                                   }*/
+                                  windowClass:"report-modal-popup"
 							    });	
 
 			modalInstance.result.then(function (selectedItem) {
@@ -4006,17 +3999,15 @@
             			{ for(var k=0; k< expressions[key].length; k++)
             			{    
             				if((exp1 === exp2)&&(exp1 == '<'))
-            				{return expressions[key][7];}//---------------select operaor for between condition from list and bind to dropdown
+            				{return expressions[key][7];}
             				else if((exp1 == exp2)&&(exp1 == '>'))
-            				{return expressions[key][8];}//---------------select operaor for !between condition from list and bind to dropdown
+            				{return expressions[key][8];}
             				else if(exp2 == expressions[key][k].value)
-            				{return expressions[key][k];}//---------------select operaor for other condition from list and bind to dropdown
+            				{return expressions[key][k];}
             			}
 
             			}
             		}
-
-//	                                    		================================================matrix==============================
 
             		$(".btnfltr").click(function(){
 
@@ -4038,8 +4029,6 @@
             		}
 
 
-//	                                    		=====================================================================================	
-            		//create and bind option value to select elemtn in matrix	
             		function generate(ids,valuearray,calltype)
             		{ 
             			// alert(calltype);
@@ -4089,36 +4078,9 @@
             					}
             					}); 
             		}
-            		/*		 $("#view_profile").click(function(){
-            				$('div[contextmenu="blur"]').hide();
-            				$("#UserContainer").show();
-            				$http({
-            					method : 'POST',
-            					url : '/GoNoGoV3/api/GoNoGoV3/UserProfile',
-            					params:{'userid':$scope.userid,'INSTITUTION_ID':user.institutionID},
-            					headers : {	'Content-Type' : 'application/json'}
-            				}).success(function(Response) 
-            				 {if(Response.StatusCode == 101)
-            					{$scope.Profile = Response.Data;
-            					console.log(JSON.stringify($scope.Profile));
-            					 $scope.error = "";
-            					}
-            				}).error(function(data){
-            					$scope.error = "System is under maintenance..Please try later";
-            				});
-            			});
-            			$(document.body).on("click","#UserBack",function(){
-            				$('div[contextmenu="blur"]').show();
-            				$("#UserContainer").hide();
-            			});
-            		 */			
-            		/*$(document.body).on("click","spy",function(){
-            				alert("Working...");
-            			 	$("#in").show();*/
+            		
             		$("#spy").click(function(){
-//	                                    			alert("Working...");
             			$("#in").show();
-
             		});	 
 
             	}
@@ -4217,10 +4179,6 @@
 
             });
 
-                    
-            
-
-
         }
 
 	    $scope.getSelectedItemsIncluding = function(list, item) {
@@ -4288,7 +4246,51 @@
 	  	};
 
 	  	$scope.previewConfiguration = function () {
-	    	$uibModalInstance.dismiss('cancel');
+
+            var selectedColumns = {};
+            _.each($scope.models[1].items, function(value,key){
+                selectedColumns[key] = value;
+            })
+	    	  
+              var serviceInput = {
+                "oHeader":{
+                    "sInstID" : "4019",
+                     "sAppSource":"",
+                     "dtSubmit":new Date(),
+
+                },
+                "aProductType":["Consumer Durables"],
+                "sReportId":"",
+                "sReportName":"",
+                "sReportCategory":"",
+                "aFlatConfig":{
+                    "mHeaderMap":selectedColumns,
+                    "sReportFomat":"json"
+                },
+                "sBranchId":"",
+                "oPaggination":{
+                    "iPageId":0,
+                    "iLimit":5,
+                    "iSkip":0
+                }
+
+              }
+
+              RestService.saveToServer("/report/preview-custom-report",serviceInput).then(function(data){
+
+                $scope.header = _.keys(data.oData[0]);
+                $scope.values = [];
+
+                _.each(data.oData,function(value,key){
+                    $scope.values.push(_.values(value));
+                });
+
+                console.log($scope.values);
+                
+
+              });
+
+              //$uibModalInstance.dismiss('cancel');
 	  	};
 
 	}]);
