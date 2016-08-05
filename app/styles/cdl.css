@@ -93,4 +93,10 @@ select.inputMaterial ~ label{
   padding-top: 0px;
   width: 100%;
   color:black;
+  box-shadow: none;
+  max-width: 100%;
+}
+
+.control-select:hover,.control-select:focus{
+  box-shadow: none;
 }

@@ -8,6 +8,15 @@
 		var dlrCode =null;
 		var CustID=null;
 
+		$scope.asset={
+			category:"",
+			make:"",
+			model:""
+		};
+
+		//Hard Coded //
+		//sharedService.setRefID("25213000015");
+
 		var user=UserService.getCurrentUser();
     	$scope.can=AclService.can;
 
@@ -105,108 +114,6 @@
 	$scope.statusJSON={};
 //	$scope.dcsnPtrn=/(Declined|Approved|OnHold)$/i;
 
-//	 get all asset category from master
-	$scope.fetchAssetCategory = function(){
-		$scope.assetJson = {"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":""}; 
-		$http({
-			method : 'POST',
-			url : APP_CONST.getConst('BASE_URL_GNG')+'asset-category-web',
-			data :$scope.assetJson,
-			headers : {'Content-Type' : 'application/json'}
-		}).success(function(data) 
-		{
-//			console.log("Asset Category Response:");
-//			console.log(data);
-			$scope.assetArray=data;
-			$scope.fetchAssetMake(data[0]);
-
-			try{
-				if($scope.Response.oReq.oApplication.aAssetDetail[0].sAssetCtg !=undefined && $scope.Response.oReq.oApplication.aAssetDetail[0].sAssetCtg !=null)
-				{
-					$scope.assetCategory = $scope.Response.oReq.oApplication.aAssetDetail[0].sAssetCtg;
-					$scope.fetchAssetMake($scope.assetCategory);
-					/*$scope.mk = $scope.Response.oReq.oApplication.aAssetDetail[0].sAssetMake;
-					$scope.mdl = $scope.Response.oReq.oApplication.aAssetDetail[0].sModelNo;*/
-				}
-			}
-			catch(Exception){}
-		}).error(function(data) {
-		$scope.serviceHitCount=$scope.serviceHitCount+1;
-			if($scope.serviceHitCount<=3)
-				{
-					$scope.fetchAssetCategory();
-				}
-			else{
-				$scope.serviceHitCount=1;
-				$scope.error="Sorry we can not process your Asset request";
-			}	
-		});
-	}
-
-	$scope.fetchAssetMake = function(val1){
-		$scope.makeJson ={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":val1}
-		$http({
-			method : 'POST',
-			url : APP_CONST.getConst('BASE_URL_GNG')+'asset-model-make-web',
-			data :$scope.makeJson,
-			headers : {'Content-Type' : 'application/json'}
-		}).success(function(data) 
-		{ 
-			$scope.makeTags=[];
-
-			$scope.makeTags = data;
-			// $scope.mk = data[0];
-			//$scope.fetchAssetModel($scope.assetCategory,data[0]);
-			try{
-				if($scope.Response.oReq.oApplication.aAssetDetail && $scope.Response.oReq.oApplication.aAssetDetail[0].sAssetCtg)
-				{
-					$scope.mk = $scope.Response.oReq.oApplication.aAssetDetail[0].sAssetMake;
-					$scope.fetchAssetModel($scope.assetCategory,$scope.mk);
-				}
-			}
-			catch(Exception)
-			{}
-		//		console.log("Data Asset Make : " + $scope.makeTags);			
-		}).error(function(data){ 
-			console.log("Getting Error from make service.");
-		});
-	}
-
-	$scope.fetchAssetModel = function(val1,val2){
-		$scope.mdlJson ={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":val1,"sQuery2":val2}; 
-		$http({
-			method : 'POST',
-			url : APP_CONST.getConst('BASE_URL_GNG')+'asset-model-all-web',
-			data :$scope.mdlJson,
-			headers : {'Content-Type' : 'application/json'}
-		}).success(function(data) { 
-		 	$scope.modelTags=[];
-			for(var i in data)
-			{
-				if(data[i].sMdlNo !=="")
-				{	
-					$scope.modelTags.push(data[i].sMdlNo);
-				}					
-			}
-
-			try{
-				if($scope.Response.oReq.oApplication.aAssetDetail[0].sAssetCtg !=undefined && $scope.Response.oReq.oApplication.aAssetDetail[0].sAssetCtg !=null)
-				{
-					$scope.mdl = $scope.Response.oReq.oApplication.aAssetDetail[0].sModelNo;
-					
-				}else{
-					$scope.mdl=$scope.modelTags[0];
-				}
-			}//end of try
-			catch(Exception)
-			{
-				$scope.mdl=$scope.modelTags[0];
-			}
-	 	}).error(function(data) {
-		 	console.log("Getting Error from asset model service.");
-		});
-	}
-
 	if($scope.applicationObject==null && CustID!=null && CustID!="") {
 		var URL='';
 		var json ={'sRefID':CustID};
@@ -294,7 +201,7 @@
 				                dateOfBirth.setFullYear(parseInt(mApplicant.sDob.slice(4)));
 				                dateOfBirth.setDate(parseInt(mApplicant.sDob.slice(0,2)));
 				                dateOfBirth.setMonth((parseInt(mApplicant.sDob.slice(2,4))-1));
-				                
+
 				                $scope.dob=dateOfBirth;
 							}else{
 								var dateOfBirth=new Date();
@@ -476,7 +383,7 @@
 //				dlrCode=Response.oHeader.sDealerId;
 				$("#nmCntnr").hide();
 				$scope.statusObject={
-						sAppStat : ""
+					sAppStat : ""
 				};
 				$scope.statusObject.sAppStat="Decline";
 				  $("#afterSubmit").show();
@@ -545,7 +452,7 @@
 //				$scope.statusObject.sAppStat="Decline";
 			}
 			else if(currentStage == "APRV")
-			{	
+			{
 				$scope.fname = Response.oReq.oApplicant.oApplName.sFirstName;
 				$scope.mname = Response.oReq.oApplicant.oApplName.sMiddleName;
 				$scope.lname = Response.oReq.oApplicant.oApplName.sLastName;
@@ -568,17 +475,17 @@
 
 				$("#nmCntnr").hide();
 				var statusJSON={
-					  "sRefID":CustID,
-					  "oHeader": {
-					    "sCroId": "default",
-					    "dtSubmit":new Date().getTime(),
-					    "sReqType": "JSON",
-					    "sAppSource" : "WEB",
-					    "sDsaId":$scope.username,
-					    "sAppID": "",
-					    "sSourceID":"",
-					    "sInstID":$scope.InstitutionID
-					  }
+					"sRefID":CustID,
+					"oHeader": {
+						"sCroId": "default",
+						"dtSubmit":new Date().getTime(),
+						"sReqType": "JSON",
+						"sAppSource" : "WEB",
+						"sDsaId":$scope.username,
+						"sAppID": "",
+						"sSourceID":"",
+						"sInstID":$scope.InstitutionID
+					}
 				}
 				poller = $interval(function(){
 					$scope.check_status(statusJSON);
@@ -762,11 +669,10 @@ $scope.stateChanged = function (val){
 		 $("#prmnt_permobile").val($("#permobile").val()).siblings("help").show();
 		 $("#prmnt_pertadd").val($("#pertadd").val()).siblings("help").show();
 		 $("#prmnt_mcity").val($("#mcity").val()).siblings("help").show();
-		}else
-			{
-			  $("#permanentAddr input").val("").siblings("help").hide();
-			  $("#permanentAddr Select").val("").siblings("help").hide();
-			}
+		}else{
+			$("#permanentAddr input").val("").siblings("help").hide();
+			$("#permanentAddr Select").val("").siblings("help").hide();
+		}
 	}
 
 $("#residenceAddr input,#residenceAddr select").on("change paste keyup", function() {
@@ -886,6 +792,11 @@ $(".next").click(function() {
 	$rootScope.errorMsg="";
 	
 	var bool =  validation();
+
+	//Hard Coded //
+	//bool=true;
+	//Hard Coded //
+
 	$scope.$apply();
 //	var bool= true;
 	if (bool) {
@@ -921,7 +832,7 @@ $(".next").click(function() {
 		);
 		if(count == 3)
 		{
-			$scope.fetchAssetCategory();
+			//$scope.fetchAssetCategory();
 //			$scope.fetchAssetMake();
 //			$scope.fetchAssetModel("DURABLE LOAN");
 		}
@@ -1637,14 +1548,15 @@ function validation()
 	});
 //	console.log("name length :"+$("#fname").val().length+$("#lname").val().length);
 	
-	if(error == false && (parseInt($("#fname").val().length)+parseInt($("#lname").val().length)) < 4)
-	{
-	 	error=true;
-	 	$rootScope.errHead="Name";
-	 	$rootScope.errorMsg="First name and last name should have atleast 4 character";
-	 	$("#fname,#lname").focus();
-	 	return false;
-	}else if(error == false){
+	// if(error == false && (parseInt($("#fname").val().length)+parseInt($("#lname").val().length)) < 4)
+	// {
+	//  	error=true;
+	//  	$rootScope.errHead="Name";
+	//  	$rootScope.errorMsg="First name and last name should have atleast 4 character";
+	//  	$("#fname,#lname").focus();
+	//  	return false;
+	// }else 
+	if(error == false){
 		if( ($(".pan").is(":visible") && $(".pan").val() !="") || ($(".aadhaar").is(":visible") && $(".aadhaar").val() != "") )
 		{	
 			if($(".aadhaar").val() !="")
@@ -1820,114 +1732,21 @@ $scope.remove_file = function(filetype, id, index) {
 };// end file remove method
 
 $(document.body).on("click",".remove_image",function()
-	{
+{
 //		console.log($(this).attr("name"));
-		var name=$(this).attr("name");
-		addkyc_array=$.grep(addkyc_array, function(e) { return e.kyc_name!=name });
+	var name=$(this).attr("name");
+	addkyc_array=$.grep(addkyc_array, function(e) { return e.kyc_name!=name });
 //		for(prop of addkyc_array)
 //		{
 //			if(p.kyc_name==name)
 //			   {  delete prop;
-			    $(document.body).find("#"+name+"").css("background-image", "none");
-				$(document.body).find("#"+name+"label").show();
-				$(document.body).find("#"+name+"remove").hide();
+		    $(document.body).find("#"+name+"").css("background-image", "none");
+			$(document.body).find("#"+name+"label").show();
+			$(document.body).find("#"+name+"remove").hide();
 //			}
 //		}
 //	console.log("kyc Array : "+addkyc_array.length);
-	});
-
-
-$(document.body).on("click","#postNext",function(){
-	var bool=validation();
-	if(bool)
-	{	$scope.ipaService(); }	
 });
-
-//send post ipa data and start flow
-$scope.ipaService = function()
-{	
-	$scope.ipaJSonFunction();
-//	console.log("$scope.ipaJson :"+$scope.ipaJson);
-	$http({
-		method : 'POST',
-		url : APP_CONST.getConst('BASE_URL_GNG')+'post-ipa-pdf',
-		data :$scope.ipaJson,
-		headers : {'Content-Type':'application/json'}
-	}).success(function(data) 
-	{	
-		// console.log("Response Data post IPA : " + JSON.stringify(data));
-	  // post ipa pdf id will availeble here
-	 if(data.sStat=="SUCCESS")
-	 {    $scope.postIpaPdfId=data.sDocID;
-	 	  $scope.postIpaPDFCode = "data:application/pdf;base64,"+data.sByteCode;
-		  $("#pOrder").hide();
-		  $("#additionalDoc").show();
-	 }
-	}).error(function(data) 
-	{
-		$scope.serviceHitCount=$scope.serviceHitCount+1;
-		if($scope.serviceHitCount<=3)
-			{
-			  $scope.ipaService();
-			}
-		else{
-			$scope.serviceHitCount=1;
-			$scope.error="Sorry we can not process your Asset request";
-		}	
-	});
-$("#pOrder").hide();
-$("#additionalDoc").show();
-}
-
-$scope.ipaJSonFunction=function()
-{	
-	$scope.postIPANum=[];
-	/*$('input','#apc').each(function(index,ele)
-	{
-	  $scope.postIPANum.push($(this).val());
-	});*/
-
-	// console.log("Asset Category : " + $scope.assetCategory);
-	$scope.ipaJson={
-			  "oHeader": {
-				    "sCroId": "default",
-				    "dtSubmit": new Date().getTime(),
-				    "sReqType":"JSON",
-				    "sAppSource": "WEB",
-				    "sDsaId": $scope.username,
-				    "sAppID": "",
-				    "sDealerId":dlrCode,
-				    "sSourceID":"HDBFS_CDL",
-				    "sInstID": "4019"
-				  },
-				  "opostIPA": {
-				    "dOtherChrg": 0,
-				    "sScheme": $scope.pstIpaSchmExp,
-				    "dDelSubven": $scope.dltSrchrg,
-				    "aAssMdl": [],
-				    "sMarginMoneyInstru": $("#mnyInstn").val(),
-				    "dTotAssCost":$("#astCst").val().replace(/,/g,''),
-				    "aAssMdls": [{
-				    	"sAssetCtg":$("#ast").val(),
-				    	"sDlrName":$scope.dealerName,
-				    	"sModelNo":$("#mdl").val(),
-				    	"sAssetMake":$("#mk").val()
-				    }],
-				    "dProcFees": $("#prcsfee").val().replace(/,/g,''),
-				    "dApvAmt": $("#apvAmt").val().replace(/,/g,''),
-				    "sMarMoneyConfirm": $("#mnyCnfm").val().replace(/,/g,''),
-				    "dMarMoney": $("#mrgnMny").val().replace(/,/g,''),
-				    "dAdvEmi": $("#aEMI").val(),
-				    "dManfSubDel": 0
-				  },
-				  "sRefID": $scope.REFID,
-				  "refID":  $scope.REFID,
-				  "dtDateTime": new Date().getTime()
-				}
-
- 	// console.log("post ipa request"+JSON.stringify($scope.ipaJson));
-}
-
 
 $scope.sendPostIpaMail=function()
 { 
@@ -1982,7 +1801,7 @@ $scope.emplArr=[];
 /*$("#wrkename").autocomplete({
 	source: $scope.emplArr
   });
-*/
+
 // $scope.empService = function(key){
 // 	$scope.assetJson ={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":""}; 
 // 	$http({
@@ -2029,197 +1848,6 @@ $scope.getEmployerNames=function(queryStr){
 		};
 
 
-
-// *********************SCHEME SERVICE***********************************************************
-$scope.allSchemes = "";
-$scope.scmTags = [];
-/*$("#scheme").autocomplete({
-	source: $scope.scmTags
-});*/
-
-$scope.scmService = function(key){
-	if( key !=undefined)
-		{
-			modelNo=key.model;
-			make=key.make;
-		}
-//	$scope.scmJson ={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":"key"}; 
-	$scope.scmJson ={
-			  "sRefID": $scope.REFID,
-			  "oHeader": {
-			    "sCroId": "default",
-			    "dtSubmit":new Date().getTime(),
-			    "sReqType":"JSON",
-			    "sAppSource": "WEB",
-			    "sDsaId":$scope.username,
-			    "sAppID": $scope.REFID,
-			    "sDealerId": dlrCode,
-			    "sSourceID": "GONOGO_HDBFS",
-			    "sInstID": $scope.InstitutionID
-			  },
-			  "sModelNo": modelNo,
-			  "sCatDsc":$scope.assetCategory,
-			  "sMfrDscr":make
-			}
-	// console.log("$scope.scmJson Input JSON"+JSON.stringify($scope.scmJson));
-	$http({
-		method : 'POST',
-		url : APP_CONST.getConst('BASE_URL_GNG')+'filtered-scheme-master',
-		data :$scope.scmJson,
-		headers : {'Content-Type' : 'application/json'}
-	}).success(function(data)
-	 {	
-	 	$scope.allSchemes = data;
-	 	$scope.scmTags=[];
-		for(var i in data){   
-			$scope.scmTags.push(data[i].sSchDes)
-		}
-		/*$("#scheme").autocomplete({
-			source: $scope.scmTags
-		});*/
-		//console.log("Data Scheme master : " + JSON.stringify(data));
-		//console.log("Data ScHIT124DBD1heme master : " + $scope.scmTags);
-		
-	}).error(function(data) 
-		{
-		$scope.serviceHitCount=$scope.serviceHitCount+1;
-		if($scope.serviceHitCount<=3)
-			{
-			  $scope.scmService(key);
-			}
-		else{
-			$scope.serviceHitCount=1;
-			$scope.error="Sorry we can not process your Scheme request";
-		}	
-		});
-}
-
-// to set the emi and other value for selected scheme
-// $('#scheme').on('autocompleteselect', function (e, ui) 
-$scope.onSchemeSelected =function(ui)
-{	
-	$scope.SchemeObject = null;
-	for(var key in $scope.allSchemes)
-	{
-	 	if($scope.allSchemes[key].sSchDes==ui)
-	 	{
-		 	$scope.SchemeObject=$scope.allSchemes[key];
-//			 	console.log("$scope.SchemeObject : "+ JSON.stringify($scope.SchemeObject));
-		 	break;
-	 	}
-	}
-
-	if($scope.SchemeObject){
-		var taprAmt = parseFloat($("#apvAmt").val().toString().replace(/,/g,""));
-		var ttlAsstCst = parseFloat($("#astCst").val().toString().replace(/,/g,""));
-		if(!$scope.SchemeObject.sMxTenu)
-		{
-			$scope.SchemeObject.sMxTenu=0;
-		}
-		if(!$scope.SchemeObject.sMinTenu)
-		{
-			$scope.SchemeObject.sMinTenu=0;
-		}
-		if(!$scope.SchemeObject.sDint)
-		{
-			$scope.SchemeObject.sDint=0;
-		}	
-		if(!$scope.SchemeObject.sMinAmt)
-		{
-			$scope.SchemeObject.sMinAmt=0;
-		}	
-		var tadEmi = 0;
-		var temi=0;
-		if(taprAmt < ttlAsstCst)
-		{	
-				temi = (taprAmt/parseFloat($scope.SchemeObject.sMxTenu));
-				temi =  Math.ceil(temi);
-				tadEmi=(temi * parseFloat($scope.SchemeObject.sMinTenu));
-		} else {
-			temi =  (ttlAsstCst/parseFloat($scope.SchemeObject.sMxTenu));
-		 	temi =  Math.ceil(temi);
-		 	tadEmi=( temi * parseFloat($scope.SchemeObject.sMinTenu));
-		}
-
-		tadEmi=  Math.ceil(tadEmi);
-		$scope.pstIpaSchmExp = ""+$scope.SchemeObject.sSchID+"("+$scope.SchemeObject.sMinTenu+"/"+$scope.SchemeObject.sMxTenu+")";
-
-		if(taprAmt < ttlAsstCst)
-		{
-		  	$scope.dltSrchrg = (taprAmt * (parseFloat($scope.SchemeObject.sDint)/100));
-		} else {
-		  	$scope.dltSrchrg = (ttlAsstCst * (parseFloat($scope.SchemeObject.sDint)/100));
-		}
-		Math.round($scope.dltSrchrg)
-		$("#aEMI").val(tadEmi).siblings("help").show();
-		$("#emi").val(temi).siblings("help").show();
-	//	$("#mrgnMny").val(tmrgnMny).prev().show();
-		$("#prcsfee").val( Math.ceil($scope.SchemeObject.sMinAmt)).siblings("help").show();
-	}
-};
-
-$("#astCst").keyup(function(){
-	var tmrgnMny;
-	var taprAmt = parseFloat($("#apvAmt").val().toString().replace(/,/g,""));	
-	var ttlAsstCst = parseFloat($("#astCst").val().toString().replace(/,/g,""));
-	
-	if(ttlAsstCst >= taprAmt)
-	{ tmrgnMny = ttlAsstCst-taprAmt; 
-	}else{
-		tmrgnMny=0;
-	}	
-	if(tmrgnMny<=0)
-	{
-	 $("#mnyInstrDiv, #mnyCnfmDiv").hide();
-	}else
-		{
-		$("#mnyInstrDiv, #mnyCnfmDiv").show();
-		}
-	/*var taprAmt = parseFloat($("#apvAmt").val().toString().replace(/,/g,""));
-	var ttlAsstCst = parseFloat($("#astCst").val().toString().replace(/,/g,""));*/
-	if($scope.SchemeObject.sMxTenu)
-	{
-		$scope.SchemeObject.sMxTenu=0;
-	}
-	if($scope.SchemeObject.sMinTenu)
-	{
-		$scope.SchemeObject.sMinTenu=0;
-	}
-	if($scope.SchemeObject.sDint)
-	{
-		$scope.SchemeObject.sDint=0;
-	}	
-	if($scope.SchemeObject.sMinAmt)
-	{
-		$scope.SchemeObject.sMinAmt=0;
-	}	
-	var tadEmi = 0;
-	var temi=0;
-	if(taprAmt < ttlAsstCst)
-	{	
-			temi = (taprAmt/parseFloat($scope.SchemeObject.sMxTenu));
-			temi =  Math.ceil(temi);
-			tadEmi=(temi * parseFloat($scope.SchemeObject.sMinTenu));
-	}else
-		{
-		 temi =  (ttlAsstCst/parseFloat($scope.SchemeObject.sMxTenu))
-		 temi =  Math.ceil(temi);
-		 tadEmi=(temi * parseFloat($scope.SchemeObject.sMinTenu));
-		}
-		tadEmi=  Math.ceil(tadEmi);
-//	$scope.pstIpaSchmExp = ""+$scope.SchemeObject.sSchID+"("+$scope.SchemeObject.sMinTenu+"/"+$scope.SchemeObject.sMxTenu+")";
-	if(taprAmt < ttlAsstCst)
-	{
-	  $scope.dltSrchrg = (taprAmt * (parseFloat($scope.SchemeObject.sDint)/100));
-	}else
-		{
-		  $scope.dltSrchrg = (ttlAsstCst * (parseFloat($scope.SchemeObject.sDint)/100));
-		}
-	Math.round($scope.dltSrchrg);
-	$("#aEMI").val(tadEmi).siblings("help").show();
-	$("#emi").val(temi).siblings("help").show();
-	$("#mrgnMny").val(tmrgnMny).siblings("help").show();
-});
 // ****************************************** ASSET MODEL
 $scope.modelTags = [];
 

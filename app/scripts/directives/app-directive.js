@@ -218,8 +218,8 @@
 		};
 
 		var _controller=["$scope",function($scope){
-			console.log("Image Array To Upload: ");
-			console.log($scope.imagearray);
+			//console.log("Image Array To Upload: ");
+			//console.log($scope.imagearray);
 			// var countimg=0;
 
 			$scope.onImageRemove=function(img){
@@ -528,7 +528,7 @@
 	        require:"ngModel",
 	        link: function(element,scope,attr,controller){
 	            controller.$validators.selectrequired = function(modelValue){                   
-	                return modelValue === '' || (modelValue && modelValue.startsWith('Select')) ? false : true;
+	                return !modelValue || modelValue === '' || (modelValue && modelValue.startsWith('Select')) ? false : true;
 	            }
 	        }
 	    }

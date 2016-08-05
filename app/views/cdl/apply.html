@@ -588,58 +588,22 @@
 					<fieldset id="incomeContainer" style="display: none;">
 						<div class="row clearfix getheight">
 							<div id="assetContainer" class="col-md-10 col-md-offset-1">
-								<form id="assetObj">
+								<!-- <form id="assetObj">
 									<div class="row clearfix customRow" style="display: none;">
 										<div class="col-md-12 height">
 											<help style="display:inline-block">Dealer*</help>
 											<input type="text" id="dlr" ng-model="dealerName"
 												class="customInput" disabled="disabled" />
 											</div>
-									</div> 
-									<div class="row clearfix customRow">
-										<div class="col-md-12 height">
-											<help>Asset Category*</help>
-											<select id="ast" ng-model="assetCategory" class="ast customSelect" ng-options = "d for d in assetArray track by d" ng-change="fetchAssetMake(assetCategory)">
-												 <option value="" >Select Category</option>
-											</select>
-											<img alt="" src="images/select-arrow.png" class="customarrow"
-												style="right: 13%" /></span>
-										</div>
-									</div>
-
-									<div class="row clearfix customRow">
-										<div class="col-md-12 height">
-											<help>Make*</help>
-											<!-- <input type="text" id="mk" ng-model="mk" class="customInput"
-												placeholder="Make*" /> -->
-												<select id="mk" ng-model="mk" class="mk customSelect" ng-options = "d for d in makeTags track by d" ng-change="fetchAssetModel(assetCategory,mk)">
-												 	<option value="" >Select Make</option>
-											    </select> 
-											        <img alt="" src="images/select-arrow.png" class="customarrow"
-																style="right: 13%" />
-										</div>
-									</div>
-									<div class="row clearfix customRow">
-										<div class="col-md-12 height">
-											<help>Model*</help>
-											<!-- <input type="text" id="mdl" ng-model="mdl"
-												class="customInput" placeholder="Model*" /> -->
-												<select id="mdl" ng-model="mdl" class="customSelect" ng-options = "d for d in modelTags track by d">
-											    <option value="" >Select Model</option>
-											    </select>
-											    <img alt="" src="images/select-arrow.png" class="customarrow"
-												style="right: 13%" />
-										</div>
-									</div>
-								</form>
+									</div>  -->
+									<asset-selector asset="asset"></asset-selector>
+								<!-- </form> -->
 							</div>
-
 						</div>
-
 						<div class="row clearfix ">
 							<div class="col-md-10 col-md-offset-1">
 								<button class="customButton previous">Previous</button>
-								<button class="customButton next">Next</button>
+								<button class="customButton next" ng-disabled="!asset.category || ! asset.make || !asset.model">Next</button>
 									<button class="customButton save" id="save" ng-click="submitApplication('step3')">Save</button>
 							</div>
 							<!-- <div class="col-md-4"></div> -->
@@ -830,9 +794,9 @@
 							    
 							    <img ng-model="profileImg" id="selectImgInit" alt="" ng-src="{{profileData}}" ng-if="profileImage" style="width:100%;height: 113px;margin-left: 3%">
 							    <div style="height: 20px">
-								<small ng-show="image_url2" class="size">{{file_size2}}</small>
-								<a class="remove_image" ng-show="selectImgInit || profileImage" ng-click="remove_file('APPLICANT-PHOTO','0',selectImgInit)">Remove</a>
-									</div>	
+									<small ng-show="image_url2" class="size">{{file_size2}}</small>
+									<a class="remove_image" ng-show="selectImgInit || profileImage" ng-click="remove_file('APPLICANT-PHOTO','0',selectImgInit)">Remove</a>
+								</div>	
 										</div>
 									</div>
 									</div>
@@ -858,7 +822,7 @@
 			</div>
 
 			<div id="pOrder" style="display: none">
-<!-- 				<div id="kycHeight"></div> -->
+<!-- 			<div id="kycHeight"></div> -->
 				<div class="row clearfix ">
 						<div class="col-md-8 col-md-offset-2" id="do">
 							<div class="row clearfix customRow">
@@ -1025,7 +989,7 @@
 										<span class="info">Additional_KYC</span>
 									</div>
 									<div class="row clearfix">
-									<div class="col-md-3" ng-repeat="item in AddtnlKycArr"  style="padding: 8px;">
+									<div class="col-md-3" ng-repeat="item in AddtnlKycArr" style="padding: 8px;">
 										<content-item content="item"></content-item></div>
 										<span class="Add-Icon same abs_rght_mdl"
 											ng-click="addNewElement('ADDITIONAL_KYC')"><b>+</b></span>
@@ -1033,7 +997,6 @@
 
 								</div>
 							</div>
-
 						</div>
 					</div>
 				</div>
@@ -1098,8 +1061,7 @@
 										placeholder="Make*" /> -->
 										<select id="mk1" ng-model="mk" class="mk customSelect" ng-options = "d for d in makeTags track by d" ng-change="fetchAssetModel(assetCategory,mk)">
 											<option value="">Select Make</option>
-										</select> <img alt="" src="images/select-arrow.png" class="customarrow"
-																style="right: 13%" />
+										</select> <img alt="" src="images/select-arrow.png" class="customarrow" style="right: 13%" />
 								</div>
 							</div>
 							<div class="row clearfix customRow">
