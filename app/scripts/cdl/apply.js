@@ -1690,7 +1690,7 @@ function validation()
 	var std	=/(perstdCode|prmnt_perstdCode|wrkstd)$/i;
 	var phone=/(perphone|prmnt_perphone|wrkphn)$/i;
 	var strptrn = /^[a-zA-Z]+$/ ;
-	var addrPtrn= /^[a-zA-Z\d#,.\/\\]+$/
+	var addrPtrn= /^[a-zA-Z\d\s#,.\/\\]+$/
 //  var mailptrn =/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 	var mailptrn =/^[A-Za-z0-9._]+@[A-Za-z]+\.[a-z]{2,4}$/;
 
