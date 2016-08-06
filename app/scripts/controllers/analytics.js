@@ -396,9 +396,8 @@
                                                 RestService,$filter,APP_CONST,$uibModal,UserService,$log,AnalyticsObject,SelectArrays,AclService) {
 
         
-        //notifier.logSuccess("Hello");
 
-		// chart functionality
+
 		var user = UserService.getCurrentUser();
 		
         $scope.can=AclService.can;
@@ -465,7 +464,6 @@
                             //TODO call service to fetch data based on date range
                         },
                         'show.daterangepicker' : function(ev , picker){
-                            console.log("showing picker");
                             $scope.datefilter.date.startDate = undefined;
                             $scope.datefilter.date.startDate = moment();
                         },
@@ -479,8 +477,6 @@
 		$scope.findAddressType = function(orignal,final){
     		return (angular.lowercase(orignal) == angular.lowercase(final));
     	}	
-
-
 
     	$scope.showimage = function(obj,isImgFlag,index,editMode){
                     
@@ -590,7 +586,7 @@
 			
 			$scope.isTableData = !$scope.isTableData;
 			
-			if($scope.isTableData == false){
+			if(!$scope.isTableData){
 				var json = {'sInstID':user.institutionID,'iSkip':"0",'iLimit':"0"};
 				RestService.saveToServer('score-log',json).then(function(data){
 			     if(data){
@@ -654,9 +650,9 @@
 		$scope.addrType = SelectArrays.getAddrType();
 		$scope.addr_type = $scope.addrType[1]; 
 		$scope.appView = true;
-		var URL='application-data';
+		
 		var json ={'sRefID':CustID};
-		RestService.saveToServer(URL,json).then(function(response){
+		RestService.saveToServer('application-data',json).then(function(response){
             if(response)
 				$scope.objectSet = response;
 			else
