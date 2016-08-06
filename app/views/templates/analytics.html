@@ -275,8 +275,7 @@ font-size:14px;}
 			                </tr>
 			            </thead>
 			            <tbody style="font-size: 12px;">
-			            	<tr><td><div style="width:50%; margin: 0 auto;" > Loading </div></td></tr>
-			                <tr data-ng-repeat="store in dataSourceCol" sty>
+			            	<tr data-ng-repeat="store in dataSourceCol" sty>
 			                    <td ><a ng-click="viewApplication(store.applicationId,store.applicationStatus)">{{store.applicationId}}</a></td>
 			                    <td>{{store.date | dateFormat}}</td>
 			                    <td>{{store.city.toUpperCase()}}</td>

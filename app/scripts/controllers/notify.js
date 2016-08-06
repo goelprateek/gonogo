@@ -982,7 +982,7 @@ $scope.updateLosData = function(status){
     $scope.dateOptions = {          
         formatYear: 'yyyy',
         showWeeks:false,
-        maxDate: maxDa,
+        maxDate: maxDa, 
         minDate: minDa,
         startingDay: 1
     };
