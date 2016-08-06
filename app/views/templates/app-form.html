@@ -20,12 +20,12 @@
 		</div>
 		<div class="col-md-4 text-right" id="top-fixed" ng-if="can('NRPRCS')">
 			
-			<a class="btn btn-primary btn-sm" ng-show="can('NRPRCS') && !isUpdating" ng-click="enableForm();">
+			<a class="btn btn-primary btn-sm" ng-show="showReinitiate && (can('NRPRCS') && !isUpdating)" ng-click="enableForm();">
                 <span class="fa fa-pencil-square-o"></span>
                 Update
             </a>
 
-            <a class="btn btn-primary btn-sm" ng-show="can('NRPRCS') && ((isUpdating && ApplicantForm.$valid) || !isUpdating)" ng-click="updateForm();" >
+            <a class="btn btn-primary btn-sm" ng-show="showReinitiate && (can('NRPRCS') && ((isUpdating && ApplicantForm.$valid) || !isUpdating))" ng-click="updateForm();" >
             	<span class="fa fa-repeat"></span>
             	Reinitiate
             </a>
@@ -680,7 +680,7 @@
 					<div ng-if="kyc.sKycName=='PAN'">
 						<label class="control-label">{{kyc.sKycName}} NUMBER</label>
 						<input class="form-control" name="pan_number" type="text" ng-model="kyc.sKycNumber" ng-disabled="!isUpdating" maxlength="10" ng-pattern="/^[A-Z]{3}[P][A-Z]\d{4}[A-Z]/i" change-on-blur="onValueChanged('pan')" capitalize/>
-						<div ng-messages="ApplicantForm.pan_number.$touched && ApplicantForm.pan_number.$error" class="errorMsg">
+						<div ng-messages="isUpdating && ApplicantForm.pan_number.$error" class="errorMsg">
 		   					<p ng-message="maxlength">Please enter valid pan number</p>
 		   					<p ng-message="pattern">Please enter valid pan number</p>
 						</div>
