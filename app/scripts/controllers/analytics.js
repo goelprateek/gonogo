@@ -396,10 +396,9 @@
 
 		// chart functionality
 		var user = UserService.getCurrentUser();
-
-		var object  = AnalyticsObject.dummy;
+		
         $scope.can=AclService.can;
-		$scope.objectSet =  object; 
+		$scope.objectSet =  AnalyticsObject.dummy;
 		$scope.isImg = true;
 
         $scope.losIdval = true;
