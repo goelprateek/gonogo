@@ -389,7 +389,6 @@
     
     // method to implement ELSearch
     $scope.searchNotification = function($viewValue){
-        console.log($viewValue);
         if($viewValue.length >= 3){
         var _serviceInput = {
                       "oHeader": {
@@ -419,9 +418,7 @@
                     }
 
             RestService.fetchDataQuietly("api/es/search",_serviceInput).then(function(data){
-                console.log(data);
                   if(data.notifications.length>0){
-                        console.log("destroying timer");
                         $interval.cancel(timer);
                         $scope.notifarray = [];
                         var filteredSearchData = _.uniq(data.notifications, function(item, key, sRefID) { 
@@ -433,7 +430,6 @@
         }else if($viewValue.length == 0){
             polling(0);
             timer  = $interval(function(){
-                 console.log("timer started again");
                  polling(0);
             }, 60000, 0,true); 
         }
@@ -490,7 +486,6 @@
 	}
 
     if(_.isUndefined(timer)){
-         console.log("starting timer");
           timer  = $interval(function(){
                     polling($scope.minVal);
           }, 60000, 0,true);    
@@ -765,7 +760,6 @@ $scope.cro_action = function(refID, action){
            return;
         }
     });
-      console.log($scope.isAllImgApprove);
 
 		if(refID !== ""){
             if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!AclService.can('NCROQUE'))){
@@ -976,9 +970,8 @@ $scope.updateLosData = function(status){
 			        "sUtr":utr
 			    }
 			};	 
-            console.log(jsondata);
-    		 var URL='update-los-details';
-    		RestService.saveToServer(URL,jsondata).then(function(Response){
+    		 
+    		RestService.saveToServer('update-los-details',jsondata).then(function(Response){
     				if(Response.status == "SUCCESS"){
                         notifier.logSuccess("LOS Status updated successfully");
     					$scope.losIdval = true;
@@ -1242,7 +1235,7 @@ $scope.updateLosData = function(status){
                      $scope.datefilter.date.startDate = moment();
                  },
                  'hide.daterangepicker': function(ev,picker){
-                     console.log('hide picker');
+                     //TODO hide picker;
                  }
              }   
          }
@@ -1841,7 +1834,6 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
     };
 
     $scope.reinitiateForm=function(){
-        //console.log("Reinitiate form :"+$scope.refID);
         requestReinitiateModules=[];
         for(var mainIndex=0;mainIndex<$scope.reinitiateModules.length;mainIndex++) {
             for(var subIndex=0;subIndex<$scope.reinitiateModules[mainIndex].subs.length;subIndex++) {
@@ -1856,17 +1848,7 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
             }
         }
         
-        // var moduleArr=[];
-        // for(var i=0;i<$scope.tags.length;i++){
-        //     console.log("Reinitiating :"+$scope.tags[i].id+" "+$scope.tags[i].text);
-            
-        //     for(var j=0;j<$scope.reinitiateModules.length;j++)
-        //     {
-        //         if(reinitiateModules[j].sModuleName==$scope.tags[i].id){
-        //             reinitiateModules[j].bRunModule=true;
-        //         }          
-        //     }
-        // }
+        
         if($scope.fieldsUpdated && ($scope.fieldsUpdated.isNameUpdated || $scope.fieldsUpdated.isResAddressUpdated || $scope.fieldsUpdated.isOffAddressUpdated || $scope.fieldsUpdated.isPerAddressUpdated || $scope.fieldsUpdated.isPanUpdated || $scope.fieldsUpdated.isVoterIDUpdated || $scope.fieldsUpdated.isAadhaarUpdated || $scope.fieldsUpdated.isDobUpdated)){
             var requestJson={
                 oWorkFlowConfig : {
@@ -1876,9 +1858,8 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
                 oApplicationRequest : applicantData.oAppReq
             };
 
-            var URL="/worker/reprocess-updated/";
 
-            RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
+            RestService.saveToServer("/worker/reprocess-updated/",JSON.stringify(requestJson)).then(function(Response){
                 if(Response && Response.sStat=="SUCCESS"){
                     notifier.logSuccess("Application has been reinitiated successfully");
                 }else{
@@ -1893,10 +1874,8 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
                 aModuleConfig:requestReinitiateModules
             };
 
-            var URL="worker/reprocess-by-id/";
-
-            RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
-                if(Response && Response.sStat=="SUCCESS"){
+            RestService.saveToServer("worker/reprocess-by-id/",JSON.stringify(requestJson)).then(function(response){
+                if(response && response.sStat=="SUCCESS"){
                     notifier.logSuccess("Application has been reinitiated successfully");
                 }else{
                     notifier.logWarning("Error occured while reinitiating") ;
@@ -1907,7 +1886,7 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
     };
 
     $scope.closeModal = function(){
-          $uibModalInstance.dismiss();
+        $uibModalInstance.dismiss();
     };
 }]);
 
@@ -1952,7 +1931,7 @@ app.directive('thisEarlierThan', function () {
             });
 
             var check = function () {
-                if (typeof cityStay === 'undefined' || typeof residenceStay === 'undefined') {
+                if (!cityStay || !residenceStay) {
                     return;
                 }
 
@@ -1975,7 +1954,7 @@ app.directive('thisEarlierThan', function () {
             };
 
             var validate = function (iYears) {                  
-                if (isNaN(parseInt(iYears))) {
+                if (parseInt(iYears)) {
                     return false;
                 }
                 else {
@@ -2000,12 +1979,10 @@ app.directive('changeOnBlur', function() {
             var oldValue = null;
             elm.bind('focus',function() {
                 oldValue = elm.val();
-                //console.log(oldValue);
             })
             elm.bind('blur', function() {
                 scope.$apply(function() {
                     var newValue = elm.val();
-                    //console.log(newValue);
                     if (newValue !== oldValue){
                         scope.$eval(expressionToCall);
                     }
@@ -2035,30 +2012,6 @@ app.filter('dateFilter', function() {
         return result;
     };
 });
-
-/*app.filter('dateFormat', function() {
-	return function(item) {
-		var month = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug','Sep', 'Oct', 'Nov', 'Dec' ];
-console.log(item);
-		var curdate= new Date(new Date());
-		var dt=curdate.getDate();
-		var mnth=curdate.getMonth()+1;
-		var year=curdate.getFullYear();
-		
-		var receivedDay = new Date(item).getDate();
-		var receivedMon = new Date(item).getMonth()+1;
-		
-		if(receivedDay == dt && receivedMon== mnth){
-			var time = new Date(item).getHours()+":"+new Date(item).getMinutes()+":"+new Date(item).getSeconds();
-			result = time;
-		}else if(receivedDay == dt-1 && receivedMon== mnth){
-			result='Yesterday';	
-		}else{
-			result  = receivedDay+"-"+month[new Date(item).getMonth()]+"-"+new Date(item).getFullYear();
-		}	
-		return result;
-	};
-});*/
 
 app.filter('currency', function() {
 	return function(value, symbol) {
