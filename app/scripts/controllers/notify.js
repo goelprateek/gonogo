@@ -427,7 +427,6 @@
                             return item.sRefID;
                         });
                         $scope.notifarray = filteredSearchData;
-                        $scope.error ="";
                   }
             });
         }else if($viewValue.length == 0){
@@ -489,9 +488,7 @@
                         return item.sRefID;
                     });
 
-                    $scope.notifarray = filteredData;
-                    $scope.error ="";
-                    
+                    $scope.notifarray = filteredData;                    
 				}
 			});	
   		}
@@ -602,8 +599,6 @@
 			 $scope.objectSet = NotificationObject.dummy();
 			
             $scope.Picked = CustID;
-            $scope.done = '';
-            $scope.error = '';
             $scope.dedupeRefArray = [];
             $scope.isAllImgApprove = true;
             $scope.showrefid = true;
@@ -892,15 +887,12 @@ $scope.cro_action = function(refID, action){
                  }
 			  }
           }else if($scope.applctnstatus == null){
-                $scope.error = "Application status is not defined...!!!";
-                $scope.done = "";
+                notifier.logWarning("Application status is not defined!!");
         }else{
-            $scope.error = "Application has already taken an action...!!!";
-            $scope.done = "";
+            notifier.logWarning("An action is already taken for this application!!");
          }
 	  }else{
-        $scope.error = "Please select enquiry from Queue...!!!";
-        $scope.done = "";
+        notifier.logWarning("Please select enquiry from Queue!!");
     }       
 }
 
@@ -914,12 +906,11 @@ function requestForStatus(json){
                             return($scope.notifarray[key].sStat = json.sAppStat);
                         }  
                   });
-            $scope.done = "Application is successfully "+json.sAppStat+""; 
+             notifier.logSuccess("Application is successfully "+json.sAppStat+""); 
         }
         else{
-            $scope.error= "Sorry...Unable to Approve your application !!";
+            notifier.logWarning("Sorry...Unable to Approve your application !!");
         }
-    setTimeout(function() { $scope.error = "";},1500);
     }); 
 }
 
@@ -933,10 +924,10 @@ function requestFordclnOnhold(json){
                         return($scope.notifarray[key].sStat = json.sAppStat);
                     }  
               });
-            $scope.done = "Application is successfully "+json.sAppStat+""; 
+             notifier.logSuccess("Application is successfully "+json.sAppStat+""); 
         }
         else{
-            $scope.error= "Sorry...Unable to update your action !!";
+            notifier.logWarning("Sorry...Unable to update your action !!");
         }
     });
 }
