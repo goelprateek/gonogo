@@ -484,6 +484,10 @@ svg:not (:root ) {
     background-color: #2EC1CC !important;
 }
 
+.badge-dusty {
+    background-color: #CCC !important;
+}
+
 .badge {
     display: inline-block;
     min-width: 10px;
