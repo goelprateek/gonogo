@@ -21,6 +21,7 @@
 	padding:20px;
 	font-size:20px;
 	cursor: pointer;
+	margin:0px 10px;
 }
 tags-input .tags{
 	border:none;
@@ -106,9 +107,11 @@ tags-input .host{
 		<button class="col-md-2 btn-reinitiate" ng-click="reinitiateForm()">Reinitiate</button>
 	</div>
 </div> -->
-
+<div class="modal-header">
+    <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
+    <h3 class="modal-title">Reinitiate application</h3>
+</div>
 <div style="overflow: hidden;">
-	<button type="button" class="close"  ng-click="closeModal()" aria-hidden="true">&times;</button>
 	<div class="col-md-12" style="overflow: hidden;text-align:center; padding: 20px;">
 		<div style="display:inline-block;" ng-repeat="module in reinitiateModules">
 			<a href ng-click="setTab(module.main)" ng-style="getTabStyle(module.main)" class="reinitiate-tab-head">
@@ -118,7 +121,7 @@ tags-input .host{
 	</div>
 	<div class="col-md-12" style="text-align:center;margin: 50px 0px;padding:10px;">
 		<div ng-show="isSet(module.main)" ng-repeat="module in reinitiateModules">
-			<label ng-style="getSubStyle(subModule.id)" class="lbl-reinitiate" ng-click="addTag(subModule.name,subModule.id)" ng-repeat="subModule in module.subs">
+			<label ng-style="getSubStyle(subModule.id)" class="lbl-reinitiate btn btn-w-md btn-gap-v btn-line-default" ng-click="addTag(subModule.name,subModule.id)" ng-repeat="subModule in module.subs">
 				{{subModule.name}}
 			</label>
 		</div>

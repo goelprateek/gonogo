@@ -331,6 +331,8 @@
 	var user=UserService.getCurrentUser();
     $scope.can=AclService.can;
 
+    $scope.showReinitiate=true;
+
     if(user.id){
         $scope.$emit('onSuccessfulLogin');
     }
@@ -388,7 +390,7 @@
     // method to implement ELSearch
 
     $scope.searchNotification = function($viewValue){
-        console.log($viewValue);
+        //console.log($viewValue);
         if($viewValue.length >= 3){
         var _serviceInput = {
                       "oHeader": {
@@ -418,7 +420,7 @@
                     }
 
             RestService.fetchDataQuietly("api/es/search",_serviceInput).then(function(data){
-                console.log(data);
+                //console.log(data);
                   if(data.notifications.length>0){
                         console.log("destroying timer");
                         $interval.cancel(timer);
@@ -433,7 +435,7 @@
         }else if($viewValue.length == 0){
             polling(0);
             timer  = $interval(function(){
-                 console.log("timer started again");
+                 //console.log("timer started again");
                  polling(0);
             }, 60000, 0,true); 
         }
@@ -498,7 +500,7 @@
 	}
 
     if(_.isUndefined(timer)){
-         console.log("starting timer");
+         //console.log("starting timer");
           timer  = $interval(function(){
                     polling($scope.minVal);
           }, 60000, 0,true);    
@@ -515,8 +517,6 @@
     $scope.findAddressType = function(orignal,final){
     	return (angular.lowercase(orignal) == angular.lowercase(final));
     }				               	
-
-
 
     $scope.showimage = function(obj,isImgFlag,index,editMode){
         var modalInstance = $uibModal.open({
@@ -775,7 +775,7 @@ $scope.cro_action = function(refID, action){
            return;
         }
     });
-      console.log($scope.isAllImgApprove);
+      //console.log($scope.isAllImgApprove);
 
 		if(refID !== ""){
             if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!AclService.can('NCROQUE'))){
@@ -993,7 +993,7 @@ $scope.updateLosData = function(status){
 			        "sUtr":utr
 			    }
 			};	 
-            console.log(jsondata);
+            //console.log(jsondata);
     		 var URL='update-los-details';
     		RestService.saveToServer(URL,jsondata).then(function(Response){
     				if(Response.status == "SUCCESS"){
@@ -1061,22 +1061,24 @@ $scope.updateLosData = function(status){
             //$scope.oldPinCode=;
 
             $scope.isUpdating=!$scope.isUpdating;
+
+            var applicant=$scope.objectSet.oAppReq.oReq.oApplicant;
             
-            if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs!=null){
+            if(applicant.aKycDocs!=null){
                 var isAadhaarPresent=false;
                 var isVoterPresent=false;
                 var isPanPresent=false;
 
-                for(var i=0;i<$scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.length;i++){
-                    if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("aadhar")>=0){
+                for(var i=0;i<applicant.aKycDocs.length;i++){
+                    if(applicant.aKycDocs[i].sKycName.toLowerCase().indexOf("aadhaar")>=0){
                         isAadhaarPresent=true;
                     }
 
-                    if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("pan")>=0){
+                    if(applicant.aKycDocs[i].sKycName.toLowerCase().indexOf("pan")>=0){
                         isPanPresent=true;
                     }
 
-                    if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("voter")>=0){
+                    if(applicant.aKycDocs[i].sKycName.toLowerCase().indexOf("voter")>=0){
                         isVoterPresent=true;
                     }
                 }
@@ -1085,12 +1087,12 @@ $scope.updateLosData = function(status){
                     var newKYC={
                         sExpiryDate:null,
                         sIssueDate:null,
-                        sKycName:"AADHAR",
+                        sKycName:"AADHAAR",
                         sKycNumber:"",
                         sKycStat:null
                     }
                     
-                    $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
+                    applicant.aKycDocs.push(newKYC);
                 }
                 
                 if(!isVoterPresent){
@@ -1101,7 +1103,7 @@ $scope.updateLosData = function(status){
                         sKycNumber:"",
                         sKycStat:null
                     }
-                    $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
+                    applicant.aKycDocs.push(newKYC);
                 }
                 
                 if(!isPanPresent){
@@ -1112,18 +1114,16 @@ $scope.updateLosData = function(status){
                         sKycNumber:"",
                         sKycStat:null
                     }
-                    $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
+                    applicant.aKycDocs.push(newKYC);
                 }
             }
             /* dob popup */     
-            $scope.openDOBDialog=function(){
-                
+            $scope.openDOBDialog=function(){                
                 $scope.dobPopup.opened = true;          
             };      
             /* dob popup */
         }
     };
-    
 
     $scope.updateForm=function(){
         if($scope.objectSet.iNoReTry>=2){
@@ -1135,11 +1135,11 @@ $scope.updateLosData = function(status){
                 {
                     $scope.objectSet.oAppReq.oReq.oApplicant.sDob=dobFormatted.replace(/\//g,"");
                 }
-        
+
                 if($scope.objectSet.oAppReq.oReq.oApplicant.sDob!=dobFormatted){
                      $scope.fieldsUpdated.isDobUpdated=true;
                 }
-        
+
                 _.each($scope.objectSet.oAppReq.oReq.oApplicant.aAddr,function(addr){
                     if(addr.sAddrType.toLowerCase()=="residence" && addr.iPinCode != $scope.oldResPincode){
                         $scope.fieldsUpdated.isResAddressUpdated=true;
@@ -1147,18 +1147,18 @@ $scope.updateLosData = function(status){
                         $scope.fieldsUpdated.isOffAddressUpdated=true;
                     }
                 });
-        
+
                 $scope.isUpdating=!$scope.isUpdating;
-                
+
                 $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet,$scope.fieldsUpdated);
             }else{
                  $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet);
             }
         }
     };
-    
+
     $scope.onValueChanged=function(valueChanged){
-        console.log("Value Changed :"+valueChanged);
+        //console.log("Value Changed :"+valueChanged);
 
         if(valueChanged == "name"){
             $scope.fieldsUpdated.isNameUpdated=true;
@@ -1176,9 +1176,9 @@ $scope.updateLosData = function(status){
             $scope.fieldsUpdated.isVoterIDUpdated=true;
         }
     };  
-    
+
     $scope.showReinitiateModal = function (size,refID,applicantData,fieldsUpdated) {
-         var modalInstance = $uibModal.open({
+        var modalInstance = $uibModal.open({
             templateUrl: 'views/modal-reinitiate.html',
             controller: 'ReinitiateModalController',
             size: size,
@@ -1193,13 +1193,20 @@ $scope.updateLosData = function(status){
                     return fieldsUpdated;
                 }
             }
-         });
+        });
+
+        modalInstance.result.then(function (isSuccess,refID) {           
+            if(isSuccess){
+                $scope.objectSet.iNoReTry=$scope.objectSet.iNoReTry +1;
+                 //$scope.showReinitiateStatusModal("lg",$scope.refID);
+            }
+        });
     };
 
     $scope.getStateCity=function($event,address){
         
-        console.log("getStateCity");
-        console.log(address);
+        //console.log("getStateCity");
+        //console.log(address);
         var pin=$event.target.value;
         
         address.sCity="";
@@ -1236,7 +1243,7 @@ $scope.updateLosData = function(status){
     
     $scope.invoiceDate = false;
     $scope.invoiceNumber = false;
-    console.log("invoiceDate :"+$scope.invoiceDate);
+    //console.log("invoiceDate :"+$scope.invoiceDate);
     $scope.datefilter =  {            
          date : {
              startDate: null,
@@ -1271,12 +1278,12 @@ $scope.updateLosData = function(status){
                      $scope.datefilter.date.startDate = moment();
                  },
                  'hide.daterangepicker': function(ev,picker){
-                     console.log('hide picker');
+                     //console.log('hide picker');
                  }
              }   
          }
      };
-    
+
      $scope.saveInvoice = function(invoiceNum,invoiceDate){
           if($scope.objectSet.oAppReq.sRefID!=""){
             if((invoiceNum != undefined && invoiceNum!="") && (invoiceDate != undefined && invoiceDate !="")){
@@ -1293,7 +1300,7 @@ $scope.updateLosData = function(status){
                            "dtInv":dobFormatted
                            }
                           };
-                           console.log(json);
+                           //console.log(json);
                            var URL="update-invoice-details";
 
                 RestService.saveToServer(URL,json).then(function(Response){
@@ -1373,7 +1380,7 @@ $scope.updateLosData = function(status){
 
     // destructor function for scope 
     $scope.$on("$destroy",function(){
-        console.log("destroying timer");
+        //console.log("destroying timer");
         if(angular.isDefined(timer)){
              $interval.cancel(polling);
              timer = undefined;
@@ -1443,8 +1450,8 @@ app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$ui
         }
     });
 
-     $scope.closeModal = function(){
-          $uibModalInstance.dismiss();
+    $scope.closeModal = function(){
+        $uibModalInstance.dismiss();
     };
 }]);
 
@@ -1661,16 +1668,16 @@ app.controller('DeclInstanceCtrl', ['$scope','$rootScope','NotificationObject',
 
 app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
    '$uibModalInstance','holdModelFeed','SelectArrays', function($scope, $rootScope,NotificationObject,$uibModalInstance,holdModelFeed,SelectArrays){ 
-       
+
     var docData =  SelectArrays.getOfferData();
-     $scope.OfferArrey =docData ;
-     $scope.AvailebleOffers = $scope.OfferArrey[0].Offers;
-     $scope.ID = 0;
-     $scope.tabIndex = undefined;
-     $scope.contentSelect = false;
-     $scope.invalidMsg = false;
-     $scope.docOfferFlag = true;
-     $scope.holdModelFeed = holdModelFeed;
+    $scope.OfferArrey =docData ;
+    $scope.AvailebleOffers = $scope.OfferArrey[0].Offers;
+    $scope.ID = 0;
+    $scope.tabIndex = undefined;
+    $scope.contentSelect = false;
+    $scope.invalidMsg = false;
+    $scope.docOfferFlag = true;
+    $scope.holdModelFeed = holdModelFeed;
 
     $scope.holdObject = {
         reqComment : ""
@@ -1680,15 +1687,15 @@ app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
          docData[4].Offers.push({'Name':image.sImgType , 'Icon':'images/rejected proof.png','Code':image.sImgType});
      });
     
-      $scope.isCurrTab = function(index){
+    $scope.isCurrTab = function(index){
         if((index == 0 && $scope.tabIndex== undefined) || index == $scope.tabIndex){
             return true;
         }
     }
 
-     $scope.isSelected = function(index){
-          if((typeof docData[index].selected !="undefined") && (docData[index].selected.length > 0))
-          return true;
+    $scope.isSelected = function(index){
+        if((typeof docData[index].selected !="undefined") && (docData[index].selected.length > 0))
+        return true;
     }
 
     $scope.Load_Offer = function(NodeID,Obj,index){
@@ -1764,242 +1771,6 @@ $scope.requestDoc = function () {
 $scope.closeDocument = function () {
     $uibModalInstance.dismiss('cancel');
   };
-}]);
-
-app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantData","$uibModalInstance","fieldsUpdated","notifier",
-    function($scope,RestService,refID,applicantData,$uibModalInstance,fieldsUpdated,notifier){
-    $scope.refID = refID;
-    $scope.applicantData = applicantData;
-    $scope.fieldsUpdated=fieldsUpdated;
-
-    $scope.fieldModule={};
-    
-    $scope.tags = [];
-    
-    var requestReinitiateModules=[];
-    
-    // var requestReinitiateModules=[
-    //                              {sModuleName : "101", bRunModule : false},
-    //                              {sModuleName : "201", bRunModule : false},
-    //                              {sModuleName : "202", bRunModule : false},
-    //                              {sModuleName : "301", bRunModule : false},
-    //                              {sModuleName : "302", bRunModule : false},
-    //                              {sModuleName : "401", bRunModule : false},
-    //                              {sModuleName : "402", bRunModule : false}
-    //                          ];
-
-    $scope.reinitiateModules=[
-                         {main:"MB" ,subs: [{name:"Cibil",id:101,isSuccess:true}]},
-                         {main:"KYC" , subs: [{name:"PAN",id:201,isSuccess:true},
-                                              {name:"Aadhaar",id:202,isSuccess:true}]},
-                         {main:"Dedupe" , subs: [{name:"Dedupe",id:301,isSuccess:true},
-                                                 {name:"Negative Pin Code",id:302,isSuccess:true}]},
-                         {main:"SOBRE" , subs: [{name:"Verificaton scoring",id:401,isSuccess:true},
-                                                {name:"Application scoring",id:402,isSuccess:true}]}
-                      ];
-    
-    $scope.tab = $scope.reinitiateModules[0].main;
-    
-    //Hard Coded for testing
-//    var requestReinitiateModules=[
-//                                  {sModuleName : "101", bRunModule : true},
-//                                  {sModuleName : "201", bRunModule : true},
-//                                  {sModuleName : "202", bRunModule : true},
-//                                  {sModuleName : "301", bRunModule : true},
-//                                  {sModuleName : "302", bRunModule : false},
-//                                  {sModuleName : "401", bRunModule : true},
-//                                  {sModuleName : "402", bRunModule : false}
-//                              ];
-//    $scope.applicantData.oWorkFlowConfig = {
-//        sGngRefId : $scope.refID,
-//        aModuleConfig : requestReinitiateModules
-//    };
-    //Hard Coded for testing
-
-    
-    if($scope.applicantData.oWorkFlowConfig && $scope.applicantData.oWorkFlowConfig.aModuleConfig){
-        _.each($scope.applicantData.oWorkFlowConfig.aModuleConfig, function(mConfig){
-            _.each($scope.reinitiateModules,function(module){
-                _.each(module.subs,function(subModule){
-                    if((subModule.id+"")==mConfig.sModuleName){
-                        subModule.isSuccess=mConfig.bRunModule;
-                    }
-                });
-            });
-        });
-    }
-    
-    //If Fields updated then add all into processing
-    if($scope.fieldsUpdated && ($scope.fieldsUpdated.isNameUpdated || $scope.fieldsUpdated.isResAddressUpdated || $scope.fieldsUpdated.isOffAddressUpdated || $scope.fieldsUpdated.isPerAddressUpdated || $scope.fieldsUpdated.isPanUpdated || $scope.fieldsUpdated.isVoterIDUpdated || $scope.fieldsUpdated.isAadhaarUpdated || $scope.fieldsUpdated.isDobUpdated)){
-        for(var i=0;i<$scope.reinitiateModules.length;i++) {
-            for(var j=0;j<$scope.reinitiateModules[i].subs.length;j++) {
-                $scope.tags.push({text: $scope.reinitiateModules[i].subs[j].name,id:$scope.reinitiateModules[i].subs[j].id});
-            }
-        }
-    }
-
-    $scope.setTab = function(newTab){
-        $scope.tab = newTab;
-    };
-
-    $scope.isSet = function(tabNum){
-        return $scope.tab === tabNum;
-    };
-
-    $scope.getTabStyle=function(pTab){
-        //console.log("pTab:"+pTab);
-        var val="";
-        if(pTab==$scope.tab){
-            //This tab is active
-            val= {
-                    color:"white",
-                    background:$scope.getTabColor(pTab),
-                    outline:null
-                    };
-        }else{
-            //This tab is not active
-            val= {
-                    color:$scope.getTabColor(pTab),
-                    border:"1px solid " + $scope.getTabColor(pTab)
-                };
-        }
-        return val;
-    };
-
-    $scope.isTabSuccess=function(pTab){
-        var isSuccess=true;
-        for(var i=0;i<$scope.reinitiateModules.length;i++){
-            if($scope.reinitiateModules[i].main==pTab){
-                for(var j=0;j<$scope.reinitiateModules[i].subs.length;j++)
-                {
-                    if(!$scope.reinitiateModules[i].subs[j].isSuccess){
-                        isSuccess=false;
-                    }
-                }
-            }
-        }
-
-        return isSuccess;
-    };
-
-    $scope.getSubStyle=function(pSub){
-//      console.log("pTab:"+pTab);
-        var val="";
-        //This tab is not active
-        val= {
-                color:$scope.getSubColor(pSub),
-                outline:null        
-            };
-        return val;
-    };
-
-    $scope.getTabColor=function(pTab){
-        if($scope.isTabSuccess(pTab)){ //Color code == green
-            return "#22ab4a";
-        }else{
-            return "#ee1f23";
-        }
-    };
-
-    $scope.getSubColor=function(pSub){
-        for(var i=0;i<$scope.reinitiateModules.length;i++) {
-            for(var j=0;j<$scope.reinitiateModules[i].subs.length;j++) {
-                if($scope.reinitiateModules[i].subs[j].id==pSub){
-                    if($scope.reinitiateModules[i].subs[j].isSuccess) { //Color code == green
-                        return "#22ab4a";
-                    }else{
-                        return "#ee1f23";
-                    }
-                }
-            }
-        }
-    };
-
-    $scope.addTag=function(pTag,tagId){
-        var tagFound=false;
-        
-        for(var i=0;i<$scope.tags.length;i++)
-        {
-            if($scope.tags[i].text==pTag){
-                tagFound=true;
-                break;
-            }
-        }
-        if(tagFound!=true)
-        {
-            $scope.tags.push({text: pTag,id:tagId});
-        }
-    };
-
-    $scope.reinitiateForm=function(){
-        //console.log("Reinitiate form :"+$scope.refID);
-        requestReinitiateModules=[];
-        for(var mainIndex=0;mainIndex<$scope.reinitiateModules.length;mainIndex++) {
-            for(var subIndex=0;subIndex<$scope.reinitiateModules[mainIndex].subs.length;subIndex++) {
-                var shouldProcess=false;            
-                for(var tagIndex=0;tagIndex<$scope.tags.length;tagIndex++) {                    
-                    if($scope.reinitiateModules[mainIndex].subs[subIndex].id==$scope.tags[tagIndex].id) {
-                        shouldProcess=true;
-                    }
-                }
-
-                requestReinitiateModules.push({sModuleName : ""+$scope.reinitiateModules[mainIndex].subs[subIndex].id, bRunModule : shouldProcess});
-            }
-        }
-        
-        // var moduleArr=[];
-        // for(var i=0;i<$scope.tags.length;i++){
-        //     console.log("Reinitiating :"+$scope.tags[i].id+" "+$scope.tags[i].text);
-            
-        //     for(var j=0;j<$scope.reinitiateModules.length;j++)
-        //     {
-        //         if(reinitiateModules[j].sModuleName==$scope.tags[i].id){
-        //             reinitiateModules[j].bRunModule=true;
-        //         }          
-        //     }
-        // }
-        if($scope.fieldsUpdated && ($scope.fieldsUpdated.isNameUpdated || $scope.fieldsUpdated.isResAddressUpdated || $scope.fieldsUpdated.isOffAddressUpdated || $scope.fieldsUpdated.isPerAddressUpdated || $scope.fieldsUpdated.isPanUpdated || $scope.fieldsUpdated.isVoterIDUpdated || $scope.fieldsUpdated.isAadhaarUpdated || $scope.fieldsUpdated.isDobUpdated)){
-            var requestJson={
-                oWorkFlowConfig : {
-                    sGngRefId : $scope.refID,
-                    aModuleConfig : requestReinitiateModules
-                },
-                oApplicationRequest : applicantData.oAppReq
-            };
-
-            var URL="/worker/reprocess-updated/";
-
-            RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
-                if(Response && Response.sStat=="SUCCESS"){
-                    notifier.logSuccess("Application has been reinitiated successfully");
-                }else{
-                    notifier.logWarning("Error occured while reinitiating") ;
-                }
-                $uibModalInstance.dismiss();
-            });
-        }
-        else{
-            var requestJson={
-                sGngRefId:$scope.refID,
-                aModuleConfig:requestReinitiateModules
-            };
-
-            var URL="worker/reprocess-by-id/";
-
-            RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
-                if(Response && Response.sStat=="SUCCESS"){
-                    notifier.logSuccess("Application has been reinitiated successfully");
-                }else{
-                    notifier.logWarning("Error occured while reinitiating") ;
-                }
-                $uibModalInstance.dismiss();
-            });
-        }
-    };
-
-    $scope.closeModal = function(){
-          $uibModalInstance.dismiss();
-    };
 }]);
 
 app.controller('DOModalCtrl', ['$scope', '$uibModalInstance', 'response',

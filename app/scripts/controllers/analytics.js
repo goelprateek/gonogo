@@ -329,7 +329,6 @@
        return {
             dummy : _obj
        }
-    
     }),
 
     app.factory("ReportStorage",function(){
@@ -389,13 +388,10 @@
               }
     }), 
 	
-
     app.controller('AnalyticsController',['$scope','$rootScope','notifier','Rules','Score', 'Policy','Decision', '$http', '$timeout',
                                           'RestService','$filter','APP_CONST', '$uibModal','UserService','$log','AnalyticsObject','SelectArrays','AclService',
                                             function($scope,$rootScope, notifier ,Rules,Score,Policy,Decision, $http, $timeout,
                                                 RestService,$filter,APP_CONST,$uibModal,UserService,$log,AnalyticsObject,SelectArrays,AclService) {
-
-        
         //notifier.logSuccess("Hello");
 
 		// chart functionality
@@ -426,62 +422,58 @@
             if($scope.search)
                    $scope.search = !$scope.search; 
         }
-
             
-       $scope.datefilter =  {
-                
-                date : {
-                    startDate: null,
-                    endDate: moment()        
+        $scope.datefilter =  {
+            date : {
+                startDate: null,
+                endDate: moment()        
+            },
+            opts: {
+                min:moment().subtract(1,'month'),
+                max: moment().format('YYYY-MM-DD'), 
+                opens : "center",
+                linkedCalendars:true,
+                applyClass: 'btn-primary',
+                isCustomDate: function(data){
+                    return '';
                 },
-                opts: {
-                    min:moment().subtract(1,'month'),
-                    max: moment().format('YYYY-MM-DD'), 
-                    opens : "center",
-                    linkedCalendars:true,
-                    applyClass: 'btn-primary',
-                    isCustomDate: function(data){
-                        return '';
+                locale: {
+                    separator : " - ",
+                    applyLabel: "Apply",
+                    fromLabel: "From",
+                    format: "YYYY-MM-DD",
+                    toLabel: "To",
+                    cancelLabel: 'Cancel',
+                    customRangeLabel: 'Custom range',
+                    daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+                    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                    firstDay: 1
+                }, 
+                ranges: {
+                   'Today': [moment(), moment()],
+                   'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                   'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                   'This Month': [moment().startOf('month'), moment().endOf('month')]
+                },
+                eventHandlers: {
+                    "apply.daterangepicker" : function(ev, picker){
+                        //TODO call service to fetch data based on date range
                     },
-                    locale: {
-                        separator : " - ",
-                        applyLabel: "Apply",
-                        fromLabel: "From",
-                        format: "YYYY-MM-DD",
-                        toLabel: "To",
-                        cancelLabel: 'Cancel',
-                        customRangeLabel: 'Custom range',
-                        daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
-                        monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                        firstDay: 1
-                    }, 
-                    ranges: {
-                       'Today': [moment(), moment()],
-                       'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                       'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                       'This Month': [moment().startOf('month'), moment().endOf('month')]
+                    'show.daterangepicker' : function(ev , picker){
+                        console.log("showing picker");
+                        $scope.datefilter.date.startDate = undefined;
+                        $scope.datefilter.date.startDate = moment();
                     },
-                    eventHandlers: {
-                        "apply.daterangepicker" : function(ev, picker){
-                            //TODO call service to fetch data based on date range
-                        },
-                        'show.daterangepicker' : function(ev , picker){
-                            console.log("showing picker");
-                            $scope.datefilter.date.startDate = undefined;
-                            $scope.datefilter.date.startDate = moment();
-                        },
-                        'hide.daterangepicker': function(ev,picker){
-                            console.log('hide picker');
-                        }
-                    }   
-                }
+                    'hide.daterangepicker': function(ev,picker){
+                        console.log('hide picker');
+                    }
+                }   
+            }
         };
 
 		$scope.findAddressType = function(orignal,final){
     		return (angular.lowercase(orignal) == angular.lowercase(final));
     	}	
-
-
 
     	$scope.showimage = function(obj,isImgFlag,index,editMode){
                     
@@ -508,12 +500,11 @@
             });
 
             modalInstance.result.then(function (selected) {}, function (array) {
-                    $log.info($scope.rejectImgFromServer);
-                     var filter = _.filter(array,function(arr2obj){
-                        return arr2obj.sStat == "Reject";
-                    });
-                    $scope.rejectImgFromServer = filter;
-
+                $log.info($scope.rejectImgFromServer);
+                 var filter = _.filter(array,function(arr2obj){
+                    return arr2obj.sStat == "Reject";
+                });
+                $scope.rejectImgFromServer = filter;
             });
         } 
 
@@ -522,8 +513,6 @@
             $scope.chartOptions = data;
     	});
 
-
-		
 		$scope.reportDownload = function(){
 			
 			var _data = {
@@ -544,8 +533,6 @@
 			});
 			
 		};
-
-
 
 		// custom report modal
 
@@ -582,8 +569,6 @@
 		    });
 		};
 
-
-		
 	    $scope.appView = false;
 		$scope.isTableData = true,
 		$scope.dataSourceCol = [],
@@ -599,9 +584,7 @@
 		          };
 			    });
 			}
-		}		
-
-		
+		};
 
         $scope.drawTablularData = function(data){
               return  $scope.dataSourceCol = data,
@@ -648,102 +631,99 @@
                           })();
 
         }
-        
-		   
-		
+
 		$scope.viewApplication = function(CustID,status){
-		$scope.addrType = SelectArrays.getAddrType();
-		$scope.addr_type = $scope.addrType[1]; 
-		$scope.appView = true;
-		var URL='application-data';
-		var json ={'sRefID':CustID};
-		RestService.saveToServer(URL,json).then(function(response){
-            if(response)
-				$scope.objectSet = response;
-			else
-			$scope.objectSet = NotificationObject.dummy();
-			
-            $scope.Picked = CustID;
+            $scope.showReinitiate=false;
+    		$scope.addrType = SelectArrays.getAddrType();
+    		$scope.addr_type = $scope.addrType[1]; 
+    		$scope.appView = true;
+    		var URL='application-data';
+    		var json ={'sRefID':CustID};
+    		RestService.saveToServer(URL,json).then(function(response){
+                if(response)
+    				$scope.objectSet = response;
+    			else
+    			$scope.objectSet = NotificationObject.dummy();
+    			
+                $scope.Picked = CustID;
 
-            if($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob!=""){
-                $scope.dob = $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)+"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4)+"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4);
-                var dateOfBirth=new Date();
-                dateOfBirth.setFullYear(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4)));
-                dateOfBirth.setDate(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)));
-                dateOfBirth.setMonth((parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4))-1));
-                
-                $scope.objectSet.oAppReq.oReq.oApplicant.sDob=dateOfBirth;
-            }
-
-			$scope.showrefid = "true";
-			$scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
-			var data = 	$scope.dataSourceCol;
-			_.each(data,function(value,key){
-                if(value.applicationId ==  $scope.objectSet.oAppReq.sRefID){
-					$scope.applctnstatus = value.applicationStatus;
+                if($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob!=""){
+                    $scope.dob = $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)+"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4)+"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4);
+                    var dateOfBirth=new Date();
+                    dateOfBirth.setFullYear(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4)));
+                    dateOfBirth.setDate(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)));
+                    dateOfBirth.setMonth((parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4))-1));
+                    
+                    $scope.objectSet.oAppReq.oReq.oApplicant.sDob=dateOfBirth;
                 }
-			});
-			$scope.croDecision = response.aCroDec;
-           
-            try{
-                 $scope.pdfData ="data:application/pdf;base64,"+$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];             
-            }catch(e){
-                 $scope.pdfData = '';
-            }
-            return response;
-			
-		}).then(function(data){
 
-            if(data){   
-               var objArray = _.map(_.pluck(data.aAppImgDtl, 'aImgMap'),function(data){
-                        return data;
+    			$scope.showrefid = "true";
+    			$scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
+    			var data = 	$scope.dataSourceCol;
+    			_.each(data,function(value,key){
+                    if(value.applicationId ==  $scope.objectSet.oAppReq.sRefID){
+    					$scope.applctnstatus = value.applicationStatus;
+                    }
+    			});
+    			$scope.croDecision = response.aCroDec;
+               
+                try{
+                     $scope.pdfData ="data:application/pdf;base64,"+$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];             
+                }catch(e){
+                     $scope.pdfData = '';
+                }
+                return response;
+    			
+    		}).then(function(data){
+
+                if(data){   
+                   var objArray = _.map(_.pluck(data.aAppImgDtl, 'aImgMap'),function(data){
+                            return data;
+                        });
+
+                    $scope.imageDataArray = [];
+                    var evidenceData = [];
+                    var maindata = [];
+                     _.each(_.flatten(objArray),function(val){
+                         if(val.sImgType.indexOf("_EVIDENCE") > -1){
+                            evidenceData.push(val);
+                         }
+                          maindata.push(val);
+                     });
+        
+                     _.each(evidenceData,function(val){
+                         var whosEvdnc = val.sImgType.slice(0,-10);
+                         _.each(maindata,function(data){
+                            if(data.sImgType == whosEvdnc){
+                                if(!data.evdncArray)
+                                  data.evdncArray = [];
+                                data.evdncArray.push(val);                           
+                            }
+                        });
+                     });
+                      
+                    _.each(maindata,function(val){
+                        return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
+                            if(!_.isUndefined(data) || !_.isNull(data)){
+                                if(!_.isEmpty(data.sByteCode)){
+                                val["sByteCode"] = "data:image/png;base64,"+data.sByteCode; 
+                                 $scope.imageDataArray.push(val); 
+                                }  
+                            }
+                        });
                     });
 
-                $scope.imageDataArray = [];
-                var evidenceData = [];
-                var maindata = [];
-                 _.each(_.flatten(objArray),function(val){
-                     if(val.sImgType.indexOf("_EVIDENCE") > -1){
-                        evidenceData.push(val);
-                     }
-                      maindata.push(val);
-                 });
-    
-                 _.each(evidenceData,function(val){
-                     var whosEvdnc = val.sImgType.slice(0,-10);
-                     _.each(maindata,function(data){
-                        if(data.sImgType == whosEvdnc){
-                            if(!data.evdncArray)
-                              data.evdncArray = [];
-                            data.evdncArray.push(val);                           
-                        }
+                    var rejectImgFromServer =[];
+                    _.each($scope.imageDataArray,function(val){
+                        if(val.sStat == "Reject"){
+                            rejectImgFromServer.push(val);
+                        }  
                     });
-                 });
-                  
-                _.each(maindata,function(val){
-                    return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
-                        if(!_.isUndefined(data) || !_.isNull(data)){
-                            if(!_.isEmpty(data.sByteCode)){
-                            val["sByteCode"] = "data:image/png;base64,"+data.sByteCode; 
-                             $scope.imageDataArray.push(val); 
-                            }  
-                        }
-                    });
-                });
+                    $scope.rejectImgFromServer = rejectImgFromServer;
+                }
+            });
+		};
 
-                var rejectImgFromServer =[];
-                _.each($scope.imageDataArray,function(val){
-                    if(val.sStat == "Reject"){
-                        rejectImgFromServer.push(val);
-                    }  
-                });
-                $scope.rejectImgFromServer = rejectImgFromServer;
-            }
-        });
- 
-		}
-
-		
 		$scope.toggleForm = function(){
 			$scope.isTableData = false;
 			$scope.appView = !$scope.appView;
@@ -1292,8 +1272,6 @@
             			switch(value)
             			{
             			case "IRP":
-
-
             				addOptionOnAggr(ilist);
 
             				break;
@@ -4078,13 +4056,12 @@
             		
             		$("#spy").click(function(){
             			$("#in").show();
-            		});	 
-
+            		});
             	}
-            	
-            }]);
+        
+    }]);
 
- app.controller("imagesCtr",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService',
+app.controller("imagesCtr",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService',
     function($scope,ImageFeed,$uibModalInstance,$timeout,RestService){
     $scope.noWrapSlides = true;
     $scope.isReject = false;
@@ -4108,14 +4085,10 @@
     $scope.closeModal = function(){
           $uibModalInstance.dismiss($scope.slides);
     };
-
 }]);
 
-	
-
-
 app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModalInstance' ,'RestService','UserService' ,'ReportStorage',function($scope,$log,notifier,$uibModalInstance,RestService,UserService,ReportStorage){
-        
+
         var user = UserService.getCurrentUser();
         $scope.preview = 0;
         $scope.systemPropertyList = [];
@@ -4157,16 +4130,13 @@ app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModal
 
         
         $scope.selectedReport = function($item, $model, $label, $event){
-           
+
             var _serviceinput = {
                 "sReportId":$item.reportId,
                 "oHeader": {
                     "sInstID": user.institutionID
                  }
             };
-
-            
-            
 
             RestService.saveToServer('report/fetch-report-config',_serviceinput).then(function(data){
                     
@@ -4183,12 +4153,9 @@ app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModal
 
                     $scope.models = [
                         {listName: "Available", items: $scope.systemPropertyList, dragging: false},
-                        {listName: "Selected", items: $scope.selectedPropertyList, dragging: false} 
-                        
+                        {listName: "Selected", items: $scope.selectedPropertyList, dragging: false}
                     ];
-
             });
-
         }
 
 	    $scope.getSelectedItemsIncluding = function(list, item) {
