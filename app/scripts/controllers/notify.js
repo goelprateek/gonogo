@@ -1263,7 +1263,7 @@ $scope.updateLosData = function(status){
                        "sInvNumber":invoiceNum,
                        "dtInv":dobFormatted
                        }
-                    },
+                    };
 
                 RestService.saveToServer("update-invoice-details",json).then(function(Response){
                     if(Response.status == "SUCCESS"){
