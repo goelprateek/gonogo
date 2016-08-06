@@ -390,14 +390,17 @@
     }), 
 	
 
-    app.controller('AnalyticsController',['$scope','$rootScope','Rules','Score', 'Policy','Decision', '$http', '$timeout',
+    app.controller('AnalyticsController',['$scope','$rootScope','notifier','Rules','Score', 'Policy','Decision', '$http', '$timeout',
                                           'RestService','$filter','APP_CONST', '$uibModal','UserService','$log','AnalyticsObject','SelectArrays','AclService',
-                                            function($scope,$rootScope, Rules,Score,Policy,Decision, $http, $timeout,
+                                            function($scope,$rootScope, notifier ,Rules,Score,Policy,Decision, $http, $timeout,
                                                 RestService,$filter,APP_CONST,$uibModal,UserService,$log,AnalyticsObject,SelectArrays,AclService) {
 
+        
+        //notifier.logSuccess("Hello");
 
 		// chart functionality
-		var user=UserService.getCurrentUser();
+		var user = UserService.getCurrentUser();
+
 		var object  = AnalyticsObject.dummy;
         $scope.can=AclService.can;
 		$scope.objectSet =  object; 
@@ -432,6 +435,7 @@
                     endDate: moment()        
                 },
                 opts: {
+                    min:moment().subtract(1,'month'),
                     max: moment().format('YYYY-MM-DD'), 
                     opens : "center",
                     linkedCalendars:true,
@@ -455,9 +459,7 @@
                        'Today': [moment(), moment()],
                        'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                       'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                       'This Month': [moment().startOf('month'), moment().endOf('month')],
-                       'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                       'This Month': [moment().startOf('month'), moment().endOf('month')]
                     },
                     eventHandlers: {
                         "apply.daterangepicker" : function(ev, picker){
@@ -482,40 +484,38 @@
 
 
     	$scope.showimage = function(obj,isImgFlag,index,editMode){
-        var modalInstance = $uibModal.open({
-                      animation: $scope.animationsEnabled,
-                      templateUrl: 'views/templates/modal.html',
-                      controller: 'imagesCtr',
-                      size: 'lg',
-                      backdrop: 'static',
-                      keyboard: false,
-                      resolve:{
-                        ImageFeed : function (){
-                            var imageData;
-                            return imageData = {
-                                isImage : isImgFlag,
-                                docData : obj,
-                                index : index,
-                                applicationId : $scope.objectSet.oAppReq.oHeader.sAppID,
-                                applicantId : $scope.objectSet.oAppReq.oReq.oApplicant.sApplID,
-                                institutionId : $scope.InstitutionID,
-                                refId : $scope.objectSet.oAppReq.sRefID,
-                                editMode : editMode
-                            }
+                    
+            var modalInstance = $uibModal.open({
+                  animation: $scope.animationsEnabled,
+                  templateUrl: 'views/templates/modal.html',
+                  controller: 'imagesCtr',
+                  size: 'lg',
+                  resolve:{
+                    ImageFeed : function (){
+                        var imageData;
+                        return imageData = {
+                            isImage : isImgFlag,
+                            docData : obj,
+                            index : index,
+                            applicationId : $scope.objectSet.oAppReq.oHeader.sAppID,
+                            applicantId : $scope.objectSet.oAppReq.oReq.oApplicant.sApplID,
+                            institutionId : user.institutionID,
+                            refId : $scope.objectSet.oAppReq.sRefID,
+                            editMode : editMode
                         }
-                      }
+                    }
+                  }
+            });
+
+            modalInstance.result.then(function (selected) {}, function (array) {
+                    $log.info($scope.rejectImgFromServer);
+                     var filter = _.filter(array,function(arr2obj){
+                        return arr2obj.sStat == "Reject";
                     });
+                    $scope.rejectImgFromServer = filter;
 
-         modalInstance.result.then(function (selected) {
-                        }, function (array) {
-                            $log.info($scope.rejectImgFromServer);
-                             var filter = _.filter(array,function(arr2obj){
-                                return arr2obj.sStat == "Reject";
-                            });
-                            $scope.rejectImgFromServer = filter;
-
-                        });
-    } 
+            });
+        } 
 
 		var json = {'sInstID':user.institutionID};
 		RestService.saveToServer("stack-graph",json).then(function(data){
@@ -572,14 +572,7 @@
 							      templateUrl: 'views/templates/report-modal.html',
 							      controller: 'CustomReportController',
 							      size: 'lg',
-                                  /*resolve:{
-                                    data : function(){
-                                        return RestService.saveToServer('report/fetch-report-config',_serviceinput).then(function(data){
-                                            console.log(data);
-                                            return data;
-                                        })
-                                    }
-                                   }*/
+                                  windowClass:"report-modal-popup"
 							    });	
 
 			modalInstance.result.then(function (selectedItem) {
@@ -593,11 +586,6 @@
 		
 	    $scope.appView = false;
 		$scope.isTableData = true,
-
-        $scope.$watch($scope.appView,function(valNew,valOld){
-            console.log(valNew);
-        },true);
-
 		$scope.dataSourceCol = [],
 		$scope.toggleView = function(){
 			
@@ -4008,17 +3996,15 @@
             			{ for(var k=0; k< expressions[key].length; k++)
             			{    
             				if((exp1 === exp2)&&(exp1 == '<'))
-            				{return expressions[key][7];}//---------------select operaor for between condition from list and bind to dropdown
+            				{return expressions[key][7];}
             				else if((exp1 == exp2)&&(exp1 == '>'))
-            				{return expressions[key][8];}//---------------select operaor for !between condition from list and bind to dropdown
+            				{return expressions[key][8];}
             				else if(exp2 == expressions[key][k].value)
-            				{return expressions[key][k];}//---------------select operaor for other condition from list and bind to dropdown
+            				{return expressions[key][k];}
             			}
 
             			}
             		}
-
-//	                                    		================================================matrix==============================
 
             		$(".btnfltr").click(function(){
 
@@ -4040,8 +4026,6 @@
             		}
 
 
-//	                                    		=====================================================================================	
-            		//create and bind option value to select elemtn in matrix	
             		function generate(ids,valuearray,calltype)
             		{ 
             			// alert(calltype);
@@ -4091,36 +4075,9 @@
             					}
             					}); 
             		}
-            		/*		 $("#view_profile").click(function(){
-            				$('div[contextmenu="blur"]').hide();
-            				$("#UserContainer").show();
-            				$http({
-            					method : 'POST',
-            					url : '/GoNoGoV3/api/GoNoGoV3/UserProfile',
-            					params:{'userid':$scope.userid,'INSTITUTION_ID':user.institutionID},
-            					headers : {	'Content-Type' : 'application/json'}
-            				}).success(function(Response) 
-            				 {if(Response.StatusCode == 101)
-            					{$scope.Profile = Response.Data;
-            					console.log(JSON.stringify($scope.Profile));
-            					 $scope.error = "";
-            					}
-            				}).error(function(data){
-            					$scope.error = "System is under maintenance..Please try later";
-            				});
-            			});
-            			$(document.body).on("click","#UserBack",function(){
-            				$('div[contextmenu="blur"]').show();
-            				$("#UserContainer").hide();
-            			});
-            		 */			
-            		/*$(document.body).on("click","spy",function(){
-            				alert("Working...");
-            			 	$("#in").show();*/
+            		
             		$("#spy").click(function(){
-//	                                    			alert("Working...");
             			$("#in").show();
-
             		});	 
 
             	}
@@ -4129,7 +4086,6 @@
 
  app.controller("imagesCtr",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService',
     function($scope,ImageFeed,$uibModalInstance,$timeout,RestService){
-    /*$scope.myInterval = 5000;*/
     $scope.noWrapSlides = true;
     $scope.isReject = false;
     $scope.active = ImageFeed.index;
@@ -4158,44 +4114,58 @@
 	
 
 
-	app.controller("CustomReportController", [ '$scope','$log','$uibModalInstance' ,'RestService', 'ReportStorage',function($scope,$log,$uibModalInstance,RestService,ReportStorage){
+app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModalInstance' ,'RestService','UserService' ,'ReportStorage',function($scope,$log,notifier,$uibModalInstance,RestService,UserService,ReportStorage){
+        
+        var user = UserService.getCurrentUser();
+        $scope.preview = 0;
+        $scope.systemPropertyList = [];
+        $scope.selectedPropertyList = [];
 
-       
-       /*var viewableColumns = _.filter(data.oColumns, function(item){
-            console.log(item.bViewable);
-            return item.bViewable === true;
-       });*/
 
+        $scope.$watch('reportName',function(newVal,oldval){
+            if(!_.isUndefined(newVal) && newVal.length === 0){
+                $scope.models = undefined;
+                $scope.preview = 0;
+                $scope.header = 0;
+            }
+        },true);
+
+         
+        $scope.$watch('models[1].items',function(newVal,oldVal){
+            if(!_.isUndefined(newVal) && $scope.selectedPropertyList.length > 0){
+
+                if(!angular.equals(newVal,$scope.selectedPropertyList)){
+                    $scope.preview = 1;
+                    $scope.header = 0;
+                }
+            }
+            
+        },true);
 
         $scope.getReportConfiguration = function(viewValue){
-            console.log(viewValue);
             var searchObj = {
                 "oHeader": {
-                    "sInstID": 4019,
+                    "sInstID": user.institutionID,
                 },
                 "sReportName":viewValue
             }
             return RestService.saveToServer('report/search-report-name',searchObj).then(function(data){
-                return  data;
+                return data;
                 
             });
         }
 
-        $scope.startsWith = function(state, viewValue) {
-          return state.substr(0, viewValue.length).toLowerCase() == viewValue.toLowerCase();
-        } 
         
         $scope.selectedReport = function($item, $model, $label, $event){
            
             var _serviceinput = {
                 "sReportId":$item.reportId,
                 "oHeader": {
-                    "sInstID": "4019"
+                    "sInstID": user.institutionID
                  }
             };
 
-            $scope.systemPropertyList = [];
-            $scope.selectedPropertyList = [];
+            
             
 
             RestService.saveToServer('report/fetch-report-config',_serviceinput).then(function(data){
@@ -4218,10 +4188,6 @@
                     ];
 
             });
-
-                    
-            
-
 
         }
 
@@ -4265,12 +4231,6 @@
 	      list.items = list.items.filter(function(item) { return !item.selected; });
 	    };
 
-	    
-	    
-	    $scope.$watch('models', function(model) {
-	        $scope.modelAsJson = angular.toJson(model, true);
-	    }, true);
-
 		$scope.saveConfiguration = function () {
 
             var map = {};
@@ -4289,8 +4249,56 @@
 	    	//$uibModalInstance.close();
 	  	};
 
+        
+        
+
+        $scope.dismiss = function(){
+            $uibModalInstance.dismiss('close');
+        }
+
 	  	$scope.previewConfiguration = function () {
-	    	$uibModalInstance.dismiss('cancel');
+
+            var selectedColumns = {};
+            _.each($scope.models[1].items, function(value,key){
+                selectedColumns[key] = value;
+            })
+	    	  
+              var serviceInput = {
+                "oHeader":{
+                    "sInstID" : user.institutionID,
+                     "sAppSource":"",
+                     "dtSubmit":new Date(),
+
+                },
+                "aProductType":["Consumer Durables"],
+                "sReportId":"",
+                "sReportName":"",
+                "sReportCategory":"",
+                "aFlatConfig":{
+                    "mHeaderMap":selectedColumns,
+                    "sReportFomat":"json"
+                },
+                "sBranchId":"",
+                "oPaggination":{
+                    "iPageId":0,
+                    "iLimit":5,
+                    "iSkip":0
+                }
+
+              }
+
+              RestService.saveToServer("/report/preview-custom-report",serviceInput).then(function(data){
+
+                $scope.header = _.keys(data.oData[0]);
+                $scope.values = [];
+
+                _.each(data.oData,function(value,key){
+                    $scope.values.push(_.values(value));
+                });
+
+              });
+
+              //$uibModalInstance.dismiss('cancel');
 	  	};
 
 	}]);

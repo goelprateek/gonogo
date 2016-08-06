@@ -164,7 +164,7 @@ font-size:14px;}
 									data-ng-keyup="search(searchKeywords)">
 								</div>
 								<div ng-show="datepicker" ng-cloak class="col-md-12">
-									<input date-range-picker  id="daterange"  name="daterange" class="form-control date-picker" type="text" ng-model="datefilter.date" options="datefilter.opts"  placeholder="Pick Date"  max="datefilter.opts.max" clearable="true"/>
+									<input date-range-picker  id="daterange"  name="daterange" class="form-control date-picker" type="text" ng-model="datefilter.date" options="datefilter.opts"  placeholder="Pick Date"  max="datefilter.opts.max" min="datefilter.opts.min" clearable="true"/>
 								</div>	
 								<span class="input-group-addon">
 								      <a class="fa fa-search" ng-click="toggleSearch()" ></a>
@@ -275,6 +275,7 @@ font-size:14px;}
 			                </tr>
 			            </thead>
 			            <tbody style="font-size: 12px;">
+			            	<tr><td><div style="width:50%; margin: 0 auto;" > Loading </div></td></tr>
 			                <tr data-ng-repeat="store in dataSourceCol" sty>
 			                    <td ><a ng-click="viewApplication(store.applicationId,store.applicationStatus)">{{store.applicationId}}</a></td>
 			                    <td>{{store.date | dateFormat}}</td>

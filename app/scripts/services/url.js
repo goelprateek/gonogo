@@ -7,7 +7,7 @@
 	app.factory("APP_CONST", function () {
 		var END_POINT = {
 
-			BASE_URL_GNG : "http://172.26.1.155:8080/GoNoGo/",
+			BASE_URL_GNG : "http://172.26.1.211:9090/GoNoGo/",
 			BASE_URL_SCORE:'http://gng.softcell.in/AppScoringV2Git/api/ScoringV3/',
 			BASE_URL_DEMO: 'http://gng.softcell.in/GoNoGoV3/api/GoNoGoV3/',
 			BASE_URL_DMI: 'http://gng.softcell.in/gonogo_dmi/',
@@ -156,7 +156,7 @@
  		
  		var fetchCurrentUser = function(){
     		
-	    	var user={
+	    	var user = {
     			roles:[],
     			getRoles: function () {
     	            return this.roles;
@@ -210,17 +210,12 @@
 					user.dealer = JSON.parse(atob(currentDealer));
 				}
 				
-				//user.roles = localStorage.getItem('ACTIONS');
-
-				// if (user.useremail && user.useremail.indexOf("CRO1") > - 1) {
-				// 	user.roles = ["CRO1"];
-				// }
-
 				user.roles.push(user.id);
 
 				if (AclService.hasRole(user.id)) {
 		            AclService.removeRole(user.id);
 		        }
+
 				AclService.addRole(user.id);
 
 				if(localStorage.getItem('ACTIONS') ){
@@ -233,6 +228,7 @@
 				}
 
 				AclService.setUserIdentity(user);
+				
 			}
 
 		    return user;
@@ -270,7 +266,6 @@
 		   "ANALYTCS", "ATREDIT", "PVIEW", "REDIT", "NACCEPT", "NREJECT", "NCHAT", "ADEFBUR", "ABRDT", 
 		   "EDFBUR", "APPLICATION", "ABURCOMM", "CONREQ", "NAPPDATASTA", "RTREE","RSTPWD","NAPPDATASALE","UPDTUP",
 		   "ENDEU","Create User Profile","CRTUP","Enable And Disable","Reset Password","Update User Profile"].map(function(data){
-
 			AclService.addResource(data);
 		});
 		

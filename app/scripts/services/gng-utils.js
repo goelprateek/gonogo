@@ -17,18 +17,13 @@
 	*  $log.error(messages)
 	*	
 	*/
-	angular.module('gonogo.utilities', ['gonogo.logging','gonogo.notification']);
+	angular.module('gonogo.utilities', ['gonogo.notification']);
 
-	var app = angular.module('gonogo.logging',[])
-
-	
-
-
- 	angular.module("gonogo.notification", []).factory("notifier", [function() {
+	angular.module("gonogo.notification", []).factory("notifier", [function() {
             var logIt;
             return toastr.options = {
                 closeButton: true,
-                positionClass: "toast-bottom-right",
+                positionClass: "toast-bottom-left",
                 timeOut: "3000",
                 debug: false,
                 newestOnTop: false,
@@ -40,8 +35,8 @@
                 showMethod: "fadeIn",
                 hideMethod: "fadeOut",
                 closeMethod : 'fadeOut',
-                closeDuration : 300,
-                closeEasing : 'linear'
+                closeDuration : 5000,
+                closeEasing : 'linear',
             }, logIt = function(message, type) {
                 return toastr[type](message)
             }, {

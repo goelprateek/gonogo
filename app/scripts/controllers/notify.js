@@ -554,7 +554,7 @@
     }
 
 	$scope.load_details = function(CustID,dedupeflag,applicationRequestType)
-	{  
+	{
         $scope.currentApplicationFormRefID=CustID;
 
         $scope.isUpdating=false;        
@@ -588,7 +588,7 @@
             var transfrmedOject ;
             if(response){
                 transfrmedOject =  response;
-                transfrmedOject.aAppScoRslt = _.uniq(transfrmedOject.aAppScoRslt,function(object,key,sFldName){
+                transfrmedOject.aAppScoRslt = _.uniq(transfrmedOject.aAppScoRslt,true,function(object){
                     return object.sFldName;
                 });
 
@@ -631,6 +631,7 @@
                 $scope.app_form={pickerDob:dateOfBirth};
             }
 
+            //Fetch application status of selected application 
 			var data = 	$scope.notifarray;
 			_.each(data ,function(value){
                 if(value.sRefID ==  $scope.objectSet.oAppReq.sRefID){
@@ -1311,6 +1312,65 @@ $scope.updateLosData = function(status){
         }
     };
 
+    $scope.loadPDF=function(){        
+        var postIPARequest=
+        {
+            oHeader:
+            {
+                sCroId:"default",
+                dtSubmit:new Date().getTime(),
+                sReqType:null,
+                sAppSource:"WEB",
+                sDsaId:user.username,
+                sAppID:"",
+                sDealerId:null,
+                sSourceID:null,
+                sInstID:user.institutionID
+            },
+            opostIPA:null,
+            sRefID:$scope.currentApplicationFormRefID,
+            refID:$scope.currentApplicationFormRefIDssss,
+            dtDateTime:new Date().getTime()
+        };
+        //alert(JSON.stringify(request));
+        //console.log("JSON IPA REQUEST : "+JSON.stringify(postIPARequest));
+        
+        URL = 'get-post-ipa';
+        RestService.saveToServer(URL,JSON.stringify(postIPARequest)).then(function(Response){
+            //console.log("JSON IPA RESPONSE : ");
+            //console.log(JSON.stringify(Response));
+            if(Response){        
+                postIPARequest.opostIPA=Response;
+                
+                //console.log(" IPA PDF REQUEST : "+JSON.stringify(postIPARequest));
+                
+                URL = 'get-pdf-ref';
+                RestService.saveToServer(URL,JSON.stringify(postIPARequest)).then(function(Response){
+                    //console.log("JSON IPA PDF RESPONSE : ");
+                    //console.log(JSON.stringify(Response));
+                    if(Response){
+                        $scope.shwPDFModal('lg',Response);
+                    }
+                });
+            }
+        });
+    };
+
+    $scope.shwPDFModal = function (size,response) {
+         //alert('modal baseURL'+baseURL);
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'views/modal-do-view.html',
+            controller: 'DOModalCtrl',
+            size: size,
+            resolve: {
+                response:function(){
+                    return response;
+                }
+            }
+        });
+    };
+
     // destructor function for scope 
     $scope.$on("$destroy",function(){
         console.log("destroying timer");
@@ -1319,7 +1379,6 @@ $scope.updateLosData = function(status){
              timer = undefined;
         }
     });
-
 }]);
 
 app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$uibModalInstance","requestObj","UserService","notifier",
@@ -1940,6 +1999,16 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
 
     $scope.closeModal = function(){
           $uibModalInstance.dismiss();
+    };
+}]);
+
+app.controller('DOModalCtrl', ['$scope', '$uibModalInstance', 'response',
+    function ($scope, $uibModalInstance, response) {
+
+    $scope.response = response;
+
+    $scope.closeModal = function () {
+        $uibModalInstance.dismiss();
     };
 }]);
 

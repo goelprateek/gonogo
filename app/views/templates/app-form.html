@@ -5,6 +5,9 @@
 	.errorMsg{
 	    color: #b94a48;
 	}
+	.img-do{
+		width: 50px;
+	}
 </style>
 <!-- {{ApplicantForm.$valid;}}
 {{ApplicantForm.$error;}} -->
@@ -13,11 +16,30 @@
 		<div class="col-md-8 text-left">
 			<div class="alert alert-danger" id="erro-msg"
 				style="float: none; text-align: left; margin: 0px">
-				<strong>Error ! &nbsp&nbsp&nbsp</strong><span id="error"></span>
+				<strong>Error ! &nbsp;&nbsp;&nbsp;</strong><span id="error"></span>
 			</div>
 		</div>
 		<div class="col-md-4 text-right" id="top-fixed" ng-if="can('NRPRCS')">
 			
+			<!-- <a class="btn btn-primary btn-sm" ng-show="can('NRPRCS') && !isUpdating" ng-click="enableForm();">
+                <span class="fa fa-pencil-square-o"></span>
+                Update
+            </a>
+
+            <a class="btn btn-primary btn-sm" ng-show="can('NRPRCS') && ((isUpdating && ApplicantForm.$valid) || !isUpdating)" ng-click="updateForm();" >
+            	<span class="fa fa-repeat"></span>
+            	Reinitiate
+            </a>
+
+            <a class="btn btn-primary btn-sm"  ng-click="toggleForm()">
+            	<span class="fa fa-reply"></span>
+            	Back
+            </a> -->
+
+
+
+
+
 			<a class="add-button-div-notification"
 				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('NRPRCS') && !isUpdating" ng-click="enableForm();">Update</a>
 			<a class="add-button-div-notification"
@@ -29,6 +51,8 @@
 		<!-- ng-if="!authenticate('NCONTAINER')"  ng-if="objectSet.oLosDtls"-->
 		<fieldset class="formfield" ng-if="!can('NCONTAINER')">
 		<legend> LOS Information</legend>
+
+		<a ng-if="applctnstatus.toLowerCase()==='approved'" ng-click="loadPDF()">View DO</a>
 		<div class="row clearfix">
 			<div class="col-md-3">
 				<label class="control-label">LOS ID</label> <input
@@ -71,7 +95,9 @@
 				type="text" ng-model="datefilter.date" options="datefilter.opts"  placeholder="Pick Date" 
 				 max="datefilter.opts.max" clearable="true" ng-disabled="invoiceDate"/>
 			</div>
-			<a ng-if="applctnstatus.toLowerCase()==='approved'" ng-click="loadPDF()"><img title="View DO" src="img/do.png" style="width: 50px;"/></a>
+			<a ng-if="applctnstatus.toLowerCase()==='approved'" ng-click="loadPDF()">
+				<img title="View DO" src="images/do-view.png" class="img-do"/>
+			</a>
 		</div>
 		<!-- 	Sayali- used template variable , have to remove further when this template structure is modularised, which is defined in notify.js--> 
 		<div class="row clearfix" ng-if="template == 'notification' && isInvoiceAvailable">

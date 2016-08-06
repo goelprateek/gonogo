@@ -90,207 +90,38 @@ ng\:form {
 	left: -9999px;
 }
 
-.pannelShowingEffect{
-	-webkit-transform: translate(0, 70px);
-	-moz-transform: translate(0, 70px);
-	-ms-transform: translate(0, 70px);
-	-o-transform: translate(0, 70px);
-	transform: translate(0, 70px);
-	-webkit-animation: pannelShowingEffect 0.35s ease forwards;
-	-moz-animation: pannelShowingEffect 0.35s ease forwards;
-	-o-animation: pannelShowingEffect 0.35s ease forwards;
-	-ms-animation: pannelShowingEffect 0.35s ease forwards;
-	animation: pannelShowingEffect 0.35s ease forwards;
-	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0 );
-	opacity: 0 ;
+#toast-container {
+  -webkit-animation-name: animGenie;
+  animation-name: animGenie;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
 }
 
-@keyframes pannelShowingEffect {
-	to {
-		transform: translateY(0);
-		opacity: 1
-	   }
-
-	}
-@-ms-keyframes pannelShowingEffect {
-	to {
-		-ms-transform: translateY(0);
-		opacity: 1
-		}
-}
-@-webkit-keyframes pannelShowingEffect {
-	to {
-		-webkit-transform: translateY(0);
-		opacity: 1
-	}
-
+.toast-bottom-left {
+  bottom: 30px;
+  
 }
 
-@-moz-keyframes cardShowingEffect {
-		to {	-moz-transform: translateY(0);
-		opacity: 1
-	}
-
+#toast-container.ng-hide {
+  -webkit-animation-direction: reverse;
+  animation-direction: reverse;
 }
 
-@
--webkit-keyframes fade-up-enter { 0% {
-	opacity: 0;
-	-webkit-transform: translateY(20px);
+@-webkit-keyframes animGenie {
+  0% { opacity:0; -webkit-transform: translate3d(0,calc(200% + 30px),0) scale3d(0,1,1); -webkit-animation-timing-function: ease-in; }
+  40% { opacity:0.5; -webkit-transform: translate3d(0,0,0) scale3d(0.02,1.1,1); -webkit-animation-timing-function: ease-out; }
+  70% { opacity:0.6; -webkit-transform: translate3d(0,-40px,0) scale3d(0.8,1.1,1); }
+  100% { opacity:1; -webkit-transform: translate3d(0,0,0) scale3d(1,1,1); }
 }
 
-100%{
-opacity
-
-
-:
-
-
-1;
--webkit-transform
-
-
-:translateY(0)
-
-
-;
-}
-}
-@
--moz-keyframes fade-up-enter { 0% {
-	opacity: 0;
-	-webkit-transform: translateY(20px);
+@keyframes animGenie {
+  0% { opacity:0; -webkit-transform: translate3d(0,calc(200% + 30px),0) scale3d(0,1,1); -webkit-animation-timing-function: ease-in; transform: translate3d(0,calc(200% + 30px),0) scale3d(0,1,1); animation-timing-function: ease-in; }
+  40% { opacity:0.5; -webkit-transform: translate3d(0,0,0) scale3d(0.02,1.1,1); -webkit-animation-timing-function: ease-out; transform: translate3d(0,0,0) scale3d(0.02,1.1,1); animation-timing-function: ease-out; }
+  70% { opacity:0.6; -webkit-transform: translate3d(0,-40px,0) scale3d(0.8,1.1,1); transform: translate3d(0,-40px,0) scale3d(0.8,1.1,1); }
+  100% { opacity:1; -webkit-transform: translate3d(0,0,0) scale3d(1,1,1); transform: translate3d(0,0,0) scale3d(1,1,1); }
 }
 
-100%
-{
-opacity
 
-
-:
-
-
-1;
--webkit-transform
-
-
-:translateY(0)
-
-
-;
-}
-}
-@
--o-keyframes fade-up-enter { 0% {
-	opacity: 0;
-	-webkit-transform: translateY(20px);
-}
-
-100%{
-opacity
-
-
-:
-
-
-1;
--webkit-transform
-
-
-:translateY(0)
-
-
-;
-}
-}
-@
-keyframes fade-up-enter { 0% {
-	opacity: 0;
-	-webkit-transform: translateY(20px);
-}
-
-100%{
-opacity
-
-
-:
-
-
-1;
--webkit-transform
-
-
-:translateY(0)
-
-
-;
-}
-}
-.animate-fade-up.ng-enter {
-	-webkit-animation: 0.35s fade-up-enter;
-	-moz-animation: 0.35s fade-up-enter;
-	-o-animation: 0.35s fade-up-enter;
-	animation: 0.35s fade-up-enter;
-}
-
-.page-signin .signin-header, .page-signup .signin-header {
-	padding: 25px 0;
-	background-color: #dfe0e6;
-}
-
-.page-signin .logo, .page-signup .logo {
-	font-size: 46px;
-	font-weight: bold;
-}
-
-.page-signin .logo a:hover, .page-signup .logo a:hover {
-	text-decoration: none;
-}
-
-.page-signin .signin-body, .page-signin .signup-body, .page-signup .signin-body,
-	.page-signup .signup-body {
-	border-top: 1px solid #f8f8f8;
-	padding: 20px 10px;
-}
-
-.page-signin .form-container, .page-signup .form-container {
-	max-width: 420px;
-	margin: 10px auto;
-}
-
-.page-signin .line-thru, .page-signup .line-thru {
-	margin: 1em 0;
-	display: block;
-	font-size: .875em;
-	font-weight: bold;
-	margin-bottom: 1em;
-	position: relative;
-	text-align: center;
-	width: 100%;
-	z-index: 1;
-}
-
-.page-signin .line-thru:before, .page-signup .line-thru:before {
-	width: 50px;
-	height: 10px;
-	background-color: #f3f3f3;
-	content: '';
-	margin: -5px 0 0 -20px;
-	left: 50%;
-	position: absolute;
-	top: 50%;
-	z-index: -1;
-}
-
-.page-signin .line-thru:after, .page-signup .line-thru:after {
-	width: 100%;
-	border-bottom: 1px solid #d9d9d9;
-	content: '';
-	display: block;
-	position: absolute;
-	top: 49%;
-	z-index: -2;
-}
 
 .form-validation .ng-invalid.ng-dirty {
     border-color: #E94B3B;
@@ -414,7 +245,7 @@ opacity
 }
 
 .node text {
-	font: 12px sans-serif;
+	font: 12px sagng-serif;
 }
 
 .link {
@@ -819,7 +650,6 @@ input[type="radio"] .styled:checked + label::after {
   color: #fff;
 }
 
-
 .open >.dropdown-menu-scaleIn {
     opacity: 1;
     -webkit-transform: scale(1);
@@ -1130,7 +960,7 @@ input[type="radio"] .styled:checked + label::after {
     height: 36px
 }
 
-.widget-buttons.buttons-bordered {
+.widget-buttons.buttogng-bordered {
     border-left: 1px solid #e5e5e5
 }
 
