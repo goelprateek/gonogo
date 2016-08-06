@@ -9,8 +9,7 @@
 		width: 50px;
 	}
 </style>
-<!-- {{ApplicantForm.$valid;}}
-{{ApplicantForm.$error;}} -->
+
 <form id="msform" name="ApplicantForm" style="margin-bottom:30px;" novalidate>
 	<div class="row clearfix" ng-if="can('NRPRCS')">
 		<div class="col-md-8 text-left">
@@ -21,7 +20,7 @@
 		</div>
 		<div class="col-md-4 text-right" id="top-fixed" ng-if="can('NRPRCS')">
 			
-			<!-- <a class="btn btn-primary btn-sm" ng-show="can('NRPRCS') && !isUpdating" ng-click="enableForm();">
+			<a class="btn btn-primary btn-sm" ng-show="can('NRPRCS') && !isUpdating" ng-click="enableForm();">
                 <span class="fa fa-pencil-square-o"></span>
                 Update
             </a>
@@ -34,17 +33,7 @@
             <a class="btn btn-primary btn-sm"  ng-click="toggleForm()">
             	<span class="fa fa-reply"></span>
             	Back
-            </a> -->
-
-
-
-
-
-			<a class="add-button-div-notification"
-				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('NRPRCS') && !isUpdating" ng-click="enableForm();">Update</a>
-			<a class="add-button-div-notification"
-				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('NRPRCS') && ((isUpdating && ApplicantForm.$valid) || !isUpdating)" ng-click="updateForm();">Reinitiate</a>
-			<a class="add-button-div-notification" style="width: 100px; display: inline-block;" ng-click="toggleForm()">Back</a>
+            </a>
 				
 		</div>
 	</div>
