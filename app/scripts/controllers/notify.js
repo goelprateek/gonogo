@@ -1697,15 +1697,15 @@ app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
             if (typeof docData[$scope.ID].selected != "undefined") {
                     docData[$scope.ID].selected.push(id);   
                     if(typeof docData[$scope.ID].Offers[id].selected == "undefined"){ 
-                        $.extend( docData[$scope.ID].Offers[id], {'selected':'true'});
+                        angular.extend( docData[$scope.ID].Offers[id], {'selected':'true'});
                 }
 
             } else {
                   var selected={'selected':[]};
-                  $.extend( docData[$scope.ID], selected);
+                  angular.extend( docData[$scope.ID], selected);
                   docData[$scope.ID].selected.push(id); 
                 if(typeof docData[$scope.ID].Offers[id].selected == "undefined"){
-                     $.extend( docData[$scope.ID].Offers[id], {'selected':'true'});
+                     angular.extend( docData[$scope.ID].Offers[id], {'selected':'true'});
                 }
             }   
       
