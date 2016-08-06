@@ -392,9 +392,8 @@
                                           'RestService','$filter','APP_CONST', '$uibModal','UserService','$log','AnalyticsObject','SelectArrays','AclService',
                                             function($scope,$rootScope, notifier ,Rules,Score,Policy,Decision, $http, $timeout,
                                                 RestService,$filter,APP_CONST,$uibModal,UserService,$log,AnalyticsObject,SelectArrays,AclService) {
-        //notifier.logSuccess("Hello");
 
-		// chart functionality
+
 		var user = UserService.getCurrentUser();
 		
         $scope.can=AclService.can;
@@ -463,6 +462,7 @@
                         $scope.datefilter.date.startDate = undefined;
                         $scope.datefilter.date.startDate = moment();
                     },
+
                     'hide.daterangepicker': function(ev,picker){
                         console.log('hide picker');
                     }
@@ -575,7 +575,7 @@
 			
 			$scope.isTableData = !$scope.isTableData;
 			
-			if($scope.isTableData == false){
+			if(!$scope.isTableData){
 				var json = {'sInstID':user.institutionID,'iSkip':"0",'iLimit':"0"};
 				RestService.saveToServer('score-log',json).then(function(data){
 			     if(data){
@@ -630,6 +630,7 @@
                           })();
 
         }
+
 
 		$scope.viewApplication = function(CustID,status){
             $scope.showReinitiate=false;
