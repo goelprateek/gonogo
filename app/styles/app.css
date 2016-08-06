@@ -168,6 +168,30 @@ ng\:form {
 	color: #fff;
 }
 
+
+.btn:focus {
+  color: #fff;
+}
+
+.btn-gap-v {
+    margin: 0 0 5px;
+}
+
+.btn-w-md {
+    min-width: 120px;
+}
+
+.btn-line-default:hover, .btn-line-default:focus, .btn-line-default:active, .btn-line-default.active {
+    color: #333;
+    background-color: #fff;
+}
+
+.btn-line-default {
+    color: #767676;
+    background-color: transparent;
+    border-color: #ccc;
+}
+
 .scroll-fixed-top {
 	position: fixed;
 	top: 0px;

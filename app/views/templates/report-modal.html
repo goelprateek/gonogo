@@ -1,70 +1,6 @@
-<style type="text/css">
-    
-    /**
- * For the correct positioning of the placeholder element, the dnd-list and
- * it's children must have position: relative
- */
-.custom-reports ul[dnd-list],
-.custom-reports ul[dnd-list] > li {
-    position: relative;
-}
-
-/**
- * The dnd-list should always have a min-height,
- * otherwise you can't drop to it once it's empty
- */
-.custom-reports ul[dnd-list] {
-    min-height: 42px;
-    padding-left: 0px;
-}
-
-/**
- * The dndDraggingSource class will be applied to
- * the source element of a drag operation. It makes
- * sense to hide it to give the user the feeling
- * that he's actually moving it.
- */
-.custom-reports ul[dnd-list] .dndDraggingSource {
-    display: none;
-}
-
-/**
- * An element with .dndPlaceholder class will be
- * added to the dnd-list while the user is dragging
- * over it.
- */
-.custom-reports ul[dnd-list] .dndPlaceholder {
-    display: block;
-    background-color: #ddd;
-    min-height: 42px;
-}
-
-/**
- * The dnd-lists's child elements currently MUST have
- * position: relative. Otherwise we can not determine
- * whether the mouse pointer is in the upper or lower
- * half of the element we are dragging over. In other
- * browsers we can use event.offsetY for this.
- */
-.custom-reports ul[dnd-list] li {
-    background-color: #fff;
-
-/**
- * Show selected elements in green
- */
-.custom-reports ul[dnd-list] li.selected {
-    color: #1C7EBB;
-    border: 1px dashed gray;
-    border-left: 3px solid #1C7EBB;
-    background-color: #fafafa;
-
-}
-
-</style>
-
 <div class="custom-reports">
         <div class="modal-header">
-            <button type="button" class="close"  ng-click="dismiss()" aria-hidden="true">×</button>
+            <button type="button" class="close"  ng-click="dismiss()" aria-hidden="true">&</button>
             <h3 class="modal-title">Custom Report Designer</h3>
         </div>
         <div class="modal-body" style="min-height:500px;">
@@ -89,7 +25,7 @@
                             <div ng-repeat="list in models" class="col-md-6">
                                 <div class="panel panel-info">
                                     <div class="panel-heading">
-                                        <h3 class="panel-title"> {{list.listName}} Column
+                                        <h3 class="panel-title"> {{list.listName}} Fields
                                             <span class="badge bage-info pull-right"  >{{list.items.length}}</span>
                                         </h3>
                                     </div>
