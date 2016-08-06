@@ -745,7 +745,9 @@ $scope.scoreTree = function(){
                 treeFeed : function (){
                     var scoreTree;
                     return scoreTree = {
-                        treeData : $scope.objectSet.oCompRes.scoringServiceResponse.SCORE_TREE
+                        treeData : $scope.objectSet.oCompRes.scoringServiceResponse.SCORE_TREE,
+                        custName : $scope.name,
+                        custRefId :$scope.objectSet.oAppReq.sRefID
                     }
                 }
               }
@@ -1568,8 +1570,10 @@ app.controller('ModalInstanceCtrl', ['$scope','$rootScope','NotificationObject',
 }]);
 
 app.controller('scoreTreeCtr', ['$scope','$uibModalInstance','treeFeed',function($scope,$uibModalInstance,treeFeed){ 
-       
+    
     $scope.treeFeed = treeFeed.treeData; 
+    $scope.custName = treeFeed.custName.toUpperCase();
+    $scope.custRefId = treeFeed.custRefId;
     $scope.closeTreePanel = function () {
         $uibModalInstance.dismiss('cancel');
     };
