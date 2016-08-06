@@ -13,11 +13,30 @@
 		<div class="col-md-8 text-left">
 			<div class="alert alert-danger" id="erro-msg"
 				style="float: none; text-align: left; margin: 0px">
-				<strong>Error ! &nbsp&nbsp&nbsp</strong><span id="error"></span>
+				<strong>Error ! &nbsp;&nbsp;&nbsp;</strong><span id="error"></span>
 			</div>
 		</div>
 		<div class="col-md-4 text-right" id="top-fixed" ng-if="can('NRPRCS')">
 			
+			<!-- <a class="btn btn-primary btn-sm" ng-show="can('NRPRCS') && !isUpdating" ng-click="enableForm();">
+                <span class="fa fa-pencil-square-o"></span>
+                Update
+            </a>
+
+            <a class="btn btn-primary btn-sm" ng-show="can('NRPRCS') && ((isUpdating && ApplicantForm.$valid) || !isUpdating)" ng-click="updateForm();" >
+            	<span class="fa fa-repeat"></span>
+            	Reinitiate
+            </a>
+
+            <a class="btn btn-primary btn-sm"  ng-click="toggleForm()">
+            	<span class="fa fa-reply"></span>
+            	Back
+            </a> -->
+
+
+
+
+
 			<a class="add-button-div-notification"
 				style="width: 100px; display: inline-block;" id="reinitiate" ng-show="can('NRPRCS') && !isUpdating" ng-click="enableForm();">Update</a>
 			<a class="add-button-div-notification"

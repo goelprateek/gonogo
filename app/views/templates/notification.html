@@ -121,7 +121,7 @@ svg:not (:root ) {
 </style>
 
 
-<div id="notification_tmp" ng-controller="NotifController" ng-cloak>
+<div id="notification_tmp" ng-controller="NotifController" ng-cloak >
 	<div class="row clearfix" contextmenu="blur">
 		<div class="col-md-10 col-md-offset-1" style="padding-right: 0px;">
 			<div class="col-md-2" id="application_process">
@@ -130,29 +130,33 @@ svg:not (:root ) {
 
 			<div class="col-md-9" style="padding: 0px; float: right;">
 				<div class="row clearfix">
-					<div class="col-md-6 text-left" style="padding-top: 10px">
+					<!-- <div class="col-md-6 text-left" style="padding-top: 10px">
 						<img src="images/loading.gif" class="LoaderSpinner" />
 						<sapn ng-if="error" style="color:red">
 						<strong> Warning! &nbsp;&nbsp;</strong>{{error}}</span>
-					</div>
-					<div class="col-md-6">
+					</div> -->
+					<div class="col-md-6 pull-right">
 						<ul class="nav navbar-nav navbar-right nhr">
-							<li><span href="" id="ref" ng-show="showrefid"
-								style="margin-top: 16px; display: block;"> <a
-									ng-click="::authenticate('NRPRCS') && newApplication(details.APPLICATION.RefID)">{{details.APPLICATION.RefID}}</a></span></li>
-							<li><a id="dsa_chat" ng-if="authenticate('NCHAT')">DSA
-									Chat</a></li>
-							<li><a id="onhold" title="{{details.CUSTOMER.CustID}}"
-								ng-if="authenticate('NHOLD')"
-								ng-click='cro_action( details.CUSTOMER.CustID, "OnHold")'>OnHold</a>
+							<li>
+								<span href="" id="ref" ng-show="showrefid" style="margin-top: 16px; display: block;">
+									<a ng-click="::authenticate('NRPRCS') && newApplication(details.APPLICATION.RefID)">	     {{details.APPLICATION.RefID}}
+									</a>
+								</span>
 							</li>
-							<li><a id="approve" title="{{details.CUSTOMER.CustID}}"
-								ng-if="authenticate('NAPPROVE')"
-								ng-click='cro_action( details.CUSTOMER.CustID, "Approved")'>Approve</a>
+							<li>
+								<a id="onhold" title="OnHold" ng-if="authenticate('NHOLD')" ng-click='cro_action(details.CUSTOMER.CustID, "OnHold")'>
+									OnHold
+								</a>
 							</li>
-							<li><a id="decline" title="{{details.CUSTOMER.CustID}}"
-								ng-if="authenticate('NDECLINE')"
-								ng-click='cro_action( details.CUSTOMER.CustID, "Declined")'>Decline</a>
+							<li>
+								<a id="approve" title="Approve" ng-if="authenticate('NAPPROVE')" ng-click='cro_action( details.CUSTOMER.CustID, "Approved")'>
+									Approve
+								</a>
+							</li>
+							<li>
+								<a id="decline" title="Decline" ng-if="authenticate('NDECLINE')" ng-click='cro_action( details.CUSTOMER.CustID, "Declined")'>
+									Decline
+								</a>
 							</li>
 						</ul>
 					</div>

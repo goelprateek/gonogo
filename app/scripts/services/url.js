@@ -156,7 +156,7 @@
  		
  		var fetchCurrentUser = function(){
     		
-	    	var user={
+	    	var user = {
     			roles:[],
     			getRoles: function () {
     	            return this.roles;
@@ -210,17 +210,12 @@
 					user.dealer = JSON.parse(atob(currentDealer));
 				}
 				
-				//user.roles = localStorage.getItem('ACTIONS');
-
-				// if (user.useremail && user.useremail.indexOf("CRO1") > - 1) {
-				// 	user.roles = ["CRO1"];
-				// }
-
 				user.roles.push(user.id);
 
 				if (AclService.hasRole(user.id)) {
 		            AclService.removeRole(user.id);
 		        }
+
 				AclService.addRole(user.id);
 
 				if(localStorage.getItem('ACTIONS') ){
@@ -233,6 +228,7 @@
 				}
 
 				AclService.setUserIdentity(user);
+				
 			}
 
 		    return user;
@@ -270,7 +266,6 @@
 		   "ANALYTCS", "ATREDIT", "PVIEW", "REDIT", "NACCEPT", "NREJECT", "NCHAT", "ADEFBUR", "ABRDT", 
 		   "EDFBUR", "APPLICATION", "ABURCOMM", "CONREQ", "NAPPDATASTA", "RTREE","RSTPWD","NAPPDATASALE","UPDTUP",
 		   "ENDEU","Create User Profile","CRTUP","Enable And Disable","Reset Password","Update User Profile"].map(function(data){
-
 			AclService.addResource(data);
 		});
 		

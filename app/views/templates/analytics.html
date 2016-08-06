@@ -164,7 +164,7 @@ font-size:14px;}
 									data-ng-keyup="search(searchKeywords)">
 								</div>
 								<div ng-show="datepicker" ng-cloak class="col-md-12">
-									<input date-range-picker  id="daterange"  name="daterange" class="form-control date-picker" type="text" ng-model="datefilter.date" options="datefilter.opts"  placeholder="Pick Date"  max="datefilter.opts.max" clearable="true"/>
+									<input date-range-picker  id="daterange"  name="daterange" class="form-control date-picker" type="text" ng-model="datefilter.date" options="datefilter.opts"  placeholder="Pick Date"  max="datefilter.opts.max" min="datefilter.opts.min" clearable="true"/>
 								</div>	
 								<span class="input-group-addon">
 								      <a class="fa fa-search" ng-click="toggleSearch()" ></a>
