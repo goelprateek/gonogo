@@ -92,7 +92,7 @@
 					                            click: function() {
 					                               if( user.role != "DSA" ){
 														var json = { 
-																	"dtDate":this.category,
+																	"dtFrmDate":this.category,
 																	"sStat":this.series.name,
 																	'sInstID':user.institutionID
 																};
