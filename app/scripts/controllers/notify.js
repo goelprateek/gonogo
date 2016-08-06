@@ -324,9 +324,9 @@
     });
 
 	app.controller('NotifController', ['$scope','$rootScope', '$interval','Validation','$filter',
-								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log',
+								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log','notifier',
                                 function($scope, $rootScope, $interval,Validation,$filter,RestService,NotificationObject,UserService,AclService,
-                                    $uibModal,SelectArrays,$log){
+                                    $uibModal,SelectArrays,$log,notifier){
 
 	var user=UserService.getCurrentUser();
     $scope.can=AclService.can;
@@ -381,26 +381,34 @@
 
 	$rootScope.template ="notification";
 	$scope.minVal = 0;
-	$scope.limit = 800;
+	$scope.limit = 100;
     $scope.notifarray = [];
+    var timer ;
     
-
     // method to implement ELSearch
 
     $scope.searchNotification = function($viewValue){
         console.log($viewValue);
+        if($viewValue.length >= 3){
         var _serviceInput = {
                       "oHeader": {
-                        "sInstID": "4019",
+                        "sAppID":null,
+                        "sInstID": user.institutionID,
                         "sSourceID": "WEB",
                         "sAppSource": "GNG_WEB",
                         "sReqType": "JSON",
+                        "dtSubmit":"",//ask kishor
+                        "sDsaId":null,//ask kishor
+                        "sCroId":user.id,//ask kishor
+                        "sDealerId":null//ask kishor
                       },
                       "oFilter": {
-                        "sMobileNumber": "9595745346",
-                        "sProduct": "CONSUMER DURABLES"
+                         "dloanAmt":0,//ask
+                         "sStage":"",//ask
+                         "sMobileNumber":"",//ask
+                         "sProduct":"CDL"//ask
                       },
-                      "oCroQueue": "defualt",
+                      "oCroQueue": $scope.json.sCroID,
                       "sQuery": $viewValue,
                       "oPagination": {
                         "iPageId": 0,
@@ -409,39 +417,55 @@
                       }
                     }
 
-        RestService.fetchDataQuietly("/api/es/search",_serviceInput).then(function(data){
-            console.log(data);
-        });
+            RestService.fetchDataQuietly("api/es/search",_serviceInput).then(function(data){
+                console.log(data);
+                  if(data.notifications.length>0){
+                        console.log("destroying timer");
+                        $interval.cancel(timer);
+                        $scope.notifarray = [];
+                        var filteredSearchData = _.uniq(data.notifications, function(item, key, sRefID) { 
+                            return item.sRefID;
+                        });
+                        $scope.notifarray = filteredSearchData;
+                        $scope.error ="";
+                  }
+            });
+        }else if($viewValue.length == 0){
+            polling(0);
+            timer  = $interval(function(){
+                 console.log("timer started again");
+                 polling(0);
+            }, 60000, 0,true); 
+        }
 
     }
 
     //when to bottom of queue load next records
-	$scope.loadData = function(){
+	/*$scope.loadData = function(){
          $scope.minVal = $scope.minVal+$scope.limit;
 		 polling($scope.minVal);
-	 }
+	 }*/
 	
-    var timer ;
 	function polling (minimum ) {
         
 		if($rootScope.template == "notification"){
 
 			if(!AclService.can('NAPPDATADEF')){
 				if(user.id=="599"){ 
-                    var json ={'sCroID':"STP_PL", 
+                    $scope.json ={'sCroID':"STP_PL", 
                     'sInstID':user.institutionID, 
                     'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit}
 				}else{
-                    var json ={'sCroID':"STA",  // CRO9
+                    $scope.json ={'sCroID':"STA",  // CRO9
                     'sInstID':user.institutionID,
                     'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit};
 				}
 			}else if(user.id=="586"){
-                var json ={'sCroID':"PL_QUEUE",  // CRO1 PL Normal
+                $scope.json ={'sCroID':"PL_QUEUE",  // CRO1 PL Normal
                         'sInstID':user.institutionID, 
                         'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit};
             }else{
-                var json ={'sCroID':"default", // CRO1,CRO2 Normal
+                $scope.json ={'sCroID':"default", // CRO1,CRO2 Normal
                         'sInstID':user.institutionID, 
                         'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit}
 			}
@@ -455,7 +479,7 @@
 			}
 
            
-			RestService.fetchDataQuietly(URL,json).then(function(data){
+			RestService.fetchDataQuietly(URL,$scope.json).then(function(data){
 				
                 if(!_.isNull(data) || !_.isUndefined(data)){
 
@@ -470,16 +494,14 @@
                     
 				}
 			});	
-            
   		}
-
 	}
 
     if(_.isUndefined(timer)){
          console.log("starting timer");
           timer  = $interval(function(){
                     polling($scope.minVal);
-          }, 30000, 0,true);    
+          }, 60000, 0,true);    
     }
 
     polling($scope.minVal);
@@ -585,6 +607,11 @@
             $scope.dedupeRefArray = [];
             $scope.isAllImgApprove = true;
             $scope.showrefid = true;
+            $scope.invoiceDate = false;
+            $scope.invoiceNumber = false;
+            $scope.isInvoiceAvailable = true;
+            $scope.datefilter.date = '';
+            $scope.invoiceNum = "";//when received from server..this will variable get removed
             $scope.croDecision = response.aCroDec;
             $scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
 
@@ -606,10 +633,31 @@
 
 			var data = 	$scope.notifarray;
 			_.each(data ,function(value){
-
                 if(value.sRefID ==  $scope.objectSet.oAppReq.sRefID){
-                    $scope.applctnstatus = value.sStat;}
+                        $scope.applctnstatus = value.sStat;
+                }
             });
+
+            try{
+                if($scope.objectSet.oInvDtls){
+                    if($scope.objectSet.oInvDtls.dtInv && $scope.objectSet.oInvDtls.sInvNumber){
+                         $scope.datefilter.date = $scope.objectSet.oInvDtls.dtInv;
+                         $scope.invoiceDate = true;
+                         $scope.invoiceNumber = true;
+                         $scope.isInvoiceAvailable = false;
+                    }else{
+                         $scope.invoiceDate = false;
+                         $scope.invoiceNumber = false;
+                         $scope.isInvoiceAvailable = true;
+                         $scope.datefilter.date = '';
+                    }
+                }
+            }catch(e){
+                    $scope.invoiceDate = false;
+                    $scope.invoiceNumber = false;
+                    $scope.isInvoiceAvailable = true;
+                    $scope.datefilter.date = '';
+            }
 
             try{
                  if($scope.objectSet.oLosDtls.sLosID){
@@ -839,8 +887,8 @@ $scope.cro_action = function(refID, action){
 
                         });
                  }else{
-                        alert("Please approve all the images");
-                    }
+                    notifier.logWarning("Please approve all the images") ;
+                 }
 			  }
           }else if($scope.applctnstatus == null){
                 $scope.error = "Application status is not defined...!!!";
@@ -948,11 +996,11 @@ $scope.updateLosData = function(status){
     		 var URL='update-los-details';
     		RestService.saveToServer(URL,jsondata).then(function(Response){
     				if(Response.status == "SUCCESS"){
-    					alert("LOS Status updated successfully");
+                        notifier.logSuccess("LOS Status updated successfully");
     					$scope.losIdval = true;
                         $scope.utrVal = true;
     				}else{
-    					alert("LOS Status is not updated successfully");
+                        notifier.logWarning("Sorry! We are unable to update your LOS Status");
     				}
     		 });
     	}
@@ -988,7 +1036,7 @@ $scope.updateLosData = function(status){
 
     $scope.enableForm=function(){
         if($scope.objectSet.iNoReTry>=2){
-                alert("This application is already re-initiated twice.");
+                notifier.logWarning("This application is already re-initiated twice") ;
         }else{
             $scope.fieldsUpdated={
                 isNameUpdated:false,
@@ -1078,7 +1126,7 @@ $scope.updateLosData = function(status){
 
     $scope.updateForm=function(){
         if($scope.objectSet.iNoReTry>=2){
-            alert("This application is already re-initiated twice.");
+            notifier.logWarning("This application is already re-initiated twice");
         }else{
             if($scope.isUpdating){
                 var dobFormatted=$filter('date')($scope.app_form.pickerDob,"dd/MM/yyyy");
@@ -1129,7 +1177,6 @@ $scope.updateLosData = function(status){
     };  
     
     $scope.showReinitiateModal = function (size,refID,applicantData,fieldsUpdated) {
-         //alert('modal baseURL'+baseURL);
          var modalInstance = $uibModal.open({
             templateUrl: 'views/modal-reinitiate.html',
             controller: 'ReinitiateModalController',
@@ -1158,8 +1205,6 @@ $scope.updateLosData = function(status){
         address.sState="";
         
         if(pin.length==6){
-            //alert($event.target.value);
-
             var pinJson ={"oHeader":{"sInstID":user.institutionID},"sQuery":pin}; 
             
             RestService.saveToServer("pincode-details-web",pinJson).then(function(data){
@@ -1185,30 +1230,86 @@ $scope.updateLosData = function(status){
             }
         });
     };
-    //sayali invoice service check if any application is selected from queue
-    $scope.saveInvoice = function(invoiceNum,invoiceDate){
-         var dobFormatted=$filter('date')(invoiceDate,"dd-MM-yyyy");
-         console.log(new Date());
-        var json =  {
-                        "oHeader":{
-                        "sInstID":user.institutionID,
-                        "sCroId":user.id,
-                        "sAppSource":"WEB"
-                        },
-                        "sRefID":$scope.objectSet.oAppReq.sRefID,
-                        "oInvDtls":{
-                        "sInvNumber":invoiceNum,
-                        "dtInv":dobFormatted
-                        }
-                    };
-                    console.log(json);
-                    var URL="update-invoice-details";
 
-     RestService.saveToServer(URL,json).then(function(Response){
-        console.log(Response);
-     });
+   //invoice information
+    
+    $scope.invoiceDate = false;
+    $scope.invoiceNumber = false;
+    console.log("invoiceDate :"+$scope.invoiceDate);
+    $scope.datefilter =  {            
+         date : {
+             startDate: null,
+             endDate: moment()        
+         },
+         timePickerIncrement: 1,
+         opts: {
+             timePicker: true,
+             singleDatePicker : true,
+             max: moment().format('YYYY-MM-DD'), 
+             opens : "center",
+             applyClass: 'btn-primary',
+             isCustomDate: function(data){
+                 return '';
+             },
+             locale: {
+                 applyLabel: "Apply",
+                 fromLabel: "From",
+                 format: "DD/MM/YYYY h:mm:ss A",
+                 cancelLabel: 'Cancel',
+                 customRangeLabel: 'Custom range',
+                 daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+                 monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                 firstDay: 1
+             }, 
+             eventHandlers: {
+                 "apply.daterangepicker" : function(ev, picker){
+                     //TODO call service to fetch data based on date range
+                 },
+                 'show.daterangepicker' : function(ev , picker){
+                     $scope.datefilter.date.startDate = undefined;
+                     $scope.datefilter.date.startDate = moment();
+                 },
+                 'hide.daterangepicker': function(ev,picker){
+                     console.log('hide picker');
+                 }
+             }   
+         }
+     };
+    
+     $scope.saveInvoice = function(invoiceNum,invoiceDate){
+          if($scope.objectSet.oAppReq.sRefID!=""){
+            if((invoiceNum != undefined && invoiceNum!="") && (invoiceDate != undefined && invoiceDate !="")){
+               var dobFormatted=$filter('date')(invoiceDate._d,"dd-MM-yyyy HH:mm:ss");
+               var json = {
+                           "oHeader":{
+                           "sInstID":user.institutionID,
+                           "sCroId":user.id,
+                           "sAppSource":"WEB"
+                           },
+                           "sRefID":$scope.objectSet.oAppReq.sRefID,
+                           "oInvDtls":{
+                           "sInvNumber":invoiceNum,
+                           "dtInv":dobFormatted
+                           }
+                          };
+                           console.log(json);
+                           var URL="update-invoice-details";
+
+                RestService.saveToServer(URL,json).then(function(Response){
+                    if(Response.status == "SUCCESS"){
+                        notifier.logSuccess("Invoice details updated successfully");
+                        $scope.invoiceNumber = true;
+                        $scope.invoiceDate = true;
+                        $scope.isInvoiceAvailable = false;
+                    }else{
+                        notifier.logWarning("Sorry! We are unable to update Invoice details") ;
+                    }
+                });
+            }
+        }else{
+            notifier.logWarning("Please select application from queue!") ;
+        }
     };
-   
 
     // destructor function for scope 
     $scope.$on("$destroy",function(){
@@ -1221,9 +1322,8 @@ $scope.updateLosData = function(status){
 
 }]);
 
-app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$uibModalInstance","requestObj","UserService",function($scope,RestService,$uibModalInstance,requestObj,UserService){
-    console.log("ReinitiatedDecisionModalController");
-    console.log(requestObj);
+app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$uibModalInstance","requestObj","UserService","notifier",
+    function($scope,RestService,$uibModalInstance,requestObj,UserService,notifier){
 
     var user=UserService.getCurrentUser();
 
@@ -1289,8 +1389,8 @@ app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$ui
     };
 }]);
 
-app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService',
-    function($scope,ImageFeed,$uibModalInstance,$timeout,RestService){
+app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService','notifier',
+    function($scope,ImageFeed,$uibModalInstance,$timeout,RestService,notifier){
     /*$scope.myInterval = 5000;*/
     $scope.noWrapSlides = true;
     $scope.active = ImageFeed.index;
@@ -1371,7 +1471,7 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
                     var re = (/\.(jpg)$/i);
                     if(!re.exec(fname))
                     {
-                        alert("File extension not supported!");
+                        notifier.logWarning("File extension not supported!") ;
                         break;
                     }
                     var $file = $files[i];
@@ -1423,10 +1523,10 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
                                                  }
                                              }); 
                                           }else{
-                                                alert("You have max limit of 2 images!");
+                                                notifier.logWarning("You have max limit of 2 images") ;
                                           }
                                 }else{
-                                    alert("File Type Not Supported");
+                                    notifier.logWarning("File Type not supported") ;
                             }
                         };
                         reader.readAsDataURL($files[i]);
@@ -1607,7 +1707,8 @@ $scope.closeDocument = function () {
   };
 }]);
 
-app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantData","$uibModalInstance","fieldsUpdated",function($scope,RestService,refID,applicantData,$uibModalInstance,fieldsUpdated){
+app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantData","$uibModalInstance","fieldsUpdated","notifier",
+    function($scope,RestService,refID,applicantData,$uibModalInstance,fieldsUpdated,notifier){
     $scope.refID = refID;
     $scope.applicantData = applicantData;
     $scope.fieldsUpdated=fieldsUpdated;
@@ -1756,7 +1857,6 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
     };
 
     $scope.addTag=function(pTag,tagId){
-        //alert(pTag);
         var tagFound=false;
         
         for(var i=0;i<$scope.tags.length;i++)
@@ -1812,9 +1912,9 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
 
             RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
                 if(Response && Response.sStat=="SUCCESS"){
-                    alert("Application has been reinitiated successfully.");
+                    notifier.logSuccess("Application has been reinitiated successfully");
                 }else{
-                    alert("Error occured while reinitiating.");
+                    notifier.logWarning("Error occured while reinitiating") ;
                 }
                 $uibModalInstance.dismiss();
             });
@@ -1829,9 +1929,9 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
 
             RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
                 if(Response && Response.sStat=="SUCCESS"){
-                    alert("Application has been reinitiated successfully.");
+                    notifier.logSuccess("Application has been reinitiated successfully");
                 }else{
-                    alert("Error occured while reinitiating.");
+                    notifier.logWarning("Error occured while reinitiating") ;
                 }
                 $uibModalInstance.dismiss();
             });
@@ -1931,7 +2031,6 @@ app.directive('changeOnBlur', function() {
                     if (newValue !== oldValue){
                         scope.$eval(expressionToCall);
                     }
-                        //alert('changed '  oldValue);
                 });         
             });
         }

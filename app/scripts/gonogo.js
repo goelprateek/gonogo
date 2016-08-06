@@ -22,7 +22,8 @@
 	                                     'gonogo.utilities',
 	                                     'gonogo.commons',
 	                                     'gonogo.factories',
-	                                     'score-directives'	                                     
+	                                     'score-directives',
+	                                     'daterangepicker'	                                     
 	                                     ]);
 
 	app.controller("Maincontroller",['$scope', '$log', 'notifier' ,'Validation', '$timeout','RestService','$location','UserService','APP_CONST','AclService',function($scope, $log, notifier ,Validation, $timeout,RestService,$location,UserService,APP_CONST,AclService) {

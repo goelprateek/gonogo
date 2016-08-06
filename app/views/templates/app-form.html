@@ -63,18 +63,20 @@
 		<div class="row clearfix">
 			<div class="col-md-3">
 				<label class="control-label">Invoice Number</label> <input
-					class="form-control" ng-model="invoiceNum" type="text" maxlength="10" ng-disabled="losIdval"  replace>
+					class="form-control" ng-model="objectSet.oInvDtls.sInvNumber" id="invoiceNumId" type="text" ng-disabled="invoiceNumber"  replace>
 			</div>
-			<div class="col-md-3">
-				<label class="control-label">Invoice Date</label> 
-				<input
-						class="form-control" ng-model="invoiceDate" type="text" ng-click="openDateDialog()" uib-datepicker-popup="{{dobFormat}}" is-open="datePopup.opened" datepicker-options="dateOptions" close-text="Close" ng-pattern="/^[0-9]{2}/[0-9]{2}/[0-9]{4}/i" required />
+			<div class="dob col-md-3">
+				<label class="control-label">Invoice Date</label> 			
+				<input date-range-picker  id="daterange"  name="daterange" class="form-control date-picker" 
+				type="text" ng-model="datefilter.date" options="datefilter.opts"  placeholder="Pick Date" 
+				 max="datefilter.opts.max" clearable="true" ng-disabled="invoiceDate"/>
 			</div>
+			<a ng-if="applctnstatus.toLowerCase()==='approved'" ng-click="loadPDF()"><img title="View DO" src="img/do.png" style="width: 50px;"/></a>
 		</div>
-	<!-- 	Sayali- used template variable , have to remove further when this template structure is modularised, which is defined in notify.js--> 
-		<div class="row clearfix" ng-if="template == 'notification'">
+		<!-- 	Sayali- used template variable , have to remove further when this template structure is modularised, which is defined in notify.js--> 
+		<div class="row clearfix" ng-if="template == 'notification' && isInvoiceAvailable">
 			<div class="col-md-3" style="float: right;">
-				<a class="add-button-div-notification" ng-click="saveInvoice(invoiceNum,invoiceDate)"
+				<a class="add-button-div-notification" ng-click="saveInvoice(objectSet.oInvDtls.sInvNumber,datefilter.date)"
 				style="float: right;margin-top: 7px;margin-bottom: -4px; width: 35%;">Save</a>
 			</div>
 		</div>
@@ -271,7 +273,6 @@
 
 			<div id="addr_detail" data-ng-repeat="address in objectSet.oAppReq.oReq.oApplicant.aAddr">
 				<div  ng-if="addr_type.value == 'Residence' && findAddressType(addr_type.value,address.sAddrType)" style="display: block;">
-					<div class="row clearfix">
 						<div class="col-md-3">
 							<label class="control-label">Address Line 1</label> <input
 								class="form-control" ng-model="address.sLine1" type="text"
@@ -290,8 +291,6 @@
 								class="form-control" ng-model="address.iPinCode" type="text" name="PinCode"
 								maxlength="6"  ng-disabled="!isUpdating" ng-keyup="getStateCity($event,address)">
 						</div>
-					</div>
-					<div class="row clearfix">
 						<div class="col-md-3">
 							<label class="control-label" style="float: none;">State </label>
 						 	<input
@@ -317,9 +316,7 @@
 							<input
 								class="form-control" ng-model="address.dRentAmt" type="text" 
 								 ng-disabled="!isUpdating" change-on-blur="onValueChanged('resAddress')">
-						</div>
-					</div>
-					<div class="row clearfix">						
+						</div>					
 						<div class="col-md-3">
 							<label class="control-label">Month at city</label>
 							<input
@@ -341,10 +338,8 @@
 								<p ng-message="thisEarlierThan">Residence stay should be less than city stay </p>
 							</div>
 						</div>
-					</div>
 				</div>
 				<div ng-if="addr_type.value == 'Office' && findAddressType(addr_type.value,address.sAddrType)">
-					<div class="row clearfix">
 						<div class="col-md-3">
 							<label class="control-label">Address Line 1</label> <input
 								class="form-control" ng-model="address.sLine1" type="text"
@@ -366,8 +361,6 @@
 								name="PinCode" maxlength="6" ng-disabled="!isUpdating" ng-keyup="getStateCity($event,address)" 
 								change-on-blur="onValueChanged('offAddress')">
 						</div>
-					</div>
-					<div class="row clearfix">
 						<div class="col-md-3">
 							<label class="control-label" style="float: none;">State </label>
 							 <input
@@ -378,10 +371,8 @@
 							<label class="control-label">City</label> <input
 								class="form-control" ng-model="address.sCity" type="text" ng-disabled="true" change-on-blur="onValueChanged('offAddress')">
 						</div>
-					</div>
 				</div>
 				<div ng-if="addr_type.value == 'Permanent' && findAddressType(addr_type.value,address.sAddrType)">
-					<div class="row clearfix">
 						<div class="col-md-3">
 							<label class="control-label">Address Line 1</label> <input
 								class="form-control" ng-model="address.sLine1" type="text"
@@ -400,8 +391,6 @@
 								class="form-control" ng-model="address.iPinCode" type="text" name="PinCode"
 								maxlength="6"  ng-disabled="!isUpdating" ng-keyup="getStateCity($event,address)">
 						</div>
-					</div>
-					<div class="row clearfix">
 						<div class="col-md-3">
 							<label class="control-label" style="float: none;">State </label>
 						 	<input
@@ -414,7 +403,7 @@
 						<div class="col-md-3">
 							<label class="control-label">Residence Address Type</label>
 							<select id="ResidentType" name="residentType" ng-model="address.sResAddrType"
-								class="form-control control-select inputMaterial" ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')" select-required>
+								class="form-control" ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')" select-required>
 								<option value="">Select Resident Type</option>
 								<option ng-repeat="obj in selectResidence" value="{{obj.value}}">{{obj.text}}</option>
 							</select>
@@ -427,9 +416,7 @@
 							<input
 								class="form-control" ng-model="address.dRentAmt" type="text" 
 								 ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')">
-						</div>
-					</div>
-					<div class="row clearfix">						
+						</div>					
 						<div class="col-md-3">
 							<label class="control-label">Month at city</label>
 							<input
@@ -451,7 +438,6 @@
 								<p ng-message="thisEarlierThan">Residence stay should be less than city stay </p>
 							</div>
 						</div>
-					</div>
 				</div>
 			</div>
 

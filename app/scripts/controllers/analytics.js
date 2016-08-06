@@ -406,6 +406,8 @@
         $scope.losIdval = true;
         $scope.utrVal = true;
         $scope.editLosStat = true;
+        $scope.invoiceDate = true;
+        $scope.invoiceNumber = true;
 
         $scope.search = true;
         $scope.datepicker = false;
