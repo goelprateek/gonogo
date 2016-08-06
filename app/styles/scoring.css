@@ -919,10 +919,10 @@ input.radio {
 	background-color: red;
 }
 
-.picked {
+/*.picked {
 	background-color: #CFCFCF;
 	border: 2px solid #fff;
-}	
+}	*/
 
 .picked:hover{
 	background-color: #CFCFCF;
