@@ -10,16 +10,12 @@
 		when('/', {
 			title : 'Login',
 			templateUrl : 'views/login.html',
-		}).when('/application', {
-			templateUrl: 'views/template/application.html',
 		}). when('/apply', {
 			templateUrl: 'views/template/hdbfs-cdl/application.html',
 		}). when('/dmiapplication', {
 			templateUrl: 'views/templates/dmi-application.html',
 		}).	when('/hdbfsnotification', {
 			templateUrl: 'views/templates/notify.html',
-		}).	when('/notification', {
-			templateUrl: 'views/templates/notification.html',
 		}). when('/policy', {
 			templateUrl: 'views/templates/policy.html',
 		}). when('/analytics', {

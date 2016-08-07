@@ -101,7 +101,7 @@
 						UserService.persistDataTolocalStorage('ACTIONS', btoa(JSON.stringify(data.ACTION)))
 
 						if (!_.isUndefined(data.ACTION)) {
-							router(data.ACTION);
+							router(data.ROLES[0]);
 						}
 					} else {
 						$scope.alert = "Sorry ! User Details are not availeble.\n Please contact system admin";
@@ -119,49 +119,16 @@
 
 		// action contains {APPLICATION,NOTIFICATION}
 
-		function router(actions) {
+		function router(role) {
+			if(role.indexOf('DSA') !== -1) {
 
-			if (_.contains(actions, 'APPLICATION') && !_.contains(actions, 'NOTIFICATION')) {
+				$(location).attr('href', '#/cdl/dealer');
 
-				if (instid == '4019') {
-					var url = '#/cdl/dealer';
-				} else if (instid == '4011') {
-					var url = '#/dmiapplication';
-				} else {
-					var url = '#/application';
-				}
+			}else if (role.indexOf('CRO') !== -1) {	
 
-				$(location).attr('href', url);
+				$(location).attr('href', '#/hdbfsnotification');
 
-			} else if (_.contains(actions, 'NOTIFICATION')) {
-
-				if (instid == '4019') {
-					var url = '#/hdbfsnotification';
-				}
-				else if (instid == '4011') {
-					var url = '#/DMINotification';
-
-				} else {
-
-					var url = '#/notification';
-				}
-
-				$(location).attr('href', url);
-			} else if (_.contains(actions, 'POLICY') && !_.contains(actions, 'NOTIFICATION')) {
-
-				var url = '#/policy';
-				$(location).attr('href', url);
-
-			} else if (!_.contains(actions, 'NOTIFICATION') && !_.contains(actions, 'POLICY') && _.contains(actions, 'ANALYTCS')) {
-
-				var url = '#/analytics';
-				$(location).attr('href', url);
-
-			} else if (!_.contains(actions, 'APPLICATION') &&
-				!_.contains(actions, 'NOTIFICATION') &&
-				!_.contains(actions, 'POLICY') &&
-				!_.contains(actions, 'ANALYTCS')) {
-
+			}else{
 				$scope.alert = "Sorry... User has been blocked. Please contact your system Admin !!!";
 			}
 		}
