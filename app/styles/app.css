@@ -97,6 +97,10 @@ ng:form {
   animation-duration: 1s;
 }
 
+#toast-container > div{
+  opacity: 1;
+}
+
 .toast-bottom-left {
   bottom: 30px;
   
