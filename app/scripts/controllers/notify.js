@@ -884,7 +884,7 @@ $scope.cro_action = function(refID, action){
             notifier.logWarning("An action is already taken for this application!!");
          }
 	  }else{
-        notifier.logWarning("Please select enquiry from Queue!!");
+        notifier.logWarning("Please select application from Queue !");
     }       
 }
 
@@ -901,7 +901,7 @@ function requestForStatus(json){
              notifier.logSuccess("Application is successfully "+json.sAppStat+""); 
         }
         else{
-            notifier.logWarning("Sorry...Unable to Approve your application !!");
+            notifier.logWarning("Unable to Approve your application !");
         }
     }); 
 }
@@ -919,7 +919,7 @@ function requestFordclnOnhold(json){
              notifier.logSuccess("Application is successfully "+json.sAppStat+""); 
         }
         else{
-            notifier.logWarning("Sorry...Unable to update your action !!");
+            notifier.logWarning("Unable to update your action !");
         }
     });
 }
@@ -980,7 +980,7 @@ $scope.updateLosData = function(status){
     					$scope.losIdval = true;
                         $scope.utrVal = true;
     				}else{
-                        notifier.logWarning("Sorry! We are unable to update your LOS Status");
+                        notifier.logWarning("We are unable to update your LOS Status");
     				}
     		 });
     	}
@@ -1280,7 +1280,7 @@ $scope.updateLosData = function(status){
                 });
             }
         }else{
-            notifier.logWarning("Please select application from queue!") ;
+            notifier.logWarning("Please select application from queue !") ;
         }
     };
 
@@ -1703,7 +1703,7 @@ $scope.requestDoc = function () {
             if($scope.invalidMsg){
              $scope.invalidMsg = false;
             }
-             notifier.logWarning("please select any doc from panel");
+             notifier.logWarning("please select any document from panel");
         }      
      }else{
          $scope.invalidMsg = true;
