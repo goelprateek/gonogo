@@ -10,16 +10,16 @@
 		validate : function() {	    
 			$("input[type='text'][id!='appno']:visible").each(function(){
 				var fieldset = $(this).closest("fieldset").index();
-				if($(this).val() == '')
-				{
+				
+				if($(this).val() == ''){
 					var value = $(this).attr("name");
 					inputError = 1;
 					$('#error').text("Please enter your "+value.charAt(0).toUpperCase()+value.slice(1)+"");
 					$('#error_head').text(value.charAt(0).toUpperCase()+value.slice(1));
 					$(this).focus().css("border","1px solid red");
 					return false;
-				}
-				else if($(this).css("border-bottom-color") == 'rgb(255, 0, 0)')
+				
+				} else if($(this).css("border-bottom-color") == 'rgb(255, 0, 0)')
 				{
 					var value = $(this).attr("name");
 					inputError = 1;
@@ -27,10 +27,7 @@
 					$('#error_head').text(value.charAt(0).toUpperCase()+value.slice(1));
 					$(this).focus().css("border","1px solid red");
 					return false;
-				}/*else{
-    				inputError=0;
-    				$(this).css("border","1px solid green");
-    			}*/
+				}
 
 			});
 			$("select:visible").each(function(){

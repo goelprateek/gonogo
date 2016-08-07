@@ -12,12 +12,8 @@
 			templateUrl : 'views/login.html',
 		}). when('/apply', {
 			templateUrl: 'views/template/hdbfs-cdl/application.html',
-		}). when('/dmiapplication', {
-			templateUrl: 'views/templates/dmi-application.html',
-		}).	when('/hdbfsnotification', {
+		}).when('/hdbfsnotification', {
 			templateUrl: 'views/templates/notify.html',
-		}). when('/policy', {
-			templateUrl: 'views/templates/policy.html',
 		}). when('/analytics', {
 			templateUrl: 'views/templates/analytics.html',
 		}).when('/cdl/dealer',{
