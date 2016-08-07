@@ -224,7 +224,7 @@ font-size:14px;}
 			                    <td>{{store.bureauScore}}</td>
 			                    <td>{{store.applicationScore}}</td>
 			                    <td>
-			                    	<span class="label"  data-ng-class="{'label-danger' : store.applicationStatus.toUpperCase() == 'DECLINED', 'label-success' : store.applicationStatus.toUpperCase() == 'APPROVED' , 'label-warning' : store.applicationStatus.toUpperCase() == 'QUEUE'}"  >{{store.applicationStatus.toUpperCase()}}
+			                    	<span class="label"  data-ng-class="{'label-danger' : store.applicationStatus.toUpperCase() == 'DECLINED', 'label-success' : store.applicationStatus.toUpperCase() == 'APPROVED' , 'label-dirty' : store.applicationStatus.toUpperCase() == 'QUEUE'}"  >{{store.applicationStatus.toUpperCase()}}
 			                    	</span>
 			                    </td>
 			                    <td>{{store.stageID}}</td>
