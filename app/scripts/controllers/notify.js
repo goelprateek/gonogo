@@ -576,8 +576,8 @@
             var transfrmedOject ;
             if(response){
                 transfrmedOject =  response;
-                transfrmedOject.aAppScoRslt = _.uniq(transfrmedOject.aAppScoRslt,true,function(object){
-                    return object.sFldName;
+                transfrmedOject.aAppScoRslt = _.uniq(transfrmedOject.aAppScoRslt,function(item, key, sFldName){
+                    return item.sFldName;
                 });
 
             }
