@@ -250,12 +250,13 @@ ng:form {
 
 .picked {
 	border-left: 5px solid #009688;
+  background-color: #CFCFCF;
 }
 
-.picked:hover {
+/*.picked:hover {
 	background-color: #CFCFCF;
 }
-
+*/
 .node ellipse {
 	fill: #fff;
 	stroke: none;
@@ -1266,10 +1267,10 @@ input[type="radio"] .styled:checked + label::after {
     border-bottom: 0
 }
 
-.task-container .tasks-list .task-item:hover {
+/*.task-container .tasks-list .task-item:hover {
     background-color: #f5f5f5
 }
-
+*/
 .task-container .tasks-list .task-item .task-check {
     position: absolute;
     top: 20px;

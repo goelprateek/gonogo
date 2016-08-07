@@ -1428,7 +1428,7 @@
 							<div class="row clearfix customRow">
 								<div class="col-md-12 height">
 									<help>Asset Category*</help>
-									<select id="ast1" ng-model="assetCategory" class="ast customSelect" ng-options = "d for d in assetArray track by d">
+									<select id="ast1" ng-model="assetCategory" class="ast customSelect" ng-options = "d for d in assetArray track by d"  ng-change="fetchAssetMake(assetCategory)">
 										<option value="">Select Category</option>
 									</select>
 									<img alt="" src="images/select-arrow.png" class="customarrow"

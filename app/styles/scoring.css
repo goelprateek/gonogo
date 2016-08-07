@@ -924,10 +924,10 @@ input.radio {
 	border: 2px solid #fff;
 }	*/
 
-.picked:hover{
+/*.picked:hover{
 	background-color: #CFCFCF;
 }
-
+*/
 #tooltip {
 	position: absolute;
 	height: auto;       
