@@ -11,6 +11,7 @@
 			BASE_URL_SCORE:'http://gng.softcell.in/AppScoringV2Git/api/ScoringV3/',
 			BASE_URL_DEMO: 'http://gng.softcell.in/GoNoGoV3/api/GoNoGoV3/',
 			BASE_URL_DMI: 'http://gng.softcell.in/gonogo_dmi/',
+			BASE_URL_SOBRE: 'http://gng.softcell.in/SoBRE',
 			APP_CONTEXT: '/'
 
 		};

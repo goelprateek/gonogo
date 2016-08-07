@@ -32,6 +32,8 @@
 		//$log.debug("hello this first log");
 		//$log.error("hello this first log");
 
+		$scope.sobreUrl = APP_CONST.getConst('BASE_URL_SOBRE');
+
 		$scope.$on('onSuccessfulLogin', function (event, args) {
 
 			var currentUser=UserService.getCurrentUser();
