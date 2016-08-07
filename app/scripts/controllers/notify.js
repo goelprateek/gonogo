@@ -597,7 +597,6 @@
             $scope.invoiceNumber = false;
             $scope.isInvoiceAvailable = true;
             $scope.datefilter.date = '';
-            $scope.invoiceNum = "";//when received from server..this will variable get removed
             $scope.croDecision = response.aCroDec;
             $scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
 
@@ -628,7 +627,8 @@
             try{
                 if($scope.objectSet.oInvDtls){
                     if($scope.objectSet.oInvDtls.dtInv && $scope.objectSet.oInvDtls.sInvNumber){
-                         $scope.datefilter.date = $scope.objectSet.oInvDtls.dtInv;
+                        var Dateformat = moment($scope.objectSet.oInvDtls.dtInv).format('DD-MM-YYYY hh:mm:s');
+                         $scope.datefilter.date = Dateformat;
                          $scope.invoiceDate = true;
                          $scope.invoiceNumber = true;
                          $scope.isInvoiceAvailable = false;
