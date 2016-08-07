@@ -2387,19 +2387,19 @@ $("#astCst").keyup(function(){
 		}
 	/*var taprAmt = parseFloat($("#apvAmt").val().toString().replace(/,/g,""));
 	var ttlAsstCst = parseFloat($("#astCst").val().toString().replace(/,/g,""));*/
-	if($scope.SchemeObject.sMxTenu)
+	if(!$scope.SchemeObject.sMxTenu)
 	{
 		$scope.SchemeObject.sMxTenu=0;
 	}
-	if($scope.SchemeObject.sMinTenu)
+	if(!$scope.SchemeObject.sMinTenu)
 	{
 		$scope.SchemeObject.sMinTenu=0;
 	}
-	if($scope.SchemeObject.sDint)
+	if(!$scope.SchemeObject.sDint)
 	{
 		$scope.SchemeObject.sDint=0;
 	}	
-	if($scope.SchemeObject.sMinAmt)
+	if(!$scope.SchemeObject.sMinAmt)
 	{
 		$scope.SchemeObject.sMinAmt=0;
 	}	
