@@ -45,12 +45,18 @@
 				</ul>
 			</div>
 			<div class="row clearfix lo" style="background-color: #DADADB;">
-				<div class="col-md-12">
-					<a class="add-button-div-notification" ng-click="requestDoc(holdObject.reqComment)" style="float: left">Request Document</a>
-					<input type="text" ng-model="holdObject.reqComment" maxlength="150" style="margin: 6px 0px; margin-left: 10px;">
+				<div class="col-md-12" style="padding:8px">
+					<a class="btn btn-primary btn-sm" ng-click="requestDoc(holdObject.reqComment)" style="float:left">
+		            	<span class="fa-files-o"></span>
+		            	Request Document
+		           	</a>
+					<input type="text" ng-model="holdObject.reqComment" maxlength="150" style="margin:0px 0px 0px 10px;">
 					<span  class="text-danger" ng-if="invalidMsg">Please enter your reason for Onhold</span>
-						<a	class="add-button-div-notification" id="closeOffer"
-						style="float: right" ng-click="closeDocument()">Close</a>
+
+					<a class="btn btn-primary btn-sm" ng-click="closeDocument()" style="float: right">
+		            	<span class="fa fa-close"></span>
+		            	Close
+		           	</a>
 				</div>
 			</div>
 		</div>

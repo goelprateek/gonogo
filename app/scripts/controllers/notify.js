@@ -430,6 +430,7 @@
                   }
             });
         }else if($viewValue.length == 0){
+            $scope.notifarray = [];
             polling(0);
             timer  = $interval(function(){
                  polling(0);
@@ -1601,7 +1602,8 @@ app.controller('DeclInstanceCtrl', ['$scope','$rootScope','NotificationObject',
 }]);
 
 app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
-   '$uibModalInstance','holdModelFeed','SelectArrays', function($scope, $rootScope,NotificationObject,$uibModalInstance,holdModelFeed,SelectArrays){ 
+   '$uibModalInstance','holdModelFeed','SelectArrays','notifier',
+    function($scope, $rootScope,NotificationObject,$uibModalInstance,holdModelFeed,SelectArrays,notifier){ 
 
     var docData =  SelectArrays.getOfferData();
     $scope.OfferArrey =docData ;
@@ -1688,18 +1690,23 @@ $scope.setSelected=function() {
 }
 
 $scope.requestDoc = function () {
-      if($scope.holdObject.reqComment){
+      if($scope.holdObject.reqComment!=''){
         $scope.setSelected();
         var data = $scope.offrData;
-        var arrayDesc = [];
-         for (var j in data){
-            arrayDesc.push({sJCode:data[j].Code,sDescrip:$scope.holdObject.reqComment,sDocName:data[j].Name});
-          }
-          if( $scope.invalidMsg == true)
-             $scope.invalidMsg = !$scope.invalidMsg;
-        $uibModalInstance.close(arrayDesc);
+        if(data.length != 0){
+             var arrayDesc = [];
+             for (var j in data){
+                arrayDesc.push({sJCode:data[j].Code,sDescrip:$scope.holdObject.reqComment,sDocName:data[j].Name});
+              }
+            $uibModalInstance.close(arrayDesc);
+        }else{
+            if($scope.invalidMsg){
+             $scope.invalidMsg = false;
+            }
+             notifier.logWarning("please select any doc from panel");
+        }      
      }else{
-         $scope.invalidMsg = !$scope.invalidMsg;
+         $scope.invalidMsg = true;
      }
 };
 
