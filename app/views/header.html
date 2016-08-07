@@ -1,5 +1,5 @@
 <header class="clearfix">
-	<div class="clearfix" data-ng-if ="InstitutionID != '4011'">
+	<div class="clearfix" >
 		<div class="col-md-12 column" id="header">
 			<nav class="navbar " role="navigation">
 				
@@ -14,24 +14,24 @@
 				</div>
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav navbar-right">
-						<li>
-							 <a href="Hdbfs_CDL/Application.html"  id="applicationLink" title="{{app}}" ng-if="  InstitutionID=='4019' && app">Application
+						<!-- <li>
+							 <a href="Hdbfs_CDL/Application.html"  id="applicationLink" title="{{app}}" ng-if="InstitutionID=='4019' && app">Application
 							 </a>
-						 </li>
-						<li>
+						 </li> -->
+						<!-- <li>
 							<a href="#dmiapplication" id="applicationLink" ng-if="InstitutionID == '4020' && app">Application</a>
-						</li>  
-						<li>
+						</li>  --> 
+						<!-- <li>
 							<a href="#notification"  id="notificationLink" ng-if="InstitutionID!='4019' && notif">Notification</a>
+						</li> -->
+						<li>
+							<a href="#hdbfsnotification"  id="notificationLink" ng-if=" notif">Notification</a>
 						</li>
 						<li>
-							<a href="#hdbfsnotification"  id="notificationLink" ng-if="InstitutionID=='4019' && notif">Notification</a>
+							<a href='http://gng.softcell.in/SoBRE' target="_blank" id="policy" ng-if="policy" >Policy</a>
 						</li>
 						<li>
-							<a href="#policy"  id="policy" ng-show="policy" >Policy</a>
-						</li>
-						<li>
-							<a href="#analytics"  id="anlysis" ng-show="analytics">Analytics</a>
+							<a href="#analytics"  id="anlysis" ng-if="analytics">Analytics</a>
 						</li>
 						
 						<li uib-dropdown  class="dropdown text-normal nav-profile" is-open="status.isopen">
