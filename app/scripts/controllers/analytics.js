@@ -388,9 +388,9 @@
               }
     }), 
 	
-    app.controller('AnalyticsController',['$scope','$rootScope','notifier','Rules','Score', 'Policy','Decision', '$http', '$timeout',
+    app.controller('AnalyticsController',['$scope','notifier',  '$timeout',
                                           'RestService','$filter','APP_CONST', '$uibModal','UserService','$log','AnalyticsObject','SelectArrays','AclService',
-                                            function($scope,$rootScope, notifier ,Rules,Score,Policy,Decision, $http, $timeout,
+                                            function($scope, notifier ,  $timeout,
                                                 RestService,$filter,APP_CONST,$uibModal,UserService,$log,AnalyticsObject,SelectArrays,AclService) {
 
 
