@@ -100,7 +100,7 @@
 						UserService.persistDataTolocalStorage('DETAILS', btoa(JSON.stringify(data.USER_DETAILS)));
 						UserService.persistDataTolocalStorage('ACTIONS', btoa(JSON.stringify(data.ACTION)))
 
-						if (!_.isUndefined(data.ACTION)) {
+						if (data.ACTION) {
 							router(data.ROLES[0]);
 						}
 					} else {
@@ -120,11 +120,11 @@
 		// action contains {APPLICATION,NOTIFICATION}
 
 		function router(role) {
-			if(role.indexOf('DSA') !== -1) {
+			if(_.contains(role, 'DSA')) {
 
 				$(location).attr('href', '#/cdl/dealer');
 
-			}else if (role.indexOf('CRO') !== -1) {	
+			}else if (_.contains(role,'CRO')) {	
 
 				$(location).attr('href', '#/hdbfsnotification');
 
