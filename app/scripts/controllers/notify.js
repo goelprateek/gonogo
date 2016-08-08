@@ -471,7 +471,6 @@
 				URL = 'cro2-queue'; // Only CRO2
 			}
 
-           
 			RestService.fetchDataQuietly(URL,$scope.json).then(function(data){
 				
                 if(!_.isNull(data) || !_.isUndefined(data)){
@@ -1304,9 +1303,7 @@ $scope.onchange = function(id) {
             refID:$scope.currentApplicationFormRefIDssss,
             dtDateTime:new Date().getTime()
         };
-        
-        
-        
+
         RestService.saveToServer('get-post-ipa',JSON.stringify(postIPARequest)).then(function(response){
             if(response){        
                 postIPARequest.opostIPA=response;
@@ -1314,8 +1311,12 @@ $scope.onchange = function(id) {
                 RestService.saveToServer("get-pdf-ref",JSON.stringify(postIPARequest)).then(function(response){
                     if(response){
                         $scope.shwPDFModal('lg',response);
+                    }else{
+                        notifier.logWarning("We are unable to load DO for this application") ;
                     }
                 });
+            }else{
+                notifier.logWarning("We are unable to load DO for this application") ;
             }
         });
     };
