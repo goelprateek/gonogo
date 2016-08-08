@@ -33,24 +33,16 @@
 			$("select:visible").each(function(){
 				var fieldset = $(this).closest("fieldset").index();
 				if(($(this[this.selectedIndex]).val()=="Select")||($(this[this.selectedIndex]).val()=="select")
-						|| ($(this[this.selectedIndex]).val()=="undefined"))
-				{
+						|| ($(this[this.selectedIndex]).val()=="undefined")){
+					
 					var value = $(this).attr("name");
 					selectError = 1;
 					$('#error').text("Please select a valid "+value.charAt(0).toUpperCase()+value.slice(1)+"");
 					$('#error_head').text(value.charAt(0).toUpperCase()+value.slice(1));
 					$(this).focus().css("border","1px solid red");
 					return false;
-				}/*else if($(this).css("border-bottom-color") == 'rgb(255, 0, 0)')
-    			{
-    			 var value = $(this).attr("name");
-    			 selectError = 1;
-				 $('#error').text("Please select a valid "+value.charAt(0).toUpperCase()+value.slice(1)+"");
-				 $('#error_head').text(value.charAt(0).toUpperCase()+value.slice(1));
-				 $(this).focus().css("border","1px solid red");
-				 return false;
-    			}*/
-				else{
+				
+				} else{
 					selectError=0;
 					$(this).css("border","1px solid green");
 					$(this).next().focus();
