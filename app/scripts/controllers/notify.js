@@ -1471,9 +1471,11 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
          RestService.saveToServer('update-image-status',json).then(function(Response){
                 if(Response.sStatus == "SUCCESS"){
                     backUpImgData[index].sStat = json.oUpldDtl.sStat;
-                     backUpImgData[index].sReason = json.oUpldDtl.sReason;
+                    backUpImgData[index].sReason = json.oUpldDtl.sReason;
+                    notifier.logSuccess("Image status has been updated Successfully !!");
                 }else{
                     $scope.slides[index].sStat = backUpImgData[index].sStat;
+                    notifier.logWarning("Sorry! Unable to update image status !");
                 }
         });
     }
