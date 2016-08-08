@@ -407,9 +407,10 @@ small {
 	position: absolute;
 }
 
+/* //sayali impacting on pick date for invoice calender
 select {
 	color: #727272;
-}
+}*/
 
 .rlabel {
 	float: none;
