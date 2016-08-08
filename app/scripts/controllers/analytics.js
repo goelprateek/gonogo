@@ -654,7 +654,8 @@
                     dateOfBirth.setDate(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)));
                     dateOfBirth.setMonth((parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4))-1));
                     
-                    $scope.objectSet.oAppReq.oReq.oApplicant.sDob=dateOfBirth;
+                    $scope.app_form={pickerDob:dateOfBirth};
+            
                 }
 
     			$scope.showrefid = "true";
@@ -671,6 +672,12 @@
                      $scope.pdfData ="data:application/pdf;base64,"+$scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];             
                 }catch(e){
                      $scope.pdfData = '';
+                }
+
+                try{
+                    $scope.foirAmount = $scope.objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT'].toFixed(2);
+                }catch(e){
+                     $scope.foirAmount = '';
                 }
                 return response;
     			

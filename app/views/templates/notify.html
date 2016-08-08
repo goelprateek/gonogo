@@ -46,59 +46,6 @@
 	background-color: red;
 }
 
-
-
-.node ellipse {
-	fill: #fff;
-	stroke: none;
-	/*  stroke-width: 2px; */
-}
-
-.node:hover {
-	cursor: pointer;
-}
-
-.node circle {
-	fill: #fff;
-	stroke: steelblue;
-	stroke-width: 2px;
-}
-
-.node text {
-	font: 12px sans-serif;
-}
-
-.link {
-	fill: none;
-	stroke: green;
-	stroke-width: 1px;
-	z-index: 1000;
-}
-
-svg:not (:root ) {
-	overflow: visible;
-}
-
-
-.tooltipExp {
-	word-spacing: 5px;
-	letter-spacing: 1px;
-	border-bottom: 1px solid rgb(224, 214, 214);
-	padding: 5px;
-}
-
-.nhr a {
-	color: #777;
-}
-
-#rightbar .list-group-item {
-padding: 6px 5px;
-}
-
-.scroll-divs-outer {
- margin: 5px 0px;
-}
-
 #application-temp-container .input-group-addon{
     padding: 0px 7px;
 }
@@ -266,14 +213,11 @@ padding: 6px 5px;
 				</div>
 				</div>
 			</div> -->
-
-<!-- 	userid!='37' -->
 			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden;padding-right: 0px; max-height: 640px;" ng-if="can('NCONTAINER')"> 
 				<ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;    height: 38px;   width:98%;">
  				    <li  class="active" style=" margin-top: 7px;"><a id="applicant" style="padding: 6px 10px;font-weight: bold; font-size: 13px;">Applicant</a></li>
 					<select class="form-control" id="dedupe1" ng-if="objectSet.aDeDupe!=''" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
 	                	 ng-change="onchange(countSelected)">
-	<!--                 	 ng-options="count as count.ref for count in dedupeArray" -->
 						<option ng-selected="true" value="Select">Default Ref</option>
 	                	<option ng-repeat="count in objectSet.aDeDupe">{{count.sRefID}}</option>
 					</select>
@@ -531,7 +475,7 @@ padding: 6px 5px;
 										</div>
 										<!-- ng-if="objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT" -->
 										<div class="list-group-item">
-											<span>FOIR :{{objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT}}</span>
+											<span>FOIR :&nbsp{{foirAmount}}</span>
 										</div>
 										<div class="list-group-item">
 											<span>Approved Amount :&nbsp{{cro.dAmtAppr | currency:'&#8377;'}}</span>
@@ -565,8 +509,8 @@ padding: 6px 5px;
 				</div>
 			</div>
 <!-- 			scroll form for cro2 -->
-			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden; max-height: 640px;padding-right: 0px;" ng-if="!can('NCONTAINER')"> <!-- 28 --> <!-- NOT NCONTAINER -->
-				<ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;    height: 38px;   width: 98%;">
+			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden; max-height: 640px;padding-right: 0px;" ng-if="!can('NCONTAINER')">
+				<ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;height: 38px;   width: 98%;">
  				    <li  class="active" style=" margin-top: 7px;"><a id="applicant" style="padding: 6px 10px;font-weight: bold; font-size: 13px;">Applicant</a></li>
  
 					<select class="form-control" id="dedupe" ng-if="objectSet.aDeDupe!=''" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
@@ -578,15 +522,7 @@ padding: 6px 5px;
  				</ul>
 				<div class="row clearfix" ng-init="applicant" id="applicant_panel" style=" width: 102%;margin-left: 14px;max-height: 515px;margin-right: -14px;overflow-y:scroll">
 					<div id="application-temp-container"style="padding-top: 10px;width: 98%;">
-						<div class="row clearfix">
-							<div class="col-md-9 text-left">
-								<div class="alert alert-danger" id="erro-msg"
-									style="float: none; text-align: left; margin: 0px">
-									<strong>Error ! &nbsp&nbsp&nbsp</strong><span id="error"></span>
-								</div>
-							</div>
-						</div>
-		<!-- ****************************************  Common Form *************************** -->
+		<!-- ***************************  Common Form *************************** -->
 		 				<div ng-include="'views/templates/app-form.html'" ></div> 
 					</div>
 				</div>
@@ -598,35 +534,8 @@ padding: 6px 5px;
 						<div ng-include="'views/templates/app-form.html'"></div> 
 				</div>
 			</div>
-<!-- ******************************Second Common Form ************************************************* -->
+		<!-- ****************Second Common Form ************************************** -->
 		</div>
 	</div>
 </div>
 <!-- end of controller -->
-<!-- commented as chat appplication is no longer in use -->
-
-	<!-- <div id="chat_window" class="row clearfix">
-		<div class="chat_header_box" style="font-weight: bold;">
-			<a id="minimize"
-				style="vertical-align: middle; border: 1px solid #fff; color: #fff; padding: 0px 5px 0px 5px; text-decoration: none;">-</a>
-			<a id="maxmize"
-				style="vertical-align: middle; border: 1px solid #fff; color: #fff; padding: 0px 5px 0px 5px; text-decoration: none;">+</a>
-			<a id="" title="{{}}"
-				style="vertical-align: middle; color: #fff; padding: 0px 5px 0px 5px; text-decoration: none;">{{
-				users.DSA.name}}</a> <a
-				style="float: right; padding-right: 10px; color: #fff;"
-				onclick="closeSocket();" id="btn_close">Close</a>
-		</div>
-		<div id="message_container">
-			<ul id="messages">
-			</ul>
-			<div id="input_message_container">
-				<form id="form_send_message" method="post" action="#">
-					<input type="text" id="input_message"
-						placeholder="Type your message here..." /> <input type="submit"
-						id="btn_send" onclick="send('');" value="Send" />
-					<div class="clear"></div>
-				</form>
-			</div>
-		</div>
-	</div> -->

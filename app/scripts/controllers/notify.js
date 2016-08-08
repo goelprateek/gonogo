@@ -671,6 +671,11 @@
             }catch(e){
 
             }
+            try{
+                $scope.foirAmount = $scope.objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT'].toFixed(2);
+            }catch(e){
+                 $scope.foirAmount = '';
+            }
             return response;
 			
 		}).then(function(data){
@@ -948,44 +953,50 @@ $scope.onchange = function(id) {
 }
 
     $scope.updateLosData = function(status){
-    	var losStat = status;
-        var losId = '';
-        var utr = '';
-        if($scope.objectSet.oLosDtls){
-            losId = $scope.objectSet.oLosDtls.sLosID;
-            utr = $scope.objectSet.oLosDtls.sUtr;
-        }
+        if($scope.objectSet.oAppReq.sRefID!=""){
+        	var losStat = status;
+            var losId = '';
+            var utr = '';
+            if($scope.objectSet.oLosDtls){
+                losId = $scope.objectSet.oLosDtls.sLosID;
+                utr = $scope.objectSet.oLosDtls.sUtr;
+            }
 
-        if((!$scope.utrVal && ( utr!=null && utr!='')) || ($scope.utrVal)){
-        	if((losId !=null && losId != "") && (losStat !=null && losStat !='')){
-        		 var jsondata=	 {
-    			    "sRefID":$scope.objectSet.sRefID,
-    			    "oHeader":{
-    			         "sAppID":$scope.objectSet.oAppReq.oHeader.sAppID,
-    			         "sInstID":user.institutionID,
-    			         "sSourceID":"WEB",
-    			         "sAppSource":"WEB",
-    			         "sReqType":"JSON",
-    			         "sCroId":user.id
-    			    },
-    			    "oLosDtls":{
-    			        "sLosID":losId,
-    			        "sStat":losStat,
-    			        "sUtr":utr
-    			    }
-    			};	 
-        		 
-        		RestService.saveToServer('update-los-details',jsondata).then(function(Response){
-        				if(Response.status == "SUCCESS"){
-                            notifier.logSuccess("LOS Status updated successfully");
-        					$scope.losIdval = true;
-                            $scope.utrVal = true;
-        				}else{
-                            notifier.logWarning("Sorry! We are unable to update your LOS Status");
-        				}
-        		 });
+            if((!$scope.utrVal && ( utr!=null && utr!='')) || ($scope.utrVal)){
+            	if((losId !=null && losId != "") && (losStat !=null && losStat !='')){
+            		 var jsondata=	 {
+        			    "sRefID":$scope.objectSet.oAppReq.sRefID,
+        			    "oHeader":{
+        			         "sAppID":$scope.objectSet.oAppReq.oHeader.sAppID,
+        			         "sInstID":user.institutionID,
+        			         "sSourceID":"WEB",
+        			         "sAppSource":"WEB",
+        			         "sReqType":"JSON",
+        			         "sCroId":user.id
+        			    },
+        			    "oLosDtls":{
+        			        "sLosID":losId,
+        			        "sStat":losStat,
+        			        "sUtr":utr
+        			    }
+        			};	 
+            		 
+            		RestService.saveToServer('update-los-details',jsondata).then(function(Response){
+            				if(Response.status == "SUCCESS"){
+                                notifier.logSuccess("LOS Status updated successfully");
+            					$scope.losIdval = true;
+                                $scope.utrVal = true;
+            				}else{
+                                notifier.logWarning("Sorry! We are unable to update your LOS Status");
+            				}
+            		 });
+            	}else{
+                     notifier.logWarning("Please provide LOS Data !");
+                }
         	}
-    	}
+        }else{
+            notifier.logWarning("Please select application from queue !");
+        }
     };
 	
     $scope.dobFormat = "dd/MM/yyyy";
@@ -1466,9 +1477,11 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
          RestService.saveToServer('update-image-status',json).then(function(Response){
                 if(Response.sStatus == "SUCCESS"){
                     backUpImgData[index].sStat = json.oUpldDtl.sStat;
-                     backUpImgData[index].sReason = json.oUpldDtl.sReason;
+                    backUpImgData[index].sReason = json.oUpldDtl.sReason;
+                    notifier.logSuccess("Image status has been updated Successfully !!");
                 }else{
                     $scope.slides[index].sStat = backUpImgData[index].sStat;
+                    notifier.logWarning("Sorry! Unable to update image status !");
                 }
         });
     }
@@ -1554,16 +1567,16 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
 }]),
 
 app.controller('ModalInstanceCtrl', ['$scope','$rootScope','NotificationObject','modalFeed',
-   '$uibModalInstance','$log', function($scope, $rootScope,NotificationObject,modalFeed,$uibModalInstance,$log){
+   '$uibModalInstance','$log','notifier', 
+   function($scope, $rootScope,NotificationObject,modalFeed,$uibModalInstance,$log,notifier){
    
     $scope.modalFeed = modalFeed;
-    $scope.approvemsg = false;
 
     $scope.saveApprvPanel = function () {
          if($scope.modalFeed.apprvRemark && $scope.modalFeed.apprvSubTo && modalFeed.approveAmt && modalFeed.emi && modalFeed.tenor){
             $uibModalInstance.close($scope.modalFeed);   
         } else {
-           $scope.approvemsg = true;
+           notifier.logWarning("Please provide all the fields !");
         }
     };
 
@@ -1584,19 +1597,19 @@ app.controller('scoreTreeCtr', ['$scope','$uibModalInstance','treeFeed',function
 }]);
 
 app.controller('DeclInstanceCtrl', ['$scope','$rootScope','NotificationObject',
-   '$uibModalInstance','dclnModelFeed', function($scope, $rootScope,NotificationObject,$uibModalInstance,dclnModelFeed){ 
+   '$uibModalInstance','dclnModelFeed','notifier', 
+   function($scope, $rootScope,NotificationObject,$uibModalInstance,dclnModelFeed,notifier){ 
        
     $scope.dclnModelFeed = dclnModelFeed;
-    $scope.errorMsg = false;
     $scope.saveDclnPanel = function () {
         if($scope.dclnModelFeed.dclnRemark !='' && $scope.dclnModelFeed.dclnRemark !=undefined){
             if($scope.dclnModelFeed.dclnSubTo !='' && $scope.dclnModelFeed.dclnSubTo !=undefined){
                 $uibModalInstance.close($scope.dclnModelFeed);        
             }else{
-                 $scope.errorMsg = true;     
+                   notifier.logWarning("Please provide Subject To !");   
             }
         }else{
-            $scope.errorMsg = true;
+            notifier.logWarning("Please provide Remark !"); 
         }
     };
     $scope.closeDclnPanel = function () {
@@ -1614,7 +1627,6 @@ app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
     $scope.ID = 0;
     $scope.tabIndex = undefined;
     $scope.contentSelect = false;
-    $scope.invalidMsg = false;
     $scope.docOfferFlag = true;
     $scope.holdModelFeed = holdModelFeed;
 
@@ -1703,13 +1715,10 @@ $scope.requestDoc = function () {
               }
             $uibModalInstance.close(arrayDesc);
         }else{
-            if($scope.invalidMsg){
-             $scope.invalidMsg = false;
-            }
-             notifier.logWarning("Please select atleast one required document!");
+             notifier.logWarning("Please select atleast one required document !");
         }      
      }else{
-         $scope.invalidMsg = true;
+         notifier.logWarning("Please enter your reason for Onhold !");
      }
 };
 
