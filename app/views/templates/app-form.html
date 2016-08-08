@@ -648,8 +648,13 @@
 				</div>
 				<div class="row clearfix">
 						<div class="col-md-3">
-							<label class="control-label">EMI </label> <input
-								ng-model="objectSet.aCroDec[0].dEmi" class="form-control" type="text" disabled="disabled">
+							<label class="control-label">EMI </label> 
+							<div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3">
+									<i class="fa fa-inr"></i>
+								</span>
+								<input ng-model="objectSet.aCroDec[0].dEmi" class="form-control" type="text" disabled="disabled">
+							</div>
 						</div>
 					    <div class="col-md-3">
 						 <label class="control-label"> Eligibility Remark</label> <input
@@ -657,9 +662,14 @@
 							disabled="disabled">
 					   </div>
 					   <div class="col-md-3">
-						 <label class="control-label">FOIR Adjusted Amount</label> <input
-							ng-model="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']" class="form-control" type="text"
-							 disabled="disabled">
+						 <label class="control-label">FOIR Adjusted Amount</label> 
+							 <div class="input-group input-group-md">
+								<span class="input-group-addon" id="sizing-addon3">
+									<i class="fa fa-inr"></i>
+								</span>
+								 <input ng-model="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']" class="form-control" type="text"
+									 disabled="disabled">
+							</div>
 					   </div>
 					   	<div class="col-md-3"  ng-repeat="decision in objectSet.oCompRes.scoringServiceResponse['DECISION_RESPONSE'].Details" ng-if="decision.Outcome!=' '">
 							<label class="control-label">Reason </label> <input

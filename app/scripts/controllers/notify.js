@@ -597,7 +597,6 @@
             $scope.invoiceNumber = false;
             $scope.isInvoiceAvailable = true;
             $scope.datefilter.date = '';
-            $scope.invoiceNum = "";//when received from server..this will variable get removed
             $scope.croDecision = response.aCroDec;
             $scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
 
@@ -628,7 +627,8 @@
             try{
                 if($scope.objectSet.oInvDtls){
                     if($scope.objectSet.oInvDtls.dtInv && $scope.objectSet.oInvDtls.sInvNumber){
-                         $scope.datefilter.date = $scope.objectSet.oInvDtls.dtInv;
+                        var Dateformat = moment($scope.objectSet.oInvDtls.dtInv).format('DD-MM-YYYY hh:mm:s');
+                         $scope.datefilter.date = Dateformat;
                          $scope.invoiceDate = true;
                          $scope.invoiceNumber = true;
                          $scope.isInvoiceAvailable = false;
@@ -884,7 +884,7 @@
             notifier.logWarning("An action is already taken for this application!!");
          }
 	  }else{
-        notifier.logWarning("Please select enquiry from Queue!!");
+        notifier.logWarning("Please select application from Queue !");
     }       
  }
 
@@ -901,7 +901,7 @@ function requestForStatus(json){
              notifier.logSuccess("Application is successfully "+json.sAppStat+""); 
         }
         else{
-            notifier.logWarning("Sorry...Unable to Approve your application !!");
+            notifier.logWarning("Unable to Approve your application !");
         }
     }); 
 }
@@ -917,8 +917,9 @@ function requestFordclnOnhold(json){
                     }  
               });
              notifier.logSuccess("Application is successfully "+json.sAppStat+""); 
-        } else{
-             notifier.logWarning("Sorry...Unable to update your action !!");
+        }
+        else{
+            notifier.logWarning("Unable to update your action !");
         }
     });
 }
@@ -947,7 +948,7 @@ $scope.onchange = function(id) {
         }
 }
 
-$scope.updateLosData = function(status){
+    $scope.updateLosData = function(status){
     	var losStat = status;
         var losId = '';
         var utr = '';
@@ -986,7 +987,7 @@ $scope.updateLosData = function(status){
         		 });
         	}
     	}
-   }
+    };
 	
     $scope.dobFormat = "dd/MM/yyyy";
     $scope.dobPopup = {
@@ -1281,7 +1282,7 @@ $scope.updateLosData = function(status){
                 });
             }
         }else{
-            notifier.logWarning("Please select application from queue!") ;
+            notifier.logWarning("Please select application from queue !") ;
         }
     };
 
@@ -1704,7 +1705,7 @@ $scope.requestDoc = function () {
             if($scope.invalidMsg){
              $scope.invalidMsg = false;
             }
-             notifier.logWarning("please select any doc from panel");
+             notifier.logWarning("please select any document from panel");
         }      
      }else{
          $scope.invalidMsg = true;
