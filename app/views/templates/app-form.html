@@ -41,7 +41,6 @@
 		<fieldset class="formfield" ng-if="!can('NCONTAINER')">
 		<legend> LOS Information</legend>
 
-		<a ng-if="applctnstatus.toLowerCase()==='approved'" ng-click="loadPDF()">View DO</a>
 		<div class="row clearfix">
 			<div class="col-md-3">
 				<label class="control-label">LOS ID</label> <input
@@ -84,7 +83,7 @@
 				type="text" ng-model="datefilter.date" options="datefilter.opts"  placeholder="Pick Date" 
 				 max="datefilter.opts.max" clearable="true" ng-disabled="invoiceDate"/>
 			</div>
-			<a ng-if="applctnstatus.toLowerCase()==='approved'" ng-click="loadPDF()">
+			<a ng-if="objectSet.oAppReq.sCurrentStageId=='PD_DE' && applctnstatus.toLowerCase()==='approved'" ng-click="loadPDF()">
 				<img title="View DO" src="images/do-view.png" class="img-do"/>
 			</a>
 		</div>
