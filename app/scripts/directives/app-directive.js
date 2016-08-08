@@ -213,14 +213,15 @@
                 template: '<i class="glyphicon glyphicon-fullscreen"></i>',
                 link: function(scope, el, attr) {
                     el.on('click', function() {
-                        var element = document.documentElement;
+                        var element = el.parents(".modal-content").find(".modal-body")[0];
+                        var angElelement=angular.element(element);
                         if (!$('body')
                             .hasClass("full-screen")) {
-
                             $('body')
                                 .addClass("full-screen");
                             $('#fullscreen-toggler')
                                 .addClass("active");
+                                angElelement.addClass("pdfExpand");
                             if (element.requestFullscreen) {
                                 element.requestFullscreen();
                             } else if (element.mozRequestFullScreen) {
@@ -232,7 +233,7 @@
                             }
 
                         } else {
-
+                        	 angElelement.removeClass("pdfExpand");
                             $('body').removeClass("full-screen");
                             el.removeClass("active");
 
