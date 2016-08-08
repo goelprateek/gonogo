@@ -18,7 +18,6 @@
 	                                     'gonogo.login',
 	                                     'gonogo.directives',
 	                                     'gonogo.cdl',
-	                                     'gonogo.services',
 	                                     'gonogo.utilities',
 	                                     'gonogo.commons',
 	                                     'gonogo.factories',
@@ -26,11 +25,8 @@
 	                                     'daterangepicker'	                                     
 	                                     ]);
 
-	app.controller("Maincontroller",['$scope', '$log', 'notifier' ,'Validation', '$timeout','RestService','$location','UserService','APP_CONST','AclService',function($scope, $log, notifier ,Validation, $timeout,RestService,$location,UserService,APP_CONST,AclService) {
+	app.controller("Maincontroller",['$scope', '$log', 'notifier' , '$timeout','RestService','$location','UserService','APP_CONST','AclService',function($scope, $log, notifier , $timeout,RestService,$location,UserService,APP_CONST,AclService) {
 
-		//$log.info("hello this first log");
-		//$log.debug("hello this first log");
-		//$log.error("hello this first log");
 
 		$scope.sobreUrl = APP_CONST.getConst('BASE_URL_SOBRE');
 
@@ -90,14 +86,7 @@
 		var emailantigo, passval, error = 0, InError = 0;
 		var actions;
 
-//		var IEversion = Validation.checkBrowser();
-//		if (IEversion.valid != true) {
-//			alert("Sorry we are not supporting Internet Explorer Version "+ IEversion.version
-//					+ " \n\n\tPlease Update Your Browser");
-//		}
-//		else {
-//			try {
-//				$scope.keyarr = localStorage.getItem('LOGID');
+
 			var currentUser=UserService.getCurrentUser();
 
 			if(!_.isUndefined(currentUser.id) )
@@ -118,14 +107,7 @@
 				$scope.userid = currentUser.userid;
 				$scope.color = currentUser.color;
 			}
-//			}catch (e) {
-//				$log.log(e);
-//			}
-
-			// if ($scope.InstitutionID == 4019 || $scope.InstitutionID == 4011) {
-			// 	$("#logo.img-responsive").css("padding", "1");
-			// }
-			//check authorization level of user
+			
 			$scope.authenticate=function(element){
 				return _.contains(actions,element);
 			};
@@ -752,10 +734,6 @@
 			                        	  value : "18"
 			                          } ];
 
-			//all_list();
-
-
-
 
 
 
@@ -814,27 +792,7 @@
 			}
 
 			$("#view_profile").click(function() {
-				/*$('div[contextmenu="blur"]').hide();
-				$("#UserContainer").show();
-				$http({
-					method : 'POST',
-					url : '/GoNoGoV3/api/GoNoGoV3/UserProfile',
-					params : {'userid' : $scope.userid,
-						'INSTITUTION_ID' : $scope.InstitutionID},
-						headers : {'Content-Type' : 'application/json'}
-				}).success(function(Response) 
-						{ if (Response.StatusCode == 101) 
-						{
-							$scope.Profile = Response.Data;
-							$scope.Profile.password = "password";
-							var states = getstates("#UserState",$scope.Profile.state);
-							$scope.error = "";
-						} else {
-							$scope.error = "The request failed due to an internal error.";
-						}
-						}).error(function(data) {
-							$scope.error = "System is under maintenance..Please try later";
-						});*/
+				
 			});
 
 			$(document.body).on("click", "#UserBack",function() {
@@ -842,10 +800,7 @@
 				$("#UserContainer").hide();
 			});
 
-			/*$(document.body).on("click", "#ref", function() {
-				all_list();
-			});*/
-
+			
 			function load_fromkyc()
 			{if($scope.InstitutionID == 4020)
 			{	 error = 0;
@@ -913,7 +868,6 @@
 						$('#error_head').text("KYC Information");
 
 					}else if (fieldsetn == 5) {
-
 						$('#error').text(" Please enter your current employment information for further processing");
 						$('#error_head').text("Employment Information");
 
@@ -925,44 +879,10 @@
 				$('#error').text("Now you can check your Loan application approval within 60 seconds.");
 				$('#error_head').text("Welcome To GoNoGo...");
 
-//				$('#right_progerssbar_div').hide();
-//				$('#result_panel').hide();
 
 				$('#btn_close').click(function() {
 					$('#chat_window').hide();
 				});
-
-				/*$('.mybtn').click(function(e){
-					$('.mybtn').toggleClass("btn-success","btn-default");
-					 if($(this).text()=='Reject'){
-						 $('#reason').show();
-					 }else{
-						 $('#reason').hide(); 
-					 }
-					 $scope.statusVal = $(this).text();
-					 e.stopImmediatePropagation();
-				});*/
-
-				/*$('.btn-default').click(function(){
-					 if($(this).text()=='Reject'){
-						 $('#reason').show();
-					 }else{
-						 $('#reason').hide(); 
-
-					 }
-
-				});*/
-
-				$('#minimize').click(function() {
-					$(this).parents('#chat_window').animate(
-							{height : '30px'},200);
-				});
-				$('#maxmize').click(function() {
-					$(this).parents('#chat_window')	.animate(
-							{height : '250px'},200);
-				});
-
-				$('#error').css("color", "red");
 
 
 				$('input').focusin(function() {
@@ -1080,7 +1000,6 @@
 						{ if (!(/^[a-zA-Z\s]+$/.test(val))) 
 						{	error = 1;
 						$(this).css("border","1px solid red");
-//						$('#error_head').text("");
 						$('#error').text("Please Enter only string value");
 						} else if ($(this).attr("name") == "Name") 
 						{ var words = $(this).val();
@@ -1088,7 +1007,6 @@
 						if (words.length < 2 || words[1] == "") 
 						{	error = 1;
 						$(this).css("border","1px solid red");
-//						$('#error_head').text("");
 						$('#error').text("Applicant name should have atleast first name and Last name");
 						} else if (words.length >= 2 || words[1] != "") {
 							error = 0;
@@ -1101,11 +1019,10 @@
 							$(this).css("border","1px solid green");
 						}
 						} else if ($(this).attr("name") == "Mobile") 
-						{ //e.keyCode 40 for key down by piyush
+						{ 
 							if (!/^[0-9\d]+$/.test($(this).val())) 
 							{	error = 1;
 							$(this).css("border","1px solid red");
-//							$('#error_head').text("");
 							$('#error').text("Please Enter only Numeric value");
 							return false;						
 							}else if (!/^[7-9]{1}/.test(val)) 
@@ -1115,7 +1032,6 @@
 							} else if (!/^[7-9]{1}[0-9]{9}$/.test(val)) 
 							{	error = 1;
 							$(this).css("border","1px solid red");
-//							$('#error_head').text("");
 							$('#error').text("Please enter 10 digit valid mobile number.");
 							} else {
 								$('#error_head,#error').text("");
@@ -1162,13 +1078,11 @@
 							if(/^[0-9,\d]+$/.test(val)) 
 							{	error = 1;
 							$(this).css("border","1px solid green");
-//							$('#error_head').text("");
 							$('#error_head,#error').text("");
 							}
 							else{
 								error = 0;
 								$(this).css("border","1px solid red");	
-//								$('#error_head').text("");
 								$('#error').text("Please Enter only Numeric value");
 								return false;
 							}
@@ -1181,7 +1095,6 @@
 							} else {
 								error = 0;
 								$(this).css("border","1px solid green");
-//								$('#error_head').text("");
 								$('#error_head,#error').text("");
 							}
 						}
@@ -1199,7 +1112,6 @@
 					});
 				}
 
-				//<!-------------------cursor move to next an prev OTP------------------------->
 				$('input[type="password"]').keyup(function(e) {
 					if (e.keyCode != 8) {
 						$(this).next().focus();
@@ -1226,7 +1138,6 @@
 					location.reload();
 				});
 			});
-		//} //end of detect version
 
 		$(document.body).on('change','select[id="select_employment"]',
 				function() {
@@ -1243,7 +1154,6 @@
 			url=url.split("/");
 			var dflt=url.length - 1
 			var option = url[dflt];
-			//		$("."+dflt)
 			switch(option){
 			case "dmiapplication":
 				$("#applicationSpeech").addClass("appbubble");
@@ -1269,9 +1179,7 @@
 		$(document.body).on("click",".checkIt",function()
 				{
 			console.log("check css");
-//			$(".checkIt").toggleClass("bubble");
 			var option = $(this).attr("id");
-//			console.log("Getting from url="+url[url.length - 1]);
 			console.log("option="+option);
 			switch(option)
 			{
