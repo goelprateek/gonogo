@@ -1627,7 +1627,7 @@ app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
      });
 
       $scope.isCurrTab = function(index){
-        if((index === 0 && $scope.tabIndex ) || index === $scope.tabIndex){
+        if((index === 0 && $scope.tabIndex=== undefined ) || index === $scope.tabIndex){
             return true;
         }
     }
@@ -1706,7 +1706,7 @@ $scope.requestDoc = function () {
             if($scope.invalidMsg){
              $scope.invalidMsg = false;
             }
-             notifier.logWarning("please select any document from panel");
+             notifier.logWarning("Please select atleast one required document!");
         }      
      }else{
          $scope.invalidMsg = true;
