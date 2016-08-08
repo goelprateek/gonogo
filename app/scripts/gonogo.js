@@ -86,7 +86,7 @@
 		var actions;
 
 
-			var currentUser=UserService.getCurrentUser();
+			var currentUser = UserService.getCurrentUser();
 
 			if(currentUser.id){
 				if(currentUser.actions && currentUser.actions.length != 0){ 
