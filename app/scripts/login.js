@@ -101,7 +101,7 @@
 						UserService.persistDataTolocalStorage('ACTIONS', btoa(JSON.stringify(data.ACTION)))
 
 						if (data.ACTION) {
-							router(data.ROLES[0]);
+							router(data.ROLES);
 						}
 					} else {
 						$scope.alert = "Sorry ! User Details are not availeble.\n Please contact system admin";
