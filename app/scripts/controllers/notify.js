@@ -1573,7 +1573,7 @@ app.controller('ModalInstanceCtrl', ['$scope','$rootScope','NotificationObject',
     $scope.modalFeed = modalFeed;
 
     $scope.saveApprvPanel = function () {
-         if($scope.modalFeed.apprvRemark && $scope.modalFeed.apprvSubTo && modalFeed.approveAmt && modalFeed.emi && modalFeed.tenor){
+         if($scope.modalFeed.apprvRemark && $scope.modalFeed.apprvSubTo && $scope.modalFeed.approveAmt && ($scope.modalFeed.emi || $scope.modalFeed.emi === 0) && ($scope.modalFeed.tenor || $scope.modalFeed.tenor === 0)){
             $uibModalInstance.close($scope.modalFeed);   
         } else {
            notifier.logWarning("Please provide all the fields !");
