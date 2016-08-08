@@ -109,17 +109,6 @@
 				return _.contains(actions,element);
 			};
 
-
-
-
-
-
-			
-
-			
-			
-
-
 			function change_header() {
 				
 
@@ -153,11 +142,6 @@
 			$(document).ready(function() {
 				$('#error').text("Now you can check your Loan application approval within 60 seconds.");
 				$('#error_head').text("Welcome To GoNoGo...");
-
-
-				$('#btn_close').click(function() {
-					$('#chat_window').hide();
-				});
 
 
 				$('input').focusin(function() {
@@ -255,123 +239,6 @@
 						} else if ($(this).attr("name") == "Location") {
 							$('#error').text("Please Enter Project location");
 							$('#error_head').text("Project location");
-						}
-					}
-				});
-
-				$(document.body).on("keyup",'input',function(e) {
-					if ($(this).attr("id") != "appno") 
-					{
-						$('#error_head').text($(this).attr("name"));
-						var val = $(this).val();
-						if (($(this).attr("name") == "Name")
-								||($(this).attr("name") == "Project")
-								|| ($(this).attr("name") == "Location")
-								|| ($(this).attr("name") == "Employer")
-								|| ($(this).attr("name") == "Company Name")
-								|| ($(this).attr("name") == "Property Address")
-								|| ($(this).attr("name") == "Property Name")
-								|| ($(this).attr("name") == "Property Location")) 
-						{ if (!(/^[a-zA-Z\s]+$/.test(val))) 
-						{	error = 1;
-						$(this).css("border","1px solid red");
-						$('#error').text("Please Enter only string value");
-						} else if ($(this).attr("name") == "Name") 
-						{ var words = $(this).val();
-						words = words.split(" ");
-						if (words.length < 2 || words[1] == "") 
-						{	error = 1;
-						$(this).css("border","1px solid red");
-						$('#error').text("Applicant name should have atleast first name and Last name");
-						} else if (words.length >= 2 || words[1] != "") {
-							error = 0;
-							$('#error_head,#error').text("");
-							$(this).css("border","1px solid green");
-						}
-						} else {
-							error = 0;
-							$('#error_head,#error').text("");
-							$(this).css("border","1px solid green");
-						}
-						} else if ($(this).attr("name") == "Mobile") 
-						{ 
-							if (!/^[0-9\d]+$/.test($(this).val())) 
-							{	error = 1;
-							$(this).css("border","1px solid red");
-							$('#error').text("Please Enter only Numeric value");
-							return false;						
-							}else if (!/^[7-9]{1}/.test(val)) 
-							{  error = 1;
-							$(this).css("border","1px solid red");
-							$('#error').text("First digit should be within 7,8,9");
-							} else if (!/^[7-9]{1}[0-9]{9}$/.test(val)) 
-							{	error = 1;
-							$(this).css("border","1px solid red");
-							$('#error').text("Please enter 10 digit valid mobile number.");
-							} else {
-								$('#error_head,#error').text("");
-								error = 0;
-								$(this).css("border","1px solid green");
-							}
-						} else if (($(this).attr("name") == "OTP")) 
-						{	if (!/^[0-9]/.test(val)) {
-							error = 1;
-							$(this).css("border","1px solid red");
-						} else {
-							error = 0;
-							$('#error_head,#error').text("");
-							$(this).css("border","1px solid green");
-						}
-						}
-						else if (($(this).attr("name") == "Email")) {
-							if (!(/^[A-Za-z0-9._]+@[A-Za-z]+\.[a-z]{2,4}$/.test(val))) {
-								error = 1;
-								$(this).css("border","1px solid red");
-								$('#error').text("Please Enter Valid Email ID");
-							} else {
-								error = 0;
-								$('#error_head,#error').text("");
-								$(this).css("border","1px solid green");
-							}
-						}else if( ($(this).attr("name")=="Amount")
-								|| ($(this).attr("name")=="Time With This Employee") 
-								|| ($(this).attr("name")=="Time at This Address") 
-								|| ($(this).attr("name")=="Gross Annual") 
-								|| ($(this).attr("name")=="Current EMI") 
-								|| ($(this).attr("name")=="last month take home") 
-								|| ($(this).attr("name")=="last to Last month take home")
-								||($(this).attr("name")=="Property Value")
-								||($(this).attr("name")=="Age of Property")
-								||($(this).attr("name")=="Loan Amount")
-								||($(this).attr("name")=="Loan Tenor")
-								||($(this).attr("name")=="Existing EMI")
-								||($(this).attr("name")=="Loan Amount")
-								||($(this).attr("name")=="Annual TurnOver")
-								||($(this).attr("name")=="Last year PBT")
-								||($(this).attr("name")=="Last month take home")) 
-						{			    	
-							if(/^[0-9,\d]+$/.test(val)) 
-							{	error = 1;
-							$(this).css("border","1px solid green");
-							$('#error_head,#error').text("");
-							}
-							else{
-								error = 0;
-								$(this).css("border","1px solid red");	
-								$('#error').text("Please Enter only Numeric value");
-								return false;
-							}
-						}
-						else if (($(this).attr("name") == "PinCode")) {
-							if (!(/^[0-9]{6}$/.test(val))) {
-								error = 1;
-								$(this).css("border","1px solid red");
-								$('#error').text("Please Enter valid 6 digit Pin Code");
-							} else {
-								error = 0;
-								$(this).css("border","1px solid green");
-								$('#error_head,#error').text("");
-							}
 						}
 					}
 				});
