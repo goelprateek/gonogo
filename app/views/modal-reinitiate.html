@@ -37,76 +37,9 @@ tags-input .tags .tag-item{
 tags-input .host{
 	margin-top:0px;
 }
-/*
-.modal.in{
-    -webkit-filter: blur(2px);
-    -moz-filter: blur(2px);
-    -o-filter: blur(2px);
-    -ms-filter: blur(2px);
-    filter: blur(2px);
-}
 
-.modal-dialog{
-    -webkit-filter: blur(0px);
-    -moz-filter: blur(0px);
-    -o-filter: blur(0px);
-    -ms-filter: blur(0px);
-    filter: blur(0px);
-}*/
 </style>
-<!-- <div style="overflow: hidden;">
-	<div class="col-md-12" style="overflow: hidden;text-align:center; padding: 20px;">
-		<div style="display:inline-block;">
-		<a href ng-click="setTab(0)" ng-style="getTabStyle(0)"	class="reinitiate-tab-head">Dedupe</a>
-		</div>
-		<div style="display:inline-block;">
-		<a href ng-click="setTab(1)" ng-style="getTabStyle(1)" class="reinitiate-tab-head">KYC</a>
-		</div>
-		<div style="display:inline-block;">
-		<a href ng-click="setTab(2)" ng-style="getTabStyle(2)" class="reinitiate-tab-head">MB</a>
-		</div>
-		<div style="display:inline-block;">
-		<a href ng-click="setTab(3)" ng-style="getTabStyle(3)" class="reinitiate-tab-head">SOBRE</a>
-		</div>
-	</div>
-	<div class="col-md-12" style="text-align:center;margin: 50px 0px;padding:10px;">
-		<div ng-show="isSet(0)">
-			<label ng-style="getOptionStyle(0)" class="lbl-reinitiate" ng-click="addTag('Dedupe',301)">
-				Dedupe
-			</label>
-			<label ng-style="getOptionStyle(0)" class="lbl-reinitiate" ng-click="addTag('NegativePinCode',302)">
-				Negative Pin Code
-			</label>
-		</div>
-		<div ng-show="isSet(1)">
-			<label ng-style="getOptionStyle(1)" class="lbl-reinitiate" ng-click="addTag('PAN',201)">
-				PAN
-			</label>
-			<label ng-style="getOptionStyle(1)" class="lbl-reinitiate" ng-click="addTag('Addhaar',202)">
-				Addhaar
-			</label>
-		</div>
-		<div ng-show="isSet(2)">
-			<label ng-style="getOptionStyle(2)" class="lbl-reinitiate" ng-click="addTag('Cibil',101)">
-				Cibil
-			</label>
-		</div>
-		<div ng-show="isSet(3)">
-			<label ng-style="getOptionStyle(3)" class="lbl-reinitiate" ng-click="addTag('Verification',401)">
-				Verification Scoring
-			</label>
-			<label ng-style="getOptionStyle(3)" class="lbl-reinitiate" ng-click="addTag('Application',402)">
-				Application Scoring
-			</label>
-		</div>
-	</div>
-	<div class="col-md-12" style="overflow: hidden;border-top: #417ac7 1px solid;padding:10px;">
-		<div class="col-md-10">
-			<tags-input ng-model="tags"></tags-input>
-		</div>
-		<button class="col-md-2 btn-reinitiate" ng-click="reinitiateForm()">Reinitiate</button>
-	</div>
-</div> -->
+
 <div class="modal-header">
     <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
     <h3 class="modal-title">Reinitiate application</h3>

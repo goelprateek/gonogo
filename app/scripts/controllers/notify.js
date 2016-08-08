@@ -323,9 +323,9 @@
 	
     });
 
-	app.controller('NotifController', ['$scope','$rootScope', '$interval','Validation','$filter',
+	app.controller('NotifController', ['$scope','$rootScope', '$interval','$filter',
 								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log','notifier',
-                                function($scope, $rootScope, $interval,Validation,$filter,RestService,NotificationObject,UserService,AclService,
+                                function($scope, $rootScope, $interval,$filter,RestService,NotificationObject,UserService,AclService,
                                     $uibModal,SelectArrays,$log,notifier){
 
 	var user=UserService.getCurrentUser();
@@ -541,8 +541,8 @@
                         });
     }
 
-	$scope.load_details = function(CustID,dedupeflag,applicationRequestType)
-	{
+	$scope.load_details = function(CustID,dedupeflag,applicationRequestType){
+
         $scope.currentApplicationFormRefID=CustID;
 
         $scope.isUpdating=false;        
@@ -724,45 +724,45 @@
                 $scope.rejectImgFromServer = rejectImgFromServer;
             }
         });
- }
+    }
 
-$scope.newApplication = function(){ 
-	if(AclService.can('NCROQUE')){
-	   $scope.container = false;
-	}		
-}
+    $scope.newApplication = function(){ 
+    	if(AclService.can('NCROQUE')){
+    	   $scope.container = false;
+    	}		
+    }
 
 
-$scope.toggleForm= function(){
-	$scope.container = !$scope.container;
-}
+    $scope.toggleForm= function(){
+    	$scope.container = !$scope.container;
+    }
 
-$scope.scoreTree = function(){
-    var modalInstance = $uibModal.open({
-              templateUrl: 'views/templates/score-tree.html',
-              controller: 'scoreTreeCtr',
-              size: 'lg',
-              resolve:{
-                treeFeed : function (){
-                    var scoreTree;
-                    return scoreTree = {
-                        treeData : $scope.objectSet.oCompRes.scoringServiceResponse.SCORE_TREE,
-                        custName : $scope.name,
-                        custRefId :$scope.objectSet.oAppReq.sRefID
+    $scope.scoreTree = function(){
+            var modalInstance = $uibModal.open({
+                  templateUrl: 'views/templates/score-tree.html',
+                  controller: 'scoreTreeCtr',
+                  size: 'lg',
+                  resolve:{
+                    treeFeed : function (){
+                        var scoreTree;
+                        return scoreTree = {
+                            treeData : $scope.objectSet.oCompRes.scoringServiceResponse.SCORE_TREE,
+                            custName : $scope.name,
+                            custRefId :$scope.objectSet.oAppReq.sRefID
+                        }
                     }
-                }
-              }
+                  }
             });
     }
 	
-$scope.cro_action = function(refID, action){ 
-    $scope.isAllImgApprove = true;
-     _.each($scope.imageDataArray,function(val){
-        if(val.sStat != "Approve"){
-           $scope.isAllImgApprove = false;
-           return;
-        }
-    });
+    $scope.cro_action = function(refID, action){ 
+        $scope.isAllImgApprove = true;
+         _.each($scope.imageDataArray,function(val){
+            if(val.sStat != "Approve"){
+               $scope.isAllImgApprove = false;
+               return;
+            }
+        });
 
 		if(refID !== ""){
             if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!AclService.can('NCROQUE'))){
@@ -886,13 +886,13 @@ $scope.cro_action = function(refID, action){
 	  }else{
         notifier.logWarning("Please select application from Queue !");
     }       
-}
+ }
 
 function requestForStatus(json){
-    var URL = 'cro-approval';
-    RestService.saveToServer(URL,json).then(function(Response){
-        if(Response.status == "OK UPDATE SUCCESSFULLY")                     
-        {
+    
+    RestService.saveToServer('cro-approval',json).then(function(Response){
+        
+        if(Response.status == "OK UPDATE SUCCESSFULLY"){
           _.each($scope.notifarray,function(value,key){
                         if($scope.notifarray[key].sRefID == $scope.objectSet.oAppReq.sRefID){
                             return($scope.notifarray[key].sStat = json.sAppStat);
@@ -907,10 +907,10 @@ function requestForStatus(json){
 }
 
 function requestFordclnOnhold(json){
-    var URL='cro-onhold';
-    RestService.saveToServer(URL,json).then(function(Response){
-        if(Response.status == "OK UPDATE SUCCESSFULLY")                     
-        {
+    
+    RestService.saveToServer('cro-onhold',json).then(function(Response){
+        
+        if(Response.status == "OK UPDATE SUCCESSFULLY")                     {
               _.each($scope.notifarray,function(value,key){
                     if($scope.notifarray[key].sRefID ==  $scope.objectSet.oAppReq.sRefID){
                         return($scope.notifarray[key].sStat = json.sAppStat);
@@ -938,55 +938,58 @@ $scope.losStatusChange=function(status){
 
 $scope.onchange = function(id) {
         $scope.backUpDefaultRefId.push($scope.objectSet);
-        if(id!='Select'){
+        
+        if(id != 'Select'){
              $scope.load_details(id,false);
         }else{
+
             $scope.defaultRefId= $scope.backUpDefaultRefId[0].oAppReq.sRefID;
             $scope.load_details($scope.defaultRefId,true);
         }
 }
 
-$scope.updateLosData = function(status){
-	var losStat = status;
-    var losId = '';
-     var utr = '';
-    if($scope.objectSet.oLosDtls){
-        losId = $scope.objectSet.oLosDtls.sLosID;
-        utr = $scope.objectSet.oLosDtls.sUtr;
-    }
+    $scope.updateLosData = function(status){
+    	var losStat = status;
+        var losId = '';
+        var utr = '';
+        if($scope.objectSet.oLosDtls){
+            losId = $scope.objectSet.oLosDtls.sLosID;
+            utr = $scope.objectSet.oLosDtls.sUtr;
+        }
 
-    if((!$scope.utrVal && ( utr!=null && utr!='')) || ($scope.utrVal)){
-    	if((losId !=null && losId != "") && (losStat !=null && losStat !='')){
-    		 var jsondata=	 {
-			    "sRefID":$scope.objectSet.sRefID,
-			    "oHeader":{
-			         "sAppID":$scope.objectSet.oAppReq.oHeader.sAppID,
-			         "sInstID":user.institutionID,
-			         "sSourceID":"WEB",
-			         "sAppSource":"WEB",
-			         "sReqType":"JSON",
-			         "sCroId":user.id
-			    },
-			    "oLosDtls":{
-			        "sLosID":losId,
-			        "sStat":losStat,
-			        "sUtr":utr
-			    }
-			};	 
-    		 
-    		RestService.saveToServer('update-los-details',jsondata).then(function(Response){
-    				if(Response.status == "SUCCESS"){
-                        notifier.logSuccess("LOS Status updated successfully");
-    					$scope.losIdval = true;
-                        $scope.utrVal = true;
-    				}else{
-                        notifier.logWarning("We are unable to update your LOS Status");
-    				}
-    		 });
+        if((!$scope.utrVal && ( utr!=null && utr!='')) || ($scope.utrVal)){
+        	if((losId !=null && losId != "") && (losStat !=null && losStat !='')){
+        		 var jsondata=	 {
+    			    "sRefID":$scope.objectSet.sRefID,
+    			    "oHeader":{
+    			         "sAppID":$scope.objectSet.oAppReq.oHeader.sAppID,
+    			         "sInstID":user.institutionID,
+    			         "sSourceID":"WEB",
+    			         "sAppSource":"WEB",
+    			         "sReqType":"JSON",
+    			         "sCroId":user.id
+    			    },
+    			    "oLosDtls":{
+    			        "sLosID":losId,
+    			        "sStat":losStat,
+    			        "sUtr":utr
+    			    }
+    			};	 
+        		 
+        		RestService.saveToServer('update-los-details',jsondata).then(function(Response){
+        				if(Response.status == "SUCCESS"){
+                            notifier.logSuccess("LOS Status updated successfully");
+        					$scope.losIdval = true;
+                            $scope.utrVal = true;
+        				}else{
+                            notifier.logWarning("Sorry! We are unable to update your LOS Status");
+        				}
+        		 });
+        	}
     	}
-	}
-}
-	$scope.dobFormat = "dd/MM/yyyy";
+    };
+	
+    $scope.dobFormat = "dd/MM/yyyy";
     $scope.dobPopup = {
         opened: false
     };
@@ -1014,7 +1017,7 @@ $scope.updateLosData = function(status){
     };
 
     $scope.enableForm=function(){
-        if($scope.objectSet.iNoReTry>=2){
+        if($scope.objectSet.iNoReTry >= 2){
                 notifier.logWarning("This application is already re-initiated twice") ;
         }else{
             $scope.fieldsUpdated={
@@ -1103,7 +1106,7 @@ $scope.updateLosData = function(status){
     };
 
     $scope.updateForm=function(){
-        if($scope.objectSet.iNoReTry>=2){
+        if($scope.objectSet.iNoReTry >= 2){
             notifier.logWarning("This application is already re-initiated twice");
         }else{
             if($scope.isUpdating){
@@ -1242,7 +1245,6 @@ $scope.updateLosData = function(status){
                  },
                  'show.daterangepicker' : function(ev , picker){
                      $scope.datefilter.date.startDate = undefined;
-                     $scope.datefilter.date.startDate = moment();
                  },
                  'hide.daterangepicker': function(ev,picker){
                      //TODO hide picker;
