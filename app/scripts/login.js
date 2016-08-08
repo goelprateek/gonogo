@@ -101,7 +101,7 @@
 						UserService.persistDataTolocalStorage('ACTIONS', btoa(JSON.stringify(data.ACTION)))
 
 						if (data.ACTION) {
-							router(data.ROLES);
+							router(data.ROLES[0]);
 						}
 					} else {
 						$scope.alert = "Sorry ! User Details are not availeble.\n Please contact system admin";
@@ -120,11 +120,11 @@
 		// action contains {APPLICATION,NOTIFICATION}
 
 		function router(role) {
-			if(_.contains(role, 'DSA')) {
+			if(role.indexOf("DSA")!=-1) {
 
 				$(location).attr('href', '#/cdl/dealer');
 
-			}else if (_.contains(role,'CRO')) {	
+			}else if (role.indexOf("CRO")!=-1) {	
 
 				$(location).attr('href', '#/hdbfsnotification');
 
