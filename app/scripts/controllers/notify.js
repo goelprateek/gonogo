@@ -671,6 +671,11 @@
             }catch(e){
 
             }
+            try{
+                $scope.foirAmount = $scope.objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT'].toFixed(2);
+            }catch(e){
+                 $scope.foirAmount = '';
+            }
             return response;
 			
 		}).then(function(data){
@@ -1554,16 +1559,16 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
 }]),
 
 app.controller('ModalInstanceCtrl', ['$scope','$rootScope','NotificationObject','modalFeed',
-   '$uibModalInstance','$log', function($scope, $rootScope,NotificationObject,modalFeed,$uibModalInstance,$log){
+   '$uibModalInstance','$log','notifier', 
+   function($scope, $rootScope,NotificationObject,modalFeed,$uibModalInstance,$log,notifier){
    
     $scope.modalFeed = modalFeed;
-    $scope.approvemsg = false;
 
     $scope.saveApprvPanel = function () {
          if($scope.modalFeed.apprvRemark && $scope.modalFeed.apprvSubTo && modalFeed.approveAmt && modalFeed.emi && modalFeed.tenor){
             $uibModalInstance.close($scope.modalFeed);   
         } else {
-           $scope.approvemsg = true;
+           notifier.logWarning("Please provide all the fields !");
         }
     };
 
@@ -1584,19 +1589,19 @@ app.controller('scoreTreeCtr', ['$scope','$uibModalInstance','treeFeed',function
 }]);
 
 app.controller('DeclInstanceCtrl', ['$scope','$rootScope','NotificationObject',
-   '$uibModalInstance','dclnModelFeed', function($scope, $rootScope,NotificationObject,$uibModalInstance,dclnModelFeed){ 
+   '$uibModalInstance','dclnModelFeed','notifier', 
+   function($scope, $rootScope,NotificationObject,$uibModalInstance,dclnModelFeed,notifier){ 
        
     $scope.dclnModelFeed = dclnModelFeed;
-    $scope.errorMsg = false;
     $scope.saveDclnPanel = function () {
         if($scope.dclnModelFeed.dclnRemark !='' && $scope.dclnModelFeed.dclnRemark !=undefined){
             if($scope.dclnModelFeed.dclnSubTo !='' && $scope.dclnModelFeed.dclnSubTo !=undefined){
                 $uibModalInstance.close($scope.dclnModelFeed);        
             }else{
-                 $scope.errorMsg = true;     
+                   notifier.logWarning("Please provide Subject To !");   
             }
         }else{
-            $scope.errorMsg = true;
+            notifier.logWarning("Please provide Remark !"); 
         }
     };
     $scope.closeDclnPanel = function () {
@@ -1614,7 +1619,6 @@ app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
     $scope.ID = 0;
     $scope.tabIndex = undefined;
     $scope.contentSelect = false;
-    $scope.invalidMsg = false;
     $scope.docOfferFlag = true;
     $scope.holdModelFeed = holdModelFeed;
 
@@ -1703,13 +1707,10 @@ $scope.requestDoc = function () {
               }
             $uibModalInstance.close(arrayDesc);
         }else{
-            if($scope.invalidMsg){
-             $scope.invalidMsg = false;
-            }
-             notifier.logWarning("Please select atleast one required document!");
+             notifier.logWarning("Please select atleast one required document !");
         }      
      }else{
-         $scope.invalidMsg = true;
+         notifier.logWarning("Please enter your reason for Onhold !");
      }
 };
 
