@@ -471,7 +471,6 @@
 				URL = 'cro2-queue'; // Only CRO2
 			}
 
-           
 			RestService.fetchDataQuietly(URL,$scope.json).then(function(data){
 				
                 if(!_.isNull(data) || !_.isUndefined(data)){
@@ -884,7 +883,7 @@
             notifier.logWarning("An action is already taken for this application!!");
          }
 	  }else{
-        notifier.logWarning("Please select enquiry from Queue!!");
+        notifier.logWarning("Please select application from Queue !");
     }       
  }
 
@@ -901,7 +900,7 @@ function requestForStatus(json){
              notifier.logSuccess("Application is successfully "+json.sAppStat+""); 
         }
         else{
-            notifier.logWarning("Sorry...Unable to Approve your application !!");
+            notifier.logWarning("Unable to Approve your application !");
         }
     }); 
 }
@@ -917,8 +916,9 @@ function requestFordclnOnhold(json){
                     }  
               });
              notifier.logSuccess("Application is successfully "+json.sAppStat+""); 
-        } else{
-             notifier.logWarning("Sorry...Unable to update your action !!");
+        }
+        else{
+            notifier.logWarning("Unable to update your action !");
         }
     });
 }
@@ -947,7 +947,7 @@ $scope.onchange = function(id) {
         }
 }
 
-$scope.updateLosData = function(status){
+    $scope.updateLosData = function(status){
     	var losStat = status;
         var losId = '';
         var utr = '';
@@ -986,7 +986,7 @@ $scope.updateLosData = function(status){
         		 });
         	}
     	}
-   }
+    };
 	
     $scope.dobFormat = "dd/MM/yyyy";
     $scope.dobPopup = {
@@ -1281,7 +1281,7 @@ $scope.updateLosData = function(status){
                 });
             }
         }else{
-            notifier.logWarning("Please select application from queue!") ;
+            notifier.logWarning("Please select application from queue !") ;
         }
     };
 
@@ -1303,9 +1303,7 @@ $scope.updateLosData = function(status){
             refID:$scope.currentApplicationFormRefIDssss,
             dtDateTime:new Date().getTime()
         };
-        
-        
-        
+
         RestService.saveToServer('get-post-ipa',JSON.stringify(postIPARequest)).then(function(response){
             if(response){        
                 postIPARequest.opostIPA=response;
@@ -1313,8 +1311,12 @@ $scope.updateLosData = function(status){
                 RestService.saveToServer("get-pdf-ref",JSON.stringify(postIPARequest)).then(function(response){
                     if(response){
                         $scope.shwPDFModal('lg',response);
+                    }else{
+                        notifier.logWarning("We are unable to load DO for this application") ;
                     }
                 });
+            }else{
+                notifier.logWarning("We are unable to load DO for this application") ;
             }
         });
     };

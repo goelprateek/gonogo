@@ -5,8 +5,6 @@
 
 	var app = angular.module('gonogo.factories',[]);
 
-	/*var app  = app.module("app.ui.metadata",[]);*/
-	
 	app.factory("timeataddress",function(){
 		var timeataddress;
 		return timeataddress = [ { value: 'select', name: 'Select Time @ address'},
