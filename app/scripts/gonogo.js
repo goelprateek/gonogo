@@ -25,8 +25,8 @@
 	                                     'daterangepicker'	                                     
 	                                     ]);
 
-	app.controller("Maincontroller",['$scope', '$log', 'notifier' , '$timeout','RestService','$location','UserService','APP_CONST','AclService',function($scope, $log, notifier , $timeout,RestService,$location,UserService,APP_CONST,AclService) {
-
+	app.controller("Maincontroller",['$scope', '$log', 'notifier' , '$timeout','RestService','$location','UserService','APP_CONST','AclService',
+		function($scope, $log, notifier , $timeout,RestService,$location,UserService,APP_CONST,AclService) {
 
 
 		$scope.$on('onSuccessfulLogin', function (event, args) {
@@ -80,33 +80,23 @@
 			$location.path(APP_CONST.getConst('APP_CONTEXT'));
 		};
 
-		var current_fs, next_fs, previous_fs;
-		var left, opacity, scale, animating, fieldsetn = 1;
-		var emailantigo, passval, error = 0, InError = 0;
-		var actions;
+		var currentUser = UserService.getCurrentUser();
 
-
-			var currentUser = UserService.getCurrentUser();
-
-			if(currentUser.id){
-				if(currentUser.actions && currentUser.actions.length != 0){ 
-					$scope.app=_.contains(currentUser.actions,'APPLICATION' );
-					$scope.notif=_.contains(currentUser.actions,'NOTIFICATION');
-					$scope.policy=_.contains(currentUser.actions,'POLICY' );
-					$scope.analytics=_.contains(currentUser.actions,'ANALYTCS');
-				}
-
-				$scope.username = currentUser.username;
-				$scope.useremail = currentUser.useremail;
-				$scope.image = currentUser.image;	
-				$scope.instImage = currentUser.instImage;
-				$scope.InstitutionID = currentUser.institutionID;
-				$scope.userid = currentUser.userid;
-				$scope.color = currentUser.color;
+		if(currentUser.id){
+			if(currentUser.actions && currentUser.actions.length != 0){ 
+				$scope.app=_.contains(currentUser.actions,'APPLICATION' );
+				$scope.notif=_.contains(currentUser.actions,'NOTIFICATION');
+				$scope.policy=_.contains(currentUser.actions,'POLICY' );
+				$scope.analytics=_.contains(currentUser.actions,'ANALYTCS');
 			}
-			
-			$scope.authenticate=function(element){
-				return _.contains(actions,element);
-			};
+
+			$scope.username = currentUser.username;
+			$scope.useremail = currentUser.useremail;
+			$scope.image = currentUser.image;	
+			$scope.instImage = currentUser.instImage;
+			$scope.InstitutionID = currentUser.institutionID;
+			$scope.userid = currentUser.userid;
+			$scope.color = currentUser.color;
+		}
 	}]);
 }).call(this)

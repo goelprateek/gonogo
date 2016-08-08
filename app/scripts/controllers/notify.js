@@ -332,8 +332,6 @@
     
     $scope.can=AclService.can;
 
-    $scope.showReinitiate=true;
-
     if(user.id){
         $scope.$emit('onSuccessfulLogin');
     }
@@ -344,13 +342,10 @@
     }
 
     $scope.selectResidence = SelectArrays.getResidenceTypes();
+    $scope.objectSet = NotificationObject.dummy;
 
     $scope.isUpdating = false;
-
-
-    $scope.objectSet = NotificationObject.dummy;
-	  
-
+    $scope.showReinitiate=true;	  
 	$scope.container = true;
     $scope.isDedupeSelected = true;
     $scope.isImg = true;
@@ -381,6 +376,8 @@
 	$scope.countSelected="Select";
 	
     //FIXME
+    //sayali if this action is present then show onhold panel otherwise directly on click of onhold ,onhold 
+    //the application
     var offersAllowed = AclService.can('NOFRS');
 
 	$rootScope.template ="notification";

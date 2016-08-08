@@ -2,7 +2,7 @@
 	
 	'use strict';
 	
-	var app = angular.module('gonogo.analytics' ,['gonogo-directives','dndLists','ui.slimscroll','ngMaterial','daterangepicker']);
+	var app = angular.module('gonogo.analytics' ,['gonogo-directives','dndLists','ui.slimscroll','ngMaterial']);
 
     app.factory("AnalyticsObject",function(){
         var _obj = {
