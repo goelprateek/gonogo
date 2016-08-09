@@ -98,9 +98,10 @@
 					}
 				}
 				modelCtrl.$parsers.push(formate);
+				modelCtrl.$formatters.push(formate);
 				formate(scope[attrs.ngModel]); // capitalize initial value
 			}
-		   };	
+	   	};	
 	});
 
 	app.directive('imageUpload',function($compile,RestService){

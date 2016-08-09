@@ -16,15 +16,8 @@
 
        			var user=UserService.getCurrentUser();
 
-			//	 get all asset category from master
+				//	 get all asset category from master
 				$scope.fetchAssetCategory = function(){
-
-					$scope.makeTags=[];
-					$scope.modelTags=[];
-
-					$scope.asset.make="";
-					$scope.asset.model="";
-
 					$scope.assetJson = {"oHeader":{"sInstID":user.institutionID},"sQuery":""};
 					var url="asset-category-web";
 
@@ -33,7 +26,7 @@
 							$scope.assetArray=successResponse;
 
 							if($scope.asset && $scope.asset.category){
-								fetchAssetMake($scope.asset.category);
+								$scope.fetchAssetMake($scope.asset.category);
 							}
 						}
 					},function(failedResponse){
@@ -52,12 +45,6 @@
 				$scope.fetchAssetCategory();
 
 				$scope.fetchAssetMake = function(val1){
-
-					$scope.modelTags=[];
-
-					$scope.asset.make="";
-					$scope.asset.model="";
-
 					$scope.makeJson ={"oHeader":{"sInstID":user.institutionID},"sQuery":val1};
 					var url="asset-model-make-web";
 
@@ -81,14 +68,16 @@
 							notifier.logError("Some error occured at server, we can not process your Asset request");
 						}
 					});
+				};
+
+				if($scope.asset && $scope.asset.make){
+					$scope.fetchAssetMake($scope.asset.category);
 				}
 
 				$scope.fetchAssetModel = function(val1,val2){
 					$scope.mdlJson ={"oHeader":{"sInstID":user.institutionID},"sQuery":val1,"sQuery2":val2}; 
 
 					var url="asset-model-all-web";
-
-					$scope.asset.model="";
 
 					RestService.saveToServer(url, $scope.mdlJson).then(function(successResponse){
 						if(successResponse){
@@ -114,6 +103,33 @@
 						}
 					});
 				};
+
+				if($scope.asset && $scope.asset.model){
+					$scope.fetchAssetModel($scope.asset.category,$scope.asset.make);
+				}
+
+       			$scope.onCategoryChanged=function(){
+       				$scope.makeTags=[];
+					$scope.modelTags=[];
+
+					$scope.asset.make="";
+					$scope.asset.model="";
+
+					$scope.fetchAssetMake($scope.asset.category);
+       			};
+
+       			$scope.onMakeChanged=function(){
+       				$scope.modelTags=[];
+
+					$scope.asset.make="";
+					$scope.asset.model="";
+
+					$scope.fetchAssetModel($scope.asset.category,$scope.asset.make);
+       			};
+
+       			$scope.onModelChanged=function(){       				
+					$scope.asset.model="";
+       			};
        		}]
 		};
 	});

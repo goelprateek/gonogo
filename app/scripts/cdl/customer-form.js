@@ -31,8 +31,7 @@ app.controller('PDFViewerModalCtrl', [
 			sImgID:imgID
 		};
 
-		URL = 'send-mail-pdf';
-		RestService.postDataWithHeaders(URL,JSON.stringify(mailRequest),user.username,user.ePassword).then(function(Response){
+		RestService.postDataWithHeaders('send-mail-pdf',JSON.stringify(mailRequest),user.username,user.ePassword).then(function(Response){
 
 			if(Response){}
 		});	
@@ -57,7 +56,6 @@ app.controller("CustomerFormCntrolr",
 	sharedService.setRefID(null);
 
 	$scope.refID = CustID;
-	var URL='';
 
 	//TODO
 	var json ={'sRefID':CustID};
@@ -65,8 +63,6 @@ app.controller("CustomerFormCntrolr",
 	if(CustID==null || CustID==""){
 		$location.path("/cdl/dashboard");
 	}
-
-	URL = 'dashboard-application-data';
 	
 	var docData = [{'Name':'Address Proof',
 		'ID':'0',
@@ -147,8 +143,10 @@ app.controller("CustomerFormCntrolr",
 
 	$scope.addr_type = $scope.addrType[0].value;
 
-	RestService.saveToServer(URL,json).then(function(Response){
+	RestService.saveToServer('dashboard-application-data',json).then(function(Response){
 		if(Response){
+			$scope.applicationData=Response;
+
 			$scope.applicant = Response.oReq.oApplicant;
 			$scope.kyc_data = Response.oReq.oApplicant;
 			$scope.applicantbckUp = Response.oReq.oApplicant; 
@@ -161,15 +159,17 @@ app.controller("CustomerFormCntrolr",
 			$scope.dealerID=Response.oHeader.sDealerId;
 			var data = 	$scope.notifarray;
 			for (j in data)
-			{if(data[j].sRefID == $rootScope.applicationID){
-					$scope.applctnstatus = data[j].sStat;}
+			{
+				if(data[j].sRefID == $rootScope.applicationID){
+					$scope.applctnstatus = data[j].sStat;
+				}
 			}
 
 			$scope.name = Response.oReq.oApplicant.oApplName.sFirstName+"  "+ Response.oReq.oApplicant.oApplName.sLastName.replace("null","");							    	
 			$scope.mobile = Response.oReq.oApplicant.aPhone[0].sPhoneNumber;
 			$scope.Amount = Response.oReq.oApplication.dLoanAmt;
 			$scope.email = Response.oReq.oApplicant.aEmail;//[0].sEmailAddr
-			
+
 			if(Response.oReq.oApplicant.sDob && Response.oReq.oApplicant.sDob.trim()!=="")
 			{
 				$scope.dob = Response.oReq.oApplicant.sDob.slice(0,2)+"/"+Response.oReq.oApplicant.sDob.slice(2,4)+"/"+Response.oReq.oApplicant.sDob.slice(4);
@@ -238,7 +238,7 @@ app.controller("CustomerFormCntrolr",
 
 			$scope.credit = Response.oReq.oApplicant.sCreditCardNum;
 			$scope.tenor = Response.oReq.oApplication.iLoanTenor;
-						
+		
 			$scope.currStage = Response.sCurrentStageId;
 			var fulladdress = Response.oReq.oApplicant.aAddr;
 			for (var j in fulladdress)
@@ -257,7 +257,7 @@ app.controller("CustomerFormCntrolr",
 				phoneArray[j].sPhoneType=$scope.getTextOfValueMatched(phoneArray[j].sPhoneType,  $scope.phoneData);
 			}
 			$scope.phn= phoneArray;
-			
+
 			$scope.error = "";
 			$scope.done = "";
 			$scope.appScore ='';
@@ -356,9 +356,8 @@ app.controller("CustomerFormCntrolr",
 			
 			//Fetch Images
 			//alert("Call Images");
-			URL = 'application-images';
 			var json ={'sRefID':CustID};
-			RestService.saveToServer(URL,json).then(function(Response){
+			RestService.saveToServer('application-images',json).then(function(Response){
 					//console.log("Images loaded:");
 					//console.log(JSON.stringify(Response));
 				if(Response!=null)
@@ -658,8 +657,7 @@ app.controller("CustomerFormCntrolr",
 	
 	function kyc_img(kycName , imgId ,status , reason,value){
 		var json ={'sImgID':imgId}
-		var URL = 'get-image-by-id-base64';
-		RestService.saveToServer(URL,json).then(function(Response){
+		RestService.saveToServer('get-image-by-id-base64',json).then(function(Response){
 //				//console.log("Response: "+JSON.stringify(Response));
 			var image = "data:image/png;base64,"+Response.sByteCode;
 			var extra_array=[];
@@ -823,9 +821,14 @@ app.controller("CustomerFormCntrolr",
 			$scope.loadPDF();
 		}else if($scope.currStage=="APRV"){
 			$rootScope.DashFlag = true;
-			sharedService.setCurrentStage($scope.currStage);
+			// sharedService.setCurrentStage($scope.currStage);
+			// sharedService.setRefID($scope.refID);
+			// $location.path("/cdl/apply");
+
 			sharedService.setRefID($scope.refID);
-			$location.path("/cdl/apply");
+			sharedService.setDealerCode($scope.dealerID);
+			sharedService.setApplicationData($scope.applicationData);
+			$location.path("/cdl/post-ipa");
 		}else if($scope.currStage=="PD_DE"){
 			var status=sharedService.getDecisionStatus();
 			status=status.toLowerCase();
@@ -849,7 +852,7 @@ app.controller("CustomerFormCntrolr",
 			$location.path("/cdl/apply");
 		}
 	}
-	
+
 	$scope.shwPDFModal = function (size,response,refID) {
 		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_CUSTOMER_FORM"),
 		 		GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
@@ -870,9 +873,9 @@ app.controller("CustomerFormCntrolr",
 	 				return refID;
 	 			}
 	 		}
-		 });
+	 	});
 	};
-	
+
 	$scope.loadPDF=function(){
 // 		$scope.keyarr = localStorage.getItem('LOGID');
 		var userdata = JSON.parse(atob(localStorage.getItem('GUID')));
@@ -907,8 +910,7 @@ app.controller("CustomerFormCntrolr",
 		//alert(JSON.stringify(request));
 		//console.log("JSON IPA REQUEST : "+JSON.stringify(postIPARequest));
 
-		URL = 'get-post-ipa';
-		RestService.saveToServer(URL,JSON.stringify(postIPARequest)).then(function(Response){	 
+		RestService.saveToServer('get-post-ipa',JSON.stringify(postIPARequest)).then(function(Response){	 
 			//console.log("JSON IPA RESPONSE : ");
 			//console.log(JSON.stringify(Response));
 			if(Response){
@@ -924,9 +926,8 @@ app.controller("CustomerFormCntrolr",
 				postIPARequest.opostIPA=Response;
 				
 				//console.log(" IPA PDF REQUEST : "+JSON.stringify(postIPARequest));
-				
-				URL = 'get-pdf-ref';
-				RestService.saveToServer(URL,JSON.stringify(postIPARequest)).then(function(Response){
+
+				RestService.saveToServer('get-pdf-ref',JSON.stringify(postIPARequest)).then(function(Response){
 					//console.log("JSON IPA PDF RESPONSE : ");
 					//console.log(JSON.stringify(Response));
 					if(Response){
@@ -935,8 +936,8 @@ app.controller("CustomerFormCntrolr",
 				});
 			}
 		});
-	}
-	
+	};
+
 	$scope.gotoDashboard=function(){
 		$location.path("/cdl/dashboard");
 	};

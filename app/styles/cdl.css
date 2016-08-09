@@ -100,3 +100,22 @@ select.inputMaterial ~ label{
 .control-select:hover,.control-select:focus{
   box-shadow: none;
 }
+
+.custom_symbol_rupee {
+    font-size: 19px;
+    margin-left: -9px;
+}
+
+.irupee {
+    font-size: 16px;
+    margin-left: 2px;
+    top: 3px;
+    padding-left: 0px;
+}
+
+.fa-rupee {
+    bottom: 5px;
+    z-index: 1;
+    left: 2%;
+    color: #000000;
+}

@@ -1,7 +1,6 @@
-
-<div id="pOrder">
+<form id="pOrder" name="PostIPAForm" novalidate>
 <!-- 			<div id="kycHeight"></div> -->
-	<div class="row clearfix ">
+	<div class="row clearfix " style="margin-top: 50px;">
 		<div class="col-md-8 col-md-offset-2" id="do">
 			<div class="row clearfix customRow">
 				<div class="col-md-12"
@@ -11,82 +10,110 @@
 				</div>
 			</div>
 			<div class="row clearfix">
-				<div class="col-md-12" style="text-align: right;">
-					<button class="customButton" data-toggle="modal" data-target="#assetModel">
+				<div class="col-md-12" style="text-align: right;margin-bottom: 50px;">
+					<button class="customButton" ng-click="onChangeAssetClicked(asset)">
 						Change Asset
 					</button>
 				</div>
 			</div>
-			<div class="row clearfix customRow">
+			<div class="row clearfix customRow" style="margin-top:30px;">
 				<div class="col-md-4 height">
-					<help>Approved Amount*</help>
-					<i class="fa fa-rupee"></i><input type="text" id="apvAmt"
-						ng-model="apvAmt" class="customInput" placeholder="Approved_Amount*" maxlength="10" style="padding-left: 4%" rupees disabled="disabled" />
+					<div class="div-rupee">
+						<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
+						<input type="text" id="apvAmt" ng-model="approvedAmt" class="cdl-form-control inputMaterial" maxlength="10" style="padding-left: 4%" rupees disabled="disabled"/>
+						<label>Approved Amount*</label>
+					</div>
+				</div>
+
+				<div class="col-md-4 height">
+					<div class="div-rupee">
+						<input name="scheme" type="text" class="cdl-form-control inputMaterial" id="scheme" ng-model="scheme" uib-typeahead="schemes for schemes in scmTags" typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select="onSchemeSelected(scheme)" required/>
+						<label>Scheme*</label>
+						<i ng-show="loadingLocations" class="glyphicon glyphicon-refresh"></i>
+						<div ng-messages="PostIPAForm.scheme.$error" ng-show="PostIPAForm.scheme.$touched" class="errorMsg">
+						    <p ng-message="required">Please enter scheme</p>
+						</div>
+					</div>
 				</div>
 				<div class="col-md-4 height">
-					<help>Scheme*</help>
-<!-- 					<input type="text" class="customInput" id="scheme" ng-model="scheme"
-						typeahead="state for state in scmTags | limitTo:8" placeholder="Scheme" /> -->
-						<input type="text" class="customInput" id="scheme" ng-model="scheme" uib-typeahead="schemes for schemes in scmTags" typeahead-loading="loadingLocations" typeahead-no-results="noResults" typeahead-on-select="onSchemeSelected(scheme)" placeholder="Scheme" />
-				</div>
-				<div class="col-md-4 height">
-					<help style="display:inline">Total Asset Cost*</help>
-					<i class="fa fa-rupee"></i><input type="text" class="customInput" id="astCst" ng-model="astCst" maxlength="15" placeholder="Total Asset Cost*" style="padding-left: 4%" rupees />
+					<div class="div-rupee">
+						<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
+						<input type="text" class="cdl-form-control inputMaterial" name="assetCost" id="astCst" ng-model="astCst" maxlength="15" rupees style="padding-left: 4%" ng-keyup="calculateEmi()" required />
+						<label>Total Asset Cost*</label>
+						<div ng-messages="PostIPAForm.assetCost.$error" ng-show="PostIPAForm.assetCost.$touched" class="errorMsg">
+						    <p ng-message="required">Please enter asset cost</p>
+						</div>
+					</div>
 				</div>
 			</div>
 
 			<div class="row clearfix customRow">
 				<div class="col-md-4 height">
-					<help>Margin Money*</help>
-					<input type="text" class="customInput" id="mrgnMny"
-						ng-model="mrgnMny" placeholder="Margin Money*"
-						style="padding-left: 4%" rupees disabled="disabled" />
+					<div class="div-rupee">
+						<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
+						<input type="text" class="cdl-form-control inputMaterial" name="marginMoney" id="mrgnMny" ng-model="mrgnMny" maxlength="15" rupees style="padding-left: 4%" ng-disabled="true"/>
+						<label>Margin Money*</label>
+					</div>
 				</div>
 				<div class="col-md-4 height" id="mnyInstrDiv">
-					<help>Margin Money instrument*</help>
-					<select id="mnyInstn" class="customSelect" ng-model="mnyInstn"
-						ng-change="changeEvent('MNY_INTRMNT',mnyInstn)">
-						<option value="" ng-selected="true">Select Margin Money Instrument</option>
+					<select class="cdl-form-control control-select inputMaterial" id="mnyInstn" ng-model="mnyInstn" name="moneyInstrument" ng-change="onMoneyInstrumentChanged()" select-required>
+						<option selected="selected" value="">Select Instrument*</option>
 						<option value="Cash">Cash</option>
 						<option value="Cheque">Cheque</option>
 						<option value="Credit Card">Credit Card</option>
 						<option value="NEFT">NEFT</option>
-					</select> <img alt="" src="images/select-arrow.png" class="customarrow" />
+					</select>
+					<label>Margin Money instrument*</label>
+					<div ng-if="PostIPAForm.moneyInstrument.$touched" ng-messages="PostIPAForm.moneyInstrument.$error" class="errorMsg">
+					    <p ng-message="selectrequired">Please select instrument</p>
+					</div>
 				</div>
 				<div class="col-md-4 height" id="mnyCnfmDiv">
-					<help>Margin Money Confirmation*</help>
-					<input type="text" class="customInput" id="mnyCnfm" ng-model="mnyCnfm"
-						placeholder="Margin Money Confirmation*" style="padding-left: 4%" />
+					<div class="div-rupee">
+						<input type="text" class="cdl-form-control inputMaterial" name="mnyCnfm" id="mnyCnfm" ng-model="mnyCnfm" maxlength="25" style="padding-left: 4%" required />
+						<label>Margin Money Confirmation*</label>
+						<div ng-messages="PostIPAForm.mnyCnfm.$error" ng-show="PostIPAForm.mnyCnfm.$touched" class="errorMsg">
+						    <p ng-message="required">Please enter margin money confirmation</p>
+						</div>
+					</div>
 				</div>
 			</div>
 
 			<div class="row clearfix customRow">
 				<div class="col-md-4 height">
-					<help>EMI*</help>
-					<input type="text" id="emi" class="customInput"
-						placeholder=" EMI" disabled="disabled" />
+					<div class="div-rupee">
+						<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
+						<input type="text" class="cdl-form-control inputMaterial" name="emi" id="emi" ng-model="emi" rupees style="padding-left: 4%" required ng-disabled="true"/>
+						<label>EMI*</label>
+					</div>
 				</div>
 				
 				<div class="col-md-4 height">
-					<help>Advance EMI*</help>
-					<input type="text" id="aEMI" class="customInput"
-						placeholder="Advance EMI" disabled="disabled" />
+					<div class="div-rupee">
+						<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
+						<input type="text" class="cdl-form-control inputMaterial" name="aEMI" id="aEMI" ng-model="aEMI" rupees style="padding-left: 4%" required ng-disabled="true"/>
+						<label>Advance EMI*</label>
+					</div>
 				</div>
 				<div class="col-md-4 height">
-					<help>Processing Fees*</help>
-					<i class="fa fa-rupee"></i><input type="text"
-						class="customInput" id="prcsfee" ng-model="prcsfee"  maxlength="10" placeholder="Processing Fees" style="padding-left: 4%" rupees disabled="disabled" />
+					<div class="div-rupee">
+						<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
+						<input type="text" class="cdl-form-control inputMaterial" name="prcsfee" id="prcsfee" ng-model="prcsfee" rupees style="padding-left: 4%" required ng-disabled="true"/>
+						<label>Processing Fees*</label>
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="col-md-2"></div>
 	</div>
+	Is Valid :{{PostIPAForm.$invalid}}
+	{{PostIPAForm}}
 	<div class="row clearfix ">
 		<div class="col-md-10 col-md-offset-1" style="text-align: center;">
 <!-- 		<span style="text-align: center;">Proceed for DDE</span> -->
 			<button class="customButton Pnext" id="postNext"
-				style="text-align: center; float: initial; margin-left: 10px;">Next</button>
+				style="text-align: center; float: initial; margin-left: 10px;" ng-click="ipaService()" ng-disabled="PostIPAForm.$invalid">Next</button>
 		</div>
 		<!-- <div class="col-md-4"></div> -->
 	</div>
-</div>
+</form>

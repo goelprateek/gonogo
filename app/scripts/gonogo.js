@@ -35,7 +35,7 @@
 
 			var currentUser=UserService.getCurrentUser();
 
-			if(!_.isUndefined(currentUser.id) )
+			if(!_.isUndefined(currentUser.id))
 			{
 				if(currentUser.actions && currentUser.actions.length!=0)
 				{ 
@@ -62,7 +62,7 @@
 
 		$scope.isCdlPage = function() {
 			var path;
-			return path = $location.path(),  _.contains(["/cdl/dealer","/cdl/apply",'/cdl/dashboard','/cdl/assetMaster','/cdl/customerForm','/cdl/basic-de','/cdl/result','/cdl/after-submit','/cdl/hold-stage'], path);
+			return path = $location.path(),  _.contains(["/cdl/dealer","/cdl/apply",'/cdl/dashboard','/cdl/assetMaster','/cdl/customerForm','/cdl/basic-de','/cdl/result','/cdl/after-submit','/cdl/hold-stage','/cdl/post-ipa'], path);
 		}
 
 		$scope.logout = function() {

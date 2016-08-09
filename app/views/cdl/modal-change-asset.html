@@ -1,0 +1,17 @@
+<style>
+	.save-btn{
+		border: 1px solid #24a1ed;
+		background-color: white;
+		padding: 4px 16px 5px;
+		color: #24a1ed;
+	}
+</style>
+<div class="modal-header">
+	<h3>Select Asset</h3>
+</div>
+<asset-selector asset="asset"></asset-selector>
+<div class="modal-footer" style="text-align: center">
+	<button type="button" class="btn btn-default save-btn" data-dismiss="modal" ng-click="onSaveAssetClicked()">
+	Save
+	</button>
+</div>
