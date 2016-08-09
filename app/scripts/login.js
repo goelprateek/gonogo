@@ -90,7 +90,7 @@
 
 						if(data.HIERARCHY && data.HIERARCHY.length>0){
 							if(data.HIERARCHY[0].HIERARCHY_LEVEL==="branchName"){
-								listvalues.branches=JSON.parse(data.HIERARCHY[0].HIERARCHY_VALUE);
+								listvalues.branches=data.HIERARCHY[0].HIERARCHY_VALUE;
 							}
 						}
 
