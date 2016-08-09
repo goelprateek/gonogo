@@ -332,8 +332,6 @@
     
     $scope.can=AclService.can;
 
-    $scope.showReinitiate=true;
-
     if(user.id){
         $scope.$emit('onSuccessfulLogin');
     }
@@ -344,13 +342,10 @@
     }
 
     $scope.selectResidence = SelectArrays.getResidenceTypes();
+    $scope.objectSet = NotificationObject.dummy;
 
     $scope.isUpdating = false;
-
-
-    $scope.objectSet = NotificationObject.dummy;
-	  
-
+    $scope.showReinitiate=true;	  
 	$scope.container = true;
     $scope.isDedupeSelected = true;
     $scope.isImg = true;
@@ -381,6 +376,8 @@
 	$scope.countSelected="Select";
 	
     //FIXME
+    //sayali if this action is present then show onhold panel otherwise directly on click of onhold ,onhold 
+    //the application
     var offersAllowed = AclService.can('NOFRS');
 
 	$rootScope.template ="notification";
@@ -1573,7 +1570,7 @@ app.controller('ModalInstanceCtrl', ['$scope','$rootScope','NotificationObject',
     $scope.modalFeed = modalFeed;
 
     $scope.saveApprvPanel = function () {
-         if($scope.modalFeed.apprvRemark && $scope.modalFeed.apprvSubTo && modalFeed.approveAmt && modalFeed.emi && modalFeed.tenor){
+         if($scope.modalFeed.apprvRemark && $scope.modalFeed.apprvSubTo && $scope.modalFeed.approveAmt && ($scope.modalFeed.emi || $scope.modalFeed.emi === 0) && ($scope.modalFeed.tenor || $scope.modalFeed.tenor === 0)){
             $uibModalInstance.close($scope.modalFeed);   
         } else {
            notifier.logWarning("Please provide all the fields !");
