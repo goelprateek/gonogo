@@ -5,7 +5,7 @@ label {
 
 .decision-panel {
 	border: 2px #5aa1e7 solid;
-	padding: 20px;
+	padding: 10px;
 	text-align: center;
 	border-radius: 33px;
 }
@@ -13,13 +13,20 @@ label {
 .decision-panel label {
 	color: #5aa1e7;
 }
+
+label{
+	font-size: 25px;
+}
 </style>
-<div style="padding: 10px;">
+<div class="row clearfix"> 
+<button type="button" class="close"  style="padding: 5px;" ng-click="closeModal()" aria-hidden="true">&times;</button>
+</div>
+<div class="row clearfix" style="padding: 10px;">
 	<div class="decision-panel">
 		<label>Status : {{data.decision}}</label>
 	</div>
-	<div style="margin-top: 20px;">
-		<label>Remark : {{data.remark}}</label>
+	<div style="margin-top: 20px">
+		<label style="color:black">Remark : {{data.remark}}</label>
 	</div>
 	<div>
 		<label style="color:#929090">Subject to : {{data.subject}}</label>
