@@ -281,9 +281,7 @@
 
 							if(assetDetails && assetDetails.length>0){
 								$scope.assetCategory = Response.oReq.oApplication.aAssetDetail[0].sAssetCtg;
-								$scope.fetchAssetMake($scope.assetCategory);
 								$scope.mk = Response.oReq.oApplication.aAssetDetail[0].sAssetMake;
-								$scope.fetchAssetModel($scope.assetCategory,$scope.mk);
 								$scope.mdl = Response.oReq.oApplication.aAssetDetail[0].sModelNo;
 							}
 
