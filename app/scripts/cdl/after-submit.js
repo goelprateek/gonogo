@@ -34,14 +34,14 @@
 			var json={
 				"sRefID":$scope.referenceID,
 				"oHeader": {
-				"sCroId": "default",
-				"dtSubmit":new Date().getTime(),
-				"sReqType": "JSON",
-				"sAppSource" : "WEB",
-				"sDsaId":user.username,
-				"sAppID": "",
-				"sSourceID":"",
-				"sInstID":user.institutionID
+					"sCroId": "default",
+					"dtSubmit":new Date().getTime(),
+					"sReqType": "JSON",
+					"sAppSource" : "WEB",
+					"sDsaId":user.username,
+					"sAppID": "",
+					"sSourceID":"",
+					"sInstID":user.institutionID
 				}
 			};
 
@@ -71,7 +71,6 @@
 				$("#pOrder").hide();
 			 	$("#additionalDoc").show();
 			 	$("#disImgRw ,#chkImgRw ,#aggImgRw").hide();
-			// $("#pOrder").show();
 			}
 			else if($scope.statusObject.sAppStat == "OnHold")
 			{
@@ -82,7 +81,7 @@
 			 	sharedService.setDealerCode($scope.dealerID); // Declined
 			 	sharedService.setApplicationStatus($scope.statusObject);
 			 	$location.path("/cdl/hold-stage");
-			// $("#pOrder").show();
+				// $("#pOrder").show();
 			}
 		};
 

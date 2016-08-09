@@ -599,7 +599,7 @@ app.controller("CustomerFormCntrolr",
 		RestService.saveToServer('get-image-by-id-base64',json).then(function(Response){
 //				//console.log("Response: "+JSON.stringify(Response));
 			var image = "data:image/png;base64,"+Response.sByteCode;
-			var extra_array=[];
+			var extra_array=[],adhar=[],panStatus=[];
 			if(Response.sByteCode != undefined && Response.sByteCode != null && Response.sByteCode != "" ){
 				//console.log("image :"+kycName+"id :"+imgId);
 				var url =image;
@@ -737,7 +737,6 @@ app.controller("CustomerFormCntrolr",
 			$scope.error = "Sorry...Unable to fetch images from server !!";					
 		});
 	}
-	
 
 	$scope.restartClicked=function(){
 		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_CUSTOMER_FORM"),
@@ -758,7 +757,7 @@ app.controller("CustomerFormCntrolr",
 		//alert($scope.currStage);
 		if($scope.currStage && $scope.currStage.startsWith("LOS_")){
 			$scope.loadPDF();
-		}else if($scope.currStage=="APRV"){
+		}else if($scope.currStage==="APRV"){
 			$rootScope.DashFlag = true;
 			// sharedService.setCurrentStage($scope.currStage);
 			// sharedService.setRefID($scope.refID);
@@ -768,18 +767,22 @@ app.controller("CustomerFormCntrolr",
 			sharedService.setDealerCode($scope.dealerID);
 			sharedService.setApplicationData($scope.applicationData);
 			$location.path("/cdl/post-ipa");
-		}else if($scope.currStage=="PD_DE"){
+		}else if($scope.currStage==="PD_DE"){
 			var status=sharedService.getDecisionStatus();
 			status=status.toLowerCase();
 			//alert("status : "+status);
 			if(status=="approved"){
 				$scope.loadPDF();
-			}else if(status=="declined"){
+			}else if(status==="declined"){
 				alert("This application has been declined.");
 				sharedService.setRefID($scope.refID);
 				$location.path("/cdl/dashboard");
 			}
-		}else if($scope.currStage=="CR_H"){
+		}else if($scope.currStage==="DCLN"){
+			sharedService.setRefID($scope.refID);
+			sharedService.setDealerCode($scope.dealerID);
+			$location.path("/cdl/after-submit");
+		}else if($scope.currStage==="CR_H"){
 			sharedService.setRefID($scope.refID);
 			sharedService.setDealerCode($scope.dealerID);
 			$location.path("/cdl/after-submit");
