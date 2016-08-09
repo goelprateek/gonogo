@@ -79,8 +79,6 @@ font-size:14px;}
 			   <div class="col-md-12" style="height:40px;">&nbsp;&nbsp;&nbsp;&nbsp;</div>
 
 			   <div class="row" >
-					<!-- <div id="mainTable"  gng-stacked-bar-graph data-ng-model="stackedChart1"  graph-data="orignalData" style="margin-left:20px;" 
-					institution-id="{{InstitutionID}}" test-data="dataFromDirective" isolated-table-data="updateData(parameter)"></div> -->
 					<div  hc-bar-chart  data="chartOptions" style="height:100%;width:100%;margin-bottom: 40px;"></div>
 				</div>
 			</div>
@@ -96,32 +94,31 @@ font-size:14px;}
 		       		</div>
 
 					<div class="col-sm-3 col-md-offset-2 col-xs-6"  style="padding: 0px;">
+						
 						<form name="gridsearch" autocomplete="off"  class="form-group form-inline">
+
 							<div class="input-group" >
-								<div ng-show="search" ng-cloak class="col-md-12">
+								<div ng-if="isSearchable" ng-cloak class="col-md-12">
 									<input type="text"  name="searchKeywords" data-ng-cloak placeholder="Search..." autofocus class="form-control" data-ng-model="searchKeywords"
 									data-ng-keyup="search(searchKeywords)">
 								</div>
-								<div ng-show="datepicker" ng-cloak class="col-md-12">
-									<input date-range-picker  id="daterange"  name="daterange" class="form-control date-picker" type="text" ng-model="datefilter.date" options="datefilter.opts"  placeholder="Pick Date"  max="datefilter.opts.max" min="datefilter.opts.min" clearable="true"/>
-								</div>	
+								<div ng-if="dateRanger" ng-cloak class="col-md-12">
+									<input date-range-picker  id="daterange"  name="daterange" class="form-control date-picker" type="text" ng-model="datefilter.date" options="datefilter.opts"  placeholder="Pick Date"  max="datefilter.opts.max" min="datefilter.opts.min" clearable="true"  />
+								</div>	 
 								<span class="input-group-addon">
 								      <a class="fa fa-search" ng-click="toggleSearch()" ></a>
 								</span>	
 								<span class="input-group-addon"  > 
-								     <a class="fa fa-calendar" ng-click="toggleDatepicker()"></a>
+								     <a class="fa fa-calendar" ng-click="toggleDatepicker($event)"></a>
 								</span>	
 							</div>
-							
-
 						</form>
-						<span data-ng-show="searchKeywords.length >= 1"> Showing {{filteredStores.length}}/{{stores.length}} entries </span>
+						<span data-ng-show="searchKeywords.length >= 1 "> Showing {{filteredStores.length}}/{{stores.length}} entries </span>
 					</div>
 					
 					<div class="col-md-3 " >
 						<div class="panel-bttn pull-right" >
 							<div class="btn-group">
-							  <!-- <button type="button" class="btn  btn-sm btn-default"><i class="fa fa-download"></i></button> -->
 							  <a type="button" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 							     <i class="fa fa-download" style="font-size:18px;"></i>
 							  </a>
@@ -214,7 +211,7 @@ font-size:14px;}
 			                </tr>
 			            </thead>
 			            <tbody style="font-size: 12px;">
-			            	<tr data-ng-repeat="store in dataSourceCol" sty>
+			            	<tr data-ng-repeat="store in dataSourceCol" >
 			                    <td ><a ng-click="viewApplication(store.applicationId,store.applicationStatus)">{{store.applicationId}}</a></td>
 			                    <td>{{store.date | dateFormat}}</td>
 			                    <td>{{store.city.toUpperCase()}}</td>

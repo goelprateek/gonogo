@@ -399,26 +399,39 @@
         $scope.can=AclService.can;
 		$scope.objectSet =  AnalyticsObject.dummy;
 		$scope.isImg = true;
-
+        $scope.dataSourceCol = [];
         $scope.losIdval = true;
         $scope.utrVal = true;
         $scope.editLosStat = true;
         $scope.invoiceDate = true;
         $scope.invoiceNumber = true;
+        $scope.copydataSourceCol =[];
 
-        $scope.search = true;
-        $scope.datepicker = false;
+        $scope.isSearchable = 1;
+        $scope.dateRanger = 0;
+
         $scope.toggleSearch = function(){
-            $scope.search = true;
-            if($scope.datepicker)
-               $scope.datepicker = !$scope.datepicker;
+            if($scope.dateRanger){
+               $scope.dateRanger = !$scope.dateRanger; 
+            }
+            $scope.isSearchable = 1;   
+            
         }
-        $scope.toggleDatepicker = function(){
-            $scope.datepicker = true;
+        $scope.toggleDatepicker = function($event){
+            
             $scope.datefilter.date.startDate = undefined;
-            $scope.datefilter.date.endDate=moment();
-            if($scope.search)
-                   $scope.search = !$scope.search; 
+            $scope.datefilter.date.endDate = undefined;
+            
+            if($scope.isSearchable){
+                $scope.isSearchable = !$scope.isSearchable; 
+            }
+            $scope.dateRanger = 1;
+            
+            console.log($event);
+
+            angular.element("#daterange").trigger("click");
+
+                   
         }
             
         $scope.datefilter =  {
@@ -431,7 +444,11 @@
                 max: moment().format('YYYY-MM-DD'), 
                 opens : "center",
                 linkedCalendars:true,
+                autoUpdateInput: true,
+                autoApply:true,
                 applyClass: 'btn-primary',
+                alwaysShowCalendars : true,
+                parentEl:"daterange",
                 isCustomDate: function(data){
                     return '';
                 },
@@ -455,20 +472,34 @@
                 },
                 eventHandlers: {
                     "apply.daterangepicker" : function(ev, picker){
-                        //TODO call service to fetch data based on date range
+                        
+                        var startDate = picker.startDate,
+                            endDate = picker.endDate;
+                            var filteredData =  _.filter($scope.copydataSourceCol , function(item){
+                                var itemDate = moment($filter('date')(item.date, "yyyy-MM-dd"),"YYYY-MM-DD");
+                                return itemDate.isBetween(startDate,endDate,'hours','[]')
+                            });
+                       return $scope.drawTablularData(filteredData);
+
+
                     },
                     'show.daterangepicker' : function(ev , picker){
-                        console.log("showing picker");
                         $scope.datefilter.date.startDate = undefined;
-                        $scope.datefilter.date.startDate = moment();
+                        $scope.datefilter.date.endDate = undefined;
+                        $scope.drawTablularData($scope.copydataSourceCol);
                     },
 
                     'hide.daterangepicker': function(ev,picker){
-                        console.log('hide picker');
+                       
+                    },
+                    'cancel.daterangepicker':function(ev,picker){
+                        console.log('cancel.daterangepicker');    
                     }
                 }   
             }
         };
+
+       
 
 		$scope.findAddressType = function(orignal,final){
     		return (angular.lowercase(orignal) == angular.lowercase(final));
@@ -534,7 +565,6 @@
 		};
 
 		// custom report modal
-
 		$scope.openCustomReportDesigner = function(){
             var _serviceinput = {                  
                         "oHeader" : {                 
@@ -569,8 +599,8 @@
 		};
 
 	    $scope.appView = false;
-		$scope.isTableData = true,
-		$scope.dataSourceCol = [],
+		$scope.isTableData = true;
+		
 		$scope.toggleView = function(){
 			
 			$scope.isTableData = !$scope.isTableData;
@@ -579,6 +609,7 @@
 				var json = {'sInstID':user.institutionID,'iSkip':"0",'iLimit':"0"};
 				RestService.saveToServer('score-log',json).then(function(data){
 			     if(data){
+                    $scope.copydataSourceCol = data;
 		          	$scope.drawTablularData(data);
 		          };
 			    });
@@ -613,7 +644,7 @@
                           }, $scope.search = function(value) {
                               return $scope.filteredStores = $filter("filter")($scope.stores, value), $scope.onFilterChange();
 
-                          }, $scope.order = function(rowName) {
+                          },$scope.order = function(rowName) {
 
                               return $scope.row !== rowName ? ($scope.row = rowName, $scope.filteredStores = $filter("orderBy")($scope.filteredStores, rowName), $scope.onOrderChange()) : void 0;
 
