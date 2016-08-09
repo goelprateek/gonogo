@@ -10,18 +10,10 @@
 		when('/', {
 			title : 'Login',
 			templateUrl : 'views/login.html',
-		}).when('/application', {
-			templateUrl: 'views/template/application.html',
 		}). when('/apply', {
 			templateUrl: 'views/template/hdbfs-cdl/application.html',
-		}). when('/dmiapplication', {
-			templateUrl: 'views/templates/dmi-application.html',
-		}).	when('/hdbfsnotification', {
+		}).when('/hdbfsnotification', {
 			templateUrl: 'views/templates/notify.html',
-		}).	when('/notification', {
-			templateUrl: 'views/templates/notification.html',
-		}). when('/policy', {
-			templateUrl: 'views/templates/policy.html',
 		}). when('/analytics', {
 			templateUrl: 'views/templates/analytics.html',
 		}).when('/cdl/dealer',{
@@ -81,17 +73,7 @@
 		};
 	});
 
-	app.config([ "$httpProvider", function($httpProvider) {
-		$httpProvider.interceptors.push('Interceptor');
-		
-	}]);
-
-	app.config(['cfpLoadingBarProvider','$compileProvider', function(cfpLoadingBarProvider,$compileProvider) {
-		cfpLoadingBarProvider.includeSpinner = true;
-		cfpLoadingBarProvider.parentSelector = 'nav';
-		$compileProvider.debugInfoEnabled(false);
-		
-	}]);
+	
 
 	app.run(function($rootScope, $location, APP_CONST){
 

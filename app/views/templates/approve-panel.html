@@ -22,11 +22,16 @@
 			   <input type="text" class="dashedcontainer" ng-model="modalFeed.apprvSubTo" >
 		  </div>
 		</div>
-		<div class="panel_footer" style="height: 27px;">
-			<span ng-if="approvemsg" class="text-danger" style="text-align: left;">Please fill all the field</span>
-			<div class="text-right" style=" display: inline; float: right;">
-		   <a class="TC_button" ng-click="saveApprvPanel()">Submit</a>	
-		   <a class="TC_button" ng-click="closeApprvPanel()">Close</a>	
+		<div class="panel_footer" style="height: 38px;">
+			<div class="text-right" style=" display: inline; float: right;padding: 2px;">
+		    <a class="btn btn-primary btn-sm" ng-click="saveApprvPanel()" >
+            	<span class="fa fa-save"></span>
+            	Submit
+           </a>
+           <a class="btn btn-primary btn-sm" ng-click="closeApprvPanel()" >
+            	<span class="fa fa-close"></span>
+            	Close
+           </a>
 		   </div>							
 		</div>
 	</div>

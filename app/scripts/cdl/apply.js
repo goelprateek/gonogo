@@ -995,14 +995,10 @@ $scope.onselectImg = function($files,type,index)
 		}
 }
 
-/*
- * Author Sayali uploadallimg function to upload img one by one
- */
 function UploadAllImgs(Ref,array,callType)
 {
 	// console.log("upload Image array :"+array.length);
 	for(var i=0 ; i<array.length ; i++){
-		if(array[i] != null){
 		var json ={
 				  "oHeader": {
 				    "sAppID": Ref,  // application id
@@ -1019,8 +1015,7 @@ function UploadAllImgs(Ref,array,callType)
 				  }
 				};
 //		console.log("image JSon : "+JSON.stringify(json));
-		uploadImage(json,callType);	
-		}	
+		uploadImage(json,callType);		
 	}
 	if(callType=="ipa")
 		{
@@ -1414,7 +1409,7 @@ function validation()
 	var std	=/(perstdCode|prmnt_perstdCode|wrkstd)$/i;
 	var phone=/(perphone|prmnt_perphone|wrkphn)$/i;
 	var strptrn = /^[a-zA-Z]+$/ ;
-	var addrPtrn= /^[a-zA-Z\d#,.\/\\]+$/
+	var addrPtrn= /^[a-zA-Z\d\s#,.\/\\]+$/
 //  var mailptrn =/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 	var mailptrn =/^[A-Za-z0-9._]+@[A-Za-z]+\.[a-z]{2,4}$/;
 
@@ -1722,7 +1717,6 @@ $scope.remove_file = function(filetype, id, index) {
 		for(var i=0; i<img_array.length;i++){
 	       if(img_array[i] != null){
 	       	if(img_array[i].kyc_name == filetype){
-	              /*delete img_array[i];*/
 	              img_array.splice(i,1);
 	          }
 	      }
@@ -1846,6 +1840,7 @@ $scope.getEmployerNames=function(queryStr){
 		      	});
  			});
 		};
+
 
 
 // ****************************************** ASSET MODEL

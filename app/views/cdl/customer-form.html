@@ -2,7 +2,8 @@
 	<span style="font-size: 18px;padding: 5px;">{{refID}}</span>
 	<button class="customButton" style="float: right;" ng-click="gotoDashboard()">Back</button>
 </div>
-<div class="col-md-10 col-md-offset-1" >
+
+<div class="col-md-10 col-md-offset-1"  style="height:420px">
 <form id="msform" slimscroll="{height: 420,railVisible:true}">
 	<!-- <fieldset class="formfield" ng-if="!authenticate('NCONTAINER')"
 		style="display: block;">
@@ -82,9 +83,9 @@
 					name="Applicant Name" disabled="disabled">
 			</div>
 			<div class="col-md-3">
-				<label class="control-label">Date of Birth</label> <input id="dob"
-					class="form-control" ng-model="dob" type="text"
-					name="Date Of Birth" disabled="disabled">
+				<label class="control-label">Date of Birth</label>
+				<input id="dob" class="form-control" ng-model="dob" type="text"
+					name="Date Of Birth" disabled="disabled" >
 			</div>
 			<div class="col-md-3">
 				<label class="control-label">Gender</label><input

@@ -19,44 +19,27 @@
 			<div class="col-xs-6 col-sm-3 col-md-2 col-md-offset-2">
 				<!-- <img alt="" src="images/user.png" class="usrimg" data-toggle="dropdown" /> -->
 				<ul class="nav navbar-nav">
-					<li class="dropdown">
-						<p data-toggle="dropdown" class="open_tab" id="openBox"
-							style="margin-bottom: 0px;">
-							<img src="{{image}}" alt="User Icon" class=" user_thumb"
-								style="height: 60px; margin: 0px;">
-						</p>
-
-						<div class="dropdown-menu " id="logout_dropdown_panel"
-							style="background-color: rgb(36, 161, 237); padding: 1px; margin-top: 10px; position: absolute; top: 65px; left: -290%;">
-							<p class="logoutPanel" style="margin: 0px 0px 0px;"></p>
-							<div class="row clearfix">
-								<div class="col-md-3">
-									<div class="profile_icon user"
-										style="background-image: url('{{image}}');">
-										<!-- 										<div id="change_thumb">Change photo</div> -->
-									</div>
+						<li uib-dropdown  class="dropdown text-normal nav-profile" is-open="statusCdl.isopen">
+							
+							<a href="javascript:;" uib-dropdown-toggle class="dropdown-toggle" aria-haspopup="true" aria-expanded="true" >
+							  <i class="fa fa-user" style="font-size:24px;color: rgba(5, 51, 74, 0.95);"></i>
+							</a>	
+							<div class="dropdown-menu with-arrow pull-right dropdown-menu-scaleIn" id="logout_dropdown_panel" uib-dropdown-menu >
+								<div class="profile_icon " style="float: left;" >
+									<i class="fa fa-user" style="font-size:95px;height:100%;width:100%;text-align: center;"></i>
+									<div id="change_thumb">Change photo</div>
 								</div>
-								<div class="user_data col-md-8" style="text-align: initial">
-									<div class="row clearfix">
-										<div class="col-md-12" style="margin-top: 4%;">
-											<label id="user_name" title="{{userid}}"
-												style="text-align: left; color: #fff">{{username}}</label>
-											<!--  -->
-											<div class="copyright"
-												style="text-align: left; margin-top: 7px; color: #fff">{{useremail}}</div>
-											<!-- 										<a id="view_profile" style="margin-top: 11px;background-color: initial;border:1px solid #fff;font-weight: inherit;color:white">View profile</a> -->
-											<div class="copyright"
-												style="text-align: left; margin-top: 7px; color: #fff">{{dealerName}}</div>
-											
-											<a class="btn-primary" ng-click="logout()"
-												style="padding: 4px 13px; background-color: initial; border: 1px solid #fff; position: absolute; bottom: -47px; right: 25px;">LogOut</a>
-										</div>
-									</div>
+								<div class="user_data">
+									<label id="user_name" title="{{userid}}">{{username}}</label>
+									<div class="copyright">{{useremail}}</div>
+									<a class="btn-primary" id="view_profile">View profile</a>
 								</div>
-								<div class="col-md-1"></div>
+								<div class="logout_footer">
+									<a data-ng-click="logout()">LogOut</a>
+								</div>
 							</div>
-						</div>
-					</li>
+							
+						  </li>
 				</ul>
 			</div>
 		</div>

@@ -4,7 +4,10 @@ app.controller('DecisionViewController', function ($scope,$uibModalInstance, dat
 //	alert(response);
 //	console.log("Dialog parameter 3: ");
 //	console.log(baseURL);
-	 $scope.data = data;
+	$scope.data = data;
+	$scope.closeModal = function(){
+        $uibModalInstance.dismiss();
+    };
 //	 $scope.selected = {
 //			 item: $scope.items[0]
 //	 };
@@ -170,7 +173,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 			remark:remark,
 			subject:subject
     	}
-    	$scope.shwDecisionModal('sm',data);
+    	$scope.shwDecisionModal('lg',data);
     };
     
 	$scope.shwDecisionModal = function (size,data) {

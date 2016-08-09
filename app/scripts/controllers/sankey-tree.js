@@ -15,7 +15,6 @@
 			type:"application/json"
 		})
 		.done(function(resp) {
-//			console.log("Getting data from portfolio"+JSON.stringify(resp));
 			var data = resp.Data;
 			var  sankeyInput={};
 			var nodes = [];
@@ -60,9 +59,7 @@
 
 			graph.links=links;
 			graph.nodes=nodes;
-//			console.log("Graph data from portfolio="+JSON.stringify(graph));
 			plotPortfolioGraph();
-			//sankeyWithCircle();
 			$('body #Loader, body #portfolio_container .CatError').hide(2000);
 		}).error(function(resp){
 			$('body #Loader').hide(2000);
@@ -82,7 +79,7 @@
 		format = function(d) { return formatNumber(d) + " " + units; },
 		color = d3.scale.category20();
 
-		// append the svg canvas to the page
+		
 		var svg = d3.select("#chart").append("svg")
 		.attr("width", "100%")
 		.attr("height", 600)
@@ -90,19 +87,14 @@
 		.attr("transform", 
 				"translate(" + margin.left + "," + margin.top + ")");
 
-		// Set the sankey diagram properties
+		
 		var sankey = d3.sankey()
 		.nodeWidth(35)
 		.nodePadding(12)
 		.size([width, height]);
-//		$('#loading_spinner').hide();
 		var path = sankey.link();
 
-		// load the data
-		//d3.json("scoringSankey.json", function(error, graph) {
-
 		var nodeMap = {};
-//		console.log("Graph data="+JSON.stringify(graph));
 		graph.nodes.forEach(function(x) {nodeMap[x.name] = x; nodeMap[x.exp] = x;});
 		graph.links = graph.links.map(function(x) {return {source: nodeMap[x.source], target: nodeMap[x.target], value: x.value }; });
 
@@ -111,7 +103,6 @@
 		.links(graph.links)
 		.layout(32);
 
-		// add in the links
 		var link = svg.append("g").selectAll(".link")
 		.data(graph.links)
 		.enter().append("path")
@@ -120,13 +111,11 @@
 		.style("stroke-width", function(d) { return Math.max(1, d.dy); })
 		.sort(function(a, b) { return b.dy - a.dy; });
 
-		// add the link titles
 		link.append("title")
 		.text(function(d) {
 			return d.source.name + " → " + 
 			d.target.name + "\n" + d.value + " times hit"; });
 
-		// add in the nodes
 		var node = svg.append("g").selectAll(".node")
 		.data(graph.nodes)
 		.enter().append("g")
@@ -134,12 +123,9 @@
 		.attr("transform", function(d) { 
 			return "translate(" + d.x + "," + d.y + ")"; })
 			.on("click",function(d){
-				if (d3.event.defaultPrevented) return; // click suppressed
-				//alert(d.exp);
-				//nodeClick(d.name);
+				if (d3.event.defaultPrevented) return; 
 				console.log("clicked"+d.level);
 				if(d.level=="Field"){
-					//prepareDataOfScoreCount(d.name);
 					nodeClick(d.name);
 					console.log("call sent");
 				}
@@ -152,7 +138,6 @@
 						this.parentNode.appendChild(this); })
 						.on("drag", dragmove));
 
-		// add the rectangles for the nodes
 		node.append("rect")
 		.attr("height", function(d) { return d.dy; })
 		.attr("width", sankey.nodeWidth())
@@ -167,7 +152,6 @@
 
 
 
-		// add in the title for the nodes
 		node.append("text")
 		.attr("x", -6)
 		.attr("y", function(d) { return d.dy / 2; })
@@ -183,13 +167,11 @@
 	    .attr("class","nodeValue")
 	    .text(function(d) { return d.name + "\n" + format(d.value); });
 		
-		///align vertically???
 		  node.selectAll("text.nodeValue")
 			  .attr("x", sankey.nodeWidth() / 2)
 			  .attr("y", function (d) { return (d.dy / 2) })
 			  .text(function (d) { return formatNumber(d.avg_score); })
 			  .attr("text-anchor", "middle");
-			  //.attr("transform", "rotate(-90)");
 
 		  node.append("text")
 		  	  .attr("class","nodeLabel");
@@ -206,7 +188,6 @@
 		      .attr("text-anchor", "start");
 
 		
-		//the function for moving the nodes
 		function dragmove(d) {
 			d3.select(this).attr("transform", 
 					"translate(" + (
@@ -217,7 +198,7 @@
 			sankey.relayout();
 			link.attr("d", path);
 		}
-		//});
+
 	}
 
 	function nodeClick(node) {
@@ -266,7 +247,7 @@
 					val=val+x.value;
 					expcount=expcount+x.exp_count;
 					tgt=x.target;
-					expression_temp=demo[i].expression;//why..
+					expression_temp=demo[i].expression;
 					obj=({
 						'source' : src,
 						'value' : val,

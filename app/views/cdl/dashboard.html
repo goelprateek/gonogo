@@ -21,9 +21,12 @@
 		</div>
 	</div>	
 	<div class="row" ng-if="!trueAppList">
-		<div id="mainTable"  gng-stacked-bar-graph data-ng-model="stackedChart1"  graph-data="orignalData" style="margin-left:20px;" 
-		institution-id="{{user.institutionID}}" test-data="dataFromDirective" isolated-table-data="updateData(parameter)"></div>
+		<!-- <div id="mainTable"  gng-stacked-bar-graph data-ng-model="stackedChart1"  graph-data="orignalData" style="margin-left:20px;" 
+		institution-id="{{user.institutionID}}" test-data="dataFromDirective" isolated-table-data="updateData(parameter)"></div> -->
+
+		<div  hc-bar-chart  data="orignalData" style="height:100%;width:100%;margin-bottom: 40px;"></div>
 	</div>
+
 	<div class="form-group" slimscroll="{height: 430,railVisible:true}" ng-if="dashboardType=='ApplicationList'">
 		<table class="table table-striped" style="margin-top:30px;font-size:13px" ng-if="!isLoadingDashboardData">
 			<thead>

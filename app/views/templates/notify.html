@@ -1,13 +1,5 @@
 <style>
 
-.scroll-fixed-top {
-	position: fixed;
-	top: 0px;
-	width: 100%;
-	left: 0px;
-	z-index: 1000;
-}
-
 #rightbar span {
 	margin-left: 0px;
 }
@@ -54,98 +46,6 @@
 	background-color: red;
 }
 
-.picked {
-	background-color: #CFCFCF;
-	border: 2px solid #fff;
-}
-
-.picked:hover {
-	background-color: #CFCFCF;
-}
-
-.node ellipse {
-	fill: #fff;
-	stroke: none;
-	/*  stroke-width: 2px; */
-}
-
-.node:hover {
-	cursor: pointer;
-}
-
-.node circle {
-	fill: #fff;
-	stroke: steelblue;
-	stroke-width: 2px;
-}
-
-.node text {
-	font: 12px sans-serif;
-}
-
-.link {
-	fill: none;
-	stroke: green;
-	stroke-width: 1px;
-	z-index: 1000;
-}
-
-svg:not (:root ) {
-	overflow: visible;
-}
-
-/*#tooltip {
-	position: absolute;
-	height: auto;
-	padding: 10px;
-	background-color: white;
-	border-radius: 10px;
-	-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-	-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-	z-index: 1;
-}
-*/
-.tooltipExp {
-	word-spacing: 5px;
-	letter-spacing: 1px;
-	border-bottom: 1px solid rgb(224, 214, 214);
-	padding: 5px;
-}
-
-
-/*#tooltip.hidden {
-	display: none;
-}
-*/
-.nhr a {
-	color: #777;
-}
-#rightbar .list-group-item {
-padding: 6px 5px;
-}
-
-.scroll-divs-outer {
- margin: 5px 0px;
-}
-
-#img_panel{
-padding: 15px;
-}
-
-#prevarrow , #nextarrow{
-height: 58px;
-width: 6%;
-}
-
-#document_preview{
-width: 100%; height: 100%; max-height: 400px;
-}
-
-#cirhtml{
- width:100%; height:620px;
- border:none;
-}
 #application-temp-container .input-group-addon{
     padding: 0px 7px;
 }
@@ -168,15 +68,23 @@ width: 100%; height: 100%; max-height: 400px;
 	left: 49px;
 	font-size: 13px;
 }
-.modal-title h5{
-font-size:14px;}
 
 .declinePanel {
-	position: absolute;width: 46%; left: 30%; top: 28%;background-color: white; border: 1px solid #C9D7E1;
+	position: absolute;
+	width: 46%; 
+	left: 30%; 
+	top: 28%;
+	background-color: white; 
+	border: 1px solid #C9D7E1;
 }
 
 .dashedcontainer {
-	border: 1px dashed grey; min-height: 40px; margin:4px 15px; padding: 10px; width: 95%; font-weight: bold
+	border: 1px dashed grey;
+	min-height: 40px; 
+	margin:4px 15px; 
+	padding: 10px; 
+	width: 95%; 
+	font-weight: bold
 }
 </style>
 
@@ -192,10 +100,6 @@ font-size:14px;}
 				<div class="row clearfix">
 					<div class="col-md-6 text-left" style="padding-top: 10px">
 						<img src="images/loading.gif" class="LoaderSpinner" />
-						<span ng-if="error" style="color:red">
-						<strong> Warning! &nbsp;&nbsp;</strong>{{error}}</span>
-						<span ng-if="done" style="color:green">
-						<strong> Note! &nbsp;&nbsp;</strong>{{done}}</span>
 					</div>
 					<div class="col-md-6">
 						<ul class="nav navbar-nav navbar-right nhr">
@@ -206,7 +110,7 @@ font-size:14px;}
 							<li><a id="dsa_chat" ng-if="can('NCHAT')">DSA Chat</a></li>
 							<li ><a id="onhold" title="{{objectSet.oAppReq.sRefID}}"
 								ng-if="can('NHOLD') && isDedupeSelected"  
-								ng-click='cro_action(objectSet.oAppReq.sRefID, "OnHold")'>OnHold</a><!-- 27 -->
+								ng-click='cro_action(objectSet.oAppReq.sRefID, "OnHold")'>OnHold</a>
 							</li>
 							<li ><a id="approve" title="{{objectSet.oAppReq.sRefID}}"
 								ng-if="can('NAPPROVE') && isDedupeSelected"
@@ -231,26 +135,63 @@ font-size:14px;}
 		</div>
 	</div>
 	<div class="col-md-10 col-md-offset-1" contextmenu="blur" style="padding: 0px;">
-		<div class="col-md-12" id="notification-main-container"
-			style="border-top: 1px solid #DADADB;padding: 0px;" data-ng-if="container">
+		<div class="col-md-12" id="notification-main-container" style="border-top: 1px solid #DADADB;padding: 0px;height: 600px;" data-ng-if="container">
+
+			<div class="col-lg-3 col-sm-12 col-xs-12" style="padding:0px; margin-top:5px;">
+			    <div class="widget">
+			        <!-- <div class="widget-header bordered-bottom bordered-themeprimary">
+			            <i class="widget-icon fa fa-tasks themeprimary"></i>
+			            <span class="widget-caption themeprimary">Applications</span>
+			        </div> -->
+			        <div class="widget-body no-padding"> 
+			            <div class="task-container">
+			                <div class="task-search">
+			                    <span class="input-icon">
+			                        <input type="text" class="form-control" data-ng-keyup="searchNotification(search)" placeholder="Search" ng-model="search">
+			                        <i class="fa fa-search gray"></i>
+			                    </span>
+			                </div>
+			                
+			                
+			                <ul class="tasks-list" slimscroll="{height: 490,railVisible:true}"  when-scrolled="loadData()">
+
+			                    <li class="task-item"  ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search"  ng-class='{picked: user.sRefID==Picked}'>
+			                        <div style="outline:none;" ng-click='load_details(user.sRefID,true,user.sRqTyp)' >
+                                        <span class="img-circle dsa_profile_icon" >
+											<h5><i class="fa fa-user"></i></h5>
+										</span>
+										<div class="notify-name">{{user.sDsaName.split("@")[0]}}</div>
+										<div class="status" id="{{user.sRefID}}" ng-model="user.sRefID" ng-class="{Pending: user.sStat.toUpperCase() == 'ONHOLD', Approved: user.sStat.toUpperCase() == 'APPROVED', Declined:user.sStat.toUpperCase()== 'DECLINED'} "></div>
+										<div class="notify-time" >{{user.dtDateTime | dateFormat }}</div>
+										<div class="property_location" style="font-size: 10px;  min-width: 60px;" ng-if="user.sStage!=null && !can('NCROQUE')">{{user.sStage}}</div>
+										<div class="processedBy" ng-if="!can('NCROQUE') && user.sProcBy.toUpperCase()!='DEFAULT'&& user.sProcBy.toUpperCase()!='ERROR'" style="font-size: 10px;left:105px">{{user.sProcBy.toUpperCase()=='STA'?'STP':user.sProcBy.toUpperCase()}}</div>
+										<div class="property_amount" >{{user.dloanAmt | currency:"&#x20B9; "}}</div>
+                                	</div>
+			                    </li>
+			                </ul>
+			            </div>
+			        </div>
+			    </div>
+			</div>
+
+
 			
-			<div class="col-md-3 column" id="leftbar" style="padding: 7px 0px 0px 0px;height: 553px;margin-bottom: 55px;"> <!--  overflow: hidden; margin-bottom: 20px; -->
+			<!-- <div class="col-md-3 column" id="leftbar" style="padding: 7px 0px 0px 0px;height: 553px;margin-bottom: 55px;"> 
 				
 				<div class="list-group" ng-init="names"
 					style="border: 1px solid rgb(218, 218, 219);overflow: hidden;margin-bottom: 0px ;border-radius: 5px;"> 
-					<!-- remove overflow hidden -->
 					<form name="notification_search" autocomplete="off">
                 		<div class="icon-addon addon-lg">
 							<input id="search" class="form-control" type="text" ng-model="search"
 								placeholder="Search Notification..."
-								style="margin: 0px; max-width: 277px; background-color: white;" />
+								style="margin: 0px; max-width: none; background-color: white;" />
 							<label for="search" class="fa fa-search"></label>	
 						</div>
 					</form>	
 					
 					<div slimscroll="{height: 512,railVisible:true}"  when-scrolled="loadData()">
 						<div class="list-group-item" ng-if="notifarray.length==0"
-								style="color: red; text-align: center;">Your Queue is Empty</div>
+								style="color: red; text-align: center;">Please wait while we are populating data</div>
 						
 						<div class="list-group-item" style="padding: 0px;border-bottom: 1px solid #ddd;margin-bottom: 0px;" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" > 
 							<div class="list-group-item" style="border-bottom: 1px solid #ddd;margin-bottom: 0px;border: 0px solid #ddd;"
@@ -271,14 +212,12 @@ font-size:14px;}
 						</div>
 				</div>
 				</div>
-			</div>
-<!-- 	userid!='37' -->
-			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden;padding-right: 0px; max-height: 640px;" ng-if="can('NCONTAINER')"> <!-- NCONTAINER  ng-show="{{userid != '494'}}"-->
+			</div> -->
+			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden;padding-right: 0px; max-height: 640px;" ng-if="can('NCONTAINER')"> 
 				<ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;    height: 38px;   width:98%;">
  				    <li  class="active" style=" margin-top: 7px;"><a id="applicant" style="padding: 6px 10px;font-weight: bold; font-size: 13px;">Applicant</a></li>
 					<select class="form-control" id="dedupe1" ng-if="objectSet.aDeDupe!=''" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
 	                	 ng-change="onchange(countSelected)">
-	<!--                 	 ng-options="count as count.ref for count in dedupeArray" -->
 						<option ng-selected="true" value="Select">Default Ref</option>
 	                	<option ng-repeat="count in objectSet.aDeDupe">{{count.sRefID}}</option>
 					</select>
@@ -304,7 +243,7 @@ font-size:14px;}
 								<div class="list-group-item">
 									<span>Address Line1 : {{objectSet.oAppReq.oReq.oApplicant.aAddr[0].sLine1}}</span>
 								</div>
-							 	<div class="list-group-item" ng-if="applicant.aAddr[0].sLine2 !=''">
+							 	<div class="list-group-item" ng-if="objectSet.oAppReq.oReq.oApplicant.aAddr[0].sLine2 !=''">
 									<span>Address Line2 : {{objectSet.oAppReq.oReq.oApplicant.aAddr[0].sLine2}}</span>
 								</div> 
 							</div>
@@ -362,11 +301,11 @@ font-size:14px;}
 									<span>Gross Annual : {{ emp.dGrossSal | rupee:"&#x20B9; "}}</span>
 								</div> -->
 								<div class="list-group-item" ng-if="emp.sConst.toUpperCase()=='SELF-EMPLOYED'">
-									<span>ITR Amount : &#8377;&nbsp;{{emp.dItrAmt}}</span> 
+									<span>ITR Amount : &nbsp{{emp.dItrAmt | currency:'&#8377;'}}</span> 
 								</div>
 								<div class="list-group-item" ng-if="emp.sConst.toUpperCase()!='SELF-EMPLOYED'">
-									<span ng-if="emp.dmonthSal != 0">Monthly Income : &#8377;&nbsp;{{emp.dmonthSal | rupee:"&#x20B9; "}}</span>
-										<span ng-if="emp.dmonthSal == 0">Yearly Income : &#8377;&nbsp;{{emp.dGrossSal | rupee:"&#x20B9; "}}</span>
+									<span ng-if="emp.dmonthSal != 0">Monthly Income :&nbsp{{emp.dmonthSal | currency:'&#8377;'}}</span>
+										<span ng-if="emp.dmonthSal == 0">Yearly Income :&nbsp{{emp.dGrossSal | currency:'&#8377;'}}</span>
 								</div>
 								<div class="list-group-item">
 									<span>Employer : {{ emp.sEmplName}}</span> 
@@ -375,34 +314,7 @@ font-size:14px;}
 									<span>Since : {{ emp.iTmWithEmplr }}
 										(Months)</span>
 								</div>
-								</div>
-<!-- 								<div class="list-group-item" style="border-bottom: none"> -->
-								<!-- <div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">
-								   <div class="col-md-4" ng-if="extraPresent" style="padding: 0px">
-									<a ><img 
-										alt="Preview Not Availeble" title="EXTRA IMAGES"
-										id="addImages" name="{{extraname}}" data-toggle="modal" data-target="#myModalnew"
-										class="custom_img_rounded arrow"
-										ng-src="{{extra}}" usermap="{{extraId}}" style="float:left;margin: 3px;"></a>
-									</div> 
-									<div class="col-md-4" ng-if="income1Present" style="padding: 0px">
-									<a><img  id="income_proof1" data-toggle="modal"
-										data-target="#myModalnew" alt="Preview Not Availeble" name="INCOME-PROOF1"
-										class="custom_img_rounded" title="INCOME-PROOF1"
-										ng-src="{{income1}}" usermap="{{income1Id}}" style="float: left;margin: 3px;"></a>
-									</div>
-									<div class="col-md-4" ng-if="income2Present" style="padding: 0px">
-									<a><img  id="income_proof2"  data-toggle="modal"
-										data-target="#myModalnew" alt="Preview Not Availeble" name="INCOME-PROOF2"
-										class="custom_img_rounded" title="INCOME-PROOF2"
-										ng-src="{{income2}}" usermap="{{income2Id}}" style="float:left;margin: 3px;"></a>
-									</div>
-										<div class="col-md-4" ng-if="evidPresent" style="padding: 0px">
-										  <a><img ng-if="evidPresent" alt="Preview Not Availeble"  id="evidence" name="{{evidencename}}" data-toggle="modal"
-										data-target="#myModalnew" class="custom_img_rounded arrow" title="{{evidencename}}"
-										ng-src="{{evidence}}" usermap="{{evdnId}}" style="float: left;margin: 3px;"></a>
-										</div>
-								</div> -->			
+								</div>										
 							</div>
 						</div>
 					<div class="col-md-4 column">
@@ -555,24 +467,24 @@ font-size:14px;}
 								<div class="div-heading kyc"><label>DECISION</label><a ng-if="objectSet && objectSet.iNoReTry>=1" style="float: right;padding-right: 10px;color: white;" ng-click="showReinitiatedDecisionData('lg',objectSet)">View Old</a></div>
 								<div id="KYC" style="width: 106.5%;" slimscroll="{height: 210,railVisible:true}">
 									<div class="list-group-item">
-										<span>Applied Amount :  &#8377;&nbsp;{{objectSet.oAppReq.oReq.oApplication.dLoanAmt}}</span>
+										<span>Applied Amount :&nbsp{{objectSet.oAppReq.oReq.oApplication.dLoanAmt | currency:'&#8377;'}}</span>
 									</div>
 									<div ng-repeat="cro in objectSet.aCroDec">
 									 	<div class="list-group-item">
-											<span>Eligibility Amount : &#8377;&nbsp;{{cro.dEligibleAmt}}</span>
+											<span>Eligibility Amount :&nbsp{{cro.dEligibleAmt | currency:'&#8377;'}}</span>
 										</div>
 										<!-- ng-if="objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT" -->
 										<div class="list-group-item">
-											<span>FOIR :{{objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT}}</span>
+											<span>FOIR :&nbsp{{foirAmount}}</span>
 										</div>
 										<div class="list-group-item">
-											<span>Approved Amount :&#8377;&nbsp; {{cro.dAmtAppr}}</span>
+											<span>Approved Amount :&nbsp{{cro.dAmtAppr | currency:'&#8377;'}}</span>
 										</div>
 										<div class="list-group-item">
 											<span>Tenor : {{cro.iTenor}}</span>
 										</div>
 										<div class="list-group-item">
-											<span>EMI :&#8377;&nbsp;{{cro.dEmi}}</span>
+											<span>EMI :&nbsp{{cro.dEmi | currency:'&#8377;'}}</span>
 										</div>
 									</div>
 									<!-- <div class="list-group-item" 
@@ -597,8 +509,8 @@ font-size:14px;}
 				</div>
 			</div>
 <!-- 			scroll form for cro2 -->
-			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden; max-height: 640px;padding-right: 0px;" ng-if="!can('NCONTAINER')"> <!-- 28 --> <!-- NOT NCONTAINER -->
-				<ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;    height: 38px;   width: 98%;">
+			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden; max-height: 640px;padding-right: 0px;" ng-if="!can('NCONTAINER')">
+				<ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;height: 38px;   width: 98%;">
  				    <li  class="active" style=" margin-top: 7px;"><a id="applicant" style="padding: 6px 10px;font-weight: bold; font-size: 13px;">Applicant</a></li>
  
 					<select class="form-control" id="dedupe" ng-if="objectSet.aDeDupe!=''" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
@@ -610,15 +522,7 @@ font-size:14px;}
  				</ul>
 				<div class="row clearfix" ng-init="applicant" id="applicant_panel" style=" width: 102%;margin-left: 14px;max-height: 515px;margin-right: -14px;overflow-y:scroll">
 					<div id="application-temp-container"style="padding-top: 10px;width: 98%;">
-						<div class="row clearfix">
-							<div class="col-md-9 text-left">
-								<div class="alert alert-danger" id="erro-msg"
-									style="float: none; text-align: left; margin: 0px">
-									<strong>Error ! &nbsp&nbsp&nbsp</strong><span id="error"></span>
-								</div>
-							</div>
-						</div>
-		<!-- ****************************************  Common Form *************************** -->
+		<!-- ***************************  Common Form *************************** -->
 		 				<div ng-include="'views/templates/app-form.html'" ></div> 
 					</div>
 				</div>
@@ -630,35 +534,8 @@ font-size:14px;}
 						<div ng-include="'views/templates/app-form.html'"></div> 
 				</div>
 			</div>
-<!-- ******************************Second Common Form ************************************************* -->
+		<!-- ****************Second Common Form ************************************** -->
 		</div>
 	</div>
 </div>
 <!-- end of controller -->
-<!-- commented as chat appplication is no longer in use -->
-
-	<!-- <div id="chat_window" class="row clearfix">
-		<div class="chat_header_box" style="font-weight: bold;">
-			<a id="minimize"
-				style="vertical-align: middle; border: 1px solid #fff; color: #fff; padding: 0px 5px 0px 5px; text-decoration: none;">-</a>
-			<a id="maxmize"
-				style="vertical-align: middle; border: 1px solid #fff; color: #fff; padding: 0px 5px 0px 5px; text-decoration: none;">+</a>
-			<a id="" title="{{}}"
-				style="vertical-align: middle; color: #fff; padding: 0px 5px 0px 5px; text-decoration: none;">{{
-				users.DSA.name}}</a> <a
-				style="float: right; padding-right: 10px; color: #fff;"
-				onclick="closeSocket();" id="btn_close">Close</a>
-		</div>
-		<div id="message_container">
-			<ul id="messages">
-			</ul>
-			<div id="input_message_container">
-				<form id="form_send_message" method="post" action="#">
-					<input type="text" id="input_message"
-						placeholder="Type your message here..." /> <input type="submit"
-						id="btn_send" onclick="send('');" value="Send" />
-					<div class="clear"></div>
-				</form>
-			</div>
-		</div>
-	</div> -->

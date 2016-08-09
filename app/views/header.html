@@ -1,7 +1,7 @@
 <header class="clearfix">
-	<div class="clearfix" data-ng-if ="InstitutionID != '4011'">
+	<div class="clearfix" >
 		<div class="col-md-12 column" id="header">
-			<nav class="navbar navbar-default" role="navigation">
+			<nav class="navbar " role="navigation">
 				
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -14,40 +14,29 @@
 				</div>
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav navbar-right">
+						
 						<li>
-							 <a href="Hdbfs_CDL/Application.html"  id="applicationLink" title="{{app}}" ng-if="  InstitutionID=='4019' && app">Application
-							 </a>
-						 </li>
-						<li>
-							<a href="#dmiapplication" id="applicationLink" title="{{app}}" ng-if="InstitutionID=='4020' && app">Application</a>
+							<a href="#hdbfsnotification"  id="notificationLink" ng-if="notif" >Notification</a>
 						</li>
 						<li>
-							<a href="#notification"  id="notificationLink" title="{{notif}}" ng-if="InstitutionID!='4019' && notif">Notification</a>
+							<a href="http://gng.softcell.in/SoBRE" target="_blank" id="policy" ng-if="policy" >Policy</a>
 						</li>
 						<li>
-							<a href="#hdbfsnotification"  id="notificationLink" title="{{notif}}" ng-if="InstitutionID=='4019' && notif">Notification</a>
-						</li>
-						<li>
-							<a href="#policy"  id="policy" title="{{policy}}" ng-show="policy" >Policy</a>
-						</li>
-						<li>
-							<a href="#analytics"  id="anlysis" title="{{analytics}}"  ng-show="analytics">Analytics</a>
+							<a href="#analytics"  id="anlysis" ng-if="analytics">Analytics</a>
 						</li>
 						
-						<li >
-							<a href="javascript:;" class="img-circle" data-toggle="dropdown">
+						<li uib-dropdown  class="dropdown text-normal nav-profile" is-open="status.isopen">
+							
+							<a href="javascript:;" uib-dropdown-toggle class="dropdown-toggle" aria-haspopup="true" aria-expanded="true" >
 							  <i class="fa fa-user" style="font-size:24px;"></i>
 							</a>	
-						 <!-- <img ng-src="{{image}}"  data-toggle="dropdown" alt="user Icon"
-							class="img-circle user_thumb" height="45px"> -->
-							
-							<div class="dropdown-menu slideOutDown" id="logout_dropdown_panel">
-								<div class="profile_icon" style="float: left;"
-									ng-style="{'background-image':'url('+image+')'}">
+							<div class="dropdown-menu with-arrow pull-right dropdown-menu-scaleIn" id="logout_dropdown_panel" uib-dropdown-menu >
+								<div class="profile_icon " style="float: left;" >
+									<i class="fa fa-user" style="font-size:95px;height:100%;width:100%;text-align: center;"></i>
 									<div id="change_thumb">Change photo</div>
 								</div>
 								<div class="user_data">
-									<label id="user_name" title="{{userid}}">{{username}}</label><!--  -->
+									<label id="user_name" title="{{userid}}">{{username}}</label>
 									<div class="copyright">{{useremail}}</div>
 									<a class="btn-primary" id="view_profile">View profile</a>
 								</div>
@@ -55,6 +44,7 @@
 									<a data-ng-click="logout()">LogOut</a>
 								</div>
 							</div>
+							
 						  </li>
 					</ul>
 				</div>

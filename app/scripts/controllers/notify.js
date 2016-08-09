@@ -6,6 +6,7 @@
 
 	app.factory("NotificationObject",function(){
     	var _obj = {
+
         "applicationLog": {},
         "sRefID": "",
         "bStatFlag": "",
@@ -314,60 +315,53 @@
             }
           ]
         }
-	
-       return {
-    		dummy : _obj
-       }
-	
+        return {
+        	dummy : _obj
+        }	
     });
 
-	app.controller('NotifController', ['$scope','$rootScope', '$timeout','Validation','$filter',
-								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log',
-                                function($scope, $rootScope, $timeout,Validation,$filter,RestService,NotificationObject,UserService,AclService,
-        
-                                    $uibModal,SelectArrays,$log){
+	app.controller('NotifController', ['$scope','$rootScope', '$interval','$filter',
+								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log','notifier',
+                                function($scope, $rootScope, $interval,$filter,RestService,NotificationObject,UserService,AclService,
+                                    $uibModal,SelectArrays,$log,notifier){
+
 	var user=UserService.getCurrentUser();
+    
     $scope.can=AclService.can;
 
     if(user.id){
         $scope.$emit('onSuccessfulLogin');
     }
 
-    $scope.selectResidence = SelectArrays.getResidenceTypes();
-
-   /* $scope.isDisabled=true;*/
-    $scope.isUpdating = false;
 
     if(_.isUndefined(user.id) ){
         $location.path(APP_CONST.getConst('APP_CONTEXT'));
     }
 
-    var object  = NotificationObject.dummy;
-	$scope.objectSet =  object;    
+    $scope.selectResidence = SelectArrays.getResidenceTypes();
+    $scope.objectSet = NotificationObject.dummy;
 
+    $scope.isUpdating = false;
+    $scope.showReinitiate=true;	  
 	$scope.container = true;
     $scope.isDedupeSelected = true;
     $scope.isImg = true;
     $scope.backUpDefaultRefId = [];
 
     $scope.isLosId = function(){
-        if($scope.objectSet.oLosDtls){
-             if($scope.objectSet.oLosDtls.sLosID)
+        if($scope.objectSet.oLosDtls && $scope.objectSet.oLosDtls.sLosID){
                 return true;
-            else
-                return false;//can edit
-        }else
-        return false;
+        }else{
+            return false;    
+        }        
     }
 
     $scope.isUtr = function(){
-        if($scope.objectSet.oLosDtls){
-             if($scope.objectSet.oLosDtls.sUtr)
-                return true;
-            else
-                return false;//can edit
-        }else
-        return false;
+        if($scope.objectSet.oLosDtls && $scope.objectSet.oLosDtls.sUtr){
+            return true;
+        }else{
+            return false;    
+        }        
     }
 
     $scope.utrVal = true;
@@ -375,87 +369,138 @@
     $scope.editLosStat = false;
 
 	$scope.countSelected="Select";
-	var offersAllowed = AclService.can('NOFRS');
-    //check
-	var treeData = [], map;
+	
+    //FIXME
+    //sayali if this action is present then show onhold panel otherwise directly on click of onhold ,onhold 
+    //the application
+    var offersAllowed = AclService.can('NOFRS');
+
 	$rootScope.template ="notification";
 	$scope.minVal = 0;
-	$scope.limit = 10;
+	$scope.limit = 100;
     $scope.notifarray = [];
+    var timer ;
+    
+    // method to implement ELSearch
+    $scope.searchNotification = function($viewValue){
+        if($viewValue.length >= 3){
+        var _serviceInput = {
+                      "oHeader": {
+                        "sAppID":null,
+                        "sInstID": user.institutionID,
+                        "sSourceID": "WEB",
+                        "sAppSource": "GNG_WEB",
+                        "sReqType": "JSON",
+                        "dtSubmit":"",
+                        "sDsaId":null,
+                        "sCroId":user.id,
+                        "sDealerId":null
+                      },
+                      "oFilter": {
+                         "dloanAmt":0,
+                         "sStage":"",
+                         "sMobileNumber":"",
+                         "sProduct":"CDL"
+                      },
+                      "oCroQueue": $scope.json.sCroID,
+                      "sQuery": $viewValue,
+                      "oPagination": {
+                        "iPageId": 0,
+                        "iLimit": 10,
+                        "iSkip": 0
+                      }
+                    }
 
-	$scope.loadData = function(){
-		 $scope.minVal = $scope.minVal+$scope.limit;
-		 polling($scope.minVal);
-	 }
-	
-	polling($scope.minVal);
-	
-	function polling(minimum) {
-        console.log("minimum :"+minimum);
+            RestService.fetchDataQuietly("api/es/search",_serviceInput).then(function(data){
+                  if(data.notifications.length>0){
+                        $interval.cancel(timer);
+                        $scope.notifarray = [];
+                        var filteredSearchData = _.uniq(data.notifications, function(item, key, sRefID) { 
+                            return item.sRefID;
+                        });
+                        $scope.notifarray = filteredSearchData;
+                  }
+            });
+        }else if($viewValue.length == 0){
+            $scope.notifarray = [];
+            polling(0);
+            timer  = $interval(function(){
+                 polling(0);
+            }, 60000, 0,true); 
+        }
+
+    }
+
+	function polling (minimum ) {
+        
 		if($rootScope.template == "notification"){
 
 			if(!AclService.can('NAPPDATADEF')){
-				if(user.id=="599"){ // PL STP -- CRO9
-					// var json ={'sCroID':"STP_PL", 
-					// 		'sInstID':user.institutionID, 
-					// 		'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};
-
-                    var json ={'sCroID':"STP_PL", 
+				if(user.id=="599"){ 
+                    $scope.json ={'sCroID':"STP_PL", 
                     'sInstID':user.institutionID, 
                     'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit}
 				}else{
-					// var json ={'sCroID':"STA",  // CRO9
-					// 		'sInstID':user.institutionID,
-					// 		'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};
-
-                    var json ={'sCroID':"STA",  // CRO9
+                    $scope.json ={'sCroID':"STA",  // CRO9
                     'sInstID':user.institutionID,
                     'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit};
 				}
 			}else if(user.id=="586"){
-				// var json ={'sCroID':"PL_QUEUE",  // CRO1 PL Normal
-				// 		'sInstID':user.institutionID, 
-				// 		'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};
-
-                var json ={'sCroID':"PL_QUEUE",  // CRO1 PL Normal
+                $scope.json ={'sCroID':"PL_QUEUE",  // CRO1 PL Normal
                         'sInstID':user.institutionID, 
                         'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit};
-            }
-			else{
-      //           var json ={'sCroID':"default", // CRO1,CRO2 Normal
-						// 'sInstID':user.institutionID, 
-						// 'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};//,'sCriteria' :"SIKKIM"
-                
-                var json ={'sCroID':"default", // CRO1,CRO2 Normal
+            }else{
+                $scope.json ={'sCroID':"default", // CRO1,CRO2 Normal
                         'sInstID':user.institutionID, 
-                        'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit}
+                        'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit};
 			}
+
 			var URL;
 
-            if(user.id=="708"){
+
+			if(user.id=="708"){
                 URL = 'cro3-queue';
+                if(user.branches && user.branches.length>0)
+                $scope.json ={
+                    'sCroID':"default", // CRO1,CRO2 Normal
+                    'sInstID':user.institutionID, 
+                    'sGrpID':"0",
+                    'iSkip': minimum,
+                    'iLimit' :$scope.limit,
+                    'oCriteria':{"aBranches":user.branches}
+                };
+
             }
             else if(AclService.can('NCROQUE')){
 				URL = 'cro-queue'; //All 
-				//URL = 'cro-queue-criteria';
 			}else{
 				URL = 'cro2-queue'; // Only CRO2
 			}
-			RestService.saveToServer(URL,json).then(function(data){
-				if(!_.isNull(data) || _.isUndefined(data)){
+
+			RestService.fetchDataQuietly(URL,$scope.json).then(function(data){
+				
+                if(!_.isNull(data) || !_.isUndefined(data)){
+
                     var queArray = _.union($scope.notifarray,data);
-                    //only union, after interval adds +10 element in queue
+                    
                     var filteredData = _.uniq(queArray, function(item, key, sRefID) { 
                         return item.sRefID;
-                    });//only unique will fix length of data in queue
-                    $scope.notifarray = filteredData;
-					$scope.error ="";
-                     console.log($scope.notifarray.length);
+                    });
+
+                    $scope.notifarray = filteredData;                    
 				}
 			});	
   		}
 	}
-    setInterval(polling, 30000,0);
+
+    if(_.isUndefined(timer)){
+          timer  = $interval(function(){
+                    polling($scope.minVal);
+          }, 60000, 0,true);    
+    }
+
+    polling($scope.minVal);
+
     $scope.addrType = SelectArrays.getAddrType();
 	$scope.addr_type = $scope.addrType[1];   //to set default address
 	$scope.aplcntType=[{value:"SAL","text":"Salaried"},
@@ -468,12 +513,9 @@
 
     $scope.showimage = function(obj,isImgFlag,index,editMode){
         var modalInstance = $uibModal.open({
-                      animation: $scope.animationsEnabled,
                       templateUrl: 'views/templates/modal.html',
                       controller: 'supportedDocuments',
                       size: 'lg',
-                      backdrop: 'static',
-                      keyboard: false,
                       resolve:{
                         ImageFeed : function (){
                             var imageData;
@@ -493,8 +535,7 @@
 
          modalInstance.result.then(function (selected) {
                         }, function (array) {
-                            if(isImgFlag
-                                ){
+                            if(isImgFlag){
                                 $log.info($scope.rejectImgFromServer);
                                  var filter = _.filter(array,function(arr2obj){
                                     return arr2obj.sStat == "Reject";
@@ -505,14 +546,15 @@
                         });
     }
 
-	$scope.load_details = function(CustID,dedupeflag,applicationRequestType)
-	{  
+	$scope.load_details = function(CustID,dedupeflag,applicationRequestType){
+
         $scope.currentApplicationFormRefID=CustID;
 
         $scope.isUpdating=false;        
 		
         var URL='';
 		var json ={'sRefID':CustID};	
+
 
         //applicationRequestType= sRqTyp introducted in PL Salary
         //PS=Partial Save & FP=Fully processed
@@ -542,9 +584,8 @@
             var transfrmedOject ;
             if(response){
                 transfrmedOject =  response;
-                transfrmedOject.aAppScoRslt = _.uniq(transfrmedOject.aAppScoRslt,true,function(object){
-                   /* if(object.sFldName  && !_.isEmpty(object.sFldVal))*/
-                    return object.sFldName;
+                transfrmedOject.aAppScoRslt = _.uniq(transfrmedOject.aAppScoRslt,function(item, key, sFldName){
+                    return item.sFldName;
                 });
 
             }
@@ -557,11 +598,13 @@
 			 $scope.objectSet = NotificationObject.dummy();
 			
             $scope.Picked = CustID;
-            $scope.done = '';
-            $scope.error = '';
             $scope.dedupeRefArray = [];
             $scope.isAllImgApprove = true;
             $scope.showrefid = true;
+            $scope.invoiceDate = false;
+            $scope.invoiceNumber = false;
+            $scope.isInvoiceAvailable = true;
+            $scope.datefilter.date = '';
             $scope.croDecision = response.aCroDec;
             $scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"  "+$scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
 
@@ -578,19 +621,38 @@
                 dateOfBirth.setDate(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)));
                 dateOfBirth.setMonth((parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4))-1));
                 
-                // $scope.objectSet.oAppReq.oReq.oApplicant.sDob =$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0,2)
-                //                                                 +"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2,4)
-                //                                                 +"/"+$scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4);
-
                 $scope.app_form={pickerDob:dateOfBirth};
             }
 
+            //Fetch application status of selected application 
 			var data = 	$scope.notifarray;
 			_.each(data ,function(value){
-
                 if(value.sRefID ==  $scope.objectSet.oAppReq.sRefID){
-                    $scope.applctnstatus = value.sStat;}
+                        $scope.applctnstatus = value.sStat;
+                }
             });
+
+            try{
+                if($scope.objectSet.oInvDtls){
+                    if($scope.objectSet.oInvDtls.dtInv && $scope.objectSet.oInvDtls.sInvNumber){
+                        var Dateformat = moment($scope.objectSet.oInvDtls.dtInv).format('DD-MM-YYYY hh:mm:s');
+                         $scope.datefilter.date = Dateformat;
+                         $scope.invoiceDate = true;
+                         $scope.invoiceNumber = true;
+                         $scope.isInvoiceAvailable = false;
+                    }else{
+                         $scope.invoiceDate = false;
+                         $scope.invoiceNumber = false;
+                         $scope.isInvoiceAvailable = true;
+                         $scope.datefilter.date = '';
+                    }
+                }
+            }catch(e){
+                    $scope.invoiceDate = false;
+                    $scope.invoiceNumber = false;
+                    $scope.isInvoiceAvailable = true;
+                    $scope.datefilter.date = '';
+            }
 
             try{
                  if($scope.objectSet.oLosDtls.sLosID){
@@ -618,10 +680,14 @@
             }catch(e){
 
             }
+            try{
+                $scope.foirAmount = $scope.objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT'].toFixed(2);
+            }catch(e){
+                 $scope.foirAmount = '';
+            }
             return response;
 			
 		}).then(function(data){
-
             if(data){            
                 var objArray = _.map(_.pluck(data.aAppImgDtl, 'aImgMap'),function(data){
                         return data;
@@ -653,6 +719,9 @@
                             if(!_.isUndefined(data) || !_.isNull(data)){
                                 if(!_.isEmpty(data.sByteCode)){
                                 val["sByteCode"] = "data:image/png;base64,"+data.sByteCode; 
+                                if(val.sReason == null){
+                                    val.sReason = "";
+                                }
                                  $scope.imageDataArray.push(val); 
                                 }  
                             }
@@ -668,61 +737,54 @@
                 $scope.rejectImgFromServer = rejectImgFromServer;
             }
         });
- }
+    }
 
-$scope.newApplication = function(){ 
-	if(AclService.can('NCROQUE')){
-	   $scope.container = false;
-	}		
-}
+    $scope.newApplication = function(){ 
+    	if(AclService.can('NCROQUE')){
+    	   $scope.container = false;
+    	}		
+    }
 
-//for back button of grey form
-$scope.toggleForm= function(){
-	$scope.container = !$scope.container;
-}
 
-$scope.scoreTree = function(){
-    var modalInstance = $uibModal.open({
-              animation: $scope.animationsEnabled,
-              templateUrl: 'views/templates/score-tree.html',
-              controller: 'scoreTreeCtr',
-              size: 'lg',
-              backdrop: 'static',
-              keyboard: false,
-              resolve:{
-                treeFeed : function (){
-                    var scoreTree;
-                    return scoreTree = {
-                        treeData : $scope.objectSet.oCompRes.scoringServiceResponse.SCORE_TREE
+    $scope.toggleForm= function(){
+    	$scope.container = !$scope.container;
+    }
+
+    $scope.scoreTree = function(){
+            var modalInstance = $uibModal.open({
+                  templateUrl: 'views/templates/score-tree.html',
+                  controller: 'scoreTreeCtr',
+                  size: 'lg',
+                  resolve:{
+                    treeFeed : function (){
+                        var scoreTree;
+                        return scoreTree = {
+                            treeData : $scope.objectSet.oCompRes.scoringServiceResponse.SCORE_TREE,
+                            custName : $scope.name,
+                            custRefId :$scope.objectSet.oAppReq.sRefID
+                        }
                     }
-                }
-              }
+                  }
             });
     }
 	
-$scope.cro_action = function(refID, action){ 
-	/*$scope.appltnID = appID;*/
-    $scope.isAllImgApprove = true;
-     _.each($scope.imageDataArray,function(val){
-        if(val.sStat != "Approve"){
-           $scope.isAllImgApprove = false;
-           return;
-        }
-    });
-      console.log($scope.isAllImgApprove);
+    $scope.cro_action = function(refID, action){ 
+        $scope.isAllImgApprove = true;
+         _.each($scope.imageDataArray,function(val){
+            if(val.sStat != "Approve"){
+               $scope.isAllImgApprove = false;
+               return;
+            }
+        });
 
 		if(refID !== ""){
             if(($scope.applctnstatus.toUpperCase() == "QUEUE") || (!AclService.can('NCROQUE'))){
 			 if(action == "OnHold"){
-				/* $scope.toggleDocPanel = !$scope.toggleDocPanel;
-				 $scope.docOfferFlag = true;*/
+				
                   var modalInstance = $uibModal.open({
-                      animation: $scope.animationsEnabled,
                       templateUrl: 'views/templates/onhold-panel.html',
                       controller: 'onholdModelCtrl',
                       size: 'lg',
-                      backdrop: 'static',
-                      keyboard: false,
                       resolve: {
                         holdModelFeed : function (){
                             var dataForModel;
@@ -747,14 +809,10 @@ $scope.cro_action = function(refID, action){
                         });
 			 
 			 }else if(action == "Declined"){
-			 	/*$scope.toggleDclnPanel = !$scope.toggleDclnPanel;*/
                   var modalInstance = $uibModal.open({
-                      animation: $scope.animationsEnabled,
                       templateUrl: 'views/templates/decline-panel.html',
                       controller: 'DeclInstanceCtrl',
                       size: 'lg',
-                      backdrop: 'static',
-                      keyboard: false,
                       resolve: {
                          dclnModelFeed : function (){
                             var dataForDcl;
@@ -778,7 +836,7 @@ $scope.cro_action = function(refID, action){
                                     'sHeader':{'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
                                     'sInstID':user.institutionID,'sCroId':user.id},
                                     "sAppStat":"Declined",
-                                    "aCroJustification":arrayDclnDesc, //not yet
+                                    "aCroJustification":arrayDclnDesc, 
                                     "aDedupeRefID ": ($scope.dedupeRefArray ? $scope.dedupeRefArray : [])
                                     };
                         requestFordclnOnhold(json);
@@ -788,12 +846,9 @@ $scope.cro_action = function(refID, action){
 			 }else{
                     if($scope.isAllImgApprove){
                      var modalInstance = $uibModal.open({
-                      animation: $scope.animationsEnabled,
                       templateUrl: 'views/templates/approve-panel.html',
                       controller: 'ModalInstanceCtrl',
                       size: 'lg',
-                      backdrop: 'static',
-                      keyboard: false,
                       resolve: {
                         modalFeed : function (){
                             var dataForModel;
@@ -833,55 +888,51 @@ $scope.cro_action = function(refID, action){
 
                         });
                  }else{
-                        alert("Please approve all the images");
-                    }
+                    notifier.logWarning("Please approve all the images") ;
+                 }
 			  }
           }else if($scope.applctnstatus == null){
-                $scope.error = "Application status is not defined...!!!";
-                $scope.done = "";
+                notifier.logWarning("Application status is not defined!!");
         }else{
-            $scope.error = "Application has already taken an action...!!!";
-            $scope.done = "";
+            notifier.logWarning("An action is already taken for this application!!");
          }
 	  }else{
-        $scope.error = "Please select enquiry from Queue...!!!";
-        $scope.done = "";
+        notifier.logWarning("Please select application from Queue !");
     }       
-}
+ }
 
 function requestForStatus(json){
-    var URL = 'cro-approval';
-    RestService.saveToServer(URL,json).then(function(Response){
-        if(Response.status == "OK UPDATE SUCCESSFULLY")                     
-        {
+    
+    RestService.saveToServer('cro-approval',json).then(function(Response){
+        
+        if(Response.status == "OK UPDATE SUCCESSFULLY"){
           _.each($scope.notifarray,function(value,key){
                         if($scope.notifarray[key].sRefID == $scope.objectSet.oAppReq.sRefID){
                             return($scope.notifarray[key].sStat = json.sAppStat);
                         }  
                   });
-            $scope.done = "Application is successfully "+json.sAppStat+""; 
+             notifier.logSuccess("Application is successfully "+json.sAppStat+""); 
         }
         else{
-            $scope.error= "Sorry...Unable to Approve your application !!";
+            notifier.logWarning("Unable to Approve your application !");
         }
-    setTimeout(function() { $scope.error = "";},1500);
     }); 
 }
 
 function requestFordclnOnhold(json){
-    var URL='cro-onhold';
-    RestService.saveToServer(URL,json).then(function(Response){
-        if(Response.status == "OK UPDATE SUCCESSFULLY")                     
-        {
+    
+    RestService.saveToServer('cro-onhold',json).then(function(Response){
+        
+        if(Response.status == "OK UPDATE SUCCESSFULLY")                     {
               _.each($scope.notifarray,function(value,key){
                     if($scope.notifarray[key].sRefID ==  $scope.objectSet.oAppReq.sRefID){
                         return($scope.notifarray[key].sStat = json.sAppStat);
                     }  
               });
-            $scope.done = "Application is successfully "+json.sAppStat+""; 
+             notifier.logSuccess("Application is successfully "+json.sAppStat+""); 
         }
         else{
-            $scope.error= "Sorry...Unable to update your action !!";
+            notifier.logWarning("Unable to update your action !");
         }
     });
 }
@@ -889,93 +940,104 @@ function requestFordclnOnhold(json){
 $scope.losStatusChange=function(status){
     var utr =  $scope.objectSet.oLosDtls.sUtr;
      if(status == "LOS_DISB" &&   $scope.applctnstatus.toUpperCase()=="APPROVED"){ //
-            //$scope.isUtrEdit = false; //&& (utr=='' || utr==null)//can edit
             if(utr=='' || utr==null){
                  $scope.isUtr();
-                $scope.utrVal = false; //enable utr field to edit       
+                $scope.utrVal = false;     
             }
         }else{
-             // $scope.isUtrEdit = true;
-             $scope.utrVal = true; //disable utr field
+             $scope.utrVal = true;
         }
 }
 
-//clicking refId from drop down of dedupe cases
 $scope.onchange = function(id) {
         $scope.backUpDefaultRefId.push($scope.objectSet);
-        if(id!='Select'){
+        
+        if(id != 'Select'){
              $scope.load_details(id,false);
         }else{
+
             $scope.defaultRefId= $scope.backUpDefaultRefId[0].oAppReq.sRefID;
             $scope.load_details($scope.defaultRefId,true);
         }
 }
 
-$scope.updateLosData = function(status){
-	var losStat = status;
-    var losId = '';
-     var utr = '';
-    if($scope.objectSet.oLosDtls){
-        losId = $scope.objectSet.oLosDtls.sLosID;
-        utr = $scope.objectSet.oLosDtls.sUtr;
-    }
+    $scope.updateLosData = function(status){
+        if($scope.objectSet.oAppReq.sRefID!=""){
+        	var losStat = status;
+            var losId = '';
+            var utr = '';
+            if($scope.objectSet.oLosDtls){
+                losId = $scope.objectSet.oLosDtls.sLosID;
+                utr = $scope.objectSet.oLosDtls.sUtr;
+            }
 
-    if((!$scope.utrVal && ( utr!=null && utr!='')) || ($scope.utrVal)){
-    	if((losId !=null && losId != "") && (losStat !=null && losStat !='')){
-    		 var jsondata=	 {
-			    "sRefID":$scope.objectSet.sRefID,
-			    "oHeader":{
-			         "sAppID":$scope.objectSet.oAppReq.oHeader.sAppID,
-			         "sInstID":user.institutionID,
-			         "sSourceID":"WEB",
-			         "sAppSource":"WEB",
-			         "sReqType":"JSON",
-			         "sCroId":user.id
-			    },
-			    "oLosDtls":{
-			        "sLosID":losId,
-			        "sStat":losStat,
-			        "sUtr":utr
-			    }
-			};	 
-            console.log(jsondata);
-    		 var URL='update-los-details';
-    		RestService.saveToServer(URL,jsondata).then(function(Response){
-    				if(Response.status == "SUCCESS"){
-    					alert("LOS Status updated successfully");
-    					$scope.losIdval = true;
-                        $scope.utrVal = true;
-    				}else{
-    					alert("LOS Status is not updated successfully");
-    				}
-    		 });
-    	}
-	}
-}
-	 
-	/******************* Reinitiate & Update *****************/
-	$scope.dobFormat = "dd/MM/yyyy";
+            if((!$scope.utrVal && ( utr!=null && utr!='')) || ($scope.utrVal)){
+            	if((losId !=null && losId != "") && (losStat !=null && losStat !='')){
+            		 var jsondata=	 {
+        			    "sRefID":$scope.objectSet.oAppReq.sRefID,
+        			    "oHeader":{
+        			         "sAppID":$scope.objectSet.oAppReq.oHeader.sAppID,
+        			         "sInstID":user.institutionID,
+        			         "sSourceID":"WEB",
+        			         "sAppSource":"WEB",
+        			         "sReqType":"JSON",
+        			         "sCroId":user.id
+        			    },
+        			    "oLosDtls":{
+        			        "sLosID":losId,
+        			        "sStat":losStat,
+        			        "sUtr":utr
+        			    }
+        			};	 
+            		 
+            		RestService.saveToServer('update-los-details',jsondata).then(function(Response){
+            				if(Response.status == "SUCCESS"){
+                                notifier.logSuccess("LOS Status updated successfully");
+            					$scope.losIdval = true;
+                                $scope.utrVal = true;
+            				}else{
+                                notifier.logWarning("Sorry! We are unable to update your LOS Status");
+            				}
+            		 });
+            	}else{
+                     notifier.logWarning("Please provide LOS Data !");
+                }
+        	}
+        }else{
+            notifier.logWarning("Please select application from queue !");
+        }
+    };
+	
+    $scope.dobFormat = "dd/MM/yyyy";
     $scope.dobPopup = {
         opened: false
     };
+    
+    $scope.datePopup = {
+        opened: false
+    };
+
+     $scope.openDateDialog=function(){
+        $scope.datePopup.opened = true;
+    }; 
     
     var minDa = new Date();
     minDa.setFullYear(minDa.getFullYear()-100);
     
     var maxDa = new Date();
     maxDa.setFullYear(maxDa.getFullYear()-18);
-    //alert($filter('date')(maxDa,"dd:MM:yyyy"));
     
     $scope.dateOptions = {          
         formatYear: 'yyyy',
         showWeeks:false,
-        maxDate: maxDa,
+        maxDate: maxDa, 
         minDate: minDa,
         startingDay: 1
     };
+
     $scope.enableForm=function(){
-        if($scope.objectSet.iNoReTry>=2){
-                alert("This application is already re-initiated twice.");
+        if($scope.objectSet.iNoReTry >= 2){
+                notifier.logWarning("This application is already re-initiated twice") ;
         }else{
             $scope.fieldsUpdated={
                 isNameUpdated:false,
@@ -996,25 +1058,26 @@ $scope.updateLosData = function(status){
                 }
             });
 
-            //$scope.oldPinCode=;
 
             $scope.isUpdating=!$scope.isUpdating;
+
+            var applicant=$scope.objectSet.oAppReq.oReq.oApplicant;
             
-            if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs!=null){
+            if(applicant.aKycDocs!=null){
                 var isAadhaarPresent=false;
                 var isVoterPresent=false;
                 var isPanPresent=false;
 
-                for(var i=0;i<$scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.length;i++){
-                    if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("aadhar")>=0){
+                for(var i=0;i<applicant.aKycDocs.length;i++){
+                    if(applicant.aKycDocs[i].sKycName.toLowerCase().indexOf("aadhaar")>=0){
                         isAadhaarPresent=true;
                     }
 
-                    if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("pan")>=0){
+                    if(applicant.aKycDocs[i].sKycName.toLowerCase().indexOf("pan")>=0){
                         isPanPresent=true;
                     }
 
-                    if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[i].sKycName.toLowerCase().indexOf("voter")>=0){
+                    if(applicant.aKycDocs[i].sKycName.toLowerCase().indexOf("voter")>=0){
                         isVoterPresent=true;
                     }
                 }
@@ -1023,12 +1086,12 @@ $scope.updateLosData = function(status){
                     var newKYC={
                         sExpiryDate:null,
                         sIssueDate:null,
-                        sKycName:"AADHAR",
+                        sKycName:"AADHAAR",
                         sKycNumber:"",
                         sKycStat:null
                     }
                     
-                    $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
+                    applicant.aKycDocs.push(newKYC);
                 }
                 
                 if(!isVoterPresent){
@@ -1039,7 +1102,7 @@ $scope.updateLosData = function(status){
                         sKycNumber:"",
                         sKycStat:null
                     }
-                    $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
+                    applicant.aKycDocs.push(newKYC);
                 }
                 
                 if(!isPanPresent){
@@ -1050,12 +1113,11 @@ $scope.updateLosData = function(status){
                         sKycNumber:"",
                         sKycStat:null
                     }
-                    $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.push(newKYC);
+                    applicant.aKycDocs.push(newKYC);
                 }
             }
             /* dob popup */     
-            $scope.openDOBDialog=function(){
-                
+            $scope.openDOBDialog=function(){                
                 $scope.dobPopup.opened = true;          
             };      
             /* dob popup */
@@ -1063,20 +1125,20 @@ $scope.updateLosData = function(status){
     };
 
     $scope.updateForm=function(){
-        if($scope.objectSet.iNoReTry>=2){
-            alert("This application is already re-initiated twice.");
+        if($scope.objectSet.iNoReTry >= 2){
+            notifier.logWarning("This application is already re-initiated twice");
         }else{
             if($scope.isUpdating){
-                var dobFormatted=$filter('date')($scope.app_form.pickerDob,"dd/MM/yyyy")
+                var dobFormatted=$filter('date')($scope.app_form.pickerDob,"dd/MM/yyyy");
                 if(dobFormatted && dobFormatted!="")
                 {
                     $scope.objectSet.oAppReq.oReq.oApplicant.sDob=dobFormatted.replace(/\//g,"");
                 }
-        
+
                 if($scope.objectSet.oAppReq.oReq.oApplicant.sDob!=dobFormatted){
                      $scope.fieldsUpdated.isDobUpdated=true;
                 }
-        
+
                 _.each($scope.objectSet.oAppReq.oReq.oApplicant.aAddr,function(addr){
                     if(addr.sAddrType.toLowerCase()=="residence" && addr.iPinCode != $scope.oldResPincode){
                         $scope.fieldsUpdated.isResAddressUpdated=true;
@@ -1084,22 +1146,17 @@ $scope.updateLosData = function(status){
                         $scope.fieldsUpdated.isOffAddressUpdated=true;
                     }
                 });
-        
+
                 $scope.isUpdating=!$scope.isUpdating;
-                
-        //        console.log("Updating form : ");
-        //        console.log($scope.objectSet);
-                
+
                 $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet,$scope.fieldsUpdated);
             }else{
                  $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet);
             }
         }
     };
-    
-    $scope.onValueChanged=function(valueChanged){
-        console.log("Value Changed :"+valueChanged);
 
+    $scope.onValueChanged=function(valueChanged){
         if(valueChanged == "name"){
             $scope.fieldsUpdated.isNameUpdated=true;
         }else if(valueChanged == "resAddress"){
@@ -1116,11 +1173,9 @@ $scope.updateLosData = function(status){
             $scope.fieldsUpdated.isVoterIDUpdated=true;
         }
     };  
-    
+
     $scope.showReinitiateModal = function (size,refID,applicantData,fieldsUpdated) {
-         //alert('modal baseURL'+baseURL);
-         var modalInstance = $uibModal.open({
-            animation: $scope.animationsEnabled,
+        var modalInstance = $uibModal.open({
             templateUrl: 'views/modal-reinitiate.html',
             controller: 'ReinitiateModalController',
             size: size,
@@ -1135,21 +1190,22 @@ $scope.updateLosData = function(status){
                     return fieldsUpdated;
                 }
             }
-         });
+        });
+
+        modalInstance.result.then(function (isSuccess,refID) {           
+            if(isSuccess){
+                $scope.objectSet.iNoReTry=$scope.objectSet.iNoReTry +1;
+                 //$scope.showReinitiateStatusModal("lg",$scope.refID);
+            }
+        });
     };
 
     $scope.getStateCity=function($event,address){
+        var pin = $event.target.value;
+        address.sCity = "";
+        address.sState = "";
         
-        console.log("getStateCity");
-        console.log(address);
-        var pin=$event.target.value;
-        
-        address.sCity="";
-        address.sState="";
-        
-        if(pin.length==6){
-            //alert($event.target.value);
-
+        if(pin.length === 6){
             var pinJson ={"oHeader":{"sInstID":user.institutionID},"sQuery":pin}; 
             
             RestService.saveToServer("pincode-details-web",pinJson).then(function(data){
@@ -1157,15 +1213,12 @@ $scope.updateLosData = function(status){
                     address.sCity=data.sCity;
                     address.sState=data.sState;
                 }
-                //console.log(data);
             });
         };
     };
 
     $scope.showReinitiatedDecisionData=function(size,requestObj){
-//      console.log("showDecisionReinitiatedData");
         var modalInstance = $uibModal.open({
-            animation: $scope.animationsEnabled,
             templateUrl: 'views/modal-bre-results.html',
             controller: 'ReinitiatedDecisionModalController',
             size: size,
@@ -1176,60 +1229,180 @@ $scope.updateLosData = function(status){
             }
         });
     };
+
+    $scope.invoiceDate = false;
+    $scope.invoiceNumber = false;
+    
+    $scope.datefilter =  {            
+         date : {
+             startDate: null,
+             endDate: moment()        
+         },
+         timePickerIncrement: 1,
+         opts: {
+             timePicker: true,
+             singleDatePicker : true,
+             max: moment().format('YYYY-MM-DD'), 
+             opens : "center",
+             applyClass: 'btn-primary',
+             isCustomDate: function(data){
+                 return '';
+             },
+             locale: {
+                 applyLabel: "Apply",
+                 fromLabel: "From",
+                 format: "DD/MM/YYYY h:mm:ss A",
+                 cancelLabel: 'Cancel',
+                 customRangeLabel: 'Custom range',
+                 daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+                 monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                 firstDay: 1
+             }, 
+             eventHandlers: {
+                 "apply.daterangepicker" : function(ev, picker){
+                     //TODO call service to fetch data based on date range
+                 },
+                 'show.daterangepicker' : function(ev , picker){
+                     $scope.datefilter.date.startDate = undefined;
+                 },
+                 'hide.daterangepicker': function(ev,picker){
+                     //TODO hide picker;
+                 }
+             }   
+         }
+     };
+
+     $scope.saveInvoice = function(invoiceNum,invoiceDate){
+          if($scope.objectSet.oAppReq.sRefID!=""){
+            if(invoiceNum && invoiceDate ){
+               var dobFormatted=$filter('date')(invoiceDate._d,"dd-MM-yyyy HH:mm:ss"),
+               json = {
+                       "oHeader":{
+                       "sInstID":user.institutionID,
+                       "sCroId":user.id,
+                       "sAppSource":"WEB"
+                       },
+                       "sRefID":$scope.objectSet.oAppReq.sRefID,
+                       "oInvDtls":{
+                       "sInvNumber":invoiceNum,
+                       "dtInv":dobFormatted
+                       }
+                    };
+
+                RestService.saveToServer("update-invoice-details",json).then(function(Response){
+                    if(Response.status == "SUCCESS"){
+                        notifier.logSuccess("Invoice details updated successfully");
+                        $scope.invoiceNumber = true;
+                        $scope.invoiceDate = true;
+                        $scope.isInvoiceAvailable = false;
+                    }else{
+                        notifier.logWarning("We are unable to update Invoice details") ;
+                    }
+                });
+            }
+        }else{
+            notifier.logWarning("Please select application from queue !") ;
+        }
+    };
+
+    $scope.loadPDF=function(){        
+        var postIPARequest = {
+            oHeader: {
+                sCroId:"default",
+                dtSubmit:new Date().getTime(),
+                sReqType:null,
+                sAppSource:"WEB",
+                sDsaId:user.username,
+                sAppID:"",
+                sDealerId:null,
+                sSourceID:null,
+                sInstID:user.institutionID
+            },
+            opostIPA:null,
+            sRefID:$scope.currentApplicationFormRefID,
+            refID:$scope.currentApplicationFormRefIDssss,
+            dtDateTime:new Date().getTime()
+        };
+
+        RestService.saveToServer('get-post-ipa',JSON.stringify(postIPARequest)).then(function(response){
+            if(response){        
+                postIPARequest.opostIPA=response;
+                
+                RestService.saveToServer("get-pdf-ref",JSON.stringify(postIPARequest)).then(function(response){
+                    if(response){
+                        $scope.shwPDFModal('lg',response);
+                    }else{
+                        notifier.logWarning("We are unable to load DO for this application") ;
+                    }
+                });
+            }else{
+                notifier.logWarning("We are unable to load DO for this application") ;
+            }
+        });
+    };
+
+    $scope.shwPDFModal = function (size,response) {
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'views/modal-do-view.html',
+            controller: 'DOModalCtrl',
+            size: size,
+            resolve: {
+                response:function(){
+                    return response;
+                }
+            }
+        });
+    };
+
+    // destructor function for scope 
+    $scope.$on("$destroy",function(){
+        if(angular.isDefined(timer)){
+             $interval.cancel(polling);
+             timer = undefined;
+        }
+    });
 }]);
 
-app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$uibModalInstance","requestObj","UserService",function($scope,RestService,$uibModalInstance,requestObj,UserService){
-    console.log("ReinitiatedDecisionModalController");
-    console.log(requestObj);
+app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$uibModalInstance","requestObj","UserService","notifier",
+    function($scope,RestService,$uibModalInstance,requestObj,UserService,notifier){
 
-    var user=UserService.getCurrentUser();
+    var user = UserService.getCurrentUser();
 
-    $scope.appForms=[];
+    $scope.appForms = [];
 
     if(requestObj.oCompRes.scoringServiceResponse && requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE){
+
         requestObj.elgbltyGrid = ( requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID ? requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID : "" ) 
                                 +"."
                                 + (requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID ? requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID : (requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] ? requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] : "" ));
     }
+
     $scope.appForms.push(requestObj);
     
-//  $scope.bureau = requestObj.aAppScoRslt;
-//
-//  $scope.cibilS = requestObj.oIntrmStat.oCibilResult.sFldVal;
-//
-//  $scope.offAddrStab= requestObj.oIntrmStat.oOffAddressResult.iAddrStblty;
-//
-//  $scope.resAddrStab= requestObj.oIntrmStat.oResAddressResult.iAddrStblty;
-//
-//  $scope.kyc_status = requestObj.oIntrmStat.oPanResult; 
-//
-//  $scope.appldAmount = requestObj.oAppReq.oReq.oApplication.dLoanAmt;
-//
-//  $scope.croDec=requestObj.aCroDec[0];
-//
-//  $scope.offAddrStab= requestObj.oIntrmStat.oOffAddressResult.iAddrStblty;
-//
-//  $scope.resAddrStab= requestObj.oIntrmStat.oResAddressResult.iAddrStblty;
-//
-//  $scope.DetailsResp=requestObj.oCompRes.scoringServiceResponse["DECISION_RESPONSE"].Details;
-//  
-//  if(Response.oCompRes.scoringServiceResponse && Response.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE){
-//      $scope.Eremark = requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.REMARK;
-//      $scope.ElgbltyGrid = ( requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID ? Response.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID : "" ) 
-//                           +"."
-//                           + (requestObj.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID ? Response.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID : (Response.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] ? Response.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] : "" ));
-//  }
 
-    //'sAppID':$scope.appltnID,'sInstID':user.institutionID,'sCroId':user.id
-    var requestJson={"oHeader":{"sAppID":requestObj.oAppReq.sRefID,"sInstID":user.institutionID,"sSourceID":"WEB","sAppSource":"WEB","sReqType":"JSON","dtSubmit":new Date().getTime(),"sDsaId":null,"sCroId":user.id,"sDealerId":null},"sRefID":requestObj.oAppReq.sRefID,"sProduct":"Consumer Durables","iNoOfRecord":2}
+    var requestJson = {
+                    "oHeader":{
+                            "sAppID":requestObj.oAppReq.sRefID,
+                            "sInstID":user.institutionID,
+                            "sSourceID":"WEB",
+                            "sAppSource":"WEB",
+                            "sReqType":"JSON",
+                            "dtSubmit":new Date().getTime(), 
+                            "sDsaId":null,
+                            "sCroId":user.id,
+                            "sDealerId":null
+                          },
+                     "sRefID":requestObj.oAppReq.sRefID,
+                     "sProduct":"Consumer Durables",
+                     "iNoOfRecord":2
+                  }
 
-    var URL="worker/bre-audit-data/";
 
-     RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
-        //[{"applicationLog":{},"sRefID":"5788d78b5bc7ec48de2796c2","bStatFlag":false,"iNoReTry":0,"oCompRes":{},"oIntrmStat":{"sRefId":null,"sAppID":null,"sInstID":null,"dtStart":1468681176705,"dtETime":null,"sAppStart":"DEFAULT","sDedupe":"DEFAULT","sEmailStat":"DEFAULT","sOtpStat":"COMPLETE","sAppStat":"DEFAULT","sPanStat":"DEFAULT","sAadharStat":"DEFAULT","sMbStat":"DEFAULT","sVarScoreStat":"DEFAULT","sScoreStat":"DEFAULT","sCblScore":"DEFAULT","sCroStat":"DEFAULT","oPanResult":null,"oCibilResult":null,"oResAddressResult":null,"oOffAddressResult":null,"oScoringResult":null,"oAadharResult":null,"oExperianResult":null,"oEquifaxResult":null,"oCHMResult":null,"oMbResult":null},"bNegPinCodeFlag":false,"aAppScoRslt":[]},{"applicationLog":{},"sRefID":"5788d78b5bc7ec48de2796c3","bStatFlag":false,"iNoReTry":0,"oCompRes":{},"oIntrmStat":{"sRefId":null,"sAppID":null,"sInstID":null,"dtStart":1468681176705,"dtETime":null,"sAppStart":"DEFAULT","sDedupe":"DEFAULT","sEmailStat":"DEFAULT","sOtpStat":"COMPLETE","sAppStat":"DEFAULT","sPanStat":"DEFAULT","sAadharStat":"DEFAULT","sMbStat":"DEFAULT","sVarScoreStat":"DEFAULT","sScoreStat":"DEFAULT","sCblScore":"DEFAULT","sCroStat":"DEFAULT","oPanResult":null,"oCibilResult":null,"oResAddressResult":null,"oOffAddressResult":null,"oScoringResult":null,"oAadharResult":null,"oExperianResult":null,"oEquifaxResult":null,"oCHMResult":null,"oMbResult":null},"bNegPinCodeFlag":false,"aAppScoRslt":[]}]
-        if(Response){
-            _.each(Response,function(resp){
-                resp=resp.auditData;
+     RestService.saveToServer("worker/bre-audit-data/",JSON.stringify(requestJson)).then(function(response){
+        if(response){
+            _.each(response,function(resp){
+                resp = resp.auditData;
                 if(resp.oCompRes.scoringServiceResponse && resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE)
                 {
                     resp.elgbltyGrid = ( resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID ? resp.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID : "" ) 
@@ -1240,15 +1413,20 @@ app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$ui
             });         
         }
     });
+
+    $scope.closeModal = function(){
+        $uibModalInstance.dismiss();
+    };
 }]);
 
-app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService',
-    function($scope,ImageFeed,$uibModalInstance,$timeout,RestService){
-    /*$scope.myInterval = 5000;*/
+app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService','notifier',
+    function($scope,ImageFeed,$uibModalInstance,$timeout,RestService,notifier){
+    
     $scope.noWrapSlides = true;
     $scope.active = ImageFeed.index;
     var rejectedImgArray = [];
     $scope.iseditMode = ImageFeed.editMode;
+    var backUpImgData = angular.copy(ImageFeed.docData);
     
     if(ImageFeed.isImage){
         $scope.imageTag = 1;
@@ -1275,7 +1453,7 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
                     "sReason":""
                   }
             };
-            $scope.imageService(json,$scope.slides[index]);
+            $scope.imageService(json,$scope.slides[index],index);
         }
     }
 
@@ -1299,35 +1477,32 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
                         "sReason":$scope.slides[index].sReason
                       }
                     };
-            $scope.imageService(json,$scope.slides[index]);
+            $scope.imageService(json,$scope.slides[index],index);
          }
     }
 
-    $scope.imageService = function(json,object){
-         var URL ='update-image-status';
-         RestService.saveToServer(URL,json).then(function(Response){
+    $scope.imageService = function(json,object,index){
+         
+         RestService.saveToServer('update-image-status',json).then(function(Response){
                 if(Response.sStatus == "SUCCESS"){
-                   /* if(json.oUpldDtl.sStat == "Reject"){
-                        rejectedImgArray.push(object);
-                        console.log(rejectedImgArray);
-                    }*/
+                    backUpImgData[index].sStat = json.oUpldDtl.sStat;
+                    backUpImgData[index].sReason = json.oUpldDtl.sReason;
+                    notifier.logSuccess("Image status has been updated Successfully !!");
                 }else{
-                    $scope.slides[index].sReason = '';
+                    $scope.slides[index].sStat = backUpImgData[index].sStat;
+                    notifier.logWarning("Sorry! Unable to update image status !");
                 }
-                   
         });
     }
 
     $scope.onFileSelect = function($files,imageName,imageIndex){
-               // $files: an array of files selected, each file has
            if(ImageFeed.editMode){
                 for (var i = 0; i < $files.length; i++){       
                     var fname=$files[0].name
                     var re = (/\.(jpg)$/i);
-                    if(!re.exec(fname))
-                    {
-                        alert("File extension not supported!");
-                        break;
+                    if(!re.exec(fname)){
+                        notifier.logWarning("File extension not supported!") ;
+                        return;
                     }
                     var $file = $files[i];
                     var base64;
@@ -1339,7 +1514,7 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
                             base64 = binaryString;
                             if(base64.split(",")[1].substring(0, 13) == "/9j/4AAQSkZJR"){
                                   if(!$scope.slides[imageIndex]["evdncArray"]){
-                                                  $scope.slides[imageIndex]["evdncArray"]=[];
+                                        $scope.slides[imageIndex]["evdncArray"]=[];
                                     }
                                  var json ={
                                       "oHeader": {
@@ -1358,8 +1533,8 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
                                       }
                                     };
                                     if($scope.slides[imageIndex]["evdncArray"].length < 2){
-                                         var URL = 'upload-image';
-                                         RestService.saveToServer(URL,json).then(function(Response){
+                                         
+                                         RestService.saveToServer('upload-image',json).then(function(Response){
                                                 if(Response.sStatus == 'SUCCESS'){
                                                     if(!$scope.slides[imageIndex]["evdncArray"]){
                                                           $scope.slides[imageIndex]["evdncArray"]=[];
@@ -1378,13 +1553,15 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
                                                  }
                                              }); 
                                           }else{
-                                                alert("You have max limit of 2 images!");
+                                              notifier.logWarning("Maximum limit to upload images reached") ;
                                           }
                                 }else{
-                                    alert("File Type Not Supported");
+                                    notifier.logWarning("File Type not supported");
                             }
                         };
+
                         reader.readAsDataURL($files[i]);
+                        
                         $timeout(function() {
                         }, 3000);
                     }
@@ -1393,61 +1570,55 @@ app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','
     }
 
     $scope.closeModal = function(){
-          $uibModalInstance.dismiss($scope.slides);
+          $uibModalInstance.dismiss(backUpImgData);
     };
 
 }]),
 
 app.controller('ModalInstanceCtrl', ['$scope','$rootScope','NotificationObject','modalFeed',
-   '$uibModalInstance','$log', function($scope, $rootScope,NotificationObject,modalFeed,$uibModalInstance,$log){
+   '$uibModalInstance','$log','notifier', 
+   function($scope, $rootScope,NotificationObject,modalFeed,$uibModalInstance,$log,notifier){
    
     $scope.modalFeed = modalFeed;
-    $scope.approvemsg = false;
 
     $scope.saveApprvPanel = function () {
-         if($scope.modalFeed.apprvRemark !=undefined && $scope.modalFeed.apprvRemark !=''){
-             if($scope.modalFeed.apprvSubTo!=undefined && $scope.modalFeed.apprvSubTo!=''){
-                if(modalFeed.approveAmt !=undefined && modalFeed.emi!=undefined && modalFeed.tenor!=undefined){
-                    $uibModalInstance.close($scope.modalFeed);   
-                }else{
-                    $scope.approvemsg = true;
-                }
-             }else{
-                $scope.approvemsg = true;
-            }
-        }else{
-            $scope.approvemsg = true;
+         if($scope.modalFeed.apprvRemark && $scope.modalFeed.apprvSubTo && $scope.modalFeed.approveAmt && ($scope.modalFeed.emi || $scope.modalFeed.emi === 0) && ($scope.modalFeed.tenor || $scope.modalFeed.tenor === 0)){
+            $uibModalInstance.close($scope.modalFeed);   
+        } else {
+           notifier.logWarning("Please provide all the fields !");
         }
     };
 
     $scope.closeApprvPanel = function () {
         $uibModalInstance.dismiss('cancel');
     };
+
 }]);
 
-app.controller('scoreTreeCtr', ['$scope','$uibModalInstance','treeFeed', 
-    function($scope,$uibModalInstance,treeFeed){ 
-       
-    $scope.treeFeed = treeFeed.treeData;    
+app.controller('scoreTreeCtr', ['$scope','$uibModalInstance','treeFeed',function($scope,$uibModalInstance,treeFeed){ 
+    
+    $scope.treeFeed = treeFeed.treeData; 
+    $scope.custName = treeFeed.custName.toUpperCase();
+    $scope.custRefId = treeFeed.custRefId;
     $scope.closeTreePanel = function () {
         $uibModalInstance.dismiss('cancel');
     };
 }]);
 
 app.controller('DeclInstanceCtrl', ['$scope','$rootScope','NotificationObject',
-   '$uibModalInstance','dclnModelFeed', function($scope, $rootScope,NotificationObject,$uibModalInstance,dclnModelFeed){ 
+   '$uibModalInstance','dclnModelFeed','notifier', 
+   function($scope, $rootScope,NotificationObject,$uibModalInstance,dclnModelFeed,notifier){ 
        
     $scope.dclnModelFeed = dclnModelFeed;
-    $scope.errorMsg = false;
     $scope.saveDclnPanel = function () {
         if($scope.dclnModelFeed.dclnRemark !='' && $scope.dclnModelFeed.dclnRemark !=undefined){
             if($scope.dclnModelFeed.dclnSubTo !='' && $scope.dclnModelFeed.dclnSubTo !=undefined){
                 $uibModalInstance.close($scope.dclnModelFeed);        
             }else{
-                 $scope.errorMsg = true;     
+                   notifier.logWarning("Please provide Subject To !");   
             }
         }else{
-            $scope.errorMsg = true;
+            notifier.logWarning("Please provide Remark !"); 
         }
     };
     $scope.closeDclnPanel = function () {
@@ -1456,17 +1627,17 @@ app.controller('DeclInstanceCtrl', ['$scope','$rootScope','NotificationObject',
 }]);
 
 app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
-   '$uibModalInstance','holdModelFeed','SelectArrays', function($scope, $rootScope,NotificationObject,$uibModalInstance,holdModelFeed,SelectArrays){ 
-       
+   '$uibModalInstance','holdModelFeed','SelectArrays','notifier',
+    function($scope, $rootScope,NotificationObject,$uibModalInstance,holdModelFeed,SelectArrays,notifier){ 
+
     var docData =  SelectArrays.getOfferData();
-     $scope.OfferArrey =docData ;
-     $scope.AvailebleOffers = $scope.OfferArrey[0].Offers;
-     $scope.ID = 0;
-     $scope.tabIndex = undefined;
-     $scope.contentSelect = false;
-     $scope.invalidMsg = false;
-     $scope.docOfferFlag = true;
-     $scope.holdModelFeed = holdModelFeed;
+    $scope.OfferArrey =docData ;
+    $scope.AvailebleOffers = $scope.OfferArrey[0].Offers;
+    $scope.ID = 0;
+    $scope.tabIndex = undefined;
+    $scope.contentSelect = false;
+    $scope.docOfferFlag = true;
+    $scope.holdModelFeed = holdModelFeed;
 
     $scope.holdObject = {
         reqComment : ""
@@ -1475,25 +1646,26 @@ app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
     _.each($scope.holdModelFeed.rejectedImage , function(image){
          docData[4].Offers.push({'Name':image.sImgType , 'Icon':'images/rejected proof.png','Code':image.sImgType});
      });
-    
+
       $scope.isCurrTab = function(index){
-        if((index == 0 && $scope.tabIndex== undefined) || index == $scope.tabIndex){
+        if((index === 0 && $scope.tabIndex=== undefined ) || index === $scope.tabIndex){
             return true;
         }
     }
 
      $scope.isSelected = function(index){
-          if((typeof docData[index].selected !="undefined") && (docData[index].selected.length > 0))
+          if((typeof docData[index].selected != "undefined") && (docData[index].selected.length > 0))
           return true;
     }
 
     $scope.Load_Offer = function(NodeID,Obj,index){
         $scope.tabIndex = index;
-        for(var i=0; i<docData.length; i++)
-        {if(docData[i].ID == NodeID)
-        {   $scope.AvailebleOffers = docData[i].Offers;
-            $scope.ID = NodeID;
-        }
+        
+        for(var i = 0; i < docData.length; i++){
+            if(docData[i].ID == NodeID){ 
+                $scope.AvailebleOffers = docData[i].Offers;
+                $scope.ID = NodeID;
+            }
         }
     }
     
@@ -1502,15 +1674,15 @@ app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
             if (typeof docData[$scope.ID].selected != "undefined") {
                     docData[$scope.ID].selected.push(id);   
                     if(typeof docData[$scope.ID].Offers[id].selected == "undefined"){ 
-                        $.extend( docData[$scope.ID].Offers[id], {'selected':'true'});
+                        angular.extend( docData[$scope.ID].Offers[id], {'selected':'true'});
                 }
 
             } else {
                   var selected={'selected':[]};
-                  $.extend( docData[$scope.ID], selected);
+                  angular.extend( docData[$scope.ID], selected);
                   docData[$scope.ID].selected.push(id); 
                 if(typeof docData[$scope.ID].Offers[id].selected == "undefined"){
-                     $.extend( docData[$scope.ID].Offers[id], {'selected':'true'});
+                     angular.extend( docData[$scope.ID].Offers[id], {'selected':'true'});
                 }
             }   
       
@@ -1542,18 +1714,20 @@ $scope.setSelected=function() {
 }
 
 $scope.requestDoc = function () {
-      if($scope.holdObject.reqComment != '' && $scope.holdObject.reqComment != undefined){
+      if($scope.holdObject.reqComment!=''){
         $scope.setSelected();
         var data = $scope.offrData;
-        var arrayDesc = [];
-         for (var j in data){
-            arrayDesc.push({sJCode:data[j].Code,sDescrip:$scope.holdObject.reqComment,sDocName:data[j].Name});
-          }
-          if( $scope.invalidMsg == true)
-             $scope.invalidMsg = !$scope.invalidMsg;
-        $uibModalInstance.close(arrayDesc);
+        if(data.length != 0){
+             var arrayDesc = [];
+             for (var j in data){
+                arrayDesc.push({sJCode:data[j].Code,sDescrip:$scope.holdObject.reqComment,sDocName:data[j].Name});
+              }
+            $uibModalInstance.close(arrayDesc);
+        }else{
+             notifier.logWarning("Please select atleast one required document !");
+        }      
      }else{
-         $scope.invalidMsg = !$scope.invalidMsg;
+         notifier.logWarning("Please enter your reason for Onhold !");
      }
 };
 
@@ -1562,235 +1736,13 @@ $scope.closeDocument = function () {
   };
 }]);
 
-app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantData","$uibModalInstance","fieldsUpdated",function($scope,RestService,refID,applicantData,$uibModalInstance,fieldsUpdated){
-    $scope.refID = refID;
-    $scope.applicantData = applicantData;
-    $scope.fieldsUpdated=fieldsUpdated;
+app.controller('DOModalCtrl', ['$scope', '$uibModalInstance', 'response',
+    function ($scope, $uibModalInstance, response) {
 
-    $scope.fieldModule={};
-    
-    $scope.tags = [];
-    
-    var requestReinitiateModules=[];
-    
-    // var requestReinitiateModules=[
-    //                              {sModuleName : "101", bRunModule : false},
-    //                              {sModuleName : "201", bRunModule : false},
-    //                              {sModuleName : "202", bRunModule : false},
-    //                              {sModuleName : "301", bRunModule : false},
-    //                              {sModuleName : "302", bRunModule : false},
-    //                              {sModuleName : "401", bRunModule : false},
-    //                              {sModuleName : "402", bRunModule : false}
-    //                          ];
+    $scope.response = response;
 
-    $scope.reinitiateModules=[
-                         {main:"MB" ,subs: [{name:"Cibil",id:101,isSuccess:true}]},
-                         {main:"KYC" , subs: [{name:"PAN",id:201,isSuccess:true},
-                                              {name:"Aadhaar",id:202,isSuccess:true}]},
-                         {main:"Dedupe" , subs: [{name:"Dedupe",id:301,isSuccess:true},
-                                                 {name:"Negative Pin Code",id:302,isSuccess:true}]},
-                         {main:"SOBRE" , subs: [{name:"Verificaton scoring",id:401,isSuccess:true},
-                                                {name:"Application scoring",id:402,isSuccess:true}]}
-                      ];
-    
-    $scope.tab = $scope.reinitiateModules[0].main;
-    
-    //Hard Coded for testing
-//    var requestReinitiateModules=[
-//                                  {sModuleName : "101", bRunModule : true},
-//                                  {sModuleName : "201", bRunModule : true},
-//                                  {sModuleName : "202", bRunModule : true},
-//                                  {sModuleName : "301", bRunModule : true},
-//                                  {sModuleName : "302", bRunModule : false},
-//                                  {sModuleName : "401", bRunModule : true},
-//                                  {sModuleName : "402", bRunModule : false}
-//                              ];
-//    $scope.applicantData.oWorkFlowConfig = {
-//        sGngRefId : $scope.refID,
-//        aModuleConfig : requestReinitiateModules
-//    };
-    //Hard Coded for testing
-
-    
-    if($scope.applicantData.oWorkFlowConfig && $scope.applicantData.oWorkFlowConfig.aModuleConfig){
-        _.each($scope.applicantData.oWorkFlowConfig.aModuleConfig, function(mConfig){
-            _.each($scope.reinitiateModules,function(module){
-                _.each(module.subs,function(subModule){
-                    if((subModule.id+"")==mConfig.sModuleName){
-                        subModule.isSuccess=mConfig.bRunModule;
-                    }
-                });
-            });
-        });
-    }
-    
-    //If Fields updated then add all into processing
-    if($scope.fieldsUpdated && ($scope.fieldsUpdated.isNameUpdated || $scope.fieldsUpdated.isResAddressUpdated || $scope.fieldsUpdated.isOffAddressUpdated || $scope.fieldsUpdated.isPerAddressUpdated || $scope.fieldsUpdated.isPanUpdated || $scope.fieldsUpdated.isVoterIDUpdated || $scope.fieldsUpdated.isAadhaarUpdated || $scope.fieldsUpdated.isDobUpdated)){
-        for(var i=0;i<$scope.reinitiateModules.length;i++) {
-            for(var j=0;j<$scope.reinitiateModules[i].subs.length;j++) {
-                $scope.tags.push({text: $scope.reinitiateModules[i].subs[j].name,id:$scope.reinitiateModules[i].subs[j].id});
-            }
-        }
-    }
-
-    $scope.setTab = function(newTab){
-        $scope.tab = newTab;
-    };
-
-    $scope.isSet = function(tabNum){
-        return $scope.tab === tabNum;
-    };
-
-    $scope.getTabStyle=function(pTab){
-        //console.log("pTab:"+pTab);
-        var val="";
-        if(pTab==$scope.tab){
-            //This tab is active
-            val= {
-                    color:"white",
-                    background:$scope.getTabColor(pTab),
-                    outline:null
-                    };
-        }else{
-            //This tab is not active
-            val= {
-                    color:$scope.getTabColor(pTab),
-                    border:"1px solid " + $scope.getTabColor(pTab)
-                };
-        }
-        return val;
-    };
-
-    $scope.isTabSuccess=function(pTab){
-        var isSuccess=true;
-        for(var i=0;i<$scope.reinitiateModules.length;i++){
-            if($scope.reinitiateModules[i].main==pTab){
-                for(var j=0;j<$scope.reinitiateModules[i].subs.length;j++)
-                {
-                    if(!$scope.reinitiateModules[i].subs[j].isSuccess){
-                        isSuccess=false;
-                    }
-                }
-            }
-        }
-
-        return isSuccess;
-    };
-
-    $scope.getSubStyle=function(pSub){
-//      console.log("pTab:"+pTab);
-        var val="";
-        //This tab is not active
-        val= {
-                color:$scope.getSubColor(pSub),
-                outline:null        
-            };
-        return val;
-    };
-
-    $scope.getTabColor=function(pTab){
-        if($scope.isTabSuccess(pTab)){ //Color code == green
-            return "#22ab4a";
-        }else{
-            return "#ee1f23";
-        }
-    };
-
-    $scope.getSubColor=function(pSub){
-        for(var i=0;i<$scope.reinitiateModules.length;i++) {
-            for(var j=0;j<$scope.reinitiateModules[i].subs.length;j++) {
-                if($scope.reinitiateModules[i].subs[j].id==pSub){
-                    if($scope.reinitiateModules[i].subs[j].isSuccess) { //Color code == green
-                        return "#22ab4a";
-                    }else{
-                        return "#ee1f23";
-                    }
-                }
-            }
-        }
-    };
-
-    $scope.addTag=function(pTag,tagId){
-        //alert(pTag);
-        var tagFound=false;
-        
-        for(var i=0;i<$scope.tags.length;i++)
-        {
-            if($scope.tags[i].text==pTag){
-                tagFound=true;
-                break;
-            }
-        }
-        if(tagFound!=true)
-        {
-            $scope.tags.push({text: pTag,id:tagId});
-        }
-    };
-
-    $scope.reinitiateForm=function(){
-        //console.log("Reinitiate form :"+$scope.refID);
-        requestReinitiateModules=[];
-        for(var mainIndex=0;mainIndex<$scope.reinitiateModules.length;mainIndex++) {
-            for(var subIndex=0;subIndex<$scope.reinitiateModules[mainIndex].subs.length;subIndex++) {
-                var shouldProcess=false;            
-                for(var tagIndex=0;tagIndex<$scope.tags.length;tagIndex++) {                    
-                    if($scope.reinitiateModules[mainIndex].subs[subIndex].id==$scope.tags[tagIndex].id) {
-                        shouldProcess=true;
-                    }
-                }
-
-                requestReinitiateModules.push({sModuleName : ""+$scope.reinitiateModules[mainIndex].subs[subIndex].id, bRunModule : shouldProcess});
-            }
-        }
-        
-        // var moduleArr=[];
-        // for(var i=0;i<$scope.tags.length;i++){
-        //     console.log("Reinitiating :"+$scope.tags[i].id+" "+$scope.tags[i].text);
-            
-        //     for(var j=0;j<$scope.reinitiateModules.length;j++)
-        //     {
-        //         if(reinitiateModules[j].sModuleName==$scope.tags[i].id){
-        //             reinitiateModules[j].bRunModule=true;
-        //         }          
-        //     }
-        // }
-        if($scope.fieldsUpdated && ($scope.fieldsUpdated.isNameUpdated || $scope.fieldsUpdated.isResAddressUpdated || $scope.fieldsUpdated.isOffAddressUpdated || $scope.fieldsUpdated.isPerAddressUpdated || $scope.fieldsUpdated.isPanUpdated || $scope.fieldsUpdated.isVoterIDUpdated || $scope.fieldsUpdated.isAadhaarUpdated || $scope.fieldsUpdated.isDobUpdated)){
-            var requestJson={
-                oWorkFlowConfig : {
-                    sGngRefId : $scope.refID,
-                    aModuleConfig : requestReinitiateModules
-                },
-                oApplicationRequest : applicantData.oAppReq
-            };
-
-            var URL="/worker/reprocess-updated/";
-
-            RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
-                if(Response && Response.sStat=="SUCCESS"){
-                    alert("Application has been reinitiated successfully.");
-                }else{
-                    alert("Error occured while reinitiating.");
-                }
-                $uibModalInstance.dismiss();
-            });
-        }
-        else{
-            var requestJson={
-                sGngRefId:$scope.refID,
-                aModuleConfig:requestReinitiateModules
-            };
-
-            var URL="worker/reprocess-by-id/";
-
-            RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
-                if(Response && Response.sStat=="SUCCESS"){
-                    alert("Application has been reinitiated successfully.");
-                }else{
-                    alert("Error occured while reinitiating.");
-                }
-                $uibModalInstance.dismiss();
-            });
-        }
+    $scope.closeModal = function () {
+        $uibModalInstance.dismiss();
     };
 }]);
 
@@ -1812,7 +1764,7 @@ app.directive('thisEarlierThan', function () {
             });
 
             var check = function () {
-                if (typeof cityStay === 'undefined' || typeof residenceStay === 'undefined') {
+                if (!cityStay || !residenceStay) {
                     return;
                 }
 
@@ -1835,7 +1787,7 @@ app.directive('thisEarlierThan', function () {
             };
 
             var validate = function (iYears) {                  
-                if (isNaN(parseInt(iYears))) {
+                if (parseInt(iYears)) {
                     return false;
                 }
                 else {
@@ -1860,16 +1812,13 @@ app.directive('changeOnBlur', function() {
             var oldValue = null;
             elm.bind('focus',function() {
                 oldValue = elm.val();
-                //console.log(oldValue);
             })
             elm.bind('blur', function() {
                 scope.$apply(function() {
                     var newValue = elm.val();
-                    //console.log(newValue);
                     if (newValue !== oldValue){
                         scope.$eval(expressionToCall);
                     }
-                        //alert('changed '  oldValue);
                 });         
             });
         }
@@ -1896,30 +1845,6 @@ app.filter('dateFilter', function() {
         return result;
     };
 });
-
-/*app.filter('dateFormat', function() {
-	return function(item) {
-		var month = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug','Sep', 'Oct', 'Nov', 'Dec' ];
-console.log(item);
-		var curdate= new Date(new Date());
-		var dt=curdate.getDate();
-		var mnth=curdate.getMonth()+1;
-		var year=curdate.getFullYear();
-		
-		var receivedDay = new Date(item).getDate();
-		var receivedMon = new Date(item).getMonth()+1;
-		
-		if(receivedDay == dt && receivedMon== mnth){
-			var time = new Date(item).getHours()+":"+new Date(item).getMinutes()+":"+new Date(item).getSeconds();
-			result = time;
-		}else if(receivedDay == dt-1 && receivedMon== mnth){
-			result='Yesterday';	
-		}else{
-			result  = receivedDay+"-"+month[new Date(item).getMonth()]+"-"+new Date(item).getFullYear();
-		}	
-		return result;
-	};
-});*/
 
 app.filter('currency', function() {
 	return function(value, symbol) {

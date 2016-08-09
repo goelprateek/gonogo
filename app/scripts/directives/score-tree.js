@@ -10,9 +10,6 @@
             restrict:"EA",
             scope: {
                   data: "=scoreData",
-                 // ngModel: '='
-                /*  isolatedTableData:'&', send back to cntroller*/
-                /*  onClick: "&"*/
             },
             replace:true,
             priority:10, 
@@ -26,6 +23,7 @@
                 function generate_scoreJson(temp){
             var colors = ['#689f38','#EF3D16','#fb8c00','#8BC34A','#2196F3','#9C27B0','#bdbdbd','#009688','#ffc107','#689f38'];
             try{
+
                 if(temp != null && typeof temp != 'undefined')
                 { treeData.push({"name":"Application Score", "score":temp.AppScore, "color":"#2196F3", "children":[]});
                 for(var i=0; i<temp.Scores.length; i++)
@@ -54,7 +52,6 @@
                 $("#scoreTree").text("Sorry we cant process this score tree");
             }
 
-// console.log(JSON.stringify(treeData));
             var margin = {top: 120,right: 150,bottom: 80,left: 100},
             width = 900,
             height = 10;
@@ -73,7 +70,7 @@
             .attr("height", height).call(zm = d3.behavior.zoom().scaleExtent([1, 1]).on("zoom", redraw))
             .append("g").attr("transform", "translate(" + width / 2 + "," + 20 + ")");
 
-            zm.translate([width / 2, 20]); // add drag functionality
+            zm.translate([width / 2, 20]); 
             root = treeData[0];
             root.x0 = height / 2;
             root.y0 = 0;
@@ -88,18 +85,14 @@
 
             root.children.forEach(collapse);
             update(root);
-            /* d3.select("#graph").style("height", "800px"); */
             function update(source) {
-                // Compute the new tree layout.
                 var nodes = tree.nodes(root).reverse(),
                 links = tree.links(nodes);
 
-                // Normalize for fixed-depth.
                 nodes.forEach(function(d) {
                     d.y = d.depth * 120;
                 });
 
-                // count no of chuldren
                 var levelWidth = [1];
                 var childCount = function(level, n) {
                     if (n.children && n.children.length > 0) {
@@ -114,27 +107,23 @@
                     }
                 };
                 childCount(0, root);
-                /* increase height of graph with respect to depth */
                 if ((height > 100) && (levelWidth.length > depth)) {
                     height = height + 160;
                     depth = levelWidth.length;
                 } else if (height < 100) {
                     height = 170;
                 }
-                // console.log(depth);
 
                 $("#scoreTree").css("height", height);
                 d3.select("svg").attr("height", height);
 
 
-                // Update the nodes…
                 var node = svg.selectAll("g.node")
                 .data(nodes, function(d) {
                     return d.id || (d.id = ++i);
                 });
 
                 var SVGmouseTip = d3.select("g.tooltip.mouse");
-                // Enter any new nodes at the parent's previous position.
                 var nodeEnter = node.enter().append("g")
                 .attr("class", "node")      
                 .attr("transform", function(d) {
@@ -146,24 +135,18 @@
                 .on("mouseover", function(d) {
                     var matrix = this.getScreenCTM()
                     .translate(+this.getAttribute("cx"), +this.getAttribute("cy")); 
-                    // Get this bar's x/y values,then augment for the tooltip                                                              
 
-                    d3.select("#tooltip") // Update the tooltip position and
-                                            // value
+                    d3.select("#tooltip") 
                     .style("left", Math.max(0, d3.event.pageX - 350) + "px")
                     .style("top", (d3.event.pageY - 184) + "px");
 
-                    // bind value with labels
-                    $('#node_expression').text(d.exp);// find function erturn
-                                                        // the full string
+                    $('#node_expression').text(d.exp);
                     $('#node_details').text("Value : "+ d.dscore);
-                    d3.select("#tooltip").classed("hidden", false); // Show the
-                                                                    // tooltip
+                    d3.select("#tooltip").classed("hidden", false); 
 
                 })
                 .on('mousemove', function(d) {
                     d3.select("#tooltip").style("left", Math.max(0, d3.event.pageX - 20) + "px") 
-                    // the d3.mouse() function calculates the mo
                                                                                         
                     .style("top", (d3.event.pageY - 120) + "px");
                 });              
@@ -185,16 +168,15 @@
                 })
                 .style("fill-opacity", 1);
 
-                nodeEnter.append("text") // append text
-                .style("fill", "white")   // fill the text with the colour
-                                            // black
-                .attr("dy", ".20em")   // set offset y position
-                .attr("text-anchor", "middle") // set anchor y justification
+                nodeEnter.append("text") 
+                .style("fill", "white")  
+                                         
+                .attr("dy", ".20em")   
+                .attr("text-anchor", "middle") 
                 .text(function(d) {
                     return d.score;
                 });        
 
-                // Transition nodes to their new position.
                 var nodeUpdate = node.transition()
                 .duration(duration)
                 .attr("transform", function(d) {
@@ -209,14 +191,13 @@
                 nodeUpdate.select("ellipse")
                 .attr("cx", 0).attr("cy", 0).attr("rx", 25).attr("ry", 12)
                 .style("fill", function(d) {
-                    // return d.color;
                     return d._children ? "lightsteelblue" : d.color;
                 });
 
 
                 nodeUpdate.select("text").style("fill-opacity", 1);
 
-                // Transition exiting nodes to the parent's new position.
+
                 var nodeExit = node.exit().transition()
                 .duration(duration)
                 .attr("transform", function(d) {
@@ -230,23 +211,19 @@
                 nodeExit.select("text")
                 .style("fill-opacity", 1e-6);
 
-                // Update the links…
                 var link = svg.selectAll("path.link")
                 .data(links, function(d) {
                     return d.target.id;
                 });
 
-                // Enter any new links at the parent's previous position.
                 link.enter().insert("path", "g")
                 .attr("class", "link")
                 .attr("d", diagonal);
 
-                // Transition links to their new position.
                 link.transition()
                 .duration(duration)
                 .attr("d", diagonal);
 
-                // Transition exiting nodes to the parent's new position.
                 link.exit().transition()
                 .duration(duration)
                 .attr("d", function(d) {
@@ -261,16 +238,13 @@
                 })
                 .remove();
 
-                // Stash the old positions for transition.
                 nodes.forEach(function(d) {
                     d.x0 = d.x;
                     d.y0 = d.y;
                 });
             }
 
-            // Toggle children on click.
-            function click(d) 
-            {              
+            function click(d){              
                 if (d.children) {
                     d._children = d.children;
                     d.children = null;
@@ -281,11 +255,8 @@
                 update(d);            
             }
 
-            // Redraw for zoom
-            function redraw() 
-            {// console.log("here", d3.event.translate, d3.event.scale);
+            function redraw(){
                 svg.attr("transform", "translate(" + d3.event.translate + ")");
-// console.log("scroll "+$('#scoreTree').parent().parent().parent());
             }
         }
 

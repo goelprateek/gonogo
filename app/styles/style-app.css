@@ -1032,15 +1032,15 @@ legend {
 	background-color: red;
 }
 
-.picked {
+/*.picked {
 	background-color: #CFCFCF;
 	border: 2px solid #fff;
-}
+}*/
 
-.picked:hover {
+/*.picked:hover {
 	background-color: #CFCFCF;
 }
-
+*/
 .node ellipse {
 	fill: #fff;
 	stroke: none;
@@ -1259,7 +1259,6 @@ body {
 		margin-right: 17px;
 	}
 	.profile_icon {
-		background-image: url("img/a.jp");
 		width: 95px;
 		height: 95px;
 		background-size: 100% 100%;
@@ -1296,25 +1295,12 @@ body {
 	height: 50px;
 }
 
-/* #application_process {
-	min-width: 280px;
-	text-align: center;
-}
- */
+
 label {
 	color: #5D6B7E;
 }
 
-/* #leftbar {
-		padding: 20px 0px 0px 0px;
-	padding: 8px 0px 0px 0px;
-	overflow: hidden;
-} */
 
-/* #leftbar span {
-	margin-right: 10px;
-}
- */
 @media ( max-width :1200px) and (min-width:900px) {
 	#leftbar {
 		width: 30%;
@@ -1323,32 +1309,6 @@ label {
 		width: 70%;
 	}
 }
-
-/* #rightbar { */
-/* 	/*padding-top: 20px;*/
-*
-/
-/* 	max-height: 640px; */
-/* 	/* padding-bottom: 20px; */
-
-
- 
-
-
-*
-/
-/* 	/* border-left: 1px solid #D6DBE7; */
-
-
- 
-
-
-*
-/
-/* } */
-
-
-
 
 
 
@@ -1364,7 +1324,6 @@ label {
 	height: 498px;
 	overflow-y: scroll;
 	overflow-x: hidden;
-	/* margin-right: -15px; */
 	width: 105%;
 	border-left: 1px solid #DADADB;
 	border-right: 1px solid #DADADB;
@@ -1372,21 +1331,8 @@ label {
 }
 
 }
-/* .leftbar_scroll {
-	height: 525px;
-	height: 490px;
-	overflow-y: scroll;
-	overflow-x: hidden;
-	margin-right: -15px;
-	width: 106%;
-	border-left: 1px solid #DADADB;
-	border-right: 1px solid #DADADB;
-	border-bottom: 1px solid #DADADB;
-} */
-/* container and color at notification page*/
+
 .container {
-	/* box-shadow: 0px -1px 4px #677ECE;
-		background-color: rgba(252, 252, 252, 0.68); */
 	width: 100%;
 }
 
@@ -1481,7 +1427,7 @@ text-align: justify;*/
 	position: fixed;
 	bottom: 0px;
 	left: 0px;
-	width: 101%;
+	width: 100%;
 	background-color: #F8F8F8;
 	text-align: center;
 	z-index: 1000;
@@ -1610,10 +1556,7 @@ section.navbar-brand {
 	text-align: center;
 }
 
-.panel-default {
-	opacity: 0.9;
-	margin-top: 30px;
-}
+
 
 .form-group.last {
 	margin-bottom: 0px;

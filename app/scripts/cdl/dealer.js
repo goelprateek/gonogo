@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	angular.module("gonogo.cdl",['gng.cdl.dealer']);
+	angular.module("gonogo.cdl",['gng.cdl.dealer','gonogo.directives']);
 	
 	var app = angular.module("gng.cdl.dealer",[]);
 

@@ -3,6 +3,149 @@
 	'use strict';
 	
 	var app = angular.module('gonogo-directives',["d3"]);
+
+	app.directive('hcBarChart',['UserService', 'RestService',function(UserService,RestService){
+		return {
+			restrict: 'EA',
+                    template: '<div></div>',
+                    scope: {
+                        data: '=data'
+
+                    },
+                    replace:true,
+                    link: function (scope,element,attribute, controller) {
+                    	
+                    	var user = UserService.getCurrentUser();
+                    	scope.$watch('data', function(dataNew,dataOld){
+                    		
+                    		if(dataNew){
+
+                    			Highcharts.chart(element[0], {
+					            chart: {
+					                type: 'column',
+					                animation: true,  
+					                reflow: true,  
+					                spacing: [10, 10, 15, 10]					                
+					            },
+					        
+					            title: {
+					                text: ''
+					            },
+					            xAxis: {
+					                 startOnTick:true,
+					                 endOnTick:true,
+					                categories: dataNew[0].x,
+					                labels: {
+					                   formatter : function(){
+					                        var date = new Date(this.value),
+					                        day = date.getDate(),
+					                        months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+					                        if(day === 1){
+					                           return months[date.getMonth()] + "-" + day;
+					                        }   
+					                        if(date.getDay() === 0 || date.getDay() === 6){
+					                          return '<span style="font-size:12px; color:maroon;">'+day+'</span>';
+					                        }
+					                      return day;
+					                   }
+					                },
+					                maxStaggerLines: 5, 
+					                type:'datetime'
+					            },
+					            yAxis: {
+					                min: 0,
+					                title: {
+					                    text: ''
+					                },
+					                stackLabels: {
+					                    enabled: false
+					                },
+					                visible : true,
+					                type: 'linear',
+					                gridLineColor:"#DFDFDF",
+					                gridLineWidth: 0.5,
+					                gridZIndex: 1,  
+					            },
+					            navigation : {
+					            	buttonOptions:{
+					            		align:'right'
+					            	},
+					            	menuItemHoverStyle: {
+										background: '#4572A5',
+										color: '#FFFFFF'
+									}
+					            },	
+					            plotOptions: {
+					                allowPointSelect: true,
+					                column: {
+					                    stacking: 'normal',
+					                    pointWidth:20,
+					                    dataLabels: {
+					                        enabled: false,
+					                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
+					                        style: {
+					                            textShadow: '0 0 3px black'
+					                        }
+					                    },
+					                    point: {
+					                         events: {
+					                            click: function() {
+					                               if( user.role != "DSA" ){
+														var json = { 
+																	"dtFrmDate":this.category,
+																	"sStat":this.series.name,
+																	'sInstID':user.institutionID
+																};
+														RestService.saveToServer("table-view",json).then(function(data){
+															scope.$parent.$parent.drawTablularData(data);
+															scope.$parent.$parent.isTableData = false;
+														});
+													}
+
+					                            }
+					                        }
+					                    }
+					                }
+					            },
+					       
+					            tooltip: {
+					              animation: true,
+					              shadow: true,
+					              useHTML:true,
+					             headerFormat: '<b>{point.x}</b><br/>',
+					                pointFormat: '<span style="color:{series.color}">{series.name}</span>: {point.y} </br>',
+					                footerFormat : 'Total: <b>{point.total}</b>',
+					                shared:true
+					            },
+					        	credits: {
+								      enabled: false
+								},
+					            loading: {
+					              hideDuration: 100,      
+					              showDuration: 100      
+					            },
+					            colors: ["#CCC","#F44336","#4CAF50"],
+					            series: [{
+					                data: dataNew[0].y, 
+					                name: dataNew[0].name
+
+					                },{
+					                    data: dataNew[1].y, 
+					                    name: dataNew[1].name
+					                },{
+					                    data: dataNew[2].y, 
+					                    name: dataNew[2].name,
+					                }]
+
+             
+                        });
+
+                  }
+               },true)
+            }
+		};
+	}]);
+
 	app.directive('gngStackedBarGraph',['d3','RestService','UserService',function(d3,RestService,UserService){
 		console.log("gngStackedBarGraph bar graph");
 		return {
@@ -158,10 +301,11 @@
 						})
 						.on("click", function(d){
 							if(user.role!="DSA"){
-								var json={"dtDate":d.time,"sStat":d.status,'sInstID':user.institutionID,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};//
-							RestService.saveToServer("table-view",json).then(function(tableData){
-								scope.isolatedTableData({parameter:tableData});
-							});
+								//var json={"dtDate":d.time,"sStat":d.status,'sInstID':user.institutionID,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};//
+								var json={"dtDate":d.time,"sStat":d.status,'sInstID':user.institutionID};
+								RestService.saveToServer("table-view",json).then(function(tableData){
+									scope.isolatedTableData({parameter:tableData});
+								});
 							}
 						})
 						.style("fill-opacity",1e-6)

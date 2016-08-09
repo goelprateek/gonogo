@@ -70,7 +70,6 @@
 					GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_LOGIN"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_LOGIN"),1,"login-web");
 
 					if (data.USER_DETAILS.length > 0) {
-						
 						var details = data.USER_DETAILS[0];
 						var listvalues = {
 							'name': data.USERNAME,
@@ -84,6 +83,16 @@
 							'products': data.PRODUCTS,
 							'ePassword': SHA1($scope.login.password)
 						};
+
+						//Hard Coded for Testing
+						//data.HIERARCHY[0].HIERARCHY_VALUE="[\"Mumbai Central\"]";
+						//Hard Coded for Testing
+
+						if(data.HIERARCHY && data.HIERARCHY.length>0){
+							if(data.HIERARCHY[0].HIERARCHY_LEVEL==="branchName"){
+								listvalues.branches=JSON.parse(data.HIERARCHY[0].HIERARCHY_VALUE);
+							}
+						}
 
 						$rootScope.loggedInUser = listvalues;
 
@@ -100,8 +109,8 @@
 						UserService.persistDataTolocalStorage('DETAILS', btoa(JSON.stringify(data.USER_DETAILS)));
 						UserService.persistDataTolocalStorage('ACTIONS', btoa(JSON.stringify(data.ACTION)))
 
-						if (!_.isUndefined(data.ACTION)) {
-							router(data.ACTION);
+						if (data.ACTION) {
+							router(data.ROLES[0]);
 						}
 					} else {
 						$scope.alert = "Sorry ! User Details are not availeble.\n Please contact system admin";
@@ -119,49 +128,16 @@
 
 		// action contains {APPLICATION,NOTIFICATION}
 
-		function router(actions) {
+		function router(role) {
+			if(role.indexOf("DSA")!=-1) {
 
-			if (_.contains(actions, 'APPLICATION') && !_.contains(actions, 'NOTIFICATION')) {
+				$(location).attr('href', '#/cdl/dealer');
 
-				if (instid == '4019') {
-					var url = '#/cdl/dealer';
-				} else if (instid == '4011') {
-					var url = '#/dmiapplication';
-				} else {
-					var url = '#/application';
-				}
+			}else if (role.indexOf("CRO")!=-1) {	
 
-				$(location).attr('href', url);
+				$(location).attr('href', '#/hdbfsnotification');
 
-			} else if (_.contains(actions, 'NOTIFICATION')) {
-
-				if (instid == '4019') {
-					var url = '#/hdbfsnotification';
-				}
-				else if (instid == '4011') {
-					var url = '#/DMINotification';
-
-				} else {
-
-					var url = '#/notification';
-				}
-
-				$(location).attr('href', url);
-			} else if (_.contains(actions, 'POLICY') && !_.contains(actions, 'NOTIFICATION')) {
-
-				var url = '#/policy';
-				$(location).attr('href', url);
-
-			} else if (!_.contains(actions, 'NOTIFICATION') && !_.contains(actions, 'POLICY') && _.contains(actions, 'ANALYTCS')) {
-
-				var url = '#/analytics';
-				$(location).attr('href', url);
-
-			} else if (!_.contains(actions, 'APPLICATION') &&
-				!_.contains(actions, 'NOTIFICATION') &&
-				!_.contains(actions, 'POLICY') &&
-				!_.contains(actions, 'ANALYTCS')) {
-
+			}else{
 				$scope.alert = "Sorry... User has been blocked. Please contact your system Admin !!!";
 			}
 		}

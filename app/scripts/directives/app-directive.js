@@ -19,8 +19,11 @@
 		     require: 'ngModel',
 		     link: function(scope, element, attrs, modelCtrl) {
 		        var capitalize = function(inputValue) {
-		           if(inputValue == undefined) inputValue = '';
-		           var capitalized = inputValue.replace(/^(.)|\s(.)/g, function(v){ return v.toUpperCase( ); });
+		           if(!inputValue) inputValue = '';
+		           var capitalized = inputValue.replace(/^((.)|\s(.))+/g, 
+		           	function(v){ 
+		           		return v.toUpperCase( ); 
+		           	});
 		           if(capitalized !== inputValue) {
 		              modelCtrl.$setViewValue(capitalized);
 		              modelCtrl.$render();
@@ -33,24 +36,6 @@
 		   };
 		});
 	
-	app.directive('capital', function() {
-	   return {
-	     require: 'ngModel',
-	     link: function(scope, element, attrs, modelCtrl) {
-	        var capitalize = function(inputValue) {
-	           if(inputValue == undefined) inputValue = '';
-	           var capitalized = inputValue.toUpperCase(); 
-	           if(capitalized !== inputValue) {
-	              modelCtrl.$setViewValue(capitalized);
-	              modelCtrl.$render();
-	            }         
-	            return capitalized;
-	         }
-	         modelCtrl.$parsers.push(capitalize);
-	         capitalize(scope[attrs.ngModel]);  // capitalize initial value
-	     }
-	   };
-	});
 
 	app.directive('initcap', function () {
 	return {
@@ -268,7 +253,6 @@
 						 var size=((($files[i].size)/1024).toFixed(2)) +" Kb";
 				         reader.onload = function(readerEvt) {
 				            binaryString = readerEvt.target.result;
-	// 						base64 = btoa(binaryString);
 							if(_.contains(["APPLICANT-PHOTO","PAN","AADHAAR","PASSPORT","DRIVING-LICENSE","CUSTOMER-PHOTO","INCOME-PROOF1","INCOME-PROOF2","OTHER"],type)){
 								$scope.imagearray.push({kyc_name:type,image:binaryString.split(",")[1],type:img_type});
 							}else if(_.contains(["APPLICATION_FORM","AGREEMENT","ACH","DISBURSEMENT","ADDITIONAL_KYC","holdCase"],type)){
@@ -279,98 +263,10 @@
 							$("#"+type+index+"label").hide();
 							$("#"+type+index+"remove").show();
 
-	// 			            switch (type) {
-	// 			            case "APPLICANT-PHOTO":
-	// 							$scope.selectImgInit = binaryString	
-	// 				        	img_array.push({kyc_name:"APPLICANT-PHOTO",image:$scope.selectImgInit.split(",")[1],type:img_type});
-	// 							break;
-	// 			            case "PAN":
-	// 							$scope.selectImg1 = binaryString	
-	// 				        	img_array.push({kyc_name:"PAN",image:$scope.selectImg1.split(",")[1],type:img_type});
-	// 							break;
-	// 						case "AADHAAR":
-	// 							$scope.selectImg2 = binaryString
-	// 							img_array.push({kyc_name:"AADHAAR",image:$scope.selectImg2.split(",")[1],type:img_type});
-	// 							break;
-	// 						case "PASSPORT":
-	// 							$scope.selectImg3 = binaryString
-	// 							img_array.push({kyc_name:"PASSPORT",image:$scope.selectImg3.split(",")[1],type:img_type});
-	// 							break;
-	// 						case "DRIVING-LICENSE":
-	// 							$scope.selectImg4 = binaryString
-	// 							img_array.push({kyc_name:"DRIVING-LICENSE",image:$scope.selectImg4.split(",")[1],type:img_type});
-	// 							break;
-	// 						case "CUSTOMER-PHOTO":
-	// 							$scope.selectImg5 = binaryString
-	// 							img_array.push({kyc_name:"APPLICANT-PHOTO",image:$scope.selectImg5.split(",")[1],type:img_type});
-	// 							break;
-	// 						case "INCOME-PROOF1":
-	// 							$scope.selectImg6 = binaryString
-	// 							img_array.push({kyc_name:"INCOME-PROOF1",image:$scope.selectImg6.split(",")[1],type:img_type});
-	// 							break;
-	// 						case "INCOME-PROOF2":
-	// 							$scope.selectImg7 = binaryString
-	// 							img_array.push({kyc_name:"INCOME-PROOF2",image:$scope.selectImg7.split(",")[1],type:img_type});
-	// 							break;
-	// 						case "OTHER":
-	// 							$scope.selectImg8 = binaryString
-	// 							img_array.push({kyc_name:"OTHER",image:$scope.selectImg8.split(",")[1],type:img_type});
-	// 							break;
-	// 						case "APPLICATION_FORM":
-	// 							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
-	// 							$(document.body).find("#"+type+index+"label").hide();
-	// 							$(document.body).find("#"+type+index+"remove").show();
-	// //							$(document.body).find("#"+type+index+"size").text(size);
-	// //							$scope.agreeimage = binaryString;
-	// 							addkyc_array.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
-	// //							console.log((type+index));
-	// 							break;
-
-	// 						case "AGREEMENT":
-	// 							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
-	// 							$(document.body).find("#"+type+index+"label").hide();
-	// 							$(document.body).find("#"+type+index+"remove").show();
-	// //							$(document.body).find("#"+type+index+"size").text(size);
-	// //							$scope.agreeimage = binaryString;
-	// 							addkyc_array.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
-	// //							console.log((type+index));
-	// 							break;	
-
-	// 						case "ACH":
-	// 							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
-	// //							$scope.agreeimage = binaryString;
-	// 							$(document.body).find("#"+type+index+"label").hide();
-	// 							$(document.body).find("#"+type+index+"remove").show();
-	// //							$(document.body).find("#"+type+index+"size").text(size);
-	// 							addkyc_array.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
-	// //							console.log((type+index));
-	// 							break;	
-
-	// 						case "DISBURSEMENT":
-	// 							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
-	// 							$(document.body).find("#"+type+index+"label").hide();
-	// 							$(document.body).find("#"+type+index+"remove").show();
-	// 							addkyc_array.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
-	// 							break;	
-
-	// 						case "ADDITIONAL_KYC":
-	// 							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
-	// 							$(document.body).find("#"+type+index+"label").hide();
-	// 							$(document.body).find("#"+type+index+"remove").show();
-	// 							addkyc_array.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
-	// 							break;	
-
-	// 						case "holdCase":
-	// 							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
-	// 							$(document.body).find("#"+type+index+"label").hide();
-	// 							$(document.body).find("#"+type+index+"remove").show();
-	// 							imagearray.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
-	// 							break;
-	// 			            }
+	
 				      };
 				        reader.readAsDataURL($files[i]);
-				  //       $timeout(function(){
-						// }, 1000);
+				  
 					}
 				}
 			}
@@ -386,31 +282,6 @@
 			controller : _controller
 		};
 	});
-
-	// directives from simdirecctive.js (Piyush) (need to disccuss why need all these)
-	// app.directive('policy', function() {
-	//     var directive = {};
-
-	//     directive.restrict = 'E'; 
-	//     directive.templateUrl = 'views/templates/policy-outcome.html';
-	//     return directive;
-	// });
-
-	// app.directive('score', function() {
-	//     var directive = {};
-
-	//     directive.restrict = 'E'; 
-	//     directive.templateUrl = 'views/templates/score-rule.html';
-	//     return directive;
-	// });
-
-	// app.directive('matrix', function() {
-	//     var directive = {};
-
-	//     directive.restrict = 'E'; /* restrict this directive to elements */
-	//     directive.templateUrl = 'views/templates/matrix.html';
-	//     return directive;
-	// });
 
 	app.directive("customBackground",function(){
 		return {
@@ -488,17 +359,11 @@
 	                    model.$render();
 	                }
 	               return transformedInput;
-	      /*  var regex = new RegExp(scope.regex);
-	        var replaced = val.replace(regex, scope.with); 
-	        if (replaced !== val) {
-	          model.$setViewValue(replaced);
-	          model.$render();
-	        }         
-	        return replaced;  */       
 	      });
 	    }
 	  };
 	});
+
 
 	app.directive('autoNext', function() {
 	    return {
@@ -523,6 +388,82 @@
 	    }
 	});
 
+
+    app.directive('fullscreen', function() {
+            return {
+                restrict: 'AC',
+                template: '<i class="glyphicon glyphicon-fullscreen"></i>',
+                link: function(scope, el, attr) {
+                    el.on('click', function() {
+                        var element = el.parents(".modal-content").find(".modal-body")[0];
+                        var angElelement=angular.element(element);
+                        if (!$('body')
+                            .hasClass("full-screen")) {
+                            $('body')
+                                .addClass("full-screen");
+                            $('#fullscreen-toggler')
+                                .addClass("active");
+                                angElelement.addClass("pdfExpand");
+                            if (element.requestFullscreen) {
+                                element.requestFullscreen();
+                            } else if (element.mozRequestFullScreen) {
+                                element.mozRequestFullScreen();
+                            } else if (element.webkitRequestFullscreen) {
+                                element.webkitRequestFullscreen();
+                            } else if (element.msRequestFullscreen) {
+                                element.msRequestFullscreen();
+                            }
+
+                        } else {
+                        	 angElelement.removeClass("pdfExpand");
+                            $('body').removeClass("full-screen");
+                            el.removeClass("active");
+
+                            if (document.exitFullscreen) {
+                                document.exitFullscreen();
+                            } else if (document.mozCancelFullScreen) {
+                                document.mozCancelFullScreen();
+                            } else if (document.webkitExitFullscreen) {
+                                document.webkitExitFullscreen();
+                            }
+
+                        }
+                    });
+                }
+            };
+        }
+    );
+
+
+    app.directive('widgetMaximize', function () {
+        return {
+            restrict: 'A',
+            template: '<i class="fa fa-expand"></i>',
+            link: function (scope, el, attr) {
+                el.on('click', function () {
+                    var widget = el.parents(".modal-dialog").eq(0);
+                    var button = el.find("i").eq(0);
+                    var compress = "fa-compress";
+                    var expand = "fa-expand";
+                    if (widget.hasClass("maximized")) {
+                        if (button) {
+                            button.addClass(expand).removeClass(compress);
+                        }
+                        widget.removeClass("maximized");
+                         widget.find("object").css("height","480px");
+                    } else {
+                        if (button) {
+                            button.addClass(compress).removeClass(expand);
+                        }
+                        widget.addClass("maximized");
+                         el.parents("modal-content").css("height", "100%");
+                         widget.find("object").css("height","565px");
+                    }
+                });
+            }
+        };
+    })
+
 	app.directive('selectRequired',function(){
 	    return {
 	        restrict: "A",
@@ -534,4 +475,5 @@
 	        }
 	    }
 	});
+	
 }).call(this);

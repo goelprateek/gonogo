@@ -1,5 +1,8 @@
+.pagination{
+	margin:0px;
+}
+
 .remove_image {
-	/* 	display: none; */
 	cursor: pointer;
 	color: red;
 }
@@ -374,9 +377,10 @@ small {
 	position: absolute;
 }
 
+/* //sayali impacting on pick date for invoice calender
 select {
 	color: #727272;
-}
+}*/
 
 .rlabel {
 	float: none;
@@ -421,7 +425,6 @@ select {
 }
 
 .hdbImg {
-    /* margin-top: 12px; */
     width: 248px;
     bottom: 20px;
 }
@@ -438,7 +441,6 @@ select {
 }
 
 .profile_icon {
-	/*     background-image: url("../img/a.jp"); */
 	width: 95px;
 	height: 95px;
 	background-size: 100% 100%;
@@ -468,10 +470,7 @@ select {
 	width: 65px;
 	margin-top: 10%;
 }
-/* circle
-{
-background-image: url('../img/timer.png');
-} */
+
 .ui-menu, .ui-menu>.ui-menu-item, .ui-menu-item>a {
 	max-height: 250px !important;
 	overflow-x: hidden;
@@ -493,7 +492,6 @@ input, select {
 	width: 55px;
 	height: 0px;
 	right: 13px;
-	/* top: 68px; */
 	border-width: 13px;
 	border-style: solid;
 	-moz-border-top-colors: none;
@@ -522,8 +520,6 @@ input, select {
 }
 
 #temp {
-	/* 	text-align: right; */
-	/* 	margin-top: 5%; */
 	position: absolute;
 	right: 0%;
 	top: 5%;
@@ -560,9 +556,6 @@ input, select {
 	width: 100%;
 }
 
-.picked {
-	background-color: #CFCFCF;
-}
 
 .view-container{
 	height:525px;
