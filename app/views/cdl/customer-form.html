@@ -81,11 +81,6 @@
 					class="form-control" ng-model="name" type="text"
 					name="Applicant Name" disabled="disabled">
 			</div>
-			<!-- <div class="col-md-3">
-					<label class="control-label">Mobile</label> <input
-						class="form-control" ng-model="mobile" type="text"
-						name="Mobile No" maxlength="10" disabled="disabled">
-				</div> -->
 			<div class="col-md-3">
 				<label class="control-label">Date of Birth</label> <input id="dob"
 					class="form-control" ng-model="dob" type="text"
@@ -106,11 +101,15 @@
 				Single
 			</div>
 		</div>
-		<div class="row clearfix">
 			<div class="col-md-3">
 				<label class="control-label">Credit Card No</label><input
 					class="form-control" ng-model="credit" type="text" name="PinCode"
 					maxlength="6" disabled="disabled">
+			</div>
+			<div class="col-md-3">
+				<label class="control-label">Loan Amount</label> <input
+					 ng-model="appldAmount" class="form-control" type="text"
+					name="Dealername" disabled="disabled">
 			</div>
 			<div class="col-md-3">
 				<label class="control-label">Tenor Applied</label><input
@@ -127,8 +126,6 @@
 					class="form-control" type="text" ng-model="education"
 					disabled="disabled">
 			</div>
-		</div>
-		<div class="row clearfix">
 			<div class="col-md-3">
 				<label class="control-label">Age</label><input class="form-control"
 					type="text" ng-model="age" disabled="disabled">
@@ -138,7 +135,6 @@
 					class="form-control" type="text" ng-model="supecious"
 					disabled="disabled">
 			</div>
-		</div>
 	</fieldset>
 	<fieldset class="formfield" style="display: block;">
 		<legend>Email Information</legend>
@@ -399,6 +395,7 @@
 			</div>
 		</div>
 	</fieldset>
+
 	<!-- <fieldset class="formfield" style="display: block;">
 		<legend> BRE Information</legend>
 		<div class="row clearfix">

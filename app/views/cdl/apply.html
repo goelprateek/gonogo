@@ -12,32 +12,43 @@
 				<div style="display: inline-block; width: 75%;"> {{ fname +"
 					"+ mname +" "+ lname}}</div>
 			</div>
-			<div style="margin-top: 10px; padding-left: 30%">
-				<div style="display: inline-block; color: #24a1ed; float: left;">Ref ID: </div>
-				<div style="display: inline-block; width: 75%;"> {{ referenceID }}</div>
-			</div>
-			<!-- <div style="margin-top: 10px; padding-left: 30%">
-				<div style="display: inline-block; color: #24a1ed; float: left;">Dealer Name: </div>
-				<div style="display: inline-block; width: 75%;"> {{dlrName}}</div>
-			</div> -->
-			<div style="margin-top: 10px; padding-left: 30%">
-				<div style="display: inline-block; color: #24a1ed; float: left;">Product: </div>
-				<div style="display: inline-block; width: 75%;"> {{productType}}</div>
-			</div>
-			<div style="margin-top: 18%;">
-				<ul class="progressbar">
-					<li id="KYCList" class="active">PERSONAL DETAILS</li>
-					<li id="personalList">ADDRESS DETAILS</li>
-					<li id="employmentList">WORK DETAILS</li>
-					<li id="IncomeList">ASSET DETAILS</li>
-					<li id="BankingList">PROOF</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div class=" col-sm-8 col-md-9">
-		<fieldset id="kyccontainer">
-			<div class="getheight" id="kycHeight">
+			<!-- end of first page -->
+
+			<div class="row clearfix" id="infoContainer" style="padding-top: 20px;">
+
+				<div class="col-sm-4 col-md-3" id="progressDiv"
+					style="border-right: 01px solid #24a1ed; padding-right: 0px; display: none;padding-top: 22px;">
+					<div id="responsive">
+						<div style="padding-left: 30%">
+							<div style="display: inline-block; color: #24a1ed; float: left;">Name
+								: </div>
+							<div style="display: inline-block; width: 75%;"> {{ fname +"
+								"+ mname +" "+ lname}}</div>
+						</div>
+						<div style="margin-top: 10px; padding-left: 30%">
+							<div style="display: inline-block; color: #24a1ed; float: left;">Ref ID: </div>
+							<div style="display: inline-block; width: 75%;"> {{ REFID }}</div>
+						</div>
+						
+						<div style="margin-top: 10px; padding-left: 30%">
+							<div style="display: inline-block; color: #24a1ed; float: left;">Product: </div>
+							<div style="display: inline-block; width: 75%;"> {{productType}}</div>
+						</div>
+						<div style="margin-top: 18%;">
+							<ul class="progressbar">
+								<li id="KYCList" class="active">PERSONAL DETAILS</li>
+								<li id="personalList">ADDRESS DETAILS</li>
+								<li id="employmentList">WORK DETAILS</li>
+								<li id="IncomeList">ASSET DETAILS</li>
+								<li id="BankingList">PROOF</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class=" col-sm-8 col-md-9">
+					<fieldset id="kyccontainer" style="display: none;">
+
+			<div class="getheight" id="kycHeight" slimscroll="{height:386,railVisible:true}">
 				<div class="row clearfix ">
 					<!-- <div class="col-sm-8 col-md-8" id="kycDataContainer" style="margin-left: 5%"></div>   end odf col-md-8 -->
 					<div class="col-md-10 col-md-offset-1">
@@ -180,8 +191,7 @@
 		</fieldset>
 
 		<fieldset id="personalInfo" style="display: none;">
-						<div class="row clearfix getheight" id="kycHeight">
-							<!-- <div class="col-sm-8 col-md-8" id="kycDataContainer" style="margin-left: 5%"></div>   end odf col-md-8 -->
+						<div class="row clearfix getheight" id="kycHeight" slimscroll="{height:386,railVisible:true}">
 							<div class="col-md-10 col-md-offset-1">
 								<div id="residenceAddr">
 									<div class="row clearfix customRow">
@@ -441,7 +451,7 @@
 
 					<fieldset id="employmentContainer" style="display: none;">
 
-						<div class="getheight" id="kycHeight">
+						<div class="getheight" id="kycHeight" slimscroll="{height:386,railVisible:true}">
 							<div class="row clearfix ">
 								<div class="col-md-10 col-md-offset-1">
 									<div class="row clearfix customRow">
@@ -586,7 +596,7 @@
 					</fieldset>
 
 					<fieldset id="incomeContainer" style="display: none;">
-						<div class="row clearfix getheight">
+						<div class="row clearfix getheight" slimscroll="{height:386,railVisible:true}">
 							<div id="assetContainer" class="col-md-10 col-md-offset-1">
 								<!-- <form id="assetObj">
 									<div class="row clearfix customRow" style="display: none;">
@@ -612,7 +622,7 @@
 
 					<!-- //sayali  -->
 					<fieldset id="bankingInfo" style="display: none;">
-						<div class="getheight" id="kycHeight">
+						<div class="getheight" id="kycHeight" slimscroll="{height:386,railVisible:true}">
 							<div class="row clearfix ">
 								<div class="col-md-10 col-md-offset-1">
 									<div class="row clearfix">
@@ -756,7 +766,7 @@
 									
 										<div class="col-md-4">
 											<div class="row clearfix">
-												<help>Other</help>
+												<help>Other</help><br/>
 												<input type="text" class="customInput" id="otherTg" placeholder="Other*"
 													disabled="disabled" />
 											</div>

@@ -216,6 +216,7 @@ app.controller("CustomerFormCntrolr",
 				else
 					$scope.constitution = tempConstitutionType;
 
+
 				$scope.lastsalary = Response.oReq.oApplicant.aEmpl[0].dmonthSal;
 				$scope.ITamt =  Response.oReq.oApplicant.aEmpl[0].dItrAmt;
 			}
