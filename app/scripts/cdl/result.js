@@ -108,7 +108,7 @@
 				}
 				else{
 					$scope.serviceHitCount=1;
-					notifier.logError("Sorry we can not process your Check Status request");
+					notifier.logError("Sorry we cannot process your Check Status request");
 				}
 			});
 

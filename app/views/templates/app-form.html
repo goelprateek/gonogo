@@ -281,9 +281,8 @@
 								class="form-control" ng-model="address.sCity" type="text" ng-disabled="true" change-on-blur="onValueChanged('resAddress')">
 						</div>
 						<div class="col-md-3">
-							<label class="control-label">Resi Addr Type</label>
-							<select id="ResidentType" name="residentType" ng-model="address.sResAddrType"
-								class="form-control" ng-disabled="!isUpdating" change-on-blur="onValueChanged('resAddress')" select-required>
+							<label class="control-label">Residence Addr Type</label>
+							<select id="ResidentType" name="residentType" ng-model="address.sResAddrType" class="form-control control-select inputMaterial" ng-disabled="!isUpdating" change-on-blur="onValueChanged('resAddress')" select-required>
 								<option value="">Select Resident Type</option>
 								<option ng-repeat="obj in selectResidence" value="{{obj.value}}">{{obj.text}}</option>
 							</select>
@@ -392,8 +391,7 @@
 						</div>
 						<div class="col-md-3">
 							<label class="control-label">Residence Address Type</label>
-							<select id="ResidentType" name="residentType" ng-model="address.sResAddrType"
-								class="form-control control-select inputMaterial" ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')" select-required>
+							<select id="ResidentType" name="residentType" ng-model="address.sResAddrType" class="form-control control-select inputMaterial" ng-disabled="!isUpdating" change-on-blur="onValueChanged('perAddress')" select-required>
 								<option value="">Select Resident Type</option>
 								<option ng-repeat="obj in selectResidence" value="{{obj.value}}">{{obj.text}}</option>
 							</select>
@@ -517,7 +515,7 @@
 						ng-model="income" class="form-control" type="text" disabled="disabled">
 				</div>
 				<div class="col-md-3">
-					<label class="control-label">Amnt Of Other Income Source</label> <input
+					<label class="control-label">Other Income Sources Total Amount</label> <input
 						id="projectname" ng-model="objectSet.oAppReq.oReq.oApplicant.oIncomeDetails.dOthrSrcIncAmt" 
 						class="form-control"
 						type="text" name="Project" disabled="disabled">
@@ -553,7 +551,7 @@
 						 disabled="disabled">
 				</div>
 				<div class="col-md-3">
-					<label class="control-label">Resi Stability</label> <input
+					<label class="control-label">Residence Stability</label> <input
 						class="form-control" ng-model="objectSet.oIntrmStat.oResAddressResult.iAddrStblty" type="text"
 						 disabled="disabled">
 				</div>

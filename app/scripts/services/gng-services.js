@@ -92,6 +92,7 @@
 		applicationID="",
 		step1Object=null,
 		dealerCode=null,
+		applicationData=null,
 		applicationStatus=null;
 	  	return {
 	        getRefID: function () {
@@ -117,6 +118,12 @@
 	        },
 	        setDecisionStatus: function(value) {
 	        	decisionStatus = value;
+	        },
+	        getApplicationData: function () {
+	            return applicationData;
+	        },
+	        setApplicationData: function(value) {
+	        	applicationData = value;
 	        },
 	        getApplicationID: function () {
 	            return applicationID;

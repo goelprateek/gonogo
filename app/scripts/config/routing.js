@@ -35,6 +35,9 @@
 		}).when('/cdl/after-submit',{
 			templateUrl: 'views/cdl/after-submit.html',
 			controller: 'AfterSubmitController'
+		}).when('/cdl/post-ipa',{
+			templateUrl: 'views/cdl/post-ipa.html',
+			controller: 'PostIPAController'
 		}).when('/cdl/hold-stage',{
 			templateUrl: 'views/cdl/hold-stage.html',
 			controller: 'HoldStageController'
