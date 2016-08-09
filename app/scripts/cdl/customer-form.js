@@ -63,66 +63,6 @@ app.controller("CustomerFormCntrolr",
 	if(CustID==null || CustID==""){
 		$location.path("/cdl/dashboard");
 	}
-	
-	var docData = [{'Name':'Address Proof',
-		'ID':'0',
-		'Icon':'img/address proof.png',
-		'Count':'1',
-		'Type' : 'Approve',
-		'Offers':[{'Name':'Valid Passport','Icon':'img/address proof.png','Code':'101'},
-			        {'Name':'Latest Electricity Bill','Icon':'img/address proof.png','Code':'102'},
-			        {'Name':'Telephone Bill','Icon':'img/address proof.png','Code':'103'},
-			        {'Name':'Driving License','Icon':'img/address proof.png','Code':'104'},
-			        {'Name':'Ration Card','Icon':'img/address proof.png','Code':'105'},
-			        {'Name':'Bank Account Statement/Pass Book 1st page','Icon':'img/address proof.png','Code':'106'},
-			        {'Name':'Rent Agreement','Icon':'img/address proof.png','Code':'107'},
-			        {'Name':'Gas Connection Bill or Post Paid Mobile Bill with full address ','Icon':'img/address proof.png','Code':'108'},
-			        {'Name':'Property Tax receipt or Water Bill','Icon':'img/address proof.png','Code':'109'},
-			        {'Name':'Voter’s Identity card','Icon':'img/address proof.png','Code':'110'},
-			        {'Name':'Aadhar UID Card','Icon':'img/address proof.png','Code':'111'}]
-	},
-	{'Name':'DOB Proof',
-		'ID':'1',
-		'Icon':'img/date of birth proof.png',
-		'Count':'2',
-		'Type' : 'Approve',
-		'Offers':[{'Name':'Valid Passport','Icon':'img/date of birth proof.png','Code':'101'},
-			        {'Name':'PAN Card','Icon':'img/date of birth proof.png','Code':'112'},
-			        {'Name':'Driving License','Icon':'img/date of birth proof.png','Code':'104'},
-			        {'Name':'Birth Certificate (Govt agency)','Icon':'img/date of birth proof.png','Code':'113'},
-			        {'Name':'School Leaving certificate (10th/12th)','Icon':'img/date of birth proof.png','Code':'114'},
-			        {'Name':'Voter ID Card','Icon':'img/date of birth proof.png','Code':'110'},
-			        {'Name':'Pension Certificate / Govt. ID Card / Aadhar UID Card','Icon':'img/date of birth proof.png','Code':'111'}]
-	},
-	{'Name':'Identification Proof',
-		'ID':'2',
-		'Icon':'img/identification number.png',
-		'Count':'3',
-		'Type' : 'Approve',
-		'Offers':[{'Name':'Valid Passport','Icon':'img/identification number.png','Code':'101'},
-			        {'Name':'PAN Card','Icon':'img/identification number.png','Code':'112'},
-			        {'Name':'Driving License','Icon':'img/identification number.png','Code':'104'},
-			        {'Name':'Voter’s Identity Card','Icon':'img/identification number.png','Code':'110'},
-			        {'Name':'Aadhar UID card','Icon':'img/identification number.png','Code':'111'},
-			        {'Name':'Bank Passbook with photo','Icon':'img/identification number.png','Code':'115'}]
-	},
-	{'Name':'Signature Proof',
-		'ID':'3',
-		'Icon':'img/signature proof.png',
-		'Count':'4',
-		'Offers':[{'Name':'Signature verification from bank','Icon':'img/signature proof.png','Code':'116'},
-			        {'Name':'Passport Copy','Icon':'img/signature proof.png','Code':'101'},
-			        {'Name':'PAN Card','Icon':'img/signature proof.png','Code':'112'},
-			        {'Name':'Driving license with photograph and signature','Icon':'img/signature proof.png','Code':'104'},
-			        {'Name':'Clearance of processing fees cheque','Icon':'img/signature proof.png','Code':'117'}]
-	},
-	{'Name':'Rejected Proof',
-		'ID':'4',
-		'Icon':'img/rejected proof.png',
-		'Count':'5',
-		'Offers':[]
-	}
-	];
 
 	$scope.addrType = [
 	                  {value:'Residence', name:'Residence'},
@@ -237,7 +177,7 @@ app.controller("CustomerFormCntrolr",
 			}
 
 			$scope.credit = Response.oReq.oApplicant.sCreditCardNum;
-			$scope.tenor = Response.oReq.oApplication.iLoanTenor;
+			$scope.tenor = Response.oReq.oApplication.iLoanTenor  + " Months";
 		
 			$scope.currStage = Response.sCurrentStageId;
 			var fulladdress = Response.oReq.oApplicant.aAddr;
@@ -263,7 +203,6 @@ app.controller("CustomerFormCntrolr",
 			$scope.appScore ='';
 			$scope.tree ='';
 			$scope.pdf ='';
-			docData[4].Offers=[];
 			$('#descReason').val("");
 			$("#approvemsg").text("");
 			$scope.rejectArray=[];

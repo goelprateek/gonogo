@@ -2,8 +2,8 @@
 	<span style="font-size: 18px;padding: 5px;">{{refID}}</span>
 	<button class="customButton" style="float: right;" ng-click="gotoDashboard()">Back</button>
 </div>
-<form id="msform" style="height:420px;overflow-y:auto;"
-	class="col-md-10 col-md-offset-1">
+<div class="col-md-10 col-md-offset-1" >
+<form id="msform" slimscroll="{height: 420,railVisible:true}">
 	<!-- <fieldset class="formfield" ng-if="!authenticate('NCONTAINER')"
 		style="display: block;">
 		<legend> LOS Information</legend>
@@ -166,7 +166,7 @@
 				<label class="control-label">Select Address Type</label>
 			</div>
 			<div class="col-md-3 column">
-				<select class="form-control control-select inputMaterial" name="Employment Type" id="select_addr"
+				<select class="form-control" name="Employment Type" id="select_addr"
 					ng-model="addr_type">
 					<option ng-repeat="obj in addrType" value="{{obj.value}}">{{obj.name}}</option>
 				</select>
@@ -769,6 +769,7 @@
 		</div>
 	</div -->
 </form>
+</div>
 <div class="col-md-offset-1 col-md-10" style="text-align: center"
 	ng-if="currStage!='BRE'">
 	<button style="margin: 20px; text-align: center"
