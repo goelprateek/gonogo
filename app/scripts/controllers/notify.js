@@ -333,7 +333,6 @@
         $scope.$emit('onSuccessfulLogin');
     }
 
-
     if(_.isUndefined(user.id) ){
         $location.path(APP_CONST.getConst('APP_CONTEXT'));
     }
@@ -439,20 +438,24 @@
 				if(user.id=="599"){ 
                     $scope.json ={'sCroID':"STP_PL", 
                     'sInstID':user.institutionID, 
-                    'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit}
+                    'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit,
+                        'oCriteria':{"aProducts":user.getProductNames()}}
 				}else{
                     $scope.json ={'sCroID':"STA",  // CRO9
                     'sInstID':user.institutionID,
-                    'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit};
+                    'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit,
+                        'oCriteria':{"aProducts":user.getProductNames()}};
 				}
 			}else if(user.id=="586"){
                 $scope.json ={'sCroID':"PL_QUEUE",  // CRO1 PL Normal
                         'sInstID':user.institutionID, 
-                        'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit};
+                        'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,
+                        'oCriteria':{"aProducts":user.getProductNames()}};
             }else{
                 $scope.json ={'sCroID':"default", // CRO1,CRO2 Normal
                         'sInstID':user.institutionID, 
-                        'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit};
+                        'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,
+                        'oCriteria':{"aProducts":user.getProductNames()}};
 			}
 
 			var URL;
@@ -460,13 +463,25 @@
 			if(_.contains(user.role, "CRO3")){
                 URL = 'cro3-queue';
                 if(user.branches && user.branches.length>0)
+                {
+                    $scope.json ={
+                        'sCroID':"default", // CRO1,CRO2 Normal
+                        'sInstID':user.institutionID, 
+                        'sGrpID':"0",
+                        'iSkip': minimum,
+                        'iLimit' :$scope.limit,
+                        'oCriteria':{"aBranches":user.branches,"aProducts":user.getProductNames()}
+                    };
+                }
+            }else if(_.contains(user.role, "CRO4")){
+                URL = 'cro4-queue';
                 $scope.json ={
                     'sCroID':"default", // CRO1,CRO2 Normal
                     'sInstID':user.institutionID, 
                     'sGrpID':"0",
                     'iSkip': minimum,
                     'iLimit' :$scope.limit,
-                    'oCriteria':{"aBranches":user.branches}
+                    'oCriteria':{"aProducts":user.getProductNames()}
                 };
             }
             else if(AclService.can('NCROQUE')){
