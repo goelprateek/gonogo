@@ -253,7 +253,6 @@
                     }
                 ],
                 "aOwndAst": ""
-
             },
             "oResAddressResult": {
                 "sCustID": "",
@@ -316,11 +315,9 @@
             }
           ]
         }
-	
-       return {
-    		dummy : _obj
-       }
-	
+        return {
+        	dummy : _obj
+        }	
     });
 
 	app.controller('NotifController', ['$scope','$rootScope', '$interval','$filter',
@@ -356,8 +353,7 @@
                 return true;
         }else{
             return false;    
-        }
-        
+        }        
     }
 
     $scope.isUtr = function(){
@@ -365,8 +361,7 @@
             return true;
         }else{
             return false;    
-        }
-        
+        }        
     }
 
     $scope.utrVal = true;
@@ -457,12 +452,24 @@
             }else{
                 $scope.json ={'sCroID':"default", // CRO1,CRO2 Normal
                         'sInstID':user.institutionID, 
-                        'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit}
+                        'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit};
 			}
 
 			var URL;
 
-			if(AclService.can('NCROQUE')){
+			if(_.contains(user.role, "CRO3")){
+                URL = 'cro3-queue';
+                if(user.branches && user.branches.length>0)
+                $scope.json ={
+                    'sCroID':"default", // CRO1,CRO2 Normal
+                    'sInstID':user.institutionID, 
+                    'sGrpID':"0",
+                    'iSkip': minimum,
+                    'iLimit' :$scope.limit,
+                    'oCriteria':{"aBranches":user.branches}
+                };
+            }
+            else if(AclService.can('NCROQUE')){
 				URL = 'cro-queue'; //All 
 			}else{
 				URL = 'cro2-queue'; // Only CRO2
@@ -546,9 +553,9 @@
         var URL='';
 		var json ={'sRefID':CustID};	
 
-        if(applicationRequestType && applicationRequestType=="PS"){
+        if(_.contains(user.role, "CRO3") && applicationRequestType && applicationRequestType=="PS"){
             URL = 'application-data-partial';
-        }else if(applicationRequestType && applicationRequestType=="FP"){
+        }else if(_.contains(user.role, "CRO3") && applicationRequestType && applicationRequestType=="FP"){
             URL = 'application-data';
         }else{
     		if(AclService.can('NCROQUE'))//for CRO1

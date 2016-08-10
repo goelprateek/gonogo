@@ -70,7 +70,6 @@
 					GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_LOGIN"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_LOGIN"),1,"login-web");
 
 					if (data.USER_DETAILS.length > 0) {
-						
 						var details = data.USER_DETAILS[0];
 						var listvalues = {
 							'name': data.USERNAME,
@@ -84,6 +83,16 @@
 							'products': data.PRODUCTS,
 							'ePassword': SHA1($scope.login.password)
 						};
+
+						//Hard Coded for Testing
+						//data.HIERARCHY[0].HIERARCHY_VALUE="[\"Mumbai Central\"]";
+						//Hard Coded for Testing
+
+						if(data.HIERARCHY && data.HIERARCHY.length>0){
+							if(data.HIERARCHY[0].HIERARCHY_LEVEL==="branchName"){
+								listvalues.branches=data.HIERARCHY[0].HIERARCHY_VALUE;
+							}
+						}
 
 						$rootScope.loggedInUser = listvalues;
 

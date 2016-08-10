@@ -6,7 +6,8 @@
 
 	app.factory("APP_CONST", function () {
 		var END_POINT = {
-			BASE_URL_GNG : "http://localhost:8080/GoNoGo/",
+			// BASE_URL_GNG : "http://172.26.1.205:8181/GoNoGo/",
+			BASE_URL_GNG : "http://172.26.1.211:9090/GoNoGo/",
 			BASE_URL_SOBRE: 'http://gng.softcell.in/SoBRE',
 			APP_CONTEXT: '/'
 
@@ -117,9 +118,7 @@
 			postDataWithHeaders: postDataWithLoginHeaders,
 			jsonpReq:jsonpReq,
 			fetchDataQuietly:_fetchDataQuietly
-
 		}
-
 	}]);	
 
  	app.service('sharedService', function () {
@@ -225,7 +224,6 @@
 				}
 
 				AclService.setUserIdentity(user);
-				
 			}
 
 		    return user;
@@ -264,7 +262,6 @@
 		   "EDFBUR", "APPLICATION", "ABURCOMM", "CONREQ", "NAPPDATASTA", "RTREE","RSTPWD","NAPPDATASALE","UPDTUP",
 		   "ENDEU","Create User Profile","CRTUP","Enable And Disable","Reset Password","Update User Profile"].map(function(data){
 			AclService.addResource(data);
-		});
-		
+		});		
 	}]);
 }).call(this);
