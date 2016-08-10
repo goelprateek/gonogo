@@ -74,6 +74,19 @@
 				defer.reject(data);
 			});
 			return defer.promise;
+		},
+
+		_fetchDataQuietly = function(url, data){
+			var defere = $q.defer(),
+				_url = APP_CONST.getConst('BASE_URL_GNG');
+
+			$http.post(_url + url, data, { ignoreLoadingBar: true }).success(function (response){
+				defere.resolve(response);
+			}).error(function (error) {
+				defere.reject(error);
+			})
+
+			return defere.promise;
 		};
 
 		return {
@@ -81,7 +94,8 @@
 			getFromServer: getFromServer,
 			getStreamFromServer: getStreamFromServer,
 			postDataWithHeaders: postDataWithLoginHeaders,
-			jsonpReq:jsonpReq
+			jsonpReq:jsonpReq,
+			fetchDataQuietly:_fetchDataQuietly
 		}
 	}]);	
 
