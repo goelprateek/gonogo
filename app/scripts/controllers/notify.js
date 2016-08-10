@@ -595,7 +595,7 @@
             if(response)
 				$scope.objectSet = response;
 			else
-			 $scope.objectSet = NotificationObject.dummy();
+			 $scope.objectSet = NotificationObject.dummy;
 			
             $scope.Picked = CustID;
             $scope.dedupeRefArray = [];
@@ -1422,6 +1422,7 @@ app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$ui
 app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService','notifier',
     function($scope,ImageFeed,$uibModalInstance,$timeout,RestService,notifier){
     
+    $scope.croImages = true;
     $scope.noWrapSlides = true;
     $scope.active = ImageFeed.index;
     var rejectedImgArray = [];

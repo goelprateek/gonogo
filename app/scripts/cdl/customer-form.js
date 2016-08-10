@@ -4,13 +4,158 @@
 
 	var app=angular.module("gonogo");
 
+	app.factory("CustFormObject",function(){
+    	var _obj = {
+    		"sInstId":"",
+    		"sUserId":"",
+    		"sPassword":"",
+    		"sRefID":"",
+    		"oHeader":{
+    			"sAppID":"",
+    			"sInstID":"",
+    			"sSourceID":"",
+    			"sAppSource":"",
+    			"sReqType":"",
+    			"dtSubmit":"",
+    			"sDsaId":"",
+    			"sCroId":"",
+    			"sDealerId":""
+    		},
+    		"oReq":{
+    			"oApplicant":{
+    				"residenceAddSameAsAbove":"",
+    				"sApplID":"",
+    				"oApplName":{
+    					"sFirstName":"",
+    					"sMiddleName":"",
+    					"sLastName":"",
+    					"sPrefix":"",
+    					"sSuffix":""
+    				},
+    				"oFatherName":"",
+    				"oSpouseName":"",
+    				"sReligion":"",
+    				"sApplGndr":"",
+    				"sDob":"",
+    				"iAge":"",
+    				"sMarStat":"",
+    				"aKycDocs":[{
+    					"sKycName":"",
+    					"sKycNumber":"",
+    					"sKycStat":"",
+    					"sIssueDate":"",
+    					"sExpiryDate":""
+    				}],
+    				"bSameAbove":"",
+    				"aAddr":[{
+    					"sLine1":"",
+    					"sLine2":"",
+    					"sCity":"",
+    					"iPinCode":"",
+    					"sState":"",
+    					"sCountry":"",
+    					"sLandLoard":"",
+    					"sLine3":"",
+    					"sLine4":"",
+    					"sVillage":"",
+    					"sDistrict":"",
+    					"fDistFrom":"",
+    					"sLandMark":"",
+    					"sAccm":"",
+    					"iTimeAtAddr":"",
+    					"sAddrType":"",
+    					"sResAddrType":"",
+    					"iMonthAtCity":"",
+    					"iMonthAtAddr":"",
+    					"dRentAmt":"",
+    					"iYearAtCity":""
+    				}],
+    				"aPhone":[{
+    					"sPhoneType":"",
+    					"sAreaCode":"",
+    					"sCountryCode":"",
+    					"sPhoneNumber":"",
+    					"sExt":""}],
+    				"aEmail":[{
+    					"sEmailType":"",
+    					"sEmailAddr":""
+    				}],
+    				"aEmpl":[{
+    					"sEmplType":"",
+    					"sEmplName":"",
+    					"iTmWithEmplr":"",
+    					"sDtJoin":"",
+    					"sDtLeave":"",
+    					"dmonthSal":"",
+    					"dGrossSal":"",
+    					"aLastMonthIncome":[],
+    					"sConst":"",
+    					"sIndustType":"",
+    					"sItrID":"",
+    					"dItrAmt":"",
+    					"sDesig":"",
+    					"sEmplrCode":"",
+    					"sEmplrBr":"",
+    					"sModePayment":"",
+    					"sDeptmt":"",
+    					"sWorkExps":"",
+    					"sBusinesName":"",
+    					"dtComencemnt":"",
+    					"sIndstryType":""
+    				}],
+    				"iNoOfDep":"",
+    				"iEarnMem":"",
+    				"iFamilyMem":"",
+    				"oApplRef":"",
+    				"sEdu":"",
+    				"sCreditCardNum":"",
+    				"bMobVer":"",
+    				"sAdharVer":"",
+    				"aBankingDetails":"",
+    				"aLoanDetails":"",
+    				"oIncomeDetails":"",
+    				"oSurrogate":""
+    			},
+    			"aCoApplicant":"",
+    			"oApplication":{
+    				"sAppID":"",
+    				"sLoanType":"",
+    				"sAppliedFor":"",
+    				"dLoanAmt":"",
+    				"iLoanTenor":"",
+    				"oProperty":"",
+    				"sLnPurp":"",
+    				"dLnApr":"",
+    				"dEmi":"",
+    				"iAdvEmi":"",
+    				"dMarginAmt":"",
+    				"aAssetDetail":[{
+    					"sAssetCtg":"",
+    					"sDlrName":"",
+    					"sAssetMake":"",
+    					"sModelNo":"",
+    					"sPrice":""
+    				}],
+    				"aOwndAst":""
+    			},
+    			"sSuspAct":""
+    		},
+    		"sRespFormat":"",
+    		"sCurrentStageId":""
+    	}
+        return {
+        	dummy : _obj
+        }	
+    });
+
 app.controller('PDFViewerModalCtrl', [
-	'RestService','$scope', '$uibModalInstance', 'response','refID','$location','UserService',
-	function (RestService,$scope, $uibModalInstance, response,refID,$location,UserService) {
+	'RestService','$scope', '$uibModalInstance', 'response','refID','$location','UserService','CustFormObject',
+	function (RestService,$scope, $uibModalInstance, response,refID,$location,UserService,CustFormObject) {
 	
 	var user=UserService.getCurrentUser();
 	$scope.response = response;
 	$scope.refID = refID;
+	$scope.objectSet = CustFormObject.dummy;
 
 	$scope.submit = function (imgID,refID) {
 
@@ -48,6 +193,22 @@ app.controller('PDFViewerModalCtrl', [
 	 };
 }]);
 
+app.controller("kycDocuments",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService',
+    function($scope,ImageFeed,$uibModalInstance,$timeout,RestService){
+    $scope.croImages = false;
+    $scope.noWrapSlides = true;
+    $scope.active = ImageFeed.index;
+    $scope.iseditMode = ImageFeed.editMode;
+    $scope.imageTag = 1;
+    $scope.slides = _.each(ImageFeed.docData,function(value,key){
+        return value["id"] = key;
+    });
+    $scope.closeModal = function(){
+          $uibModalInstance.dismiss();
+    };
+
+}]);
+
 app.controller("CustomerFormCntrolr",
 	['$scope','$rootScope','sharedService',"RestService","APP_CONST","$location","$uibModal","GNG_GA",
 	function($scope,$rootScope,sharedService, RestService, APP_CONST, $location,$uibModal,GNG_GA){
@@ -81,11 +242,37 @@ app.controller("CustomerFormCntrolr",
        	{value:"SEB",name:"Self Employed Business"},
        	{value:"SEP",name:"Self Employed Professional"}];
 
-	$scope.addr_type = $scope.addrType[0].value;
+    $scope.findAddressType = function(orignal,final){
+    	return (angular.lowercase(orignal) == angular.lowercase(final));
+    }		
+
+	
 
 	RestService.saveToServer('dashboard-application-data',json).then(function(Response){
 		if(Response){
-			$scope.applicationData=Response;
+			if(Response)
+				$scope.objectSet = Response;
+			else
+			 $scope.objectSet = CustFormObject.dummy;
+
+			$scope.name = $scope.objectSet.oReq.oApplicant.oApplName.sFirstName+"  "+ $scope.objectSet.oReq.oApplicant.oApplName.sLastName.replace("null","");							    	
+			if($scope.objectSet.oReq.oApplicant.sDob && $scope.objectSet.oReq.oApplicant.sDob.trim()!=="")
+			{
+				$scope.dob = $scope.objectSet.oReq.oApplicant.sDob.slice(0,2)+"/"+$scope.objectSet.oReq.oApplicant.sDob.slice(2,4)+"/"+$scope.objectSet.oReq.oApplicant.sDob.slice(4);
+			}else{
+				$scope.dob ="";
+			}
+
+			var tempConstitutionType = $scope.objectSet.oReq.oApplicant.aEmpl[0].sConst;
+			var enumText = $scope.getTextOfValueMatched(tempConstitutionType,$scope.aplcntType);
+			if(enumText)
+				$scope.constitution = enumText;
+			else
+				$scope.constitution = tempConstitutionType;
+
+			$scope.addr_type = $scope.addrType[0];
+
+			/*$scope.applicationData=Response;
 
 			$scope.applicant = Response.oReq.oApplicant;
 			$scope.kyc_data = Response.oReq.oApplicant;
@@ -285,109 +472,28 @@ app.controller("CustomerFormCntrolr",
 			{
 				$scope.coAppId =Response.oReq.oCoApplicant[0].sApplID;
 			
-	//			$scope.coapplicant = Response.oAppReq.oCoApplicant[0].oApplName;
 			}
-	//		}catch(e){
-	//			$scope.coAppId ='';
-	//			$scope.coapplicant = '';
-	//		}
-	//		try{
+	
 			
 			//Fetch Images
 			//alert("Call Images");
 			var json ={'sRefID':CustID};
 			RestService.saveToServer('application-images',json).then(function(Response){
-					//console.log("Images loaded:");
-					//console.log(JSON.stringify(Response));
+					
 				if(Response!=null)
 				{
 					var data = Response;
 					for (j in data)
 					{
-						//alert("Got Images");
-		//					if(data[j].sApplID == $scope.applicantID){
 							$scope.appkycimg = data[j].aImgMap;
 							applicantImg(data[j].aImgMap);
-						/*}
-						else{
-							$scope.coappImgs = data[j].aImgMap;
-						}*/
 					}
 					$scope.array = $scope.appkycimg;
 				}
 			},function(error){
 				$scope.error = "Sorry...Unable to fetch images from server !!";					
 			});				
-	//		}
-	//		catch(error){
-	//			$scope.array = '';
-	//		}
-	//		try{
-				/*var pdfStatus =Response.oCompRes.multiBureauJsonRespose.FINISHED[0].STATUS ;
-				if(pdfStatus =="SUCCESS"){*/
-	//			console.log("Response.oCompRes.multiBureauJsonRespose:");
-	//			console.log(Response.oCompRes.multiBureauJsonRespose);
-	//			if(Response.oCompRes.multiBureauJsonRespose!=null && Response.oCompRes.multiBureauJsonRespose.FINISHED!=null && Response.oCompRes.multiBureauJsonRespose.FINISHED.length>0){
-	//				$scope.pdf ="data:application/pdf;base64,"+Response.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];
-	//				$scope.score =Response.oCompRes.multiBureauJsonRespose.FINISHED[0]["JSON-RESPONSE-OBJECT"].scoreList[0].score;
-	//				  $scope.sanctionedAmt =Response.oCompRes.multiBureauJsonRespose.FINISHED[0]["BUREAU-RRP-OBJECT"].rrpTotalOutstanding ;
-	//				  $scope.noEnquiry = Response.oCompRes.multiBureauJsonRespose.FINISHED[0]["BUREAU-RRP-OBJECT"].rrpTotInqs;
-	//			}
-				/*}else{console.log("no pdf");}*/
-	//		}
-	//		catch(error){
-	//			$scope.pdf ='';
-	//		}
-	//		try{
-	//			if(Response.oCompRes.scoringServiceResponse["SCORE-DATA"]!=null){
-	//				
-	//				var data =Response.oCompRes.scoringServiceResponse["SCORE-DATA"].STATUS;
-	//				if(data == "ERROR"){
-	//					$scope.appScore ="Not Available";
-	//				}
-	//				else if(data == null){
-	//					$scope.appScore ="No Score has been calculated";
-	//				}			 
-	//				else{
-	//					$scope.appScore =Response.oCompRes.scoringServiceResponse.SCORE_TREE.AppScore;
-	//					$scope.tree = Response.oCompRes.scoringServiceResponse.SCORE_TREE;//
-	//				}
-	//			}
-	//		}
-	//		catch(error){
-	//			 $scope.appScore ='';
-	//			 $scope.tree ='';
-	//		}
-	//		try{
-	//			  $scope.DetailsResp=Response.oCompRes.scoringServiceResponse["DECISION_RESPONSE"].Details;
-				 
-	//		}catch(error){
-	//			  $scope.DetailsResp="";
-	//		}
-	//		try{
-	//			 $scope.Emi = Response.aCroDec[0].dEmi;	
-	//		}catch(error){
-	//			  $scope.Emi ="";
-	//		}
-	//		try{
-	//			$scope.Eremark=Response.oCompRes.scoringServiceResponse["ELIGIBILITY_RESPONSE"].REMARK;
-	//		}catch(error){
-	//			$scope.Eremark="";
-	//		}
-	//	  try{
-	//			if(Response.oElgGrdOut!=null){
-	//				$scope.eligibility = Response.oElgGrdOut.dElgAmt;
-	//				$scope.decision = Response.oElgGrdOut.sDec;
-	//			}
 	
-	//	  }catch(error){
-	//		  $scope.eligibility = "";
-	//		  $scope.decision = "";
-	//		  $scope.score = "";
-	////			  $scope.sanctionedAmt = "";
-	////			  $scope.noEnquiry = "";
-	//	  }
-	//	  try{
 		  	if(typeof Response.aDeDupe !== "undefined" && Response.aDeDupe.length != 0){
 			  	if(Response.aDeDupe !='' || Response.aDeDupe !=null){
 				  	var dedupeArray = Response.aDeDupe;
@@ -397,109 +503,42 @@ app.controller("CustomerFormCntrolr",
 					$scope.dedupeArray = arrayData;	
 			  	}else{$scope.dedupeArray= false;}
 		  	}else{$scope.dedupeArray= false;}
-	//		  }
-	//		catch(e) {
-	//			$scope.dedupeArray = "";
-	//		}
-	//		try{
-			$scope.appldAmount = Response.oReq.oApplication.dLoanAmt;
-	//		}catch(e){
-	//			$scope.appldAmount = '';
-	//		}
-	//		try{
-	//			  $scope.croDec=Response.aCroDec[0];
-	//		}catch(error){
-	//			$scope.croDec="";
-	//		}
-	//		try{
-	//			$scope.offAddrStab= Response.oIntrmStat.oOffAddressResult.iAddrStblty;
-	//			$scope.resAddrStab= Response.oIntrmStat.oResAddressResult.iAddrStblty;
-	//		}catch(e){
-	//			$scope.offAddrStab="";
-	//			$scope.resAddrStab="";
-	//		}
-	//		try{
-	//			if(Response.oLosDtls!=null){
-	//				console.log("los ID : "+Response.oLosDtls.sLosID);
-	//				if(!Response.oLosDtls.sLosID)
-	//				{
-	//					$timeout(function(){
-	//						$scope.losID="";
-	//						$(document.body).find('#losId').prop('disabled', false);
-	//					});
-	//				}else{	
-	//					$timeout(function(){
-	//						$scope.losID= Response.oLosDtls.sLosID;
-	//						$('#losId').val(Response.oLosDtls.sLosID);
-	//						$(document.body).find('#losId').prop('disabled', true);
-	//					});
-	//				}
-	//
-	//				if(!Response.oLosDtls.sStat)
-	//				{
-	//					$timeout(function(){
-	//						$('#losStatusId1').val("");
-	//						$scope.losStatus1 ="";
-	//					});
-	//				}else{	
-	//					$timeout(function(){
-	//						$('#losStatusId1').val(Response.oLosDtls.sStat);
-	//						$scope.losStatus1 = Response.oLosDtls.sStat;
-	//						if(Response.oLosDtls.sStat == "LOS_DISB"){
-	//							$(document.body).find('#utrData').prop('disabled', false);
-	//						}else{
-	//							$(document.body).find('#utrData').prop('disabled', true);
-	//							$(document.body).find('#utrData').val("");
-	//							$(document.body).find('#utrData').css("border","1px solid #cfcfcf");
-	//						}
-	//					});
-	//				}
-	////				try{
-	//					if(!Response.oLosDtls.sUtr)
-	//					{
-	//						$timeout(function(){
-	//							$scope.utrValue = "";
-	//						});
-	//					}else{	
-	//						$timeout(function(){
-	//						$scope.utrValue = Response.oLosDtls.sUtr;
-	//						$(document.body).find('#utrData').val(Response.oLosDtls.sUtr);
-	//						$(document.body).find('#utrData').prop('disabled', true);
-	//						});
-	//					}
-	//					$scope.utrValue = Response.oLosDtls.sUtr;
-	////				}catch(e){
-	////					$scope.utrValue = "";
-	////				}
-	//			}
-	//		}catch(e){
-	//			 $scope.losID="";
-	//			 $(document.body).find('#losId').prop('disabled', false);
-	//			 $('#losStatusId1').val("");
-	//			 $scope.losStatus1 ="";
-	//		}
-	//		try{
-			$scope.supecious = Response.oReq.sSuspAct;
-	//		}catch(e){
-	//			$scope.supecious ="";
-	//		}
-	//		try{
-			$scope.croRemark = Response.aCroJustification;
-	//		}catch(e){
-	//			$scope.croRemark = "";
-	//		}
-	//		
-	//		if(!croQueue)// for CRO2
-	//		{	$scope.newApplication(CustID);}
-			
-			
-	//		$scope.time_employer = $scope.timeataddress[$scope.getTime(Response.oReq.oApplicant.aEmpl[0].iTmWithEmplr, $scope.timeataddress)];							    	
+				$scope.appldAmount = Response.oReq.oApplication.dLoanAmt;
 	
-	//		$scope.lmth =  Validation.NoWithComma(Response.oAppReq.CUSTOMER.lastMonthIncome);
-	//		$scope.llmth =  Validation.NoWithComma(Response.oAppReq.CUSTOMER.lastLastMonthIncome);
-	//		$('#Job').show();
-		}
-	},function(error){
+			$scope.supecious = Response.oReq.sSuspAct;
+	
+			$scope.croRemark = Response.aCroJustification;
+		*/}
+		  return Response;
+	}).then(function(data){
+            if(data){
+            	var json ={'sRefID':data.sRefID};
+				RestService.saveToServer('application-images',json).then(function(Response){
+	                var objArray = _.flatten(_.map(_.pluck(Response, 'aImgMap'),function(data){
+	                        return data;
+	                }));
+
+	                $scope.imageDataArray = [];
+	                $scope.applicantPhoto = [];
+                    _.each(objArray,function(val){
+                        return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
+                            if(!_.isUndefined(data) || !_.isNull(data)){
+                                if(!_.isEmpty(data.sByteCode)){
+	                                val["sByteCode"] = "data:image/png;base64,"+data.sByteCode;
+	                                if(val.sImgType === "APPLICANT-PHOTO"){
+	                                	$scope.applicantPhoto.push(val);
+	                                }else{
+	                                	$scope.imageDataArray.push(val); 
+	                                }
+                                }  
+                            }
+                        });
+                    });
+                    console.log($scope.applicantPhoto);
+                    console.log($scope.imageDataArray);
+                });
+            }
+        },function(error){
 		$scope.error = "Sorry...System is under maintenance !!";					
 	});
 
@@ -765,7 +804,7 @@ app.controller("CustomerFormCntrolr",
 
 			sharedService.setRefID($scope.refID);
 			sharedService.setDealerCode($scope.dealerID);
-			sharedService.setApplicationData($scope.applicationData);
+			sharedService.setApplicationData($scope.objectSet);
 			$location.path("/cdl/post-ipa");
 		}else if($scope.currStage==="PD_DE"){
 			var status=sharedService.getDecisionStatus();
@@ -884,8 +923,8 @@ app.controller("CustomerFormCntrolr",
 		$location.path("/cdl/dashboard");
 	};
 	
-	$scope.showPreviewModal=function(img){
-		if(img.startsWith("data")){
+	$scope.showPreviewModal=function(obj,isImgFlag,index,editMode){
+	/*	if(img.startsWith("data")){
 			if(img.startsWith("data:image/")){
 				$(document.body).find('#cirhtml').attr("data", "").hide();
 				$(document.body).find('#document_preview').attr("src", img).show();
@@ -905,7 +944,23 @@ app.controller("CustomerFormCntrolr",
 				$(document.body).find('#cirhtml').attr("data", "").hide();
 				$(document.body).find('#document_preview').attr("src", img).show();
 			}
-		}
+		}*/
+		 var modalInstance = $uibModal.open({
+                      templateUrl: 'views/templates/modal.html',
+                      controller: 'kycDocuments',
+                      size: 'lg',
+                      resolve:{
+                        ImageFeed : function (){
+                            var imageData;
+                            return imageData = {
+                                isImage : isImgFlag,
+                                docData : obj,
+                                index : index,
+                                editMode : editMode
+                    }
+                } 
+            }
+        });
 	}
 }]);
 
