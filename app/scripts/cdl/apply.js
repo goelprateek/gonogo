@@ -2360,7 +2360,7 @@ $scope.onSchemeSelected =function(ui)
 		} else {
 		  	$scope.dltSrchrg = (ttlAsstCst * (parseFloat($scope.SchemeObject.sDint)/100));
 		}
-		Math.round($scope.dltSrchrg)
+		$scope.dltSrchrg=Math.round($scope.dltSrchrg);
 		$("#aEMI").val(tadEmi).siblings("help").show();
 		$("#emi").val(temi).siblings("help").show();
 	//	$("#mrgnMny").val(tmrgnMny).prev().show();
@@ -2425,7 +2425,7 @@ $("#astCst").keyup(function(){
 		{
 		  $scope.dltSrchrg = (ttlAsstCst * (parseFloat($scope.SchemeObject.sDint)/100));
 		}
-	Math.round($scope.dltSrchrg);
+	$scope.dltSrchrg=Math.round($scope.dltSrchrg);
 	$("#aEMI").val(tadEmi).siblings("help").show();
 	$("#emi").val(temi).siblings("help").show();
 	$("#mrgnMny").val(tmrgnMny).siblings("help").show();
