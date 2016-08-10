@@ -568,7 +568,7 @@
         var URL='';
 		var json ={'sRefID':CustID};	
 
-        if(_.contains(user.role, "CRO3") && applicationRequestType && applicationRequestType=="PS"){
+        if((_.contains(user.role, "CRO4") || _.contains(user.role, "CRO3")) && applicationRequestType && applicationRequestType=="PS"){
             URL = 'application-data-partial';
         }else if(_.contains(user.role, "CRO3") && applicationRequestType && applicationRequestType=="FP"){
             URL = 'application-data';
