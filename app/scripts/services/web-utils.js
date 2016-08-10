@@ -2,7 +2,6 @@ var app=angular.module('gng-web-utils',[]);
 
 app.factory('WEB_UTILS',function(){
 	return {
-		//detecting browser name -----------------------------------------------------------
 		getBrowser:function(){
 			var N= navigator.appName;
 			var UA= navigator.userAgent;
