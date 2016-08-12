@@ -1210,8 +1210,8 @@ $scope.submitApplication=function(UrlKey)
 	$scope.email.aEmail.push($scope.email1);
 	$scope.email.aEmail.push($scope.email2);
 	$scope.email.aEmail.push($scope.email3);
-	
-	$scope.name={"oApplName":{"sFirstName":$("#fname").val(),"sLastName":$("#lname").val(),"sMiddleName":$("#mname").val()}};
+
+	$scope.name={"oApplName":{"sFirstName":$scope.fname,"sLastName":$scope.mname,"sMiddleName":$scope.lname}};
 
 	$scope.kyc={"aKycDocs":[]};
 	$scope.kyc1={"sKycName":"PAN","sKycNumber":$("#pan").val()};
