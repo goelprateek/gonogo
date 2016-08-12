@@ -31,7 +31,9 @@
 				var object = {
 					"value" : "holdCase",
 					"index" :i+1,
-					"doc"  :$scope.statusObject.aCroJustification[i].sDocName
+					"doc"  :$scope.statusObject.aCroJustification[i].sDocName,
+					"state":$scope.statusObject.aCroJustification[i].sCase,
+					"reason":$scope.statusObject.aCroJustification[i].sDescrip
 				};
 				$scope.holdStageArr.push(object);
 			}

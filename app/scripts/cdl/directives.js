@@ -133,16 +133,4 @@
        		}]
 		};
 	});
-
-	app.directive('selectRequired',function(){
-	    return {
-	        restrict: "A",
-	        require:"ngModel",
-	        link: function(element,scope,attr,controller){
-	            controller.$validators.selectrequired = function(modelValue){                   
-	                return modelValue === '' || (modelValue && modelValue.startsWith('Select')) ? false : true;
-	            }
-	        }
-	    }
-	});
 }).call(this);

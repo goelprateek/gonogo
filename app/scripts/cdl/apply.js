@@ -507,11 +507,6 @@
 	$scope.serviceHitCount=1;
 	var img_array=[];
 	var addkyc_array=[];
-	$scope.ApplicationArr=[{value:"APPLICATION_FORM","index":1}];
-	$scope.AggrigationArr=[{value:"AGREEMENT","index":1}];
-	$scope.AchArr=[{value:"ACH","index":1}];
-	$scope.DisbursmentArr=[{value:"DISBURSEMENT","index":1}];
-	$scope.AddtnlKycArr=[{value:"ADDITIONAL_KYC","index":1}];
 
 	$scope.mstatus="Single"
 	$scope.gender="Male";
@@ -1062,26 +1057,26 @@ function uploadImage(json,callType)
 }*/
 
 //$(document.body).on("click","#dsubmit",function(){
-	$scope.finalPdfshowFun = function()
-	{
-		$rootScope.errHead="";
-     	$rootScope.errorMsg="";
-	    UploadAllImgs($scope.REFID,addkyc_array,"ipa");
-	    $scope.updateStatus();
-	    // console.log("$scope.dstatus :"+$scope.dstatus);
-	    if(status == "Declined")
-		{	
-	    	$("loaderImg").show();
-	    	$timeout( function(){ $location.path("/cdl/dashboard"); }, 3000);
-		     $rootScope.errHead="";
-		     $rootScope.errorMsg="";
-		}else
-		 {
-			$('#additionalDoc').hide();
-			$('#additionalDocfinal').show();
-		 }
+// 	$scope.finalPdfshowFun = function()
+// 	{
+// 		$rootScope.errHead="";
+//      	$rootScope.errorMsg="";
+// 	    UploadAllImgs($scope.REFID,addkyc_array,"ipa");
+// 	    $scope.updateStatus();
+// 	    // console.log("$scope.dstatus :"+$scope.dstatus);
+// 	    if(status == "Declined")
+// 		{	
+// 	    	$("loaderImg").show();
+// 	    	$timeout( function(){ $location.path("/cdl/dashboard"); }, 3000);
+// 		     $rootScope.errHead="";
+// 		     $rootScope.errorMsg="";
+// 		}else
+// 		 {
+// 			$('#additionalDoc').hide();
+// 			$('#additionalDocfinal').show();
+// 		 }
 	
-};
+// };
 
 /*// service for getting postIPA pdf
 function GetPostIPA_PDF()
@@ -1872,22 +1867,22 @@ $scope.modelTags = [];
 });*/
 
 
-$scope.updateStatus = function(){
-	$scope.updateJson ={"sRefID":$scope.REFID};
-	// console.log("Input JSON for status update :"+$scope.updateJson);
-	$http({
-		method : 'POST',
-		url : APP_CONST.getConst('BASE_URL_GNG')+"post-ipa-stage-update",
-		data :$scope.updateJson,
-		headers : {'Content-Type' : 'application/json'}
-	}).success(function(data) 
-	{
-		// console.log("Data from status update : " + JSON.stringify(data));			
-	}).error(function(data)
-	{ 
-	console.log("Getting Error from make service.");
-	});
-}
+// $scope.updateStatus = function(){
+// 	$scope.updateJson ={"sRefID":$scope.REFID};
+// 	// console.log("Input JSON for status update :"+$scope.updateJson);
+// 	$http({
+// 		method : 'POST',
+// 		url : APP_CONST.getConst('BASE_URL_GNG')+"post-ipa-stage-update",
+// 		data :$scope.updateJson,
+// 		headers : {'Content-Type' : 'application/json'}
+// 	}).success(function(data) 
+// 	{
+// 		// console.log("Data from status update : " + JSON.stringify(data));			
+// 	}).error(function(data)
+// 	{ 
+// 	console.log("Getting Error from make service.");
+// 	});
+// }
 
 // $scope.resetStatus=function(){
 // 	$scope.updateJson ={
@@ -1946,28 +1941,6 @@ $scope.updateStatus = function(){
  
  $("#prmnt_perstdCode, #wrketype").removeAttr("disabled");
 
-	$scope.addNewElement=function(key)
-	{  switch (key) {
-		case "APPLICATION_FORM":
-			$scope.ApplicationArr.push({value:key,"index":($scope.ApplicationArr[$scope.ApplicationArr.length-1].index)+1});
-			break;
-		case "AGREEMENT":
-			$scope.AggrigationArr.push({value:key,"index":($scope.AggrigationArr[$scope.AggrigationArr.length-1].index)+1});
-			break;
-		case "ACH":
-			$scope.AchArr.push({value:key,"index":($scope.AchArr[$scope.AchArr.length-1].index)+1});
-			break;
-			
-		case "DISBURSEMENT":
-			$scope.DisbursmentArr.push({value:key,"index":($scope.DisbursmentArr[$scope.DisbursmentArr.length-1].index)+1});
-			break;
-			
-		case "ADDITIONAL_KYC":
-			$scope.AddtnlKycArr.push({value:key,"index":($scope.AddtnlKycArr[$scope.AddtnlKycArr.length-1].index)+1});
-			break;
-		}
-		
-	}
 	
 	/* var self = this;
 
@@ -2042,13 +2015,13 @@ $scope.updateStatus = function(){
 	    location.reload();
 	  	});
 		  
-	  $scope.onSaveAssetClicked=function(){
+	  /*$scope.onSaveAssetClicked=function(){
 		  // $scope.mkVal = $scope.mk;
 		  // $scope.mdlVal = $scope.mdl;
 		  var json = {"make":$("#mk1").val(),"model":$("#mdl1").val()}
 		  $scope.scmService(json);
 		  $scope.scheme="";
-	  }
+	  }*/
 	 // $scope.reprocess=function()
 	 // {
 		//  // console.log("$scope.refid : "+$scope.REFID +" :Cust id ="+CustID);

@@ -45,6 +45,9 @@
 		}).when('/cdl/customerForm', {
 			templateUrl: 'views/cdl/customer-form.html',
 			controller: 'CustomerFormCntrolr'
+		}).when('/cdl/additnl-doc',{
+			templateUrl: 'views/cdl/upload-additnl-docs.html',
+			controller: 'AdditionalDocumentController'
 		}).otherwise({ redirectTo: '/' })
 	}]);
 	

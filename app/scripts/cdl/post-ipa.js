@@ -1,8 +1,14 @@
 ;(function(){
 	'use strict';	
 	var app=angular.module("gonogo.cdl");
-	app.controller("ChangeAssetCtrlr",["$scope","asset",function($scope,asset){
+	app.controller("ChangeAssetCtrlr",["$scope","asset","$uibModalInstance",function($scope,asset,$uibModalInstance){
 		$scope.asset=asset;
+
+    	$scope.onSaveAssetClicked=function(){
+			// var json = {"make":$("#mk1").val(),"model":$("#mdl1").val()}
+
+			$uibModalInstance.close($scope.asset);
+	  	}
 	}]);
 
 	app.controller("PostIPAController",["$scope","sharedService","$location","UserService","RestService","notifier","$uibModal",
@@ -16,6 +22,7 @@
 
 		$scope.approvedAmt="";
 		$scope.astCst="";
+		$scope.tMrgnMny="0";
 
 		var user=UserService.getCurrentUser();
 
@@ -37,10 +44,12 @@
 			$scope.asset.category=$scope.applicationData.oReq.oApplication.aAssetDetail[0].sAssetCtg;
 			$scope.asset.make =$scope.applicationData.oReq.oApplication.aAssetDetail[0].sAssetMake;
 			$scope.asset.model=$scope.applicationData.oReq.oApplication.aAssetDetail[0].sModelNo;
+			$scope.dealerName=$scope.applicationData.oReq.oApplication.aAssetDetail[0].sDlrName;
 
 			$scope.dealerCode=$scope.applicationData.oHeader.sDealerId;
 		}else{
 			$location.path("/cdl/basic-de");
+			return;
 		}
 
 		if(sharedService.getApplicationStatus()){
@@ -54,6 +63,7 @@
 				sharedService.setRefID(null);
 			}else{
 				$location.path("/cdl/basic-de");
+				return;
 			}
 
 			var json={
@@ -74,8 +84,11 @@
 			.then(function(data){
 				if(data){
 					$scope.statusObject=data;
-					//$scope.approvedAmt=data.aCroDec[0].dAmtAppr;
-					$scope.approvedAmt=100000;
+					$scope.approvedAmt=data.aCroDec[0].dAmtAppr;
+
+					//HARD CODED
+					//$scope.approvedAmt=100000;
+					//HARD CODED
 				}
 			},function(failedResponse){
 				notifier.logError("Sorry we cannot process your application status request");
@@ -86,13 +99,14 @@
 		$scope.allSchemes = "";
 		$scope.scmTags = [];
 
-		$scope.onMoneyInstrumentChanged=function(){
-			if($scope.mnyInstn && $scope.mnyInstn!="Cash")
-		 	{
-				$("#mnyCnfmDiv").show();
-		 	}else{
-				$("#mnyCnfmDiv").hide();
-		 	}
+		$scope.onMoneyInstrumentChanged=function(instrumentSelected){
+			$scope.mnyInstn=instrumentSelected;
+			// if($scope.mnyInstn && $scope.mnyInstn!="Cash")
+		 // 	{
+			// 	$("#mnyCnfmDiv").show();
+		 // 	}else{
+			// 	$("#mnyCnfmDiv").hide();
+		 // 	}
 		};
 
 		$scope.scmService = function(){
@@ -211,26 +225,26 @@
 		// 	{	$scope.ipaService(); }	
 		// });
 
-		$scope.calculateEmi=function(){
-			var tMrgnMny;
-			var tAprAmt = parseFloat(($scope.approvedAmt+"").replace(/,/g,""));	
-			var tAsstCst = parseFloat($scope.astCst.replace(/,/g,""));
+		$scope.calculateEmi=function(){			
+			var tAprAmt = parseFloat(($scope.approvedAmt ? $scope.approvedAmt : "0").replace(/,/g,""));	
+			var tAsstCst = parseFloat(($scope.astCst ? $scope.astCst : "0") .replace(/,/g,""));
 
 			if(tAsstCst >= tAprAmt){ 
-				tMrgnMny = tAsstCst-tAprAmt; 
+				$scope.tMrgnMny = tAsstCst-tAprAmt; 
 			}else{
-				tMrgnMny=0;
+				$scope.tMrgnMny="0";
 			}
 
-			if(tMrgnMny<=0)
-			{
-			 	$("#mnyInstrDiv, #mnyCnfmDiv").hide();
-			}else{
-				$("#mnyInstrDiv, #mnyCnfmDiv").show();
-			}
+			// if($scope.tMrgnMny<=0)
+			// {
+			//  	$("#mnyInstrDiv, #mnyCnfmDiv").hide();
+			// }else{
+			// 	$("#mnyInstrDiv, #mnyCnfmDiv").show();
+			// }
+
 			/*var tAprAmt = parseFloat($("#apvAmt").val().toString().replace(/,/g,""));
 			var tAsstCst = parseFloat($("#astCst").val().toString().replace(/,/g,""));*/
-			
+
 			if($scope.SchemeObject){
 				if(!$scope.SchemeObject.sMxTenu)
 				{
@@ -247,33 +261,35 @@
 				if(!$scope.SchemeObject.sMinAmt)
 				{
 					$scope.SchemeObject.sMinAmt=0;
-				}	
-				var tadEmi = 0;
-				var temi=0;
+				}
+				$scope.tadEmi = 0;
+				$scope.temi=0;
 				if(tAprAmt < tAsstCst)
 
 				{	
-					temi = (tAprAmt/parseFloat($scope.SchemeObject.sMxTenu));
-					temi =  Math.ceil(temi);
-					tadEmi=(temi * parseFloat($scope.SchemeObject.sMinTenu));
+					$scope.temi = (tAprAmt/parseFloat($scope.SchemeObject.sMxTenu));
+					$scope.temi =  Math.ceil($scope.temi);
+					$scope.tadEmi=($scope.temi * parseFloat($scope.SchemeObject.sMinTenu));
 				}else{
-					temi =  (tAsstCst/parseFloat($scope.SchemeObject.sMxTenu))
-					temi =  Math.ceil(temi);
-					tadEmi=(temi * parseFloat($scope.SchemeObject.sMinTenu));
+					$scope.temi =  (tAsstCst/parseFloat($scope.SchemeObject.sMxTenu))
+					$scope.temi =  Math.ceil($scope.temi);
+					$scope.tadEmi=($scope.temi * parseFloat($scope.SchemeObject.sMinTenu));
 				}
-				tadEmi=  Math.ceil(tadEmi);
-			//	$scope.pstIpaSchmExp = ""+$scope.SchemeObject.sSchID+"("+$scope.SchemeObject.sMinTenu+"/"+$scope.SchemeObject.sMxTenu+")";
+				$scope.tadEmi=  Math.ceil($scope.tadEmi);
+				$scope.pstIpaSchmExp = ""+$scope.SchemeObject.sSchID+"("+$scope.SchemeObject.sMinTenu+"/"+$scope.SchemeObject.sMxTenu+")";
 				if(tAprAmt < tAsstCst)
 				{
 			  		$scope.dltSrchrg = (tAprAmt * (parseFloat($scope.SchemeObject.sDint)/100));
 				}else{
 			  		$scope.dltSrchrg = (tAsstCst * (parseFloat($scope.SchemeObject.sDint)/100));
 				}
-				Math.round($scope.dltSrchrg);
-				$("#aEMI").val(tadEmi).siblings("help").show();
-				$("#emi").val(temi).siblings("help").show();
-				$("#mrgnMny").val(tMrgnMny).siblings("help").show();
-				$("#prcsfee").val( Math.ceil($scope.SchemeObject.sMinAmt)).siblings("help").show();
+				$scope.dltSrchrg=Math.round($scope.dltSrchrg);
+				// $("#aEMI").val(tadEmi).siblings("help").show();
+				// $("#emi").val($scope.temi).siblings("help").show();
+				// $("#mrgnMny").val($scope.tMrgnMny).siblings("help").show();
+
+				$scope.SchemeObject.sMinAmt=Math.ceil($scope.SchemeObject.sMinAmt);
+				//$("#prcsfee").val( Math.ceil($scope.SchemeObject.sMinAmt)).siblings("help").show();
 			}
 		};
 
@@ -297,23 +313,22 @@
 					"sScheme": $scope.pstIpaSchmExp,
 					"dDelSubven": $scope.dltSrchrg,
 					"aAssMdl": [],
-					"sMarginMoneyInstru": $("#mnyInstn").val(),
-					"dTotAssCost":$("#astCst").val().replace(/,/g,''),
+					"sMarginMoneyInstru": $scope.mnyInstn,
+					"dTotAssCost":$scope.astCst.replace(/,/g,''),
 					"aAssMdls": [{
-						"sAssetCtg":$("#ast").val(),
+						"sAssetCtg":$scope.asset.category,
 						"sDlrName":$scope.dealerName,
-						"sModelNo":$("#mdl").val(),
-						"sAssetMake":$("#mk").val()
+						"sModelNo":$scope.asset.model,
+						"sAssetMake":$scope.asset.make
 					}],
-					"dProcFees": $("#prcsfee").val().replace(/,/g,''),
-					"dApvAmt": $("#apvAmt").val().replace(/,/g,''),
-					"sMarMoneyConfirm": $("#mnyCnfm").val().replace(/,/g,''),
-					"dMarMoney": $("#mrgnMny").val().replace(/,/g,''),
-					"dAdvEmi": $("#aEMI").val(),
+					"dProcFees": ($scope.SchemeObject.sMinAmt+"").replace(/,/g,''),
+					"dApvAmt": $scope.approvedAmt.replace(/,/g,''),
+					"sMarMoneyConfirm": $scope.mnyCnfm,
+					"dMarMoney": ($scope.tMrgnMny+"").replace(/,/g,''),
+					"dAdvEmi": $scope.tadEmi ? $scope.tadEmi.replace(/,/g,'') : "0" ,
 					"dManfSubDel": 0
 				},
-				"sRefID": $scope.REFID,
-				"refID":  $scope.REFID,
+				"sRefID": $scope.referenceID,
 				"dtDateTime": new Date().getTime()
 			};
 		//	console.log("$scope.ipaJson :"+$scope.ipaJson);
@@ -412,11 +427,11 @@
             });
 
             modalInstance.result.then(function (asset) {
-            	console.log("New Asset");
-            	console.log(asset);
-        	}, function (array) {
-            
-        	});
+            	//console.log("New Asset");
+            	//console.log(asset);
+            	$scope.asset=asset;
+				$scope.scmService();
+        	}, function (array) {});
     	};
 	}]);
 }).call(this);
