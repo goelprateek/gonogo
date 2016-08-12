@@ -56,6 +56,9 @@ module.exports = function(config) {
       'bower_components/bootstrap-daterangepicker/daterangepicker.js',
       'bower_components/angular-daterangepicker/js/angular-daterangepicker.js',
       'bower_components/angular-ez-plus/js/angular-ezplus.js',
+      'bower_components/spin.js/spin.js',
+      'bower_components/ladda/dist/ladda.min.js',
+      'bower_components/angular-ladda/dist/angular-ladda.min.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',

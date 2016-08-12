@@ -426,9 +426,6 @@
                 $scope.isSearchable = !$scope.isSearchable; 
             }
             $scope.dateRanger = 1;
-            
-            console.log($event);
-
             angular.element("#daterange").trigger("click");
 
                    
@@ -794,33 +791,132 @@ app.controller("imagesCtr",['$scope', 'ImageFeed','$uibModalInstance','$timeout'
     };
 }]);
 
-app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModalInstance' ,'RestService','UserService' ,'ReportStorage',function($scope,$log,notifier,$uibModalInstance,RestService,UserService,ReportStorage){
+app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModalInstance' ,'RestService','UserService' ,'ReportStorage','APP_CONST',function($scope,$log,notifier,$uibModalInstance,RestService,UserService,ReportStorage,APP_CONST){
 
         var user = UserService.getCurrentUser();
         $scope.preview = 0;
         $scope.systemPropertyList = [];
         $scope.selectedPropertyList = [];
+        $scope.reportId ;
 
+
+        $scope.reportdate = {
+            date : {
+                startDate : null,
+                endDate : moment()
+            },
+            opts: {
+                min:moment().subtract(1,'month'),
+                max: moment().format('YYYY-MM-DD'), 
+                opens : "center",
+                linkedCalendars:true,
+                autoUpdateInput: true,
+                autoApply:true,
+                applyClass: 'btn-primary',
+                alwaysShowCalendars : true,
+                isCustomDate: function(data){
+                    return '';
+                },
+                locale: {
+                    separator : " - ",
+                    applyLabel: "Apply",
+                    fromLabel: "From",
+                    format: "YYYY-MM-DD",
+                    toLabel: "To",
+                    cancelLabel: 'Cancel',
+                    customRangeLabel: 'Custom range',
+                    firstDay: 1
+                }, 
+                
+                eventHandlers: {
+                    "apply.daterangepicker" : function(ev, picker){
+                        
+
+                    },
+                    'show.daterangepicker' : function(ev , picker){
+
+                    },
+
+                    'hide.daterangepicker': function(ev,picker){
+                       
+                    },
+                    'cancel.daterangepicker':function(ev,picker){
+
+                    }
+                }   
+            }
+        }
 
         $scope.$watch('reportName',function(newVal,oldval){
             if(!_.isUndefined(newVal) && newVal.length === 0){
                 $scope.models = undefined;
                 $scope.preview = 0;
                 $scope.header = 0;
+                $scope.noResults = 0;
+                $scope.selectedPropertyList = [];
+                $scope.models = undefined;
             }
         },true);
 
          
         $scope.$watch('models[1].items',function(newVal,oldVal){
-            if(!_.isUndefined(newVal) && $scope.selectedPropertyList.length > 0){
 
-                if(!angular.equals(newVal,$scope.selectedPropertyList)){
-                    $scope.preview = 1;
-                    $scope.header = 0;
-                }
+            if(newVal == oldVal) return ;
+
+            if(newVal && oldVal){
+                $scope.preview = 1;
+                $scope.header = 0;
             }
             
         },true);
+
+        $scope.addnewReport = function(){
+            
+            var serviceInput = {
+                "oHeader":{
+                    "sInstID" : user.institutionID,
+                     "sAppSource":"",
+                     "dtSubmit":moment(),
+
+                },
+                "sUserId":user.username,
+                "aProductType":["Consumer Durables"],
+                "sReportId": "",
+                "sReportName":$scope.reportName,
+                "sReportCategory":"",
+                "aFlatConfig":{
+                    "mHeaderMap":{},
+                    "sReportFomat":"json"
+                },
+                "sBranchId":"",
+                "oPaggination":{
+                    "iPageId":0,
+                    "iLimit":5,
+                    "iSkip":0
+                }
+
+              }
+
+            RestService.saveToServer("/report/save-default-report",serviceInput).then(function(response){
+
+                 if(response){
+                        $scope.reportId = response.sReportId;
+                        _.map(response.aFlatConfig.mHeaderMap,function(item){
+                            $scope.selectedPropertyList.push(item);
+                        })
+
+                        $scope.systemPropertyList = response.oUnSelectedColumns;
+
+                        
+                    }
+
+                    $scope.models = [
+                        {listName: "Available", items: $scope.systemPropertyList, dragging: false},
+                        {listName: "Selected", items: $scope.selectedPropertyList, dragging: false}
+                    ];
+                
+            })
+        }
 
         $scope.getReportConfiguration = function(viewValue){
             var searchObj = {
@@ -837,26 +933,28 @@ app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModal
 
         
         $scope.selectedReport = function($item, $model, $label, $event){
-
+            $scope.reportId = $item.reportId;
             var _serviceinput = {
-                "sReportId":$item.reportId,
                 "oHeader": {
                     "sInstID": user.institutionID
-                 }
+                 },
+                 "sUserId":user.username,
+                 "sReportId":$item.reportId
+
             };
 
             RestService.saveToServer('report/fetch-report-config',_serviceinput).then(function(data){
                     
-                    _.map(data[0].aFlatConfig.mHeaderMap,function(item){
+                    if(data){
                         
-                        if(item.bViewable){
+                        _.map(data.aFlatConfig.mHeaderMap,function(item){
                             $scope.selectedPropertyList.push(item);
-                        }
-                            
-                        if(item.bDownloadable && !item.bViewable){
-                            $scope.systemPropertyList.push(item);
-                        }
-                    });
+                        })
+                        
+                        $scope.systemPropertyList = data.oUnSelectedColumns;
+
+                        
+                    }
 
                     $scope.models = [
                         {listName: "Available", items: $scope.systemPropertyList, dragging: false},
@@ -907,20 +1005,43 @@ app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModal
 
 		$scope.saveConfiguration = function () {
 
-            var map = {};
+            var selectedColumns = {};
             _.each($scope.models[1].items, function(value,key){
-                map[key] = value;
+                selectedColumns[key] = value;
             })
 
-            
+            var serviceInput = {
+                "oHeader":{
+                    "sInstID" : user.institutionID,
+                     "sAppSource":"",
+                     "dtSubmit":moment(),
 
-            var _serviceInput  = {
-                "oHeader": {
-                    "sInstID" : 4019
+                },
+                "sUserId":user.username,
+                "aProductType":["Consumer Durables"],
+                "sReportId": $scope.reportId,
+                "sReportName":$scope.reportName,
+                "sReportCategory":"",
+                "aFlatConfig":{
+                    "mHeaderMap":selectedColumns,
+                    "sReportFomat":"csv"
+                },
+                "sBranchId":"",
+                "oPaggination":{
+                    "iPageId":0,
+                    "iLimit":5,
+                    "iSkip":0
                 }
-            }
 
-	    	//$uibModalInstance.close();
+              }
+
+
+              RestService.saveToServer("/report/save-custom-report",serviceInput).then(function(data){
+                    if(data){
+                        notifier.logSuccess("Report saves successfully ");
+                    }
+              })
+	    	
 	  	};
 
         
@@ -931,6 +1052,7 @@ app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModal
         }
 
 	  	$scope.previewConfiguration = function () {
+            $scope.previewLoading = true;
 
             var selectedColumns = {};
             _.each($scope.models[1].items, function(value,key){
@@ -941,9 +1063,10 @@ app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModal
                 "oHeader":{
                     "sInstID" : user.institutionID,
                      "sAppSource":"",
-                     "dtSubmit":new Date(),
+                     "dtSubmit":moment(),
 
                 },
+                "sUserId":user.username,
                 "aProductType":["Consumer Durables"],
                 "sReportId":"",
                 "sReportName":"",
@@ -970,10 +1093,59 @@ app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModal
                     $scope.values.push(_.values(value));
                 });
 
+              }).finally(function(){
+                console.log("calling finally of preview request");
+                $scope.previewLoading = false;
               });
 
               //$uibModalInstance.dismiss('cancel');
 	  	};
+
+        $scope.downloadCustomReport = function(){
+
+            var selectedColumns = {};
+            _.each($scope.models[1].items, function(value,key){
+                selectedColumns[key] = value;
+            })
+
+            var serviceInput = {
+                "oHeader":{
+                    "sInstID" : user.institutionID,
+                     "sAppSource":"",
+                     "dtSubmit":moment(),
+
+                },
+                "sUserId":user.username,
+                "aProductType":["Consumer Durables"],
+                "sReportId":$scope.reportId,
+                "sReportName":$scope.reportName,
+                "sReportCategory":"",
+                "aFlatConfig":{
+                    "mHeaderMap":selectedColumns,
+                    "sReportFomat":"csv"
+                },
+                "sBranchId":"",
+                "oPaggination":{
+                    "iPageId":0,
+                    "iLimit":5,
+                    "iSkip":0
+                }
+
+              }
+
+            RestService.getStreamFromServer(APP_CONST.getConst('BASE_URL_GNG')+"report/download-zip-report",serviceInput).then(function(data){
+                console.log(data);
+                var blob = new Blob([data], { type: "application/zip" });
+                var downloadUrl = window.URL.createObjectURL(blob);
+                var a = document.createElement("a");
+                 a.href = downloadUrl;
+                 a.download = new Date().getTime()+".zip";
+                 document.body.appendChild(a);
+                    a.click();
+            });
+
+        }
+
 
 	}]);
 
