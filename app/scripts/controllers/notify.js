@@ -457,7 +457,7 @@
 
 			var URL;
 
-			if(user.id=="708"){
+			if(_.contains(user.role, "CRO3")){
                 URL = 'cro3-queue';
                 if(user.branches && user.branches.length>0)
                 $scope.json ={
@@ -553,9 +553,9 @@
         var URL='';
 		var json ={'sRefID':CustID};	
 
-        if(applicationRequestType && applicationRequestType=="PS"){
+        if(_.contains(user.role, "CRO3") && applicationRequestType && applicationRequestType=="PS"){
             URL = 'application-data-partial';
-        }else if(applicationRequestType && applicationRequestType=="FP"){
+        }else if(_.contains(user.role, "CRO3") && applicationRequestType && applicationRequestType=="FP"){
             URL = 'application-data';
         }else{
     		if(AclService.can('NCROQUE'))//for CRO1
