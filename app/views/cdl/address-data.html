@@ -1,0 +1,250 @@
+<form>
+			<div class="row clearfix getheight" slimscroll="{height:386,railVisible:true}">
+				<div class="col-md-10 col-md-offset-1">
+					<div>
+						<div class="row clearfix customRow">
+							<div class="col-md-6 height">
+								<help>Residence Address Type*</help>
+								<select id="addressType" class="customSelect" ng-model="addressType">
+									<option value="" ng-selected="true">Select
+										Address Type*</option>
+									<option value="OWNED-BUNGLOW">OWNED-BUNGLOW</option>
+									<option value="OWNED-CHAWL">OWNED-CHAWL</option>
+									<option value="OWNED-FLAT">OWNED-FLAT</option>
+									<option value="OWNED-PENTHOUSE">OWNED-PENTHOUSE</option>
+									<option value="OWNED-ROWHOUSE">OWNED-ROWHOUSE</option>
+									<option value="RENTED-BUNGLOW">RENTED-BUNGLOW</option>
+									<option value="RENTED-CHAWL">RENTED-CHAWL</option>
+									<option value="RENTED-FLAT">RENTED-FLAT</option>
+									<option value="RENTED-PENTHOUSE">RENTED-PENTHOUSE</option>
+									<option value="RENTED-ROWHOUSE">RENTED-ROWHOUSE</option>
+									<option value="RENTED-BACHELOR ACCOMODATION">RENTED-BACHELOR
+										ACCOMODATION</option>
+									<option value="COMPANY PROVIDED-FLAT">COMPANY PROVIDED-FLAT</option>
+									<option value="PARENT OWNED-HOUSE">PARENT OWNED-HOUSE</option>
+									<option value="PARENT OWNED-FLAT">PARENT OWNED-FLAT</option>
+									<option value="COMPANY PROVIDED-HOUSE">COMPANY PROVIDED-HOUSE</option>
+								</select>
+								<img alt="" src="images/select-arrow.png" class="customarrow" />
+							</div>
+							<div class="col-md-6 height" ng-if="addressType.indexOf('RENTED') != -1">
+								<help>Rent Per Month*</help>
+								<i class="fa fa-rupee"></i><input type='text' maxlength="10" ng-model="applicant.oResidence.oAddress.dRentPerMonth" class='customInput' placeholder='Rent Per Month*' style="padding-left: 4%" rupees />
+							</div>
+						</div>
+						<div class="row clearfix customRow">
+							<div class="col-md-12 height">
+								<help>Address Line 1*</help>
+								<input type="text" ng-model="applicant.oResidence.oAddress.sAddress1" class="customInput"
+									placeholder="Address Line 1*" style="width: 93%" capitalize />
+							</div>
+						</div>
+
+						<div>
+							<div class="row clearfix customRow">
+								<div class="col-md-6 height">
+									<help>Address Line 2</help>
+									<input type="text" ng-model="applicant.oResidence.oAddress.sAddress2" class="customInput"
+										placeholder="Address Line 2" capitalize />
+								</div>
+								<div class="col-md-6 height">
+									<help>Address Line 3</help>
+									<input type="text" ng-model="applicant.oResidence.oAddress.sAddress3" class="customInput"
+										placeholder="Address Line 3" capitalize />
+								</div>
+							</div>
+
+							<div class="row clearfix customRow">
+								<div class="col-md-6 height">
+									<help>Pincode*</help>
+									<input type="text" class="customInput" ng-model="applicant.oResidence.oAddress.sPinCode"
+										placeholder="Pincode*" maxlength="6" />
+								</div>
+								<div class="col-md-6 height">
+									<span>
+										<help>City*</help>
+										<input type="text" class="customInput city"
+											disabled="disabled" placeholder="City*" style="width: 45%;" ng-model="applicant.oResidence.oAddress.sCity" />
+									</span>
+									<span>
+										<help class="margin_state">State*</help>
+										<input type="text" disabled="disabled"
+											class="customInput state" placeholder="State" ng-model="applicant.oResidence.oAddress.sState" />
+									</span>
+								</div>
+							</div>
+
+							<div class="row clearfix customRow">
+								<div class="col-md-2 height">
+									<help>STD Code*</help>
+									<input type="text" class="customInput" ng-model="applicant.oResidence.oPhone.sStdCode"
+										placeholder="STD Code*" maxlength="5" />
+								</div>
+								<div class="col-md-4 height">
+									<help>Landline Number</help>
+									<input type="text" class="customInput" ng-model="applicant.oResidence.oPhone.iLandLine"
+										placeholder="Phone" maxlength="10" style="width: 78%;" />
+								</div>
+								<div class="col-md-6 height">
+									<help>Personal Mobile*</help>
+									<input type="text" ng-model="applicant.oResidence.oPhone.iMobile"
+										class="customInput" placeholder="Mobile*" maxlength="10"
+										disabled="disabled" />
+								</div>
+							</div>
+
+
+							<div class="row clearfix customRow">
+								<div class="col-md-12 height">
+									<help>Email*</help>
+									<input type="text" class="customInput" ng-model="applicant.oResidence.sEmail"
+										placeholder="Email*" style="width: 93%;" />
+								</div>
+							</div>
+
+							<div class="row clearfix customRow">
+								<div class="col-md-6 height">
+									<help>Months at current address*</help>
+									<input type="text" class="customInput"
+										placeholder="Months at current address*" maxlength="3" ng-model="applicant.oResidence.oAddress.iMonthAddress"/>
+								</div>
+								<div class="col-md-6 height">
+									<help>Months at City*</help>
+									<input type="text" class="customInput city" ng-model="applicant.oResidence.oAddress.iMonthCity"
+										placeholder="Months at City*" maxlength="3" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="permanentAddr">
+						<div class="row clearfix alert-info">
+							<div class="col-md-6">
+								<strong>Permanent Address</strong>
+							</div>
+							<div class="col-md-6">
+								<label for="same"> <input type="checkbox"
+									ng-model="same" ng-change="stateChanged(same)" /> Same as Above
+								</label>
+							</div>
+						</div>
+						<div class="row clearfix customRow">
+							<div class="col-md-6 height">
+								<help>Permanent Address Type*</help>
+								<select class="customSelect"
+									ng-model="prmnt_addressType">
+									<option value="" ng-selected="true">Select
+										Address Type*</option>
+									<option value="OWNED-BUNGLOW">OWNED-BUNGLOW</option>
+									<option value="OWNED-CHAWL">OWNED-CHAWL</option>
+									<option value="OWNED-FLAT">OWNED-FLAT</option>
+									<option value="OWNED-PENTHOUSE">OWNED-PENTHOUSE</option>
+									<option value="OWNED-ROWHOUSE">OWNED-ROWHOUSE</option>
+									<option value="RENTED-BUNGLOW">RENTED-BUNGLOW</option>
+									<option value="RENTED-CHAWL">RENTED-CHAWL</option>
+									<option value="RENTED-FLAT">RENTED-FLAT</option>
+									<option value="RENTED-PENTHOUSE">RENTED-PENTHOUSE</option>
+									<option value="RENTED-ROWHOUSE">RENTED-ROWHOUSE</option>
+									<option value="RENTED-BACHELOR ACCOMODATION">RENTED-BACHELOR
+										ACCOMODATION</option>
+									<option value="COMPANY PROVIDED-FLAT">COMPANY
+										PROVIDED-FLAT</option>
+									<option value="PARENT OWNED-HOUSE">PARENT
+										OWNED-HOUSE</option>
+									<option value="PARENT OWNED-FLAT">PARENT OWNED-FLAT</option>
+									<option value="COMPANY PROVIDED-HOUSE">COMPANY
+										PROVIDED-HOUSE</option>
+								</select> <img alt="" src="images/select-arrow.png" class="customarrow" />
+							</div>
+							<div class="col-md-6 height" ng-if="prmnt_addressType.indexOf('RENTED') != -1">
+								<help>Rent Per Month*</help>
+								<i class="fa fa-rupee"></i> <input type='text' ng-model="applicant.oPermanent.oAddress.dRentPerMonth" class='customInput' maxlength="10" placeholder='Rent Per Month*' style="padding-left: 4%" rupees />
+							</div>
+
+						</div>
+						<div class="row clearfix customRow">
+							<div class="col-md-12 height">
+								<help>Address Line 1*</help>
+								<input type="text" ng-model="applicant.oPermanent.oAddress.sAddress1"
+									class="customInput" placeholder="Address Line 1*"
+									style="width: 93%;" capitalize />
+							</div>
+						</div>
+						<div class="row clearfix customRow">
+							<div class="col-md-6 height">
+								<help>Address Line 2</help>
+								<input type="text" ng-model="applicant.oPermanent.oAddress.sAddress2"
+									class="customInput" placeholder="Address Line 2" capitalize />
+							</div>
+							<div class="col-md-6 height">
+								<help>Address Line 3</help>
+								<input type="text" ng-model="applicant.oPermanent.oAddress.sAddress3"
+									class="customInput" placeholder="Address Line 3" capitalize />
+							</div>
+						</div>
+
+						<div class="row clearfix customRow">
+							<div class="col-md-6 height">
+								<help>Pincode*</help>
+								<input type="text" class="customInput" ng-model="applicant.oPermanent.oAddress.sPinCode"
+									placeholder="Pincode*" maxlength="6"/>
+							</div>
+							<div class="col-md-6 height">
+								<span>
+								<help>City*</help>
+								<input type="text" class="customInput city" placeholder="City*" style="width: 45%;" ng-model="applicant.oPermanent.oAddress.sCity"
+									disabled="disabled" />
+								</span>
+								<span>
+								<help class="margin_state">State*</help>
+								<input type="text"
+									class="customInput state" placeholder="State*" ng-model="applicant.oPermanent.oAddress.sState"
+									disabled="disabled" />
+								</span>
+							</div>
+						</div>
+						<div class="row clearfix customRow">
+							<div class="col-md-2 height">
+								<help>STD Code*</help>
+								<input type="text" ng-model="applicant.oPermanent.oAddress.sStdCode"
+									class="customInput" maxlength="5" placeholder="STD Code*" />
+							</div>
+							<div class="col-md-4 height">
+								<help>Phone</help>
+								<input type="text"  class="customInput" ng-model="applicant.oPermanent.oAddress.iLandLine"
+									placeholder="Phone" />
+							</div>
+							<div class="col-md-6 height">
+								<help>Mobile</help>
+								<input type="text" class="customInput" ng-model="applicant.oPermanent.oAddress.iMobile"
+									placeholder="Mobile" maxlength="10" />
+							</div>
+						</div>
+						<div class="row clearfix customRow">
+							<div class="col-md-12 height">
+								<help>Email*</help>
+								<input type="text" class="customInput" ng-model="applicant.oPermanent.sEmail"
+									placeholder="Email*" style="width: 93%;" />
+							</div>
+						</div>
+						<div class="row clearfix customRow">
+							<div class="col-md-6 height">
+								<help>Months at Permanent address*</help>
+								<input type="text" class="customInput"  ng-model="applicant.oPermanent.oAddress.iMonthAddress"
+								placeholder="Months at permanent address"  maxlength="3" />
+							</div>
+							<div class="col-md-6 height">
+								<help>Months at City*</help>
+								<input type="text" class="customInput city" ng-model="applicant.oPermanent.oAddress.iMonthCity" placeholder="Months at City*" maxlength="3" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row clearfix ">
+				<div class="col-md-10 col-md-offset-1">
+					<button ui-sref="/cdl/apply.personal" class="customButton previous">Previous</button>
+					<button ui-sref="/cdl/apply.professional" class="customButton next">Next</button>
+						<button class="customButton save" ng-click="submitApplication('step3')">Save</button>
+				</div>
+			</div>
+		</form>

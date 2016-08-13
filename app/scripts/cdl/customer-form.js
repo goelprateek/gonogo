@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	var app=angular.module("gonogo");
+	var app=angular.module("gonogo.cdl");
 
 	app.factory("CustFormObject",function(){
     	var _obj = {

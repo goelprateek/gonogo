@@ -54,9 +54,13 @@
 
 
 
-      <div layout="column" flex class="layout-column flex" >
+     <!--  <div layout="column" flex class="layout-column flex" >
         <div ng-view="" class="animate-fade-up"></div>
-      </div>
+      </div> -->
+
+      <div layout="column" flex class="layout-column flex">
+        <div ui-view class="animate-fade-up"></div>
+    </div>
 
 
       <div data-ng-if="!isSpecificPage() && !isCdlPage()" data-ng-include="'views/footer.html'"></div>
@@ -114,12 +118,25 @@
     <script src="bower_components/bootstrap-daterangepicker/daterangepicker.js"></script>
     <script src="bower_components/angular-daterangepicker/js/angular-daterangepicker.js"></script>
     <script src="bower_components/angular-ez-plus/js/angular-ezplus.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
+
+ <script src="scripts/cdl/dealer.js"></script>
+        <script src="scripts/cdl/basic-de.js"></script>
+        <script src="scripts/cdl/apply.js"></script>
+        <script src="scripts/cdl/manufacturer.js"></script>
+        <script src="scripts/cdl/dashboard.js"></script>
+        <script src="scripts/cdl/customer-form.js"></script>
+        <script src="scripts/cdl/result.js"></script>
+        <script src="scripts/cdl/after-submit.js"></script>
+        <script src="scripts/cdl/hold-stage.js"></script>
+        <script src="scripts/cdl/directives.js"></script>
+        <script src="scripts/cdl/post-ipa.js"></script>
+        
         <script src="scripts/gonogo.js"></script> 
-        <script src="scripts/config/routing.js"></script>
         <script src="scripts/config/config.js"></script>
         <script src="scripts/services/web-utils.js"></script>
         <script src="scripts/services/url.js"></script>        
@@ -137,19 +154,12 @@
         <script src="scripts/controllers/modal/reinitiate-application.js"></script>
         <script src="scripts/filter/app-filter.js"></script>
         <script src="scripts/login.js"></script>
-        <script src="scripts/cdl/dealer.js"></script>
-        <script src="scripts/cdl/basic-de.js"></script>
-        <script src="scripts/cdl/apply.js"></script>
-        <script src="scripts/cdl/manufacturer.js"></script>
-        <script src="scripts/cdl/dashboard.js"></script>
-        <script src="scripts/cdl/customer-form.js"></script>
-        <script src="scripts/cdl/result.js"></script>
-        <script src="scripts/cdl/after-submit.js"></script>
-        <script src="scripts/cdl/hold-stage.js"></script>
-        <script src="scripts/cdl/directives.js"></script>
-        <script src="scripts/cdl/post-ipa.js"></script>
+       
 
         <script src="https://www.google-analytics.com/analytics.js"></script>
+
+
+        <script src="scripts/config/routing.js"></script>
 
         <!-- endbuild -->
 </body>

@@ -3,8 +3,8 @@
 
 	var app = angular.module('gonogo.cdl');
 
-	app.controller("BasicDEController",["$scope","$location","APP_CONST","sharedService","RestService",'$log',"UserService","AclService","GNG_GA","notifier",function(
-	 									$scope,$location,APP_CONST,sharedService,RestService,$log,UserService,AclService,GNG_GA,notifier) {
+	app.controller("BasicDEController",["$scope","$location","APP_CONST","sharedService","RestService",'$log',"UserService","AclService","GNG_GA","notifier","$state",function(
+	 									$scope,$location,APP_CONST,sharedService,RestService,$log,UserService,AclService,GNG_GA,notifier,$state) {
 		// var obj={
 		// 	"oHeader":{
 		// 		"sAppSource":"WEB",
@@ -313,7 +313,8 @@
 					sharedService.setApplicationID(applicationID);
 					sharedService.setStep1Object(requestObject);
 
-					$location.path("/cdl/apply");
+					//$location.path("/cdl/apply");
+					$state.go('/cdl/apply.personal');
 				}
 			},function(failedResponse){
 				notifier.logError("Some error occured at server, please retry !");

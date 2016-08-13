@@ -1,4 +1,4 @@
-var app=angular.module('gonogo');
+var app=angular.module('gonogo.cdl');
 
 app.controller('DecisionViewController', function ($scope,$uibModalInstance, data) {
 //	alert(response);

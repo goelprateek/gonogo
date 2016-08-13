@@ -1358,7 +1358,7 @@ $scope.onchange = function(id) {
     // destructor function for scope 
     $scope.$on("$destroy",function(){
         if(angular.isDefined(timer)){
-             $interval.cancel(polling);
+             $interval.cancel(timer);
              timer = undefined;
         }
     });

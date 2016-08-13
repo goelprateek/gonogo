@@ -1,0 +1,24 @@
+<form id="incomeContainer">
+			<div class="row clearfix getheight" slimscroll="{height:386,railVisible:true}">
+				<div id="assetContainer" class="col-md-10 col-md-offset-1">
+					<!-- <form id="assetObj">
+						<div class="row clearfix customRow" style="display: none;">
+							<div class="col-md-12 height">
+								<help style="display:inline-block">Dealer*</help>
+								<input type="text" id="dlr" ng-model="dealerName"
+									class="customInput" disabled="disabled" />
+								</div>
+						</div>  -->
+						<asset-selector asset="asset"></asset-selector>
+					<!-- </form> -->
+
+				</div>
+			</div>
+			<div class="row clearfix ">
+				<div class="col-md-10 col-md-offset-1">
+					<button  ui-sref="/cdl/apply.professional" class="customButton previous">Previous</button>
+					<button  ui-sref="/cdl/apply.kyc" class="customButton next" ng-disabled="!asset.category || ! asset.make || !asset.model">Next</button>
+						<button class="customButton save" id="save" ng-click="submitApplication('step3')">Save</button>
+				</div>
+			</div>
+		</form>

@@ -30,7 +30,8 @@
     "angular-slimscroll": "^1.1.5",
     "highcharts": "^4.2.5",
     "angular-daterangepicker": "^0.2.2",
-    "angular-ez-plus": "^1.1.18"
+    "angular-ez-plus": "^1.1.18",
+    "angular-ui-router": "^0.3.1"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.0"

@@ -650,7 +650,9 @@ $scope.stateChanged = function (val){
 //	$("#permanentAddr").trigger("reset");
 	if(val==true)
 		{
-		//console.log($("#addressType option:selected").val());
+			$scope.applicant.oAddress.oPermanent = $scope.applicant.oAddress.oResidence;
+			console.log($scope.applicant);
+		/*//console.log($("#addressType option:selected").val());
 		 $("#prmnt_addressType").val($("#addressType option:selected").val()).siblings("help").show();
 //		$scope.prmnt_AddressType=$scope.AddressType;
 		 $("#prmnt_rent").val($("#rent").val()).siblings("help").show();
@@ -665,7 +667,7 @@ $scope.stateChanged = function (val){
 		 $("#prmnt_perphone").val($("#perphone").val()).siblings("help").show();
 		 $("#prmnt_permobile").val($("#permobile").val()).siblings("help").show();
 		 $("#prmnt_pertadd").val($("#pertadd").val()).siblings("help").show();
-		 $("#prmnt_mcity").val($("#mcity").val()).siblings("help").show();
+		 $("#prmnt_mcity").val($("#mcity").val()).siblings("help").show();*/
 		}else{
 			$("#permanentAddr input").val("").siblings("help").hide();
 			$("#permanentAddr Select").val("").siblings("help").hide();
@@ -2091,5 +2093,8 @@ $scope.updateStatus = function(){
 		    startingDay: 1
 		};
 		/* End of dob popup */
+
+		/*Sayali*/
+		$scope.applicant = {};
 }]);
 }).call(this)

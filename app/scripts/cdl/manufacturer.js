@@ -3,7 +3,7 @@
 
 	'use strict';
 
-	angular.module('gonogo').controller("manufacturerController",function(
+	angular.module('gonogo.cdl').controller("manufacturerController",function(
 		$scope,$http,$timeout,$window,$location,$q,APP_CONST,$rootScope) {
 	
 		var userdata = JSON.parse(atob(localStorage.getItem('GUID')));

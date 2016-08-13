@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	var app = angular.module('gonogo', [ 'ngRoute', 
+	var app = angular.module('gonogo', [ 'ui.router', 
 	                                     'ngAria',
 	                                     'ngMessages' ,
 	                                     'ngResource',
@@ -22,8 +22,8 @@
 	                                     'gonogo.commons',
 	                                     'gonogo.factories',
 	                                     'score-directives',
-	                                     'daterangepicker'	                                     
-	                                     ]);
+	                                     'daterangepicker'
+	                                    ]);
 
 	app.controller("Maincontroller",['$scope', '$log', 'notifier' , '$timeout','RestService','$location','UserService','APP_CONST','AclService',
 		function($scope, $log, notifier , $timeout,RestService,$location,UserService,APP_CONST,AclService) {
