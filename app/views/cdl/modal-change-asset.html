@@ -11,7 +11,8 @@
 </div>
 <asset-selector asset="asset"></asset-selector>
 <div class="modal-footer" style="text-align: center">
-	<button type="button" class="btn btn-default save-btn" data-dismiss="modal" ng-click="onSaveAssetClicked()">
-	Save
+	<button type="button" class="btn btn-primary btn-sm" ng-disabled="!asset.category || ! asset.make || !asset.model" ng-click="onSaveAssetClicked()">
+		<span class="fa fa-save"></span>
+		Save
 	</button>
 </div>

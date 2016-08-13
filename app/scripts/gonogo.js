@@ -53,7 +53,6 @@
 			}
 		});
 
-
 		$scope.status = {
 		    isopen: false
 		};
@@ -69,7 +68,7 @@
 
 		$scope.isCdlPage = function() {
 			var path;
-			return path = $location.path(),  _.contains(["/cdl/dealer","/cdl/apply",'/cdl/dashboard','/cdl/assetMaster','/cdl/customerForm','/cdl/basic-de','/cdl/result','/cdl/after-submit','/cdl/hold-stage','/cdl/post-ipa'], path);
+			return path = $location.path(),  _.contains(["/cdl/dealer","/cdl/apply",'/cdl/dashboard','/cdl/assetMaster','/cdl/customerForm','/cdl/basic-de','/cdl/result','/cdl/after-submit','/cdl/hold-stage','/cdl/post-ipa','/cdl/additnl-doc'], path);
 		}
 
 		$scope.logout = function() {
@@ -79,7 +78,7 @@
 					"sUserID": $scope.userid
 			}
 
-			RestService.postDataWithHeaders(APP_CONST.getConst('BASE_URL_GNG')+'logout',json);
+			RestService.postDataWithHeaders('logout',json);
 
 			UserService.cleanUpUserDetails();
 			$location.path(APP_CONST.getConst('APP_CONTEXT'));
@@ -104,4 +103,4 @@
 			$scope.color = currentUser.color;
 		}
 	}]);
-}).call(this)
+}).call(this);

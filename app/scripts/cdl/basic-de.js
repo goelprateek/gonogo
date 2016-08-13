@@ -204,14 +204,13 @@
 							 GNG_GA.getConstAction("ACTION_CLICK_GET_OTP"),
 							 "Get OTP Button Clicked",1);
 
-			var url = APP_CONST.getConst('BASE_URL_GNG')+'get-otp';
 			var json = {
 							"USER_ID":user.username, "PASSWORD":user.ePassword,
 							"INSTITUTION_ID":user.institutionID,
 							"inputJson_":{ "MOBILE-NUMBER":$scope.mobileNo }
 						};
 
-			RestService.postDataWithHeaders(url, json, user.username, user.ePassword)
+			RestService.postDataWithHeaders('get-otp', json, user.username, user.ePassword)
 			.then(function(successResponse){
 				$scope.otp=successResponse.OTP;
 				$scope.shwVerify=true;

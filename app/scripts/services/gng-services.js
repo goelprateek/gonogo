@@ -28,9 +28,10 @@
 			return defere.promise;
 		},
 		getFromServer = function (url) {
-			var defere = $q.defer();
+			var defere = $q.defer(),
+				_url = APP_CONST.getConst('BASE_URL_GNG');
 
-			$http.get(url).success(function (resp) {
+			$http.get(_url+url).success(function (resp) {
 				$log.debug(resp);
 				defere.resolve(resp);
 			}).error(function (error) {
@@ -65,8 +66,10 @@
 			$http.defaults.headers.common['username'] = username;
 			$http.defaults.headers.common['password'] = pass;
 
-			var defer = $q.defer();
-			$http.post(url, data).success(function (data) {
+			var defer = $q.defer(),
+				_url = APP_CONST.getConst('BASE_URL_GNG');
+
+			$http.post(_url + url, data).success(function (data) {
 				$log.info(data);
 				defer.resolve(data);
 			}).error(function (data) {

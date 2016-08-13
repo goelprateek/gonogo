@@ -89,7 +89,9 @@
 	   	};	
 	});
 
-	app.directive('imageUpload',function($compile,RestService){
+	app.directive('imageUpload',["RestService","UploadImages","notifier","$compile","$log",
+	function(RestService,UploadImages,notifier,$compile,$log){
+
 		var linker = function(scope, element, attrs) {
 			var template = 	  '<div class="row clearfix">'
 			template=template+	'<div class="col-md-4" ng-repeat="item in requestImageArray">';		
@@ -97,7 +99,7 @@
 			template=template+	'</div>';
 			template=template+'</div>';
 			template=template+'<div class="row clearfix" style="text-align: center;">';
-			template=template+	'<button class="customButton submit" id="reprocess" ng-click="uploadAllImgs()" style="float: inherit;">Submit</button>';
+			template=template+	'<button class="customButton submit" id="reprocess" ng-click="uploadImages()" style="float: inherit;">Submit</button>';
 			template=template+'</div>';
 			element.html(template);
 			$compile(element.contents())(scope);
@@ -107,32 +109,45 @@
 			// console.log("Image Array Request: ");
 			// console.log($scope.requestImageArray);
 
-			console.log("Reference ID: ");
-			console.log($scope.referenceId);
+			//console.log("Reference ID: ");
+			//console.log($scope.referenceId);
 
 			$scope.imageArrayToUpload=[];
 
-			$scope.imageUploadedCount=0;
+			$scope.uploadImages=function(){
+
+				if($scope.requestImageArray.length == $scope.imageArrayToUpload.length){
+					UploadImages.upload($scope.referenceId,$scope.imageArrayToUpload).then(function(imageUploadedCount) {
+					  	$log.debug('Image upload Success, Total image uploaded : ' + imageUploadedCount);
+					  	$scope.onImageUploaded();
+					}, function(reason) {
+					  	$log.debug('Image upload Failed, Total image uploaded : ' + imageUploadedCount);
+					});
+				}else{
+					notifier.logWarning("Please provide all images.") ;
+				}
+			};
 
 			/*
 			 * Author Sayali uploadallimg function to upload img one by one
 			 */
-			$scope.uploadAllImgs=function()
+			 /*
+			$scope.uploadAllImgs=function(pReferenceID,pImageArrayToUpload)
 			{
 				// console.log("upload Image array :"+array.length);
 				for(var i=0 ; i<$scope.imageArrayToUpload.length ; i++){
 					if($scope.imageArrayToUpload[i] != null){
 						var json ={
 					  		"oHeader": {
-						    	"sAppID": $scope.referenceId,  // application id
+						    	"sAppID": pReferenceID,  // application id
 							    "sApplID": "1" // applicant id
 						  	},
-						  	"sRefID": $scope.referenceId,
+						  	"sRefID": pReferenceID,
 					  		"oUpldDtl": {
 							    "sFileID": "1", // ask yogesh
-							    "sFileName": $scope.imageArrayToUpload[i].kyc_name,
-							    "sFileType": $scope.imageArrayToUpload[i].type,
-							    "sfileData": $scope.imageArrayToUpload[i].image,
+							    "sFileName": pImageArrayToUpload[i].kyc_name,
+							    "sFileType": pImageArrayToUpload[i].type,
+							    "sfileData": pImageArrayToUpload[i].image,
 							    "sStat": "", // ask yogesh
 							    "sReason": "" // ask yogesh
 						  	}
@@ -147,7 +162,7 @@
 			{
 				RestService.saveToServer("upload-image",json)
 				.then(function(data)
-				{	
+				{
 					$scope.imageUploadedCount=$scope.imageUploadedCount+1;
 
 					if($scope.imageUploadedCount == $scope.imageArrayToUpload.length){
@@ -173,7 +188,7 @@
 						alert("Sorry we can not process your image upload request");
 					}
 				});
-			};
+			};*/
 		}];
 
 		return {
@@ -186,14 +201,14 @@
 			},
 			controller : _controller
 		};
-	});
+	}]);
 
 	app.directive('contentItem', function ($compile) {
 		var linker = function(scope, element, attrs) {
 			var template = '<div class="row clearfix" style="padding: 8px;">';
 			template=template+'<label>{{item.doc}}</label>';
 			template=template+'<div class="preview" id="{{item.value}}{{item.index}}">';
-			template=template+'<input id="{{item.value}}l{{item.index}}" type="file" ngf-select="onselectImg($files,'+"'{{item.value}}'"+','+"'{{item.index}}'"+')">';
+			template=template+'<input id="{{item.value}}l{{item.index}}" type="file" ngf-select="onselectImg($files,{{item}})">';
 			template=template+'<label for="{{item.value}}l{{item.index}}" id="{{item.value}}{{item.index}}label">';
 			template=template+'<img alt="" src="../images/camera-128.png" class="img_icon"></label></div>';
 			template=template+'<small id="{{item.value}}{{item.index}}size" class="size"></small>';
@@ -228,15 +243,15 @@
 				}
 			};
 
-			$scope.onselectImg = function($files,type,index) 
-			{           
+			$scope.onselectImg = function($files,item) 
+			{
 				//console.log("inside file select"+type+" file:"+$files[0].name);
 				//alert("Hello");
 				var img_type ='';
 				for (var i = 0; i < $files.length; i++) 
-				{    	
+				{
 					var fname=$files[0].name;
-	// countimg++;
+	// 				countimg++;
 	//		    	var re = (/\.(gif|jpg|jpeg|tiff|png)$/i);
 			    	var re = (/\.(jpg)$/i);
 					if(!re.exec(fname))
@@ -249,24 +264,23 @@
 					var base64;
 					var  reader=new FileReader();
 					if ($files[i] && $file) {
-						 var binaryString;
-						 var size=((($files[i].size)/1024).toFixed(2)) +" Kb";
-				         reader.onload = function(readerEvt) {
-				            binaryString = readerEvt.target.result;
-							if(_.contains(["APPLICANT-PHOTO","PAN","AADHAAR","PASSPORT","DRIVING-LICENSE","CUSTOMER-PHOTO","INCOME-PROOF1","INCOME-PROOF2","OTHER"],type)){
-								$scope.imagearray.push({kyc_name:type,image:binaryString.split(",")[1],type:img_type});
-							}else if(_.contains(["APPLICATION_FORM","AGREEMENT","ACH","DISBURSEMENT","ADDITIONAL_KYC","holdCase"],type)){
-								$scope.imagearray.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
+						var binaryString;
+						var size=((($files[i].size)/1024).toFixed(2)) +" Kb";
+						reader.onload = function(readerEvt) {
+							binaryString = readerEvt.target.result;
+							if(_.contains(["APPLICANT-PHOTO","PAN","AADHAAR","PASSPORT","DRIVING-LICENSE","CUSTOMER-PHOTO","INCOME-PROOF1","INCOME-PROOF2","OTHER"],item.value)){
+								$scope.imagearray.push({kyc_name:item.value,image:binaryString.split(",")[1],type:img_type});
+							}else if(_.contains(["APPLICATION_FORM","AGREEMENT","ACH","DISBURSEMENT","ADDITIONAL_KYC"],item.value)){
+								$scope.imagearray.push({kyc_name:(item.value+item.index),image:binaryString.split(",")[1],type:img_type});
+							}else if(item.value==="holdCase"){
+								$scope.imagearray.push({kyc_name:item.doc, image:binaryString.split(",")[1], type:img_type, state:item.state,reason:item.reason});
 							}
 
-							$("#"+type+index+"").css("background-image", "url("+binaryString+")");
-							$("#"+type+index+"label").hide();
-							$("#"+type+index+"remove").show();
-
-	
-				      };
+							$("#"+item.value+item.index+"").css("background-image", "url("+binaryString+")");
+							$("#"+item.value+item.index+"label").hide();
+							$("#"+item.value+item.index+"remove").show();
+						};
 				        reader.readAsDataURL($files[i]);
-				  
 					}
 				}
 			}
@@ -292,7 +306,6 @@
                     return $location.path()
                 }, addBg = function(path) {
                     switch ($element.removeClass("body-home body-special body-tasks body-lock"), path) {
-                        
                         case "/":
                         	return $element.addClass("body-special");
                     }
@@ -312,7 +325,6 @@
 				 parent = elem.parent(),
 				 topPadding = parseInt(attrs.paddingWhenAtTop, 10),
                  offsetTop;	
-				 
 
 				 $win.on('scroll', function (e) {
 				 	offsetTop = (parent.offset().top - topPadding);
@@ -390,49 +402,48 @@
 
 
     app.directive('fullscreen', function() {
-            return {
-                restrict: 'AC',
-                template: '<i class="glyphicon glyphicon-fullscreen"></i>',
-                link: function(scope, el, attr) {
-                    el.on('click', function() {
-                        var element = el.parents(".modal-content").find(".modal-body")[0];
-                        var angElelement=angular.element(element);
-                        if (!$('body')
-                            .hasClass("full-screen")) {
-                            $('body')
-                                .addClass("full-screen");
-                            $('#fullscreen-toggler')
-                                .addClass("active");
-                                angElelement.addClass("pdfExpand");
-                            if (element.requestFullscreen) {
-                                element.requestFullscreen();
-                            } else if (element.mozRequestFullScreen) {
-                                element.mozRequestFullScreen();
-                            } else if (element.webkitRequestFullscreen) {
-                                element.webkitRequestFullscreen();
-                            } else if (element.msRequestFullscreen) {
-                                element.msRequestFullscreen();
-                            }
-
-                        } else {
-                        	 angElelement.removeClass("pdfExpand");
-                            $('body').removeClass("full-screen");
-                            el.removeClass("active");
-
-                            if (document.exitFullscreen) {
-                                document.exitFullscreen();
-                            } else if (document.mozCancelFullScreen) {
-                                document.mozCancelFullScreen();
-                            } else if (document.webkitExitFullscreen) {
-                                document.webkitExitFullscreen();
-                            }
-
+		return {
+            restrict: 'AC',
+            template: '<i class="glyphicon glyphicon-fullscreen"></i>',
+            link: function(scope, el, attr) {
+                el.on('click', function() {
+                    var element = el.parents(".modal-content").find(".modal-body")[0];
+                    var angElelement=angular.element(element);
+                    if (!$('body')
+                        .hasClass("full-screen")) {
+                        $('body')
+                            .addClass("full-screen");
+                        $('#fullscreen-toggler')
+                            .addClass("active");
+                            angElelement.addClass("pdfExpand");
+                        if (element.requestFullscreen) {
+                            element.requestFullscreen();
+                        } else if (element.mozRequestFullScreen) {
+                            element.mozRequestFullScreen();
+                        } else if (element.webkitRequestFullscreen) {
+                            element.webkitRequestFullscreen();
+                        } else if (element.msRequestFullscreen) {
+                            element.msRequestFullscreen();
                         }
-                    });
-                }
-            };
-        }
-    );
+
+                    } else {
+                    	 angElelement.removeClass("pdfExpand");
+                        $('body').removeClass("full-screen");
+                        el.removeClass("active");
+
+                        if (document.exitFullscreen) {
+                            document.exitFullscreen();
+                        } else if (document.mozCancelFullScreen) {
+                            document.mozCancelFullScreen();
+                        } else if (document.webkitExitFullscreen) {
+                            document.webkitExitFullscreen();
+                        }
+
+                    }
+                });
+            }
+        };
+    });
 
 
     app.directive('widgetMaximize', function () {
@@ -462,7 +473,7 @@
                 });
             }
         };
-    })
+    });
 
 	app.directive('selectRequired',function(){
 	    return {

@@ -148,51 +148,6 @@
         }	
     });
 
-app.controller('PDFViewerModalCtrl', [
-	'RestService','$scope', '$uibModalInstance', 'response','refID','$location','UserService','CustFormObject',
-	function (RestService,$scope, $uibModalInstance, response,refID,$location,UserService,CustFormObject) {
-	
-	var user=UserService.getCurrentUser();
-	$scope.response = response;
-	$scope.refID = refID;
-	$scope.objectSet = CustFormObject.dummy;
-
-	$scope.submit = function (imgID,refID) {
-
-		var mailRequest={
-			oHeader:
-			{
-				sCroId:"default",
-				dtSubmit:new Date().getTime(),
-				sReqType:null,
-				sAppSource:"WEB",
-				sDsaId:user.username,
-				sAppID:"",
-				sDealerId:null,
-				sSourceID:null,
-				sInstID:user.institutionID
-			},
-			sRefID:refID,
-			sImgID:imgID
-		};
-
-		RestService.postDataWithHeaders('send-mail-pdf',JSON.stringify(mailRequest),user.username,user.ePassword).then(function(Response){
-
-			if(Response){}
-		});	
-
-		$uibModalInstance.close();
-
-		alert("DO has been sent to dealer.");
-		$location.path("/cdl/dashboard");
-	 };
-
-	 $scope.cancel = function () {
-		$uibModalInstance.dismiss('cancel');
-		$location.path("/cdl/dashboard");
-	 };
-}]);
-
 app.controller("kycDocuments",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService',
     function($scope,ImageFeed,$uibModalInstance,$timeout,RestService){
     $scope.croImages = false;
@@ -210,9 +165,10 @@ app.controller("kycDocuments",['$scope', 'ImageFeed','$uibModalInstance','$timeo
 }]);
 
 app.controller("CustomerFormCntrolr",
-	['$scope','$rootScope','sharedService',"RestService","APP_CONST","$location","$uibModal","GNG_GA",
-	function($scope,$rootScope,sharedService, RestService, APP_CONST, $location,$uibModal,GNG_GA){
+	['$scope','$rootScope','sharedService',"RestService","APP_CONST","$location","$uibModal","GNG_GA","notifier",
+	function($scope,$rootScope,sharedService, RestService, APP_CONST, $location,$uibModal,GNG_GA,notifier){
 
+	$scope.isApplicationDataLoaded=false;
 	var CustID=sharedService.getRefID();
 	sharedService.setRefID(null);
 
@@ -250,6 +206,8 @@ app.controller("CustomerFormCntrolr",
 
 	RestService.saveToServer('dashboard-application-data',json).then(function(Response){
 		if(Response){
+			$scope.isApplicationDataLoaded=true;
+
 			if(Response)
 				$scope.objectSet = Response;
 			else
@@ -834,7 +792,7 @@ app.controller("CustomerFormCntrolr",
 		}
 	}
 
-	$scope.shwPDFModal = function (size,response,refID) {
+	$scope.shwPDFModal = function (size,response,refID,canSubmit) {
 		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_CUSTOMER_FORM"),
 		 		GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
 		 		GNG_GA.getConstAction("ACTION_CLICK_DASHBOARD_DO_PDF"),
@@ -843,7 +801,7 @@ app.controller("CustomerFormCntrolr",
 		 //alert('modal baseURL'+baseURL);
 		 var modalInstance = $uibModal.open({
 	 		animation: $scope.animationsEnabled,
-	 		templateUrl: 'views/cdl/modal-post-ipa-pdf.html',
+	 		templateUrl: 'views/modal-do-view.html',
 	 		controller: 'PDFViewerModalCtrl',
 	 		size: size,
 	 		resolve: {
@@ -852,6 +810,9 @@ app.controller("CustomerFormCntrolr",
 	 			},
 	 			refID:function(){
 	 				return refID;
+	 			},
+	 			canSubmit:function(){
+	 				return canSubmit;
 	 			}
 	 		}
 	 	});
@@ -912,9 +873,13 @@ app.controller("CustomerFormCntrolr",
 					//console.log("JSON IPA PDF RESPONSE : ");
 					//console.log(JSON.stringify(Response));
 					if(Response){
-						$scope.shwPDFModal('lg',Response,CustID);
+						$scope.shwPDFModal('lg',Response,CustID,true);
+					}else{
+						notifier.logWarning("We are unable to load DO for this application") ;
 					}
 				});
+			}else{
+				notifier.logWarning("We are unable to load DO for this application") ;
 			}
 		});
 	};
@@ -973,5 +938,4 @@ app.config(['$compileProvider',
 		$compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|blob):|data:image|data:application\//);
 	}
 ]);
-
-}).call(this)
+}).call(this);

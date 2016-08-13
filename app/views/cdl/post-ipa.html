@@ -6,7 +6,7 @@
 				<div class="col-md-12"
 					style="border: 01px solid #24A1ED; line-height: 4">
 					<span style="color: #24A1ED">{{fname +" "+ mname +" "+lname}}</span>
-					<span style="float: right;">{{mk +" - "+ mdl}}</span>
+					<span style="float: right;">{{asset.make +" - "+ asset.model}}</span>
 				</div>
 			</div>
 			<div class="row clearfix">
@@ -51,12 +51,12 @@
 				<div class="col-md-4 height">
 					<div class="div-rupee">
 						<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
-						<input type="text" class="cdl-form-control inputMaterial" name="marginMoney" id="mrgnMny" ng-model="mrgnMny" maxlength="15" rupees style="padding-left: 4%" ng-disabled="true"/>
+						<input type="text" class="cdl-form-control inputMaterial" name="marginMoney" id="mrgnMny" ng-model="tMrgnMny" maxlength="15" rupees style="padding-left: 4%" ng-disabled="true"/>
 						<label>Margin Money*</label>
 					</div>
 				</div>
-				<div class="col-md-4 height" id="mnyInstrDiv">
-					<select class="cdl-form-control control-select inputMaterial" id="mnyInstn" ng-model="mnyInstn" name="moneyInstrument" ng-change="onMoneyInstrumentChanged()" select-required>
+				<div class="col-md-4 height" id="mnyInstrDiv" ng-show="tMrgnMny!=='0'">
+					<select class="cdl-form-control control-select inputMaterial" id="mnyInstn" ng-model="mnyInstn" name="moneyInstrument" ng-change="onMoneyInstrumentChanged(mnyInstn)" select-required>
 						<option selected="selected" value="">Select Instrument*</option>
 						<option value="Cash">Cash</option>
 						<option value="Cheque">Cheque</option>
@@ -68,9 +68,9 @@
 					    <p ng-message="selectrequired">Please select instrument</p>
 					</div>
 				</div>
-				<div class="col-md-4 height" id="mnyCnfmDiv">
+				<div class="col-md-4 height" id="mnyCnfmDiv" ng-if="mnyInstn && mnyInstn!=='Cash'">
 					<div class="div-rupee">
-						<input type="text" class="cdl-form-control inputMaterial" name="mnyCnfm" id="mnyCnfm" ng-model="mnyCnfm" maxlength="25" style="padding-left: 4%" required />
+						<input type="text" class="cdl-form-control inputMaterial" name="mnyCnfm" ng-model="$parent.mnyCnfm" maxlength="25" style="padding-left: 4%" required />
 						<label>Margin Money Confirmation*</label>
 						<div ng-messages="PostIPAForm.mnyCnfm.$error" ng-show="PostIPAForm.mnyCnfm.$touched" class="errorMsg">
 						    <p ng-message="required">Please enter margin money confirmation</p>
@@ -83,7 +83,7 @@
 				<div class="col-md-4 height">
 					<div class="div-rupee">
 						<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
-						<input type="text" class="cdl-form-control inputMaterial" name="emi" id="emi" ng-model="emi" rupees style="padding-left: 4%" required ng-disabled="true"/>
+						<input type="text" class="cdl-form-control inputMaterial" name="emi" id="emi" ng-model="temi" rupees style="padding-left: 4%" required ng-disabled="true"/>
 						<label>EMI*</label>
 					</div>
 				</div>
@@ -91,14 +91,14 @@
 				<div class="col-md-4 height">
 					<div class="div-rupee">
 						<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
-						<input type="text" class="cdl-form-control inputMaterial" name="aEMI" id="aEMI" ng-model="aEMI" rupees style="padding-left: 4%" required ng-disabled="true"/>
+						<input type="text" class="cdl-form-control inputMaterial" name="aEMI" id="aEMI" ng-model="tadEmi" rupees style="padding-left: 4%" required ng-disabled="true"/>
 						<label>Advance EMI*</label>
 					</div>
 				</div>
 				<div class="col-md-4 height">
 					<div class="div-rupee">
 						<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
-						<input type="text" class="cdl-form-control inputMaterial" name="prcsfee" id="prcsfee" ng-model="prcsfee" rupees style="padding-left: 4%" required ng-disabled="true"/>
+						<input type="text" class="cdl-form-control inputMaterial" name="prcsfee" id="prcsfee" ng-model="SchemeObject.sMinAmt" rupees style="padding-left: 4%" required ng-disabled="true"/>
 						<label>Processing Fees*</label>
 					</div>
 				</div>
@@ -106,13 +106,12 @@
 		</div>
 		<div class="col-md-2"></div>
 	</div>
-<!-- 	Is Valid :{{PostIPAForm.$invalid}}
+<!--  	Is Invalid :{{PostIPAForm.$invalid}}
 	{{PostIPAForm}} -->
 	<div class="row clearfix ">
 		<div class="col-md-10 col-md-offset-1" style="text-align: center;">
 <!-- 		<span style="text-align: center;">Proceed for DDE</span> -->
-			<button class="customButton Pnext" id="postNext"
-				style="text-align: center; float: initial; margin-left: 10px;" ng-click="ipaService()" ng-disabled="PostIPAForm.$invalid">Next</button>
+			<button class="customButton Pnext" id="postNext" style="text-align: center; float: initial; margin-left: 10px;" ng-click="ipaService()" ng-disabled="PostIPAForm.$invalid">Next</button>
 		</div>
 		<!-- <div class="col-md-4"></div> -->
 	</div>

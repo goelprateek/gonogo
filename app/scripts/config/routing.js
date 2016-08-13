@@ -68,6 +68,7 @@
 	        templateUrl: "views/cdl/asset-data.html",
 	    });
 		 $urlRouterProvider.otherwise('/');
+
 	}]);
 	
 	app.factory("Interceptor", function($q, $location) {

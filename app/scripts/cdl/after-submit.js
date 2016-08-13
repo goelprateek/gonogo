@@ -68,9 +68,12 @@
 			}
 			else if($scope.statusObject.sAppStat == "Declined" )
 			{
-				$("#pOrder").hide();
-			 	$("#additionalDoc").show();
-			 	$("#disImgRw ,#chkImgRw ,#aggImgRw").hide();
+				// $("#pOrder").hide();
+			 // 	$("#additionalDoc").show();
+			 // 	$("#disImgRw ,#chkImgRw ,#aggImgRw").hide();
+				sharedService.setRefID($scope.referenceID);
+				sharedService.setApplicationStatus($scope.statusObject);
+			 	$location.path("/cdl/additnl-doc");
 			}
 			else if($scope.statusObject.sAppStat == "OnHold")
 			{
