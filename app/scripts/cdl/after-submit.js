@@ -2,8 +2,8 @@
 	'use strict';	
 	var app=angular.module("gonogo.cdl");
 
-	app.controller("AfterSubmitController",["$scope","sharedService","UserService","RestService","$location",
-				function($scope,sharedService,UserService,RestService,$location){
+	app.controller("AfterSubmitController",["$scope","sharedService","UserService","RestService","$location","$state",
+				function($scope,sharedService,UserService,RestService,$location,$state){
 
 		//HARD CODED FOR TESTING
 		//sharedService.setRefID("SATH000216"); // Declined
@@ -73,7 +73,8 @@
 			 // 	$("#disImgRw ,#chkImgRw ,#aggImgRw").hide();
 				sharedService.setRefID($scope.referenceID);
 				sharedService.setApplicationStatus($scope.statusObject);
-			 	$location.path("/cdl/additnl-doc");
+			 	//$location.path("/cdl/additnl-doc");
+			 	$state.go("/cdl/additnl-doc");
 			}
 			else if($scope.statusObject.sAppStat == "OnHold")
 			{
