@@ -66,7 +66,9 @@
 	        templateUrl: "views/cdl/kyc-documents.html",
 	    }).state('/cdl/apply.asset', {
 	        templateUrl: "views/cdl/asset-data.html",
-	    });
+	    }).state('/cdl/additnl-doc',{
+			templateUrl: 'views/cdl/upload-additnl-docs.html',
+			controller: 'AdditionalDocumentController';
 		 $urlRouterProvider.otherwise('/');
 
 	}]);
