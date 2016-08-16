@@ -68,7 +68,7 @@
 	        templateUrl: "views/cdl/asset-data.html",
 	    }).state('/cdl/additnl-doc',{
 			templateUrl: 'views/cdl/upload-additnl-docs.html',
-			controller: 'AdditionalDocumentController';
+			controller: 'AdditionalDocumentController',});
 		 $urlRouterProvider.otherwise('/');
 
 	}]);
