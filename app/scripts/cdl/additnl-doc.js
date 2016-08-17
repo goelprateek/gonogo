@@ -2,8 +2,8 @@
 	'use strict';	
 	var app=angular.module("gonogo.cdl");
 
-	app.controller("AdditionalDocumentController",["$scope","sharedService","UserService","RestService","$location","UploadImages","$log","notifier",
-		function($scope,sharedService,UserService,RestService,$location,UploadImages,$log,notifier){
+	app.controller("AdditionalDocumentController",["$scope","sharedService","UserService","RestService","UploadImages","$log","notifier","$state",
+		function($scope,sharedService,UserService,RestService,UploadImages,$log,notifier,$state){
 
 		$scope.additnlDocArrayToUpload=[];
 
@@ -11,15 +11,19 @@
 			$scope.referenceID=sharedService.getRefID();
 			sharedService.setRefID(null);
 		}else{
-			$location.path("/cdl/basic-de");
+			$state.go("/cdl/basic-de");
 		}
 
 		if(sharedService.getApplicationStatus()){
 			$scope.statusObject=sharedService.getApplicationStatus();
 			sharedService.setApplicationStatus(null);
-
 		}else{
-			$location.path("/cdl/basic-de");
+			$state.go("/cdl/basic-de");
+		}
+		
+		$scope.doDocument=sharedService.getDODocument();
+		if($scope.doDocument){	
+			sharedService.setDODocument(null);
 		}
 
 		$scope.applicationFormArr=[{value:"APPLICATION_FORM","index":1}];
@@ -62,13 +66,13 @@
 				notifier.logWarning("Please select atleast 1 image to upload.");
 			}
 
-		 //    UploadAllImgs($scope.REFID,addkyc_array,"ipa");
-		 //    $scope.updateStatus();
-		 //    // console.log("$scope.dstatus :"+$scope.dstatus);
-		 //    if(status == "Declined")
+		 	//    UploadAllImgs($scope.REFID,addkyc_array,"ipa");
+		 	//    $scope.updateStatus();
+		    // console.log("$scope.dstatus :"+$scope.dstatus);
+		 	//    if(status == "Declined")
 			// {	
-		 //    	$("loaderImg").show();
-		 //    	$timeout( function(){ $location.path("/cdl/dashboard"); }, 3000);
+		 	//    	$("loaderImg").show();
+		 	//    	$timeout( function(){ $state.go("/cdl/dashboard"); }, 3000);
 			//      $rootScope.errHead="";
 			//      $rootScope.errorMsg="";
 			// }  else {
@@ -83,14 +87,19 @@
 
 			RestService.saveToServer('post-ipa-stage-update', updateJson)
 			.then(function(data){
-				if(data){
-					if(status == "Declined")
+				if(data && data.sStat==="SUCCESS"){
+					if($scope.statusObject.sAppStat === "Declined")
 					{
-				    	$location.path("/cdl/dashboard");
-					}  else {
-						$('#additionalDoc').hide();
-						$('#additionalDocfinal').show();
+						notifier.logSuccess("Image has been uploaded successfully.");
+				    	$state.go("/cdl/dashboard");
+					} else if($scope.statusObject.sAppStat === "Approved"){
+						sharedService.setRefID($scope.referenceID);
+						sharedService.setDODocument($scope.doDocument);
+						sharedService.setApplicationStatus($scope.statusObject);
+						$state.go("/cdl/post-do");
 					}
+				}else{
+					notifier.logError("Unable to update status, please try again or contact system admin.");
 				}
 			},function(failedResponse){
 				notifier.logError("Sorry we can not reset the stage.");

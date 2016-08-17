@@ -68,9 +68,12 @@
 	        templateUrl: "views/cdl/asset-data.html",
 	    }).state('/cdl/additnl-doc',{
 			templateUrl: 'views/cdl/upload-additnl-docs.html',
-			controller: 'AdditionalDocumentController',});
+			controller: 'AdditionalDocumentController'
+		}).state('/cdl/post-do', {
+			templateUrl: 'views/cdl/post-do.html',
+			controller: 'PostDOCntrolr'
+		});
 		 $urlRouterProvider.otherwise('/');
-
 	}]);
 	
 	app.factory("Interceptor", function($q, $location) {

@@ -2,8 +2,8 @@
 	'use strict';	
 	var app=angular.module("gonogo.cdl");
 
-	app.controller("HoldStageController",["$scope","sharedService","$location","UserService",
-				function($scope,sharedService,$location,UserService){
+	app.controller("HoldStageController",["$scope","sharedService","UserService","$state","notifier",
+				function($scope,sharedService,UserService,$state,notifier){
 
 		var user=UserService.getCurrentUser();
 
@@ -17,7 +17,7 @@
 			$scope.referenceID=sharedService.getRefID();
 			sharedService.setRefID(null);
 		}else{
-			$location.path("/cdl/basic-de");
+			$state.go("/cdl/basic-de");
 		}
 
 		// Start : If from step 1 screen
@@ -38,7 +38,7 @@
 				$scope.holdStageArr.push(object);
 			}
 		}else{
-			$location.path("/cdl/basic-de");
+			$state.go("/cdl/basic-de");
 		}
 
 		// $scope.reprocess=function()
@@ -67,7 +67,7 @@
 		// 	.then(function(data){
 		// 		if(data){
 		// 			sharedService.setRefID($scope.referenceID);
-		// 			$location.path("/cdl/result");
+		// 			$state.go("/cdl/result");
 		// 		}
 		// 	},function(failedResponse){
 		// 		notifier.logError("Sorry we can not reset the status request.");
@@ -129,9 +129,12 @@
 
 			RestService.saveToServer('reset-status', updateJson)
 			.then(function(data){
-				if(data){
+				if(data && data.sStatus == 'SUCCESS'){
 					sharedService.setRefID($scope.referenceID);
-					$location.path("/cdl/result");
+					notifier.logSuccess("Your request has bee processed successfully.");
+					$state.go("/cdl/result");
+				}else{
+					notifier.logError("Unable to update status, please try again or contact system admin.");
 				}
 			},function(failedResponse){
 				notifier.logError("Sorry we can not reset the status request.");

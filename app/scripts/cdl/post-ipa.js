@@ -11,8 +11,8 @@
 	  	}
 	}]);
 
-	app.controller("PostIPAController",["$scope","sharedService","$location","UserService","RestService","notifier","$uibModal",
-				function($scope,sharedService,$location,UserService,RestService,notifier,$uibModal){
+	app.controller("PostIPAController",["$scope","sharedService","UserService","RestService","notifier","$uibModal","$state",
+				function($scope,sharedService,UserService,RestService,notifier,$uibModal,$state){
 
 		$scope.asset={
 			category:"",
@@ -48,7 +48,7 @@
 
 			$scope.dealerCode=$scope.applicationData.oHeader.sDealerId;
 		}else{
-			$location.path("/cdl/basic-de");
+			$state.go("/cdl/basic-de");
 			return;
 		}
 
@@ -62,7 +62,7 @@
 				$scope.referenceID=sharedService.getRefID();
 				sharedService.setRefID(null);
 			}else{
-				$location.path("/cdl/basic-de");
+				$state.go("/cdl/basic-de");
 				return;
 			}
 
@@ -89,6 +89,8 @@
 					//HARD CODED
 					//$scope.approvedAmt=100000;
 					//HARD CODED
+				}else{
+					notifier.logError("We cannot process your application status request, please try again or contact system admin.");
 				}
 			},function(failedResponse){
 				notifier.logError("Sorry we cannot process your application status request");
@@ -120,7 +122,7 @@
 					"sAppSource": "WEB",
 					"sDsaId":user.username,
 					"sAppID": $scope.applicationID,
-					"sDealerId": $scope.dealerCode,
+					"sDealerId": $scope.dealerID,
 					"sSourceID": "GONOGO_HDBFS",
 					"sInstID": user.institutionID
 				},
@@ -230,7 +232,7 @@
 			var tAsstCst = parseFloat(($scope.astCst ? $scope.astCst : "0") .replace(/,/g,""));
 
 			if(tAsstCst >= tAprAmt){ 
-				$scope.tMrgnMny = tAsstCst-tAprAmt; 
+				$scope.tMrgnMny = (tAsstCst-tAprAmt)+""; 
 			}else{
 				$scope.tMrgnMny="0";
 			}
@@ -325,44 +327,46 @@
 					"dApvAmt": $scope.approvedAmt.replace(/,/g,''),
 					"sMarMoneyConfirm": $scope.mnyCnfm,
 					"dMarMoney": ($scope.tMrgnMny+"").replace(/,/g,''),
-					"dAdvEmi": $scope.tadEmi ? $scope.tadEmi.replace(/,/g,'') : "0" ,
+					"dAdvEmi": $scope.tadEmi ? ($scope.tadEmi+"").replace(/,/g,'') : "0" ,
 					"dManfSubDel": 0
 				},
 				"sRefID": $scope.referenceID,
 				"dtDateTime": new Date().getTime()
 			};
 		//	console.log("$scope.ipaJson :"+$scope.ipaJson);
-			$http({
-				method : 'POST',
-				url : APP_CONST.getConst('BASE_URL_GNG')+'post-ipa-pdf',
-				data :$scope.ipaJson,
-				headers : {'Content-Type':'application/json'}
-			}).success(function(data) 
-			{	
-				// console.log("Response Data post IPA : " + JSON.stringify(data));
-			  	// post ipa pdf id will availeble here
-				if(data.sStat=="SUCCESS")
-				{    
-					$scope.postIpaPdfId=data.sDocID;
-					$scope.postIpaPDFCode = "data:application/pdf;base64,"+data.sByteCode;
-					$("#pOrder").hide();
-					$("#additionalDoc").show();
+
+			RestService.saveToServer('post-ipa-pdf', $scope.ipaJson)
+			.then(function(data){
+				if(data && data.sStat=="SUCCESS"){
+
+					var doDoc={
+						sDocID:data.sDocID,
+						sByteCode:data.sByteCode
+					}
+					// $scope.postIpaPdfId=data.sDocID;
+					// $scope.postIpaPDFCode = "data:application/pdf;base64,"+data.sByteCode;
+					// $("#pOrder").hide();
+					// $("#additionalDoc").show();
+
+					sharedService.setRefID($scope.referenceID);
+					sharedService.setApplicationStatus($scope.statusObject);
+					sharedService.setDODocument(doDoc);
+
+				 	$state.go("/cdl/additnl-doc");
+				}else{
+					notifier.logError("Sorry we can not process your asset request, please try again or contact system admin.");
 				}
-			}).error(function(data) 
-			{
+			},function(failedResponse){
 				$scope.serviceHitCount=$scope.serviceHitCount+1;
 				if($scope.serviceHitCount<=3)
-					{
-					  $scope.ipaService();
-					}
-				else{
+				{
+				  	$scope.ipaService();
+				} else {
 					$scope.serviceHitCount=1;
-					$scope.error="Sorry we can not process your Asset request";
-				}	
+					notifier.logError("Sorry we can not process your Asset request");
+				}
 			});
-			$("#pOrder").hide();
-			$("#additionalDoc").show();
-		}
+		};
 
 		/*
 		$scope.ipaJSonFunction=function()

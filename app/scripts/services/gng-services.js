@@ -110,7 +110,9 @@
 		step1Object=null,
 		dealerCode=null,
 		applicationData=null,
-		applicationStatus=null;
+		applicationStatus=null,
+		doDocument=null;
+
 	  	return {
 	        getRefID: function () {
 	            return refID;
@@ -159,6 +161,12 @@
 	        },
 	        setApplicationStatus: function(value) {
 	        	applicationStatus = value;
+	        },
+	        getDODocument: function () {
+	            return doDocument;
+	        },
+	        setDODocument: function(value) {
+	        	doDocument = value;
 	        }
 	    };
   	});

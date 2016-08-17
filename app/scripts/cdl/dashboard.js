@@ -13,8 +13,8 @@ app.controller('DecisionViewController', function ($scope,$uibModalInstance, dat
 //	 };
 });
 
-app.controller("DashboardController",["$scope","$filter",'sharedService','$location',"$uibModal",'APP_CONST',"RestService","UserService","$rootScope","GNG_GA",
-							function($scope,$filter,sharedService,$location,$uibModal,APP_CONST,RestService,UserService,$rootScope,GNG_GA){
+app.controller("DashboardController",["$scope","$filter",'sharedService',"$uibModal",'APP_CONST',"RestService","UserService","$rootScope","GNG_GA","$state",
+							function($scope,$filter,sharedService,$uibModal,APP_CONST,RestService,UserService,$rootScope,GNG_GA,$state){
 	 //sayali (added stacked graph service using directive)
 	var user=UserService.getCurrentUser();
 
@@ -77,7 +77,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 			$scope.userid = user.userid;
 			$scope.color = user.color;
 		}else{
-			$location.path(APP_CONST.getConst('APP_CONTEXT'));
+			$state.go(APP_CONST.getConst('APP_CONTEXT'));
 		}
 
 //		alert($scope.useremail.toLowerCase());
@@ -86,7 +86,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 		{
 //			console.log();
 //			alert("Moving to root");
-			$location.path("/");
+			$state.go(APP_CONST.getConst('APP_CONTEXT'));
 		}
 
 		$scope.query   = $scope.searchText;
@@ -129,7 +129,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 
 		sharedService.setRefID(refID);
 		sharedService.setDecisionStatus(decisionStatus);
-		$location.path( "/cdl/customerForm" );
+		$state.go( "/cdl/customerForm" );
 	};
 
 	$scope.fetchDashboardList();

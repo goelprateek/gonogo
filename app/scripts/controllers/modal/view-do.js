@@ -1,13 +1,13 @@
 app.controller('PDFViewerModalCtrl', [
-	'RestService','$scope', '$uibModalInstance', 'response','refID','$location','UserService','notifier','canSubmit',
-	function (RestService,$scope, $uibModalInstance, response,refID,$location,UserService,notifier,canSubmit) {
+	'RestService','$scope', '$uibModalInstance', 'response','refID','$location','UserService','notifier','canSubmit',"$state",
+	function (RestService,$scope, $uibModalInstance, response,refID,$location,UserService,notifier,canSubmit,$state) {
 	
 	var user=UserService.getCurrentUser();
 	$scope.response = response;
 	$scope.refID = refID;
 	$scope.canSubmitDO=canSubmit;
 
-	$scope.submit = function (imgID,refID) {
+	$scope.sendDOMail = function (imgID,refID) {
 
 		var mailRequest={
 			oHeader:
@@ -34,7 +34,7 @@ app.controller('PDFViewerModalCtrl', [
 		$uibModalInstance.close();
 
 		notifier.logSuccess("DO has been sent to dealer.");
-		$location.path("/cdl/dashboard");
+		$state.go("/cdl/dashboard");
  	};
 
  	$scope.closeModal = function () {

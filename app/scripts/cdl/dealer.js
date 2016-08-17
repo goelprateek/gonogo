@@ -6,8 +6,8 @@
 	
 	var app = angular.module("gng.cdl.dealer",[]);
 
-	app.controller("DealerController",["$rootScope","$scope","$location",'UserService','APP_CONST','GNG_GA',
-							function($rootScope,$scope,$location,UserService,APP_CONST,GNG_GA){
+	app.controller("DealerController",["$rootScope","$scope",'UserService','APP_CONST','GNG_GA',"$state",
+							function($rootScope,$scope,UserService,APP_CONST,GNG_GA,$state){
 
 		var user = UserService.getCurrentUser();
 
@@ -24,15 +24,15 @@
 
 			if(currDealer){
 				if(currDealer.DEALER_NAME){
-					$location.path("/cdl/basic-de");
+					$state.go("/cdl/basic-de");
 				}
 			}else if($scope.dealers){
-				$location.path("/cdl/dealer");
+				$state.go("/cdl/dealer");
 			}else{
-				$location.path(APP_CONST.getConst('APP_CONTEXT'));
+				$state.go(APP_CONST.getConst('APP_CONTEXT'));
 			}
 		}else{
-			$location.path(APP_CONST.getConst('APP_CONTEXT'));
+			$state.go(APP_CONST.getConst('APP_CONTEXT'));
 		}
 
 		$scope.onDealerSelected=function(dealerSelected){
@@ -51,7 +51,7 @@
 
 				$rootScope.dealerName = dealerObj["DEALER_NAME"];
 
-				$location.path("/cdl/basic-de");
+				$state.go("/cdl/basic-de");
 			}else {
 				$rootScope.errHead="Dealer";
 				$rootScope.errorMsg="Please select Dealer";
