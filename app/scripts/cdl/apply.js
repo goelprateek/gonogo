@@ -2,8 +2,8 @@
 	'use strict';
 	var app = angular.module('gonogo.cdl');
 
-	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA", function(
-	 									$scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA) {
+	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA","$state", function(
+	 									$scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA,$state) {
 
 		var dlrCode =null;
 		var CustID=null;
@@ -202,11 +202,11 @@
 					                dateOfBirth.setDate(parseInt(mApplicant.sDob.slice(0,2)));
 					                dateOfBirth.setMonth((parseInt(mApplicant.sDob.slice(2,4))-1));
 
-					                $scope.dob=dateOfBirth;
+					                $scope.applicant.dob=dateOfBirth;
 								}else{
 									var dateOfBirth=new Date();
 					                dateOfBirth.setFullYear(new Date().getFullYear()-25);
-					                $scope.dob=dateOfBirth;
+					                $scope.applicant.dob=dateOfBirth;
 								}
 
 								$scope.constitution=mApplicant.aEmpl[0].sConst;
@@ -642,11 +642,16 @@ $scope.changeEvent=function(type,val)
 
 //permanant address same as above
 $scope.stateChanged = function (val){
-//	$("#permanentAddr").trigger("reset");
 	if(val==true)
 		{
-			$scope.applicant.oAddress.oPermanent = $scope.applicant.oAddress.oResidence;
-			console.log($scope.applicant);
+			if($scope.applicant.oPermanent==undefined){
+				$scope.applicant.oPermanent="";
+			}
+			var backUpResidenceData = angular.copy($scope.applicant.oResidence);
+			$scope.applicant.oPermanent = backUpResidenceData;
+			
+			//sibling help hide show remain
+
 		/*//console.log($("#addressType option:selected").val());
 		 $("#prmnt_addressType").val($("#addressType option:selected").val()).siblings("help").show();
 //		$scope.prmnt_AddressType=$scope.AddressType;
@@ -664,8 +669,9 @@ $scope.stateChanged = function (val){
 		 $("#prmnt_pertadd").val($("#pertadd").val()).siblings("help").show();
 		 $("#prmnt_mcity").val($("#mcity").val()).siblings("help").show();*/
 		}else{
-			$("#permanentAddr input").val("").siblings("help").hide();
-			$("#permanentAddr Select").val("").siblings("help").hide();
+			/*$("#permanentAddr input").val("").siblings("help").hide();
+			$("#permanentAddr Select").val("").siblings("help").hide();*/
+				$scope.applicant.oPermanent="";
 		}
 	}
 
@@ -745,15 +751,24 @@ $scope.pinService = function(pin,id){
 				$scope.pcty =Response.sCity;
 				$("#percity").val(Response.sCity).prop("disabled","true").siblings("help").show();
 				$("#perstate").val(Response.sState).prop("disabled","true").siblings("help").show();
+				//sayali
+				$scope.applicant.oResidence.oAddress.sCity = Response.sCity;
+				$scope.applicant.oResidence.oAddress.sState = Response.sState;
 			}
 			else if(id =="wrkpin")
 			{
 				$("#wrkcity").val(Response.sCity).prop("disabled","true").siblings("help").show();
 				$("#wrkstate").val(Response.sState).prop("disabled","true").siblings("help").show();
+				//sayali
+				$scope.applicant.empl.emplCity = Response.sCity;
+				$scope.applicant.empl.emplState = Response.sState;
+
 			}else if(id =="prmnt_perpin")
 			{
 				$("#prmnt_percity").val(Response.sCity).prop("disabled","true").siblings("help").show();
 				$("#prmnt_perstate").val(Response.sState).prop("disabled","true").siblings("help").show();
+				$scope.applicant.oPermanent.oAddress.sCity = Response.sCity;
+				$scope.applicant.oPermanent.oAddress.sState = Response.sState;
 			}
 	}).error(function(error) {
 //		$scope.error = 'Sorry ! ';
@@ -1169,7 +1184,224 @@ function ageCalculator(){
 
 $scope.submitApplication=function(UrlKey)
 {
-	var bool=true;
+	var json = 
+	{
+		"oHeader":{
+			"sAppID":"",
+			"sAppSource":"WEB:1.06.01",//added version
+			"sCroId":"default",
+			"dtSubmit":1471340384072,//remain
+			"sDealerId":dlrCode,
+			"sDsaId":$scope.username,
+			"sInstID":$scope.InstitutionID,
+			"sReqType":"JSON"
+		},
+		"sRefID":$scope.referenceID,
+		"oReq":{
+			"oApplicant":{
+				"residenceAddSameAsAbove":$scope.applicant.sameAbove,
+				"aAddr":[{
+					"sLine1":$scope.applicant.oResidence.oAddress.sAddress1,
+					"sLine2":$scope.applicant.oResidence.oAddress.sAddress2,
+					"sCity":$scope.applicant.oResidence.oAddress.sCity,
+					"sCountry":"India",
+					"sVillage":null,
+					"sDistrict":null,
+					"sLandMark":null,
+					"sLine3":$scope.applicant.oResidence.oAddress.sAddress3,
+					"sLine4":null,
+					"sState":$scope.applicant.oResidence.oAddress.sState,
+					"fDistFrom":0.0,
+					"iPinCode":$scope.applicant.oResidence.oAddress.sPinCode,
+					"sAddrType":"RESIDENCE",
+					"sResAddrType":$scope.applicant.oResidence.oAddress.addrType,
+					"iMonthAtCity":$scope.applicant.oResidence.oAddress.iMonthCity,
+					"dRentAmt":$scope.applicant.oResidence.oAddress.dRentPerMonth ? ($scope.applicant.oResidence.oAddress.dRentPerMonth+"").replace(/,/g,"") : 0,
+					"iMonthAtAddr":$scope.applicant.oResidence.oAddress.iMonthAddress,
+					"iTimeAtAddr":"",
+					"iYearAtCity":"",
+				},
+				{
+					"sLine1":$scope.applicant.empl.emplAddr1,
+					"sLine2":$scope.applicant.empl.emplAddr2,
+					"sCity":$scope.applicant.empl.emplCity,
+					"sCountry":"India",
+					"sVillage":null,
+					"sDistrict":null,
+					"sLandMark":null,
+					"sLine3":$scope.applicant.empl.emplAddr3,
+					"sLine4":null,
+					"sState":$scope.applicant.empl.emplState,
+					"fDistFrom":0.0,
+					"iPinCode":$scope.applicant.empl.emplPin,
+					"sAddrType":"OFFICE",
+					"sResAddrType":"",//not for office
+					"iMonthAtCity":"",
+					"dRentAmt":"",
+					"iMonthAtAddr":"",
+					"iTimeAtAddr":"",
+					"iYearAtCity":""
+				},
+				{
+					"sLine1":$scope.applicant.oPermanent.oAddress.sAddress1,
+					"sLine2":$scope.applicant.oPermanent.oAddress.sAddress2,
+					"sCity":$scope.applicant.oPermanent.oAddress.sCity,
+					"sCountry":"India",
+					"sVillage":null,
+					"sDistrict":null,
+					"sLandMark":null,
+					"sLine3":$scope.applicant.oPermanent.oAddress.sAddress3,
+					"sLine4":null,
+					"sState":$scope.applicant.oPermanent.oAddress.sState,
+					"fDistFrom":0.0,
+					"iPinCode":$scope.applicant.oPermanent.oAddress.sPinCode,
+					"sAddrType":"PERMANENT",
+					"sResAddrType":$scope.applicant.oPermanent.oAddress.addrType,
+					"iMonthAtCity":$scope.applicant.oPermanent.oAddress.iMonthCity,
+					"dRentAmt":$scope.applicant.oPermanent.oAddress.dRentPerMonth ? ($scope.applicant.oPermanent.oAddress.dRentPerMonth+"").replace(/,/g,"") : 0,
+					"iMonthAtAddr":$scope.applicant.oPermanent.oAddress.iMonthAddress,
+					"iTimeAtAddr":"",
+					"iYearAtCity":""
+				}],
+				"sApplID":"APPLICANT_1",
+				"oApplName":{
+					"sFirstName":$scope.fname,
+					"sLastName":$scope.mname,
+					"sMiddleName":$scope.lname,
+					"sPrefix":null,
+					"sSuffix":null
+				},
+				"oApplRef":null,
+				"aBankingDetails":null,
+				"sCreditCardNum":$scope.applicant.creditCard,
+				"sDob":"15061985",//remain
+				"sEdu":$scope.applicant.education,
+				"aEmail":[{
+					"sEmailAddr":$scope.applicant.oResidence.sEmail,
+					"sEmailType":"PERSONAL"
+				},
+				{
+					"sEmailAddr":$scope.applicant.oPermanent.sEmail,
+					"sEmailType":"PERMANENT"
+				},
+				{
+					"sEmailAddr":$scope.applicant.empl.emplEmail,
+					"sEmailType":"WORK"
+				}],
+				"aEmpl":[{
+					"sConst":$scope.applicant.constitution,
+					"sDtJoin":null,
+					"sDtLeave":null,
+					"sDesig":null,
+					"sEmplrBr":null,
+					"sEmplrCode":null,
+					"sEmplName":$scope.applicant.empl.emplName,
+					"sEmplType":$scope.applicant.empl.emplType,
+					"aLastMonthIncome":[],
+					"sItrID":null,
+					"iTmWithEmplr":$scope.applicant.empl.emplMonthWithEmp,
+					"dGrossSal":0.0,
+					"dmonthSal":$scope.applicant.empl.emplSalary ? ($scope.applicant.empl.emplSalary+"").replace(/,/g,"") : 0,
+					"dItrAmt":$scope.applicant.empl.emplITReturn ? ($scope.applicant.empl.emplITReturn + "").replace(/,/g,"") : 0
+				}],
+				"oFatherName":null,
+				"sApplGndr":$scope.applicant.gender,
+				"oIncomeDetails":null,
+				"oSpouseName":null,
+				"aKycDocs":[{ // whole block is remain
+					"sExpiryDate":null,
+					"sIssueDate":null,
+					"sKycName":"AADHAAR",
+					"sKycNumber":"254234523452",
+					"sKycStat":null
+				}],
+				"aLoanDetails":null,
+				"sMarStat":$scope.applicant.maritalStat,
+				"sReligion":null,
+				"aPhone":[{
+					"phoneType":"PERSONAL_MOBILE",
+					"sPhoneType":"PERSONAL_MOBILE",
+					"sAreaCode":"",
+					"sCountryCode":"+91",
+					"sExt":"",
+					"sPhoneNumber":$scope.applicant.oPermanent.oPhone.iMobile
+				},
+				{
+					"phoneType":"PERSONAL_PHONE",
+					"sPhoneType":"PERSONAL_PHONE",
+					"sAreaCode":$scope.applicant.oPermanent.oPhone.sStdCode,
+					"sCountryCode":"+91",
+					"sExt":"",
+					"sPhoneNumber":$scope.applicant.oPermanent.oPhone.iLandLine
+				},
+				{
+					"phoneType":"RESIDENCE_MOBILE",
+					"sPhoneType":"RESIDENCE_MOBILE",
+					"sAreaCode":"",
+					"sCountryCode":"+91",
+					"sExt":"",
+					"sPhoneNumber":$scope.applicant.oResidence.oPhone.iMobile
+				},
+				{
+					"phoneType":"RESIDENCE_PHONE",
+					"sPhoneType":"RESIDENCE_PHONE",
+					"sAreaCode":$scope.applicant.oResidence.oPhone.sStdCode,
+					"sCountryCode":"+91",
+					"sExt":"",
+					"sPhoneNumber":$scope.applicant.oResidence.oPhone.iLandLine
+				},
+				{
+					"phoneType":"OFFICE_PHONE",
+					"sPhoneType":"OFFICE_PHONE",
+					"sAreaCode":$scope.applicant.empl.emplStd,
+					"sCountryCode":"+91",
+					"sExt":"",
+					"sPhoneNumber":$scope.applicant.empl.emplLandLine
+				},
+				{
+					"phoneType":"OFFICE_MOBILE",
+					"sPhoneType":"OFFICE_MOBILE",
+					"sAreaCode":"",
+					"sCountryCode":"+91",
+					"sExt":"",
+					"sPhoneNumber":$scope.applicant.empl.emplMob
+				}],
+				"iEarnMem":0,
+				"iFamilyMem":0,
+				"iNoOfDep":0,
+				"bMobVer":true,
+				"sAdharVer":false,
+				"bSameAbove":$scope.applicant.sameAbove,//check key
+				"iAge":0
+			},
+			"oApplication":{
+				"sApID":null,
+				"sAppliedFor":null,
+				"aAssetDetail":[{
+					"sAssetCtg":$scope.applicant.asset.category,
+					"sAssetMake":$scope.applicant.asset.make,
+					"sAssetModelMake":"",
+					"sDlrName":$scope.dealerName,
+					"sModelNo":$scope.applicant.asset.model,
+					"sPrice":""
+				}],
+				"oProperty":null,
+				"sLoanType":"Consumer Durables",
+				"dEmi":0.0,
+				"dLoanAmt":$scope.applicant.loanAmt ? ($scope.applicant.loanAmt+"").replace(/,/g,"") : 0,
+				"dMarginAmt":0.0,
+				"iAdvEmi":0,
+				"iLoanTenor":$scope.applicant.tenor
+			},
+			"aCoApplicant":null,
+			"sSuspAct":$scope.applicant.suspected
+		}
+	};
+
+console.log("final JSon : "+JSON.stringify(json));
+
+
+	/*var bool=true;
 	modelNo=$("#mdl").val();
 //	assetCat = $("#ast option:selected").val();
 	make = $("#mk").val();
@@ -1275,26 +1507,30 @@ $scope.submitApplication=function(UrlKey)
 	$.extend($scope.object,{"sRefID":$scope.REFID});
 	$.extend($scope.object,$scope.hdr);
 	$.extend($scope.object,$scope.reqst);
-	// console.log("submit json= "+JSON.stringify($scope.object));
-   
-   $http({
+	// console.log("submit json= "+JSON.stringify($scope.object));*/
+
+ // var json = {"oHeader":{"sAppID":"","sAppSource":"WEB:1.06.01","sCroId":"default","dtSubmit":1471340384072,"sDealerId":"25052","sDsaId":"HDBFS_DSA1@softcell.com","sInstID":"4019","sReqType":"JSON"},"sRefID":"25052000159","oReq":{"oApplicant":{"residenceAddSameAsAbove":true,"aAddr":[{"sLine1":"QWWEQEQWEW","sLine2":"GYGUUYIUYI","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"IIUIUYIUYIU","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411005","sAddrType":"RESIDENCE","sResAddrType":"RENTED-FLAT","iMonthAtCity":"99","dRentAmt":"21212121","iMonthAtAddr":"90","iTimeAtAddr":"","iYearAtCity":""},{"sLine1":"DFSFSDFSD","sLine2":"SDFFDSFSD","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"SDFDSFDSFSD","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411004","sAddrType":"OFFICE","sResAddrType":"","iMonthAtCity":"","dRentAmt":"","iMonthAtAddr":"","iTimeAtAddr":"","iYearAtCity":""},{"sLine1":"QWWEQEQWEW","sLine2":"GYGUUYIUYI","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"IIUIUYIUYIU","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411005","sAddrType":"PERMANENT","sResAddrType":"RENTED-FLAT","iMonthAtCity":"99","dRentAmt":"21212121","iMonthAtAddr":"90","iTimeAtAddr":"","iYearAtCity":""}],"sApplID":"APPLICANT_1","oApplName":{"sFirstName":"SAYALI","sLastName":"MADAN","sMiddleName":"MULAY","sPrefix":null,"sSuffix":null},"oApplRef":null,"aBankingDetails":null,"sCreditCardNum":"121212","sDob":"15061985","sEdu":"DOCTORATE","aEmail":[{"sEmailAddr":"askdhaks@sdjf.com","sEmailType":"PERSONAL"},{"sEmailAddr":"askdhaks@sdjf.com","sEmailType":"PERMANENT"},{"sEmailAddr":"so@dfsn.com","sEmailType":"WORK"}],"aEmpl":[{"sConst":"TRUST","sDtJoin":null,"sDtLeave":null,"sDesig":null,"sEmplrBr":null,"sEmplrCode":null,"sEmplName":"SOFTCELL TRADE AND TECHNOLOGIES LTD","sEmplType":"PROFESSIONAL","aLastMonthIncome":[],"sItrID":null,"iTmWithEmplr":"223","dGrossSal":0,"dmonthSal":"32432442","dItrAmt":0}],"oFatherName":null,"sApplGndr":"Female","oIncomeDetails":null,"oSpouseName":null,"aKycDocs":[{"sExpiryDate":null,"sIssueDate":null,"sKycName":"AADHAAR","sKycNumber":"254234523452","sKycStat":null}],"aLoanDetails":null,"sMarStat":"Single","sReligion":null,"aPhone":[{"phoneType":"PERSONAL_MOBILE","sPhoneType":"PERSONAL_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":"","sPhoneNumber":"2323123123"},{"phoneType":"PERSONAL_PHONE","sPhoneType":"PERSONAL_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"4545454545"},{"phoneType":"RESIDENCE_MOBILE","sPhoneType":"RESIDENCE_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":""},{"phoneType":"RESIDENCE_PHONE","sPhoneType":"RESIDENCE_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"4545454545"},{"phoneType":"OFFICE_PHONE","sPhoneType":"OFFICE_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"5454545454"},{"phoneType":"OFFICE_MOBILE","sPhoneType":"OFFICE_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":"","sPhoneNumber":"2131321313"}],"iEarnMem":0,"iFamilyMem":0,"iNoOfDep":0,"bMobVer":true,"sAdharVer":false,"bSameAbove":true,"iAge":0},"oApplication":{"sApID":null,"sAppliedFor":null,"aAssetDetail":[{"sAssetCtg":"WASHING MACHINE","sAssetMake":"HITACHI","sAssetModelMake":"","sDlrName":"SATHYA AGENCIES-SLM","sModelNo":"SF-80PJ3CINEM","sPrice":""}],"oProperty":null,"sLoanType":"Consumer Durables","dEmi":0,"dLoanAmt":"12121212","dMarginAmt":0,"iAdvEmi":0,"iLoanTenor":"121"},"aCoApplicant":null,"sSuspAct":"No"}};
+
+  $http({
 		method : 'POST',
 		url : APP_CONST.getConst('BASE_URL_GNG')+'submit-application/'+UrlKey,
-		data :$scope.object,
+		data :json,
 		headers : {'Content-Type':'application/json'}
 	}).success(function(data){
-
+		console.log(data);
 		if(UrlKey=="step1"){
 			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP1"),1,"submit-application","",data.sRefID);
 		}else if(UrlKey=="step4"){
 
 			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP4"),1,"submit-application","",data.sRefID);
 				
-			$("#infoContainer , #ErrorContainer").hide();
+			/*$("#infoContainer , #ErrorContainer").hide();
 			
-			$("#resultPanel").show();
+			$("#resultPanel").show();*/
+			sharedService.setRefID($scope.refID);
+			$state.go('/cdl/result');
 			
-			$scope.StartTimer();
+			/*$scope.StartTimer();
 			$scope.REFID =data.sRefID;
 			var statusJSON ={
 				  "sRefID":data.sRefID,
@@ -1313,7 +1549,7 @@ $scope.submitApplication=function(UrlKey)
 			poller = $interval(function(){
 				$scope.check_status(statusJSON);
 			},3000);
-		}
+*/		}
 
 		if(UrlKey=="step3"){
 			$rootScope.errHead = "Status"
@@ -2036,13 +2272,14 @@ $scope.modelTags = [];
 	 	/* dob popup */		
 		$scope.openDOBDialog=function(){
 
-			if(!$scope.dob){
+			if(!$scope.applicant.dob){
 				//console.log("DOB Dialog Opened");
 		 		var defaultDate = new Date();
 		 		defaultDate.setFullYear(defaultDate.getFullYear()-25);
 
-		 		$scope.dob=defaultDate;
+		 		$scope.applicant.dob=defaultDate;
 			}
+			console.log($scope.applicant.dob);
 
 			$scope.dobPopup.opened = true;			
 		};
@@ -2069,5 +2306,16 @@ $scope.modelTags = [];
 
 		/*Sayali*/
 		$scope.applicant = {};
+		if($scope.asset){
+			$scope.applicant.asset = $scope.asset;
+		}
+
+		$scope.isCurrPanel = function(){
+			return true;
+		}
+
+		$scope.checkData = function(){
+			console.log($scope.applicant);
+		}
 }]);
 }).call(this)

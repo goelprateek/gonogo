@@ -15,7 +15,7 @@
 			</div>			
 			<div style="margin-top: 10px; padding-left: 30%">
 				<div style="display: inline-block; color: #24a1ed; float: left;">Ref ID: </div>
-				<div style="display: inline-block; width: 75%;"> {{ REFID }}</div>
+				<div style="display: inline-block; width: 75%;"> {{ referenceID }}</div>
 			</div>			
 			<div style="margin-top: 10px; padding-left: 30%">
 				<div style="display: inline-block; color: #24a1ed; float: left;">Product: </div>
@@ -24,10 +24,10 @@
 			<div style="margin-top: 18%;">
 				<ul class="progressbar">
 					<li id="KYCList" class="active">PERSONAL DETAILS</li>
-					<li id="personalList">ADDRESS DETAILS</li>
-					<li id="employmentList">WORK DETAILS</li>
-					<li id="IncomeList">ASSET DETAILS</li>
-					<li id="BankingList">PROOF</li>
+					<li id="personalList" ng-class= "{ active : isCurrPanel()}">ADDRESS DETAILS</li>
+					<li id="employmentList" ng-class= "{ active : isCurrPanel()}">WORK DETAILS</li>
+					<li id="IncomeList" ng-class= "{ active : isCurrPanel()}">ASSET DETAILS</li>
+					<li id="BankingList" ng-class= "{ active : isCurrPanel()}">PROOF</li>
 				</ul>
 			</div>
 		</div>

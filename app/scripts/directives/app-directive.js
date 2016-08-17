@@ -62,8 +62,9 @@
 			link: function(scope, element, attrs, modelCtrl) {
 				var formate = function(inputValue) {
 					if (inputValue == undefined) inputValue = '';
-					var rupee = torupee(inputValue);
-					if (rupee !== inputValue) {
+					  var transformedInput = inputValue.replace(/[^0-9]/g, '');
+					var rupee = torupee(transformedInput);
+					if (rupee !== transformedInput) {
 						modelCtrl.$setViewValue(rupee);
 						modelCtrl.$render();
 					}

@@ -5,13 +5,13 @@
 						<div class="row clearfix customRow">
 							<div class="col-md-6 height">
 								<help>Employer Name*</help>
-								<input type="text" ng-model="wrkename" id="wrkename" class="customInput" uib-typeahead="employers for employers in getEmployerNames($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" maxlength="70"placeholder="Employer Name*" />
+								<input type="text" ng-model="applicant.empl.emplName" id="wrkename" class="customInput" uib-typeahead="employers for employers in getEmployerNames($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" maxlength="70"placeholder="Employer Name*" />
 							</div>
 							<div class="col-md-6 height">
 								<help>Employment Type*</help>
-								<select class="customSelect" ng-model="wrketype" id="wrketype"
+								<select class="customSelect" ng-model="applicant.empl.emplType" id="wrketype"
 									
-									ng-change="changeEvent('WRKTYPE',wrketype)">
+									ng-change="changeEvent('WRKTYPE',applicant.empl.emplType)">
 									<option ng-selected="true" value="">Select
 										Employment Type*</option>
 									<option value="SELF-EMPLOYED">SELF-EMPLOYED</option>
@@ -27,7 +27,7 @@
 							
 							<div class="col-md-12 height">
 								<help>Address Line 1*</help>
-								<input type="text" id="wrka1" ng-model="wrka1"
+								<input type="text" id="wrka1" ng-model="applicant.empl.emplAddr1"
 									class="customInput" placeholder="Address Line 1*" capitalize
 									style="width: 93%" />
 							</div>
@@ -36,12 +36,12 @@
 						<div class="row clearfix customRow">
 							<div class="col-md-6 height">
 								<help>Address Line 2</help>
-								<input type="text" id="wrka2" ng-model="wrka2"
+								<input type="text" id="wrka2" ng-model="applicant.empl.emplAddr2"
 									class="customInput" placeholder="Address Line 2" capitalize />
 							</div>
 							<div class="col-md-6 height">
 								<help>Address Line 3</help>
-								<input type="text" id="wrka3" ng-model="wrka3"
+								<input type="text" id="wrka3" ng-model="applicant.empl.emplAddr3"
 									class="customInput" placeholder="Address Line 3" capitalize />
 							</div>
 						</div>
@@ -50,19 +50,19 @@
 						<div class="row clearfix customRow">
 							<div class="col-md-6 height">
 								<help>Pincode*</help>
-								<input type="text" ng-model="wrkpin" id="wrkpin" class="customInput"
+								<input type="text" ng-model="applicant.empl.emplPin" id="wrkpin" class="customInput"
 									placeholder="Pincode*" maxlength="6" />
 							</div>
 							<div class="col-md-6 height">
 								<span>
 									<help>City*</help>
 									<input type="text" class="customInput city"
-										disabled="disabled" ng-model="wrkcity" id="wrkcity" placeholder="City*"
+										disabled="disabled" ng-model="applicant.empl.emplCity" id="wrkcity" placeholder="City*"
 										style="width: 45%;" />
 								</span>
 								<span>
 									<help class="margin_state">State*</help>
-									<input type="text" id="wrkstate" ng-model="wrkstate" disabled="disabled"
+									<input type="text" id="wrkstate" ng-model="applicant.empl.emplState" disabled="disabled"
 										class="customInput state" placeholder="State" />
 								</span>
 							</div>
@@ -71,18 +71,18 @@
 						<div class="row clearfix customRow">
 							<div class="col-md-2 height">
 								<help>STD Code*</help>
-								<input type="text" id="wrkstd" ng-model="wrkstd" class="customInput"
+								<input type="text" id="wrkstd" ng-model="applicant.empl.emplStd" class="customInput"
 									placeholder="STD Code*" maxlength="5" />
 							</div>
 							<div class="col-md-4 height">
 								<help>Landline Number</help>
-								<input type="text" id="wrkphn" ng-model="wrkphn" class="customInput"
+								<input type="text" id="wrkphn" ng-model="applicant.empl.emplLandLine" class="customInput"
 									placeholder="Landline Phone" maxlength="10"
 									style="width: 78%;" />
 							</div>
 							<div class="col-md-6 height">
 								<help>Office Mobile*</help>
-								<input type="text" id="wrkmob" ng-model="wrkmob" class="customInput"
+								<input type="text" id="wrkmob" ng-model="applicant.empl.emplMob" class="customInput"
 									placeholder="Office Mobile*" maxlength="10" />
 							</div>
 						</div>
@@ -90,28 +90,28 @@
 						<div class="row clearfix customRow">
 							<div class="col-md-6 height">
 								<help>Email*</help>
-								<input type="text" id="wrkemail" ng-model="wrkemail" class="customInput"
+								<input type="text" id="wrkemail" ng-model="applicant.empl.emplEmail" class="customInput"
 									placeholder="Email*" />
 							</div>
 							<div class="col-md-6 height">
 								<help>Months with Current Employer*</help>
-								<input type="text" id="wrktwe" ng-model="wrktwe" class="customInput"
+								<input type="text" id="wrktwe" ng-model="applicant.empl.emplMonthWithEmp" class="customInput"
 									placeholder="Months with Current Employer*" maxlength="3" />
 							</div>
 						</div>
 						<div class="row clearfix customRow">
 							<div class="col-md-6 height"
-								ng-show="wrketype!='SELF-EMPLOYED'">
+								ng-show="applicant.empl.emplType!='SELF-EMPLOYED'">
 								<help>Last Month Salary*</help>
 								<i class="fa fa-rupee"></i> <input type="text"
-									id="wrkLstMnthSal" ng-model="wrkLstMnthSal"	class="customInput" maxlength="10" placeholder="Last Month salary*" style="padding-left: 4%" rupees />
+									id="wrkLstMnthSal" ng-model="applicant.empl.emplSalary"	class="customInput" maxlength="12" placeholder="Last Month salary*" style="padding-left: 4%" rupees />
 							</div>
 							<div class="col-md-6 height"
-								ng-show="wrketype=='SELF-EMPLOYED'">
+								ng-show="applicant.empl.emplType =='SELF-EMPLOYED'">
 								<help>Last Year IT Return*</help>
 								<i class="fa fa-rupee"></i> <input type="text"
-									id="wrkGrsAnnual" ng-model="wrkGrsAnnual"
-									class="customInput" placeholder="Last Year IT Return*" maxlength="10" style="padding-left: 4%" rupees />
+									id="wrkGrsAnnual" ng-model="applicant.empl.emplITReturn"
+									class="customInput" placeholder="Last Year IT Return*" maxlength="12" style="padding-left: 4%" rupees />
 							</div>
 						</div>
 					</div>
