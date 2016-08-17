@@ -1232,7 +1232,7 @@ $scope.onchange = function(id) {
 
     $scope.invoiceDate = false;
     $scope.invoiceNumber = false;
-    
+
     $scope.datefilter =  {            
          date : {
              startDate: null,
@@ -1320,7 +1320,6 @@ $scope.onchange = function(id) {
             },
             opostIPA:null,
             sRefID:$scope.currentApplicationFormRefID,
-            refID:$scope.currentApplicationFormRefIDssss,
             dtDateTime:new Date().getTime()
         };
 
@@ -1330,7 +1329,7 @@ $scope.onchange = function(id) {
                 
                 RestService.saveToServer("get-pdf-ref",JSON.stringify(postIPARequest)).then(function(response){
                     if(response){
-                        $scope.shwPDFModal('lg',response);
+                        $scope.shwPDFModal(response,$scope.currentApplicationFormRefID,false);
                     }else{
                         notifier.logWarning("We are unable to load DO for this application") ;
                     }
@@ -1341,15 +1340,22 @@ $scope.onchange = function(id) {
         });
     };
 
-    $scope.shwPDFModal = function (size,response) {
+    $scope.shwPDFModal = function (response,refID,canSubmit) {
+        //alert('modal baseURL'+baseURL);
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'views/modal-do-view.html',
-            controller: 'DOModalCtrl',
-            size: size,
+            controller: 'PDFViewerModalCtrl',
+            size: 'lg',
             resolve: {
                 response:function(){
                     return response;
+                },
+                refID:function(){
+                    return refID;
+                },
+                canSubmit:function(){
+                    return canSubmit;
                 }
             }
         });
@@ -1737,15 +1743,6 @@ $scope.closeDocument = function () {
   };
 }]);
 
-app.controller('DOModalCtrl', ['$scope', '$uibModalInstance', 'response',
-    function ($scope, $uibModalInstance, response) {
-
-    $scope.response = response;
-
-    $scope.closeModal = function () {
-        $uibModalInstance.dismiss();
-    };
-}]);
 
 app.directive('thisEarlierThan', function () {
     return {

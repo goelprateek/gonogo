@@ -1109,13 +1109,10 @@ $(document).on('click','.preview', function(e) {
 function ageCalculator(){
 	
 	var dat = $("#dob").val();
-	
 	var day=dat.slice(0,2);
-	
 	var month=dat.slice(3,6);
-	
 	var yr=dat.slice(7,11);
-	
+
 	var convert;
 	
 	switch (month) {
@@ -1403,7 +1400,7 @@ function validation()
 	var std	=/(perstdCode|prmnt_perstdCode|wrkstd)$/i;
 	var phone=/(perphone|prmnt_perphone|wrkphn)$/i;
 	var strptrn = /^[a-zA-Z]+$/ ;
-	var addrPtrn= /^[a-zA-Z\d\s#,.\/\\]+$/
+	var addrPtrn= /^[a-zA-Z\d\s#,-'"\.\/\\]+$/
 //  var mailptrn =/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 	var mailptrn =/^[A-Za-z0-9._]+@[A-Za-z]+\.[a-z]{2,4}$/;
 
@@ -1736,47 +1733,48 @@ $(document.body).on("click",".remove_image",function()
 //	console.log("kyc Array : "+addkyc_array.length);
 });
 
-$scope.sendPostIpaMail=function()
-{ 
-	var requestJson={"sRefID":$scope.REFID,
-	"oHeader":{
-		"sCroId":"default",
-		"dtSubmit":new Date().getTime(),
-		"sReqType":"JSON",
-		"sAppSource":"WEB",
-		"sDsaId":$scope.username,
-	    "sAppID":$scope.userid,
-	    "sSourceID": "02",
-	    "sInstID": $scope.InstitutionID},
-		"sImgID":$scope.postIpaPdfId};
-	$http({
-		method : 'POST',
-		url : APP_CONST.getConst('BASE_URL_GNG')+'send-mail-pdf',
-		data :requestJson,
-		headers : {'Content-Type':'application/json'}
-	}).success(function(data) 
-	{	//console.log("Response Data post IPA mail : " + JSON.stringify(data));
-	 setTimeout(function(){
-	    location.reload();
-     }, 3000);
-	}).error(function(data) 
-	{
-		$scope.serviceHitCount=$scope.serviceHitCount+1;
-		if($scope.serviceHitCount<=3)
-			{
-			  $scope.sendPostIpaMail();
-			}
-		else{
-			$scope.serviceHitCount=1;
-			$scope.error="Sorry we can not process your POST IPA request";
-		}	
-	});
-	$scope.finalResponse="Email sent successfully";
-	setTimeout(function(){
-		$scope.finalResponse="";
-	    location.reload();
-     }, 15000);
-};
+// $scope.sendPostIpaMail=function()
+// { 
+// 	var requestJson={"sRefID":$scope.REFID,
+// 	"oHeader":{
+// 		"sCroId":"default",
+// 		"dtSubmit":new Date().getTime(),
+// 		"sReqType":"JSON",
+// 		"sAppSource":"WEB",
+// 		"sDsaId":$scope.username,
+// 	    "sAppID":$scope.userid,
+// 	    "sSourceID": "02",
+// 	    "sInstID": $scope.InstitutionID},
+// 		"sImgID":$scope.postIpaPdfId};
+// 	$http({
+// 		method : 'POST',
+// 		url : APP_CONST.getConst('BASE_URL_GNG')+'send-mail-pdf',
+// 		data :requestJson,
+// 		headers : {'Content-Type':'application/json'}
+// 	}).success(function(data) 
+// 	{
+// 		//console.log("Response Data post IPA mail : " + JSON.stringify(data));
+// 	 	setTimeout(function(){
+// 	    	location.reload();
+//      	}, 3000);
+// 	}).error(function(data) 
+// 	{
+// 		$scope.serviceHitCount=$scope.serviceHitCount+1;
+// 		if($scope.serviceHitCount<=3)
+// 			{
+// 			  $scope.sendPostIpaMail();
+// 			}
+// 		else{
+// 			$scope.serviceHitCount=1;
+// 			$scope.error="Sorry we can not process your POST IPA request";
+// 		}	
+// 	});
+// 	$scope.finalResponse="Email sent successfully";
+// 	setTimeout(function(){
+// 		$scope.finalResponse="";
+// 	    location.reload();
+//      }, 15000);
+// };
 
 //get all employer name from master
 //$(document.body).on("keyup","#wrkename",function(e)

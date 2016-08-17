@@ -11,9 +11,7 @@
 			</div>
 			<div class="row clearfix">
 				<div class="col-md-12" style="text-align: right;margin-bottom: 50px;">
-					<button class="customButton" ng-click="onChangeAssetClicked(asset)">
-						Change Asset
-					</button>
+					<button class="customButton" ng-click="onChangeAssetClicked(asset)">Change Asset</button>
 				</div>
 			</div>
 			<div class="row clearfix customRow" style="margin-top:30px;">
@@ -55,7 +53,7 @@
 						<label>Margin Money*</label>
 					</div>
 				</div>
-				<div class="col-md-4 height" id="mnyInstrDiv" ng-show="tMrgnMny!=='0'">
+				<div class="col-md-4 height" id="mnyInstrDiv" ng-if="tMrgnMny!=='0'">
 					<select class="cdl-form-control control-select inputMaterial" id="mnyInstn" ng-model="mnyInstn" name="moneyInstrument" ng-change="onMoneyInstrumentChanged(mnyInstn)" select-required>
 						<option selected="selected" value="">Select Instrument*</option>
 						<option value="Cash">Cash</option>

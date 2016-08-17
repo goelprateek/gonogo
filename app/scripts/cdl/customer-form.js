@@ -161,12 +161,11 @@ app.controller("kycDocuments",['$scope', 'ImageFeed','$uibModalInstance','$timeo
     $scope.closeModal = function(){
           $uibModalInstance.dismiss();
     };
-
 }]);
 
 app.controller("CustomerFormCntrolr",
-	['$scope','$rootScope','sharedService',"RestService","APP_CONST","$location","$uibModal","GNG_GA","notifier",
-	function($scope,$rootScope,sharedService, RestService, APP_CONST, $location,$uibModal,GNG_GA,notifier){
+	['$scope','$rootScope','sharedService',"RestService","APP_CONST","$uibModal","GNG_GA","notifier","$state",
+	function($scope,$rootScope,sharedService, RestService, APP_CONST,$uibModal,GNG_GA,notifier,$state){
 
 	$scope.isApplicationDataLoaded=false;
 	var CustID=sharedService.getRefID();
@@ -178,7 +177,7 @@ app.controller("CustomerFormCntrolr",
 	var json ={'sRefID':CustID};
 
 	if(CustID==null || CustID==""){
-		$location.path("/cdl/dashboard");
+		$state.go("/cdl/dashboard");
 	}
 
 	$scope.addrType = [
@@ -200,9 +199,7 @@ app.controller("CustomerFormCntrolr",
 
     $scope.findAddressType = function(orignal,final){
     	return (angular.lowercase(orignal) == angular.lowercase(final));
-    }		
-
-	
+    }
 
 	RestService.saveToServer('dashboard-application-data',json).then(function(Response){
 		if(Response){
@@ -211,7 +208,7 @@ app.controller("CustomerFormCntrolr",
 			if(Response)
 				$scope.objectSet = Response;
 			else
-			 $scope.objectSet = CustFormObject.dummy;
+			 	$scope.objectSet = CustFormObject.dummy;
 
 			$scope.name = $scope.objectSet.oReq.oApplicant.oApplName.sFirstName+"  "+ $scope.objectSet.oReq.oApplicant.oApplName.sLastName.replace("null","");							    	
 			if($scope.objectSet.oReq.oApplicant.sDob && $scope.objectSet.oReq.oApplicant.sDob.trim()!=="")
@@ -221,12 +218,14 @@ app.controller("CustomerFormCntrolr",
 				$scope.dob ="";
 			}
 
-			var tempConstitutionType = $scope.objectSet.oReq.oApplicant.aEmpl[0].sConst;
-			var enumText = $scope.getTextOfValueMatched(tempConstitutionType,$scope.aplcntType);
-			if(enumText)
-				$scope.constitution = enumText;
-			else
-				$scope.constitution = tempConstitutionType;
+			if($scope.objectSet.oReq.oApplicant.aEmpl){
+				var tempConstitutionType = $scope.objectSet.oReq.oApplicant.aEmpl[0].sConst;
+				var enumText = $scope.getTextOfValueMatched(tempConstitutionType,$scope.aplcntType);
+				if(enumText)
+					$scope.constitution = enumText;
+				else
+					$scope.constitution = tempConstitutionType;
+			}
 
 			$scope.addr_type = $scope.addrType[0];
 
@@ -324,7 +323,7 @@ app.controller("CustomerFormCntrolr",
 			$scope.credit = Response.oReq.oApplicant.sCreditCardNum;
 			$scope.tenor = Response.oReq.oApplication.iLoanTenor  + " Months";
 		
-			$scope.currStage = Response.sCurrentStageId;
+			$scope.objectSet.sCurrentStageId = Response.sCurrentStageId;
 			var fulladdress = Response.oReq.oApplicant.aAddr;
 			for (var j in fulladdress)
 			{
@@ -741,30 +740,30 @@ app.controller("CustomerFormCntrolr",
 		 		GNG_GA.getConstAction("ACTION_CLICK_DASHBOARD_RESTART"),
 		 		$scope.refID,1);
 
-//		if($scope.currStage=="DE"){
-//			$location.path("/apply");
-//		}else if($scope.currStage=="PD_DE"){
-//			$location.path("/apply");
-//		}else if($scope.currStage=="CR_Q"){
+//		if($scope.objectSet.sCurrentStageId=="DE"){
+//			$state.go("/apply");
+//		}else if($scope.objectSet.sCurrentStageId=="PD_DE"){
+//			$state.go("/apply");
+//		}else if($scope.objectSet.sCurrentStageId=="CR_Q"){
 //			
-//		}else if($scope.currStage=="DCLN"){
+//		}else if($scope.objectSet.sCurrentStageId=="DCLN"){
 //			alert("Your Application for loan has been declined.");
 //		}
 
-		//alert($scope.currStage);
-		if($scope.currStage && $scope.currStage.startsWith("LOS_")){
+		//alert($scope.objectSet.sCurrentStageId);
+		if($scope.objectSet.sCurrentStageId && $scope.objectSet.sCurrentStageId.startsWith("LOS_")){
 			$scope.loadPDF();
-		}else if($scope.currStage==="APRV"){
+		}else if($scope.objectSet.sCurrentStageId==="APRV"){
 			$rootScope.DashFlag = true;
-			// sharedService.setCurrentStage($scope.currStage);
+			// sharedService.setCurrentStage($scope.objectSet.sCurrentStageId);
 			// sharedService.setRefID($scope.refID);
-			// $location.path("/cdl/apply");
+			// $state.go("/cdl/apply");
 
 			sharedService.setRefID($scope.refID);
-			sharedService.setDealerCode($scope.dealerID);
+			sharedService.setDealerCode($scope.objectSet.oHeader.sDealerId);
 			sharedService.setApplicationData($scope.objectSet);
-			$location.path("/cdl/post-ipa");
-		}else if($scope.currStage==="PD_DE"){
+			$state.go("/cdl/post-ipa");
+		}else if($scope.objectSet.sCurrentStageId==="PD_DE"){
 			var status=sharedService.getDecisionStatus();
 			status=status.toLowerCase();
 			//alert("status : "+status);
@@ -773,37 +772,38 @@ app.controller("CustomerFormCntrolr",
 			}else if(status==="declined"){
 				alert("This application has been declined.");
 				sharedService.setRefID($scope.refID);
-				$location.path("/cdl/dashboard");
+				$state.go("/cdl/dashboard");
 			}
-		}else if($scope.currStage==="DCLN"){
+		}else if($scope.objectSet.sCurrentStageId==="DCLN"){
 			sharedService.setRefID($scope.refID);
-			sharedService.setDealerCode($scope.dealerID);
-			$location.path("/cdl/after-submit");
-		}else if($scope.currStage==="CR_H"){
+			sharedService.setDealerCode($scope.objectSet.oHeader.sDealerId);
+			sharedService.setApplicationData($scope.objectSet);
+			$state.go("/cdl/after-submit");
+		}else if($scope.objectSet.sCurrentStageId==="CR_H"){
 			sharedService.setRefID($scope.refID);
-			sharedService.setDealerCode($scope.dealerID);
-			$location.path("/cdl/after-submit");
+			sharedService.setDealerCode($scope.objectSet.oHeader.sDealerId);
+			$state.go("/cdl/after-submit");
 		}else{
-//			alert("Sending : "+$scope.currStage);
+//			alert("Sending : "+$scope.objectSet.sCurrentStageId);
 //			$rootScope.DashFlag=true;
-			sharedService.setCurrentStage($scope.currStage);
+			sharedService.setCurrentStage($scope.objectSet.sCurrentStageId);
 			sharedService.setRefID($scope.refID);
-			$location.path("/cdl/apply");
+			$state.go("/cdl/apply");
 		}
 	}
 
-	$scope.shwPDFModal = function (size,response,refID,canSubmit) {
+	$scope.shwPDFModal = function (response,refID,canSubmit) {
 		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_CUSTOMER_FORM"),
 		 		GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
 		 		GNG_GA.getConstAction("ACTION_CLICK_DASHBOARD_DO_PDF"),
 		 		$scope.dashboardType,1);
 
-		 //alert('modal baseURL'+baseURL);
-		 var modalInstance = $uibModal.open({
+	 	//alert('modal baseURL'+baseURL);
+	 	var modalInstance = $uibModal.open({
 	 		animation: $scope.animationsEnabled,
 	 		templateUrl: 'views/modal-do-view.html',
 	 		controller: 'PDFViewerModalCtrl',
-	 		size: size,
+	 		size: 'lg',
 	 		resolve: {
 	 			response:function(){
 	 				return response;
@@ -866,14 +866,14 @@ app.controller("CustomerFormCntrolr",
 				 *
 				 * */		
 				postIPARequest.opostIPA=Response;
-				
+
 				//console.log(" IPA PDF REQUEST : "+JSON.stringify(postIPARequest));
 
 				RestService.saveToServer('get-pdf-ref',JSON.stringify(postIPARequest)).then(function(Response){
 					//console.log("JSON IPA PDF RESPONSE : ");
 					//console.log(JSON.stringify(Response));
 					if(Response){
-						$scope.shwPDFModal('lg',Response,CustID,true);
+						$scope.shwPDFModal(Response,CustID,true);
 					}else{
 						notifier.logWarning("We are unable to load DO for this application") ;
 					}
@@ -885,9 +885,9 @@ app.controller("CustomerFormCntrolr",
 	};
 
 	$scope.gotoDashboard=function(){
-		$location.path("/cdl/dashboard");
+		$state.go("/cdl/dashboard");
 	};
-	
+
 	$scope.showPreviewModal=function(obj,isImgFlag,index,editMode){
 	/*	if(img.startsWith("data")){
 			if(img.startsWith("data:image/")){
@@ -911,20 +911,20 @@ app.controller("CustomerFormCntrolr",
 			}
 		}*/
 		 var modalInstance = $uibModal.open({
-                      templateUrl: 'views/templates/modal.html',
-                      controller: 'kycDocuments',
-                      size: 'lg',
-                      resolve:{
-                        ImageFeed : function (){
-                            var imageData;
-                            return imageData = {
-                                isImage : isImgFlag,
-                                docData : obj,
-                                index : index,
-                                editMode : editMode
-                    }
-                } 
-            }
+          	templateUrl: 'views/templates/modal.html',
+	      	controller: 'kycDocuments',
+	      	size: 'lg',
+	      	resolve:{
+                ImageFeed : function (){
+               		var imageData;
+                    return imageData = {
+                        isImage : isImgFlag,
+                        docData : obj,
+                        index : index,
+                        editMode : editMode
+                	}
+            	} 
+    		}
         });
 	}
 }]);

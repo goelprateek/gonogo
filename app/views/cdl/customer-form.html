@@ -9,9 +9,7 @@
 		<div class="col-md-2" ng-repeat="kyc_doc in applicantPhoto">
 			<label class="control-label">{{kyc_doc.sImgType}}</label>
 			<a>
-			<img alt="Document Not available" title="{{kyc_doc.kyc_name}}" accesskey="{{kyc_doc.sByteCode}}"
-				src="{{kyc_doc.sByteCode}}" style="border: none;    height: 110px;"
-				ng-click="showPreviewModal(applicantPhoto,true,$index,false)" />
+			<img alt="Document Not available" title="{{kyc_doc.kyc_name}}" accesskey="{{kyc_doc.sByteCode}}" ng-src={{kyc_doc.sByteCode}} style="border: none;    height: 110px;" ng-click="showPreviewModal(applicantPhoto,true,$index,false)" />
 			</a>
 		</div>
 	</div>
@@ -342,9 +340,7 @@
 			<label class="control-label"><span ng-if="kyc_doc.val!=''">Number :</span> {{kyc_doc.sImgVal}}
 			</label>
 			<a>
-			<img alt="Document Not available" title="{{kyc_doc.kyc_name}}" accesskey="{{kyc_doc.sByteCode}}"
-				src="{{kyc_doc.sByteCode}}" style="border: none;"
-				ng-click="showPreviewModal(imageDataArray,true,$index,false)" />
+			<img alt="Document Not available" title="{{kyc_doc.kyc_name}}" accesskey="{{kyc_doc.sByteCode}}" ng-src="{{kyc_doc.sByteCode}}" style="border: none;width: 170px;" ng-click="showPreviewModal(imageDataArray,true,$index,false)" />
 			</a>
 		</div>
 <!-- 

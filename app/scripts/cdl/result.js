@@ -3,8 +3,8 @@
 
 	var app = angular.module('gonogo.cdl');
 
-	app.controller("DEResultController",["$scope","$location","APP_CONST","sharedService","RestService",'$log',"UserService","AclService","GNG_GA","notifier","$interval",function(
-	 									$scope,$location,APP_CONST,sharedService,RestService,$log,UserService,AclService,GNG_GA,notifier,$interval) {
+	app.controller("DEResultController",["$scope","APP_CONST","sharedService","RestService",'$log',"UserService","AclService","GNG_GA","notifier","$interval","$state",function(
+	 									$scope,APP_CONST,sharedService,RestService,$log,UserService,AclService,GNG_GA,notifier,$interval,$state) {
 		//HARD CODED FOR TESTING
 		//sharedService.setRefID("SATH000216"); // Declined
 		// /sharedService.setRefID("SATH000224"); // Approved
@@ -17,7 +17,7 @@
 			$scope.referenceID=sharedService.getRefID();
 			sharedService.setRefID(null);
 		}else{
-			$location.path("/cdl/basic-de");
+			$state.go("/cdl/basic-de");
 		}
 
 		$scope.check_status=function()
@@ -73,7 +73,7 @@
 						status = data.sAppStat;
 						$scope.dstatus = data.sAppStat;
 						$("#ErrorContainer").show();
-						//					$scope.scmService();
+						//$scope.scmService();
 						$("#dimg").attr("src","images/approve.png").show();
 						$("#postIPA").show();
 						$scope.stopTimer();
@@ -174,7 +174,7 @@
 //			$("#resultPanel").hide();
 //			$("#afterSubmit").show();
 			sharedService.setApplicationStatus($scope.statusObject);
-			$location.path("/cdl/after-submit");
+			$state.go("/cdl/after-submit");
 		});
  	}]);
 }).call(this);

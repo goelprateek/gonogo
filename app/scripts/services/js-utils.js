@@ -43,7 +43,7 @@
 			{
 				imageCountUploaded = imageCountUploaded+1;
 
-				if(data.sStatus == 'SUCCESS')
+				if(data.sStatus === 'SUCCESS')
 				{
 	//				console.log("response for-"+JSON.stringify(Response));
 					if(imageCountUploaded == imageCountToUpload){

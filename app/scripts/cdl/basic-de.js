@@ -3,8 +3,8 @@
 
 	var app = angular.module('gonogo.cdl');
 
-	app.controller("BasicDEController",["$scope","$location","APP_CONST","sharedService","RestService",'$log',"UserService","AclService","GNG_GA","notifier","$state",function(
-	 									$scope,$location,APP_CONST,sharedService,RestService,$log,UserService,AclService,GNG_GA,notifier,$state) {
+	app.controller("BasicDEController",["$scope","APP_CONST","sharedService","RestService",'$log',"UserService","AclService","GNG_GA","notifier","$state",function(
+	 									$scope,APP_CONST,sharedService,RestService,$log,UserService,AclService,GNG_GA,notifier,$state) {
 		// var obj={
 		// 	"oHeader":{
 		// 		"sAppSource":"WEB",
@@ -163,7 +163,7 @@
 			$scope.dealerCode=dealerCurrent["DEALER_CODE"];
 			$scope.dealerName=dealerCurrent["DEALER_NAME"];
 		}else{
-			$location.path("/cdl/dealer");
+			$state.go("/cdl/dealer");
 		}
 
 		$scope.clickEvent = function(type){
@@ -312,7 +312,6 @@
 					sharedService.setApplicationID(applicationID);
 					sharedService.setStep1Object(requestObject);
 
-					//$location.path("/cdl/apply");
 					$state.go('/cdl/apply.personal');
 				}
 			},function(failedResponse){
