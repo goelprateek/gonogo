@@ -94,7 +94,7 @@
 														var json = { 
 																	"dtFrmDate":this.category,
 																	"sStat":this.series.name,
-																	'sInstID':user.institutionID
+																	'sInstID':user.institutionID,'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}
 																};
 														RestService.saveToServer("table-view",json).then(function(data){
 															scope.$parent.$parent.drawTablularData(data);
@@ -302,7 +302,7 @@
 						.on("click", function(d){
 							if(user.role!="DSA"){
 								//var json={"dtDate":d.time,"sStat":d.status,'sInstID':user.institutionID,'oCriteria':{"aBranches":user.getBranchCodes(),"aProducts":user.getProductNames()}};//
-								var json={"dtDate":d.time,"sStat":d.status,'sInstID':user.institutionID};
+								var json={"dtDate":d.time,"sStat":d.status,'sInstID':user.institutionID,'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}};
 								RestService.saveToServer("table-view",json).then(function(tableData){
 									scope.isolatedTableData({parameter:tableData});
 								});

@@ -439,23 +439,23 @@
                     $scope.json ={'sCroID':"STP_PL", 
                     'sInstID':user.institutionID, 
                     'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit,
-                        'oCriteria':{"aProducts":user.getProductNames()}}
+                        'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}}
 				}else{
                     $scope.json ={'sCroID':"STA",  // CRO9
                     'sInstID':user.institutionID,
                     'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit,
-                        'oCriteria':{"aProducts":user.getProductNames()}};
+                    'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}};
 				}
 			}else if(user.id=="586"){
                 $scope.json ={'sCroID':"PL_QUEUE",  // CRO1 PL Normal
                         'sInstID':user.institutionID, 
                         'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,
-                        'oCriteria':{"aProducts":user.getProductNames()}};
+                        'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}};
             }else{
                 $scope.json ={'sCroID':"default", // CRO1,CRO2 Normal
                         'sInstID':user.institutionID, 
                         'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,
-                        'oCriteria':{"aProducts":user.getProductNames()}};
+                        'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}};
 			}
 
 			var URL;
@@ -470,7 +470,8 @@
                         'sGrpID':"0",
                         'iSkip': minimum,
                         'iLimit' :$scope.limit,
-                        'oCriteria':{"aBranches":user.branches,"aProducts":user.getProductNames()}
+                        //'oCriteria':{"aBranches":user.branches,"aProducts":user.getProductNames()}
+                        'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}
                     };
                 }
             }else if(_.contains(user.role, "CRO4")){

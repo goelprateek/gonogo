@@ -3,10 +3,10 @@
 	'use strict';
 	var app = angular.module('gonogo.commons',['ng-acl']);
 
-
 	app.factory("APP_CONST", function () {
 		var END_POINT = {
-			BASE_URL_GNG : "http://localhost:8080/GoNoGo/",
+			// BASE_URL_GNG : "http://localhost:8080/GoNoGo/",
+			BASE_URL_GNG : "http://172.26.1.211:9090/GoNoGo/",
 			BASE_URL_SOBRE: 'http://gng.softcell.in/SoBRE',
 			APP_CONTEXT: '/'
 
@@ -171,20 +171,21 @@
 				user.institutionID = userdata.InstitutionID;
 				user.id = userdata.userid;
 				user.color = userdata.color;
-				user.branches = userdata.branches;
+				//user.branches = userdata.branches;
 				user.products = userdata.products;
 				user.ePassword = userdata.ePassword;
+				user.hierarchy = userdata.hierarchy;
 
 				user.role = JSON.parse(atob(localStorage.getItem('ROLES')));
 
-				user.getBranchCodes=function(){
-					var brnchs=[];
-		            _.each(user.branches,function(branch){
-		                brnchs.push(branch.BRANCH_CODE);
-		            });
+				// user.getBranchCodes=function(){
+				// 	var brnchs=[];
+		  //           _.each(user.branches,function(branch){
+		  //               brnchs.push(branch.BRANCH_CODE);
+		  //           });
 		            
-		            return brnchs;
-				};
+		  //           return brnchs;
+				// };
 				
 				user.getProductNames=function(){
 					var prods=[];

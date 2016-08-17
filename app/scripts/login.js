@@ -7,14 +7,12 @@
 	function ($scope, $rootScope, $cookies, RestService, APP_CONST, UserService,GNG_GA) {
 
 		(function () {
-
 			if (!_.isUndefined($cookies.get("UID")) && !_.isNull($cookies.get("UID"))) {
 				$scope.alert = "Welcome " + atob($cookies.get("UID")) + " to GoNoGo";
 
 			} else {
 				$scope.alert = "Welcome to GoNoGo Portal";
 			}
-
 		}).call(this);
 
 		var expireDate = new Date();
@@ -79,20 +77,21 @@
 							'userImage': details.USER_IMAGE,
 							'userid': details.USER_ID,
 							'color': details.COLOR,
-							'branches': data.BRANCHES,
+							//'branches': data.BRANCHES,
 							'products': data.PRODUCTS,
-							'ePassword': SHA1($scope.login.password)
+							'ePassword': SHA1($scope.login.password),
+							'hierarchy': data.HIERARCHY
 						};
 
 						//Hard Coded for Testing
 						//data.HIERARCHY[0].HIERARCHY_VALUE="[\"Mumbai Central\"]";
 						//Hard Coded for Testing
 
-						if(data.HIERARCHY && data.HIERARCHY.length>0){
-							if(data.HIERARCHY[0].HIERARCHY_LEVEL==="branchName"){
-								listvalues.branches=data.HIERARCHY[0].HIERARCHY_VALUE;
-							}
-						}
+						// if(data.HIERARCHY && data.HIERARCHY.length>0){
+						// 	if(data.HIERARCHY[0].HIERARCHY_LEVEL==="branchName"){
+						// 		listvalues.branches=data.HIERARCHY[0].HIERARCHY_VALUE;
+						// 	}
+						// }
 
 						$rootScope.loggedInUser = listvalues;
 

@@ -496,9 +496,7 @@
             }
         };
 
-       
-
-		$scope.findAddressType = function(orignal,final){
+       	$scope.findAddressType = function(orignal,final){
     		return (angular.lowercase(orignal) == angular.lowercase(final));
     	}	
 
@@ -535,7 +533,7 @@
             });
         } 
 
-		var json = {'sInstID':user.institutionID};
+		var json = {'sInstID':user.institutionID,'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}};
 		RestService.saveToServer("stack-graph",json).then(function(data){
             $scope.chartOptions = data;
     	});
@@ -558,7 +556,6 @@
 				 document.body.appendChild(a);
 			        a.click();
 			});
-			
 		};
 
 		// custom report modal
@@ -603,7 +600,8 @@
 			$scope.isTableData = !$scope.isTableData;
 			
 			if(!$scope.isTableData){
-				var json = {'sInstID':user.institutionID,'iSkip':"0",'iLimit':"0"};
+				var json = {'sInstID':user.institutionID,'iSkip':"0",'iLimit':"0",
+        'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}};
 				RestService.saveToServer('score-log',json).then(function(data){
 			     if(data){
                     $scope.copydataSourceCol = data;

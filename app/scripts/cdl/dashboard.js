@@ -33,7 +33,8 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 	   	if(value == 'ApplicationList'){
 	   		$scope.trueAppList = true;
 	   	}else{
-			var json = {'sInstID':user.institutionID,'sDsaId':user.username};
+			var json = {'sInstID':user.institutionID,'sDsaId':user.username,
+		'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}};
 			RestService.saveToServer("stack-graph",json).then(function(data){
 				$scope.orignalData = data;
 			});
