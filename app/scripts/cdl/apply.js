@@ -20,22 +20,25 @@
         "oResidence":{
         	"oAddress":{
         		"addrType":""
+        	},
+        	"oPhone":{
+        		"iMobile":""
         	}
         },
         "oPermanent":{
         	"oAddress":{
         		"addrType":""
         	}
-        }
-           
+        },
+       
         };
         return{
         	dummy : _obj
         }
     });
 
-	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA","$state","ApplyObject", function(
-	 									$scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA,$state,ApplyObject) {
+	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA","$state","ApplyObject","UploadImages","notifier", function(
+	 									$scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA,$state,ApplyObject,UploadImages,notifier) {
 
 		var dlrCode =null;
 		var CustID=null;
@@ -1582,7 +1585,6 @@ console.log("final JSon : "+JSON.stringify(json));
 		data :json,
 		headers : {'Content-Type':'application/json'}
 	}).success(function(data){
-		console.log(data);
 		if(UrlKey=="step1"){
 			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP1"),1,"submit-application","",data.sRefID);
 		}else if(UrlKey=="step4"){
@@ -1592,6 +1594,19 @@ console.log("final JSon : "+JSON.stringify(json));
 			/*$("#infoContainer , #ErrorContainer").hide();
 			
 			$("#resultPanel").show();*/
+			if(img_array.length!=0){
+				UploadImages.upload($scope.referenceID,img_array).then(function(imageUploadedCount) {
+				  	$log.debug('Image upload Success, Total image uploaded : ' + imageUploadedCount);
+				  //	$scope.updateStatus();
+				  //action to be taken when we get success from server
+
+				}, function(reason) {
+				  	$log.debug('Image upload Failed, Total image uploaded : ' + imageUploadedCount);
+				});
+			}else{
+				notifier.logWarning("Please select atleast 1 image to upload.");
+			}
+
 			sharedService.setRefID($scope.referenceID);
 			$state.go('/cdl/result');
 		}
@@ -2354,6 +2369,8 @@ $scope.modelTags = [];
 		if($scope.asset){
 			$scope.applicant.asset = $scope.asset;
 		}
+		$scope.applicant.oResidence.oPhone.iMobile = $scope.tmob;
+
 	
 		$scope.isCurrPanel = function(){
 			return true;
