@@ -37,8 +37,8 @@
         }
     });
 
-	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA","$state","ApplyObject","UploadImages","notifier", function(
-	 									$scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA,$state,ApplyObject,UploadImages,notifier) {
+	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA","$state","ApplyObject","UploadImages","notifier","$filter",
+	 function($scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA,$state,ApplyObject,UploadImages,notifier,$filter) {
 
 		var dlrCode =null;
 		var CustID=null;
@@ -1249,7 +1249,8 @@ function ageCalculator(){
 
 $scope.submitApplication=function(UrlKey)
 {
-	console.log($scope.applicant.dob);
+	var dobFormatted = $filter('date')($scope.applicant.dob,"dd:MM:yyyy").replace(/:/g,'');
+	console.log(dobFormatted);
 	var json = 
 	{
 		"oHeader":{
@@ -1339,7 +1340,7 @@ $scope.submitApplication=function(UrlKey)
 				"oApplRef":null,
 				"aBankingDetails":null,
 				"sCreditCardNum":$scope.applicant.creditCard,
-				"sDob":$scope.applicant.dob,
+				"sDob":dobFormatted,
 				"sEdu":$scope.applicant.education,
 				"aEmail":[{
 					"sEmailAddr":$scope.applicant.oResidence.sEmail,
@@ -1590,10 +1591,7 @@ console.log("final JSon : "+JSON.stringify(json));
 		}else if(UrlKey=="step4"){
 
 			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP4"),1,"submit-application","",data.sRefID);
-				
-			/*$("#infoContainer , #ErrorContainer").hide();
 			
-			$("#resultPanel").show();*/
 			if(img_array.length!=0){
 				UploadImages.upload($scope.referenceID,img_array).then(function(imageUploadedCount) {
 				  	$log.debug('Image upload Success, Total image uploaded : ' + imageUploadedCount);
