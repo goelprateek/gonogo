@@ -1,128 +1,158 @@
-<form id="employmentContainer" >
-			<div class="getheight" id="kycHeight" slimscroll="{height:386,railVisible:true}">
-				<div class="row clearfix ">
-					<div class="col-md-10 col-md-offset-1">
-						<div class="row clearfix customRow">
-							<div class="col-md-6 height">
-								<help>Employer Name*</help>
-								<input type="text" ng-model="applicant.empl.emplName" id="wrkename" class="customInput" uib-typeahead="employers for employers in getEmployerNames($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" maxlength="70"placeholder="Employer Name*" />
-							</div>
-							<div class="col-md-6 height">
-								<help>Employment Type*</help>
-								<select class="customSelect" ng-model="applicant.empl.emplType" id="wrketype"
-									
-									ng-change="changeEvent('WRKTYPE',applicant.empl.emplType)">
-									<option ng-selected="true" value="">Select
-										Employment Type*</option>
-									<option value="SELF-EMPLOYED">SELF-EMPLOYED</option>
-									<option value="PROFESSIONAL">PROFESSIONAL</option>
-									<option value="RETIRED">RETIRED</option>
-									<option value="SALARIED">SALARIED</option>
-									<option value="OTHERS">OTHERS</option>
-								</select> <img alt="" src="images/select-arrow.png" class="customarrow" />
-							</div>
+<form id="employmentContainer" name="professionalData" novalidate>
+	<div class="getheight" id="kycHeight" slimscroll="{height:400,railVisible:true}">
+		<div class="row clearfix ">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="row clearfix">
+					<div class="col-md-6 cdl-height form-group">
+						<input type="text" ng-model="applicant.empl.emplName" id="wrkename" class="cdl-form-control inputMaterial" uib-typeahead="employers for employers in getEmployerNames($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" maxlength="70" name="empname" required/>
+						<label>Employer Name*</label>
+						<div ng-messages="professionalData.empname.$touched && professionalData.empname.$error" class="errorMsg">
+	   						<p ng-message="required">Please enter Employer name</p>
 						</div>
-
-						<div class="row clearfix customRow">
-							
-							<div class="col-md-12 height">
-								<help>Address Line 1*</help>
-								<input type="text" id="wrka1" ng-model="applicant.empl.emplAddr1"
-									class="customInput" placeholder="Address Line 1*" capitalize
-									style="width: 93%" />
-							</div>
+					</div>
+					<div class="col-md-6 cdl-height form-group">
+						<help>Employment Type*</help>
+						<select class="cdl-form-control control-select inputMaterial" ng-model="applicant.empl.emplType" id="wrketype" 	name="emptype"									ng-change="changeEvent('WRKTYPE',applicant.empl.emplType)" select-required>
+							<option value="">Select	Employment Type*</option>
+							<option value="SELF-EMPLOYED">SELF-EMPLOYED</option>
+							<option value="PROFESSIONAL">PROFESSIONAL</option>
+							<option value="RETIRED">RETIRED</option>
+							<option value="SALARIED">SALARIED</option>
+							<option value="OTHERS">OTHERS</option>
+						</select> 
+						<div ng-messages="professionalData.emptype.$error" ng-show="professionalData.emptype.$touched" class="errorMsg">
+							<p ng-message="selectrequired">Please select Employment type </p>
 						</div>
+					</div>
+				</div>
 
-						<div class="row clearfix customRow">
-							<div class="col-md-6 height">
-								<help>Address Line 2</help>
-								<input type="text" id="wrka2" ng-model="applicant.empl.emplAddr2"
-									class="customInput" placeholder="Address Line 2" capitalize />
-							</div>
-							<div class="col-md-6 height">
-								<help>Address Line 3</help>
-								<input type="text" id="wrka3" ng-model="applicant.empl.emplAddr3"
-									class="customInput" placeholder="Address Line 3" capitalize />
-							</div>
+				<div class="row clearfix">
+					
+					<div class="col-md-12 cdl-height form-group">
+						<input type="text" id="wrka1" ng-model="applicant.empl.emplAddr1"
+							class="cdl-form-control inputMaterial" capitalize
+							style="width: 93%" name="empadd1" required/>
+						<label>Address Line 1*</label>
+						<div ng-messages="professionalData.empadd1.$touched && professionalData.empadd1.$error" class="errorMsg">
+	   						<p ng-message="required">Please enter Address line 1</p>
 						</div>
+					</div>
+				</div>
+
+				<div class="row clearfix">
+					<div class="col-md-6 cdl-height form-group">
+						<input type="text" id="wrka2" ng-model="applicant.empl.emplAddr2"
+							class="cdl-form-control inputMaterial"  capitalize />
+						<label>Address Line 2</label>
+					</div>
+					<div class="col-md-6 cdl-height form-group">
+						<input type="text" id="wrka3" ng-model="applicant.empl.emplAddr3"
+							class="cdl-form-control inputMaterial" capitalize />
+						<label>Address Line 3</label>
+					</div>
+				</div>
 
 
-						<div class="row clearfix customRow">
-							<div class="col-md-6 height">
-								<help>Pincode*</help>
-								<input type="text" ng-model="applicant.empl.emplPin" id="wrkpin" class="customInput"
-									placeholder="Pincode*" maxlength="6" />
-							</div>
-							<div class="col-md-6 height">
-								<span>
-									<help>City*</help>
-									<input type="text" class="customInput city"
-										disabled="disabled" ng-model="applicant.empl.emplCity" id="wrkcity" placeholder="City*"
-										style="width: 45%;" />
-								</span>
-								<span>
-									<help class="margin_state">State*</help>
-									<input type="text" id="wrkstate" ng-model="applicant.empl.emplState" disabled="disabled"
-										class="customInput state" placeholder="State" />
-								</span>
-							</div>
+				<div class="row clearfix">
+					<div class="col-md-6 cdl-height form-group">
+						<input type="text" ng-model="applicant.empl.emplPin" id="wrkpin" class="cdl-form-control inputMaterial" data-ng-keyup="pinService(applicant.empl.emplPin,'wrkpin')" maxlength="6" name="emppin" required only-digits/>
+						<label>Pincode*</label>
+						<div ng-messages="professionalData.emppin.$touched && professionalData.emppin.$error" class="errorMsg">
+	   						<p ng-message="required">Please enter Pincode</p>
 						</div>
-
-						<div class="row clearfix customRow">
-							<div class="col-md-2 height">
-								<help>STD Code*</help>
-								<input type="text" id="wrkstd" ng-model="applicant.empl.emplStd" class="customInput"
-									placeholder="STD Code*" maxlength="5" />
-							</div>
-							<div class="col-md-4 height">
-								<help>Landline Number</help>
-								<input type="text" id="wrkphn" ng-model="applicant.empl.emplLandLine" class="customInput"
-									placeholder="Landline Phone" maxlength="10"
-									style="width: 78%;" />
-							</div>
-							<div class="col-md-6 height">
-								<help>Office Mobile*</help>
-								<input type="text" id="wrkmob" ng-model="applicant.empl.emplMob" class="customInput"
-									placeholder="Office Mobile*" maxlength="10" />
-							</div>
+					</div>
+					<div class="col-md-6 cdl-height form-group">
+						<span>
+							<input type="text" class="cdl-form-control inputMaterial city"
+								disabled="disabled" ng-model="applicant.empl.emplCity" id="wrkcity" 
+								style="width: 45%;" required name="empcity" />
+							<label>City*</label>
+							<div ng-messages="professionalData.empcity.$touched && professionalData.empcity.$error" class="errorMsg">
+	   						<p ng-message="required">Please enter Employer city</p>
 						</div>
-
-						<div class="row clearfix customRow">
-							<div class="col-md-6 height">
-								<help>Email*</help>
-								<input type="text" id="wrkemail" ng-model="applicant.empl.emplEmail" class="customInput"
-									placeholder="Email*" />
-							</div>
-							<div class="col-md-6 height">
-								<help>Months with Current Employer*</help>
-								<input type="text" id="wrktwe" ng-model="applicant.empl.emplMonthWithEmp" class="customInput"
-									placeholder="Months with Current Employer*" maxlength="3" />
-							</div>
+						</span>
+						<span>
+							<input type="text" id="wrkstate" ng-model="applicant.empl.emplState" disabled="disabled"
+								class="cdl-form-control inputMaterial state" required name="
+								empstate" />
+							<label class="margin_state">State*</label>
+							<div ng-messages="professionalData.empstate.$touched && professionalData.empstate.$error" class="errorMsg">
+	   						<p ng-message="required">Please enter Employer city</p>
 						</div>
-						<div class="row clearfix customRow">
-							<div class="col-md-6 height"
-								ng-show="applicant.empl.emplType!='SELF-EMPLOYED'">
-								<help>Last Month Salary*</help>
-								<i class="fa fa-rupee"></i> <input type="text"
-									id="wrkLstMnthSal" ng-model="applicant.empl.emplSalary"	class="customInput" maxlength="12" placeholder="Last Month salary*" style="padding-left: 4%" rupees />
-							</div>
-							<div class="col-md-6 height"
-								ng-show="applicant.empl.emplType =='SELF-EMPLOYED'">
-								<help>Last Year IT Return*</help>
-								<i class="fa fa-rupee"></i> <input type="text"
-									id="wrkGrsAnnual" ng-model="applicant.empl.emplITReturn"
-									class="customInput" placeholder="Last Year IT Return*" maxlength="12" style="padding-left: 4%" rupees />
-							</div>
+						</span>
+					</div>
+				</div>
+
+				<div class="row clearfix">
+					<div class="col-md-2 cdl-height form-group">
+						<input type="text" id="wrkstd" ng-model="applicant.empl.emplStd" class="cdl-form-control inputMaterial" maxlength="5" name="empstd" required only-digits/>
+						<label>STD Code*</label>
+						<div ng-messages="professionalData.empstd.$touched && professionalData.empstd.$error" class="errorMsg">
+	   						<p ng-message="required">Please enter STD code</p>
+						</div>
+					</div>
+					<div class="col-md-4 cdl-height form-group">
+						<input type="text" id="wrkphn" ng-model="applicant.empl.emplLandLine" class="cdl-form-control inputMaterial" maxlength="10"
+							style="width: 78%;" only-digits/>
+						<label>Landline Number</label>
+					</div>
+					<div class="col-md-6 cdl-height form-group">
+						<input type="text" id="wrkmob" ng-model="applicant.empl.emplMob" class="cdl-form-control inputMaterial" maxlength="10" name="empofcmob" only-digits required/>
+						<label>Office Mobile*</label>
+						<div ng-messages="professionalData.empofcmob.$touched && professionalData.empofcmob.$error" class="errorMsg">
+	   						<p ng-message="required">Please enter Office mobile</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="row clearfix">
+					<div class="col-md-6 cdl-height form-group">
+						<input type="text" id="wrkemail" ng-model="applicant.empl.emplEmail" class="cdl-form-control inputMaterial" name="empemail" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required/>
+						<label>Email*</label>
+						<div ng-messages="professionalData.empemail.$touched && professionalData.empemail.$error" class="errorMsg">
+	   						<p ng-message="required">Please enter Email ID</p>
+	   						<p ng-message="pattern">Please enter valid Email ID</p>
+						</div>
+					</div>
+					<div class="col-md-6 cdl-height form-group">
+						<input type="text" id="wrktwe" ng-model="applicant.empl.emplMonthWithEmp" class="cdl-form-control inputMaterial" maxlength="3" name="monthwithemp" only-digits required/>
+						<label>Months with Current Employer*</label>
+						<div ng-messages="professionalData.monthwithemp.$touched && professionalData.monthwithemp.$error" class="errorMsg">
+	   						<p ng-message="required">Please enter Month with current employer</p>
+						</div>
+					</div>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-6 cdl-height form-group"
+						ng-if="applicant.empl.emplType!='SELF-EMPLOYED'">
+						<i class="fa fa-rupee"></i> <input type="text"
+							id="wrkLstMnthSal" ng-model="applicant.empl.emplSalary"	class="cdl-form-control inputMaterial" maxlength="12" name="lastmonth" style="padding-left: 4%" rupees required/>
+						<label>Last Month Salary*</label>
+						<div ng-messages="professionalData.lastmonth.$touched && professionalData.lastmonth.$error" class="errorMsg">
+	   						<p ng-message="required">Please enter Last month salary</p>
+						</div>
+					</div>
+					<div class="col-md-6 cdl-height form-group"
+						ng-if="applicant.empl.emplType =='SELF-EMPLOYED'">
+						<i class="fa fa-rupee"></i> <input type="text"
+							id="wrkGrsAnnual" ng-model="applicant.empl.emplITReturn"
+							class="cdl-form-control inputMaterial" name="itreturn" maxlength="12" style="padding-left: 4%" rupees required/>
+						<label>Last Year IT Return*</label>
+						<div ng-messages="professionalData.itreturn.$touched && professionalData.itreturn.$error" class="errorMsg">
+	   						<p ng-message="required">Please enter Last year IT return</p>
 						</div>
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
 
-			<div class="row clearfix ">
-				<div class="col-md-10 col-md-offset-1">
-					<button  ui-sref="/cdl/apply.address" class="customButton previous">Previous</button>
-					<button ui-sref="/cdl/apply.asset" class="customButton next" id="fromemployment">Next</button>
-						<button class="customButton save" id="save" ng-click="submitApplication('step3')">Save</button>
-				</div>
-			</div>
-		</form>
+	<div class="row clearfix ">
+		<div class="col-md-10 col-md-offset-1">
+			<button  ui-sref="/cdl/apply.address" class="customButton previous">Previous</button>
+			<!-- ng-disabled="professionalData.$invalid" -->
+			<button ui-sref="/cdl/apply.asset" class="customButton next" ng-disabled="professionalData.$invalid" id="fromemployment" >Next</button>
+				<button class="customButton save" id="save" ng-click="submitApplication('step3')">Save</button>
+		</div>
+	</div>
+</form>

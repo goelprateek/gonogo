@@ -2,8 +2,40 @@
 	'use strict';
 	var app = angular.module('gonogo.cdl');
 
-	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA","$state", function(
-	 									$scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA,$state) {
+	app.factory("ApplyObject",function(){
+    	var _obj = {
+
+        "suspected": "No",
+        "creditCard": "",
+        "gender": "Male",
+        "education": "",
+        "maritalStat":"Single",
+        "dob":"",
+        "constitution":"",
+        "loanAmt":"",
+        "tenor":"",
+        "empl":{
+        	"emplType":""
+        },
+        "oResidence":{
+        	"oAddress":{
+        		"addrType":""
+        	}
+        },
+        "oPermanent":{
+        	"oAddress":{
+        		"addrType":""
+        	}
+        }
+           
+        };
+        return{
+        	dummy : _obj
+        }
+    });
+
+	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA","$state","ApplyObject", function(
+	 									$scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA,$state,ApplyObject) {
 
 		var dlrCode =null;
 		var CustID=null;
@@ -726,7 +758,7 @@ if($(this).val() =="")
 	}
 });
 
-$(document.body).on("keyup change","#wrkpin ,#perpin, #prmnt_perpin",function(e)
+/*$(document.body).on("keyup change","#wrkpin ,#perpin, #prmnt_perpin",function(e)
 {	
 //			console.log("Keyup working ");
 	if($(this).val().length === 6)
@@ -736,54 +768,74 @@ $(document.body).on("keyup change","#wrkpin ,#perpin, #prmnt_perpin",function(e)
 		{
 		 $(this).parent().next().find(".city, .state").val("").siblings("help").hide();
 		}
-});
+});*/
 $scope.pinService = function(pin,id){
-	var pinJson ={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":pin}; 
-	$http({
-		method : 'POST',
-		url : APP_CONST.getConst('BASE_URL_GNG')+'pincode-details-web',
-		data : pinJson,
-		headers : {'Content-Type' : 'application/json'}
-	}).success(function(Response) 
-	{		
-		if( id =="perpin")
-			{
-				$scope.pcty =Response.sCity;
-				$("#percity").val(Response.sCity).prop("disabled","true").siblings("help").show();
-				$("#perstate").val(Response.sState).prop("disabled","true").siblings("help").show();
-				//sayali
-				$scope.applicant.oResidence.oAddress.sCity = Response.sCity;
-				$scope.applicant.oResidence.oAddress.sState = Response.sState;
-			}
-			else if(id =="wrkpin")
-			{
-				$("#wrkcity").val(Response.sCity).prop("disabled","true").siblings("help").show();
-				$("#wrkstate").val(Response.sState).prop("disabled","true").siblings("help").show();
-				//sayali
-				$scope.applicant.empl.emplCity = Response.sCity;
-				$scope.applicant.empl.emplState = Response.sState;
+	if(pin.length == 6){
+		var pinJson ={"oHeader":{"sInstID":$scope.InstitutionID},"sQuery":pin}; 
+		$http({
+			method : 'POST',
+			url : APP_CONST.getConst('BASE_URL_GNG')+'pincode-details-web',
+			data : pinJson,
+			headers : {'Content-Type' : 'application/json'}
+		}).success(function(Response) 
+		{		
+			if( id =="perpin")
+				{
+					$scope.pcty =Response.sCity;
+					/*$("#percity").val(Response.sCity).prop("disabled","true").siblings("help").show();
+					$("#perstate").val(Response.sState).prop("disabled","true").siblings("help").show();
+					*/
+					$scope.applicant.oResidence.oAddress.sCity = Response.sCity;
+					$scope.applicant.oResidence.oAddress.sState = Response.sState;
+				}
+				else if(id =="wrkpin")
+				{
+					/*$("#wrkcity").val(Response.sCity).prop("disabled","true").siblings("help").show();
+					$("#wrkstate").val(Response.sState).prop("disabled","true").siblings("help").show();
+					*///sayali
+					$scope.applicant.empl.emplCity = Response.sCity;
+					$scope.applicant.empl.emplState = Response.sState;
 
-			}else if(id =="prmnt_perpin")
-			{
-				$("#prmnt_percity").val(Response.sCity).prop("disabled","true").siblings("help").show();
-				$("#prmnt_perstate").val(Response.sState).prop("disabled","true").siblings("help").show();
-				$scope.applicant.oPermanent.oAddress.sCity = Response.sCity;
-				$scope.applicant.oPermanent.oAddress.sState = Response.sState;
+				}else if(id =="prmnt_perpin")
+				{
+					/*$("#prmnt_percity").val(Response.sCity).prop("disabled","true").siblings("help").show();
+					$("#prmnt_perstate").val(Response.sState).prop("disabled","true").siblings("help").show();
+					*/$scope.applicant.oPermanent.oAddress.sCity = Response.sCity;
+					$scope.applicant.oPermanent.oAddress.sState = Response.sState;
+				}
+		}).error(function(error) {
+	//		$scope.error = 'Sorry ! ';
+			console.log("Pincode Service Error:");
+			console.log(error);
+			$scope.serviceHitCount=$scope.serviceHitCount+1;
+			if($scope.serviceHitCount<=3)
+				{
+				 $scope.pinService(pin,id);
+				}
+			else{
+				$scope.serviceHitCount=1;
+				$scope.error="Sorry we can not process your PAN request";
 			}
-	}).error(function(error) {
-//		$scope.error = 'Sorry ! ';
-		console.log("Pincode Service Error:");
-		console.log(error);
-		$scope.serviceHitCount=$scope.serviceHitCount+1;
-		if($scope.serviceHitCount<=3)
-			{
-			 $scope.pinService(pin,id);
-			}
-		else{
-			$scope.serviceHitCount=1;
-			$scope.error="Sorry we can not process your PAN request";
+		});	
+	}else if(pin.length == 0){
+		if( id =="perpin")
+		{
+			$scope.applicant.oResidence.oAddress.sCity = "";
+			$scope.applicant.oResidence.oAddress.sState = "";
 		}
-	});	
+		else if(id =="wrkpin")
+		{
+			$scope.applicant.empl.emplCity = "";
+			$scope.applicant.empl.emplState = "";
+
+		}else if(id =="prmnt_perpin")
+		{
+			/*$("#prmnt_percity").val(Response.sCity).prop("disabled","true").siblings("help").show();
+			$("#prmnt_perstate").val(Response.sState).prop("disabled","true").siblings("help").show();
+			*/$scope.applicant.oPermanent.oAddress.sCity = "";
+			$scope.applicant.oPermanent.oAddress.sState = "";
+		}
+	}
 }
 
 // <!-------------------cursor move to next an prev
@@ -1124,10 +1176,13 @@ $(document).on('click','.preview', function(e) {
 function ageCalculator(){
 	
 	var dat = $("#dob").val();
+	
 	var day=dat.slice(0,2);
+	
 	var month=dat.slice(3,6);
+	
 	var yr=dat.slice(7,11);
-
+	
 	var convert;
 	
 	switch (month) {
@@ -1181,13 +1236,13 @@ function ageCalculator(){
 
 $scope.submitApplication=function(UrlKey)
 {
+	console.log($scope.applicant.dob);
 	var json = 
 	{
 		"oHeader":{
 			"sAppID":"",
 			"sAppSource":"WEB:1.06.01",//added version
 			"sCroId":"default",
-			"dtSubmit":1471340384072,//remain
 			"sDealerId":dlrCode,
 			"sDsaId":$scope.username,
 			"sInstID":$scope.InstitutionID,
@@ -1271,7 +1326,7 @@ $scope.submitApplication=function(UrlKey)
 				"oApplRef":null,
 				"aBankingDetails":null,
 				"sCreditCardNum":$scope.applicant.creditCard,
-				"sDob":"15061985",//remain
+				"sDob":$scope.applicant.dob,
 				"sEdu":$scope.applicant.education,
 				"aEmail":[{
 					"sEmailAddr":$scope.applicant.oResidence.sEmail,
@@ -1398,6 +1453,9 @@ $scope.submitApplication=function(UrlKey)
 console.log("final JSon : "+JSON.stringify(json));
 
 
+
+
+
 	/*var bool=true;
 	modelNo=$("#mdl").val();
 //	assetCat = $("#ast option:selected").val();
@@ -1506,7 +1564,7 @@ console.log("final JSon : "+JSON.stringify(json));
 	$.extend($scope.object,$scope.reqst);
 	// console.log("submit json= "+JSON.stringify($scope.object));*/
 
- // var json = {"oHeader":{"sAppID":"","sAppSource":"WEB:1.06.01","sCroId":"default","dtSubmit":1471340384072,"sDealerId":"25052","sDsaId":"HDBFS_DSA1@softcell.com","sInstID":"4019","sReqType":"JSON"},"sRefID":"25052000159","oReq":{"oApplicant":{"residenceAddSameAsAbove":true,"aAddr":[{"sLine1":"QWWEQEQWEW","sLine2":"GYGUUYIUYI","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"IIUIUYIUYIU","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411005","sAddrType":"RESIDENCE","sResAddrType":"RENTED-FLAT","iMonthAtCity":"99","dRentAmt":"21212121","iMonthAtAddr":"90","iTimeAtAddr":"","iYearAtCity":""},{"sLine1":"DFSFSDFSD","sLine2":"SDFFDSFSD","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"SDFDSFDSFSD","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411004","sAddrType":"OFFICE","sResAddrType":"","iMonthAtCity":"","dRentAmt":"","iMonthAtAddr":"","iTimeAtAddr":"","iYearAtCity":""},{"sLine1":"QWWEQEQWEW","sLine2":"GYGUUYIUYI","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"IIUIUYIUYIU","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411005","sAddrType":"PERMANENT","sResAddrType":"RENTED-FLAT","iMonthAtCity":"99","dRentAmt":"21212121","iMonthAtAddr":"90","iTimeAtAddr":"","iYearAtCity":""}],"sApplID":"APPLICANT_1","oApplName":{"sFirstName":"SAYALI","sLastName":"MADAN","sMiddleName":"MULAY","sPrefix":null,"sSuffix":null},"oApplRef":null,"aBankingDetails":null,"sCreditCardNum":"121212","sDob":"15061985","sEdu":"DOCTORATE","aEmail":[{"sEmailAddr":"askdhaks@sdjf.com","sEmailType":"PERSONAL"},{"sEmailAddr":"askdhaks@sdjf.com","sEmailType":"PERMANENT"},{"sEmailAddr":"so@dfsn.com","sEmailType":"WORK"}],"aEmpl":[{"sConst":"TRUST","sDtJoin":null,"sDtLeave":null,"sDesig":null,"sEmplrBr":null,"sEmplrCode":null,"sEmplName":"SOFTCELL TRADE AND TECHNOLOGIES LTD","sEmplType":"PROFESSIONAL","aLastMonthIncome":[],"sItrID":null,"iTmWithEmplr":"223","dGrossSal":0,"dmonthSal":"32432442","dItrAmt":0}],"oFatherName":null,"sApplGndr":"Female","oIncomeDetails":null,"oSpouseName":null,"aKycDocs":[{"sExpiryDate":null,"sIssueDate":null,"sKycName":"AADHAAR","sKycNumber":"254234523452","sKycStat":null}],"aLoanDetails":null,"sMarStat":"Single","sReligion":null,"aPhone":[{"phoneType":"PERSONAL_MOBILE","sPhoneType":"PERSONAL_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":"","sPhoneNumber":"2323123123"},{"phoneType":"PERSONAL_PHONE","sPhoneType":"PERSONAL_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"4545454545"},{"phoneType":"RESIDENCE_MOBILE","sPhoneType":"RESIDENCE_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":""},{"phoneType":"RESIDENCE_PHONE","sPhoneType":"RESIDENCE_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"4545454545"},{"phoneType":"OFFICE_PHONE","sPhoneType":"OFFICE_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"5454545454"},{"phoneType":"OFFICE_MOBILE","sPhoneType":"OFFICE_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":"","sPhoneNumber":"2131321313"}],"iEarnMem":0,"iFamilyMem":0,"iNoOfDep":0,"bMobVer":true,"sAdharVer":false,"bSameAbove":true,"iAge":0},"oApplication":{"sApID":null,"sAppliedFor":null,"aAssetDetail":[{"sAssetCtg":"WASHING MACHINE","sAssetMake":"HITACHI","sAssetModelMake":"","sDlrName":"SATHYA AGENCIES-SLM","sModelNo":"SF-80PJ3CINEM","sPrice":""}],"oProperty":null,"sLoanType":"Consumer Durables","dEmi":0,"dLoanAmt":"12121212","dMarginAmt":0,"iAdvEmi":0,"iLoanTenor":"121"},"aCoApplicant":null,"sSuspAct":"No"}};
+ /* var json = {"oHeader":{"sAppID":"","sAppSource":"WEB:1.06.01","sCroId":"default","dtSubmit":1471340384072,"sDealerId":"25052","sDsaId":"HDBFS_DSA1@softcell.com","sInstID":"4019","sReqType":"JSON"},"sRefID":"25052000159","oReq":{"oApplicant":{"residenceAddSameAsAbove":true,"aAddr":[{"sLine1":"QWWEQEQWEW","sLine2":"GYGUUYIUYI","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"IIUIUYIUYIU","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411005","sAddrType":"RESIDENCE","sResAddrType":"RENTED-FLAT","iMonthAtCity":"99","dRentAmt":"21212121","iMonthAtAddr":"90","iTimeAtAddr":"","iYearAtCity":""},{"sLine1":"DFSFSDFSD","sLine2":"SDFFDSFSD","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"SDFDSFDSFSD","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411004","sAddrType":"OFFICE","sResAddrType":"","iMonthAtCity":"","dRentAmt":"","iMonthAtAddr":"","iTimeAtAddr":"","iYearAtCity":""},{"sLine1":"QWWEQEQWEW","sLine2":"GYGUUYIUYI","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"IIUIUYIUYIU","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411005","sAddrType":"PERMANENT","sResAddrType":"RENTED-FLAT","iMonthAtCity":"99","dRentAmt":"21212121","iMonthAtAddr":"90","iTimeAtAddr":"","iYearAtCity":""}],"sApplID":"APPLICANT_1","oApplName":{"sFirstName":"SAYALI","sLastName":"MADAN","sMiddleName":"MULAY","sPrefix":null,"sSuffix":null},"oApplRef":null,"aBankingDetails":null,"sCreditCardNum":"121212","sDob":"15061985","sEdu":"DOCTORATE","aEmail":[{"sEmailAddr":"askdhaks@sdjf.com","sEmailType":"PERSONAL"},{"sEmailAddr":"askdhaks@sdjf.com","sEmailType":"PERMANENT"},{"sEmailAddr":"so@dfsn.com","sEmailType":"WORK"}],"aEmpl":[{"sConst":"TRUST","sDtJoin":null,"sDtLeave":null,"sDesig":null,"sEmplrBr":null,"sEmplrCode":null,"sEmplName":"SOFTCELL TRADE AND TECHNOLOGIES LTD","sEmplType":"PROFESSIONAL","aLastMonthIncome":[],"sItrID":null,"iTmWithEmplr":"223","dGrossSal":0,"dmonthSal":"32432442","dItrAmt":0}],"oFatherName":null,"sApplGndr":"Female","oIncomeDetails":null,"oSpouseName":null,"aKycDocs":[{"sExpiryDate":null,"sIssueDate":null,"sKycName":"AADHAAR","sKycNumber":"254234523452","sKycStat":null}],"aLoanDetails":null,"sMarStat":"Single","sReligion":null,"aPhone":[{"phoneType":"PERSONAL_MOBILE","sPhoneType":"PERSONAL_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":"","sPhoneNumber":"2323123123"},{"phoneType":"PERSONAL_PHONE","sPhoneType":"PERSONAL_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"4545454545"},{"phoneType":"RESIDENCE_MOBILE","sPhoneType":"RESIDENCE_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":""},{"phoneType":"RESIDENCE_PHONE","sPhoneType":"RESIDENCE_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"4545454545"},{"phoneType":"OFFICE_PHONE","sPhoneType":"OFFICE_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"5454545454"},{"phoneType":"OFFICE_MOBILE","sPhoneType":"OFFICE_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":"","sPhoneNumber":"2131321313"}],"iEarnMem":0,"iFamilyMem":0,"iNoOfDep":0,"bMobVer":true,"sAdharVer":false,"bSameAbove":true,"iAge":0},"oApplication":{"sApID":null,"sAppliedFor":null,"aAssetDetail":[{"sAssetCtg":"WASHING MACHINE","sAssetMake":"HITACHI","sAssetModelMake":"","sDlrName":"SATHYA AGENCIES-SLM","sModelNo":"SF-80PJ3CINEM","sPrice":""}],"oProperty":null,"sLoanType":"Consumer Durables","dEmi":0,"dLoanAmt":"12121212","dMarginAmt":0,"iAdvEmi":0,"iLoanTenor":"121"},"aCoApplicant":null,"sSuspAct":"No"}};*/
 
   $http({
 		method : 'POST',
@@ -1524,29 +1582,9 @@ console.log("final JSon : "+JSON.stringify(json));
 			/*$("#infoContainer , #ErrorContainer").hide();
 			
 			$("#resultPanel").show();*/
-			sharedService.setRefID($scope.refID);
+			sharedService.setRefID($scope.referenceID);
 			$state.go('/cdl/result');
-			
-			/*$scope.StartTimer();
-			$scope.REFID =data.sRefID;
-			var statusJSON ={
-				  "sRefID":data.sRefID,
-				  "oHeader": {
-				    "sCroId": "default",
-				    "dtSubmit":new Date().getTime(),
-				    "sReqType": "JSON",
-				    "sAppSource" : "WEB",
-				    "sDsaId":$scope.username,
-				    "sAppID": "",
-				    "sSourceID":"",
-				    "sInstID":$scope.InstitutionID
-				  }
-			};
-
-			poller = $interval(function(){
-				$scope.check_status(statusJSON);
-			},3000);
-*/		}
+		}
 
 		if(UrlKey=="step3"){
 			$rootScope.errHead = "Status"
@@ -1636,7 +1674,7 @@ function validation()
 	var std	=/(perstdCode|prmnt_perstdCode|wrkstd)$/i;
 	var phone=/(perphone|prmnt_perphone|wrkphn)$/i;
 	var strptrn = /^[a-zA-Z]+$/ ;
-	var addrPtrn= /^[a-zA-Z\d\s#,-'"\.\/\\]+$/
+	var addrPtrn= /^[a-zA-Z\d\s#,.\/\\]+$/
 //  var mailptrn =/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 	var mailptrn =/^[A-Za-z0-9._]+@[A-Za-z]+\.[a-z]{2,4}$/;
 
@@ -1969,48 +2007,47 @@ $(document.body).on("click",".remove_image",function()
 //	console.log("kyc Array : "+addkyc_array.length);
 });
 
-// $scope.sendPostIpaMail=function()
-// { 
-// 	var requestJson={"sRefID":$scope.REFID,
-// 	"oHeader":{
-// 		"sCroId":"default",
-// 		"dtSubmit":new Date().getTime(),
-// 		"sReqType":"JSON",
-// 		"sAppSource":"WEB",
-// 		"sDsaId":$scope.username,
-// 	    "sAppID":$scope.userid,
-// 	    "sSourceID": "02",
-// 	    "sInstID": $scope.InstitutionID},
-// 		"sImgID":$scope.postIpaPdfId};
-// 	$http({
-// 		method : 'POST',
-// 		url : APP_CONST.getConst('BASE_URL_GNG')+'send-mail-pdf',
-// 		data :requestJson,
-// 		headers : {'Content-Type':'application/json'}
-// 	}).success(function(data) 
-// 	{
-// 		//console.log("Response Data post IPA mail : " + JSON.stringify(data));
-// 	 	setTimeout(function(){
-// 	    	location.reload();
-//      	}, 3000);
-// 	}).error(function(data) 
-// 	{
-// 		$scope.serviceHitCount=$scope.serviceHitCount+1;
-// 		if($scope.serviceHitCount<=3)
-// 			{
-// 			  $scope.sendPostIpaMail();
-// 			}
-// 		else{
-// 			$scope.serviceHitCount=1;
-// 			$scope.error="Sorry we can not process your POST IPA request";
-// 		}	
-// 	});
-// 	$scope.finalResponse="Email sent successfully";
-// 	setTimeout(function(){
-// 		$scope.finalResponse="";
-// 	    location.reload();
-//      }, 15000);
-// };
+$scope.sendPostIpaMail=function()
+{ 
+	var requestJson={"sRefID":$scope.REFID,
+	"oHeader":{
+		"sCroId":"default",
+		"dtSubmit":new Date().getTime(),
+		"sReqType":"JSON",
+		"sAppSource":"WEB",
+		"sDsaId":$scope.username,
+	    "sAppID":$scope.userid,
+	    "sSourceID": "02",
+	    "sInstID": $scope.InstitutionID},
+		"sImgID":$scope.postIpaPdfId};
+	$http({
+		method : 'POST',
+		url : APP_CONST.getConst('BASE_URL_GNG')+'send-mail-pdf',
+		data :requestJson,
+		headers : {'Content-Type':'application/json'}
+	}).success(function(data) 
+	{	//console.log("Response Data post IPA mail : " + JSON.stringify(data));
+	 setTimeout(function(){
+	    location.reload();
+     }, 3000);
+	}).error(function(data) 
+	{
+		$scope.serviceHitCount=$scope.serviceHitCount+1;
+		if($scope.serviceHitCount<=3)
+			{
+			  $scope.sendPostIpaMail();
+			}
+		else{
+			$scope.serviceHitCount=1;
+			$scope.error="Sorry we can not process your POST IPA request";
+		}	
+	});
+	$scope.finalResponse="Email sent successfully";
+	setTimeout(function(){
+		$scope.finalResponse="";
+	    location.reload();
+     }, 15000);
+};
 
 //get all employer name from master
 //$(document.body).on("keyup","#wrkename",function(e)
@@ -2271,7 +2308,7 @@ $scope.modelTags = [];
 		$scope.openDOBDialog=function(){
 
 			if(!$scope.applicant.dob){
-				//console.log("DOB Dialog Opened");
+				console.log("DOB Dialog Opened");
 		 		var defaultDate = new Date();
 		 		defaultDate.setFullYear(defaultDate.getFullYear()-25);
 
@@ -2303,17 +2340,14 @@ $scope.modelTags = [];
 		/* End of dob popup */
 
 		/*Sayali*/
-		$scope.applicant = {};
+		$scope.applicant = ApplyObject.dummy;
 		if($scope.asset){
 			$scope.applicant.asset = $scope.asset;
 		}
-
+	
 		$scope.isCurrPanel = function(){
 			return true;
 		}
 
-		$scope.checkData = function(){
-			console.log($scope.applicant);
-		}
 }]);
 }).call(this)

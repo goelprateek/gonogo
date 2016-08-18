@@ -314,7 +314,7 @@
                 "sImageBlock": ""
             }
           ]
-        }
+        };
         return {
         	dummy : _obj
         }	
