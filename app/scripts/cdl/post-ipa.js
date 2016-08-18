@@ -20,8 +20,8 @@
 			model:""
 		};
 
-		$scope.approvedAmt="";
-		$scope.astCst="";
+		$scope.approvedAmt="0";
+		$scope.astCst="0";
 		$scope.tMrgnMny="0";
 
 		var user=UserService.getCurrentUser();
@@ -228,7 +228,7 @@
 		// });
 
 		$scope.calculateEmi=function(){			
-			var tAprAmt = parseFloat(($scope.approvedAmt ? $scope.approvedAmt : "0").replace(/,/g,""));	
+			var tAprAmt = parseFloat(($scope.approvedAmt ? ($scope.approvedAmt+"") : "0").replace(/,/g,""));	
 			var tAsstCst = parseFloat(($scope.astCst ? $scope.astCst : "0") .replace(/,/g,""));
 
 			if(tAsstCst >= tAprAmt){ 

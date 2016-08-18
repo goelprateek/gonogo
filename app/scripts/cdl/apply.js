@@ -156,6 +156,10 @@
 			$scope.fname=Response.oReq.oApplicant.oApplName.sFirstName;
 	  		$scope.mname=Response.oReq.oApplicant.oApplName.sMiddleName;
 	  		$scope.lname=Response.oReq.oApplicant.oApplName.sLastName;
+
+	  		if(Response.oReq.oApplication.aAssetDetail && Response.oReq.oApplication.aAssetDetail.length>0){
+	  			$scope.dealerName=Response.oReq.oApplication.aAssetDetail[0].sDlrName;
+	  		}
 	  		$scope.Response=Response;
 			if(currentStage=="DE"){
 				if(Response){
@@ -241,14 +245,23 @@
 					                $scope.applicant.dob=dateOfBirth;
 								}
 
-								$scope.constitution=mApplicant.aEmpl[0].sConst;
-								if($scope.constitution == "SELF-EMPLOYED")
+								if(mApplicant.aEmpl && mApplicant.aEmpl.length>0)
 								{
-									$("#wrketype").val("SELF-EMPLOYED").attr("disabled","disabled").siblings("help").show();
-									$("#wrketype option[value='SELF-EMPLOYED']").show();
-								}else{
-								 	$("#wrketype").val("").removeAttr("disabled");
-								 	$("#wrketype option[value='SELF-EMPLOYED']").hide();
+									$scope.constitution=mApplicant.aEmpl[0].sConst;
+									if($scope.constitution == "SELF-EMPLOYED")
+									{
+										$("#wrketype").val("SELF-EMPLOYED").attr("disabled","disabled").siblings("help").show();
+										$("#wrketype option[value='SELF-EMPLOYED']").show();
+									}else{
+									 	$("#wrketype").val("").removeAttr("disabled");
+									 	$("#wrketype option[value='SELF-EMPLOYED']").hide();
+									}
+
+									$scope.wrkename =Response.oReq.oApplicant.aEmpl[0].sEmplName;
+									$scope.wrketype = Response.oReq.oApplicant.aEmpl[0].sEmplType;
+									$scope.wrktwe =Response.oReq.oApplicant.aEmpl[0].iTmWithEmplr;
+									$scope.wrkLstMnthSal = Response.oReq.oApplicant.aEmpl[0].dmonthSal;
+									$scope.wrkGrsAnnual =Response.oReq.oApplicant.aEmpl[0].dItrAmt;
 								}
 								$scope.lamt=Response.oReq.oApplication.dLoanAmt;
 								$scope.loanTenure=Response.oReq.oApplication.iLoanTenor;
@@ -299,11 +312,7 @@
 										}
 									}
 								}
-								$scope.wrkename =Response.oReq.oApplicant.aEmpl[0].sEmplName;
-								$scope.wrketype = Response.oReq.oApplicant.aEmpl[0].sEmplType;
-								$scope.wrktwe =Response.oReq.oApplicant.aEmpl[0].iTmWithEmplr;
-								$scope.wrkLstMnthSal = Response.oReq.oApplicant.aEmpl[0].dmonthSal;
-								$scope.wrkGrsAnnual =Response.oReq.oApplicant.aEmpl[0].dItrAmt;
+
 								//$scope.dealerObj.name =Response.oHeader.sDealerId;
 								//$scope.dealerObj.name =Response.oHeader.sDealerId;
 	//							console.log("Again check :"+Response.oReq.oApplication.aAssetDetail[0].sAssetCtg);
@@ -443,7 +452,8 @@
 			  	$("#afterSubmit").show();
 			}
 			else if(currentStage=="CR_Q")
-			{	$scope.fname = Response.oReq.oApplicant.oApplName.sFirstName;
+			{
+				$scope.fname = Response.oReq.oApplicant.oApplName.sFirstName;
 				$scope.mname = Response.oReq.oApplicant.oApplName.sMiddleName;
 				$scope.lname = Response.oReq.oApplicant.oApplName.sLastName;
 
@@ -480,48 +490,48 @@
 				},3000);
 //				$scope.statusObject.sAppStat="Decline";
 			}
-			else if(currentStage == "APRV")
-			{
-				$scope.fname = Response.oReq.oApplicant.oApplName.sFirstName;
-				$scope.mname = Response.oReq.oApplicant.oApplName.sMiddleName;
-				$scope.lname = Response.oReq.oApplicant.oApplName.sLastName;
+			// else if(currentStage == "APRV")
+			// {
+			// 	$scope.fname = Response.oReq.oApplicant.oApplName.sFirstName;
+			// 	$scope.mname = Response.oReq.oApplicant.oApplName.sMiddleName;
+			// 	$scope.lname = Response.oReq.oApplicant.oApplName.sLastName;
 
-				$scope.fetchAssetCategory();
-				$scope.assetCategory=Response.oReq.oApplication.aAssetDetail[0].sAssetCtg;
+			// 	$scope.fetchAssetCategory();
+			// 	$scope.assetCategory=Response.oReq.oApplication.aAssetDetail[0].sAssetCtg;
 
-				$scope.fetchAssetMake($scope.assetCategory);
-				$scope.mk=Response.oReq.oApplication.aAssetDetail[0].sAssetMake;
-				// $scope.mkVal=Response.oReq.oApplication.aAssetDetail[0].sAssetMake;
-				make =Response.oReq.oApplication.aAssetDetail[0].sAssetMake;
+			// 	$scope.fetchAssetMake($scope.assetCategory);
+			// 	$scope.mk=Response.oReq.oApplication.aAssetDetail[0].sAssetMake;
+			// 	// $scope.mkVal=Response.oReq.oApplication.aAssetDetail[0].sAssetMake;
+			// 	make =Response.oReq.oApplication.aAssetDetail[0].sAssetMake;
 
-				$scope.fetchAssetModel($scope.assetCategory,$scope.mk);
-				$scope.mdl=Response.oReq.oApplication.aAssetDetail[0].sModelNo;
-				modelNo =Response.oReq.oApplication.aAssetDetail[0].sModelNo;
-				// $scope.mdlVal=Response.oReq.oApplication.aAssetDetail[0].sModelNo;
+			// 	$scope.fetchAssetModel($scope.assetCategory,$scope.mk);
+			// 	$scope.mdl=Response.oReq.oApplication.aAssetDetail[0].sModelNo;
+			// 	modelNo =Response.oReq.oApplication.aAssetDetail[0].sModelNo;
+			// 	// $scope.mdlVal=Response.oReq.oApplication.aAssetDetail[0].sModelNo;
 
-				dlrCode=Response.oHeader.sDealerId;				
-				$scope.REFID=CustID;
+			// 	dlrCode=Response.oHeader.sDealerId;				
+			// 	$scope.REFID=CustID;
 
-				$("#nmCntnr").hide();
-				var statusJSON={
-					"sRefID":CustID,
-					"oHeader": {
-						"sCroId": "default",
-						"dtSubmit":new Date().getTime(),
-						"sReqType": "JSON",
-						"sAppSource" : "WEB",
-						"sDsaId":$scope.username,
-						"sAppID": "",
-						"sSourceID":"",
-						"sInstID":$scope.InstitutionID
-					}
-				}
-				poller = $interval(function(){
-					$scope.check_status(statusJSON);
-				},3000);
-				$scope.scmService();
-				  $("#pOrder").show();
-			}
+			// 	$("#nmCntnr").hide();
+			// 	var statusJSON={
+			// 		"sRefID":CustID,
+			// 		"oHeader": {
+			// 			"sCroId": "default",
+			// 			"dtSubmit":new Date().getTime(),
+			// 			"sReqType": "JSON",
+			// 			"sAppSource" : "WEB",
+			// 			"sDsaId":$scope.username,
+			// 			"sAppID": "",
+			// 			"sSourceID":"",
+			// 			"sInstID":$scope.InstitutionID
+			// 		}
+			// 	}
+			// 	poller = $interval(function(){
+			// 		$scope.check_status(statusJSON);
+			// 	},3000);
+			// 	$scope.scmService();
+			// 	  $("#pOrder").show();
+			// }
 		}); // End of call rest API
 	}else{
 		if(localStorage.getItem('CURRENT_DEALER')){

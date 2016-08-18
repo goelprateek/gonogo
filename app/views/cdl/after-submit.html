@@ -36,7 +36,7 @@
 </style>
 <div class="container" id="afterSubmit">
 	<div class="afterSubmit">
-		<div class="row clearfix approveSec">
+		<div class="row clearfix approveSec" ng-if="statusObject">
 			<div class="col-md-12">
 				<span>Your application has been</span>
 				<span ng-if="statusObject.sAppStat == 'OnHold'"> put on hold. </span>

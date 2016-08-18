@@ -783,12 +783,15 @@ app.controller("CustomerFormCntrolr",
 			sharedService.setRefID($scope.refID);
 			sharedService.setDealerCode($scope.objectSet.oHeader.sDealerId);
 			$state.go("/cdl/after-submit");
+		}else if($scope.objectSet.sCurrentStageId==="CR_Q"){
+			sharedService.setRefID($scope.refID);
+			$state.go("/cdl/result");
 		}else{
 //			alert("Sending : "+$scope.objectSet.sCurrentStageId);
 //			$rootScope.DashFlag=true;
 			sharedService.setCurrentStage($scope.objectSet.sCurrentStageId);
 			sharedService.setRefID($scope.refID);
-			$state.go("/cdl/apply");
+			$state.go("/cdl/apply.personal");
 		}
 	}
 
