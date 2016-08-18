@@ -1,10 +1,8 @@
 <form name="addressData" novalidate>
-	<div class="row clearfix getheight" slimscroll="{height:405,railVisible:true}" style="
-	    height: 400px;">
+	<div class="row clearfix getheight" slimscroll="{height:405,railVisible:true}" style="height: 400px;">
 		<div class="col-md-10 col-md-offset-1">
-			<div class="row clearfix">
+			<div class="row clearfix" style="margin-top: 40px;">
 				<div class="col-md-6 cdl-height form-group">
-					<help>Residence Address Type*</help>
 					<select id="addressType" class="cdl-form-control control-select inputMaterial" name="resaddtype" ng-model="applicant.oResidence.oAddress.addrType" select-required>
 						<option value="" >Select Address Type*</option>
 						<option value="OWNED-BUNGLOW">OWNED-BUNGLOW</option>
@@ -24,15 +22,20 @@
 						<option value="PARENT OWNED-FLAT">PARENT OWNED-FLAT</option>
 						<option value="COMPANY PROVIDED-HOUSE">COMPANY PROVIDED-HOUSE</option>
 					</select>
+					<label>Residence Address Type*</label>
 					<div ng-messages="addressData.resaddtype.$error" ng-show="addressData.resaddtype.$touched" class="errorMsg">
 						<p ng-message="selectrequired">Please select Residence address type </p>
 					</div>
 				</div>
+
 				<div class="col-md-6 cdl-height form-group" ng-if="applicant.oResidence.oAddress.addrType.indexOf('RENTED') != -1">
-					<i class="fa fa-rupee"></i><input type='text' maxlength="12" ng-model="applicant.oResidence.oAddress.dRentPerMonth" class="cdl-form-control inputMaterial" name="resRent" style="padding-left: 4%" rupees required/>
-					<label>Rent Per Month*</label>
-					<div ng-messages="addressData.resRent.$touched && addressData.resRent.$error" class="errorMsg">
-	   					<p ng-message="required">Please enter Rent per month</p>
+					<div class="div-rupee">
+						<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
+						<input type='text' maxlength="12" ng-model="applicant.oResidence.oAddress.dRentPerMonth" class="cdl-form-control inputMaterial" name="resRent" style="padding-left: 4%" rupees required/>
+						<label>Rent Per Month*</label>
+						<div ng-messages="addressData.resRent.$touched && addressData.resRent.$error" class="errorMsg">
+		   					<p ng-message="required">Please enter Rent per month</p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -143,9 +146,8 @@
 						</label>
 					</div>
 				</div>
-				<div class="row clearfix">
+				<div class="row clearfix" style="margin-top: 40px;">
 					<div class="col-md-6 cdl-height form-group">
-						<help>Permanent Address Type*</help>
 						<select class="cdl-form-control control-select inputMaterial"
 							ng-model="applicant.oPermanent.oAddress.addrType" name="peraddtype" select-required>
 							<option value="">Select	Address Type*</option>
@@ -159,28 +161,27 @@
 							<option value="RENTED-FLAT">RENTED-FLAT</option>
 							<option value="RENTED-PENTHOUSE">RENTED-PENTHOUSE</option>
 							<option value="RENTED-ROWHOUSE">RENTED-ROWHOUSE</option>
-							<option value="RENTED-BACHELOR ACCOMODATION">RENTED-BACHELOR
-								ACCOMODATION</option>
-							<option value="COMPANY PROVIDED-FLAT">COMPANY
-								PROVIDED-FLAT</option>
-							<option value="PARENT OWNED-HOUSE">PARENT
-								OWNED-HOUSE</option>
+							<option value="RENTED-BACHELOR ACCOMODATION">RENTED-BACHELOR ACCOMODATION</option>
+							<option value="COMPANY PROVIDED-FLAT">COMPANY PROVIDED-FLAT</option>
+							<option value="PARENT OWNED-HOUSE">PARENT OWNED-HOUSE</option>
 							<option value="PARENT OWNED-FLAT">PARENT OWNED-FLAT</option>
-							<option value="COMPANY PROVIDED-HOUSE">COMPANY
-								PROVIDED-HOUSE</option>
+							<option value="COMPANY PROVIDED-HOUSE">COMPANY PROVIDED-HOUSE</option>
 						</select>
+						<label>Permanent Address Type*</label>
 						<div ng-messages="addressData.peraddtype.$error" ng-show="addressData.peraddtype.$touched" class="errorMsg">
-							<p ng-message="selectrequired">Please select Permanent address type </p>
+							<p ng-message="selectrequired">Please select Permanent address type</p>
 						</div>
 					</div>
 					<div class="col-md-6 cdl-height form-group" ng-if="applicant.oPermanent.oAddress.addrType.indexOf('RENTED') != -1">
-						<i class="fa fa-rupee"></i> <input type='text' ng-model="applicant.oPermanent.oAddress.dRentPerMonth" name="perrent" class="cdl-form-control inputMaterial" maxlength="12" style="padding-left: 4%" rupees required/>
-						<label>Rent Per Month*</label>
-						<div ng-messages="addressData.perrent.$touched && addressData.perrent.$error" class="errorMsg">
+						<div class="div-rupee">
+							<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
+							<input type='text' ng-model="applicant.oPermanent.oAddress.dRentPerMonth" name="perrent" class="cdl-form-control inputMaterial" maxlength="12" style="padding-left: 4%" rupees required/>
+							<label>Rent Per Month*</label>
+							<div ng-messages="addressData.perrent.$touched && addressData.perrent.$error" class="errorMsg">
 			   					<p ng-message="required">Please enter Rent per month</p>
+							</div>
 						</div>
 					</div>
-
 				</div>
 				<div class="row clearfix">
 					<div class="col-md-12 cdl-height form-group">

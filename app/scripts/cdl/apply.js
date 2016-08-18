@@ -4,33 +4,73 @@
 
 	app.factory("ApplyObject",function(){
     	var _obj = {
-
-        "suspected": "No",
-        "creditCard": "",
-        "gender": "Male",
-        "education": "",
-        "maritalStat":"Single",
-        "dob":"",
-        "constitution":"",
-        "loanAmt":"",
-        "tenor":"",
-        "empl":{
-        	"emplType":""
-        },
-        "oResidence":{
-        	"oAddress":{
-        		"addrType":""
-        	},
-        	"oPhone":{
-        		"iMobile":""
-        	}
-        },
-        "oPermanent":{
-        	"oAddress":{
-        		"addrType":""
-        	}
-        },
-       
+	        "suspected": "No",
+	        "creditCard": "",
+	        "gender": "Male",
+	        "education": "",
+	        "maritalStat":"Single",
+	        "dob":"",
+	        "constitution":"",
+	        "loanAmt":"",
+	        "tenor":"",
+	        "sameAbove":"",
+	        "empl":{
+	        	"emplType":"",
+	        	"emplMob":"",
+	        	"emplLandLine":"",
+	        	"emplStd":"",
+	        	"emplITReturn":"",
+	        	"emplSalary":"",
+	        	"emplMonthWithEmp":"",
+	        	"emplName":"",
+	        	"emplEmail":""
+	        },
+	        "oResidence":{
+	        	"oAddress":{
+	        		"addrType":"",
+	        		"sAddress1":"",
+	        		"sAddress2":"",
+	        		"sAddress3":"",
+	        		"sState":"",
+	        		"sCity":"",
+	        		"sPinCode":"",
+	        		"addrType":"",
+	        		"iMonthCity":"",
+	        		"dRentPerMonth":"",
+	        		"iMonthAddress":""
+	        	},
+	        	"oPhone":{
+	        		"iMobile":"",
+	        		"iLandLine":"",
+	        		"sStdCode":""
+	        	},
+	        	"sEmail":""
+	        },
+	        "oPermanent":{
+	        	"oAddress":{
+	        		"addrType":"",
+	        		"sAddress1":"",
+	        		"sAddress2":"",
+	        		"sAddress3":"",
+	        		"sState":"",
+	        		"sCity":"",
+	        		"sPinCode":"",
+	        		"addrType":"",
+	        		"iMonthCity":"",
+	        		"dRentPerMonth":"",
+	        		"iMonthAddress":""
+	        	},"oPhone":{
+	        		"iMobile":"",
+	        		"iLandLine":"",
+	        		"sStdCode":""
+	        	},
+	        	"sEmail":""
+	        },
+	       	"asset":{
+	       		"category":"",
+	       		"make":"",
+	       		"model":""
+	       	}
         };
         return{
         	dummy : _obj
@@ -43,14 +83,16 @@
 		var dlrCode =null;
 		var CustID=null;
 
-		$scope.asset={
-			category:"",
-			make:"",
-			model:""
-		};
+		// $scope.asset={
+		// 	category:"",
+		// 	make:"",
+		// 	model:""
+		// };
+
+		$scope.applicant = ApplyObject.dummy;
 
 		//Hard Coded //
-		//sharedService.setRefID("25213000015");
+		//sharedService.setRefID("24970000023");
 
 		var user=UserService.getCurrentUser();
     	$scope.can=AclService.can;
@@ -84,7 +126,7 @@
 
 	  		dlrCode=$scope.applicationObject.oHeader.sDealerId;
 	  		$scope.dealerName=$scope.applicationObject.oReq.oApplication.aAssetDetail[0].sDlrName;
-			$scope.tmob=_applicant.aPhone[0].sPhoneNumber;
+			$scope.applicant.oResidence.oPhone.iMobile=_applicant.aPhone[0].sPhoneNumber;
 
 			for(var i=0;i<_applicant.aKycDocs.length;i++){
   				if(_applicant.aKycDocs[i].sKycName==="PAN"){
@@ -102,7 +144,7 @@
 
 	var poller;
 	$scope.dealerArr = [];
-	$scope.assetArray = [];
+	//$scope.assetArray = [];
 
 	try {
 		//$log.debug("userdata :"+JSON.stringify(userdata));
@@ -117,13 +159,11 @@
 	    // $scope.holdStageArr=[];
 	    $scope.holdIndex =[];
 	    $scope.wrketype="";
-	    $scope.assetCategory="";
+	    //$scope.assetCategory="";
 	    $scope.astCst=0;
 		$scope.dealerArr=JSON.parse(atob(localStorage.getItem('DEALERS')));
 
 		var status=null;
-		var modelNo=null;
-		var make=null;
 //		console.log("$scope.username :"+$scope.username);
 //		console.log("$scope.ePassword :"+$scope.ePassword);
 
@@ -187,7 +227,7 @@
 						  		if(mApplicant.aPhone){
 						  			for(var i=0;i<mApplicant.aPhone.length;i++){
 						  				if(mApplicant.aPhone[i].sPhoneType==="PERSONAL_MOBILE"){
-						  					$scope.tmob=mApplicant.aPhone[i].sPhoneNumber;
+						  					$scope.applicant.oResidence.oPhone.iMobile=mApplicant.aPhone[i].sPhoneNumber;
 						  				}else if(mApplicant.aPhone[i].sPhoneType==="PERSONAL_PHONE"){
 						  					$scope.residenceStd=mApplicant.aPhone[i].sAreaCode;
 											$scope.residencePhone=mApplicant.aPhone[i].sPhoneNumber;
@@ -324,9 +364,9 @@
 								var assetDetails=Response.oReq.oApplication.aAssetDetail;
 
 								if(assetDetails && assetDetails.length>0){
-									$scope.assetCategory = Response.oReq.oApplication.aAssetDetail[0].sAssetCtg;
-									$scope.mk = Response.oReq.oApplication.aAssetDetail[0].sAssetMake;
-									$scope.mdl = Response.oReq.oApplication.aAssetDetail[0].sModelNo;
+									$scope.applicant.asset.category = Response.oReq.oApplication.aAssetDetail[0].sAssetCtg;
+									$scope.applicant.asset.make = Response.oReq.oApplication.aAssetDetail[0].sAssetMake;
+									$scope.applicant.asset.model = Response.oReq.oApplication.aAssetDetail[0].sModelNo;
 								}
 
 								//Fetch Images
@@ -429,70 +469,70 @@
 // 				$scope.statusObject.sAppStat="Decline";
 // 			  	$("#afterSubmit").show();
 // 			}
-			else if(currentStage=="CR_H")
-			{
-				status= "OnHold";
-				$scope.REFID=CustID;
-//				dlrCode=Response.oHeader.sDealerId;
-				$("#nmCntnr").hide();
-				var statusJSON={
-					  "sRefID":CustID,
-					  "oHeader": {
-					    "sCroId": "default",
-					    "dtSubmit":new Date().getTime(),
-					    "sReqType": "JSON",
-					    "sAppSource" : "WEB",
-					    "sDsaId":$scope.username,
-					    "sAppID": "",
-					    "sSourceID":"",
-					    "sInstID":$scope.InstitutionID
-					  }
-				};
-				poller = $interval(function(){
-					$scope.check_status(statusJSON);
-				},3000);
-//				$scope.statusObject.sAppStat="Decline";
-			  	$("#afterSubmit").show();
-			}
-			else if(currentStage=="CR_Q")
-			{
-				$scope.fname = Response.oReq.oApplicant.oApplName.sFirstName;
-				$scope.mname = Response.oReq.oApplicant.oApplName.sMiddleName;
-				$scope.lname = Response.oReq.oApplicant.oApplName.sLastName;
+// 			else if(currentStage=="CR_H")
+// 			{
+// 				status= "OnHold";
+// 				$scope.REFID=CustID;
+// //				dlrCode=Response.oHeader.sDealerId;
+// 				$("#nmCntnr").hide();
+// 				var statusJSON={
+// 					"sRefID":CustID,
+// 					"oHeader": {
+// 						"sCroId": "default",
+// 						"dtSubmit":new Date().getTime(),
+// 						"sReqType": "JSON",
+// 						"sAppSource" : "WEB",
+// 						"sDsaId":$scope.username,
+// 						"sAppID": "",
+// 						"sSourceID":"",
+// 						"sInstID":$scope.InstitutionID
+// 					}
+// 				};
+// 				poller = $interval(function(){
+// 					$scope.check_status(statusJSON);
+// 				},3000);
+// //				$scope.statusObject.sAppStat="Decline";
+// 			  	$("#afterSubmit").show();
+// 			}
+// 			else if(currentStage=="CR_Q")
+// 			{
+// 				$scope.fname = Response.oReq.oApplicant.oApplName.sFirstName;
+// 				$scope.mname = Response.oReq.oApplicant.oApplName.sMiddleName;
+// 				$scope.lname = Response.oReq.oApplicant.oApplName.sLastName;
 
-				if(Response.oReq.oApplication.aAssetDetail){
-					$scope.mk=Response.oReq.oApplication.aAssetDetail[0].sAssetMake;
-					$scope.mdl=Response.oReq.oApplication.aAssetDetail[0].sModelNo;
-					modelNo=Response.oReq.oApplication.aAssetDetail[0].sModelNo;
-					$scope.assetCategory=Response.oReq.oApplication.aAssetDetail[0].sAssetCtg;
-					
-					make=Response.oReq.oApplication.aAssetDetail[0].sAssetMake;
-				}
-				$scope.REFID=CustID;
+// 				if(Response.oReq.oApplication.aAssetDetail){
+// 					$scope.mk=Response.oReq.oApplication.aAssetDetail[0].sAssetMake;
+// 					$scope.mdl=Response.oReq.oApplication.aAssetDetail[0].sModelNo;
+// 					modelNo=Response.oReq.oApplication.aAssetDetail[0].sModelNo;
+// 					$scope.assetCategory=Response.oReq.oApplication.aAssetDetail[0].sAssetCtg;
 
-				dlrCode=Response.oHeader.sDealerId;
+// 					make=Response.oReq.oApplication.aAssetDetail[0].sAssetMake;
+// 				}
+// 				$scope.REFID=CustID;
+
+// 				dlrCode=Response.oHeader.sDealerId;
 				
-				$("#nmCntnr").hide();
-				var statusJSON={
-					  "sRefID":CustID,
-					  "oHeader": {
-					    "sCroId": "default",
-					    "dtSubmit":new Date().getTime(),
-					    "sReqType": "JSON",
-					    "sAppSource" : "WEB",
-					    "sDsaId":$scope.username,
-					    "sAppID": "",
-					    "sSourceID":"",
-					    "sInstID":$scope.InstitutionID
-					  }
-				}
-				$("#resultPanel").show();
-				$scope.StartTimer(); // 	60 sec timer
-				poller = $interval(function(){
-					$scope.check_status(statusJSON);
-				},3000);
-//				$scope.statusObject.sAppStat="Decline";
-			}
+// 				$("#nmCntnr").hide();
+// 				var statusJSON={
+// 					  "sRefID":CustID,
+// 					  "oHeader": {
+// 					    "sCroId": "default",
+// 					    "dtSubmit":new Date().getTime(),
+// 					    "sReqType": "JSON",
+// 					    "sAppSource" : "WEB",
+// 					    "sDsaId":$scope.username,
+// 					    "sAppID": "",
+// 					    "sSourceID":"",
+// 					    "sInstID":$scope.InstitutionID
+// 					  }
+// 				}
+// 				$("#resultPanel").show();
+// 				$scope.StartTimer(); // 	60 sec timer
+// 				poller = $interval(function(){
+// 					$scope.check_status(statusJSON);
+// 				},3000);
+// //				$scope.statusObject.sAppStat="Decline";
+// 			}
 			// else if(currentStage == "APRV")
 			// {
 			// 	$scope.fname = Response.oReq.oApplicant.oApplName.sFirstName;
@@ -546,7 +586,7 @@
 			$location.path("/cdl/dealer");
 		}
 
-		$("#nmCntnr").show();
+		//$("#nmCntnr").show();
 	}
 
 	$scope.serviceHitCount=1;
@@ -1463,11 +1503,7 @@ $scope.submitApplication=function(UrlKey)
 		}
 	};
 
-console.log("final JSon : "+JSON.stringify(json));
-
-
-
-
+//	console.log("final JSon : "+JSON.stringify(json));
 
 	/*var bool=true;
 	modelNo=$("#mdl").val();
@@ -2365,7 +2401,6 @@ $scope.modelTags = [];
 		/* End of dob popup */
 
 		/*Sayali*/
-		$scope.applicant = ApplyObject.dummy;
 		if($scope.asset){
 			$scope.applicant.asset = $scope.asset;
 		}

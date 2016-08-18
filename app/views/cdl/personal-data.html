@@ -2,7 +2,7 @@
 	<div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true}">
 		<div class="row clearfix ">
 			<div class="col-md-10 col-md-offset-1">
-				<div class="row clearfix">
+				<div class="row clearfix" style="margin-bottom: 40px;">
 					<help style="display:block;margin:15px;">Applicant Photo</help>
 					<div class="preview" ng-if="!profileImage"
 						ng-style="{'background-image':'url('+selectImgInit+')'}"
@@ -21,25 +21,23 @@
 							ng-click="remove_file('APPLICANT-PHOTO','0',selectImgInit)">Remove</a>
 					</div>
 				</div>
-
 				<div class="row clearfix">
 					<div class="col-md-6 cdl-height form-group">
-						<help>Suspected Activity</help>
 						<select class="cdl-form-control control-select inputMaterial" id="susPctdFrd" ng-model="applicant.suspected">
 							<option selected="selected" value="No">Refer to Credit</option>
 							<option value="Suspected Fraud">Suspected Fraud</option>
 							<option value="Confirmed Fraud">Confirmed Fraud</option>
 						</select>
+						<label>Suspected Activity</label>
 					</div>
 				</div>
 				<div class="row clearfix">
 					<div class="col-md-6 cdl-height form-group">
 						<input type="text" id="cr" ng-model="applicant.creditCard"
-							class="cdl-form-control inputMaterial" name="credit" maxlength="6" required only-digits/>
+							class="cdl-form-control inputMaterial" name="credit" maxlength="6" only-digits/>
 						<label>Credit Card No</label>
 						<div ng-messages="personalData.credit.$touched && personalData.credit.$error" class="errorMsg">
 		   					<p ng-message="onlydigits">Please enter only digits</p>
-		   					<p ng-message="required">Please enter valid credit card number</p>
 						</div>
 					</div>
 					<div class="col-md-6 cdl-height form-group">
@@ -57,7 +55,6 @@
 
 				<div class="row clearfix">
 					<div class="col-md-6 cdl-height form-group">
-						<help>Education Qualification*</help>
 						<select class="cdl-form-control control-select inputMaterial" id="edu" ng-model="applicant.education" name="education" select-required>
 							<option value="">Select Qualification*</option>
 							<option value="DOCTORATE">DOCTORATE</option>
@@ -67,6 +64,7 @@
 							<option value="UNDER GRADUATE">UNDER GRADUATE</option>
 							<option value="OTHERS">OTHERS</option>
 						</select>
+						<label>Education Qualification*</label>
 						<div ng-messages="personalData.education.$error" ng-show="personalData.education.$touched" class="errorMsg">
 							<p ng-message="selectrequired">Please select Qualification </p>
 						</div>
@@ -96,7 +94,6 @@
 						</div>
 					</div>
 					<div class="col-md-6 cdl-height form-group">
-						<help>Constitution*</help>
 						<select class="cdl-form-control control-select inputMaterial" name="constitution"	ng-model="applicant.constitution" ng-change="changeEvent('CONSTITN',constitution)" select-required>
 							<option value="">Select Constitution*</option>
 							<option value="TRUST">TRUST</option>
@@ -105,7 +102,8 @@
 							<option value="PARTNERSHIP">PARTNERSHIP</option>
 							<option value="PRIVATE LIMITED COMPANY">PRIVATE
 								LIMITED COMPANY</option>
-						</select> 
+						</select>
+						<label>Constitution*</label>
 						<div ng-messages="personalData.constitution.$error" ng-show="personalData.constitution.$touched" class="errorMsg">
 							<p ng-message="selectrequired">Please select Constitution </p>
 						</div>
@@ -113,16 +111,25 @@
 				</div>
 
 				<div class="row clearfix">
-					<div class="col-md-6 cdl-height form-group">
+					<!-- <div class="col-md-6 cdl-height form-group">
 						<i class="fa fa-rupee"></i><input type="text" ng-model="applicant.loanAmt" class="cdl-form-control inputMaterial" name="loanamt" maxlength="12" style="padding-left: 4%" rupees required/>
 						<label>Loan Amount*</label>
 						<div ng-messages="personalData.loanamt.$touched && personalData.loanamt.$error" class="errorMsg">
 		   					<p ng-message="required">Please enter Loan Amount</p>
 						</div>
+					</div> -->
+					<div class="col-md-6 cdl-height form-group">
+						<div class="div-rupee">
+							<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
+							<input type="text" class="cdl-form-control inputMaterial" name="loanamt" ng-model="applicant.loanAmt" maxlength="12" style="padding-left: 4%" rupees required />
+							<label>Loan Amount*</label>
+							<div ng-messages="personalData.loanamt.$error" ng-show="personalData.loanamt.$touched" class="errorMsg">
+							    <p ng-message="required">Please enter Loan Amount</p>
+							</div>
+						</div>
 					</div>
 					<div class="col-md-6 cdl-height form-group">
-						<input type="text" name="tenor" class="cdl-form-control inputMaterial"	ng-model="applicant.tenor"
-							maxlength="3" />
+						<input type="text" name="tenor" class="cdl-form-control inputMaterial" ng-model="applicant.tenor" maxlength="3" only-digits required />
 						<label>Tenor in Months*</label>
 						<div ng-messages="personalData.tenor.$touched && personalData.tenor.$error" class="errorMsg">
 		   					<p ng-message="required">Please enter Tenor</p>

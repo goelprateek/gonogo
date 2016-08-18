@@ -321,9 +321,9 @@
     });
 
 	app.controller('NotifController', ['$scope','$rootScope', '$interval','$filter',
-								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log','notifier',
+								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log','notifier','$state',
                                 function($scope, $rootScope, $interval,$filter,RestService,NotificationObject,UserService,AclService,
-                                    $uibModal,SelectArrays,$log,notifier){
+                                    $uibModal,SelectArrays,$log,notifier,$state){
 
 	var user=UserService.getCurrentUser();
     
@@ -335,7 +335,7 @@
 
 
     if(_.isUndefined(user.id) ){
-        $location.path(APP_CONST.getConst('APP_CONTEXT'));
+        $state.go(APP_CONST.getConst('APP_CONTEXT'));
     }
 
     $scope.selectResidence = SelectArrays.getResidenceTypes();

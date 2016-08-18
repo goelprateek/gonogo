@@ -10,7 +10,7 @@
 			restrict: 'E',
 			templateUrl: function(elem,attrs) {
            		//return attrs.templateUrl || 'some/path/default.html'
-           		return 'views/cdl/template_asset.html'
+           		return 'views/cdl/template-asset.html'
        		},
        		controller:["$scope","RestService","UserService",function($scope,RestService,UserService){
 
