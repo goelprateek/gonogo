@@ -61,10 +61,11 @@
 			require: 'ngModel',
 			link: function(scope, element, attrs, modelCtrl) {
 				var formate = function(inputValue) {
-					if (inputValue == undefined) inputValue = '';
-					  var transformedInput = inputValue.replace(/[^0-9]/g, '');
+					if (!inputValue) inputValue = '';
+						var transformedInput = (inputValue+"").replace(/[^0-9]/g, '');
+					
 					var rupee = torupee(transformedInput);
-					if (rupee !== transformedInput) {
+					if (inputValue !== rupee) {
 						modelCtrl.$setViewValue(rupee);
 						modelCtrl.$render();
 					}
@@ -482,7 +483,7 @@
 	        require:"ngModel",
 	        link: function(element,scope,attr,controller){
 	            controller.$validators.selectrequired = function(modelValue){                   
-	                return !modelValue || modelValue === '' || (modelValue && modelValue.startsWith('Select')) ? false : true;
+	                return  (!!modelValue) && !modelValue.startsWith('Select');
 	            }
 	        }
 	    }

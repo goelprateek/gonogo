@@ -2,8 +2,8 @@
 	'use strict';	
 	var app=angular.module("gonogo.cdl");
 
-	app.controller("AfterSubmitController",["$scope","sharedService","UserService","RestService","$state",
-				function($scope,sharedService,UserService,RestService,$state){
+	app.controller("AfterSubmitController",["$scope","sharedService","UserService","RestService","$state","notifier",
+				function($scope,sharedService,UserService,RestService,$state,notifier){
 
 		//HARD CODED FOR TESTING
 		//sharedService.setRefID("SATH000216"); // Declined
@@ -52,7 +52,7 @@
 
 			RestService.saveToServer('status', json)
 			.then(function(data){
-				if(data && data.sStatus == 'SUCCESS'){
+				if(data){
 					$scope.statusObject=data;
 				}else{
 					notifier.logError("Sorry we can not process your check status request, please try again later.");

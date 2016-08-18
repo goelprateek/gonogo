@@ -56,7 +56,7 @@
 		$scope.submitImages = function()
 		{
 			if($scope.additnlDocArrayToUpload.length!=0){
-				UploadImages.upload($scope.referenceId,$scope.additnlDocArrayToUpload).then(function(imageUploadedCount) {
+				UploadImages.upload($scope.referenceID,$scope.additnlDocArrayToUpload).then(function(imageUploadedCount) {
 				  	$log.debug('Image upload Success, Total image uploaded : ' + imageUploadedCount);
 				  	$scope.updateStatus();
 				}, function(reason) {
@@ -85,9 +85,9 @@
 			var updateJson ={"sRefID":$scope.referenceID};
 			// console.log("Input JSON for status update :"+$scope.updateJson);
 
-			RestService.saveToServer('post-ipa-stage-update', updateJson)
-			.then(function(data){
-				if(data && data.sStat==="SUCCESS"){
+			// RestService.saveToServer('post-ipa-stage-update', updateJson)
+			// .then(function(data){
+			// 	if(data && data.sStat==="SUCCESS"){
 					if($scope.statusObject.sAppStat === "Declined")
 					{
 						notifier.logSuccess("Image has been uploaded successfully.");
@@ -98,12 +98,12 @@
 						sharedService.setApplicationStatus($scope.statusObject);
 						$state.go("/cdl/post-do");
 					}
-				}else{
-					notifier.logError("Unable to update status, please try again or contact system admin.");
-				}
-			},function(failedResponse){
-				notifier.logError("Sorry we can not reset the stage.");
-			});
+			// 	}else{
+			// 		notifier.logError("Unable to update status, please try again or contact system admin.");
+			// 	}
+			// },function(failedResponse){
+			// 	notifier.logError("Sorry we can not reset the stage.");
+			// });
 		};
 	}]);
 }).call(this);
