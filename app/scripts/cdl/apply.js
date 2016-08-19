@@ -2,7 +2,7 @@
 	'use strict';
 	var app = angular.module('gonogo.cdl');
 
-	app.factory("ApplyObject",function(){
+	app.service("ApplyObject",function(){
     	var _obj = {
 	        "suspected": "No",
 	        "creditCard": "",
@@ -11,9 +11,12 @@
 	        "maritalStat":"Single",
 	        "dob":"",
 	        "constitution":"",
-	        "loanAmt":"",
-	        "tenor":"",
-	        "sameAbove":"",
+	        "sameAbove":false,
+	        "application":{
+	        	"loanType":"Consumer Durables",
+	        	"loanAmt":"",
+	        	"tenor":""
+	        },
 	        "empl":{
 	        	"emplType":"",
 	        	"emplMob":"",
@@ -23,7 +26,13 @@
 	        	"emplSalary":"",
 	        	"emplMonthWithEmp":"",
 	        	"emplName":"",
-	        	"emplEmail":""
+	        	"emplEmail":"",
+	        	"emplState":"",
+	        	"emplCity":"",
+	        	"emplPin":"",
+	        	"emplAddr1":"",
+	        	"emplAddr2":"",
+	        	"emplAddr3":""
 	        },
 	        "oResidence":{
 	        	"oAddress":{
@@ -80,8 +89,8 @@
 	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA","$state","ApplyObject","UploadImages","notifier","$filter",
 	 function($scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA,$state,ApplyObject,UploadImages,notifier,$filter) {
 
-		var dlrCode =null;
-		var CustID=null;
+		var dlrCode = null;
+		var CustID = null;
 
 		// $scope.asset={
 		// 	category:"",
@@ -132,13 +141,13 @@
   				if(_applicant.aKycDocs[i].sKycName==="PAN"){
   					$scope.pan=_applicant.aKycDocs[i].sKycNumber;
   				}
-  				
+
   				if(_applicant.aKycDocs[i].sKycName==="AADHAAR"){
   					$scope.aadhar=_applicant.aKycDocs[i].sKycNumber;
   				}
   			}
 
-  			$scope.productType=$scope.applicationObject.oReq.oApplication.sLoanType;
+  			$scope.applicant.application.loanType=$scope.applicationObject.oReq.oApplication.sLoanType;
 		}
 		// End : If from step 1 screen
 
@@ -152,13 +161,13 @@
 		$scope.InstitutionID = user.institutionID;
 		$scope.userid = user.id;
 		$scope.ePassword = user.ePassword;
-		$scope.suspAct="No";
-		$scope.edu="";
+		// $scope.suspAct="No";
+		// $scope.edu="";
 		$rootScope.errHead="";
 		$rootScope.errorMsg="";
 	    // $scope.holdStageArr=[];
-	    $scope.holdIndex =[];
-	    $scope.wrketype="";
+	    // $scope.holdIndex =[];
+	    // $scope.wrketype="";
 	    //$scope.assetCategory="";
 	    $scope.astCst=0;
 		$scope.dealerArr=JSON.parse(atob(localStorage.getItem('DEALERS')));
@@ -223,24 +232,24 @@
 								$rootScope.errHead = "";
 								$scope.error = "";
 						  		var mApplicant=Response.oReq.oApplicant;
-						  		
+
 						  		if(mApplicant.aPhone){
 						  			for(var i=0;i<mApplicant.aPhone.length;i++){
 						  				if(mApplicant.aPhone[i].sPhoneType==="PERSONAL_MOBILE"){
 						  					$scope.applicant.oResidence.oPhone.iMobile=mApplicant.aPhone[i].sPhoneNumber;
 						  				}else if(mApplicant.aPhone[i].sPhoneType==="PERSONAL_PHONE"){
-						  					$scope.residenceStd=mApplicant.aPhone[i].sAreaCode;
-											$scope.residencePhone=mApplicant.aPhone[i].sPhoneNumber;
+						  					$scope.applicant.oResidence.oPhone.sStdCode=mApplicant.aPhone[i].sAreaCode;
+											$scope.applicant.oResidence.oPhone.iLandLine=mApplicant.aPhone[i].sPhoneNumber;
 						  				}else if(mApplicant.aPhone[i].sPhoneType==="RESIDENCE_PHONE"){
-						  					$scope.prmntStd=mApplicant.aPhone[i].sAreaCode;
-											$scope.prmntPhone=mApplicant.aPhone[i].sPhoneNumber;
-						  				}else if(mApplicant.aPhone[i].sPhoneType==="RESIDENCE_PHONE"){
-						  					$scope.prmntMobile=mApplicant.aPhone[i].sPhoneNumber;
+						  					$scope.applicant.oPermanent.oPhone.sStdCode=mApplicant.aPhone[i].sAreaCode;
+											$scope.applicant.oPermanent.oPhone.iLandLine=mApplicant.aPhone[i].sPhoneNumber;
+						  				}else if(mApplicant.aPhone[i].sPhoneType==="RESIDENCE_MOBILE"){
+						  					$scope.applicant.oPermanent.oPhone.iMobile=mApplicant.aPhone[i].sPhoneNumber;
 						  				}else if(mApplicant.aPhone[i].sPhoneType==="OFFICE_PHONE"){
-						  					$scope.wrkstd = mApplicant.aPhone[i].sAreaCode;
-											$scope.wrkphn = mApplicant.aPhone[i].sPhoneNumber 
+						  					$scope.applicant.empl.emplStd = mApplicant.aPhone[i].sAreaCode;
+											$scope.applicant.empl.emplLandLine = mApplicant.aPhone[i].sPhoneNumber;
 						  				}else if(mApplicant.aPhone[i].sPhoneType==="OFFICE_MOBILE"){
-						  					$scope.wrkmob = mApplicant.aPhone[i].sPhoneNumber
+						  					$scope.applicant.empl.emplMob = mApplicant.aPhone[i].sPhoneNumber
 						  				}					  				
 						  			}
 						  		}
@@ -258,22 +267,22 @@
 						  		}
 
 						  		$scope.same=mApplicant.residenceAddSameAsAbove;
-						  		$scope.productType=Response.oReq.oApplication.sLoanType;
+						  		$scope.applicant.application.loanType=Response.oReq.oApplication.sLoanType;
 
-								$("#msgContainer").css({"left":"32%"});							
-								$("#progressDiv ,#showApplicant").show();
-								$("#kyccontainer,#ErrorContainer").show();
-								$("#nmCntnr").hide();
+								// $("#msgContainer").css({"left":"32%"});							
+								// $("#progressDiv ,#showApplicant").show();
+								// $("#kyccontainer,#ErrorContainer").show();
+								// $("#nmCntnr").hide();
 
 								//TODO
 								$scope.REFID=CustID;
 	//							console.log("Rquired:"+Response.oReq.sSuspAct +"and"+mApplicant.sCreditCardNum);
-								$scope.suspAct=Response.oReq.sSuspAct =="" ? "No" : Response.oReq.sSuspAct;
-								$scope.creditCardNumber=mApplicant.sCreditCardNum;
+								$scope.applicant.suspected=(!Response.oReq.sSuspAct) ? "No" : Response.oReq.sSuspAct;
+								$scope.applicant.creditCard=mApplicant.sCreditCardNum;
 
-								$scope.gender=mApplicant.sApplGndr;
-								$scope.edu=mApplicant.sEdu;
-								$scope.mstatus=mApplicant.sMarStat;
+								$scope.applicant.gender=(!mApplicant.sApplGndr) ? "Male" : mApplicant.sApplGndr;
+								$scope.applicant.education=mApplicant.sEdu;
+								$scope.applicant.maritalStat=(!mApplicant.sMarStat) ? "Single" : mApplicant.sMarStat;
 
 								if(mApplicant.sDob && mApplicant.sDob!=""){
 									var dateOfBirth=new Date();
@@ -290,33 +299,35 @@
 
 								if(mApplicant.aEmpl && mApplicant.aEmpl.length>0)
 								{
-									$scope.constitution=mApplicant.aEmpl[0].sConst;
-									if($scope.constitution == "SELF-EMPLOYED")
+									$scope.applicant.constitution=mApplicant.aEmpl[0].sConst;
+									if($scope.applicant.constitution === "SELF-EMPLOYED")
 									{
-										$("#wrketype").val("SELF-EMPLOYED").attr("disabled","disabled").siblings("help").show();
-										$("#wrketype option[value='SELF-EMPLOYED']").show();
+										$scope.applicant.empl.emplType="SELF-EMPLOYED";
+										// $("#wrketype").val("SELF-EMPLOYED").attr("disabled","disabled").siblings("help").show();
+										// $("#wrketype option[value='SELF-EMPLOYED']").show();
 									}else{
-									 	$("#wrketype").val("").removeAttr("disabled");
-									 	$("#wrketype option[value='SELF-EMPLOYED']").hide();
+										$scope.applicant.empl.emplType="";
+									 	// $("#wrketype").val("").removeAttr("disabled");
+									 	// $("#wrketype option[value='SELF-EMPLOYED']").hide();
 									}
 
-									$scope.wrkename =Response.oReq.oApplicant.aEmpl[0].sEmplName;
-									$scope.wrketype = Response.oReq.oApplicant.aEmpl[0].sEmplType;
-									$scope.wrktwe =Response.oReq.oApplicant.aEmpl[0].iTmWithEmplr;
-									$scope.wrkLstMnthSal = Response.oReq.oApplicant.aEmpl[0].dmonthSal;
-									$scope.wrkGrsAnnual =Response.oReq.oApplicant.aEmpl[0].dItrAmt;
+									$scope.applicant.empl.emplName =Response.oReq.oApplicant.aEmpl[0].sEmplName;
+									$scope.applicant.empl.emplType = Response.oReq.oApplicant.aEmpl[0].sEmplType;
+									$scope.applicant.empl.emplMonthWithEmp =Response.oReq.oApplicant.aEmpl[0].iTmWithEmplr;
+									$scope.applicant.empl.emplSalary = Response.oReq.oApplicant.aEmpl[0].dmonthSal;
+									$scope.applicant.empl.emplITReturn =Response.oReq.oApplicant.aEmpl[0].dItrAmt;
 								}
-								$scope.lamt=Response.oReq.oApplication.dLoanAmt;
-								$scope.loanTenure=Response.oReq.oApplication.iLoanTenor;
+								$scope.applicant.application.loanAmt=Response.oReq.oApplication.dLoanAmt;
+								$scope.applicant.application.tenor=Response.oReq.oApplication.iLoanTenor;
 
 								if(mApplicant.aEmail){
 						  			for(var i=0;i<mApplicant.aEmail.length;i++){
 						  				if(mApplicant.aEmail[i].sEmailType==="PERSONAL"){
-						  					$scope.residenceEmail=mApplicant.aEmail[i].sEmailAddr;
-						  				}else if(mApplicant.aEmail[i].sEmailType==="PERMANENT"){
-						  					$scope.prmntEmail=mApplicant.aEmail[i].sEmailAddr;
-						  				}else if(mApplicant.aEmail[i].sEmailType==="WORK"){
-						  					$scope.wrkemail = mApplicant.aEmail[i].sEmailAddr
+						  					$scope.applicant.oResidence.sEmail = mApplicant.aEmail[i].sEmailAddr;
+						  				}else if(mApplicant.aEmail[i].sEmailType === "PERMANENT"){
+						  					$scope.applicant.oPermanent.sEmail = mApplicant.aEmail[i].sEmailAddr;
+						  				}else if(mApplicant.aEmail[i].sEmailType === "WORK"){
+						  					$scope.applicant.empl.emplEmail = mApplicant.aEmail[i].sEmailAddr;
 						  				}
 						  			}
 						  		}
@@ -324,34 +335,34 @@
 								if(mApplicant.aAddr){
 									for(var i=0;i<mApplicant.aAddr.length;i++){
 										if(mApplicant.aAddr[i].sAddrType=="RESIDENCE"){
-											$scope.addressType=mApplicant.aAddr[i].sResAddrType;
-											$scope.rent=mApplicant.aAddr[i].dRentAmt;
-											$scope.a1=mApplicant.aAddr[i].sLine1;
-											$scope.a2=mApplicant.aAddr[i].sLine2;
-											$scope.a3=mApplicant.aAddr[i].sLine3;
-											$scope.residencePincode=mApplicant.aAddr[i].iPinCode;
-											$scope.residenceCity=mApplicant.aAddr[i].sCity;
-											$scope.residenceState=mApplicant.aAddr[i].sState;
-											$scope.residenceAddrStay=mApplicant.aAddr[i].iMonthAtAddr;
-											$scope.residenceCityStay=mApplicant.aAddr[i].iMonthAtCity;
+											$scope.applicant.oResidence.oAddress.addrType = mApplicant.aAddr[i].sResAddrType;
+											$scope.applicant.oResidence.oAddress.dRentPerMonth = mApplicant.aAddr[i].dRentAmt;
+											$scope.applicant.oResidence.oAddress.sAddress1 = mApplicant.aAddr[i].sLine1;
+											$scope.applicant.oResidence.oAddress.sAddress2 = mApplicant.aAddr[i].sLine2;
+											$scope.applicant.oResidence.oAddress.sAddress3 = mApplicant.aAddr[i].sLine3;
+											$scope.applicant.oResidence.oAddress.sPinCode = mApplicant.aAddr[i].iPinCode;
+											$scope.applicant.oResidence.oAddress.sCity = mApplicant.aAddr[i].sCity;
+											$scope.applicant.oResidence.oAddress.sState = mApplicant.aAddr[i].sState;
+											$scope.applicant.oResidence.oAddress.iMonthAddress = mApplicant.aAddr[i].iMonthAtAddr;
+											$scope.applicant.oResidence.oAddress.iMonthCity = mApplicant.aAddr[i].iMonthAtCity;
 										}else if(mApplicant.aAddr[i].sAddrType=="PERMANENT"){
-											$scope.prmnt_addressType=mApplicant.aAddr[i].sResAddrType;
-											$scope.prmnt_rent=mApplicant.aAddr[i].dRentAmt;
-											$scope.prmnt_a1=mApplicant.aAddr[i].sLine1;
-											$scope.prmnt_a2=mApplicant.aAddr[i].sLine2;
-											$scope.prmnt_a3=mApplicant.aAddr[i].sLine3;
-											$scope.prmntPincode=mApplicant.aAddr[i].iPinCode;
-											$scope.prmntCity=mApplicant.aAddr[i].sCity;
-											$scope.prmntState=mApplicant.aAddr[i].sState;
-											$scope.prmntAddrStay=mApplicant.aAddr[i].iMonthAtAddr;
-											$scope.prmntCityStay=mApplicant.aAddr[i].iMonthAtCity;
+											$scope.applicant.oPermanent.oAddress.addrType = mApplicant.aAddr[i].sResAddrType;
+											$scope.applicant.oPermanent.oAddress.dRentPerMonth = mApplicant.aAddr[i].dRentAmt;
+											$scope.applicant.oPermanent.oAddress.sAddress1 = mApplicant.aAddr[i].sLine1;
+											$scope.applicant.oPermanent.oAddress.sAddress2 = mApplicant.aAddr[i].sLine2;
+											$scope.applicant.oPermanent.oAddress.sAddress3 = mApplicant.aAddr[i].sLine3;
+											$scope.applicant.oPermanent.oAddress.sPinCode = mApplicant.aAddr[i].iPinCode;
+											$scope.applicant.oPermanent.oAddress.sCity = mApplicant.aAddr[i].sCity;
+											$scope.applicant.oPermanent.oAddress.sState = mApplicant.aAddr[i].sState;
+											$scope.applicant.oPermanent.oAddress.iMonthAddress = mApplicant.aAddr[i].iMonthAtAddr;
+											$scope.applicant.oPermanent.oAddress.iMonthCity = mApplicant.aAddr[i].iMonthAtCity;
 										}else if(mApplicant.aAddr[i].sAddrType=="OFFICE"){
-											$scope.wrka1 =mApplicant.aAddr[i].sLine1;
-											$scope.wrka2 =mApplicant.aAddr[i].sLine2;
-											$scope.wrka3 =mApplicant.aAddr[i].sLine3;
-											$scope.wrkpin =mApplicant.aAddr[i].iPinCode;
-											$scope.wrkcity =mApplicant.aAddr[i].sCity;
-											$scope.wrkstate =mApplicant.aAddr[i].sState;
+											$scope.applicant.empl.emplAddr1 = mApplicant.aAddr[i].sLine1;
+											$scope.applicant.empl.emplAddr2 = mApplicant.aAddr[i].sLine2;
+											$scope.applicant.empl.emplAddr3 = mApplicant.aAddr[i].sLine3;
+											$scope.applicant.empl.emplPin = mApplicant.aAddr[i].iPinCode;
+											$scope.applicant.empl.emplCity = mApplicant.aAddr[i].sCity;
+											$scope.applicant.empl.emplState = mApplicant.aAddr[i].sState;
 										}
 									}
 								}
@@ -655,10 +666,9 @@
 //		}
 //	}
 	
-	
 $scope.clickEvent = function(type)
 {
-switch (type) {
+	switch (type) {
 	case "anotherAsset":
 				var dom =$("#assetObj").clone();
 				lcount=lcount+1;
@@ -682,42 +692,41 @@ switch (type) {
 			break;*/
 
 	}
-}
+};
 
-$scope.changeEvent=function(type,val)
+$scope.onChanged=function(type,val)
 { //console.log(val);
 	switch (type) {
-	case "MNY_INTRMNT":
-//		 val=$("#mnyInstn option:selected").val();
-		if(val!="Select" && val!="Cash")
-		 {
-			$("#mnyCnfmDiv").show();
-		 }else{
-			$("#mnyCnfmDiv").hide();
-		 }
-		break;
+// 	case "MNY_INTRMNT":
+// //		 val=$("#mnyInstn option:selected").val();
+// 		if(val!="Select" && val!="Cash")
+// 		 {
+// 			$("#mnyCnfmDiv").show();
+// 		 }else{
+// 			$("#mnyCnfmDiv").hide();
+// 		 }
+// 		break;
 	case "CONSTITN":
-//		 val=$("#constitution option:selected").val();
-		if(val=="SELF-EMPLOYED")
-	 	{
-			$("#wrketype").val("SELF-EMPLOYED").attr("disabled","disabled").siblings("help").show();
-			$("#wrketype option[value='SELF-EMPLOYED']").show();
-	 	}else{
-		 	$("#wrketype").val("").removeAttr("disabled");
-		 	$("#wrketype option[value='SELF-EMPLOYED']").hide();
-		 	$scope.wrketype="";
-	 	}
+		// if(val=="SELF-EMPLOYED")
+	 // 	{
+		// 	$("#wrketype").val("SELF-EMPLOYED").attr("disabled","disabled").siblings("help").show();
+		// 	$("#wrketype option[value='SELF-EMPLOYED']").show();
+	 // 	}else{
+		//  	$("#wrketype").val("").removeAttr("disabled");
+		//  	$("#wrketype option[value='SELF-EMPLOYED']").hide();
+		//  	$scope.wrketype="";
+	 // 	}
+	 	if($scope.applicant.constitution === "SELF-EMPLOYED")
+		{
+			$scope.applicant.empl.emplType="SELF-EMPLOYED";
+		}else{
+			$scope.applicant.empl.emplType="";
+		}
 		break;
 	case "WRKTYPE":
-//		 val=$("#constitution option:selected").val();
-//		if(val=="SELF-EMPLOYED")
-//		 {
-			$("#wrkGrsAnnual,#wrkLstMnthSal").val("");
-//			$("#wrkLstMnthSal").val("").hide();
-//		 }else{
-//				$("#wrkLstMnthSal").val("").show();
-//				$("#wrkGrsAnnual").val("").hide();
-//		 }
+			//$("#wrkGrsAnnual,#wrkLstMnthSal").val("");
+			$scope.applicant.empl.emplITReturn="";
+			$scope.applicant.empl.emplSalary="";
 		break;
 		
 	default:
@@ -1418,7 +1427,7 @@ $scope.submitApplication=function(UrlKey)
 					"sExpiryDate":null,
 					"sIssueDate":null,
 					"sKycName":"AADHAAR",
-					"sKycNumber":"254234523452",
+					"sKycNumber":"",
 					"sKycStat":null
 				}],
 				"aLoanDetails":null,
@@ -1492,12 +1501,12 @@ $scope.submitApplication=function(UrlKey)
 					"sPrice":""
 				}],
 				"oProperty":null,
-				"sLoanType":"Consumer Durables",
+				"sLoanType":$scope.applicant.application.loanType,
 				"dEmi":0.0,
-				"dLoanAmt":$scope.applicant.loanAmt ? ($scope.applicant.loanAmt+"").replace(/,/g,"") : 0,
+				"dLoanAmt":$scope.applicant.application.loanAmt ? ($scope.applicant.application.loanAmt+"").replace(/,/g,"") : 0,
 				"dMarginAmt":0.0,
 				"iAdvEmi":0,
-				"iLoanTenor":$scope.applicant.tenor
+				"iLoanTenor":$scope.applicant.application.tenor
 			},
 			"aCoApplicant":null,
 			"sSuspAct":$scope.applicant.suspected
@@ -1646,8 +1655,9 @@ $scope.submitApplication=function(UrlKey)
 		}
 
 		if(UrlKey=="step3"){
-			$rootScope.errHead = "Status"
-			$rootScope.errorMsg = "Data Saved Successfully.";
+			// $rootScope.errHead = "Status"
+			// $rootScope.errorMsg = "Data Saved Successfully.";
+			notifier.logSuccess("Data Saved Successfully.");
 		}
 		//console.log("before upload:"+img_array.length);
 		UploadAllImgs(data.sRefID,img_array,"submit");
@@ -1670,7 +1680,8 @@ $scope.submitApplication=function(UrlKey)
 			}
 		else{
 			$scope.serviceHitCount=1;
-			$scope.error="Sorry we can not process your Submit request";
+			//$scope.error="Sorry we can not process your Submit request";
+			notifier.logError("We are unable to submit your request, please try again later");
 		}	
 	});
 };
@@ -1979,17 +1990,17 @@ function validation()
 		}
 });*/
 
-var mdlCnt=1
-var rowCnt=1;
+// var mdlCnt=1
+// var rowCnt=1;
 // add new template for model no in postipa
-$(document.body).on("click","#anotherModel",function()
-{	
-var id=$(document.body).find("div[id^=modelRow]").last().attr("id");
-var	dom="<div class='col-md-4 height mdlNmbr' id='fmodelPanel"+mdlCnt+"'><help>Additional Model Number</help><input type='text' id='IpaAdModel"+mdlCnt+"' class='customInput' placeholder='Additional Model Number'/>" ;
-dom=dom+"<span class='glyphicon glyphicon-remove'></span></div></div>";
-mdlCnt++;
-$("#apc").children().last().append(dom);
-});
+// $(document.body).on("click","#anotherModel",function()
+// {	
+// 	var id=$(document.body).find("div[id^=modelRow]").last().attr("id");
+// 	var	dom="<div class='col-md-4 height mdlNmbr' id='fmodelPanel"+mdlCnt+"'><help>Additional Model Number</help><input type='text' id='IpaAdModel"+mdlCnt+"' class='customInput' placeholder='Additional Model Number'/>" ;
+// 	dom=dom+"<span class='glyphicon glyphicon-remove'></span></div></div>";
+// 	mdlCnt++;
+// 	$("#apc").children().last().append(dom);
+// });
 
 $scope.remove_file = function(filetype, id, index) {
 		if(id == 1)
@@ -2037,7 +2048,7 @@ $scope.remove_file = function(filetype, id, index) {
 				$("#selectImgInit").attr("src","");
 				$scope.profileImage=false;
 		}
-	console.log(img_array.length);
+		//console.log(img_array.length);
 		for(var i=0; i<img_array.length;i++){
 	       if(img_array[i] != null){
 	       	if(img_array[i].kyc_name == filetype){
@@ -2045,7 +2056,7 @@ $scope.remove_file = function(filetype, id, index) {
 	          }
 	      }
 	  }
-	  console.log(img_array.length);
+	  //console.log(img_array.length);
 		
 };// end file remove method
 
@@ -2115,7 +2126,7 @@ $scope.sendPostIpaMail=function()
 //		$scope.empService($(this).val());
 //	}
 //});
-$scope.emplArr=[];
+// $scope.emplArr=[];
 /*$("#wrkename").autocomplete({
 	source: $scope.emplArr
   });
@@ -2168,7 +2179,7 @@ $scope.getEmployerNames=function(queryStr){
 
 
 // ****************************************** ASSET MODEL
-$scope.modelTags = [];
+//$scope.modelTags = [];
 
 // $(".ast").change(function()
 // {
@@ -2296,7 +2307,7 @@ $scope.modelTags = [];
 //		  }
 ////		  console.log($scope.dealerObj+" : "+$scope.dealerObj["DEALER_CODE"]);
 //	  });
-	//Piyush
+/*
 //	    $('.mdlNmbr ').hover(function(){
     	$(document).on("mouseenter",".mdlNmbr ",function(){
 //	    	alert("Hello");
@@ -2309,10 +2320,12 @@ $scope.modelTags = [];
 	  $(document.body).on("click",".glyphicon-remove",function(){
 		  $(this).parent("div").remove();
 	  });
+
+	  */
 	  //reload current data form
-	  $("#cancel").click(function(){
-		  location.reload();
-	  });
+	  // $("#cancel").click(function(){
+		 //  location.reload();
+	  // });
 	  //save partial service data
      /*$("#save").click(function(){
 		  
@@ -2343,9 +2356,9 @@ $scope.modelTags = [];
 			return message;
 		}*/
 	  
-	$(document.body).on("click","#homePG",function(){
-	    location.reload();
-	  	});
+		// $(document.body).on("click","#homePG",function(){
+	 //    	location.reload();
+	 //  	});
 		  
 	  /*$scope.onSaveAssetClicked=function(){
 		  // $scope.mkVal = $scope.mk;
@@ -2383,7 +2396,7 @@ $scope.modelTags = [];
 	  	};
 
 		var minDa = new Date();
-			minDa.setFullYear(minDa.getFullYear()-100);
+		minDa.setFullYear(minDa.getFullYear()-100);
 
 		var maxDa = new Date();
 		maxDa.setFullYear(maxDa.getFullYear()-18);
@@ -2402,12 +2415,17 @@ $scope.modelTags = [];
 		if($scope.asset){
 			$scope.applicant.asset = $scope.asset;
 		}
-		$scope.applicant.oResidence.oPhone.iMobile = $scope.tmob;
 
-	
 		$scope.isCurrPanel = function(){
 			return true;
 		}
 
-}]);
-}).call(this)
+		$scope.onNextClicked=function(nextURL,isInvalid){
+			if(isInvalid){
+				angular.element('input.ng-invalid').first().focus();
+			}else{
+				$state.go(nextURL);
+			}
+		};
+	}]);
+}).call(this);
