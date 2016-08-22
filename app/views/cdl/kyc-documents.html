@@ -176,12 +176,10 @@
 
 	<div class="row clearfix ">
 		<div class="col-md-10 col-md-offset-1">
-			<button    ui-sref="/cdl/apply.asset" class="customButton previous">Previous</button>
+			<button class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.asset')">Previous</button>
 			<button class="customButton cancel" id="cancel">Cancel</button>
 			<button class="customButton save saveSubmit" id="save" ng-click="submitApplication('step3')">Save</button>
-			<button class="customButton submit" id="submit"
-				style="position: absolute; top: -1px;"
-				ng-click="submitApplication('step4')">Submit</button>
+			<button class="customButton submit" id="submit"	style="position: absolute; top: -1px;" ng-click="submitApplication('step4')">Submit</button>
 		</div>
 	</div>
 		<!-- <div class="col-md-4"></div> -->

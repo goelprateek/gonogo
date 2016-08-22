@@ -145,7 +145,7 @@
 
 	<div class="row clearfix ">
 		<div class="col-md-10 col-md-offset-1">
-			<button  ui-sref="/cdl/apply.address" class="customButton previous">Previous</button>
+			<button class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.address')">Previous</button>
 			<!-- ng-disabled="professionalData.$invalid" -->
 			<!-- <button ui-sref="/cdl/apply.asset" class="customButton next" ng-disabled="professionalData.$invalid" id="fromemployment" >Next</button> -->
 			<button type="submit" class="customButton next" id="fromemployment" ng-click="onNextClicked('/cdl/apply.asset',professionalData.$invalid)">Next</button>
