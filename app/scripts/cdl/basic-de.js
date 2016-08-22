@@ -215,7 +215,7 @@
 				$scope.otp=successResponse.OTP;
 				$scope.shwVerify=true;
 			},function(failedResponse){
-				alert("Some error occured, please retry !");
+				notifier.logError("Some error occured, please retry !");
 			});
 		};
 

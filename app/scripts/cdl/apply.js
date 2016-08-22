@@ -17,6 +17,7 @@
 	        	"loanAmt":"",
 	        	"tenor":""
 	        },
+	        "aKycDocs":[],
 	        "empl":{
 	        	"emplType":"",
 	        	"emplMob":"",
@@ -133,15 +134,15 @@
 	  		$scope.dealerName=$scope.applicationObject.oReq.oApplication.aAssetDetail[0].sDlrName;
 			$scope.applicant.oResidence.oPhone.iMobile=_applicant.aPhone[0].sPhoneNumber;
 
-			for(var i=0;i<_applicant.aKycDocs.length;i++){
-  				if(_applicant.aKycDocs[i].sKycName==="PAN"){
-  					$scope.pan=_applicant.aKycDocs[i].sKycNumber;
-  				}
-
-  				if(_applicant.aKycDocs[i].sKycName==="AADHAAR"){
-  					$scope.aadhar=_applicant.aKycDocs[i].sKycNumber;
-  				}
-  			}
+			_.each(_applicant.aKycDocs ,function(value){
+				$scope.applicant.aKycDocs.push({
+					"sExpiryDate":null,
+					"sIssueDate":null,
+					"sKycName":value.sKycName,
+					"sKycNumber":value.sKycNumber,
+					"sKycStat":null
+				});
+			});
 
   			$scope.applicant.application.loanType=$scope.applicationObject.oReq.oApplication.sLoanType;
 		}
@@ -1418,13 +1419,7 @@ $scope.submitApplication=function(UrlKey)
 				"sApplGndr":$scope.applicant.gender,
 				"oIncomeDetails":null,
 				"oSpouseName":null,
-				"aKycDocs":[{ // whole block is remain
-					"sExpiryDate":null,
-					"sIssueDate":null,
-					"sKycName":"AADHAAR",
-					"sKycNumber":"",
-					"sKycStat":null
-				}],
+				"aKycDocs":$scope.applicant.aKycDocs,
 				"aLoanDetails":null,
 				"sMarStat":$scope.applicant.maritalStat,
 				"sReligion":null,
