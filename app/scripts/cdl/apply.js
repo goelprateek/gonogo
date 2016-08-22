@@ -1008,7 +1008,7 @@ $scope.onselectImg = function($files,type,index)
 		    	var re = (/\.(jpg)$/i);
 				if(!re.exec(fname))
 		    	{
-			    	alert("Sorry..!! We can not upload your image. \n Only .Jpg images are allowed");
+			    	notifier.logWarning("Sorry..!! We can not upload your image. \n Only .Jpg images are allowed");
 			    	break;
 		    	}
 				img_type = fname.split(".")[1];
