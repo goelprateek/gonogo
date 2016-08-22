@@ -284,7 +284,7 @@
 	<div class="row clearfix ">
 		<div class="col-md-10 col-md-offset-1">
 		<!-- ng-disabled="addressData.$invalid" -->
-			<button ui-sref="/cdl/apply.personal" class="customButton previous">Previous</button>
+			<button class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.personal')">Previous</button>
 			<!-- <button ui-sref="/cdl/apply.professional" ng-disabled="addressData.$invalid" class="customButton next">Next</button> -->
 			<button type="submit" class="customButton next" ng-click="onNextClicked('/cdl/apply.professional',addressData.$invalid)">Next</button>
 			<button class="customButton save" ng-click="submitApplication('step3')">Save</button>
