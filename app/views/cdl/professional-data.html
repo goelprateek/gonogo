@@ -11,7 +11,6 @@
 						</div>
 					</div>
 					<div class="col-md-6 cdl-height form-group">
-						<help>Employment Type*</help>
 						<select class="cdl-form-control control-select inputMaterial" ng-model="applicant.empl.emplType" id="wrketype" name="emptype" ng-change="onChanged('WRKTYPE',applicant.empl.emplType)" ng-disabled="applicant.constitution === 'SELF-EMPLOYED'" select-required>
 							<option value="">Select	Employment Type*</option>
 							<option ng-if="applicant.constitution === 'SELF-EMPLOYED'" value="SELF-EMPLOYED">SELF-EMPLOYED</option>
@@ -20,6 +19,7 @@
 							<option value="SALARIED">SALARIED</option>
 							<option value="OTHERS">OTHERS</option>
 						</select> 
+						<label>Employment Type*</label>
 						<div ng-messages="professionalData.emptype.$error" ng-show="professionalData.emptype.$touched" class="errorMsg">
 							<p ng-message="selectrequired">Please select Employment type </p>
 						</div>

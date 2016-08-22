@@ -261,7 +261,7 @@
 						  			}
 						  		}
 
-						  		$scope.same=mApplicant.residenceAddSameAsAbove;
+						  		$scope.applicant.sameAbove=mApplicant.residenceAddSameAsAbove;
 						  		$scope.applicant.application.loanType=Response.oReq.oApplication.sLoanType;
 
 								// $("#msgContainer").css({"left":"32%"});							
@@ -874,7 +874,7 @@ $scope.pinService = function(pin,id){
 				$scope.error="Sorry we can not process your PAN request";
 			}
 		});	
-	}else if(pin.length == 0){
+	}else if(pin.length != 6){
 		if( id =="perpin")
 		{
 			$scope.applicant.oResidence.oAddress.sCity = "";
@@ -2430,5 +2430,9 @@ $scope.getEmployerNames=function(queryStr){
 				$state.go(nextURL);
 			}
 		};
+
+		$scope.cancelApplication = function(){
+			location.reload();
+		}
 	}]);
 }).call(this);
