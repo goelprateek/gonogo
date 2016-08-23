@@ -142,6 +142,11 @@
 					"sKycNumber":value.sKycNumber,
 					"sKycStat":null
 				});
+				if(value.sKycName == "PAN"){
+					$scope.pan=value.sKycNumber;						  					
+				}else if(value.sKycName == "AADHAAR"){
+					$scope.aadhar=value.sKycNumber;
+				}
 			});
 
   			$scope.applicant.application.loanType=$scope.applicationObject.oReq.oApplication.sLoanType;
@@ -1021,6 +1026,13 @@ $scope.onselectImg = function($files,type,index)
 			            case "APPLICANT-PHOTO":
 							$scope.selectImgInit = binaryString	
 				        	img_array.push({kyc_name:"APPLICANT-PHOTO",image:$scope.selectImgInit.split(",")[1],type:img_type});
+							$scope.applicant.aKycDocs.push({
+									"sExpiryDate":null,
+									"sIssueDate":null,
+									"sKycName":"APPLICANT-PHOTO",
+									"sKycNumber":"",
+									"sKycStat":null
+							});
 							break;
 			            case "PAN":
 							$scope.selectImg1 = binaryString	
@@ -1033,10 +1045,24 @@ $scope.onselectImg = function($files,type,index)
 						case "PASSPORT":
 							$scope.selectImg3 = binaryString
 							img_array.push({kyc_name:"PASSPORT",image:$scope.selectImg3.split(",")[1],type:img_type});
+							$scope.applicant.aKycDocs.push({
+									"sExpiryDate":null,
+									"sIssueDate":null,
+									"sKycName":"PASSPORT",
+									"sKycNumber":"",
+									"sKycStat":null
+							});
 							break;
 						case "DRIVING-LICENSE":
 							$scope.selectImg4 = binaryString
 							img_array.push({kyc_name:"DRIVING-LICENSE",image:$scope.selectImg4.split(",")[1],type:img_type});
+							$scope.applicant.aKycDocs.push({
+									"sExpiryDate":null,
+									"sIssueDate":null,
+									"sKycName":"DRIVING-LICENSE",
+									"sKycNumber":"",
+									"sKycStat":null
+							});
 							break;
 						case "CUSTOMER-PHOTO":
 							$scope.selectImg5 = binaryString
@@ -1053,6 +1079,13 @@ $scope.onselectImg = function($files,type,index)
 						case "OTHER":
 							$scope.selectImg8 = binaryString
 							img_array.push({kyc_name:"OTHER",image:$scope.selectImg8.split(",")[1],type:img_type});
+							$scope.applicant.aKycDocs.push({
+									"sExpiryDate":null,
+									"sIssueDate":null,
+									"sKycName":"OTHER",
+									"sKycNumber":"",
+									"sKycStat":null
+							});
 							break;	
 							
 						case "APPLICATION_FORM":
@@ -1650,6 +1683,13 @@ $scope.submitApplication=function(UrlKey)
 			if(UrlKey=="step3"){
 				// $rootScope.errHead = "Status"
 				// $rootScope.errorMsg = "Data Saved Successfully.";
+				if(img_array.length!=0){
+					UploadImages.upload($scope.referenceID,img_array).then(function(imageUploadedCount) {
+					  	$log.debug('Image upload Success, Total image uploaded : ' + imageUploadedCount);
+					}, function(reason) {
+					  	$log.debug('Image upload Failed, Total image uploaded : ' + imageUploadedCount);
+					});
+				}
 				notifier.logSuccess("Data Saved Successfully.");
 			}
 		}else{
