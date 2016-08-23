@@ -8,7 +8,7 @@
 						<div class="col-md-7"><input type="text" class="customInput" /> </div> -->
 						<div class="form-group col-md-4 cdl-height" ng-class="{'has-error': BasicInfoForm.fName.$touched && BasicInfoForm.fName.$invalid}">
 							<input id="fname" ng-model="basicInfo.firstName" type="text" name="fName"
-								class="cdl-form-control inputMaterial" maxlength="30" ng-pattern="/^[a-zA-Z\s]+$/" capitalize required/>
+								class="cdl-form-control inputMaterial" ng-disabled="shwVerify" maxlength="30" ng-pattern="/^[a-zA-Z\s]+$/" capitalize required/>
 							<label>First Name*</label>
 							<div ng-messages="BasicInfoForm.fName.$touched && BasicInfoForm.fName.$error" class="errorMsg">
 								<p ng-message="required">Please enter first name</p>
@@ -16,12 +16,12 @@
 							</div>
 						</div>
 						<div class="form-group col-md-4 cdl-height" ng-class="{'has-error': BasicInfoForm.mName.$touched && BasicInfoForm.mName.$invalid}">
-							<input id="mname" ng-model="basicInfo.middleName" type="text" name="mName" class="cdl-form-control inputMaterial" capitalize />
+							<input id="mname" ng-model="basicInfo.middleName" type="text" name="mName" class="cdl-form-control inputMaterial" ng-disabled="shwVerify" capitalize />
 							<label>Middle Name</label>
 						</div>
 						<div class="form-group col-md-4 cdl-height" ng-class="{'has-error': BasicInfoForm.lName.$touched && BasicInfoForm.lName.$invalid}">
 							<input id="lname" ng-model="basicInfo.lastName" type="text" name="lName"
-								class="cdl-form-control inputMaterial" capitalize maxlength="30" ng-pattern="/^[a-zA-Z\s]+$/" required/>
+								class="cdl-form-control inputMaterial" ng-disabled="shwVerify" capitalize maxlength="30" ng-pattern="/^[a-zA-Z\s]+$/" required/>
 							<label>Last Name*</label>
 							<div ng-messages="BasicInfoForm.lName.$touched && BasicInfoForm.lName.$error" class="errorMsg">
 								<p ng-message="required">Please enter last name</p>
@@ -32,7 +32,7 @@
 
 					<div class="row clearfix">
 						<div class="form-group col-md-4 cdl-height" ng-class="{'has-error': BasicInfoForm.mobileNumber.$touched && BasicInfoForm.mobileNumber.$invalid}">
-							<input type="text" id="tmob" ng-model="basicInfo.mobileNumber" class="cdl-form-control inputMaterial" maxlength="10" required name="mobileNumber" ng-pattern="/^[0-9\d]{10}$/" />
+							<input type="text" id="tmob" ng-model="basicInfo.mobileNumber" class="cdl-form-control inputMaterial" ng-disabled="shwVerify" maxlength="10" required name="mobileNumber" ng-pattern="/^[0-9\d]{10}$/" />
 							<label>Mobile Number*</label>
 							<div ng-messages="BasicInfoForm.mobileNumber.$touched && BasicInfoForm.mobileNumber.$error" class="errorMsg">
 								<p ng-message="required">Please enter mobile number</p>
@@ -40,11 +40,14 @@
 							</div>
 						</div>
 						<div class="form-group col-md-4 cdl-height">
-							<input type="text" id="aadhar" name="Aadhar Number" ng-model="basicInfo.aadhaarNumber" class="cdl-form-control aadhaar inputMaterial" maxlength="12" />
+							<input type="text" id="aadhar" name="Aadhar" ng-model="basicInfo.aadhaarNumber" ng-disabled="shwVerify" class="cdl-form-control aadhaar inputMaterial" ng-pattern="/^[0-9\d]{12}$/" maxlength="12" />
 							<label>Aadhaar Number</label>
+							<!-- <div ng-messages="BasicInfoForm.Aadhar.$error"  class="errorMsg">
+			  				  	<p ng-message="pattern">Please enter valid Aadhaar Number</p>
+							</div> -->
 						</div>
 						<div class="form-group col-md-4 cdl-height">
-							<input type="text" id="pan" ng-model="basicInfo.panNumber" name="panNumber" class="cdl-form-control pan inputMaterial" maxlength="10" capitalize ng-pattern="/^[A-Z]{3}[P][A-Z]\d{4}[A-Z]/i" />
+							<input type="text" id="pan" ng-model="basicInfo.panNumber" name="panNumber" class="cdl-form-control pan inputMaterial" maxlength="10" ng-disabled="shwVerify" capitalize ng-pattern="/^[A-Z]{3}[P][A-Z]\d{4}[A-Z]/i" />
 							<label>Pan</label>
 							<div ng-messages="BasicInfoForm.panNumber.$error"  class="errorMsg">
 			  				  	<p ng-message="pattern">Please enter valid Pan Number</p>
@@ -54,7 +57,7 @@
 
 					<div class="row clearfix">
 						<div class="form-group col-md-4 cdl-height">
-							<select class="cdl-form-control control-select inputMaterial" id="cdl" ng-model="basicInfo.productType" name="productType" select-required>
+							<select class="cdl-form-control control-select inputMaterial" id="cdl" ng-model="basicInfo.productType" name="productType" ng-disabled="shwVerify" select-required>
 								<option selected="selected" value="">Select Product Type*</option>
 								<option value="Consumer Durables">Consumer Durables</option>
 							</select>

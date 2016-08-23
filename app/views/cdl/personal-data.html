@@ -1,24 +1,20 @@
-<form id="kyccontainer" name="personalData" novalidate>
+<form id="kyccontainer" name="personalData" novalidate accessible-form>
 	<div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true}">
 		<div class="row clearfix ">
 			<div class="col-md-10 col-md-offset-1">
 				<div class="row clearfix" style="margin-bottom: 40px;">
 					<help style="display:block;margin:15px;">Applicant Photo</help>
-					<div class="preview" ng-if="!profileImage"
-						ng-style="{'background-image':'url('+selectImgInit+')'}"
-						style="width: 17%; height: 113px; margin-left: 3%">
-						<input id="addrIP" type="file" ng-model="addrIP"
-							ngf-select="onselectImg($files,'APPLICANT-PHOTO')" />
+					<div class="preview" ng-if="!profileImage" ng-style="{'background-image':'url('+selectImgInit+')'}" style="width: 17%; height: 113px; margin-left: 3%">
+						<input id="addrIP" type="file" ng-model="addrIP" ngf-select="onselectImg($files,'APPLICANT-PHOTO')" />
 						<label for="addrIP" ng-hide="selectImgInit" style="display: block;">
-						<img id="selectImgInit" alt="" src="images/camera-128.png" class="img_icon" />
+							<img id="selectImgInit" alt="" src="images/camera-128.png" class="img_icon" />
 						</label>
 					</div>
 
 					<img ng-model="profileImg" id="selectImgInit" alt="" ng-src="{{profileData}}" ng-if="profileImage" style="width: 17%; height: 113px; margin-left: 3%">
 					<div style="height: 20px">
 						<small ng-show="image_url2" class="size">{{file_size2}}</small>
-						<a class="remove_image" ng-show="selectImgInit || profileImage"
-							ng-click="remove_file('APPLICANT-PHOTO','0',selectImgInit)">Remove</a>
+						<a class="remove_image" ng-show="selectImgInit || profileImage" ng-click="remove_file('APPLICANT-PHOTO','0',selectImgInit)">Remove</a>
 					</div>
 				</div>
 				<div class="row clearfix">
@@ -43,12 +39,12 @@
 					<div class="col-md-6 cdl-height form-group">
 						<div class="rc" style="color: inherit;">
 							<label style="color: inherit; width: 35%;">Gender*</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<label style="float: none; color: inherit;"><input
-								type="radio" name="Gender" checked="checked" value="Male"
-								ng-model="applicant.gender"/> Male </label> 
-							<label style="float: none; color: inherit;"><input
-								type="radio" name="Gender" value="Female" ng-model="applicant.gender" />
-								Female </label>
+							<label style="float: none; color: inherit;">
+								<input type="radio" name="Gender" ng-model="applicant.gender" value="Male"/>Male
+							</label>
+							<label style="float: none; color: inherit;">
+								<input type="radio" name="Gender" value="Female" ng-model="applicant.gender" />Female
+							</label>
 						</div>
 					</div>
 				</div>
@@ -69,17 +65,18 @@
 							<p ng-message="selectrequired">Please select Qualification </p>
 						</div>
 					</div>
+					<!-- {{applicant.maritalStat}} -->
 					<div class="col-md-6 cdl-height form-group">
 						<div class="rc">
-							<label style="color: inherit;">Marital
-								Status*</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label
-								style="float: none; color: inherit;"><input
-								type="radio" name="Mstatus" ng-model="applicant.maritalStat"
-								checked="checked" value="Single" /> Single </label>
-								<label
-								style="float: none; color: inherit;">
+							<label style="color: inherit;">Marital Status*</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<label style="float: none; color: inherit;">
+								<input type="radio" name="Mstatus" ng-model="applicant.maritalStat" value="Single" />
+								Single
+							</label>
+							<label style="float: none; color: inherit;">
 								<input type="radio" name="Mstatus" ng-model="applicant.maritalStat" value="Married" />
-								Married </label>
+								Married
+							</label>
 						</div>
 					</div>
 				</div>
@@ -94,14 +91,13 @@
 						</div>
 					</div>
 					<div class="col-md-6 cdl-height form-group">
-						<select class="cdl-form-control control-select inputMaterial" name="constitution"	ng-model="applicant.constitution" ng-change="changeEvent('CONSTITN',constitution)" select-required>
+						<select class="cdl-form-control control-select inputMaterial" name="constitution" ng-model="applicant.constitution" ng-change="onChanged('CONSTITN',constitution)" select-required>
 							<option value="">Select Constitution*</option>
 							<option value="TRUST">TRUST</option>
 							<option value="SELF-EMPLOYED">SELF-EMPLOYED</option>
 							<option value="SALARIED">SALARIED</option>
 							<option value="PARTNERSHIP">PARTNERSHIP</option>
-							<option value="PRIVATE LIMITED COMPANY">PRIVATE
-								LIMITED COMPANY</option>
+							<option value="PRIVATE LIMITED COMPANY">PRIVATE LIMITED COMPANY</option>
 						</select>
 						<label>Constitution*</label>
 						<div ng-messages="personalData.constitution.$error" ng-show="personalData.constitution.$touched" class="errorMsg">
@@ -121,7 +117,7 @@
 					<div class="col-md-6 cdl-height form-group">
 						<div class="div-rupee">
 							<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
-							<input type="text" class="cdl-form-control inputMaterial" name="loanamt" ng-model="applicant.loanAmt" maxlength="12" style="padding-left: 4%" rupees required />
+							<input type="text" class="cdl-form-control inputMaterial" name="loanamt" ng-model="applicant.application.loanAmt" maxlength="12" style="padding-left: 4%" rupees required />
 							<label>Loan Amount*</label>
 							<div ng-messages="personalData.loanamt.$error" ng-show="personalData.loanamt.$touched" class="errorMsg">
 							    <p ng-message="required">Please enter Loan Amount</p>
@@ -129,10 +125,10 @@
 						</div>
 					</div>
 					<div class="col-md-6 cdl-height form-group">
-						<input type="text" name="tenor" class="cdl-form-control inputMaterial" ng-model="applicant.tenor" maxlength="3" only-digits required />
+						<input type="text" name="tenor" class="cdl-form-control inputMaterial" ng-model="applicant.application.tenor" maxlength="3" only-digits required />
 						<label>Tenor in Months*</label>
 						<div ng-messages="personalData.tenor.$touched && personalData.tenor.$error" class="errorMsg">
-		   					<p ng-message="required">Please enter Tenor</p>
+							<p ng-message="required">Please enter Tenor</p>
 						</div>
 					</div>
 				</div>
@@ -141,8 +137,8 @@
 	</div>
 	<div class="row clearfix">
 		<div class="col-md-10 col-md-offset-1">
-		<!-- ng-disabled="personalData.$invalid" -->
-			<button ui-sref="/cdl/apply.address" ng-disabled="personalData.$invalid" class="customButton next" id="fromKYC">Next</button>
+			<!-- <button ui-sref="/cdl/apply.address" ng-disabled="personalData.$invalid" class="customButton next" id="fromKYC">Next</button> -->
+			<button type="submit" class="customButton next" id="fromKYC" ng-click="onNextClicked('/cdl/apply.address',personalData.$invalid)">Next</button>
 			<button class="customButton save" id="save" ng-click="submitApplication('step3')">Save</button>
 		</div>
 	</div>

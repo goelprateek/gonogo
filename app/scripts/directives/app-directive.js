@@ -469,8 +469,8 @@
                             button.addClass(compress).removeClass(expand);
                         }
                         widget.addClass("maximized");
-                         el.parents("modal-content").css("height", "100%");
-                         widget.find("object").css("height","565px");
+                     	el.parents("modal-content").css("height", "100%");
+                     	widget.find("object").css("height","565px");
                     }
                 });
             }
@@ -489,4 +489,75 @@
 	    }
 	});
 	
+	app.directive('accessibleForm', function () {
+	    return {
+	        restrict: 'A',
+	        link: function (scope, elem) {
+
+	            // set up event handler on the form element
+	            elem.on('submit', function () {
+
+	                // find the first invalid element
+	                var firstInvalid = elem[0].querySelector('.ng-invalid');
+
+	                // if we find one, set focus
+	                if (firstInvalid) {
+	                    firstInvalid.focus();
+	                }
+	            });
+	        }
+	    };
+	});
+
+	app.directive('thisEarlierThan', function () {
+		return {
+			require: 'ngModel',
+			restrict: 'A',
+			link: function (scope, elem, attrs, ctrl) {
+				var cityStay,residenceStay;
+
+				scope.$watch(attrs.ngModel, function (newVal, oldVal, scope) {
+					residenceStay = newVal;
+					check();
+				});
+
+				scope.$watch(attrs.thisEarlierThan, function (newVal, oldVal, scope) {
+					cityStay = newVal;
+					check();
+				});
+
+				var check = function () {
+					if (!cityStay || !residenceStay) {
+						return;
+					}
+
+					if (!validate(cityStay)) {
+						return;						
+					}
+
+					if (!validate(residenceStay)) {
+						return;						
+					}
+
+					if (parseInt(cityStay) >= parseInt(residenceStay)) {
+						ctrl.$setValidity('thisEarlierThan', true);
+					}
+					else {
+						ctrl.$setValidity('thisEarlierThan', false);
+					}
+
+					return;
+				};
+
+				var validate = function (iYears) {					
+					if (isNaN(parseInt(iYears))) {
+						return false;
+					}
+					else {
+						return true;
+					}					
+				};
+			}
+		};
+	});
 }).call(this);

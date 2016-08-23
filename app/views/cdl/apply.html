@@ -14,7 +14,7 @@
 			</div>			
 			<div style="margin-top: 10px; padding-left: 30%">
 				<div style="display: inline-block; color: #24a1ed; float: left;">Product: </div>
-				<div style="display: inline-block; width: 75%;"> {{productType}}</div>
+				<div style="display: inline-block; width: 75%;"> {{applicant.application.loanType}}</div>
 			</div>
 			<div style="margin-top: 18%;">
 				<ul class="progressbar">
@@ -24,11 +24,11 @@
 					<li ui-sref-active="active" ui-sref="/cdl/apply.asset"> ASSET DETAILS</li>
 					<li ui-sref-active="active" ui-sref="/cdl/apply.kyc"> PROOF</li> -->
 
-					<li id="KYCList" class="active">PERSONAL DETAILS</li>
-					<li id="personalList" ng-class= "{ active : isCurrPanel()}">ADDRESS DETAILS</li>
-					<li id="employmentList" ng-class= "{ active : isCurrPanel()}">WORK DETAILS</li>
-					<li id="IncomeList" ng-class= "{ active : isCurrPanel()}">ASSET DETAILS</li>
-					<li id="BankingList" ng-class= "{ active : isCurrPanel()}">PROOF</li>
+					<li id="KYCList" ng-class= "{ active : isCurrPanel(1)}">PERSONAL DETAILS</li>
+					<li id="personalList" ng-class= "{ active : isCurrPanel(2)}">ADDRESS DETAILS</li>
+					<li id="employmentList" ng-class= "{ active : isCurrPanel(3)}">WORK DETAILS</li>
+					<li id="IncomeList" ng-class= "{ active : isCurrPanel(4)}">ASSET DETAILS</li>
+					<li id="BankingList" ng-class= "{ active : isCurrPanel(5)}">PROOF</li>
 				</ul>
 			</div>
 		</div>

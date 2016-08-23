@@ -1757,59 +1757,6 @@ $scope.closeDocument = function () {
   };
 }]);
 
-
-app.directive('thisEarlierThan', function () {
-    return {
-        require: 'ngModel',
-        restrict: 'A',
-        link: function (scope, elem, attrs, ctrl) {
-            var cityStay,residenceStay;
-
-            scope.$watch(attrs.ngModel, function (newVal, oldVal, scope) {
-                residenceStay = newVal;
-                check();
-            });
-
-            scope.$watch(attrs.thisEarlierThan, function (newVal, oldVal, scope) {
-                cityStay = newVal;
-                check();
-            });
-
-            var check = function () {
-                if (!cityStay || !residenceStay) {
-                    return;
-                }
-
-                if (!validate(cityStay)) {
-                    return;                     
-                }
-
-                if (!validate(residenceStay)) {
-                    return;                     
-                }
-
-                if (parseInt(cityStay) >= parseInt(residenceStay)) {
-                    ctrl.$setValidity('thisEarlierThan', true);
-                }
-                else {
-                    ctrl.$setValidity('thisEarlierThan', false);
-                }
-
-                return;
-            };
-
-            var validate = function (iYears) {                  
-                if (parseInt(iYears)) {
-                    return false;
-                }
-                else {
-                    return true;
-                }                   
-            };
-        }
-    };
-});
-
 app.directive('changeOnBlur', function() {
     return {
         restrict: 'A',

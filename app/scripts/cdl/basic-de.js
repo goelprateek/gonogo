@@ -167,7 +167,8 @@
 		}
 
 		$scope.clickEvent = function(type){
-			switch (type) {
+			if($scope.basicInfo.aadhaarNumber!='' || $scope.basicInfo.panNumber!=''){
+				switch (type) {
 				case "getOTP":
 					GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),
 									 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
@@ -195,7 +196,11 @@
 					$scope.basicInfo.isMobileVerfied=false;
 					$scope.submitLoanRequest("step1");
 					break;
+				}
+			}else{
+				notifier.logError("Please Enter PAN OR AADHAAR Number");
 			}
+			
 		};
 
 		$scope.fetchOTP=function(){
@@ -215,7 +220,7 @@
 				$scope.otp=successResponse.OTP;
 				$scope.shwVerify=true;
 			},function(failedResponse){
-				alert("Some error occured, please retry !");
+				notifier.logError("Some error occured, please retry !");
 			});
 		};
 

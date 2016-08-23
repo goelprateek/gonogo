@@ -1,4 +1,4 @@
-<form name="addressData" novalidate>
+<form name="addressData" novalidate accessible-form>
 	<div class="row clearfix getheight" slimscroll="{height:405,railVisible:true}" style="height: 400px;">
 		<div class="col-md-10 col-md-offset-1">
 			<div class="row clearfix" style="margin-top: 40px;">
@@ -90,10 +90,11 @@
 
 			<div class="row clearfix">
 				<div class="col-md-2 cdl-height form-group">
-					<input type="text" class="cdl-form-control inputMaterial" ng-model="applicant.oResidence.oPhone.sStdCode" maxlength="5" name="resStd" only-digits required/>
+					<input type="text" class="cdl-form-control inputMaterial" ng-model="applicant.oResidence.oPhone.sStdCode" maxlength="5" ng-pattern="/^[0-9\d]{3,5}$/"  name="resStd" only-digits required/>
 					<label>STD Code*</label>
 					<div ng-messages="addressData.resStd.$touched && addressData.resStd.$error" class="errorMsg">
 	   					<p ng-message="required">Please enter STD code</p>
+	   					<p ng-message="pattern">STD code minimum of 3 digits</p>
 					</div>
 				</div>
 				<div class="col-md-4 cdl-height form-group">
@@ -121,17 +122,18 @@
 
 			<div class="row clearfix">
 				<div class="col-md-6 cdl-height form-group">
-					<input type="text" class="cdl-form-control inputMaterial" maxlength="3" ng-model="applicant.oResidence.oAddress.iMonthAddress" name="monthaddr" only-digits required/>
+					<input type="text" class="cdl-form-control inputMaterial" maxlength="3" ng-model="applicant.oResidence.oAddress.iMonthAddress" name="monthaddr" only-digits required this-earlier-than="applicant.oResidence.oAddress.iMonthCity"/>
 					<label>Months at current address*</label>
 					<div ng-messages="addressData.monthaddr.$touched && addressData.monthaddr.$error" class="errorMsg">
-	   					<p ng-message="required">Please enter Months at current address</p>
+	   					<p ng-message="required">Please enter months at current address</p>
+	   					<p ng-message="thisEarlierThan">Residence stay should be less than city stay </p>
 					</div>
 				</div>
 				<div class="col-md-6 cdl-height form-group">
 					<input type="text" class="cdl-form-control inputMaterial city" ng-model="applicant.oResidence.oAddress.iMonthCity" name="monthcity" maxlength="3" only-digits required/>
 					<label>Months at City*</label>
 					<div ng-messages="addressData.monthcity.$touched && addressData.monthcity.$error" class="errorMsg">
-	   					<p ng-message="required">Please enter Months at city</p>
+	   					<p ng-message="required">Please enter months at city</p>
 					</div>
 				</div>
 			</div>
@@ -255,24 +257,25 @@
 						<input type="text" class="cdl-form-control inputMaterial" name="peremail" ng-model="applicant.oPermanent.sEmail" style="width: 93%;" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required/>
 						<label>Email*</label>
 						<div ng-messages="addressData.peremail.$touched && addressData.peremail.$error" class="errorMsg">
-			   					<p ng-message="required">Please enter Email ID</p>
-			   					<p ng-message="pattern">Please enter valid Email ID</p>
+		   					<p ng-message="required">Please enter Email ID</p>
+		   					<p ng-message="pattern">Please enter valid Email ID</p>
 						</div>
 					</div>
 				</div>
 				<div class="row clearfix">
 					<div class="col-md-6 cdl-height form-group">
-						<input type="text" class="cdl-form-control inputMaterial" ng-model="applicant.oPermanent.oAddress.iMonthAddress" name="permonthadd" maxlength="3" only-digits required/>
+						<input type="text" class="cdl-form-control inputMaterial" ng-model="applicant.oPermanent.oAddress.iMonthAddress" name="permonthadd" maxlength="3" only-digits required this-earlier-than="applicant.oPermanent.oAddress.iMonthCity"/>
 						<label>Months at Permanent address*</label>
 						<div ng-messages="addressData.permonthadd.$touched && addressData.permonthadd.$error" class="errorMsg">
-			   					<p ng-message="required">Please enter Months at a</p>
+		   					<p ng-message="required">Please enter months at address</p>
+		   					<p ng-message="thisEarlierThan">Residence stay should be less than city stay </p>
 						</div>
 					</div>
 					<div class="col-md-6 cdl-height form-group">
 						<input type="text" class="cdl-form-control inputMaterial city" name="permonthcity" ng-model="applicant.oPermanent.oAddress.iMonthCity" maxlength="3" only-digits required/>
 						<label>Months at City*</label>
 						<div ng-messages="addressData.permonthcity.$touched && addressData.permonthcity.$error" class="errorMsg">
-			   					<p ng-message="required">Please enter Months at city</p>
+		   					<p ng-message="required">Please enter months at city</p>
 						</div>
 					</div>
 				</div>
@@ -282,9 +285,10 @@
 	<div class="row clearfix ">
 		<div class="col-md-10 col-md-offset-1">
 		<!-- ng-disabled="addressData.$invalid" -->
-			<button ui-sref="/cdl/apply.personal" class="customButton previous">Previous</button>
-			<button ui-sref="/cdl/apply.professional" ng-disabled="addressData.$invalid" class="customButton next">Next</button>
-				<button class="customButton save" ng-click="submitApplication('step3')">Save</button>
+			<button class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.personal')">Previous</button>
+			<!-- <button ui-sref="/cdl/apply.professional" ng-disabled="addressData.$invalid" class="customButton next">Next</button> -->
+			<button type="submit" class="customButton next" ng-click="onNextClicked('/cdl/apply.professional',addressData.$invalid)">Next</button>
+			<button class="customButton save" ng-click="submitApplication('step3')">Save</button>
 		</div>
 	</div>
 </form>

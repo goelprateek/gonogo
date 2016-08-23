@@ -2,7 +2,7 @@
 	'use strict';
 	var app = angular.module('gonogo.cdl');
 
-	app.factory("ApplyObject",function(){
+	app.service("ApplyObject",function(){
     	var _obj = {
 	        "suspected": "No",
 	        "creditCard": "",
@@ -11,9 +11,13 @@
 	        "maritalStat":"Single",
 	        "dob":"",
 	        "constitution":"",
-	        "loanAmt":"",
-	        "tenor":"",
-	        "sameAbove":"",
+	        "sameAbove":false,
+	        "application":{
+	        	"loanType":"Consumer Durables",
+	        	"loanAmt":"",
+	        	"tenor":""
+	        },
+	        "aKycDocs":[],
 	        "empl":{
 	        	"emplType":"",
 	        	"emplMob":"",
@@ -23,7 +27,13 @@
 	        	"emplSalary":"",
 	        	"emplMonthWithEmp":"",
 	        	"emplName":"",
-	        	"emplEmail":""
+	        	"emplEmail":"",
+	        	"emplState":"",
+	        	"emplCity":"",
+	        	"emplPin":"",
+	        	"emplAddr1":"",
+	        	"emplAddr2":"",
+	        	"emplAddr3":""
 	        },
 	        "oResidence":{
 	        	"oAddress":{
@@ -80,14 +90,10 @@
 	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA","$state","ApplyObject","UploadImages","notifier","$filter",
 	 function($scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA,$state,ApplyObject,UploadImages,notifier,$filter) {
 
-		var dlrCode =null;
-		var CustID=null;
+		var dlrCode = null;
+		var CustID = null;
 
-		// $scope.asset={
-		// 	category:"",
-		// 	make:"",
-		// 	model:""
-		// };
+		$scope.currentPageNumber=1;
 
 		$scope.applicant = ApplyObject.dummy;
 
@@ -128,23 +134,22 @@
 	  		$scope.dealerName=$scope.applicationObject.oReq.oApplication.aAssetDetail[0].sDlrName;
 			$scope.applicant.oResidence.oPhone.iMobile=_applicant.aPhone[0].sPhoneNumber;
 
-			for(var i=0;i<_applicant.aKycDocs.length;i++){
-  				if(_applicant.aKycDocs[i].sKycName==="PAN"){
-  					$scope.pan=_applicant.aKycDocs[i].sKycNumber;
-  				}
-  				
-  				if(_applicant.aKycDocs[i].sKycName==="AADHAAR"){
-  					$scope.aadhar=_applicant.aKycDocs[i].sKycNumber;
-  				}
-  			}
+			_.each(_applicant.aKycDocs ,function(value){
+				$scope.applicant.aKycDocs.push({
+					"sExpiryDate":null,
+					"sIssueDate":null,
+					"sKycName":value.sKycName,
+					"sKycNumber":value.sKycNumber,
+					"sKycStat":null
+				});
+			});
 
-  			$scope.productType=$scope.applicationObject.oReq.oApplication.sLoanType;
+  			$scope.applicant.application.loanType=$scope.applicationObject.oReq.oApplication.sLoanType;
 		}
 		// End : If from step 1 screen
 
 	var poller;
 	$scope.dealerArr = [];
-	//$scope.assetArray = [];
 
 	try {
 		//$log.debug("userdata :"+JSON.stringify(userdata));
@@ -152,13 +157,13 @@
 		$scope.InstitutionID = user.institutionID;
 		$scope.userid = user.id;
 		$scope.ePassword = user.ePassword;
-		$scope.suspAct="No";
-		$scope.edu="";
+		// $scope.suspAct="No";
+		// $scope.edu="";
 		$rootScope.errHead="";
 		$rootScope.errorMsg="";
 	    // $scope.holdStageArr=[];
-	    $scope.holdIndex =[];
-	    $scope.wrketype="";
+	    // $scope.holdIndex =[];
+	    // $scope.wrketype="";
 	    //$scope.assetCategory="";
 	    $scope.astCst=0;
 		$scope.dealerArr=JSON.parse(atob(localStorage.getItem('DEALERS')));
@@ -223,24 +228,24 @@
 								$rootScope.errHead = "";
 								$scope.error = "";
 						  		var mApplicant=Response.oReq.oApplicant;
-						  		
+
 						  		if(mApplicant.aPhone){
 						  			for(var i=0;i<mApplicant.aPhone.length;i++){
 						  				if(mApplicant.aPhone[i].sPhoneType==="PERSONAL_MOBILE"){
 						  					$scope.applicant.oResidence.oPhone.iMobile=mApplicant.aPhone[i].sPhoneNumber;
 						  				}else if(mApplicant.aPhone[i].sPhoneType==="PERSONAL_PHONE"){
-						  					$scope.residenceStd=mApplicant.aPhone[i].sAreaCode;
-											$scope.residencePhone=mApplicant.aPhone[i].sPhoneNumber;
+						  					$scope.applicant.oResidence.oPhone.sStdCode=mApplicant.aPhone[i].sAreaCode;
+											$scope.applicant.oResidence.oPhone.iLandLine=mApplicant.aPhone[i].sPhoneNumber;
 						  				}else if(mApplicant.aPhone[i].sPhoneType==="RESIDENCE_PHONE"){
-						  					$scope.prmntStd=mApplicant.aPhone[i].sAreaCode;
-											$scope.prmntPhone=mApplicant.aPhone[i].sPhoneNumber;
-						  				}else if(mApplicant.aPhone[i].sPhoneType==="RESIDENCE_PHONE"){
-						  					$scope.prmntMobile=mApplicant.aPhone[i].sPhoneNumber;
+						  					$scope.applicant.oPermanent.oPhone.sStdCode=mApplicant.aPhone[i].sAreaCode;
+											$scope.applicant.oPermanent.oPhone.iLandLine=mApplicant.aPhone[i].sPhoneNumber;
+						  				}else if(mApplicant.aPhone[i].sPhoneType==="RESIDENCE_MOBILE"){
+						  					$scope.applicant.oPermanent.oPhone.iMobile=mApplicant.aPhone[i].sPhoneNumber;
 						  				}else if(mApplicant.aPhone[i].sPhoneType==="OFFICE_PHONE"){
-						  					$scope.wrkstd = mApplicant.aPhone[i].sAreaCode;
-											$scope.wrkphn = mApplicant.aPhone[i].sPhoneNumber 
+						  					$scope.applicant.empl.emplStd = mApplicant.aPhone[i].sAreaCode;
+											$scope.applicant.empl.emplLandLine = mApplicant.aPhone[i].sPhoneNumber;
 						  				}else if(mApplicant.aPhone[i].sPhoneType==="OFFICE_MOBILE"){
-						  					$scope.wrkmob = mApplicant.aPhone[i].sPhoneNumber
+						  					$scope.applicant.empl.emplMob = mApplicant.aPhone[i].sPhoneNumber
 						  				}					  				
 						  			}
 						  		}
@@ -257,23 +262,23 @@
 						  			}
 						  		}
 
-						  		$scope.same=mApplicant.residenceAddSameAsAbove;
-						  		$scope.productType=Response.oReq.oApplication.sLoanType;
+						  		$scope.applicant.sameAbove=mApplicant.residenceAddSameAsAbove;
+						  		$scope.applicant.application.loanType=Response.oReq.oApplication.sLoanType;
 
-								$("#msgContainer").css({"left":"32%"});							
-								$("#progressDiv ,#showApplicant").show();
-								$("#kyccontainer,#ErrorContainer").show();
-								$("#nmCntnr").hide();
+								// $("#msgContainer").css({"left":"32%"});							
+								// $("#progressDiv ,#showApplicant").show();
+								// $("#kyccontainer,#ErrorContainer").show();
+								// $("#nmCntnr").hide();
 
 								//TODO
-								$scope.REFID=CustID;
+								$scope.referenceID=CustID;
 	//							console.log("Rquired:"+Response.oReq.sSuspAct +"and"+mApplicant.sCreditCardNum);
-								$scope.suspAct=Response.oReq.sSuspAct =="" ? "No" : Response.oReq.sSuspAct;
-								$scope.creditCardNumber=mApplicant.sCreditCardNum;
+								$scope.applicant.suspected=(!Response.oReq.sSuspAct) ? "No" : Response.oReq.sSuspAct;
+								$scope.applicant.creditCard=mApplicant.sCreditCardNum;
 
-								$scope.gender=mApplicant.sApplGndr;
-								$scope.edu=mApplicant.sEdu;
-								$scope.mstatus=mApplicant.sMarStat;
+								$scope.applicant.gender=(!mApplicant.sApplGndr) ? "Male" : mApplicant.sApplGndr;
+								$scope.applicant.education=mApplicant.sEdu;
+								$scope.applicant.maritalStat=(!mApplicant.sMarStat) ? "Single" : mApplicant.sMarStat;
 
 								if(mApplicant.sDob && mApplicant.sDob!=""){
 									var dateOfBirth=new Date();
@@ -290,33 +295,35 @@
 
 								if(mApplicant.aEmpl && mApplicant.aEmpl.length>0)
 								{
-									$scope.constitution=mApplicant.aEmpl[0].sConst;
-									if($scope.constitution == "SELF-EMPLOYED")
+									$scope.applicant.constitution=mApplicant.aEmpl[0].sConst;
+									if($scope.applicant.constitution === "SELF-EMPLOYED")
 									{
-										$("#wrketype").val("SELF-EMPLOYED").attr("disabled","disabled").siblings("help").show();
-										$("#wrketype option[value='SELF-EMPLOYED']").show();
+										$scope.applicant.empl.emplType="SELF-EMPLOYED";
+										// $("#wrketype").val("SELF-EMPLOYED").attr("disabled","disabled").siblings("help").show();
+										// $("#wrketype option[value='SELF-EMPLOYED']").show();
 									}else{
-									 	$("#wrketype").val("").removeAttr("disabled");
-									 	$("#wrketype option[value='SELF-EMPLOYED']").hide();
+										$scope.applicant.empl.emplType="";
+									 	// $("#wrketype").val("").removeAttr("disabled");
+									 	// $("#wrketype option[value='SELF-EMPLOYED']").hide();
 									}
 
-									$scope.wrkename =Response.oReq.oApplicant.aEmpl[0].sEmplName;
-									$scope.wrketype = Response.oReq.oApplicant.aEmpl[0].sEmplType;
-									$scope.wrktwe =Response.oReq.oApplicant.aEmpl[0].iTmWithEmplr;
-									$scope.wrkLstMnthSal = Response.oReq.oApplicant.aEmpl[0].dmonthSal;
-									$scope.wrkGrsAnnual =Response.oReq.oApplicant.aEmpl[0].dItrAmt;
+									$scope.applicant.empl.emplName =Response.oReq.oApplicant.aEmpl[0].sEmplName;
+									$scope.applicant.empl.emplType = Response.oReq.oApplicant.aEmpl[0].sEmplType;
+									$scope.applicant.empl.emplMonthWithEmp =Response.oReq.oApplicant.aEmpl[0].iTmWithEmplr;
+									$scope.applicant.empl.emplSalary = Response.oReq.oApplicant.aEmpl[0].dmonthSal;
+									$scope.applicant.empl.emplITReturn =Response.oReq.oApplicant.aEmpl[0].dItrAmt;
 								}
-								$scope.lamt=Response.oReq.oApplication.dLoanAmt;
-								$scope.loanTenure=Response.oReq.oApplication.iLoanTenor;
+								$scope.applicant.application.loanAmt=Response.oReq.oApplication.dLoanAmt;
+								$scope.applicant.application.tenor=Response.oReq.oApplication.iLoanTenor;
 
 								if(mApplicant.aEmail){
 						  			for(var i=0;i<mApplicant.aEmail.length;i++){
 						  				if(mApplicant.aEmail[i].sEmailType==="PERSONAL"){
-						  					$scope.residenceEmail=mApplicant.aEmail[i].sEmailAddr;
-						  				}else if(mApplicant.aEmail[i].sEmailType==="PERMANENT"){
-						  					$scope.prmntEmail=mApplicant.aEmail[i].sEmailAddr;
-						  				}else if(mApplicant.aEmail[i].sEmailType==="WORK"){
-						  					$scope.wrkemail = mApplicant.aEmail[i].sEmailAddr
+						  					$scope.applicant.oResidence.sEmail = mApplicant.aEmail[i].sEmailAddr;
+						  				}else if(mApplicant.aEmail[i].sEmailType === "PERMANENT"){
+						  					$scope.applicant.oPermanent.sEmail = mApplicant.aEmail[i].sEmailAddr;
+						  				}else if(mApplicant.aEmail[i].sEmailType === "WORK"){
+						  					$scope.applicant.empl.emplEmail = mApplicant.aEmail[i].sEmailAddr;
 						  				}
 						  			}
 						  		}
@@ -324,34 +331,34 @@
 								if(mApplicant.aAddr){
 									for(var i=0;i<mApplicant.aAddr.length;i++){
 										if(mApplicant.aAddr[i].sAddrType=="RESIDENCE"){
-											$scope.addressType=mApplicant.aAddr[i].sResAddrType;
-											$scope.rent=mApplicant.aAddr[i].dRentAmt;
-											$scope.a1=mApplicant.aAddr[i].sLine1;
-											$scope.a2=mApplicant.aAddr[i].sLine2;
-											$scope.a3=mApplicant.aAddr[i].sLine3;
-											$scope.residencePincode=mApplicant.aAddr[i].iPinCode;
-											$scope.residenceCity=mApplicant.aAddr[i].sCity;
-											$scope.residenceState=mApplicant.aAddr[i].sState;
-											$scope.residenceAddrStay=mApplicant.aAddr[i].iMonthAtAddr;
-											$scope.residenceCityStay=mApplicant.aAddr[i].iMonthAtCity;
+											$scope.applicant.oResidence.oAddress.addrType = mApplicant.aAddr[i].sResAddrType;
+											$scope.applicant.oResidence.oAddress.dRentPerMonth = mApplicant.aAddr[i].dRentAmt;
+											$scope.applicant.oResidence.oAddress.sAddress1 = mApplicant.aAddr[i].sLine1;
+											$scope.applicant.oResidence.oAddress.sAddress2 = mApplicant.aAddr[i].sLine2;
+											$scope.applicant.oResidence.oAddress.sAddress3 = mApplicant.aAddr[i].sLine3;
+											$scope.applicant.oResidence.oAddress.sPinCode = mApplicant.aAddr[i].iPinCode;
+											$scope.applicant.oResidence.oAddress.sCity = mApplicant.aAddr[i].sCity;
+											$scope.applicant.oResidence.oAddress.sState = mApplicant.aAddr[i].sState;
+											$scope.applicant.oResidence.oAddress.iMonthAddress = mApplicant.aAddr[i].iMonthAtAddr;
+											$scope.applicant.oResidence.oAddress.iMonthCity = mApplicant.aAddr[i].iMonthAtCity;
 										}else if(mApplicant.aAddr[i].sAddrType=="PERMANENT"){
-											$scope.prmnt_addressType=mApplicant.aAddr[i].sResAddrType;
-											$scope.prmnt_rent=mApplicant.aAddr[i].dRentAmt;
-											$scope.prmnt_a1=mApplicant.aAddr[i].sLine1;
-											$scope.prmnt_a2=mApplicant.aAddr[i].sLine2;
-											$scope.prmnt_a3=mApplicant.aAddr[i].sLine3;
-											$scope.prmntPincode=mApplicant.aAddr[i].iPinCode;
-											$scope.prmntCity=mApplicant.aAddr[i].sCity;
-											$scope.prmntState=mApplicant.aAddr[i].sState;
-											$scope.prmntAddrStay=mApplicant.aAddr[i].iMonthAtAddr;
-											$scope.prmntCityStay=mApplicant.aAddr[i].iMonthAtCity;
+											$scope.applicant.oPermanent.oAddress.addrType = mApplicant.aAddr[i].sResAddrType;
+											$scope.applicant.oPermanent.oAddress.dRentPerMonth = mApplicant.aAddr[i].dRentAmt;
+											$scope.applicant.oPermanent.oAddress.sAddress1 = mApplicant.aAddr[i].sLine1;
+											$scope.applicant.oPermanent.oAddress.sAddress2 = mApplicant.aAddr[i].sLine2;
+											$scope.applicant.oPermanent.oAddress.sAddress3 = mApplicant.aAddr[i].sLine3;
+											$scope.applicant.oPermanent.oAddress.sPinCode = mApplicant.aAddr[i].iPinCode;
+											$scope.applicant.oPermanent.oAddress.sCity = mApplicant.aAddr[i].sCity;
+											$scope.applicant.oPermanent.oAddress.sState = mApplicant.aAddr[i].sState;
+											$scope.applicant.oPermanent.oAddress.iMonthAddress = mApplicant.aAddr[i].iMonthAtAddr;
+											$scope.applicant.oPermanent.oAddress.iMonthCity = mApplicant.aAddr[i].iMonthAtCity;
 										}else if(mApplicant.aAddr[i].sAddrType=="OFFICE"){
-											$scope.wrka1 =mApplicant.aAddr[i].sLine1;
-											$scope.wrka2 =mApplicant.aAddr[i].sLine2;
-											$scope.wrka3 =mApplicant.aAddr[i].sLine3;
-											$scope.wrkpin =mApplicant.aAddr[i].iPinCode;
-											$scope.wrkcity =mApplicant.aAddr[i].sCity;
-											$scope.wrkstate =mApplicant.aAddr[i].sState;
+											$scope.applicant.empl.emplAddr1 = mApplicant.aAddr[i].sLine1;
+											$scope.applicant.empl.emplAddr2 = mApplicant.aAddr[i].sLine2;
+											$scope.applicant.empl.emplAddr3 = mApplicant.aAddr[i].sLine3;
+											$scope.applicant.empl.emplPin = mApplicant.aAddr[i].iPinCode;
+											$scope.applicant.empl.emplCity = mApplicant.aAddr[i].sCity;
+											$scope.applicant.empl.emplState = mApplicant.aAddr[i].sState;
 										}
 									}
 								}
@@ -655,10 +662,9 @@
 //		}
 //	}
 	
-	
 $scope.clickEvent = function(type)
 {
-switch (type) {
+	switch (type) {
 	case "anotherAsset":
 				var dom =$("#assetObj").clone();
 				lcount=lcount+1;
@@ -682,42 +688,41 @@ switch (type) {
 			break;*/
 
 	}
-}
+};
 
-$scope.changeEvent=function(type,val)
+$scope.onChanged=function(type,val)
 { //console.log(val);
 	switch (type) {
-	case "MNY_INTRMNT":
-//		 val=$("#mnyInstn option:selected").val();
-		if(val!="Select" && val!="Cash")
-		 {
-			$("#mnyCnfmDiv").show();
-		 }else{
-			$("#mnyCnfmDiv").hide();
-		 }
-		break;
+// 	case "MNY_INTRMNT":
+// //		 val=$("#mnyInstn option:selected").val();
+// 		if(val!="Select" && val!="Cash")
+// 		 {
+// 			$("#mnyCnfmDiv").show();
+// 		 }else{
+// 			$("#mnyCnfmDiv").hide();
+// 		 }
+// 		break;
 	case "CONSTITN":
-//		 val=$("#constitution option:selected").val();
-		if(val=="SELF-EMPLOYED")
-	 	{
-			$("#wrketype").val("SELF-EMPLOYED").attr("disabled","disabled").siblings("help").show();
-			$("#wrketype option[value='SELF-EMPLOYED']").show();
-	 	}else{
-		 	$("#wrketype").val("").removeAttr("disabled");
-		 	$("#wrketype option[value='SELF-EMPLOYED']").hide();
-		 	$scope.wrketype="";
-	 	}
+		// if(val=="SELF-EMPLOYED")
+	 // 	{
+		// 	$("#wrketype").val("SELF-EMPLOYED").attr("disabled","disabled").siblings("help").show();
+		// 	$("#wrketype option[value='SELF-EMPLOYED']").show();
+	 // 	}else{
+		//  	$("#wrketype").val("").removeAttr("disabled");
+		//  	$("#wrketype option[value='SELF-EMPLOYED']").hide();
+		//  	$scope.wrketype="";
+	 // 	}
+	 	if($scope.applicant.constitution === "SELF-EMPLOYED")
+		{
+			$scope.applicant.empl.emplType="SELF-EMPLOYED";
+		}else{
+			$scope.applicant.empl.emplType="";
+		}
 		break;
 	case "WRKTYPE":
-//		 val=$("#constitution option:selected").val();
-//		if(val=="SELF-EMPLOYED")
-//		 {
-			$("#wrkGrsAnnual,#wrkLstMnthSal").val("");
-//			$("#wrkLstMnthSal").val("").hide();
-//		 }else{
-//				$("#wrkLstMnthSal").val("").show();
-//				$("#wrkGrsAnnual").val("").hide();
-//		 }
+			//$("#wrkGrsAnnual,#wrkLstMnthSal").val("");
+			$scope.applicant.empl.emplITReturn="";
+			$scope.applicant.empl.emplSalary="";
 		break;
 		
 	default:
@@ -870,7 +875,7 @@ $scope.pinService = function(pin,id){
 				$scope.error="Sorry we can not process your PAN request";
 			}
 		});	
-	}else if(pin.length == 0){
+	}else if(pin.length != 6){
 		if( id =="perpin")
 		{
 			$scope.applicant.oResidence.oAddress.sCity = "";
@@ -999,7 +1004,7 @@ $scope.onselectImg = function($files,type,index)
 		    	var re = (/\.(jpg)$/i);
 				if(!re.exec(fname))
 		    	{
-			    	alert("Sorry..!! We can not upload your image. \n Only .Jpg images are allowed");
+			    	notifier.logWarning("Sorry..!! We can not upload your image. \n Only .Jpg images are allowed");
 			    	break;
 		    	}
 				img_type = fname.split(".")[1];
@@ -1414,13 +1419,7 @@ $scope.submitApplication=function(UrlKey)
 				"sApplGndr":$scope.applicant.gender,
 				"oIncomeDetails":null,
 				"oSpouseName":null,
-				"aKycDocs":[{ // whole block is remain
-					"sExpiryDate":null,
-					"sIssueDate":null,
-					"sKycName":"AADHAAR",
-					"sKycNumber":"254234523452",
-					"sKycStat":null
-				}],
+				"aKycDocs":$scope.applicant.aKycDocs,
 				"aLoanDetails":null,
 				"sMarStat":$scope.applicant.maritalStat,
 				"sReligion":null,
@@ -1492,12 +1491,12 @@ $scope.submitApplication=function(UrlKey)
 					"sPrice":""
 				}],
 				"oProperty":null,
-				"sLoanType":"Consumer Durables",
+				"sLoanType":$scope.applicant.application.loanType,
 				"dEmi":0.0,
-				"dLoanAmt":$scope.applicant.loanAmt ? ($scope.applicant.loanAmt+"").replace(/,/g,"") : 0,
+				"dLoanAmt":$scope.applicant.application.loanAmt ? ($scope.applicant.application.loanAmt+"").replace(/,/g,"") : 0,
 				"dMarginAmt":0.0,
 				"iAdvEmi":0,
-				"iLoanTenor":$scope.applicant.tenor
+				"iLoanTenor":$scope.applicant.application.tenor
 			},
 			"aCoApplicant":null,
 			"sSuspAct":$scope.applicant.suspected
@@ -1616,43 +1615,51 @@ $scope.submitApplication=function(UrlKey)
 
  /* var json = {"oHeader":{"sAppID":"","sAppSource":"WEB:1.06.01","sCroId":"default","dtSubmit":1471340384072,"sDealerId":"25052","sDsaId":"HDBFS_DSA1@softcell.com","sInstID":"4019","sReqType":"JSON"},"sRefID":"25052000159","oReq":{"oApplicant":{"residenceAddSameAsAbove":true,"aAddr":[{"sLine1":"QWWEQEQWEW","sLine2":"GYGUUYIUYI","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"IIUIUYIUYIU","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411005","sAddrType":"RESIDENCE","sResAddrType":"RENTED-FLAT","iMonthAtCity":"99","dRentAmt":"21212121","iMonthAtAddr":"90","iTimeAtAddr":"","iYearAtCity":""},{"sLine1":"DFSFSDFSD","sLine2":"SDFFDSFSD","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"SDFDSFDSFSD","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411004","sAddrType":"OFFICE","sResAddrType":"","iMonthAtCity":"","dRentAmt":"","iMonthAtAddr":"","iTimeAtAddr":"","iYearAtCity":""},{"sLine1":"QWWEQEQWEW","sLine2":"GYGUUYIUYI","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"IIUIUYIUYIU","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411005","sAddrType":"PERMANENT","sResAddrType":"RENTED-FLAT","iMonthAtCity":"99","dRentAmt":"21212121","iMonthAtAddr":"90","iTimeAtAddr":"","iYearAtCity":""}],"sApplID":"APPLICANT_1","oApplName":{"sFirstName":"SAYALI","sLastName":"MADAN","sMiddleName":"MULAY","sPrefix":null,"sSuffix":null},"oApplRef":null,"aBankingDetails":null,"sCreditCardNum":"121212","sDob":"15061985","sEdu":"DOCTORATE","aEmail":[{"sEmailAddr":"askdhaks@sdjf.com","sEmailType":"PERSONAL"},{"sEmailAddr":"askdhaks@sdjf.com","sEmailType":"PERMANENT"},{"sEmailAddr":"so@dfsn.com","sEmailType":"WORK"}],"aEmpl":[{"sConst":"TRUST","sDtJoin":null,"sDtLeave":null,"sDesig":null,"sEmplrBr":null,"sEmplrCode":null,"sEmplName":"SOFTCELL TRADE AND TECHNOLOGIES LTD","sEmplType":"PROFESSIONAL","aLastMonthIncome":[],"sItrID":null,"iTmWithEmplr":"223","dGrossSal":0,"dmonthSal":"32432442","dItrAmt":0}],"oFatherName":null,"sApplGndr":"Female","oIncomeDetails":null,"oSpouseName":null,"aKycDocs":[{"sExpiryDate":null,"sIssueDate":null,"sKycName":"AADHAAR","sKycNumber":"254234523452","sKycStat":null}],"aLoanDetails":null,"sMarStat":"Single","sReligion":null,"aPhone":[{"phoneType":"PERSONAL_MOBILE","sPhoneType":"PERSONAL_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":"","sPhoneNumber":"2323123123"},{"phoneType":"PERSONAL_PHONE","sPhoneType":"PERSONAL_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"4545454545"},{"phoneType":"RESIDENCE_MOBILE","sPhoneType":"RESIDENCE_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":""},{"phoneType":"RESIDENCE_PHONE","sPhoneType":"RESIDENCE_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"4545454545"},{"phoneType":"OFFICE_PHONE","sPhoneType":"OFFICE_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"5454545454"},{"phoneType":"OFFICE_MOBILE","sPhoneType":"OFFICE_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":"","sPhoneNumber":"2131321313"}],"iEarnMem":0,"iFamilyMem":0,"iNoOfDep":0,"bMobVer":true,"sAdharVer":false,"bSameAbove":true,"iAge":0},"oApplication":{"sApID":null,"sAppliedFor":null,"aAssetDetail":[{"sAssetCtg":"WASHING MACHINE","sAssetMake":"HITACHI","sAssetModelMake":"","sDlrName":"SATHYA AGENCIES-SLM","sModelNo":"SF-80PJ3CINEM","sPrice":""}],"oProperty":null,"sLoanType":"Consumer Durables","dEmi":0,"dLoanAmt":"12121212","dMarginAmt":0,"iAdvEmi":0,"iLoanTenor":"121"},"aCoApplicant":null,"sSuspAct":"No"}};*/
 
-  $http({
+  	$http({
 		method : 'POST',
 		url : APP_CONST.getConst('BASE_URL_GNG')+'submit-application/'+UrlKey,
 		data :json,
 		headers : {'Content-Type':'application/json'}
 	}).success(function(data){
-		if(UrlKey=="step1"){
-			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP1"),1,"submit-application","",data.sRefID);
-		}else if(UrlKey=="step4"){
+		if(data && data.sStat==="SUCCESS"){
+			$scope.referenceID = data.sRefID;
 
-			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP4"),1,"submit-application","",data.sRefID);
-			
-			if(img_array.length!=0){
-				UploadImages.upload($scope.referenceID,img_array).then(function(imageUploadedCount) {
-				  	$log.debug('Image upload Success, Total image uploaded : ' + imageUploadedCount);
-				  //	$scope.updateStatus();
-				  //action to be taken when we get success from server
+			if(UrlKey=="step1"){
+				GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP1"),1,"submit-application","",data.sRefID);
+			}else if(UrlKey=="step4"){
 
-				}, function(reason) {
-				  	$log.debug('Image upload Failed, Total image uploaded : ' + imageUploadedCount);
-				});
-			}else{
-				notifier.logWarning("Please select atleast 1 image to upload.");
+				GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP4"),1,"submit-application","",data.sRefID);
+
+				if(img_array.length!=0){
+					UploadImages.upload($scope.referenceID,img_array).then(function(imageUploadedCount) {
+					  	$log.debug('Image upload Success, Total image uploaded : ' + imageUploadedCount);
+					  //	$scope.updateStatus();
+					  //action to be taken when we get success from server
+
+					}, function(reason) {
+					  	$log.debug('Image upload Failed, Total image uploaded : ' + imageUploadedCount);
+					});
+
+					sharedService.setRefID($scope.referenceID);
+					$state.go('/cdl/result');
+				}else{
+					notifier.logWarning("Please select atleast 1 image to upload.");
+				}
 			}
 
-			sharedService.setRefID($scope.referenceID);
-			$state.go('/cdl/result');
+			if(UrlKey=="step3"){
+				// $rootScope.errHead = "Status"
+				// $rootScope.errorMsg = "Data Saved Successfully.";
+				notifier.logSuccess("Data Saved Successfully.");
+			}
+		}else{
+			notifier.logError("Some error occured while application submission, please try again.");
 		}
-
-		if(UrlKey=="step3"){
-			$rootScope.errHead = "Status"
-			$rootScope.errorMsg = "Data Saved Successfully.";
-		}
-		//console.log("before upload:"+img_array.length);
-		UploadAllImgs(data.sRefID,img_array,"submit");
 		
-		$scope.REFID = data.sRefID;
+		//console.log("before upload:"+img_array.length);
+		//UploadAllImgs(data.sRefID,img_array,"submit");
+		
+		//$scope.REFID = data.sRefID;
 
 	}).error(function(data){
 
@@ -1670,7 +1677,8 @@ $scope.submitApplication=function(UrlKey)
 			}
 		else{
 			$scope.serviceHitCount=1;
-			$scope.error="Sorry we can not process your Submit request";
+			//$scope.error="Sorry we can not process your Submit request";
+			notifier.logError("We are unable to submit your request, please try again later");
 		}	
 	});
 };
@@ -1979,17 +1987,17 @@ function validation()
 		}
 });*/
 
-var mdlCnt=1
-var rowCnt=1;
+// var mdlCnt=1
+// var rowCnt=1;
 // add new template for model no in postipa
-$(document.body).on("click","#anotherModel",function()
-{	
-var id=$(document.body).find("div[id^=modelRow]").last().attr("id");
-var	dom="<div class='col-md-4 height mdlNmbr' id='fmodelPanel"+mdlCnt+"'><help>Additional Model Number</help><input type='text' id='IpaAdModel"+mdlCnt+"' class='customInput' placeholder='Additional Model Number'/>" ;
-dom=dom+"<span class='glyphicon glyphicon-remove'></span></div></div>";
-mdlCnt++;
-$("#apc").children().last().append(dom);
-});
+// $(document.body).on("click","#anotherModel",function()
+// {	
+// 	var id=$(document.body).find("div[id^=modelRow]").last().attr("id");
+// 	var	dom="<div class='col-md-4 height mdlNmbr' id='fmodelPanel"+mdlCnt+"'><help>Additional Model Number</help><input type='text' id='IpaAdModel"+mdlCnt+"' class='customInput' placeholder='Additional Model Number'/>" ;
+// 	dom=dom+"<span class='glyphicon glyphicon-remove'></span></div></div>";
+// 	mdlCnt++;
+// 	$("#apc").children().last().append(dom);
+// });
 
 $scope.remove_file = function(filetype, id, index) {
 		if(id == 1)
@@ -2037,7 +2045,7 @@ $scope.remove_file = function(filetype, id, index) {
 				$("#selectImgInit").attr("src","");
 				$scope.profileImage=false;
 		}
-	console.log(img_array.length);
+		//console.log(img_array.length);
 		for(var i=0; i<img_array.length;i++){
 	       if(img_array[i] != null){
 	       	if(img_array[i].kyc_name == filetype){
@@ -2045,7 +2053,7 @@ $scope.remove_file = function(filetype, id, index) {
 	          }
 	      }
 	  }
-	  console.log(img_array.length);
+	  //console.log(img_array.length);
 		
 };// end file remove method
 
@@ -2066,47 +2074,47 @@ $(document.body).on("click",".remove_image",function()
 //	console.log("kyc Array : "+addkyc_array.length);
 });
 
-$scope.sendPostIpaMail=function()
-{ 
-	var requestJson={"sRefID":$scope.REFID,
-	"oHeader":{
-		"sCroId":"default",
-		"dtSubmit":new Date().getTime(),
-		"sReqType":"JSON",
-		"sAppSource":"WEB",
-		"sDsaId":$scope.username,
-	    "sAppID":$scope.userid,
-	    "sSourceID": "02",
-	    "sInstID": $scope.InstitutionID},
-		"sImgID":$scope.postIpaPdfId};
-	$http({
-		method : 'POST',
-		url : APP_CONST.getConst('BASE_URL_GNG')+'send-mail-pdf',
-		data :requestJson,
-		headers : {'Content-Type':'application/json'}
-	}).success(function(data) 
-	{	//console.log("Response Data post IPA mail : " + JSON.stringify(data));
-	 setTimeout(function(){
-	    location.reload();
-     }, 3000);
-	}).error(function(data) 
-	{
-		$scope.serviceHitCount=$scope.serviceHitCount+1;
-		if($scope.serviceHitCount<=3)
-			{
-			  $scope.sendPostIpaMail();
-			}
-		else{
-			$scope.serviceHitCount=1;
-			$scope.error="Sorry we can not process your POST IPA request";
-		}	
-	});
-	$scope.finalResponse="Email sent successfully";
-	setTimeout(function(){
-		$scope.finalResponse="";
-	    location.reload();
-     }, 15000);
-};
+// $scope.sendPostIpaMail=function()
+// { 
+// 	var requestJson={"sRefID":$scope.REFID,
+// 	"oHeader":{
+// 		"sCroId":"default",
+// 		"dtSubmit":new Date().getTime(),
+// 		"sReqType":"JSON",
+// 		"sAppSource":"WEB",
+// 		"sDsaId":$scope.username,
+// 	    "sAppID":$scope.userid,
+// 	    "sSourceID": "02",
+// 	    "sInstID": $scope.InstitutionID},
+// 		"sImgID":$scope.postIpaPdfId};
+// 	$http({
+// 		method : 'POST',
+// 		url : APP_CONST.getConst('BASE_URL_GNG')+'send-mail-pdf',
+// 		data :requestJson,
+// 		headers : {'Content-Type':'application/json'}
+// 	}).success(function(data) 
+// 	{	//console.log("Response Data post IPA mail : " + JSON.stringify(data));
+// 	 setTimeout(function(){
+// 	    location.reload();
+//      }, 3000);
+// 	}).error(function(data) 
+// 	{
+// 		$scope.serviceHitCount=$scope.serviceHitCount+1;
+// 		if($scope.serviceHitCount<=3)
+// 			{
+// 			  $scope.sendPostIpaMail();
+// 			}
+// 		else{
+// 			$scope.serviceHitCount=1;
+// 			$scope.error="Sorry we can not process your POST IPA request";
+// 		}	
+// 	});
+// 	$scope.finalResponse="Email sent successfully";
+// 	setTimeout(function(){
+// 		$scope.finalResponse="";
+// 	    location.reload();
+//      }, 15000);
+// };
 
 //get all employer name from master
 //$(document.body).on("keyup","#wrkename",function(e)
@@ -2115,7 +2123,7 @@ $scope.sendPostIpaMail=function()
 //		$scope.empService($(this).val());
 //	}
 //});
-$scope.emplArr=[];
+// $scope.emplArr=[];
 /*$("#wrkename").autocomplete({
 	source: $scope.emplArr
   });
@@ -2169,7 +2177,7 @@ $scope.getEmployerNames=function(queryStr){
 
 
 // ****************************************** ASSET MODEL
-$scope.modelTags = [];
+//$scope.modelTags = [];
 
 // $(".ast").change(function()
 // {
@@ -2297,7 +2305,7 @@ $scope.modelTags = [];
 //		  }
 ////		  console.log($scope.dealerObj+" : "+$scope.dealerObj["DEALER_CODE"]);
 //	  });
-	//Piyush
+/*
 //	    $('.mdlNmbr ').hover(function(){
     	$(document).on("mouseenter",".mdlNmbr ",function(){
 //	    	alert("Hello");
@@ -2310,10 +2318,12 @@ $scope.modelTags = [];
 	  $(document.body).on("click",".glyphicon-remove",function(){
 		  $(this).parent("div").remove();
 	  });
+
+	  */
 	  //reload current data form
-	  $("#cancel").click(function(){
-		  location.reload();
-	  });
+	  // $("#cancel").click(function(){
+		 //  location.reload();
+	  // });
 	  //save partial service data
      /*$("#save").click(function(){
 		  
@@ -2344,9 +2354,9 @@ $scope.modelTags = [];
 			return message;
 		}*/
 	  
-	$(document.body).on("click","#homePG",function(){
-	    location.reload();
-	  	});
+		// $(document.body).on("click","#homePG",function(){
+	 //    	location.reload();
+	 //  	});
 		  
 	  /*$scope.onSaveAssetClicked=function(){
 		  // $scope.mkVal = $scope.mk;
@@ -2384,7 +2394,7 @@ $scope.modelTags = [];
 	  	};
 
 		var minDa = new Date();
-			minDa.setFullYear(minDa.getFullYear()-100);
+		minDa.setFullYear(minDa.getFullYear()-100);
 
 		var maxDa = new Date();
 		maxDa.setFullYear(maxDa.getFullYear()-18);
@@ -2399,16 +2409,26 @@ $scope.modelTags = [];
 		};
 		/* End of dob popup */
 
-		/*Sayali*/
-		if($scope.asset){
-			$scope.applicant.asset = $scope.asset;
-		}
-		$scope.applicant.oResidence.oPhone.iMobile = $scope.tmob;
+		$scope.isCurrPanel = function(currentPage){
+			if(currentPage==$scope.currentPageNumber)
+				return true;
+		};
+		$scope.onPreviousClicked=function(previousURL){
+			$scope.currentPageNumber--;
+			$state.go(previousURL);
+		};
+		$scope.onNextClicked=function(nextURL,isInvalid){
+			if(isInvalid){
+				angular.element('input.ng-invalid').first().focus();
+			}else{
 
-	
-		$scope.isCurrPanel = function(){
-			return true;
-		}
+				$scope.currentPageNumber++;
+				$state.go(nextURL);
+			}
+		};
 
-}]);
-}).call(this)
+		$scope.cancelApplication = function(){
+			location.reload();
+		}
+	}]);
+}).call(this);
