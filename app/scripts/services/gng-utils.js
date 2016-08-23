@@ -19,6 +19,7 @@
 	*/
 	angular.module('gonogo.utilities', ['gonogo.notification']);
 
+
 	angular.module("gonogo.notification", []).factory("notifier", [function() {
             var logIt;
             return toastr.options = {
@@ -55,6 +56,4 @@
                 }
             }
         }]);
-
-
-}).call(this)
+}).call(this);

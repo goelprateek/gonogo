@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	var app = angular.module('gonogo', [ 'ngRoute', 
+	var app = angular.module('gonogo', [ 'ui.router', 
 	                                     'ngAria',
 	                                     'ngMessages' ,
 	                                     'ngResource',
@@ -23,8 +23,8 @@
 	                                     'gonogo.commons',
 	                                     'gonogo.factories',
 	                                     'score-directives',
-	                                     'daterangepicker'	                                     
-	                                     ]);
+	                                     'daterangepicker'
+	                                    ]);
 
 	app.controller("Maincontroller",['$scope', '$log', 'notifier' , '$timeout','RestService','$location','UserService','APP_CONST','AclService',
 		function($scope, $log, notifier , $timeout,RestService,$location,UserService,APP_CONST,AclService) {
@@ -34,7 +34,7 @@
 
 			var currentUser=UserService.getCurrentUser();
 
-			if(!_.isUndefined(currentUser.id) )
+			if(!_.isUndefined(currentUser.id))
 			{
 				if(currentUser.actions && currentUser.actions.length!=0)
 				{ 
@@ -54,7 +54,6 @@
 			}
 		});
 
-
 		$scope.status = {
 		    isopen: false
 		};
@@ -70,7 +69,7 @@
 
 		$scope.isCdlPage = function() {
 			var path;
-			return path = $location.path(),  _.contains(["/cdl/dealer","/cdl/apply",'/cdl/dashboard','/cdl/assetMaster','/cdl/customerForm'], path);
+			return path = $location.path(),  _.contains(["/cdl/dealer","/cdl/apply",'/cdl/dashboard','/cdl/assetMaster','/cdl/customerForm','/cdl/basic-de','/cdl/result','/cdl/after-submit','/cdl/hold-stage','/cdl/post-ipa','/cdl/additnl-doc'], path);
 		}
 
 		$scope.logout = function() {
@@ -80,7 +79,7 @@
 					"sUserID": $scope.userid
 			}
 
-			RestService.postDataWithHeaders(APP_CONST.getConst('BASE_URL_GNG')+'logout',json);
+			RestService.postDataWithHeaders('logout',json);
 
 			UserService.cleanUpUserDetails();
 			$location.path(APP_CONST.getConst('APP_CONTEXT'));
@@ -105,4 +104,4 @@
 			$scope.color = currentUser.color;
 		}
 	}]);
-}).call(this)
+}).call(this);

@@ -35,4 +35,12 @@
     		<object id="cirhtml" data="data:application/pdf;base64,{{response.sByteCode}}" type="text/html" width="100%" style="border: none; height: 450px;"></object>
     	</div>
     </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-if="canSubmitDO" ng-click="sendDOMail(response.sDocID,refID)">
+        Submit
+        </button>
+        <button class="btn btn-warning" type="button" ng-click="closeModal()">
+        Cancel
+        </button>
+    </div>
 </div>

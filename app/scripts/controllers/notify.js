@@ -314,16 +314,16 @@
                 "sImageBlock": ""
             }
           ]
-        }
+        };
         return {
         	dummy : _obj
         }	
     });
 
 	app.controller('NotifController', ['$scope','$rootScope', '$interval','$filter',
-								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log','notifier',
+								'RestService','NotificationObject','UserService','AclService','$uibModal','SelectArrays','$log','notifier','$state',
                                 function($scope, $rootScope, $interval,$filter,RestService,NotificationObject,UserService,AclService,
-                                    $uibModal,SelectArrays,$log,notifier){
+                                    $uibModal,SelectArrays,$log,notifier,$state){
 
 	var user=UserService.getCurrentUser();
     
@@ -334,7 +334,7 @@
     }
 
     if(_.isUndefined(user.id) ){
-        $location.path(APP_CONST.getConst('APP_CONTEXT'));
+        $state.go(APP_CONST.getConst('APP_CONTEXT'));
     }
 
     $scope.selectResidence = SelectArrays.getResidenceTypes();
@@ -461,6 +461,7 @@
 			var URL;
 
 			if(_.contains(user.role, "CRO3")){
+
                 URL = 'cro3-queue';
                 if(user.branches && user.branches.length>0)
                 {
@@ -484,6 +485,7 @@
                     'iLimit' :$scope.limit,
                     'oCriteria':{"aProducts":user.getProductNames()}
                 };
+
             }
             else if(AclService.can('NCROQUE')){
 				URL = 'cro-queue'; //All 
@@ -572,6 +574,7 @@
         if((_.contains(user.role, "CRO4") || _.contains(user.role, "CRO3")) && applicationRequestType && applicationRequestType=="PS"){
             URL = 'application-data-partial';
         }else if(_.contains(user.role, "CRO3") && applicationRequestType && applicationRequestType=="FP"){
+
             URL = 'application-data';
         }else{
     		if(AclService.can('NCROQUE'))//for CRO1
@@ -606,7 +609,7 @@
             if(response)
 				$scope.objectSet = response;
 			else
-			 $scope.objectSet = NotificationObject.dummy();
+			 $scope.objectSet = NotificationObject.dummy;
 			
             $scope.Picked = CustID;
             $scope.dedupeRefArray = [];
@@ -1243,7 +1246,7 @@ $scope.onchange = function(id) {
 
     $scope.invoiceDate = false;
     $scope.invoiceNumber = false;
-    
+
     $scope.datefilter =  {            
          date : {
              startDate: null,
@@ -1331,7 +1334,6 @@ $scope.onchange = function(id) {
             },
             opostIPA:null,
             sRefID:$scope.currentApplicationFormRefID,
-            refID:$scope.currentApplicationFormRefIDssss,
             dtDateTime:new Date().getTime()
         };
 
@@ -1341,7 +1343,7 @@ $scope.onchange = function(id) {
                 
                 RestService.saveToServer("get-pdf-ref",JSON.stringify(postIPARequest)).then(function(response){
                     if(response){
-                        $scope.shwPDFModal('lg',response);
+                        $scope.shwPDFModal(response,$scope.currentApplicationFormRefID,false);
                     }else{
                         notifier.logWarning("We are unable to load DO for this application") ;
                     }
@@ -1352,15 +1354,22 @@ $scope.onchange = function(id) {
         });
     };
 
-    $scope.shwPDFModal = function (size,response) {
+    $scope.shwPDFModal = function (response,refID,canSubmit) {
+        //alert('modal baseURL'+baseURL);
         var modalInstance = $uibModal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'views/modal-do-view.html',
-            controller: 'DOModalCtrl',
-            size: size,
+            controller: 'PDFViewerModalCtrl',
+            size: 'lg',
             resolve: {
                 response:function(){
                     return response;
+                },
+                refID:function(){
+                    return refID;
+                },
+                canSubmit:function(){
+                    return canSubmit;
                 }
             }
         });
@@ -1369,7 +1378,7 @@ $scope.onchange = function(id) {
     // destructor function for scope 
     $scope.$on("$destroy",function(){
         if(angular.isDefined(timer)){
-             $interval.cancel(polling);
+             $interval.cancel(timer);
              timer = undefined;
         }
     });
@@ -1433,6 +1442,7 @@ app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$ui
 app.controller("supportedDocuments",['$scope', 'ImageFeed','$uibModalInstance','$timeout','RestService','notifier',
     function($scope,ImageFeed,$uibModalInstance,$timeout,RestService,notifier){
     
+    $scope.croImages = true;
     $scope.noWrapSlides = true;
     $scope.active = ImageFeed.index;
     var rejectedImgArray = [];
@@ -1747,28 +1757,6 @@ $scope.closeDocument = function () {
   };
 }]);
 
-app.controller('DOModalCtrl', ['$scope', '$uibModalInstance', 'response',
-    function ($scope, $uibModalInstance, response) {
-
-    $scope.response = response;
-
-    $scope.closeModal = function () {
-        $uibModalInstance.dismiss();
-    };
-}]);
-
-app.directive('selectRequired',function(){
-    return {
-        restrict: "A",
-        require:"ngModel",
-        link: function(element,scope,attr,controller){
-
-            controller.$validators.selectrequired = function(modelValue){                   
-                return modelValue === '' || modelValue.startsWith('Select') ? false : true;
-            }
-        }
-    }
-});
 
 app.directive('thisEarlierThan', function () {
     return {

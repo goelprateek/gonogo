@@ -36,6 +36,7 @@
 		   };
 		});
 	
+
 	app.directive('initcap', function () {
 	return {
 		require: 'ngModel',
@@ -60,9 +61,11 @@
 			require: 'ngModel',
 			link: function(scope, element, attrs, modelCtrl) {
 				var formate = function(inputValue) {
-					if (inputValue == undefined) inputValue = '';
-					var rupee = torupee(inputValue);
-					if (rupee !== inputValue) {
+					if (!inputValue) inputValue = '';
+						var transformedInput = (inputValue+"").replace(/[^0-9]/g, '');
+					
+					var rupee = torupee(transformedInput);
+					if (inputValue !== rupee) {
 						modelCtrl.$setViewValue(rupee);
 						modelCtrl.$render();
 					}
@@ -82,31 +85,220 @@
 					}
 				}
 				modelCtrl.$parsers.push(formate);
+				modelCtrl.$formatters.push(formate);
 				formate(scope[attrs.ngModel]); // capitalize initial value
 			}
-		   };	
+	   	};	
 	});
+
+	app.directive('imageUpload',["RestService","UploadImages","notifier","$compile","$log",
+	function(RestService,UploadImages,notifier,$compile,$log){
+
+		var linker = function(scope, element, attrs) {
+			var template = 	  '<div class="row clearfix">'
+			template=template+	'<div class="col-md-4" ng-repeat="item in requestImageArray">';		
+			template=template+		'<content-item item="item" imagearray="imageArrayToUpload"></content-item>';
+			template=template+	'</div>';
+			template=template+'</div>';
+			template=template+'<div class="row clearfix" style="text-align: center;">';
+			template=template+	'<button class="customButton submit" id="reprocess" ng-click="uploadImages()" style="float: inherit;">Submit</button>';
+			template=template+'</div>';
+			element.html(template);
+			$compile(element.contents())(scope);
+		};
+
+		var _controller=["$scope",function($scope){
+			// console.log("Image Array Request: ");
+			// console.log($scope.requestImageArray);
+
+			//console.log("Reference ID: ");
+			//console.log($scope.referenceId);
+
+			$scope.imageArrayToUpload=[];
+
+			$scope.uploadImages=function(){
+
+				if($scope.requestImageArray.length == $scope.imageArrayToUpload.length){
+					UploadImages.upload($scope.referenceId,$scope.imageArrayToUpload).then(function(imageUploadedCount) {
+					  	$log.debug('Image upload Success, Total image uploaded : ' + imageUploadedCount);
+					  	$scope.onImageUploaded();
+					}, function(reason) {
+					  	$log.debug('Image upload Failed, Total image uploaded : ' + imageUploadedCount);
+					});
+				}else{
+					notifier.logWarning("Please provide all images.") ;
+				}
+			};
+
+			/*
+			 * Author Sayali uploadallimg function to upload img one by one
+			 */
+			 /*
+			$scope.uploadAllImgs=function(pReferenceID,pImageArrayToUpload)
+			{
+				// console.log("upload Image array :"+array.length);
+				for(var i=0 ; i<$scope.imageArrayToUpload.length ; i++){
+					if($scope.imageArrayToUpload[i] != null){
+						var json ={
+					  		"oHeader": {
+						    	"sAppID": pReferenceID,  // application id
+							    "sApplID": "1" // applicant id
+						  	},
+						  	"sRefID": pReferenceID,
+					  		"oUpldDtl": {
+							    "sFileID": "1", // ask yogesh
+							    "sFileName": pImageArrayToUpload[i].kyc_name,
+							    "sFileType": pImageArrayToUpload[i].type,
+							    "sfileData": pImageArrayToUpload[i].image,
+							    "sStat": "", // ask yogesh
+							    "sReason": "" // ask yogesh
+						  	}
+						};
+				//		console.log("image JSon : "+JSON.stringify(json));
+						uploadImage(json);	
+					}
+				}
+			};
+
+			function uploadImage(json)
+			{
+				RestService.saveToServer("upload-image",json)
+				.then(function(data)
+				{
+					$scope.imageUploadedCount=$scope.imageUploadedCount+1;
+
+					if($scope.imageUploadedCount == $scope.imageArrayToUpload.length){
+						$scope.onImageUploaded();
+					}
+
+					if(Response.sStatus == 'SUCCESS')
+					{
+		//				console.log("response for-"+JSON.stringify(Response));		
+					}
+	 			},function(failedResponse){
+	 				$scope.serviceHitCount=$scope.serviceHitCount+1;
+					if($scope.serviceHitCount<=3)
+					{
+					  	uploadImage(json);
+					}else{
+						$scope.serviceHitCount=1;
+
+						$scope.imageUploadedCount=$scope.imageUploadedCount+1;
+						if($scope.imageUploadedCount == $scope.imageArrayToUpload.length){
+							$scope.onImageUploaded();
+						}
+						alert("Sorry we can not process your image upload request");
+					}
+				});
+			};*/
+		}];
+
+		return {
+			restrict : 'E',
+			link : linker,
+			scope : {
+				requestImageArray : "=",
+				referenceId:"@",
+				onImageUploaded:'&'
+			},
+			controller : _controller
+		};
+	}]);
 
 	app.directive('contentItem', function ($compile) {
 		var linker = function(scope, element, attrs) {
 			var template = '<div class="row clearfix" style="padding: 8px;">';
+			template=template+'<label>{{item.doc}}</label>';
 			template=template+'<div class="preview" id="{{item.value}}{{item.index}}">';
-			template=template+'<input id="{{item.value}}l{{item.index}}" type="file" ngf-select="onselectImg($files,'+"'{{item.value}}'"+','+"'{{item.index}}'"+')">';
+			template=template+'<input id="{{item.value}}l{{item.index}}" type="file" ngf-select="onselectImg($files,{{item}})">';
 			template=template+'<label for="{{item.value}}l{{item.index}}" id="{{item.value}}{{item.index}}label">';
 			template=template+'<img alt="" src="../images/camera-128.png" class="img_icon"></label></div>';
 			template=template+'<small id="{{item.value}}{{item.index}}size" class="size"></small>';
-			template=template+'<div style="height:20px;"><a class="remove_image" id="{{item.value}}{{item.index}}remove" name="{{item.value}}{{item.index}}" style="display:none">Remove</a></div></div>';
-			element.html(template); 
+			template=template+'<div style="height:20px;display:inline"><a class="remove_image" id="{{item.value}}{{item.index}}remove" name="{{item.value}}{{item.index}}" style="display:none" ng-click="onImageRemove(item)">Remove</a></div>';
+			template=template+'</div>';
+			element.html(template);
 			$compile(element.contents())(scope);
 		};
+
+		var _controller=["$scope",function($scope){
+			//console.log("Image Array To Upload: ");
+			//console.log($scope.imagearray);
+			// var countimg=0;
+
+			$scope.onImageRemove=function(img){
+				$("#"+img.value+img.index+"").css("background-image", "");
+				$("#"+img.value+img.index+"label").show();
+				$("#"+img.value+img.index+"remove").hide();
+
+				var kycName="";
+				if(_.contains(["APPLICANT-PHOTO","PAN","AADHAAR","PASSPORT","DRIVING-LICENSE","CUSTOMER-PHOTO","INCOME-PROOF1","INCOME-PROOF2","OTHER"],img.value)){
+					kycName=img.value;
+				}else if(_.contains(["APPLICATION_FORM","AGREEMENT","ACH","DISBURSEMENT","ADDITIONAL_KYC","holdCase"],img.value)){
+					kycName=img.value+img.index;
+				}
+
+				for(var i=0; i<$scope.imagearray.length;i++){
+					if($scope.imagearray[i].kyc_name == kycName){
+						/* delete img_array[i]; */
+						$scope.imagearray.splice(i,1);
+					}
+				}
+			};
+
+			$scope.onselectImg = function($files,item) 
+			{
+				//console.log("inside file select"+type+" file:"+$files[0].name);
+				//alert("Hello");
+				var img_type ='';
+				for (var i = 0; i < $files.length; i++) 
+				{
+					var fname=$files[0].name;
+	// 				countimg++;
+	//		    	var re = (/\.(gif|jpg|jpeg|tiff|png)$/i);
+			    	var re = (/\.(jpg)$/i);
+					if(!re.exec(fname))
+			    	{
+				    	alert("Sorry..!! We can not upload your image. \n Only .Jpg images are allowed");
+				    	break;
+			    	}
+					img_type = fname.split(".")[1];
+					var $file = $files[i];
+					var base64;
+					var  reader=new FileReader();
+					if ($files[i] && $file) {
+						var binaryString;
+						var size=((($files[i].size)/1024).toFixed(2)) +" Kb";
+						reader.onload = function(readerEvt) {
+							binaryString = readerEvt.target.result;
+							if(_.contains(["APPLICANT-PHOTO","PAN","AADHAAR","PASSPORT","DRIVING-LICENSE","CUSTOMER-PHOTO","INCOME-PROOF1","INCOME-PROOF2","OTHER"],item.value)){
+								$scope.imagearray.push({kyc_name:item.value,image:binaryString.split(",")[1],type:img_type});
+							}else if(_.contains(["APPLICATION_FORM","AGREEMENT","ACH","DISBURSEMENT","ADDITIONAL_KYC"],item.value)){
+								$scope.imagearray.push({kyc_name:(item.value+item.index),image:binaryString.split(",")[1],type:img_type});
+							}else if(item.value==="holdCase"){
+								$scope.imagearray.push({kyc_name:item.doc, image:binaryString.split(",")[1], type:img_type, state:item.state,reason:item.reason});
+							}
+
+							$("#"+item.value+item.index+"").css("background-image", "url("+binaryString+")");
+							$("#"+item.value+item.index+"label").hide();
+							$("#"+item.value+item.index+"remove").show();
+						};
+				        reader.readAsDataURL($files[i]);
+					}
+				}
+			}
+		}];
+
 		return {
 			restrict : 'E',
 			link : linker,
-			scope : false
+			scope : {
+				imagearray : "=",
+				item: "="
+			},
+			controller : _controller
 		};
 	});
 
-	
 	app.directive("customBackground",function(){
 		return {
             restrict: "A",
@@ -116,7 +308,6 @@
                     return $location.path()
                 }, addBg = function(path) {
                     switch ($element.removeClass("body-home body-special body-tasks body-lock"), path) {
-                        
                         case "/":
                         	return $element.addClass("body-special");
                     }
@@ -136,7 +327,6 @@
 				 parent = elem.parent(),
 				 topPadding = parseInt(attrs.paddingWhenAtTop, 10),
                  offsetTop;	
-				 
 
 				 $win.on('scroll', function (e) {
 				 	offsetTop = (parent.offset().top - topPadding);
@@ -151,8 +341,6 @@
 			}
 		}
 	}),
-
-	
 
 	app.directive('onlyDigits', function () {
 	    return {
@@ -170,7 +358,7 @@
 	            });
 	        }
 	    };
-	})
+	});
 
 	app.directive('replace', function() {
 	  return {
@@ -191,50 +379,73 @@
 	});
 
 
+	app.directive('autoNext', function() {
+	    return {
+	       	restrict: 'A',
+	       	link: function(scope, element, attr, form) { 
+	           	var tabindex = parseInt(attr.tabindex);
+	           	var maxLength = parseInt(attr.maxlength);
+
+	           	element.on('keyup', function(e) {
+	               	if (element.val().length > maxLength-1) {
+	               		var next = angular.element(document.body).find('[tabindex=' + (tabindex+1) + ']');
+	                  	if (next.length > 0) {
+	                      	next.focus();
+	                      	return true;
+	                  	} else {
+	                      	return false;                          
+	                  	}
+	               	}
+	               	return true;
+	          	});
+	       	}
+	    }
+	});
+
+
     app.directive('fullscreen', function() {
-            return {
-                restrict: 'AC',
-                template: '<i class="glyphicon glyphicon-fullscreen"></i>',
-                link: function(scope, el, attr) {
-                    el.on('click', function() {
-                        var element = el.parents(".modal-content").find(".modal-body")[0];
-                        var angElelement=angular.element(element);
-                        if (!$('body')
-                            .hasClass("full-screen")) {
-                            $('body')
-                                .addClass("full-screen");
-                            $('#fullscreen-toggler')
-                                .addClass("active");
-                                angElelement.addClass("pdfExpand");
-                            if (element.requestFullscreen) {
-                                element.requestFullscreen();
-                            } else if (element.mozRequestFullScreen) {
-                                element.mozRequestFullScreen();
-                            } else if (element.webkitRequestFullscreen) {
-                                element.webkitRequestFullscreen();
-                            } else if (element.msRequestFullscreen) {
-                                element.msRequestFullscreen();
-                            }
-
-                        } else {
-                        	 angElelement.removeClass("pdfExpand");
-                            $('body').removeClass("full-screen");
-                            el.removeClass("active");
-
-                            if (document.exitFullscreen) {
-                                document.exitFullscreen();
-                            } else if (document.mozCancelFullScreen) {
-                                document.mozCancelFullScreen();
-                            } else if (document.webkitExitFullscreen) {
-                                document.webkitExitFullscreen();
-                            }
-
+		return {
+            restrict: 'AC',
+            template: '<i class="glyphicon glyphicon-fullscreen"></i>',
+            link: function(scope, el, attr) {
+                el.on('click', function() {
+                    var element = el.parents(".modal-content").find(".modal-body")[0];
+                    var angElelement=angular.element(element);
+                    if (!$('body')
+                        .hasClass("full-screen")) {
+                        $('body')
+                            .addClass("full-screen");
+                        $('#fullscreen-toggler')
+                            .addClass("active");
+                            angElelement.addClass("pdfExpand");
+                        if (element.requestFullscreen) {
+                            element.requestFullscreen();
+                        } else if (element.mozRequestFullScreen) {
+                            element.mozRequestFullScreen();
+                        } else if (element.webkitRequestFullscreen) {
+                            element.webkitRequestFullscreen();
+                        } else if (element.msRequestFullscreen) {
+                            element.msRequestFullscreen();
                         }
-                    });
-                }
-            };
-        }
-    );
+
+                    } else {
+                    	 angElelement.removeClass("pdfExpand");
+                        $('body').removeClass("full-screen");
+                        el.removeClass("active");
+
+                        if (document.exitFullscreen) {
+                            document.exitFullscreen();
+                        } else if (document.mozCancelFullScreen) {
+                            document.mozCancelFullScreen();
+                        } else if (document.webkitExitFullscreen) {
+                            document.webkitExitFullscreen();
+                        }
+
+                    }
+                });
+            }
+        };
+    });
 
 
     app.directive('widgetMaximize', function () {
@@ -264,9 +475,18 @@
                 });
             }
         };
-    })
+    });
 
-    
-
-}).call(this)
-
+	app.directive('selectRequired',function(){
+	    return {
+	        restrict: "A",
+	        require:"ngModel",
+	        link: function(element,scope,attr,controller){
+	            controller.$validators.selectrequired = function(modelValue){                   
+	                return  (!!modelValue) && !modelValue.startsWith('Select');
+	            }
+	        }
+	    }
+	});
+	
+}).call(this);

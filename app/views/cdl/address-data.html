@@ -1,0 +1,290 @@
+<form name="addressData" novalidate>
+	<div class="row clearfix getheight" slimscroll="{height:405,railVisible:true}" style="height: 400px;">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="row clearfix" style="margin-top: 40px;">
+				<div class="col-md-6 cdl-height form-group">
+					<select id="addressType" class="cdl-form-control control-select inputMaterial" name="resaddtype" ng-model="applicant.oResidence.oAddress.addrType" select-required>
+						<option value="" >Select Address Type*</option>
+						<option value="OWNED-BUNGLOW">OWNED-BUNGLOW</option>
+						<option value="OWNED-CHAWL">OWNED-CHAWL</option>
+						<option value="OWNED-FLAT">OWNED-FLAT</option>
+						<option value="OWNED-PENTHOUSE">OWNED-PENTHOUSE</option>
+						<option value="OWNED-ROWHOUSE">OWNED-ROWHOUSE</option>
+						<option value="RENTED-BUNGLOW">RENTED-BUNGLOW</option>
+						<option value="RENTED-CHAWL">RENTED-CHAWL</option>
+						<option value="RENTED-FLAT">RENTED-FLAT</option>
+						<option value="RENTED-PENTHOUSE">RENTED-PENTHOUSE</option>
+						<option value="RENTED-ROWHOUSE">RENTED-ROWHOUSE</option>
+						<option value="RENTED-BACHELOR ACCOMODATION">RENTED-BACHELOR
+							ACCOMODATION</option>
+						<option value="COMPANY PROVIDED-FLAT">COMPANY PROVIDED-FLAT</option>
+						<option value="PARENT OWNED-HOUSE">PARENT OWNED-HOUSE</option>
+						<option value="PARENT OWNED-FLAT">PARENT OWNED-FLAT</option>
+						<option value="COMPANY PROVIDED-HOUSE">COMPANY PROVIDED-HOUSE</option>
+					</select>
+					<label>Residence Address Type*</label>
+					<div ng-messages="addressData.resaddtype.$error" ng-show="addressData.resaddtype.$touched" class="errorMsg">
+						<p ng-message="selectrequired">Please select Residence address type </p>
+					</div>
+				</div>
+
+				<div class="col-md-6 cdl-height form-group" ng-if="applicant.oResidence.oAddress.addrType.indexOf('RENTED') != -1">
+					<div class="div-rupee">
+						<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
+						<input type='text' maxlength="12" ng-model="applicant.oResidence.oAddress.dRentPerMonth" class="cdl-form-control inputMaterial" name="resRent" style="padding-left: 4%" rupees required/>
+						<label>Rent Per Month*</label>
+						<div ng-messages="addressData.resRent.$touched && addressData.resRent.$error" class="errorMsg">
+		   					<p ng-message="required">Please enter Rent per month</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row clearfix">
+				<div class="col-md-12 cdl-height form-group">
+					<input type="text" ng-model="applicant.oResidence.oAddress.sAddress1" class="cdl-form-control inputMaterial" style="width: 93%" name="resAdd1" capitalize required/>
+					<label>Address Line 1*</label>
+					<div ng-messages="addressData.resAdd1.$touched && addressData.resAdd1.$error" class="errorMsg">
+	   					<p ng-message="required">Please enter Address line 1</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="row clearfix">
+				<div class="col-md-6 cdl-height form-group">
+					<input type="text" ng-model="applicant.oResidence.oAddress.sAddress2" class="cdl-form-control inputMaterial" capitalize />
+					<label>Address Line 2</label>
+				</div>
+				<div class="col-md-6 cdl-height form-group">
+					<input type="text" ng-model="applicant.oResidence.oAddress.sAddress3" class="cdl-form-control inputMaterial" capitalize />
+					<label>Address Line 3</label>
+				</div>
+			</div>
+
+			<div class="row clearfix">
+				<div class="col-md-6 cdl-height form-group">
+					<input type="text" class="cdl-form-control inputMaterial" ng-model="applicant.oResidence.oAddress.sPinCode" id="perpin" name="respin" maxlength="6" data-ng-keyup="pinService(applicant.oResidence.oAddress.sPinCode,'perpin')" only-digits required/>
+					<label>Pincode*</label>
+					<div ng-messages="addressData.respin.$touched && addressData.respin.$error" class="errorMsg">
+	   					<p ng-message="required">Please enter Pincode</p>
+					</div>
+				</div>
+				<div class="col-md-6 cdl-height form-group">
+					<div class="col-md-6" style="padding: 0px;">
+						<input type="text" class="cdl-form-control inputMaterial"
+							disabled="disabled" name="rescity" ng-model="applicant.oResidence.oAddress.sCity" required />
+						<label style="left: 0px;">City*</label>
+						<div ng-messages="addressData.rescity.$touched && addressData.rescity.$error" class="errorMsg">
+		   					<p ng-message="required">Please provide City</p>
+						</div>
+					</div>
+					<div class="col-md-6" style="padding: 0px;">
+						<input type="text" disabled="disabled"
+							class="cdl-form-control inputMaterial" ng-model="applicant.oResidence.oAddress.sState" name="resstate" required/>
+						<label class="margin_state" style="left: 15px;margin: 0px;">State*</label>
+						<div ng-messages="addressData.resstate.$touched && addressData.resstate.$error" class="errorMsg">
+		   					<p ng-message="required">Please provide State</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row clearfix">
+				<div class="col-md-2 cdl-height form-group">
+					<input type="text" class="cdl-form-control inputMaterial" ng-model="applicant.oResidence.oPhone.sStdCode" maxlength="5" name="resStd" only-digits required/>
+					<label>STD Code*</label>
+					<div ng-messages="addressData.resStd.$touched && addressData.resStd.$error" class="errorMsg">
+	   					<p ng-message="required">Please enter STD code</p>
+					</div>
+				</div>
+				<div class="col-md-4 cdl-height form-group">
+					<input type="text" class="cdl-form-control inputMaterial" ng-model="applicant.oResidence.oPhone.iLandLine" maxlength="10" style="width: 78%;" only-digits/>
+					<label>Landline Number</label>
+				</div>
+				<div class="col-md-6 cdl-height form-group">
+					<input type="text" ng-model="applicant.oResidence.oPhone.iMobile"
+						class="cdl-form-control inputMaterial" maxlength="10"
+						disabled="disabled" only-digits/>
+					<label>Personal Mobile</label>
+				</div>
+			</div>
+
+			<div class="row clearfix">
+				<div class="col-md-12 cdl-height form-group">
+					<input type="text" class="cdl-form-control inputMaterial" name="resemail" ng-model="applicant.oResidence.sEmail" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" style="width: 93%;" required/>
+					<label>Email*</label>
+					<div ng-messages="addressData.resemail.$touched && addressData.resemail.$error" class="errorMsg">
+	   					<p ng-message="required">Please enter Email ID</p>
+	   					<p ng-message="pattern">Please enter valid Email ID</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="row clearfix">
+				<div class="col-md-6 cdl-height form-group">
+					<input type="text" class="cdl-form-control inputMaterial" maxlength="3" ng-model="applicant.oResidence.oAddress.iMonthAddress" name="monthaddr" only-digits required/>
+					<label>Months at current address*</label>
+					<div ng-messages="addressData.monthaddr.$touched && addressData.monthaddr.$error" class="errorMsg">
+	   					<p ng-message="required">Please enter Months at current address</p>
+					</div>
+				</div>
+				<div class="col-md-6 cdl-height form-group">
+					<input type="text" class="cdl-form-control inputMaterial city" ng-model="applicant.oResidence.oAddress.iMonthCity" name="monthcity" maxlength="3" only-digits required/>
+					<label>Months at City*</label>
+					<div ng-messages="addressData.monthcity.$touched && addressData.monthcity.$error" class="errorMsg">
+	   					<p ng-message="required">Please enter Months at city</p>
+					</div>
+				</div>
+			</div>
+			<div id="permanentAddr">
+				<div class="row clearfix alert-info">
+					<div class="col-md-6">
+						<strong>Permanent Address</strong>
+					</div>
+					<div class="col-md-6">
+						<label for="same"> <input type="checkbox"
+							ng-model="applicant.sameAbove" ng-change="stateChanged(applicant.sameAbove)" /> Same as Above
+						</label>
+					</div>
+				</div>
+				<div class="row clearfix" style="margin-top: 40px;">
+					<div class="col-md-6 cdl-height form-group">
+						<select class="cdl-form-control control-select inputMaterial"
+							ng-model="applicant.oPermanent.oAddress.addrType" name="peraddtype" select-required>
+							<option value="">Select	Address Type*</option>
+							<option value="OWNED-BUNGLOW">OWNED-BUNGLOW</option>
+							<option value="OWNED-CHAWL">OWNED-CHAWL</option>
+							<option value="OWNED-FLAT">OWNED-FLAT</option>
+							<option value="OWNED-PENTHOUSE">OWNED-PENTHOUSE</option>
+							<option value="OWNED-ROWHOUSE">OWNED-ROWHOUSE</option>
+							<option value="RENTED-BUNGLOW">RENTED-BUNGLOW</option>
+							<option value="RENTED-CHAWL">RENTED-CHAWL</option>
+							<option value="RENTED-FLAT">RENTED-FLAT</option>
+							<option value="RENTED-PENTHOUSE">RENTED-PENTHOUSE</option>
+							<option value="RENTED-ROWHOUSE">RENTED-ROWHOUSE</option>
+							<option value="RENTED-BACHELOR ACCOMODATION">RENTED-BACHELOR ACCOMODATION</option>
+							<option value="COMPANY PROVIDED-FLAT">COMPANY PROVIDED-FLAT</option>
+							<option value="PARENT OWNED-HOUSE">PARENT OWNED-HOUSE</option>
+							<option value="PARENT OWNED-FLAT">PARENT OWNED-FLAT</option>
+							<option value="COMPANY PROVIDED-HOUSE">COMPANY PROVIDED-HOUSE</option>
+						</select>
+						<label>Permanent Address Type*</label>
+						<div ng-messages="addressData.peraddtype.$error" ng-show="addressData.peraddtype.$touched" class="errorMsg">
+							<p ng-message="selectrequired">Please select Permanent address type</p>
+						</div>
+					</div>
+					<div class="col-md-6 cdl-height form-group" ng-if="applicant.oPermanent.oAddress.addrType.indexOf('RENTED') != -1">
+						<div class="div-rupee">
+							<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
+							<input type='text' ng-model="applicant.oPermanent.oAddress.dRentPerMonth" name="perrent" class="cdl-form-control inputMaterial" maxlength="12" style="padding-left: 4%" rupees required/>
+							<label>Rent Per Month*</label>
+							<div ng-messages="addressData.perrent.$touched && addressData.perrent.$error" class="errorMsg">
+			   					<p ng-message="required">Please enter Rent per month</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-12 cdl-height form-group">
+						<input type="text" ng-model="applicant.oPermanent.oAddress.sAddress1"
+							class="cdl-form-control inputMaterial" name="peradd1" style="width: 93%;" capitalize  required/>
+						<label>Address Line 1*</label>
+						<div ng-messages="addressData.peradd1.$touched && addressData.peradd1.$error" class="errorMsg">
+			   					<p ng-message="required">Please enter Address line 1</p>
+						</div>
+					</div>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-6 cdl-height form-group">
+						<input type="text" ng-model="applicant.oPermanent.oAddress.sAddress2"
+							class="cdl-form-control inputMaterial" capitalize />
+						<label>Address Line 2</label>
+					</div>
+					<div class="col-md-6 cdl-height form-group">
+						<input type="text" ng-model="applicant.oPermanent.oAddress.sAddress3"
+							class="cdl-form-control inputMaterial" capitalize />
+						<label>Address Line 3</label>
+					</div>
+				</div>
+
+				<div class="row clearfix">
+					<div class="col-md-6 cdl-height form-group">
+						<input type="text" class="cdl-form-control inputMaterial" ng-model="applicant.oPermanent.oAddress.sPinCode" id="prmnt_perpin" maxlength="6" data-ng-keyup="pinService(applicant.oPermanent.oAddress.sPinCode,'prmnt_perpin')" name="perpin" only-digits required/>
+						<label>Pincode*</label>
+						<div ng-messages="addressData.perpin.$touched && addressData.perpin.$error" class="errorMsg">
+			   					<p ng-message="required">Please enter Pincode</p>
+						</div>
+					</div>
+					<div class="col-md-6 cdl-height form-group">
+						<div class="col-md-6" style="padding: 0px;">
+							<input type="text" class="cdl-form-control inputMaterial city" ng-model="applicant.oPermanent.oAddress.sCity"
+								disabled="disabled" name="percity" required/>
+							<label style="left: 0px;">City*</label>
+							<div ng-messages="addressData.percity.$touched && addressData.percity.$error" class="errorMsg">
+			   					<p ng-message="required">Please enter City</p>
+							</div>
+						</div>
+						<div class="col-md-6" style="padding: 0px;">
+							<input type="text" class="cdl-form-control inputMaterial state" ng-model="applicant.oPermanent.oAddress.sState" name="perstate" disabled="disabled" required/>
+							<label class="margin_state" style="left: 15px;margin: 0px;">State*</label>
+							<div ng-messages="addressData.perstate.$touched && addressData.perstate.$error" class="errorMsg">
+			   					<p ng-message="required">Please enter State</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-2 cdl-height form-group">
+						<input type="text" ng-model="applicant.oPermanent.oPhone.sStdCode"
+							class="cdl-form-control inputMaterial" name="perstd" maxlength="5" only-digits required/>
+						<label>STD Code*</label>
+						<div ng-messages="addressData.perstd.$touched && addressData.perstd.$error" class="errorMsg">
+			   					<p ng-message="required">Please enter STD code</p>
+						</div>
+					</div>
+					<div class="col-md-4 cdl-height form-group">
+						<input type="text"  class="cdl-form-control inputMaterial" ng-model="applicant.oPermanent.oPhone.iLandLine" maxlength="10" only-digits/>
+						<label>Phone</label>
+					</div>
+					<div class="col-md-6 cdl-height form-group">
+						<input type="text" class="cdl-form-control inputMaterial" ng-model="applicant.oPermanent.oPhone.iMobile" maxlength="10" only-digits/>
+						<label>Mobile</label>
+					</div>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-12 cdl-height form-group">
+						<input type="text" class="cdl-form-control inputMaterial" name="peremail" ng-model="applicant.oPermanent.sEmail" style="width: 93%;" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required/>
+						<label>Email*</label>
+						<div ng-messages="addressData.peremail.$touched && addressData.peremail.$error" class="errorMsg">
+			   					<p ng-message="required">Please enter Email ID</p>
+			   					<p ng-message="pattern">Please enter valid Email ID</p>
+						</div>
+					</div>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-6 cdl-height form-group">
+						<input type="text" class="cdl-form-control inputMaterial" ng-model="applicant.oPermanent.oAddress.iMonthAddress" name="permonthadd" maxlength="3" only-digits required/>
+						<label>Months at Permanent address*</label>
+						<div ng-messages="addressData.permonthadd.$touched && addressData.permonthadd.$error" class="errorMsg">
+			   					<p ng-message="required">Please enter Months at a</p>
+						</div>
+					</div>
+					<div class="col-md-6 cdl-height form-group">
+						<input type="text" class="cdl-form-control inputMaterial city" name="permonthcity" ng-model="applicant.oPermanent.oAddress.iMonthCity" maxlength="3" only-digits required/>
+						<label>Months at City*</label>
+						<div ng-messages="addressData.permonthcity.$touched && addressData.permonthcity.$error" class="errorMsg">
+			   					<p ng-message="required">Please enter Months at city</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row clearfix ">
+		<div class="col-md-10 col-md-offset-1">
+		<!-- ng-disabled="addressData.$invalid" -->
+			<button ui-sref="/cdl/apply.personal" class="customButton previous">Previous</button>
+			<button ui-sref="/cdl/apply.professional" ng-disabled="addressData.$invalid" class="customButton next">Next</button>
+				<button class="customButton save" ng-click="submitApplication('step3')">Save</button>
+		</div>
+	</div>
+</form>

@@ -1,0 +1,78 @@
+<style>
+	.afterSubmit{
+		text-align: center;
+		border: 01px solid rgb(36, 161, 237);
+		margin-top: 5%;
+		width: 96%;
+		margin-left: 2%;
+		border-radius: 17px;
+	}
+
+	.approveSec{
+		color: rgb(36, 161, 237);
+		font-size: 20px;
+		margin: 4px 0px;
+	}
+
+	.emiSec{
+		margin-bottom: 5px;
+		font-size: 16px;
+	}
+	.rmrkCr
+	{
+		margin: 2%;
+		border-bottom: 01px solid #eae1e1;;
+	}
+	.rmrk
+	{
+		font-size: 18px;
+	}
+	.sbjt
+	{
+		font-size: 16px;
+		color: gray;
+		margin-bottom: 5px;
+	}
+</style>
+<div class="container" id="afterSubmit">
+	<div class="afterSubmit">
+		<div class="row clearfix approveSec" ng-if="statusObject">
+			<div class="col-md-12">
+				<span>Your application has been</span>
+				<span ng-if="statusObject.sAppStat == 'OnHold'"> put on hold. </span>
+				<span ng-if="statusObject.sAppStat == 'Decline'"> declined. </span>
+				<span ng-if="statusObject.sAppStat != 'OnHold' && statusObject.sAppStat != 'Decline'"> {{statusObject.sAppStat}} </span> 
+			</div>
+		</div>
+		<div class="row clearfix emiSec" ng-if="statusObject.sAppStat == 'Approved'">
+			<div class="col-md-4">Approved Amount : {{statusObject.aCroDec[0].dAmtAppr}}</div>
+			<div class="col-md-4">Emi :{{statusObject.aCroDec[0].dEmi}}</div>
+			<div class="col-md-4">Tenor : {{statusObject.aCroDec[0].iTenor}}</div>
+		</div><!-- Emi Saction-->
+	</div><!-- After Submit --> 
+
+	
+	<div class="row clearfix rmrkCr" ng-repeat="decision in statusObject.aCroJustification" ng-if="statusObject.sAppStat != 'OnHold'">
+		<div class="col-md-12 rmrk">Remark :{{decision.sSubTo}}</div>
+		<div class="col-md-12 sbjt">Subject To : {{decision.sRemark}}</div>
+	</div>
+
+	<div class="row clearfix rmrk" ng-if="statusObject.sAppStat == 'OnHold'" style="text-align: center;margin-top: 10px">
+		List of Documents
+	</div>
+	<div  slimscroll="{height: 340,railVisible:true}">
+		<div class="row clearfix rmrkCr" ng-repeat="decision in statusObject.aCroJustification" ng-if="statusObject.sAppStat == 'OnHold'">
+			<div class="col-md-12 rmrk">Document :{{decision.sDocName}}</div>
+			<div class="col-md-12 sbjt">Reason : {{decision.sDescrip}}</div>
+		</div>
+	</div>
+
+	<div class="row clearfix ">
+		<div class="col-md-10 col-md-offset-1"
+			style="text-align: center;">
+			<!-- <button class="customButton previous">Previous</button> -->
+			<button class="customButton next" id="aSubmitBtn" style="float: right;" ng-click="onSubmitClicked()">Next
+			</button>
+		</div>
+	</div>
+</div>

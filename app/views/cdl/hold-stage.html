@@ -1,0 +1,11 @@
+<div id="HoldStage">
+	<!-- <div class="row clearfix" >
+		<div class="col-md-4" ng-repeat="item in holdStageArr">			
+			<content-item item="item" imagearray="holdStageArr"></content-item>
+		</div>
+	</div>
+	<div class="row clearfix" style="text-align: center;">
+		<button class="customButton submit" id="reprocess"	ng-click="reprocess()" style="float: inherit;">Submit</button>
+	</div> -->
+	<image-upload request-image-array="holdStageArr" on-image-uploaded="onImageUploaded()" reference-id="{{referenceID}}"></image-upload>
+</div><!-- End of hold stage -->

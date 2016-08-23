@@ -1,0 +1,41 @@
+<form name="AssetForm" novalidate>
+	<div class="row clearfix customRow" style="margin-top:30px;">
+		<div class="col-md-12 height">
+			<select id="ast1" name="category" ng-model="asset.category" class="form-control control-select inputMaterial" ng-options = "d for d in assetArray track by d" ng-change="fetchAssetMake(asset.category)" select-required>
+				<option value="">Select Category*</option>
+			</select>
+			<label>Asset Category*</label>
+			<!-- <img alt="" src="images/select-arrow.png" class="form-control control-select inputMaterial" style="right: 13%" /> -->
+			<div ng-messages="AssetForm.category.$error" ng-show="AssetForm.category.$touched" class="errorMsg">
+	    		<p ng-message="selectrequired">Please select Asset Category</p>
+			</div>	
+		</div>
+	</div>
+	<div class="row clearfix customRow">
+		<div class="col-md-12 height">
+			<!-- <input type="text" id="mk1" ng-model="mk" class="customInput" placeholder="Make*" /> -->
+			<select id="mk1" name="make" ng-model="asset.make" class="form-control control-select inputMaterial" ng-options = "d for d in makeTags track by d" ng-change="fetchAssetModel(asset.category,asset.make)" select-required>
+				<option value="">Select Make*</option>
+			</select>
+			<label>Make*</label>
+	<!-- 		<img alt="" src="images/select-arrow.png" class="form-control control-select inputMaterial" style="right: 13%" /> -->
+			<div ng-messages="AssetForm.make.$error" ng-show="AssetForm.make.$touched" class="errorMsg">
+	    		<p ng-message="selectrequired">Please select Asset Make</p>
+			</div>
+		</div>
+	</div>
+	<div class="row clearfix customRow">
+		<div class="col-md-12 height">
+			<!-- <input type="text" id="mdl1" ng-model="mdl" class="customInput" placeholder="Model*" /> -->
+			<select id="mdl1" name="model" ng-model="asset.model" class="form-control control-select inputMaterial" ng-options = "d for d in modelTags track by d" select-required>
+				<option value="">Select Model*</option>
+			</select>
+			<label>Model*</label>
+			<!-- 
+			<img alt="" src="images/select-arrow.png" class="form-control control-select inputMaterial" style="right: 13%" /> -->
+			<div ng-messages="AssetForm.model.$error" ng-show="AssetForm.model.$touched" class="errorMsg">
+	    		<p ng-message="selectrequired">Please select Asset Model</p>
+			</div>
+		</div>
+	</div>
+</form>

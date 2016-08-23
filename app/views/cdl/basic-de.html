@@ -1,0 +1,101 @@
+<form class="row clearfix" id="nmCntnr" name="BasicInfoForm" novalidate >
+	<div class="col-md-8 col-md-offset-2" id="middleContainer">
+		<div class="row clearfix containerBorder">
+			<div class="col-md-10 col-md-offset-1">
+				<div id="basicInfo" style="margin-top: 20%">
+					<div class="row clearfix">
+						<!-- <div class="col-md-5 customDiv"><label  > First Name</label></div>
+						<div class="col-md-7"><input type="text" class="customInput" /> </div> -->
+						<div class="form-group col-md-4 cdl-height" ng-class="{'has-error': BasicInfoForm.fName.$touched && BasicInfoForm.fName.$invalid}">
+							<input id="fname" ng-model="basicInfo.firstName" type="text" name="fName"
+								class="cdl-form-control inputMaterial" maxlength="30" ng-pattern="/^[a-zA-Z\s]+$/" capitalize required/>
+							<label>First Name*</label>
+							<div ng-messages="BasicInfoForm.fName.$touched && BasicInfoForm.fName.$error" class="errorMsg">
+								<p ng-message="required">Please enter first name</p>
+						   		<p ng-message="pattern">Please enter valid first name</p>
+							</div>
+						</div>
+						<div class="form-group col-md-4 cdl-height" ng-class="{'has-error': BasicInfoForm.mName.$touched && BasicInfoForm.mName.$invalid}">
+							<input id="mname" ng-model="basicInfo.middleName" type="text" name="mName" class="cdl-form-control inputMaterial" capitalize />
+							<label>Middle Name</label>
+						</div>
+						<div class="form-group col-md-4 cdl-height" ng-class="{'has-error': BasicInfoForm.lName.$touched && BasicInfoForm.lName.$invalid}">
+							<input id="lname" ng-model="basicInfo.lastName" type="text" name="lName"
+								class="cdl-form-control inputMaterial" capitalize maxlength="30" ng-pattern="/^[a-zA-Z\s]+$/" required/>
+							<label>Last Name*</label>
+							<div ng-messages="BasicInfoForm.lName.$touched && BasicInfoForm.lName.$error" class="errorMsg">
+								<p ng-message="required">Please enter last name</p>
+						   		<p ng-message="pattern">Please enter valid last name</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="row clearfix">
+						<div class="form-group col-md-4 cdl-height" ng-class="{'has-error': BasicInfoForm.mobileNumber.$touched && BasicInfoForm.mobileNumber.$invalid}">
+							<input type="text" id="tmob" ng-model="basicInfo.mobileNumber" class="cdl-form-control inputMaterial" maxlength="10" required name="mobileNumber" ng-pattern="/^[0-9\d]{10}$/" />
+							<label>Mobile Number*</label>
+							<div ng-messages="BasicInfoForm.mobileNumber.$touched && BasicInfoForm.mobileNumber.$error" class="errorMsg">
+								<p ng-message="required">Please enter mobile number</p>
+						   		<p ng-message="pattern">Please enter valid mobile number</p>
+							</div>
+						</div>
+						<div class="form-group col-md-4 cdl-height">
+							<input type="text" id="aadhar" name="Aadhar Number" ng-model="basicInfo.aadhaarNumber" class="cdl-form-control aadhaar inputMaterial" maxlength="12" />
+							<label>Aadhaar Number</label>
+						</div>
+						<div class="form-group col-md-4 cdl-height">
+							<input type="text" id="pan" ng-model="basicInfo.panNumber" name="panNumber" class="cdl-form-control pan inputMaterial" maxlength="10" capitalize ng-pattern="/^[A-Z]{3}[P][A-Z]\d{4}[A-Z]/i" />
+							<label>Pan</label>
+							<div ng-messages="BasicInfoForm.panNumber.$error"  class="errorMsg">
+			  				  	<p ng-message="pattern">Please enter valid Pan Number</p>
+							</div>
+						</div>
+					</div>
+
+					<div class="row clearfix">
+						<div class="form-group col-md-4 cdl-height">
+							<select class="cdl-form-control control-select inputMaterial" id="cdl" ng-model="basicInfo.productType" name="productType" select-required>
+								<option selected="selected" value="">Select Product Type*</option>
+								<option value="Consumer Durables">Consumer Durables</option>
+							</select>
+							<label>Product Type*</label>
+							<div ng-if="BasicInfoForm.productType.$touched" ng-messages="BasicInfoForm.productType.$error" class="errorMsg">
+							    <p ng-message="selectrequired">Please select product type</p>
+							</div>
+						</div>
+					</div>
+					<div class="row clearfix" style="margin-bottom: 15px">
+						<div class="col-md-5"></div>
+						<div class="col-md-7" style="text-align: right;">
+							<button id="getOTP" class="customButton" style="float: right;" ng-disabled="BasicInfoForm.$invalid" ng-click="clickEvent('getOTP')"  ng-show="!shwVerify">Get OTP</button>
+							<div id="otpContainer" ng-show="shwVerify">
+								<input class="form-control otp" ng-model='otpKey1' id='txt1' type="password" maxlength="1" tabindex="1" name="OTP" auto-next/>
+								<input class="form-control otp" ng-model='otpKey2' id='txt2' type="password" maxlength="1" tabindex="2" name="OTP" auto-next/>
+								<input class="form-control otp" ng-model='otpKey3' id='txt3' type="password" maxlength="1" tabindex="3" name="OTP" auto-next/>
+								<input class="form-control otp" ng-model='otpKey4' id='txt4' type="password" maxlength="1" tabindex="4" name="OTP" auto-next/>
+								<input class="form-control otp" ng-model='otpKey5' id='txt5' type="password" maxlength="1" tabindex="5" name="OTP" auto-next/>
+								<button id="verifybtn" class="customButton" ng-click="verifyOTP()">Verify</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="row clearfix" style="margin-bottom: 15px">
+						<div class="col-md-5 "></div>
+						<div class="col-md-7" style="text-align: right;">
+							<div id="ResendCntnr">
+								<button id="Resend" class="customButton" ng-click="clickEvent('Resend')" style="padding: 4px 11px;" ng-show="shwVerify && !showSkip">Resend</button>
+								<button id="Skip" class="customButton" ng-click="clickEvent('Skip')" ng-show="showSkip" style="padding: 4px 20px;">Skip</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="row clearfix" style="margin-bottom: 15px">
+						<div class="col-md-12"></div>
+					</div>
+				</div>
+				<!-- End of basic info container -->
+			</div>
+		</div>
+	</div>
+	<div class="col-md-2" id="rightbarContainer" style="text-align: center;"></div>
+</form>

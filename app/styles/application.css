@@ -247,36 +247,6 @@ vertical-align: middle;
 	left: 505px;
 }
 
-.timerimg {
-    width: 190px;
-    height: 190px;
-    position: absolute;
-    left: 9%;
-    z-index: 0;
-    top: 0%;
-}
-
-.startTimer {
-	/* position: relative;
-left:-169px;
-top: 9px;
-z-index: 2; */
-	position: relative;
-	z-index: 2;
-	margin-left: -53%;
-	top: 27%;
-	padding:10px;
-}
-
-.resultInfo {
-	border: 1px solid #24A1ED;
-	border-radius: 54px;
-	position: relative;
-	text-align: center;
-	top: -106px;
-	height: 160px;
-}
-
 .resultNode {
 	position: absolute;
 	padding: 3px;
@@ -359,7 +329,7 @@ legend {
 	/*     background-color: #F6F6F6; */
 	border: 1px solid #CECFD1;
 	text-align: center;
-	margin-bottom: 15px;
+	margin-bottom: 0px;
 }
 
 input[type="file"] {
@@ -436,7 +406,7 @@ select {
 /* 	border-bottom: 1px solid; */
 	position: absolute;
 	width: 85%;
-	bottom: 10px;
+	bottom: 40px;
 	font-size: 16px;
 }
 

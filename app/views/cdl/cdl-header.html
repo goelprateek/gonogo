@@ -3,12 +3,18 @@
 				<img alt="" src="images/gonogo.png" class="gngimg" />
 			</div>
 			<div class="col-sm-6 col-md-5 hidden-xs" id="msgHdr">
-				<a href="#/cdl/apply"><img alt="Application" class="linkIcons" id="application"
-					src="images/apply.png"></a> <a href="#/cdl/dashboard"><img
-					alt="Dashboard" class="linkIcons" src="images/dashboard.png"
-					style="width: 66px"></a> <a href="#/cdl/assetMaster"><img
-					alt="AssetMaster" class="linkIcons" src="images/asset.png"
-					style="width: 80px"></a>
+				<a ui-sref="/cdl/basic-de">
+					<img alt="Application" class="linkIcons" id="application"
+					src="images/apply.png">
+				</a>
+				<a ui-sref="/cdl/dashboard">
+					<img alt="Dashboard" class="linkIcons" src="images/dashboard.png"
+						style="width: 66px">
+				</a>
+				<a ui-sref="/cdl/assetMaster">
+					<img alt="AssetMaster" class="linkIcons" src="images/asset.png"
+					style="width: 80px">
+				</a>
 			</div>
 			<div class="col-xs-6 col-sm-3 col-md-2 col-md-offset-2">
 				<!-- <img alt="" src="images/user.png" class="usrimg" data-toggle="dropdown" /> -->
@@ -26,6 +32,7 @@
 								<div class="user_data">
 									<label id="user_name" title="{{userid}}">{{username}}</label>
 									<div class="copyright">{{useremail}}</div>
+									<div class="copyright">{{dealerName}}</div>
 									<a class="btn-primary" id="view_profile">View profile</a>
 								</div>
 								<div class="logout_footer">

@@ -59,6 +59,7 @@ module.exports = function(config) {
       'bower_components/spin.js/spin.js',
       'bower_components/ladda/dist/ladda.min.js',
       'bower_components/angular-ladda/dist/angular-ladda.min.js',
+      'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',

@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="styles/application.css" />
     <link rel="stylesheet" href="styles/customer-form.css" />
     <link rel="stylesheet" href="styles/dashboard.css" />
+    <link rel="stylesheet" href="styles/cdl.css" />
 
     <!-- endbuild -->
   </head>
@@ -54,9 +55,13 @@
 
 
 
-      <div layout="column" flex class="layout-column flex" >
+     <!--  <div layout="column" flex class="layout-column flex" >
         <div ng-view="" class="animate-fade-up"></div>
-      </div>
+      </div> -->
+
+      <div layout="column" flex class="layout-column flex">
+        <div ui-view class="animate-fade-up"></div>
+    </div>
 
 
       <div data-ng-if="!isSpecificPage() && !isCdlPage()" data-ng-include="'views/footer.html'"></div>
@@ -117,18 +122,36 @@
     <script src="bower_components/spin.js/spin.js"></script>
     <script src="bower_components/ladda/dist/ladda.min.js"></script>
     <script src="bower_components/angular-ladda/dist/angular-ladda.min.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
+
+ <script src="scripts/cdl/dealer.js"></script>
+        <script src="scripts/cdl/basic-de.js"></script>
+        <script src="scripts/cdl/apply.js"></script>
+        <script src="scripts/cdl/manufacturer.js"></script>
+        <script src="scripts/cdl/dashboard.js"></script>
+        <script src="scripts/cdl/customer-form.js"></script>
+        <script src="scripts/cdl/result.js"></script>
+        <script src="scripts/cdl/after-submit.js"></script>
+        <script src="scripts/cdl/hold-stage.js"></script>
+        <script src="scripts/cdl/directives.js"></script>
+        <script src="scripts/cdl/post-ipa.js"></script>
+        <script src="scripts/cdl/additnl-doc.js"></script>
+        <script src="scripts/cdl/post-do.js"></script>
+
         <script src="scripts/gonogo.js"></script> 
-        <script src="scripts/config/routing.js"></script>
         <script src="scripts/config/config.js"></script>
         <script src="scripts/services/web-utils.js"></script>
         <script src="scripts/services/url.js"></script>        
         <script src="scripts/services/d3.js"></script>
         <script src="scripts/services/gng-utils.js"></script>
         <script src="scripts/services/gng-google-analytics.js"></script>
+        <script src="scripts/services/gng-services.js"></script>
+        <script src="scripts/services/js-utils.js"></script>
+
         <script src="scripts/factories/gng-factories.js"></script>
         <script src="scripts/directives/app-directive.js"></script>
         <script src="scripts/directives/angular-d3-directives.js"></script>
@@ -136,14 +159,15 @@
         <script src="scripts/controllers/notify.js"></script>
         <script src="scripts/controllers/analytics.js"></script>
         <script src="scripts/controllers/modal/reinitiate-application.js"></script>
+        <script src="scripts/controllers/modal/view-do.js"></script>
         <script src="scripts/filter/app-filter.js"></script>
         <script src="scripts/login.js"></script>
-        <script src="scripts/cdl/dealer.js"></script>
-        <script src="scripts/cdl/apply.js"></script>
-        <script src="scripts/cdl/manufacturer.js"></script>
-        <script src="scripts/cdl/dashboard.js"></script>
-        <script src="scripts/cdl/customer-form.js"></script>
-        <!-- <script src="https://www.google-analytics.com/analytics.js"></script> -->
+
+        <script src="https://www.google-analytics.com/analytics.js"></script>
+
+
+        <script src="scripts/config/routing.js"></script>
+
         <!-- endbuild -->
 </body>
 </html>

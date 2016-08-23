@@ -1,0 +1,191 @@
+<form id="bankingInfo" >
+			<div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true}">
+				<div class="row clearfix ">
+					<div class="col-md-10 col-md-offset-1">
+						<div class="row clearfix">
+							<div class="col-md-4">
+								<div class="row clearfix">
+									<help>Pan Number</help>
+									<input type="text" id="panNo" ng-model="pan" maxlength="10"
+										class="customInput" placeholder="Pan Number" capitalize />
+								</div>
+								<div class="row clearifx">
+									<div class="preview" id="preview" ng-if="!panPresent" ng-style="{'background-image':'url('+selectImg1+')'}">
+										<input id="pan_card" class="pan" type="file" name="Pan Card" maxlength=""
+											ngf-select="onselectImg($files,'PAN')"> <label
+											for="pan_card" ng-hide="selectImg1"> <img alt=""
+											src="images/camera-128.png" class="img_icon">
+										</label>
+									
+									</div>
+									<img  id="panImg"  ng-if="panPresent" ng-src ="{{panData}}" class="preview">
+									
+									<a class="remove_image" ng-show="selectImg1 || panPresent"
+										ng-click="remove_file('PAN','1',selectImg1)">Remove</a>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="row clearfix">
+									<help>Aadhaar Number</help>
+									<input type="text" id="adharNo" ng-model="aadhar" maxlength="12"
+										class="customInput aadhaar" placeholder="Aadhaar Number*" />
+								</div>
+								<div class="row clearfix">
+									<div class="preview" ng-if="!adharpresent"
+										ng-style="{'background-image':'url('+selectImg2+')'}">
+										<input type="file" id="aadhar_card" name="Aadhar Card"
+											ngf-select="onselectImg($files,'AADHAAR')"> <label
+											for="aadhar_card" ng-hide="selectImg2"> <img
+											alt="" src="images/camera-128.png" class="img_icon">
+										</label>
+										
+									</div>
+									<img class="preview" ng-src="{{aadharData}}" id="aadhaarImg" ng-model="aadhaarImg" ng-if="adharpresent">
+									<a class="remove_image" ng-show="selectImg2 ||adharpresent"
+										ng-click="remove_file('AADHAAR','2',selectImg2)">Remove</a>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="row clearifx">
+									<help>Passport Number</help>
+									<input type="text" id="passportNo" class="customInput"
+										placeholder="Passport Number*" />
+								</div>
+								<div class="row clearfix">
+									<div class="preview"ng-if="!passportPresent"
+										ng-style="{'background-image':'url('+selectImg3+')'}">
+										<input id="passport" type="file" name="passport"
+											ngf-select="onselectImg($files,'PASSPORT')"> <label
+											for="passport" ng-hide="selectImg3"> <img alt=""
+											src="images/camera-128.png" class="img_icon">
+										</label>
+									</div>
+									<img class="preview" ng-src="{{aadharData}}" id="passportImg" ng-model="passportImg" ng-if="passportPresent">
+									<a class="remove_image" ng-show="selectImg3 || passportPresent"
+										ng-click="remove_file('PASSPORT','3',selectImg3)">Remove</a>
+								</div>
+							</div>
+						</div>
+						<div class="row clearfix">
+							<div class="col-md-4">
+								<div class="row clearfix">
+									<help>Driving-License Number</help>
+									<input type="text" id="drivingNo" class="customInput"
+										placeholder="Driving-License Number*" />
+								</div>
+								<div class="row clearfix">
+									<div class="preview" ng-if="!drivingPresent"
+										ng-style="{'background-image':'url('+selectImg4+')'}">
+										<input id="drivingl" type="file" name="driving license"
+											ngf-select="onselectImg($files,'DRIVING-LICENSE')">
+										<label for="drivingl" ng-hide="selectImg4"> <img
+											alt="" src="images/camera-128.png" class="img_icon">
+										</label>
+									</div>
+									<img class="preview" ng-src="{{drivingData}}" id="drivingImg" ng-model="drivingImg" ng-if="drivingPresent">
+									<a class="remove_image" ng-show="selectImg4||drivingPresent"
+										ng-click="remove_file('DRIVING-LICENSE','4',selectImg4)">Remove</a>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="row clearfix">
+									<help>Income-Proof1</help>
+									<input type="text" class="customInput" id="incmProof"
+										placeholder="Income-Proof1*" disabled="disabled" />
+								</div>
+								<div class="row clearfix">
+									<div class="preview" ng-if="!incomePresent"
+										ng-style="{'background-image':'url('+selectImg6+')'}">
+										<input id="income1" type="file" name=""
+											ngf-select="onselectImg($files,'INCOME-PROOF1')">
+										<label for="income1" ng-hide="selectImg6"> <img
+											alt="" src="images/camera-128.png" class="img_icon">
+										</label>
+									</div>
+									<img class="preview" ng-src="{{income1Data}}" id="incomeImg" ng-model="incomeImg" ng-if="incomePresent">
+									<a class="remove_image" ng-show="selectImg6 ||incomePresent"
+										ng-click="remove_file('INCOME-PROOF1','6',selectImg6)">Remove</a>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="row clearfix">
+									<help>Income-Proof2</help>
+									<input type="text" class="customInput" id="incmProof2"
+										placeholder="Income-Proof2*" disabled="disabled" />
+								</div>
+								<div class="row clearfix">
+									<div class="preview"ng-if="!income2Present"
+										ng-style="{'background-image':'url('+selectImg7+')'}">
+										<input id="income2" type="file" name=""
+											ngf-select="onselectImg($files,'INCOME-PROOF2')">
+										<label for="income2" ng-hide="selectImg7">
+											<img alt="" src="images/camera-128.png" class="img_icon">
+										</label>
+									</div>
+									<img class="preview" ng-src="{{income2Data}}" id="income2Img" ng-model="income2Img" ng-if="income2Present">
+									<a class="remove_image" ng-show="selectImg7||income2Present"
+										ng-click="remove_file('INCOME-PROOF2','7',selectImg7)">Remove</a>
+								</div>
+							</div>
+						</div>
+
+						<div class="row clearfix">						
+							<div class="col-md-4">
+								<div class="row clearfix">
+									<help>Other</help><br/>
+									<input type="text" class="customInput" id="otherTg" placeholder="Other*"
+										disabled="disabled" />
+								</div>
+								<div class="row clearfix">
+									<div class="preview" ng-if="!otherPresent"
+										ng-style="{'background-image':'url('+selectImg8+')'}">
+										<input id="other" type="file" name=""
+											ngf-select="onselectImg($files,'OTHER')"> <label
+											for="other" ng-hide="selectImg8"> <img alt=""
+											src="images/camera-128.png" class="img_icon">
+										</label>
+									</div>
+									<img class="preview" id="otherImg" ng-model="otherImg" ng-src="{{otherData}}"  ng-if="otherPresent">
+									<a class="remove_image" ng-show="selectImg8 || otherPresent"
+										ng-click="remove_file('OTHER','8',selectImg8)">Remove</a>
+								</div>
+							</div>
+							
+							<div class="col-md-4">
+								<div class="row clearfix">
+									<help>Applicant Photo</help>
+									<input type="text" class="customInput" id="otherTg" placeholder="Profile Image"	disabled="disabled" />
+								</div>
+								<div class="row clearfix">
+									<div class="row clearfix">
+										<div class="preview" ng-if="!profileImage" ng-style="{'background-image':'url('+selectImgInit+')'}" >
+											<input id="addrIP" type="file" ng-model="addrIP" ngf-select="onselectImg($files,'APPLICANT-PHOTO')">
+											<label for="addrIP" ng-hide="selectImgInit" style="display: block;">
+						     					<img id="selectImgInit" alt="" src="images/camera-128.png" class="img_icon" >    
+						    				</label>	<!-- <label ng-hide="image_url2">Present Address</label> -->
+				    					</div>	
+				    
+				    					<img ng-model="profileImg" id="selectImgInit" alt="" ng-src="{{profileData}}" ng-if="profileImage" style="width:100%;height: 113px;margin-left: 3%">
+									    <div style="height: 20px">
+											<small ng-show="image_url2" class="size">{{file_size2}}</small>
+											<a class="remove_image" ng-show="selectImgInit || profileImage" ng-click="remove_file('APPLICANT-PHOTO','0',selectImgInit)">Remove</a>
+										</div>	
+									</div>
+								</div>
+							</div>		
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row clearfix ">
+				<div class="col-md-10 col-md-offset-1">
+					<button    ui-sref="/cdl/apply.asset" class="customButton previous">Previous</button>
+					<button class="customButton cancel" id="cancel">Cancel</button>
+					<button class="customButton save saveSubmit" id="save" ng-click="submitApplication('step3')">Save</button>
+					<button class="customButton submit" id="submit"
+						style="position: absolute; top: -1px;"
+						ng-click="submitApplication('step4')">Submit</button>
+				</div>
+				<!-- <div class="col-md-4"></div> -->
+		</form>

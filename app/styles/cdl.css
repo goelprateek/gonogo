@@ -1,0 +1,121 @@
+
+.inputMaterial 				{
+  font-size:18px;
+  padding:0px 0px 0px 5px;
+  display:block;
+  border:none;
+  border-bottom:1px solid #757575;
+}
+
+.inputMaterial:focus { outline:none;}
+
+/* LABEL ======================================= */
+
+.inputMaterial ~ label {
+  color:#999; 
+  font-size:14px;
+  font-weight:normal;
+  position:absolute;
+  pointer-events:none;
+  left:18px;
+  top:0px;
+  transition:0.2s ease all; 
+  -moz-transition:0.2s ease all; 
+  -webkit-transition:0.2s ease all;
+}
+
+/* active state */
+.inputMaterial:focus ~ label,
+.inputMaterial.ng-touched.ng-valid ~ label, 
+.inputMaterial.ng-not-empty ~ label, 
+.inputMaterial:disabled ~ label,
+select.inputMaterial ~ label{
+  top:-22px;
+  font-size:14px;
+  color: #24a1ed;
+  font-weight:normal;
+  border:none;
+}
+
+.cdl-form-control,.cdl-form-control:focus {
+  height:auto;
+  box-shadow: none;
+  padding-bottom: 0px;
+  border-radius: 0px;
+  font-size:16px;
+  width: 100%;
+}
+
+.has-error .form-control , .has-error .form-control:focus{
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+.cdl-height{ height:70px; }
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group.required .control-label:after {
+  content:"";
+  color:red;
+}
+
+.has-error .form-control{
+  box-shadow: none;
+  border-bottom: 1px solid red;
+  border-radius: 0px;
+}
+
+.has-error > label {
+  color:#a94442;
+  font-weight: bold;
+}
+
+.errorMsg{
+  color:#a94442;
+}
+
+.control-select{
+  /*for firefox*/
+  -moz-appearance: none;
+  
+  /*for chrome*/
+  -webkit-appearance:none;
+
+  padding-bottom: 0px;
+
+  background: url("../images/arrow_select.png") no-repeat right #FFFFFF;
+  border:0px;
+  border-bottom: 1px solid #004d82;
+  border-radius: 0px;
+  padding-top: 0px;
+  width: 100%;
+  color:black;
+  box-shadow: none;
+  max-width: 100%;
+}
+
+.control-select:hover,.control-select:focus{
+  box-shadow: none;
+}
+
+.custom_symbol_rupee {
+    font-size: 19px;
+    margin-left: -9px;
+}
+
+.irupee {
+    font-size: 16px;
+    margin-left: 2px;
+    top: 3px;
+    padding-left: 0px;
+}
+
+.fa-rupee {
+    bottom: 5px;
+    z-index: 1;
+    left: 2%;
+    color: #000000;
+}

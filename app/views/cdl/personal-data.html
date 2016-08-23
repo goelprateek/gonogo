@@ -1,0 +1,149 @@
+<form id="kyccontainer" name="personalData" novalidate>
+	<div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true}">
+		<div class="row clearfix ">
+			<div class="col-md-10 col-md-offset-1">
+				<div class="row clearfix" style="margin-bottom: 40px;">
+					<help style="display:block;margin:15px;">Applicant Photo</help>
+					<div class="preview" ng-if="!profileImage"
+						ng-style="{'background-image':'url('+selectImgInit+')'}"
+						style="width: 17%; height: 113px; margin-left: 3%">
+						<input id="addrIP" type="file" ng-model="addrIP"
+							ngf-select="onselectImg($files,'APPLICANT-PHOTO')" />
+						<label for="addrIP" ng-hide="selectImgInit" style="display: block;">
+						<img id="selectImgInit" alt="" src="images/camera-128.png" class="img_icon" />
+						</label>
+					</div>
+
+					<img ng-model="profileImg" id="selectImgInit" alt="" ng-src="{{profileData}}" ng-if="profileImage" style="width: 17%; height: 113px; margin-left: 3%">
+					<div style="height: 20px">
+						<small ng-show="image_url2" class="size">{{file_size2}}</small>
+						<a class="remove_image" ng-show="selectImgInit || profileImage"
+							ng-click="remove_file('APPLICANT-PHOTO','0',selectImgInit)">Remove</a>
+					</div>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-6 cdl-height form-group">
+						<select class="cdl-form-control control-select inputMaterial" id="susPctdFrd" ng-model="applicant.suspected">
+							<option selected="selected" value="No">Refer to Credit</option>
+							<option value="Suspected Fraud">Suspected Fraud</option>
+							<option value="Confirmed Fraud">Confirmed Fraud</option>
+						</select>
+						<label>Suspected Activity</label>
+					</div>
+				</div>
+				<div class="row clearfix">
+					<div class="col-md-6 cdl-height form-group">
+						<input type="text" id="cr" ng-model="applicant.creditCard"
+							class="cdl-form-control inputMaterial" name="credit" maxlength="6" only-digits/>
+						<label>Credit Card No</label>
+						<div ng-messages="personalData.credit.$touched && personalData.credit.$error" class="errorMsg">
+		   					<p ng-message="onlydigits">Please enter only digits</p>
+						</div>
+					</div>
+					<div class="col-md-6 cdl-height form-group">
+						<div class="rc" style="color: inherit;">
+							<label style="color: inherit; width: 35%;">Gender*</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<label style="float: none; color: inherit;"><input
+								type="radio" name="Gender" checked="checked" value="Male"
+								ng-model="applicant.gender"/> Male </label> 
+							<label style="float: none; color: inherit;"><input
+								type="radio" name="Gender" value="Female" ng-model="applicant.gender" />
+								Female </label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row clearfix">
+					<div class="col-md-6 cdl-height form-group">
+						<select class="cdl-form-control control-select inputMaterial" id="edu" ng-model="applicant.education" name="education" select-required>
+							<option value="">Select Qualification*</option>
+							<option value="DOCTORATE">DOCTORATE</option>
+							<option value="GRADUATE">GRADUATE</option>
+							<option value="POST-GRADUATE">POST-GRADUATE</option>
+							<option value="PROFESSIONAL">PROFESSIONAL</option>
+							<option value="UNDER GRADUATE">UNDER GRADUATE</option>
+							<option value="OTHERS">OTHERS</option>
+						</select>
+						<label>Education Qualification*</label>
+						<div ng-messages="personalData.education.$error" ng-show="personalData.education.$touched" class="errorMsg">
+							<p ng-message="selectrequired">Please select Qualification </p>
+						</div>
+					</div>
+					<div class="col-md-6 cdl-height form-group">
+						<div class="rc">
+							<label style="color: inherit;">Marital
+								Status*</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <label
+								style="float: none; color: inherit;"><input
+								type="radio" name="Mstatus" ng-model="applicant.maritalStat"
+								checked="checked" value="Single" /> Single </label>
+								<label
+								style="float: none; color: inherit;">
+								<input type="radio" name="Mstatus" ng-model="applicant.maritalStat" value="Married" />
+								Married </label>
+						</div>
+					</div>
+				</div>
+
+				<div class="row clearfix">
+					<div class="col-md-6 cdl-height form-group">
+					 	<input type="text" name="dob" class="cdl-form-control inputMaterial"  ng-model="applicant.dob" ng-click="openDOBDialog()" uib-datepicker-popup="{{dobFormat}}" is-open="dobPopup.opened" datepicker-options="dateOptions" close-text="Close" ng-pattern="/^[0-9]{2}:[0-9]{2}:[0-9]{4}/i" readonly="true" required/> 
+					 	<label>Date of Birth*</label>
+					 	<div ng-messages="personalData.dob.$touched && personalData.dob.$error" class="errorMsg">
+						    <p ng-message="pattern">Please select valid date of birth</p>
+						    <p ng-message="required">Please select date of birth</p>
+						</div>
+					</div>
+					<div class="col-md-6 cdl-height form-group">
+						<select class="cdl-form-control control-select inputMaterial" name="constitution"	ng-model="applicant.constitution" ng-change="changeEvent('CONSTITN',constitution)" select-required>
+							<option value="">Select Constitution*</option>
+							<option value="TRUST">TRUST</option>
+							<option value="SELF-EMPLOYED">SELF-EMPLOYED</option>
+							<option value="SALARIED">SALARIED</option>
+							<option value="PARTNERSHIP">PARTNERSHIP</option>
+							<option value="PRIVATE LIMITED COMPANY">PRIVATE
+								LIMITED COMPANY</option>
+						</select>
+						<label>Constitution*</label>
+						<div ng-messages="personalData.constitution.$error" ng-show="personalData.constitution.$touched" class="errorMsg">
+							<p ng-message="selectrequired">Please select Constitution </p>
+						</div>
+					</div>
+				</div>
+
+				<div class="row clearfix">
+					<!-- <div class="col-md-6 cdl-height form-group">
+						<i class="fa fa-rupee"></i><input type="text" ng-model="applicant.loanAmt" class="cdl-form-control inputMaterial" name="loanamt" maxlength="12" style="padding-left: 4%" rupees required/>
+						<label>Loan Amount*</label>
+						<div ng-messages="personalData.loanamt.$touched && personalData.loanamt.$error" class="errorMsg">
+		   					<p ng-message="required">Please enter Loan Amount</p>
+						</div>
+					</div> -->
+					<div class="col-md-6 cdl-height form-group">
+						<div class="div-rupee">
+							<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
+							<input type="text" class="cdl-form-control inputMaterial" name="loanamt" ng-model="applicant.loanAmt" maxlength="12" style="padding-left: 4%" rupees required />
+							<label>Loan Amount*</label>
+							<div ng-messages="personalData.loanamt.$error" ng-show="personalData.loanamt.$touched" class="errorMsg">
+							    <p ng-message="required">Please enter Loan Amount</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 cdl-height form-group">
+						<input type="text" name="tenor" class="cdl-form-control inputMaterial" ng-model="applicant.tenor" maxlength="3" only-digits required />
+						<label>Tenor in Months*</label>
+						<div ng-messages="personalData.tenor.$touched && personalData.tenor.$error" class="errorMsg">
+		   					<p ng-message="required">Please enter Tenor</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row clearfix">
+		<div class="col-md-10 col-md-offset-1">
+		<!-- ng-disabled="personalData.$invalid" -->
+			<button ui-sref="/cdl/apply.address" ng-disabled="personalData.$invalid" class="customButton next" id="fromKYC">Next</button>
+			<button class="customButton save" id="save" ng-click="submitApplication('step3')">Save</button>
+		</div>
+	</div>
+</form>

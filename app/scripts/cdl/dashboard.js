@@ -1,4 +1,4 @@
-var app=angular.module('gonogo');
+var app=angular.module('gonogo.cdl');
 
 app.controller('DecisionViewController', function ($scope,$uibModalInstance, data) {
 //	alert(response);
@@ -13,8 +13,8 @@ app.controller('DecisionViewController', function ($scope,$uibModalInstance, dat
 //	 };
 });
 
-app.controller("DashboardController",["$scope","$filter",'sharedService','$location',"$uibModal",'APP_CONST',"RestService","UserService","$rootScope","GNG_GA",
-							function($scope,$filter,sharedService,$location,$uibModal,APP_CONST,RestService,UserService,$rootScope,GNG_GA){
+app.controller("DashboardController",["$scope","$filter",'sharedService',"$uibModal",'APP_CONST',"RestService","UserService","$rootScope","GNG_GA","$state",
+							function($scope,$filter,sharedService,$uibModal,APP_CONST,RestService,UserService,$rootScope,GNG_GA,$state){
 	 //sayali (added stacked graph service using directive)
 	var user=UserService.getCurrentUser();
 
@@ -42,7 +42,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 	   	}
   	}
 	//end
-	
+
 	$scope.duration="LastYear";
 	$scope.dashboardResult=[];
 
@@ -57,13 +57,9 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 	$scope.searchText   = '';     // set the default search/filter term
 	$scope.query   = '';
 
-	$scope.onDashboardTypeChange=function(){
-	}
-
 	$scope.fetchDashboardList=function(){
 		//alert("Search String: "+$scope.searchText+" Duration: "+$scope.duration);
 
-		
 		if(!_.isUndefined(user.id) )
 		{
 			if(user.actions && user.actions.length!=0)
@@ -82,7 +78,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 			$scope.userid = user.userid;
 			$scope.color = user.color;
 		}else{
-			$location.path(APP_CONST.getConst('APP_CONTEXT'));
+			$state.go(APP_CONST.getConst('APP_CONTEXT'));
 		}
 
 //		alert($scope.useremail.toLowerCase());
@@ -91,15 +87,15 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 		{
 //			console.log();
 //			alert("Moving to root");
-			$location.path("/");
+			$state.go(APP_CONST.getConst('APP_CONTEXT'));
 		}
 
 		$scope.query   = $scope.searchText;
-		
+
 		var todayStr = $filter('date')(new Date(),'yyyy-MM-dd');
-		
+
 		var fromDate=new Date();
-		
+
 		if($scope.duration=="LastYear"){
 			fromDate.setYear(fromDate.getFullYear()-1);
 		}else if($scope.duration=="LastMonth"){
@@ -108,10 +104,10 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 			fromDate.setDate(fromDate.getDate()-7);
 		}
 		var fromDateStr = $filter('date')(fromDate,'yyyy-MM-dd');
-		
+
 		//TODO Get sDsaId
 		dashboardJson={"iLimit":10000,"dtToDate":todayStr,"sDsaId":$scope.username,"iSkip":0,"dtFromDate":fromDateStr};
-		
+
 		var dashboardJson=JSON.stringify(dashboardJson);
 		// var urlConst= APP_CONST.getConst('BASE_URL_GNG');
 
@@ -125,9 +121,8 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 			$scope.dashboardResult=data;
 		});
 	};
-	
-	$scope.loadCDLForm=function(refID,decisionStatus){
 
+	$scope.loadCDLForm=function(refID,decisionStatus){
 		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_DEALER"),
 					 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
 					 GNG_GA.getConstAction("ACTION_CLICK_DASHBOARD_APPLICATION_CLICKED"),
@@ -135,7 +130,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
 
 		sharedService.setRefID(refID);
 		sharedService.setDecisionStatus(decisionStatus);
-		$location.path( "/cdl/customerForm" );
+		$state.go( "/cdl/customerForm" );
 	};
 
 	$scope.fetchDashboardList();
@@ -143,7 +138,6 @@ app.controller("DashboardController",["$scope","$filter",'sharedService','$locat
     $scope.search = function (row) {
 //    	console.log("Row:");
 //    	console.log(row);
-
     	var name=row.sName;
     	name=name.toLowerCase();
 
@@ -213,7 +207,7 @@ app.directive('ngModelOnblur',['GNG_GA', function(GNG_GA) {
             elm.unbind('input').unbind('change');
             elm.bind('keyup', function() {            	
                 scope.$apply(function() {
-                	console.log("Duration Fetched:"+scope.durationSelected+" Value:"+elm.val());
+                	//console.log("Duration Fetched:"+scope.durationSelected+" Value:"+elm.val());
                 	ngModelCtrl.$setViewValue(elm.val());
                 	if(elm.val().length>=0)
                 	{
