@@ -309,12 +309,12 @@
 
 									$scope.applicant.empl.emplName =Response.oReq.oApplicant.aEmpl[0].sEmplName;
 									$scope.applicant.empl.emplType = Response.oReq.oApplicant.aEmpl[0].sEmplType;
-									$scope.applicant.empl.emplMonthWithEmp =Response.oReq.oApplicant.aEmpl[0].iTmWithEmplr;
+									$scope.applicant.empl.emplMonthWithEmp = (Response.oReq.oApplicant.aEmpl[0].iTmWithEmplr == 0 ? '' :Response.oReq.oApplicant.aEmpl[0].iTmWithEmplr);
 									$scope.applicant.empl.emplSalary = Response.oReq.oApplicant.aEmpl[0].dmonthSal;
 									$scope.applicant.empl.emplITReturn =Response.oReq.oApplicant.aEmpl[0].dItrAmt;
 								}
 								$scope.applicant.application.loanAmt=Response.oReq.oApplication.dLoanAmt;
-								$scope.applicant.application.tenor=Response.oReq.oApplication.iLoanTenor;
+								$scope.applicant.application.tenor=(Response.oReq.oApplication.iLoanTenor == 0 ? '' : Response.oReq.oApplication.iLoanTenor);
 
 								if(mApplicant.aEmail){
 						  			for(var i=0;i<mApplicant.aEmail.length;i++){
@@ -336,27 +336,27 @@
 											$scope.applicant.oResidence.oAddress.sAddress1 = mApplicant.aAddr[i].sLine1;
 											$scope.applicant.oResidence.oAddress.sAddress2 = mApplicant.aAddr[i].sLine2;
 											$scope.applicant.oResidence.oAddress.sAddress3 = mApplicant.aAddr[i].sLine3;
-											$scope.applicant.oResidence.oAddress.sPinCode = mApplicant.aAddr[i].iPinCode;
+											$scope.applicant.oResidence.oAddress.sPinCode = (mApplicant.aAddr[i].iPinCode == 0 ? '' : mApplicant.aAddr[i].iPinCode);
 											$scope.applicant.oResidence.oAddress.sCity = mApplicant.aAddr[i].sCity;
 											$scope.applicant.oResidence.oAddress.sState = mApplicant.aAddr[i].sState;
-											$scope.applicant.oResidence.oAddress.iMonthAddress = mApplicant.aAddr[i].iMonthAtAddr;
-											$scope.applicant.oResidence.oAddress.iMonthCity = mApplicant.aAddr[i].iMonthAtCity;
+											$scope.applicant.oResidence.oAddress.iMonthAddress = (mApplicant.aAddr[i].iMonthAtAddr == 0 ? '' :mApplicant.aAddr[i].iMonthAtAddr);
+											$scope.applicant.oResidence.oAddress.iMonthCity = (mApplicant.aAddr[i].iMonthAtCity == 0 ? '' : mApplicant.aAddr[i].iMonthAtCity);
 										}else if(mApplicant.aAddr[i].sAddrType=="PERMANENT"){
 											$scope.applicant.oPermanent.oAddress.addrType = mApplicant.aAddr[i].sResAddrType;
 											$scope.applicant.oPermanent.oAddress.dRentPerMonth = mApplicant.aAddr[i].dRentAmt;
 											$scope.applicant.oPermanent.oAddress.sAddress1 = mApplicant.aAddr[i].sLine1;
 											$scope.applicant.oPermanent.oAddress.sAddress2 = mApplicant.aAddr[i].sLine2;
 											$scope.applicant.oPermanent.oAddress.sAddress3 = mApplicant.aAddr[i].sLine3;
-											$scope.applicant.oPermanent.oAddress.sPinCode = mApplicant.aAddr[i].iPinCode;
+											$scope.applicant.oPermanent.oAddress.sPinCode = (mApplicant.aAddr[i].iPinCode == 0 ? '' : mApplicant.aAddr[i].iPinCode);
 											$scope.applicant.oPermanent.oAddress.sCity = mApplicant.aAddr[i].sCity;
 											$scope.applicant.oPermanent.oAddress.sState = mApplicant.aAddr[i].sState;
-											$scope.applicant.oPermanent.oAddress.iMonthAddress = mApplicant.aAddr[i].iMonthAtAddr;
-											$scope.applicant.oPermanent.oAddress.iMonthCity = mApplicant.aAddr[i].iMonthAtCity;
+											$scope.applicant.oPermanent.oAddress.iMonthAddress = (mApplicant.aAddr[i].iMonthAtAddr == 0 ? '' : mApplicant.aAddr[i].iMonthAtAddr);
+											$scope.applicant.oPermanent.oAddress.iMonthCity = (mApplicant.aAddr[i].iMonthAtCity == 0 ? '' : mApplicant.aAddr[i].iMonthAtCity);
 										}else if(mApplicant.aAddr[i].sAddrType=="OFFICE"){
 											$scope.applicant.empl.emplAddr1 = mApplicant.aAddr[i].sLine1;
 											$scope.applicant.empl.emplAddr2 = mApplicant.aAddr[i].sLine2;
 											$scope.applicant.empl.emplAddr3 = mApplicant.aAddr[i].sLine3;
-											$scope.applicant.empl.emplPin = mApplicant.aAddr[i].iPinCode;
+											$scope.applicant.empl.emplPin = (mApplicant.aAddr[i].iPinCode == 0 ? '' :mApplicant.aAddr[i].iPinCode);
 											$scope.applicant.empl.emplCity = mApplicant.aAddr[i].sCity;
 											$scope.applicant.empl.emplState = mApplicant.aAddr[i].sState;
 										}
@@ -2428,6 +2428,18 @@ $scope.getEmployerNames=function(queryStr){
 
 		$scope.cancelApplication = function(){
 			location.reload();
+		}
+
+		$scope.resAddrTypeChange = function(type){
+			if(type.indexOf('RENTED') != -1){ 
+				$scope.applicant.oResidence.oAddress.dRentPerMonth = "";
+			}
+		}
+
+		$scope.perAddrTypeChange = function(type){
+			if(type.indexOf('RENTED') != -1){ 
+				$scope.applicant.oPermanent.oAddress.dRentPerMonth = "";
+			}
 		}
 	}]);
 }).call(this);

@@ -3,7 +3,7 @@
 		<div class="col-md-10 col-md-offset-1">
 			<div class="row clearfix" style="margin-top: 40px;">
 				<div class="col-md-6 cdl-height form-group">
-					<select id="addressType" class="cdl-form-control control-select inputMaterial" name="resaddtype" ng-model="applicant.oResidence.oAddress.addrType" select-required>
+					<select id="addressType" class="cdl-form-control control-select inputMaterial" name="resaddtype" ng-model="applicant.oResidence.oAddress.addrType" data-ng-change="resAddrTypeChange(applicant.oResidence.oAddress.addrType)" select-required>
 						<option value="" >Select Address Type*</option>
 						<option value="OWNED-BUNGLOW">OWNED-BUNGLOW</option>
 						<option value="OWNED-CHAWL">OWNED-CHAWL</option>
@@ -41,10 +41,11 @@
 			</div>
 			<div class="row clearfix">
 				<div class="col-md-12 cdl-height form-group">
-					<input type="text" ng-model="applicant.oResidence.oAddress.sAddress1" class="cdl-form-control inputMaterial" style="width: 93%" name="resAdd1" capitalize required/>
+					<input type="text" ng-model="applicant.oResidence.oAddress.sAddress1" class="cdl-form-control inputMaterial" style="width: 93%" ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/" name="resAdd1" capitalize required/>
 					<label>Address Line 1*</label>
 					<div ng-messages="addressData.resAdd1.$touched && addressData.resAdd1.$error" class="errorMsg">
 	   					<p ng-message="required">Please enter Address line 1</p>
+	   					<p ng-message="pattern">Please enter valid Address</p>
 					</div>
 				</div>
 			</div>
@@ -151,7 +152,7 @@
 				<div class="row clearfix" style="margin-top: 40px;">
 					<div class="col-md-6 cdl-height form-group">
 						<select class="cdl-form-control control-select inputMaterial"
-							ng-model="applicant.oPermanent.oAddress.addrType" name="peraddtype" select-required>
+							ng-model="applicant.oPermanent.oAddress.addrType" data-ng-change="perAddrTypeChange(applicant.oPermanent.oAddress.addrType)" name="peraddtype" select-required>
 							<option value="">Select	Address Type*</option>
 							<option value="OWNED-BUNGLOW">OWNED-BUNGLOW</option>
 							<option value="OWNED-CHAWL">OWNED-CHAWL</option>
@@ -188,10 +189,11 @@
 				<div class="row clearfix">
 					<div class="col-md-12 cdl-height form-group">
 						<input type="text" ng-model="applicant.oPermanent.oAddress.sAddress1"
-							class="cdl-form-control inputMaterial" name="peradd1" style="width: 93%;" capitalize  required/>
+							class="cdl-form-control inputMaterial" name="peradd1"  ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/"  style="width: 93%;" capitalize  required/>
 						<label>Address Line 1*</label>
 						<div ng-messages="addressData.peradd1.$touched && addressData.peradd1.$error" class="errorMsg">
 			   					<p ng-message="required">Please enter Address line 1</p>
+			   					<p ng-message="pattern">Please enter valid Address</p>
 						</div>
 					</div>
 				</div>

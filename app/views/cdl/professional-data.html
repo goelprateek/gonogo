@@ -29,10 +29,11 @@
 				<div class="row clearfix">
 					
 					<div class="col-md-12 cdl-height form-group">
-						<input type="text" id="wrka1" ng-model="applicant.empl.emplAddr1" class="cdl-form-control inputMaterial" capitalize style="width: 93%" name="empadd1" required/>
+						<input type="text" id="wrka1" ng-model="applicant.empl.emplAddr1" class="cdl-form-control inputMaterial" capitalize style="width: 93%" ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/" name="empadd1" required/>
 						<label>Address Line 1*</label>
 						<div ng-messages="professionalData.empadd1.$touched && professionalData.empadd1.$error" class="errorMsg">
 	   						<p ng-message="required">Please enter Address line 1</p>
+	   						<p ng-message="pattern">Please enter valid Address</p>
 						</div>
 					</div>
 				</div>
