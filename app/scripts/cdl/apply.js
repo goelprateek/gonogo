@@ -1071,10 +1071,24 @@ $scope.onselectImg = function($files,type,index)
 						case "INCOME-PROOF1":
 							$scope.selectImg6 = binaryString
 							img_array.push({kyc_name:"INCOME-PROOF1",image:$scope.selectImg6.split(",")[1],type:img_type});
+							$scope.applicant.aKycDocs.push({
+									"sExpiryDate":null,
+									"sIssueDate":null,
+									"sKycName":"OTHER",
+									"sKycNumber":"",
+									"sKycStat":null
+							});
 							break;
 						case "INCOME-PROOF2":
 							$scope.selectImg7 = binaryString
 							img_array.push({kyc_name:"INCOME-PROOF2",image:$scope.selectImg7.split(",")[1],type:img_type});
+							$scope.applicant.aKycDocs.push({
+									"sExpiryDate":null,
+									"sIssueDate":null,
+									"sKycName":"OTHER",
+									"sKycNumber":"",
+									"sKycStat":null
+							});
 							break;
 						case "OTHER":
 							$scope.selectImg8 = binaryString
