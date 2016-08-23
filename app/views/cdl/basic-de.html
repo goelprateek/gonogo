@@ -32,7 +32,7 @@
 
 					<div class="row clearfix">
 						<div class="form-group col-md-4 cdl-height" ng-class="{'has-error': BasicInfoForm.mobileNumber.$touched && BasicInfoForm.mobileNumber.$invalid}">
-							<input type="text" id="tmob" ng-model="basicInfo.mobileNumber" class="cdl-form-control inputMaterial" ng-disabled="shwVerify" maxlength="10" required name="mobileNumber" ng-pattern="/^[0-9\d]{10}$/" />
+							<input type="text" id="tmob" ng-model="basicInfo.mobileNumber" class="cdl-form-control inputMaterial" ng-disabled="shwVerify" maxlength="10" required only-digits name="mobileNumber" ng-pattern="/^[0-9\d]{10}$/" />
 							<label>Mobile Number*</label>
 							<div ng-messages="BasicInfoForm.mobileNumber.$touched && BasicInfoForm.mobileNumber.$error" class="errorMsg">
 								<p ng-message="required">Please enter mobile number</p>

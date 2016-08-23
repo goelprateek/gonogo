@@ -893,9 +893,7 @@ $scope.pinService = function(pin,id){
 
 		}else if(id =="prmnt_perpin")
 		{
-			/*$("#prmnt_percity").val(Response.sCity).prop("disabled","true").siblings("help").show();
-			$("#prmnt_perstate").val(Response.sState).prop("disabled","true").siblings("help").show();
-			*/$scope.applicant.oPermanent.oAddress.sCity = "";
+			$scope.applicant.oPermanent.oAddress.sCity = "";
 			$scope.applicant.oPermanent.oAddress.sState = "";
 		}
 	}
@@ -1271,14 +1269,14 @@ function GetPostIPA_PDF()
 	});	
 }*/
 
-$(document).on('click','.preview', function(e) {
+/*$(document).on('click','.preview', function(e) {
 	var src = $(this).attr("accesskey");
 	$(document.body).find('#document_preview').hide();
 	$(document.body).find('#cirhtml').attr("data",src).show();
-});
+});*/
 // ==========================================================================================================
 
-function ageCalculator(){
+/*function ageCalculator(){
 	
 	var dat = $("#dob").val();
 	
@@ -1337,7 +1335,7 @@ function ageCalculator(){
 	var diff = cur-birthdate; // This is the difference in milliseconds
 	var age = Math.floor(diff/31536000000); // Divide by 1000*60*60*24*365
 	return age;
-}
+}*/
 
 $scope.submitApplication=function(UrlKey)
 {
@@ -1695,8 +1693,6 @@ $scope.submitApplication=function(UrlKey)
 			}
 
 			if(UrlKey=="step3"){
-				// $rootScope.errHead = "Status"
-				// $rootScope.errorMsg = "Data Saved Successfully.";
 				if(img_array.length!=0){
 					UploadImages.upload($scope.referenceID,img_array).then(function(imageUploadedCount) {
 					  	$log.debug('Image upload Success, Total image uploaded : ' + imageUploadedCount);
@@ -1720,24 +1716,21 @@ $scope.submitApplication=function(UrlKey)
 		if(UrlKey=="step1"){
 			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP1"),1,"submit-application","",data.sRefID);
 		}else if(UrlKey=="step4"){
-
 			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP4"),1,"submit-application","",data.sRefID);
 		}
 
 		$scope.serviceHitCount=$scope.serviceHitCount+1;
-		if($scope.serviceHitCount<=3)
-			{
+		if($scope.serviceHitCount<=3){
 			$scope.submitApplication();
-			}
+		}
 		else{
 			$scope.serviceHitCount=1;
-			//$scope.error="Sorry we can not process your Submit request";
 			notifier.logError("We are unable to submit your request, please try again later");
 		}	
 	});
 };
 
-var timer = null, startTime = null;
+/*var timer = null, startTime = null;*/
 /*var progress = $("#progress").shieldProgressBar(
 		{	min : 0,max : 60, value : 60,
 			layout : "circular",
@@ -1768,7 +1761,9 @@ var timer = null, startTime = null;
 // //	$('#timer_box').hide();
 // };
 
-function updateProgress() {
+
+//check out this function
+/*function updateProgress() {
 	var remaining = 60 - (Date.now() - startTime) / 1000;
 	$rootScope.counter = Math.floor(remaining);
 	progress.value(remaining);
@@ -1776,7 +1771,7 @@ function updateProgress() {
 		clearInterval(timer);								
 		return 0;
 	}
-}
+}*/
 
 function validation()
 {
@@ -2111,7 +2106,7 @@ $scope.remove_file = function(filetype, id, index) {
 		
 };// end file remove method
 
-$(document.body).on("click",".remove_image",function()
+/*$(document.body).on("click",".remove_image",function()
 {
 //		console.log($(this).attr("name"));
 	var name=$(this).attr("name");
@@ -2127,7 +2122,7 @@ $(document.body).on("click",".remove_image",function()
 //		}
 //	console.log("kyc Array : "+addkyc_array.length);
 });
-
+*/
 // $scope.sendPostIpaMail=function()
 // { 
 // 	var requestJson={"sRefID":$scope.REFID,
@@ -2215,13 +2210,10 @@ $scope.getEmployerNames=function(queryStr){
 			return RestService.saveToServer("employer-master-details-web",ojs)
 			.then(function(data)
 			{
-
 				var map=data.map(function(item){					
 			        return item.sEmpName;
 		      	});
-				//console.log(map);
 				return data.map(function(item){
-					//console.log(item.sEmpName);
 			        return item.sEmpName;
 		      	});
  			});
@@ -2329,11 +2321,11 @@ $scope.getEmployerNames=function(queryStr){
 // 	});
 // };
 
- $("select").change(function(){
+/* $("select").change(function(){
 	 $(this).siblings("help").show(); 
  });
  
- $("#prmnt_perstdCode, #wrketype").removeAttr("disabled");
+ $("#prmnt_perstdCode, #wrketype").removeAttr("disabled");*/
 
 	
 	/* var self = this;

@@ -12,7 +12,7 @@
 					</div>
 					<div class="col-md-6 cdl-height form-group">
 						<select class="cdl-form-control control-select inputMaterial" ng-model="applicant.empl.emplType" id="wrketype" name="emptype" ng-change="onChanged('WRKTYPE',applicant.empl.emplType)" ng-disabled="applicant.constitution === 'SELF-EMPLOYED'" select-required>
-							<option value="">Select	Employment Type*</option>
+							<option value="">Select	Employment Type</option>
 							<option ng-if="applicant.constitution === 'SELF-EMPLOYED'" value="SELF-EMPLOYED">SELF-EMPLOYED</option>
 							<option value="PROFESSIONAL">PROFESSIONAL</option>
 							<option value="RETIRED">RETIRED</option>
@@ -61,18 +61,19 @@
 					</div>
 					<div class="col-md-6 cdl-height form-group">
 						<div class="col-md-6" style="padding: 0px;">
-							<input type="text" class="cdl-form-control inputMaterial city" disabled="disabled" ng-model="applicant.empl.emplCity" id="wrkcity" required name="empcity" />
+							<input type="text" class="cdl-form-control inputMaterial city" ng-pattern="/^[A-Z]*$/" ng-model="applicant.empl.emplCity" id="wrkcity" required name="empcity" />
 							<label style="left: 0px;">City*</label>
 							<div ng-messages="professionalData.empcity.$touched && professionalData.empcity.$error" class="errorMsg">
 	   						<p ng-message="required">Please enter Employer city</p>
+	   						<p ng-message="pattern">Please enter valid characters</p>
 							</div>
 						</div>
 						<div class="col-md-6" style="padding: 0px;">
-							<input type="text" id="wrkstate" ng-model="applicant.empl.emplState" disabled="disabled" class="cdl-form-control inputMaterial state" required name="
-								empstate" />
+							<input type="text" id="wrkstate" ng-model="applicant.empl.emplState" ng-pattern="/^[A-Z]*$/" class="cdl-form-control inputMaterial state" required name="empstate" />
 							<label class="margin_state" style="left: 15px;margin: 0px;">State*</label>
 							<div ng-messages="professionalData.empstate.$touched && professionalData.empstate.$error" class="errorMsg">
 	   						<p ng-message="required">Please enter employer state</p>
+	   						<p ng-message="pattern">Please enter valid characters</p>
 							</div>
 						</div>
 					</div>
