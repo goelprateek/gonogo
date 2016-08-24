@@ -1765,7 +1765,7 @@ $scope.submitApplication=function(UrlKey)
 					});
 
 					sharedService.setRefID($scope.referenceID);
-					//$state.go('/cdl/result');
+					$state.go('/cdl/result');
 				}else{
 					notifier.logWarning("Please select atleast 1 image to upload.");
 				}
