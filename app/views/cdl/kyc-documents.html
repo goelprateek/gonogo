@@ -1,12 +1,15 @@
-<form id="bankingInfo" >
+<form id="bankingInfo" name="KycDoc" novalidate>
 	<div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true}">
 		<div class="row clearfix ">
 			<div class="col-md-10 col-md-offset-1">
-				<div class="row clearfix">
+			<!-- <div class="row clearfix">
 					<div class="col-md-4">
 						<div class="row clearfix">
 							<help>Pan Number</help>
-							<input type="text" id="panNo" ng-model="pan" maxlength="10" class="customInput" placeholder="Pan Number" capitalize />
+							<input type="text" id="panNo" ng-model="pan" maxlength="10" class="customInput" placeholder="Pan Number" capitalize ng-pattern="/^[A-Z]{3}[P][A-Z]\d{4}[A-Z]/i" name="pan"/>
+							<div ng-messages="KycDoc.pan.$touched && KycDoc.pan.$error" class="errorMsg">
+			   					<p ng-message="pattern">Please enter valid PAN Number</p>
+							</div>
 						</div>
 						<div class="row clearifx">
 							<div class="preview" id="preview" ng-if="!panPresent" ng-style="{'background-image':'url('+selectImg1+')'}">
@@ -30,12 +33,10 @@
 						<div class="row clearfix">
 							<div class="preview" ng-if="!adharpresent"
 								ng-style="{'background-image':'url('+selectImg2+')'}">
-								<input type="file" id="aadhar_card" name="Aadhar Card"
-									ngf-select="onselectImg($files,'AADHAAR')"> <label
+								<input type="file" id="aadhar_card" name="Aadhar Card"  ng-pattern="/^\d{12}/i" ngf-select="onselectImg($files,'AADHAAR')"> <label
 									for="aadhar_card" ng-hide="selectImg2"> <img
 									alt="" src="images/camera-128.png" class="img_icon">
 								</label>
-								
 							</div>
 							<img class="preview" ng-src="{{aadharData}}" id="aadhaarImg" ng-model="aadhaarImg" ng-if="adharpresent">
 							<a class="remove_image" ng-show="selectImg2 ||adharpresent"
@@ -49,7 +50,7 @@
 								placeholder="Passport Number*" />
 						</div>
 						<div class="row clearfix">
-							<div class="preview"ng-if="!passportPresent"
+							<div class="preview" ng-if="!passportPresent"
 								ng-style="{'background-image':'url('+selectImg3+')'}">
 								<input id="passport" type="file" name="passport"
 									ngf-select="onselectImg($files,'PASSPORT')"> <label
@@ -158,7 +159,7 @@
 									<input id="addrIP" type="file" ng-model="addrIP" ngf-select="onselectImg($files,'APPLICANT-PHOTO')">
 									<label for="addrIP" ng-hide="selectImgInit" style="display: block;">
 				     					<img id="selectImgInit" alt="" src="images/camera-128.png" class="img_icon" >    
-				    				</label>	<!-- <label ng-hide="image_url2">Present Address</label> -->
+				    				</label>
 		    					</div>	
 		    
 		    					<img ng-model="profileImg" id="selectImgInit" alt="" ng-src="{{profileData}}" ng-if="profileImage" style="width:100%;height: 113px;margin-left: 3%">
@@ -169,11 +170,18 @@
 							</div>
 						</div>
 					</div>		
-				</div>
+				</div> -->
+				<div class="col-md-12">
+					<document-item ng-repeat="item in kycArray" item="item" imagearray="kycDocImages" remove-kyc-doc="removeKycDoc(index)"></document-item>
+				</div>				
 			</div>
 		</div>
 	</div>
-
+	<div class="col-md-12" style="text-align:center;">
+		<span class="Add-Icon" ng-click="addNewDocElement('','')" title="Add new document">
+			<b>+</b>
+		</span>
+	</div>
 	<div class="row clearfix ">
 		<div class="col-md-10 col-md-offset-1">
 			<button class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.asset')">Previous</button>
@@ -182,5 +190,4 @@
 			<button class="customButton submit" id="submit"	style="position: absolute; top: -1px;" ng-click="submitApplication('step4')">Submit</button>
 		</div>
 	</div>
-		<!-- <div class="col-md-4"></div> -->
 </form>

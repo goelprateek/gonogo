@@ -90,16 +90,75 @@
 	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA","$state","ApplyObject","UploadImages","notifier","$filter",
 	 function($scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA,$state,ApplyObject,UploadImages,notifier,$filter) {
 
-		var dlrCode = null;
 		var CustID = null;
 
 		$scope.currentPageNumber=1;
 
 		$scope.applicant = ApplyObject.dummy;
 
+		$scope.kycArray=[];
+
+		$scope.kycDocImages=[];
+
+		$scope.addNewDocElement=function(pDocType,pDocNumber){
+			if($scope.kycArray.length>0){
+				$scope.kycArray.push({
+					index:($scope.kycArray[$scope.kycArray.length-1].index+1),
+					docType:pDocType,
+					docNumber:pDocNumber,
+					style:{
+                    	background:'url("../images/camera-128.png") center/60px no-repeat'
+                    },
+                    isDefault:true
+				});
+  			}else{
+  				$scope.kycArray.push({
+  					index:1,
+  					docType:pDocType,
+  					docNumber:pDocNumber,
+  					style:{
+                   		background:'url("../images/camera-128.png") center/60px no-repeat'
+                    },
+                    isDefault:true
+  				});
+  			}
+		};
+
+		$scope.addNewDocElementImage=function(pDocName,pDocByteImage){
+			var docNameFound=false;
+			for(var docIndex=0;docIndex<$scope.kycArray.length;docIndex++){
+				if($scope.kycArray[docIndex].docType===pDocName && $scope.kycArray[docIndex].isDefault){
+					docNameFound=true;
+					$scope.kycArray[docIndex].style={
+                   		background:'url('+pDocByteImage+') center/contain no-repeat'
+                    };
+                    $scope.kycArray[docIndex].isDefault=false;
+				}
+			}
+
+			if(!docNameFound){
+				$scope.kycArray.push({
+  					index:1,
+  					docType:pDocName,
+  					docNumber:'',
+  					style:{
+                   		background:'url('+pDocByteImage+') center/contain no-repeat'
+                    },
+                    isDefault:false
+  				});
+			}
+		};
+
+		$scope.removeKycDoc = function(pIndex){
+			var spliceIndex = _.chain($scope.kycArray).pluck("index").indexOf(pIndex).value();
+			$scope.kycArray.splice(spliceIndex,1);
+			if($scope.kycDocImages[spliceIndex]){
+				$scope.kycDocImages.splice(spliceIndex,1);
+			}
+		};
+
 		//Hard Coded //
 		//sharedService.setRefID("24970000023");
-
 		var user=UserService.getCurrentUser();
     	$scope.can=AclService.can;
 
@@ -130,24 +189,21 @@
 	  		$scope.mname=_applicant.oApplName.sMiddleName;
 	  		$scope.lname=_applicant.oApplName.sLastName;
 
-	  		dlrCode=$scope.applicationObject.oHeader.sDealerId;
+	  		$scope.dealerCode=$scope.applicationObject.oHeader.sDealerId;
 	  		$scope.dealerName=$scope.applicationObject.oReq.oApplication.aAssetDetail[0].sDlrName;
 			$scope.applicant.oResidence.oPhone.iMobile=_applicant.aPhone[0].sPhoneNumber;
 
-			_.each(_applicant.aKycDocs ,function(value){
-				$scope.applicant.aKycDocs.push({
-					"sExpiryDate":null,
-					"sIssueDate":null,
-					"sKycName":value.sKycName,
-					"sKycNumber":value.sKycNumber,
-					"sKycStat":null
-				});
-				if(value.sKycName == "PAN"){
-					$scope.pan=value.sKycNumber;						  					
-				}else if(value.sKycName == "AADHAAR"){
-					$scope.aadhar=value.sKycNumber;
-				}
-			});
+			for(var i=0;i<_applicant.aKycDocs.length;i++){
+  				if(_applicant.aKycDocs[i].sKycName==="PAN"){
+  					$scope.pan=_applicant.aKycDocs[i].sKycNumber;
+  				}
+
+  				if(_applicant.aKycDocs[i].sKycName==="AADHAAR"){
+  					$scope.aadhar=_applicant.aKycDocs[i].sKycNumber;
+  				}
+
+	  			$scope.addNewDocElement(_applicant.aKycDocs[i].sKycName,_applicant.aKycDocs[i].sKycNumber);
+  			}
 
   			$scope.applicant.application.loanType=$scope.applicationObject.oReq.oApplication.sLoanType;
 		}
@@ -217,14 +273,14 @@
 			if(currentStage=="DE"){
 				if(Response){
 		//			{"sInstId":null,"sUserId":null,"sPassword":null,"sRefID":"SATH000302","oHeader":{"sAppID":"160608FK9FAI","sInstID":"4019","sSourceID":null,"sAppSource":"WEB","sReqType":"JSON","dtSubmit":1465371687106,"sDsaId":"HDBFS_DSA1@softcell.com","sCroId":null,"sDealerId":"SATH"},"oReq":{"oApplicant":{"residenceAddSameAsAbove":false,"sApplID":"APPLICANT_1","oApplName":{"sFirstName":"JKJKJKJKJ","sMiddleName":"JKJKJKJKJKJ","sLastName":"JKJKJKJKJJ","sPrefix":null,"sSuffix":null},"oFatherName":null,"oSpouseName":null,"sReligion":null,"sApplGndr":"Male","sDob":"","iAge":0,"sMarStat":"Single","aKycDocs":[{"sKycName":"PAN","sKycNumber":"","sKycStat":null,"sIssueDate":null,"sExpiryDate":null},{"sKycName":"AADHAAR","sKycNumber":"989898998989","sKycStat":null,"sIssueDate":null,"sExpiryDate":null}],"bSameAbove":false,"aAddr":[{"sLine1":"","sLine2":"","sCity":"","iPinCode":0,"sState":"","sCountry":"INDIA","sLandLoard":null,"sLine3":"","sLine4":null,"sVillage":null,"sDistrict":null,"fDistFrom":0,"sLandMark":null,"sAccm":null,"iTimeAtAddr":0,"sAddrType":"RESIDENCE","sResAddrType":"Select","iMonthAtCity":0,"iMonthAtAddr":0,"dRentAmt":0,"iYearAtCity":0},{"sLine1":"","sLine2":"","sCity":"","iPinCode":0,"sState":"","sCountry":"INDIA","sLandLoard":null,"sLine3":"","sLine4":null,"sVillage":null,"sDistrict":null,"fDistFrom":0,"sLandMark":null,"sAccm":null,"iTimeAtAddr":0,"sAddrType":"PERMANENT","sResAddrType":"Select","iMonthAtCity":0,"iMonthAtAddr":0,"dRentAmt":0,"iYearAtCity":0},{"sLine1":"","sLine2":"","sCity":"","iPinCode":0,"sState":"","sCountry":"INDIA","sLandLoard":null,"sLine3":"","sLine4":null,"sVillage":null,"sDistrict":null,"fDistFrom":0,"sLandMark":null,"sAccm":null,"iTimeAtAddr":0,"sAddrType":"OFFICE","sResAddrType":null,"iMonthAtCity":0,"iMonthAtAddr":0,"dRentAmt":0,"iYearAtCity":0}],"aPhone":[{"sPhoneType":"PERSONAL_PHONE","sAreaCode":"","sCountryCode":"+91","sPhoneNumber":"","sExt":null},{"sPhoneType":"RESIDENCE_PHONE","sAreaCode":"","sCountryCode":"+91","sPhoneNumber":"","sExt":null},{"sPhoneType":"OFFICE_PHONE","sAreaCode":"","sCountryCode":"+91","sPhoneNumber":"","sExt":null},{"sPhoneType":"PERSONAL_MOBILE","sAreaCode":null,"sCountryCode":"+91","sPhoneNumber":"9898989889","sExt":null},{"sPhoneType":"RESIDENCE_MOBILE","sAreaCode":null,"sCountryCode":"+91","sPhoneNumber":"","sExt":null},{"sPhoneType":"OFFICE_MOBILE","sAreaCode":null,"sCountryCode":"+91","sPhoneNumber":"","sExt":null}],"aEmail":[{"sEmailType":"PERSONAL","sEmailAddr":""},{"sEmailType":"RESIDENCE","sEmailAddr":""},{"sEmailType":"WORK","sEmailAddr":""}],"aEmpl":[{"sEmplType":"Select","sEmplName":"","iTmWithEmplr":0,"sDtJoin":null,"sDtLeave":null,"dmonthSal":0,"dGrossSal":0,"aLastMonthIncome":[],"sConst":"Select","sItrID":null,"dItrAmt":0,"sDesig":null,"sEmplrCode":null,"sEmplrBr":null,"sModePayment":null,"sDeptmt":null,"sWorkExps":null,"sBusinesName":null,"dtComencemnt":null}],"iNoOfDep":0,"iEarnMem":0,"iFamilyMem":0,"oApplRef":null,"sEdu":"Select","sCreditCardNum":"","bMobVer":true,"aBankingDetails":null,"aLoanDetails":null,"oIncomeDetails":null},"aCoApplicant":null,"oApplication":{"sAppID":null,"sLoanType":"Consumer Durables","sAppliedFor":null,"dLoanAmt":0,"iLoanTenor":0,"oProperty":null,"sLnPurp":null,"dLnApr":0,"dEmi":0,"iAdvEmi":0,"dMarginAmt":0,"aAssetDetail":[{"sAssetCtg":"Select","sDlrName":"SATHYA AGENCIES-SLM","sAssetMake":"","sModelNo":"","sPrice":""}],"aOwndAst":null},"sSuspAct":"No"},"sRespFormat":null,"sCurrentStageId":"DE"}
-					dlrCode=Response.oHeader.sDealerId;
+					$scope.dealerCode=Response.oHeader.sDealerId;
 		//				console.log("$scope.dealerArr :"+$scope.dealerArr);
 	//				console.log("$scope.dealerArr :");
 	//				console.log($scope.dealerArr);
 					if($scope.dealerArr){
 						for(var i=0;i<$scope.dealerArr.length;i++)
 						{
-							if($scope.dealerArr[i].DEALER_CODE==dlrCode){
+							if($scope.dealerArr[i].DEALER_CODE==$scope.dealerCode){
 								$scope.dealerName=$scope.dealerArr[0]["DEALER_NAME"];
 	//							console.log("Dealer :");
 	//							console.log($scope.dealerArr[0]);
@@ -264,7 +320,16 @@
 						  				if(mApplicant.aKycDocs[i].sKycName==="AADHAAR"){
 						  					$scope.aadhar=mApplicant.aKycDocs[i].sKycNumber;
 						  				}
+
+							  			$scope.addNewDocElement(mApplicant.aKycDocs[i].sKycName,mApplicant.aKycDocs[i].sKycNumber);
 						  			}
+						  		}else{
+						  			$scope.kycArray.push({
+					  					index:1,
+					  					docType:"",
+					  					docNumber:"",
+					  					imgByteArray:""
+					  				});
 						  		}
 
 						  		$scope.applicant.sameAbove=mApplicant.residenceAddSameAsAbove;
@@ -386,7 +451,14 @@
 									var json ={'sImgID':imgId}
 									var URL = 'get-image-by-id-base64';
 									RestService.saveToServer(URL,json).then(function(Response){
-										var image = "data:image/png;base64,"+Response.sByteCode;
+
+										if(Response && Response.sByteCode){
+											$scope.addNewDocElementImage( kycName , "data:image/png;base64,"+Response.sByteCode );
+										}
+
+										//TODO
+										
+										/*
 										if(Response.sByteCode != undefined && Response.sByteCode != null && Response.sByteCode != "" ){
 	//										console.log("image :"+kycName+"id :"+imgId);
 											var url =image;
@@ -410,16 +482,7 @@
 												$scope.drivingPresent = true;
 												$scope.drivingData=image;
 	//											$("#drivingImg").attr("src",image);
-												/*
-												$scope.dLPresent = true;
-												if($scope.dlicense == ''){
-													$scope.dlicense =image;
-													$scope.drvlimgID = imgId;
-													dlicen.push({status: status, reason:reason});
-												}
-												$scope.kyc_array.push({kyc_name:"DRIVING-LICENSE",image:image, ImageID:imgId,img_status:status, img_reason:reason,val:value});
-	//											$rootScope.uploadImgFor = "DRIVING-LICENSE";
-											*/}
+											}
 											else if(kycName =="PASSPORT"){
 												$scope.passportPresent =  true;
 												$scope.passportData= image;
@@ -438,6 +501,7 @@
 												$scope.otherData=image;
 											}
 										}
+										*/
 									},function(error){
 										$scope.error = "Sorry, unable to fetch images from server !!";					
 									});
@@ -473,7 +537,7 @@
 // 			{
 // 				$scope.REFID = CustID;
 // 				status= "Declined";
-// //				dlrCode=Response.oHeader.sDealerId;
+// //				$scope.dealerCode=Response.oHeader.sDealerId;
 // 				$("#nmCntnr").hide();
 // 				$scope.statusObject={
 // 					sAppStat : ""
@@ -485,7 +549,7 @@
 // 			{
 // 				status= "OnHold";
 // 				$scope.REFID=CustID;
-// //				dlrCode=Response.oHeader.sDealerId;
+// //				$scope.dealerCode=Response.oHeader.sDealerId;
 // 				$("#nmCntnr").hide();
 // 				var statusJSON={
 // 					"sRefID":CustID,
@@ -522,7 +586,7 @@
 // 				}
 // 				$scope.REFID=CustID;
 
-// 				dlrCode=Response.oHeader.sDealerId;
+// 				$scope.dealerCode=Response.oHeader.sDealerId;
 				
 // 				$("#nmCntnr").hide();
 // 				var statusJSON={
@@ -564,7 +628,7 @@
 			// 	modelNo =Response.oReq.oApplication.aAssetDetail[0].sModelNo;
 			// 	// $scope.mdlVal=Response.oReq.oApplication.aAssetDetail[0].sModelNo;
 
-			// 	dlrCode=Response.oHeader.sDealerId;				
+			// 	$scope.dealerCode=Response.oHeader.sDealerId;				
 			// 	$scope.REFID=CustID;
 
 			// 	$("#nmCntnr").hide();
@@ -589,11 +653,9 @@
 			// }
 		}); // End of call rest API
 	}else{
-		if(localStorage.getItem('CURRENT_DEALER')){
-			var dealerCurrent = JSON.parse(atob(localStorage.getItem('CURRENT_DEALER')));
-
-			dlrCode=dealerCurrent["DEALER_CODE"];
-			$scope.dealerName=dealerCurrent["DEALER_NAME"];
+		if(user.dealer){			
+			$scope.dealerCode=user.dealer["DEALER_CODE"];
+			$scope.dealerName=user.dealer["DEALER_NAME"];
 		}else{
 			$location.path("/cdl/dealer");
 		}
@@ -656,7 +718,7 @@
 //			$rootScope.errorMsg="";
 //			$scope.dealerObj=JSON.parse(dealerSelected);
 ////			console.log("$scope.dealerObj :"+JSON.stringify($scope.dealerObj));
-//			dlrCode=$scope.dealerObj["DEALER_CODE"];
+//			$scope.dealerCode=$scope.dealerObj["DEALER_CODE"];
 //			$scope.dlrName=$scope.dealerObj["DEALER_NAME"];
 //			
 //		}
@@ -1340,17 +1402,23 @@ function GetPostIPA_PDF()
 $scope.submitApplication=function(UrlKey)
 {
 	var dobFormatted = $filter('date')($scope.applicant.dob,"dd:MM:yyyy").replace(/:/g,'');
-	console.log(dobFormatted);
+	//console.log(dobFormatted);
+
+	if(!$scope.dealerCode){
+		$state.go("/cdl/dealer");
+	}
+
 	var json = 
 	{
 		"oHeader":{
 			"sAppID":"",
 			"sAppSource":"WEB:1.06.01",//added version
 			"sCroId":"default",
-			"sDealerId":dlrCode,
+			"sDealerId":$scope.dealerCode,
 			"sDsaId":$scope.username,
 			"sInstID":$scope.InstitutionID,
-			"sReqType":"JSON"
+			"sReqType":"JSON",
+			"sSourceID":"GONOGO_HDBFS"
 		},
 		"sRefID":$scope.referenceID,
 		"oReq":{
@@ -1464,7 +1532,7 @@ $scope.submitApplication=function(UrlKey)
 				"sApplGndr":$scope.applicant.gender,
 				"oIncomeDetails":null,
 				"oSpouseName":null,
-				"aKycDocs":$scope.applicant.aKycDocs,
+				"aKycDocs":[],
 				"aLoanDetails":null,
 				"sMarStat":$scope.applicant.maritalStat,
 				"sReligion":null,
@@ -1548,14 +1616,29 @@ $scope.submitApplication=function(UrlKey)
 		}
 	};
 
-//	console.log("final JSon : "+JSON.stringify(json));
+	_.each($scope.kycArray,function(kycDoc){
+		var resultIndex = _.chain(json.oReq.oApplicant.aKycDocs).pluck("sKycName").indexOf(kycDoc.docType).value();
+		if(resultIndex === -1){
+			json.oReq.oApplicant.aKycDocs.push({ // whole block is remain
+				"sExpiryDate":null,
+				"sIssueDate":null,
+				"sKycName":kycDoc.docType,
+				"sKycNumber":kycDoc.docNumber,
+				"sKycStat":null
+			});
+		}else{
+			json.oReq.oApplicant.aKycDocs[resultIndex].sKycNumber=kycDoc.docNumber;
+		}
+	});
 
+//	console.log(");
+//	$log.debug("final JSon : "+JSON.stringify(json)); 
 	/*var bool=true;
 	modelNo=$("#mdl").val();
 //	assetCat = $("#ast option:selected").val();
 	make = $("#mk").val();
 	$scope.Header={"sAppSource":"WEB","sDsaId":$scope.username,"sInstID":$scope.InstitutionID,
-			"sReqType":"JSON","sDealerId":dlrCode};
+			"sReqType":"JSON","sDealerId":$scope.dealerCode};
 
 	$scope.address={"sLine1":$("#a1").val(),"sLine2":$("#a2").val(),"sCountry":"INDIA","sCity":$("#percity").val(),
 			"sLine3":$("#a3").val(),"sState":$("#perstate").val(),"iPinCode":$("#perpin").val(),"sAddrType":"RESIDENCE",
@@ -1660,6 +1743,8 @@ $scope.submitApplication=function(UrlKey)
 
  /* var json = {"oHeader":{"sAppID":"","sAppSource":"WEB:1.06.01","sCroId":"default","dtSubmit":1471340384072,"sDealerId":"25052","sDsaId":"HDBFS_DSA1@softcell.com","sInstID":"4019","sReqType":"JSON"},"sRefID":"25052000159","oReq":{"oApplicant":{"residenceAddSameAsAbove":true,"aAddr":[{"sLine1":"QWWEQEQWEW","sLine2":"GYGUUYIUYI","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"IIUIUYIUYIU","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411005","sAddrType":"RESIDENCE","sResAddrType":"RENTED-FLAT","iMonthAtCity":"99","dRentAmt":"21212121","iMonthAtAddr":"90","iTimeAtAddr":"","iYearAtCity":""},{"sLine1":"DFSFSDFSD","sLine2":"SDFFDSFSD","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"SDFDSFDSFSD","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411004","sAddrType":"OFFICE","sResAddrType":"","iMonthAtCity":"","dRentAmt":"","iMonthAtAddr":"","iTimeAtAddr":"","iYearAtCity":""},{"sLine1":"QWWEQEQWEW","sLine2":"GYGUUYIUYI","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"IIUIUYIUYIU","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411005","sAddrType":"PERMANENT","sResAddrType":"RENTED-FLAT","iMonthAtCity":"99","dRentAmt":"21212121","iMonthAtAddr":"90","iTimeAtAddr":"","iYearAtCity":""}],"sApplID":"APPLICANT_1","oApplName":{"sFirstName":"SAYALI","sLastName":"MADAN","sMiddleName":"MULAY","sPrefix":null,"sSuffix":null},"oApplRef":null,"aBankingDetails":null,"sCreditCardNum":"121212","sDob":"15061985","sEdu":"DOCTORATE","aEmail":[{"sEmailAddr":"askdhaks@sdjf.com","sEmailType":"PERSONAL"},{"sEmailAddr":"askdhaks@sdjf.com","sEmailType":"PERMANENT"},{"sEmailAddr":"so@dfsn.com","sEmailType":"WORK"}],"aEmpl":[{"sConst":"TRUST","sDtJoin":null,"sDtLeave":null,"sDesig":null,"sEmplrBr":null,"sEmplrCode":null,"sEmplName":"SOFTCELL TRADE AND TECHNOLOGIES LTD","sEmplType":"PROFESSIONAL","aLastMonthIncome":[],"sItrID":null,"iTmWithEmplr":"223","dGrossSal":0,"dmonthSal":"32432442","dItrAmt":0}],"oFatherName":null,"sApplGndr":"Female","oIncomeDetails":null,"oSpouseName":null,"aKycDocs":[{"sExpiryDate":null,"sIssueDate":null,"sKycName":"AADHAAR","sKycNumber":"254234523452","sKycStat":null}],"aLoanDetails":null,"sMarStat":"Single","sReligion":null,"aPhone":[{"phoneType":"PERSONAL_MOBILE","sPhoneType":"PERSONAL_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":"","sPhoneNumber":"2323123123"},{"phoneType":"PERSONAL_PHONE","sPhoneType":"PERSONAL_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"4545454545"},{"phoneType":"RESIDENCE_MOBILE","sPhoneType":"RESIDENCE_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":""},{"phoneType":"RESIDENCE_PHONE","sPhoneType":"RESIDENCE_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"4545454545"},{"phoneType":"OFFICE_PHONE","sPhoneType":"OFFICE_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"5454545454"},{"phoneType":"OFFICE_MOBILE","sPhoneType":"OFFICE_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":"","sPhoneNumber":"2131321313"}],"iEarnMem":0,"iFamilyMem":0,"iNoOfDep":0,"bMobVer":true,"sAdharVer":false,"bSameAbove":true,"iAge":0},"oApplication":{"sApID":null,"sAppliedFor":null,"aAssetDetail":[{"sAssetCtg":"WASHING MACHINE","sAssetMake":"HITACHI","sAssetModelMake":"","sDlrName":"SATHYA AGENCIES-SLM","sModelNo":"SF-80PJ3CINEM","sPrice":""}],"oProperty":null,"sLoanType":"Consumer Durables","dEmi":0,"dLoanAmt":"12121212","dMarginAmt":0,"iAdvEmi":0,"iLoanTenor":"121"},"aCoApplicant":null,"sSuspAct":"No"}};*/
 
+ 	//Hard Coded - Commented for testing 
+
   	$http({
 		method : 'POST',
 		url : APP_CONST.getConst('BASE_URL_GNG')+'submit-application/'+UrlKey,
@@ -1675,8 +1760,8 @@ $scope.submitApplication=function(UrlKey)
 
 				GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP4"),1,"submit-application","",data.sRefID);
 
-				if(img_array.length!=0){
-					UploadImages.upload($scope.referenceID,img_array).then(function(imageUploadedCount) {
+				if($scope.kycDocImages.length!=0){
+					UploadImages.upload($scope.referenceID,$scope.kycDocImages).then(function(imageUploadedCount) {
 					  	$log.debug('Image upload Success, Total image uploaded : ' + imageUploadedCount);
 					  //	$scope.updateStatus();
 					  //action to be taken when we get success from server
@@ -1686,29 +1771,26 @@ $scope.submitApplication=function(UrlKey)
 					});
 
 					sharedService.setRefID($scope.referenceID);
-					$state.go('/cdl/result');
+					//$state.go('/cdl/result');
 				}else{
 					notifier.logWarning("Please select atleast 1 image to upload.");
 				}
 			}
 
 			if(UrlKey=="step3"){
-				if(img_array.length!=0){
-					UploadImages.upload($scope.referenceID,img_array).then(function(imageUploadedCount) {
-					  	$log.debug('Image upload Success, Total image uploaded : ' + imageUploadedCount);
-					}, function(reason) {
-					  	$log.debug('Image upload Failed, Total image uploaded : ' + imageUploadedCount);
-					});
-				}
+				// $rootScope.errHead = "Status"
+				// $rootScope.errorMsg = "Data Saved Successfully.";
 				notifier.logSuccess("Data Saved Successfully.");
 			}
 		}else{
 			notifier.logError("Some error occured while application submission, please try again.");
 		}
+
 		
 		//console.log("before upload:"+img_array.length);
 		//UploadAllImgs(data.sRefID,img_array,"submit");
 		
+
 		//$scope.REFID = data.sRefID;
 
 	}).error(function(data){
@@ -1716,18 +1798,22 @@ $scope.submitApplication=function(UrlKey)
 		if(UrlKey=="step1"){
 			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP1"),1,"submit-application","",data.sRefID);
 		}else if(UrlKey=="step4"){
+
 			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP4"),1,"submit-application","",data.sRefID);
 		}
 
 		$scope.serviceHitCount=$scope.serviceHitCount+1;
 		if($scope.serviceHitCount<=3){
 			$scope.submitApplication();
-		}
-		else{
+		}else{
 			$scope.serviceHitCount=1;
+			//$scope.error="Sorry we can not process your Submit request";
 			notifier.logError("We are unable to submit your request, please try again later");
-		}	
+		}
 	});
+	
+	//Hard Coded - Commented for testing 
+
 };
 
 /*var timer = null, startTime = null;*/
@@ -2280,7 +2366,7 @@ $scope.getEmployerNames=function(queryStr){
 // 			    "sAppSource": "WEB",
 // 			    "sDsaId": $scope.username,
 // 			    "sAppID": "APPLICANT_1",
-// 			    "sDealerId": dlrCode,
+// 			    "sDealerId": $scope.dealerCode,
 // 			    "sSourceID": "HDBFS_CDL",
 // 			    "sInstID":  $scope.InstitutionID
 // 			  },
@@ -2488,4 +2574,14 @@ $scope.getEmployerNames=function(queryStr){
 			}
 		}
 	}]);
+
+	app.config(['$compileProvider',
+		function( $compileProvider )
+		{   
+		//        	  alert("Hei");
+		      //$compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|data|mailto|chrome-extension):/);
+		      // Angular before v1.2 uses $compileProvider.urlSanitizationWhitelist(...)
+			$compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|blob):|data:image|data:application\//);
+		}
+	]);
 }).call(this);
