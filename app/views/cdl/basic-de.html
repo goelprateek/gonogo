@@ -71,7 +71,7 @@
 						<div class="col-md-5"></div>
 						<div class="col-md-7" style="text-align: right;">
 						<!-- ng-click="clickEvent('getOTP')" ng-disabled="BasicInfoForm.$invalid" -->
-							<button id="getOTP" class="customButton" style="float: right;"    ng-show="!shwVerify">Get OTP</button>
+							<button id="getOTP" class="customButton" style="float: right;" ng-click="clickEvent('getOTP')" ng-disabled="BasicInfoForm.$invalid" ng-show="!shwVerify">Get OTP</button>
 							<div id="otpContainer" ng-show="shwVerify">
 								<input class="form-control otp" ng-model='otpKey1' id='txt1' type="password" maxlength="1" tabindex="1" name="OTP" auto-next/>
 								<input class="form-control otp" ng-model='otpKey2' id='txt2' type="password" maxlength="1" tabindex="2" name="OTP" auto-next/>
