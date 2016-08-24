@@ -595,13 +595,6 @@ top: 6px;
 
 .glyphicon:empty {
 	width: 1.5em;
-	color: #656161;
-}
-
-.glyphicon:hover {
-	cursor: pointer;
-	color: red;
-	/* 	border: 1px solid #777; */
 }
 
 #bureau-score-body, #app-score-body {

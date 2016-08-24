@@ -3,7 +3,8 @@
 
 	var app=angular.module('gonogo.utilities');
 
-	app.service('UploadImages', ["$q","RestService",function ($q,RestService) {
+	app.service('UploadImages', ["$q","RestService","$log",
+		function ($q,RestService,$log) {
 		var imageCountUploaded=0;
 		var imageCountToUpload=0;
 		var serviceHitCount=0;
@@ -29,8 +30,8 @@
 						    "sReason": pImageArrayToUpload[i].reason 
 					  	}
 					};
-			//		console.log("image JSon : "+JSON.stringify(json));
-					this.uploadImage(defer,json);	
+					//$log.debug("image JSon : "+JSON.stringify(json));
+					this.uploadImage(defer,json);
 				}
 			}
 

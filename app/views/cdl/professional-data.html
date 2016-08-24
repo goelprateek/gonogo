@@ -76,6 +76,7 @@
 						</div>
 						<div class="col-md-6" style="padding: 0px;">
 							<input type="text" id="wrkstate" ng-model="applicant.empl.emplState" ng-pattern="/^[A-Za-z ]*$/" class="cdl-form-control inputMaterial state" required name="empstate" />
+
 							<label class="margin_state" style="left: 15px;margin: 0px;">State*</label>
 							<div ng-messages="professionalData.empstate.$touched && professionalData.empstate.$error" class="errorMsg">
 	   						<p ng-message="required">Please enter employer state</p>
@@ -136,15 +137,17 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-6 cdl-height form-group"
-						ng-if="applicant.empl.emplType =='SELF-EMPLOYED'">
-						<i class="fa fa-rupee"></i> <input type="text"
-							id="itReturn" ng-model="applicant.empl.emplITReturn"
-							class="cdl-form-control inputMaterial" name="itreturn" maxlength="12" style="padding-left: 4%" rupees required/>
-						<label>Last Year IT Return*</label>
-						<div ng-messages="professionalData.itreturn.$touched && professionalData.itreturn.$error" class="errorMsg">
-	   						<p ng-message="required">Please enter Last year IT return</p>
-						</div>
+					<div class="col-md-6 cdl-height form-group" ng-if="applicant.empl.emplType =='SELF-EMPLOYED'">
+						<div class="div-rupee">
+							<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
+							<input type="text"
+								id="itReturn" ng-model="applicant.empl.emplITReturn"
+								class="cdl-form-control inputMaterial" name="itreturn" maxlength="12" style="padding-left: 4%" rupees required/>
+							<label>Last Year IT Return*</label>
+							<div ng-messages="professionalData.itreturn.$touched && professionalData.itreturn.$error" class="errorMsg">
+		   						<p ng-message="required">Please enter Last year IT return</p>
+							</div>
+						</div>						
 					</div>
 				</div>
 			</div>

@@ -1,4 +1,4 @@
-<form class="row clearfix" id="nmCntnr" name="BasicInfoForm" novalidate >
+<form class="row clearfix" id="nmCntnr" name="BasicInfoForm" novalidate  accessible-form>
 	<div class="col-md-8 col-md-offset-2" id="middleContainer">
 		<div class="row clearfix containerBorder">
 			<div class="col-md-10 col-md-offset-1">
@@ -70,7 +70,8 @@
 					<div class="row clearfix" style="margin-bottom: 15px">
 						<div class="col-md-5"></div>
 						<div class="col-md-7" style="text-align: right;">
-							<button id="getOTP" class="customButton" style="float: right;" ng-disabled="BasicInfoForm.$invalid" ng-click="clickEvent('getOTP')"  ng-show="!shwVerify">Get OTP</button>
+						<!-- ng-click="clickEvent('getOTP')" ng-disabled="BasicInfoForm.$invalid" -->
+							<button id="getOTP" class="customButton" style="float: right;"    ng-show="!shwVerify">Get OTP</button>
 							<div id="otpContainer" ng-show="shwVerify">
 								<input class="form-control otp" ng-model='otpKey1' id='txt1' type="password" maxlength="1" tabindex="1" name="OTP" auto-next/>
 								<input class="form-control otp" ng-model='otpKey2' id='txt2' type="password" maxlength="1" tabindex="2" name="OTP" auto-next/>
