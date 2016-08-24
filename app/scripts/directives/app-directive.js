@@ -223,7 +223,7 @@
 		var _controller=["$scope",function($scope){
 			//console.log("Image Array To Upload: ");
 			//console.log($scope.imagearray);
-			// var countimg=0;
+			//var countimg=0;
 
 			$scope.onImageRemove=function(img){
 				$("#"+img.value+img.index+"").css("background-image", "");
@@ -292,6 +292,108 @@
 		};
 	});
 
+	app.directive('documentItem', function ($compile) {
+		var linker = function(scope, element, attrs) {
+			// var template = '<div class="row clearfix" style="padding: 8px;">';
+			// template=template+'<label>{{item.doc}}</label>';
+			// template=template+'<div class="preview" id="{{item.index}}">';
+			// template=template+'<input id="l{{item.index}}" type="file" ngf-select="onselectImg($files,{{item}})">';
+			// template=template+'<label for="l{{item.index}}" id="{{item.index}}label">';
+			// template=template+'<img alt="" src="../images/camera-128.png" class="img_icon"></label></div>';
+			// template=template+'<small id="{{item.index}}size" class="size"></small>';
+			// template=template+'<div style="height:20px;display:inline"><a class="remove_image" id="{{item.index}}remove" name="{{item.index}}" style="display:none" ng-click="onImageRemove(item)">Remove</a></div>';
+			// template=template+'</div>';
+
+			var template =    ' <style>';
+			template=template+'		.doc-number{position:relative;bottom:0px;width:100%;left:0px;margin-top: 10px;border: none;border-bottom: 1px solid black;}';
+			template=template+'		.btn-delete-doc{position:absolute;bottom:10px;right:10px;}';
+			template=template+' </style>';
+		 	template=template+'	<div class="col-md-4" style="padding: 8px;margin-bottom:20px;">';
+	        template=template+'		<select class="form-control control-select" ng-model="item.docType"><option value="">Document Type</option><option ng-repeat="obj in arrDocTypes" value="{{obj}}">{{obj}}</option></select>';
+	        template=template+'		<input type="text" class="doc-number" ng-model="item.docNumber" capitalize placeholder="{{item.docType}} Number" />';
+	        template=template+'		<div class="upload-preview" id="{{item.index}}"  title="Click to select image.">';
+	        template=template+'			<input id="l{{item.index}}" name="l{{item.index}}" type="file" ngf-select="onselectImg($files,{{item}});" />';
+	        template=template+'			<label for="l{{item.index}}" id="{{item.index}}label" title="Click to select image." ng-class="{\'upload-default\': item.isDefault,\'upload-preview\': !item.isDefault}" ng-style="item.style">';
+	        template=template+'			</label>';
+	        template=template+'			<button class="btn btn-danger btn-xs btn-delete-doc" title="Delete this document" ng-click="removeDoc(item.index)"><span class="glyphicon glyphicon-trash"></span></button>';
+	        template=template+'		</div>';
+	        // template=template+'		<button class="remove_image" id="{{item.index}}remove" name="{{item.index}}" href="remove_image()">Remove</button>';
+	        template=template+'	</div>';
+
+			element.html(template);
+			$compile(element.contents())(scope);
+
+			scope.removeDoc=function(pIndex){
+				//alert("Hi");
+				//$scope.inputs.splice(index,1);
+				//console.log("Index:"+index);
+				scope.removeKycDoc({index:pIndex});
+				// console.log("Image Object:");
+				// console.log($scope.addkyc_array);
+			};
+		};
+
+		var _controller=["$scope",function($scope){
+			//	console.log("Image Array To Upload: ");
+			//	console.log($scope.imagearray);
+			// 	var countimg=0;
+
+			$scope.arrDocTypes=["PAN","AADHAAR","PASSPORT","DRIVING-LICENSE","INCOME-PROOF1","INCOME-PROOF2","OTHER"];
+
+			$scope.onselectImg = function($files,item) 
+			{
+				//console.log("inside file select"+type+" file:"+$files[0].name);
+				//alert("Hello");
+				var img_type ='';
+				for (var i = 0; i < $files.length; i++){
+					var fname=$files[0].name;
+
+//		    		var re = (/\.(gif|jpg|jpeg|tiff|png)$/i);
+			    	var re = (/\.(jpg)$/i);
+					if(!re.exec(fname)){
+				    	alert("Sorry..!! We can not upload your image. \n Only .Jpg images are allowed");
+				    	break;
+			    	}
+
+					img_type = fname.split(".")[1];
+					var $file = $files[i];
+					var base64;
+					var reader = new FileReader();
+					if ($files[i] && $file) {
+						var binaryString;
+						var size=((($files[i].size)/1024).toFixed(2)) +" Kb";
+						reader.onload = function(readerEvt) {
+							binaryString = readerEvt.target.result;
+
+							var spliceIndex = _.chain($scope.imagearray).pluck("index").indexOf(item.index).value();
+							if(spliceIndex==-1){
+								$scope.imagearray.push({index:item.index,kyc_name:item.docType,kyc_number:item.docNumber,image:binaryString.split(",")[1],type:img_type});
+							}else{
+								$scope.imagearray[spliceIndex].image=binaryString.split(",")[1];
+							}
+							$("#"+item.index).css("background-image", "url("+binaryString+")");
+							$("#"+item.index+"label").css("background-image", "none");
+							//$("#"+item.index+"label").hide();
+							//$("#"+item.index+"remove").show();
+						};
+				        reader.readAsDataURL($files[i]);
+					}
+				}
+			};
+		}];
+
+		return {
+			restrict : 'E',
+			link : linker,
+			scope : {
+				imagearray : "=",
+				item: "=",
+				removeKycDoc:"&"
+			},
+			controller : _controller
+		};
+	});
+
 	app.directive("customBackground",function(){
 		return {
             restrict: "A",
@@ -354,21 +456,21 @@
 	});
 
 	app.directive('replace', function() {
-	  return {
-	  	restrict:'A',
-	    require: 'ngModel',
-	    link: function(scope, element, attrs, model) {
-	      model.$parsers.push(function(val) {
-	        if (!val) { return ''; }
-	        var transformedInput = val.replace(/[^a-zA-Z0-9]/g, '');
-	         if (transformedInput !== val) {
-	                    model.$setViewValue(transformedInput);
-	                    model.$render();
-	                }
-	               return transformedInput;
-	      });
-	    }
-	  };
+		return {
+			restrict:'A',
+			require: 'ngModel',
+			link: function(scope, element, attrs, model) {
+				model.$parsers.push(function(val) {
+				if (!val) { return ''; }
+				var transformedInput = val.replace(/[^a-zA-Z0-9]/g, '');
+					if (transformedInput !== val) {
+						model.$setViewValue(transformedInput);
+						model.$render();
+					}
+					return transformedInput;
+				});
+			}
+		};
 	});
 
 
@@ -439,7 +541,6 @@
             }
         };
     });
-
 
     app.directive('widgetMaximize', function () {
         return {

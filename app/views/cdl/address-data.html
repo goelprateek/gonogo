@@ -3,8 +3,9 @@
 		<div class="col-md-10 col-md-offset-1">
 			<div class="row clearfix" style="margin-top: 40px;">
 				<div class="col-md-6 cdl-height form-group">
-					<select id="addressType" class="cdl-form-control control-select inputMaterial" name="resaddtype" ng-model="applicant.oResidence.oAddress.addrType" select-required>
-						<option value="" >Select Address Type*</option>
+				<!-- ng-options="addr.text for addr in addressTypeoption track by addr.text" -->
+					<select id="addressType" class="cdl-form-control control-select inputMaterial" name="resaddtype" ng-model="applicant.oResidence.oAddress.addrType" data-ng-change="resAddrTypeChange(applicant.oResidence.oAddress.addrType)"  select-required>
+						 <option value="" >Select Address Type</option>
 						<option value="OWNED-BUNGLOW">OWNED-BUNGLOW</option>
 						<option value="OWNED-CHAWL">OWNED-CHAWL</option>
 						<option value="OWNED-FLAT">OWNED-FLAT</option>
@@ -41,10 +42,11 @@
 			</div>
 			<div class="row clearfix">
 				<div class="col-md-12 cdl-height form-group">
-					<input type="text" ng-model="applicant.oResidence.oAddress.sAddress1" class="cdl-form-control inputMaterial" style="width: 93%" name="resAdd1" capitalize required/>
+					<input type="text" ng-model="applicant.oResidence.oAddress.sAddress1" class="cdl-form-control inputMaterial" style="width: 93%" ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/" name="resAdd1" capitalize required/>
 					<label>Address Line 1*</label>
 					<div ng-messages="addressData.resAdd1.$touched && addressData.resAdd1.$error" class="errorMsg">
 	   					<p ng-message="required">Please enter Address line 1</p>
+	   					<p ng-message="pattern">Please enter valid Address</p>
 					</div>
 				</div>
 			</div>
@@ -70,19 +72,22 @@
 				</div>
 				<div class="col-md-6 cdl-height form-group">
 					<div class="col-md-6" style="padding: 0px;">
-						<input type="text" class="cdl-form-control inputMaterial"
-							disabled="disabled" name="rescity" ng-model="applicant.oResidence.oAddress.sCity" required />
+						<input type="text" class="cdl-form-control inputMaterial" ng-disabled="true" ng-pattern="/^[A-Za-z]*$/"
+							 name="rescity" ng-model="applicant.oResidence.oAddress.sCity" required/>
 						<label style="left: 0px;">City*</label>
 						<div ng-messages="addressData.rescity.$touched && addressData.rescity.$error" class="errorMsg">
 		   					<p ng-message="required">Please provide City</p>
+		   					<p ng-message="pattern">Please enter valid characters</p>
 						</div>
 					</div>
 					<div class="col-md-6" style="padding: 0px;">
-						<input type="text" disabled="disabled"
-							class="cdl-form-control inputMaterial" ng-model="applicant.oResidence.oAddress.sState" name="resstate" required/>
+						<input type="text"
+							class="cdl-form-control inputMaterial" ng-model="applicant.oResidence.oAddress.sState" name="resstate" ng-disabled="true" ng-pattern="/^[A-Za-z ]*$/" required/>
+
 						<label class="margin_state" style="left: 15px;margin: 0px;">State*</label>
 						<div ng-messages="addressData.resstate.$touched && addressData.resstate.$error" class="errorMsg">
 		   					<p ng-message="required">Please provide State</p>
+		   					<p ng-message="pattern">Please enter valid characters</p>
 						</div>
 					</div>
 				</div>
@@ -111,7 +116,7 @@
 
 			<div class="row clearfix">
 				<div class="col-md-12 cdl-height form-group">
-					<input type="text" class="cdl-form-control inputMaterial" name="resemail" ng-model="applicant.oResidence.sEmail" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" style="width: 93%;" required/>
+					<input type="text" class="cdl-form-control inputMaterial" name="resemail" ng-model="applicant.oResidence.sEmail" ng-pattern="/^[a-zA-Z]+[a-zA-Z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" style="width: 93%;" required/>
 					<label>Email*</label>
 					<div ng-messages="addressData.resemail.$touched && addressData.resemail.$error" class="errorMsg">
 	   					<p ng-message="required">Please enter Email ID</p>
@@ -151,8 +156,8 @@
 				<div class="row clearfix" style="margin-top: 40px;">
 					<div class="col-md-6 cdl-height form-group">
 						<select class="cdl-form-control control-select inputMaterial"
-							ng-model="applicant.oPermanent.oAddress.addrType" name="peraddtype" select-required>
-							<option value="">Select	Address Type*</option>
+							ng-model="applicant.oPermanent.oAddress.addrType" data-ng-change="perAddrTypeChange(applicant.oPermanent.oAddress.addrType)" name="peraddtype" select-required>
+							<option value="">Select	Address Type</option>
 							<option value="OWNED-BUNGLOW">OWNED-BUNGLOW</option>
 							<option value="OWNED-CHAWL">OWNED-CHAWL</option>
 							<option value="OWNED-FLAT">OWNED-FLAT</option>
@@ -188,10 +193,11 @@
 				<div class="row clearfix">
 					<div class="col-md-12 cdl-height form-group">
 						<input type="text" ng-model="applicant.oPermanent.oAddress.sAddress1"
-							class="cdl-form-control inputMaterial" name="peradd1" style="width: 93%;" capitalize  required/>
+							class="cdl-form-control inputMaterial" name="peradd1"  ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/"  style="width: 93%;" capitalize  required/>
 						<label>Address Line 1*</label>
 						<div ng-messages="addressData.peradd1.$touched && addressData.peradd1.$error" class="errorMsg">
 			   					<p ng-message="required">Please enter Address line 1</p>
+			   					<p ng-message="pattern">Please enter valid Address</p>
 						</div>
 					</div>
 				</div>
@@ -218,18 +224,21 @@
 					</div>
 					<div class="col-md-6 cdl-height form-group">
 						<div class="col-md-6" style="padding: 0px;">
-							<input type="text" class="cdl-form-control inputMaterial city" ng-model="applicant.oPermanent.oAddress.sCity"
-								disabled="disabled" name="percity" required/>
+							<input type="text" class="cdl-form-control inputMaterial city" ng-disabled="true" ng-model="applicant.oPermanent.oAddress.sCity" 
+								ng-pattern="/^[A-Za-z]*$/" name="percity" required/>
 							<label style="left: 0px;">City*</label>
 							<div ng-messages="addressData.percity.$touched && addressData.percity.$error" class="errorMsg">
 			   					<p ng-message="required">Please enter City</p>
+			   					<p ng-message="pattern">Please enter valid characters</p>
 							</div>
 						</div>
 						<div class="col-md-6" style="padding: 0px;">
-							<input type="text" class="cdl-form-control inputMaterial state" ng-model="applicant.oPermanent.oAddress.sState" name="perstate" disabled="disabled" required/>
+							<input type="text" class="cdl-form-control inputMaterial state" ng-model="applicant.oPermanent.oAddress.sState" name="perstate" ng-disabled="true" ng-pattern="/^[A-Za-z ]*$/" required/>
+
 							<label class="margin_state" style="left: 15px;margin: 0px;">State*</label>
 							<div ng-messages="addressData.perstate.$touched && addressData.perstate.$error" class="errorMsg">
 			   					<p ng-message="required">Please enter State</p>
+			   					<p ng-message="pattern">Please enter valid characters</p>
 							</div>
 						</div>
 					</div>
@@ -254,7 +263,7 @@
 				</div>
 				<div class="row clearfix">
 					<div class="col-md-12 cdl-height form-group">
-						<input type="text" class="cdl-form-control inputMaterial" name="peremail" ng-model="applicant.oPermanent.sEmail" style="width: 93%;" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required/>
+						<input type="text" class="cdl-form-control inputMaterial" name="peremail" ng-model="applicant.oPermanent.sEmail" style="width: 93%;" ng-pattern="/^[a-zA-Z]+[a-zA-Z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required/>
 						<label>Email*</label>
 						<div ng-messages="addressData.peremail.$touched && addressData.peremail.$error" class="errorMsg">
 		   					<p ng-message="required">Please enter Email ID</p>

@@ -45,7 +45,7 @@
 					"sAppSource" : "WEB",
 					"sDsaId":user.username,
 					"sAppID": "",
-					"sSourceID":"",
+					"sSourceID":"GONOGO_HDBFS",
 					"sInstID":user.institutionID
 				}
 			};

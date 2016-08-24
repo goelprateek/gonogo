@@ -284,15 +284,7 @@
 							"sLastName":$scope.basicInfo.lastName,
 							"sMiddleName":$scope.basicInfo.middleName
 						},
-						"aKycDocs":[
-							{
-								"sKycName":"PAN",
-								"sKycNumber":$scope.basicInfo.panNumber
-							},{
-								"sKycName":"AADHAAR",
-								"sKycNumber":$scope.basicInfo.aadhaarNumber
-							}
-						],
+						"aKycDocs":[],
 						"bMobVer":$scope.basicInfo.isMobileVerfied,
 						"sApplID":"APPLICANT_1"
 					},
@@ -309,6 +301,20 @@
 					}
 				}
 			};
+
+			if($scope.basicInfo.panNumber){
+				requestObject.oReq.oApplicant.aKycDocs.push({
+					"sKycName":"PAN",
+					"sKycNumber":$scope.basicInfo.panNumber
+				});
+			}
+
+			if($scope.basicInfo.aadhaarNumber){
+				requestObject.oReq.oApplicant.aKycDocs.push({
+					"sKycName":"AADHAAR",
+					"sKycNumber":$scope.basicInfo.panNumber
+				});
+			}
 
 			var url  = "submit-application/step1";
 			var json = JSON.stringify(requestObject);
