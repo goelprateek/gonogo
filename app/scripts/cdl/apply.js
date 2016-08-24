@@ -107,6 +107,19 @@
         	$scope.$emit('onSuccessfulLogin');
    		}
 
+   		$scope.suspectedActivities = ["Refer to Credit","Suspected Fraud","Confirmed Fraud"].map(function(activity){
+   			return {view : activity}
+   		}),
+   		$scope.genders = ["Male" , "Female"].map(function(gender){
+   			return {view:gender};
+   		}),
+   		$scope.qualifications = ["DOCTORATE","GRADUATE","POST-GRADUATE","PROFESSIONAL","UNDER GRADUATE","OTHERS"].map(function(qualification){
+   			return {view:qualification}
+   		}),
+   		$scope.maritalStat = ["Single","Married"].map(function(status){
+   			return {view:status};
+   		})
+
     	// Start : If from step 1 screen
 		if(sharedService.getRefID()){
 			$scope.referenceID=sharedService.getRefID();
@@ -910,7 +923,7 @@ $(".next").click(function() {
 	$rootScope.errHead="";
 	$rootScope.errorMsg="";
 	
-	var bool =  validation();
+	//var bool =  validation();
 
 	//Hard Coded //
 	//bool=true;
@@ -1671,11 +1684,12 @@ $scope.submitApplication=function(UrlKey)
 		}
 
 		$scope.serviceHitCount=$scope.serviceHitCount+1;
-		if($scope.serviceHitCount<=3)
-			{
+		
+		if($scope.serviceHitCount<=3) {
+		
 			$scope.submitApplication();
-			}
-		else{
+		
+		}else{
 			$scope.serviceHitCount=1;
 			//$scope.error="Sorry we can not process your Submit request";
 			notifier.logError("We are unable to submit your request, please try again later");
@@ -1724,7 +1738,7 @@ function updateProgress() {
 	}
 }
 
-function validation()
+/*function validation()
 {
 	var error =false;
 	var selectError=false;
@@ -1975,6 +1989,7 @@ function validation()
 	}
 	$scope.$apply();
 }
+*/
 
 /*$(document.body).on("change","#addressType",function(){
 	if($(this).val()== "RENTED" )

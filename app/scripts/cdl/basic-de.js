@@ -138,8 +138,12 @@
 		// 			"dLoanAmt":""
 		// 		},
 		// 		"sSuspAct":"No"
-		// 	}
+		// 	}	
 		// };
+
+		$scope.products = ["Consumer Durables"].map(function(product){
+			 return {view: product}
+		})
 
 		$scope.productType="";
 		$scope.dealerCode;
@@ -155,6 +159,8 @@
 			isMobileVerfied:false
 		};
 
+		$scope.generateOTP = 1;
+
 		var user=UserService.getCurrentUser();
 
 		if(localStorage.getItem('CURRENT_DEALER')){
@@ -167,7 +173,7 @@
 		}
 
 		$scope.clickEvent = function(type){
-			if($scope.basicInfo.aadhaarNumber!='' || $scope.basicInfo.panNumber!=''){
+			if($scope.basicInfo.aadhaarNumber != '' || $scope.basicInfo.panNumber != ''){
 				switch (type) {
 				case "getOTP":
 					GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),
@@ -175,6 +181,7 @@
 									 GNG_GA.getConstAction("ACTION_CLICK_GET_OTP"),
 									 "Get OTP Button Clicked",1);
 					$scope.fetchOTP();
+					$scope.generateOTP = 0;
 					$scope.shwVerify=true;
 					break;
 

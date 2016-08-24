@@ -1,9 +1,11 @@
-<form id="kyccontainer" name="personalData" novalidate accessible-form>
+<form id="kyccontainer" name="personalData" novalidate autocomplete="off" >
 	<div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true}">
 		<div class="row clearfix ">
 			<div class="col-md-10 col-md-offset-1">
 				<div class="row clearfix" style="margin-bottom: 40px;">
+					
 					<help style="display:block;margin:15px;">Applicant Photo</help>
+					
 					<div class="preview" ng-if="!profileImage" ng-style="{'background-image':'url('+selectImgInit+')'}" style="width: 17%; height: 113px; margin-left: 3%">
 						<input id="addrIP" type="file" ng-model="addrIP" ngf-select="onselectImg($files,'APPLICANT-PHOTO')" />
 						<label for="addrIP" ng-hide="selectImgInit" style="display: block;">
@@ -17,7 +19,79 @@
 						<a class="remove_image" ng-show="selectImgInit || profileImage" ng-click="remove_file('APPLICANT-PHOTO','0',selectImgInit)">Remove</a>
 					</div>
 				</div>
-				<div class="row clearfix">
+
+
+				<div layout-gt-sm="row">
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Suspected Activity</label>
+						<md-select ng-model="applicant.suspected" name="suspected"> <!--md-on-close: expression; multiple:boolean; placeholder: string;-->
+						  <md-option ng-repeat="suspectedActivity in suspectedActivities" value="{{suspectedActivity.view}}">	{{ suspectedActivity.view }}
+						  </md-option>
+						</md-select>
+					</md-input-container>
+				</div>
+
+				<div layout-gt-sm="row">
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Credit Card No</label>
+						<input  name="credit"  ng-model="applicant.creditCard" md-maxlength="6" only-digits>
+						<div ng-messages="personalData.credit.$error" >
+		   					<div ng-message="onlydigits">Please enter only digits</div>
+						</div>
+					</md-input-container>
+
+					<div flex="5" hide-xs hide-sm></div>
+
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Gender</label>
+						<md-radio-group ng-model="applicant.gender" layout="row" style="margin-left:80px;" >
+					      <md-radio-button value="{{gender.view}}" class="md-primary" ng-repeat=" gender in genders">
+					      	{{gender.view}}
+					      </md-radio-button>
+					    </md-radio-group>
+				    </md-input-container>
+				</div>
+
+				<div layout-gt-sm="row">
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Education Qualification</label>
+						<md-select name="education"  ng-model="applicant.education" select-required>
+						  <md-option ng-value="qualification.view" ng-repeat="qualification in qualifications">
+						  	{{ qualification.view }}
+						  </md-option>
+						</md-select>
+						<div ng-messages="personalData.education.$error" >
+							<div ng-message="selectrequired">Please select Qualification </div>
+						</div>
+					</md-input-container>
+					
+					<div flex="5" hide-xs hide-sm></div>
+					
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Marital Status</label>
+						<md-radio-group ng-model="applicant.maritalStat" layout="row" style="margin-left:80px;" >
+					      <md-radio-button value="{{status.view}}" class="md-primary" ng-repeat=" status in maritalStat">
+					      	{{status.view}}
+					      </md-radio-button>
+					    </md-radio-group>
+					</md-input-container>
+				</div>
+
+				<div layout-gt-sm="row">
+					<md-input-container class="md-block" flex-gt-sm>
+			            <label>Date of Birth</label>
+			            <md-datepicker ng-model="applicant.dob" name="dob"></md-datepicker>
+			            <div ng-messages="personalData.dob.$error" class="errorMsg">
+						    <div ng-message="required">Please select date of birth </div>
+						</div>
+			        </md-input-container>
+
+			        <div flex="5" hide-xs hide-sm></div>
+
+
+			    </div>    
+
+				<!-- <div class="row clearfix">
 					<div class="col-md-6 cdl-height form-group">
 						<select class="cdl-form-control control-select inputMaterial" id="susPctdFrd" ng-model="applicant.suspected">
 							<option selected="selected" value="No">Refer to Credit</option>
@@ -26,13 +100,13 @@
 						</select>
 						<label>Suspected Activity</label>
 					</div>
-				</div>
+				</div> 
 				<div class="row clearfix">
 					<div class="col-md-6 cdl-height form-group">
 						<input type="text" id="cr" ng-model="applicant.creditCard"
 							class="cdl-form-control inputMaterial" name="credit" maxlength="6" only-digits/>
 						<label>Credit Card No</label>
-						<div ng-messages="personalData.credit.$touched && personalData.credit.$error" class="errorMsg">
+						<div ng-messages="personalData.$submitted && personalData.credit.$error" class="errorMsg">
 		   					<p ng-message="onlydigits">Please enter only digits</p>
 						</div>
 					</div>
@@ -47,10 +121,10 @@
 							</label>
 						</div>
 					</div>
-				</div>
+				</div>-->
 
-				<div class="row clearfix">
-					<div class="col-md-6 cdl-height form-group">
+				<!--<div class="row clearfix">
+					 <div class="col-md-6 cdl-height form-group">
 						<select class="cdl-form-control control-select inputMaterial" id="edu" ng-model="applicant.education" name="education" select-required>
 							<option value="">Select Qualification*</option>
 							<option value="DOCTORATE">DOCTORATE</option>
@@ -61,11 +135,11 @@
 							<option value="OTHERS">OTHERS</option>
 						</select>
 						<label>Education Qualification*</label>
-						<div ng-messages="personalData.education.$error" ng-show="personalData.education.$touched" class="errorMsg">
+						<div ng-messages="personalData.education.$error" ng-show="personalData.$submitted" class="errorMsg">
 							<p ng-message="selectrequired">Please select Qualification </p>
 						</div>
-					</div>
-					<!-- {{applicant.maritalStat}} -->
+					</div> 
+					
 					<div class="col-md-6 cdl-height form-group">
 						<div class="rc">
 							<label style="color: inherit;">Marital Status*</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -79,13 +153,13 @@
 							</label>
 						</div>
 					</div>
-				</div>
+				</div>-->
 
 				<div class="row clearfix">
 					<div class="col-md-6 cdl-height form-group">
 					 	<input type="text" name="dob" class="cdl-form-control inputMaterial"  ng-model="applicant.dob" ng-click="openDOBDialog()" uib-datepicker-popup="{{dobFormat}}" is-open="dobPopup.opened" datepicker-options="dateOptions" close-text="Close" ng-pattern="/^[0-9]{2}:[0-9]{2}:[0-9]{4}/i" readonly="true" required/> 
 					 	<label>Date of Birth*</label>
-					 	<div ng-messages="personalData.dob.$touched && personalData.dob.$error" class="errorMsg">
+					 	<div ng-messages="personalData.$submitted && personalData.dob.$error" class="errorMsg">
 						    <p ng-message="pattern">Please select valid date of birth</p>
 						    <p ng-message="required">Please select date of birth</p>
 						</div>
@@ -100,7 +174,7 @@
 							<option value="PRIVATE LIMITED COMPANY">PRIVATE LIMITED COMPANY</option>
 						</select>
 						<label>Constitution*</label>
-						<div ng-messages="personalData.constitution.$error" ng-show="personalData.constitution.$touched" class="errorMsg">
+						<div ng-messages="personalData.constitution.$error" ng-show="personalData.$submitted" class="errorMsg">
 							<p ng-message="selectrequired">Please select Constitution </p>
 						</div>
 					</div>
@@ -119,7 +193,7 @@
 							<i class="fa fa-rupee irupee custom_symbol_rupee"></i>
 							<input type="text" class="cdl-form-control inputMaterial" name="loanamt" ng-model="applicant.application.loanAmt" maxlength="12" style="padding-left: 4%" rupees required />
 							<label>Loan Amount*</label>
-							<div ng-messages="personalData.loanamt.$error" ng-show="personalData.loanamt.$touched" class="errorMsg">
+							<div ng-messages="personalData.loanamt.$error" ng-show="personalData.$submitted" class="errorMsg">
 							    <p ng-message="required">Please enter Loan Amount</p>
 							</div>
 						</div>
@@ -127,7 +201,7 @@
 					<div class="col-md-6 cdl-height form-group">
 						<input type="text" name="tenor" class="cdl-form-control inputMaterial" ng-model="applicant.application.tenor" maxlength="3" only-digits required />
 						<label>Tenor in Months*</label>
-						<div ng-messages="personalData.tenor.$touched && personalData.tenor.$error" class="errorMsg">
+						<div ng-messages="personalData.$submitted && personalData.tenor.$error" class="errorMsg">
 							<p ng-message="required">Please enter Tenor</p>
 						</div>
 					</div>

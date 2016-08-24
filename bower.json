@@ -49,9 +49,9 @@
     }
   },
   "ladda": {
-          "main": [
-              "dist/ladda-themeless.min.css"
-          ]
+    "main": [
+      "dist/ladda-themeless.min.css"
+    ]
   },
   "resolutions": {
     "angular": "^1.5.7"

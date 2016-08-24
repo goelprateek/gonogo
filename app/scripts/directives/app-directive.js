@@ -245,19 +245,12 @@
 				}
 			};
 
-			$scope.onselectImg = function($files,item) 
-			{
-				//console.log("inside file select"+type+" file:"+$files[0].name);
-				//alert("Hello");
+			$scope.onselectImg = function($files,item) {
 				var img_type ='';
-				for (var i = 0; i < $files.length; i++) 
-				{
+				for (var i = 0; i < $files.length; i++){
 					var fname=$files[0].name;
-	// 				countimg++;
-	//		    	var re = (/\.(gif|jpg|jpeg|tiff|png)$/i);
 			    	var re = (/\.(jpg)$/i);
-					if(!re.exec(fname))
-			    	{
+					if(!re.exec(fname)){
 				    	alert("Sorry..!! We can not upload your image. \n Only .Jpg images are allowed");
 				    	break;
 			    	}
@@ -507,7 +500,36 @@
 	            });
 	        }
 	    };
-	});
+	}),
+
+	app.directive("validateForm", ["$parse", function($parse){
+		return {
+			 post: function postLink(scope, element, iAttrs, controller) {
+                    var form = element.controller('form');
+                    form.$submitted = false;
+                    var fn = $parse(iAttrs.validateForm);
+                    element.on('submit', function(event) {
+                        scope.$apply(function() {
+                            element.addClass('ng-submitted');
+                            form.$submitted = true;
+                            if(form.$valid) {
+                                fn(scope, {$event:event});
+                            }
+                        });
+                    });
+                    scope.$watch(function() { return form.$valid}, function(isValid) {
+                        if(form.$submitted == false) return;
+                        if(isValid) {
+                            element.removeClass('has-error').addClass('has-success');
+                        } else {
+                            element.removeClass('has-success');
+                            element.addClass('has-error');
+                        }
+                        element.focus();
+                    });
+            }
+		};
+	}]),
 
 	app.directive('thisEarlierThan', function () {
 		return {
@@ -559,5 +581,64 @@
 				};
 			}
 		};
+	}),
+
+	app.directive("requiredAny",function(){
+	    var groups = {};
+
+	    function determineIfRequired(groupName) {
+	        var group = groups[groupName];
+	        if (!group) return false;
+
+	        var keys = Object.keys(group);
+	        return keys.every(function (key) {
+	            return (key === 'isRequired') || !group[key];
+	        });
+	    }
+
+	    return {
+	        restrict: 'A',
+	        require: '?ngModel',
+	        scope: {},
+	        link: function postLink(scope, elem, attrs, modelCtrl) {
+	            if (!modelCtrl || !attrs.requiredAny) return;
+
+	            var groupName = attrs.requiredAny;
+	            if (groups[groupName] === undefined) {
+	                groups[groupName] = {isRequired: true};
+	            }
+	            var group = scope.group = groups[groupName];
+
+	            scope.$on('$destroy', function () {
+	                delete(group[scope.$id]);
+	                if (Object.keys(group).length <= 1) {
+	                    delete(groups[groupName]);
+	                }
+	            });
+
+	            function updateValidity() {
+	                if (group.isRequired) {
+	                    modelCtrl.$setValidity('required', false);
+	                } else {
+	                    modelCtrl.$setValidity('required', true);
+	                }
+	            }
+
+	            function validate(value) {
+	                group[scope.$id] = !modelCtrl.$isEmpty(value);
+	                group.isRequired = determineIfRequired(groupName);
+	                updateValidity();
+	                return group.isRequired ? undefined : value;
+	            };
+
+	            modelCtrl.$formatters.push(validate);
+	            modelCtrl.$parsers.unshift(validate);
+	            scope.$watch('group.isRequired', updateValidity);
+	        }
+	    };
+		
 	});
+
+
+
 }).call(this);
