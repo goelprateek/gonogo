@@ -667,7 +667,7 @@
 //		}
 //	}
 	
-$scope.clickEvent = function(type)
+/*$scope.clickEvent = function(type)
 {
 	switch (type) {
 	case "anotherAsset":
@@ -676,7 +676,7 @@ $scope.clickEvent = function(type)
 				dom.find("legend ").text("Asset "+lcount);
 				$("#assetContainer").children(" :last").after(dom);
 				break;
-	/*case "Applicant":
+	case "Applicant":
 				$("fieldset").css({"transform":"initial","opacity":"initial"});
 				$("#coApplicantArray").hide();
 				$("#kyccontainer").show();
@@ -684,16 +684,16 @@ $scope.clickEvent = function(type)
 				var display =$("#coApplicantArray").css("display");
 			//	console.log("display css="+display);
 				refreshPLst();
-				break;*/
-	/*case "addAddress":
+				break;
+	case "addAddress":
 			$("#PermanentAddressContainer").toggle();
 			break;
 	case "moreReference":
 			$("#reference2").toggle();
-			break;*/
+			break;
 
 	}
-};
+};*/
 
 $scope.onChanged=function(type,val)
 { //console.log(val);
@@ -769,7 +769,7 @@ $scope.stateChanged = function (val){
 				$scope.applicant.oPermanent="";
 		}
 	}
-
+/*
 $("#residenceAddr input,#residenceAddr select").on("change paste keyup", function() {
 	if($scope.same==true)
 	{	var id = $(this).attr("id");
@@ -786,7 +786,7 @@ $("#residenceAddr input,#residenceAddr select").on("change paste keyup", functio
 		if(val.length>0)
 			$(this).siblings("help").show();
 	}		
-});
+});*/
 // auto bind values to permanent address
 //$scope.prmnt_addressType=$scope.same==true?$scope.prmnt_addressType:'';
 // $scope.prmnt_rent=
@@ -803,7 +803,7 @@ $("#residenceAddr input,#residenceAddr select").on("change paste keyup", functio
 //$scope.prmnt_pertadd
 //$scope.prmnt_mcity
 
-$(document.body).on("focusin","input[type='text']",function(e){
+/*$(document.body).on("focusin","input[type='text']",function(e){
 	$(this).css("border-color", "#24a1ed");
 	$(this).siblings("help").css({"color": "#24a1ed","display":"inline"});
 	$(this).attr("placeholder","");
@@ -820,7 +820,7 @@ if($(this).val() =="")
 	$(this).attr("placeholder",text);
 	}
 });
-
+*/
 /*$(document.body).on("keyup change","#wrkpin ,#perpin, #prmnt_perpin",function(e)
 {	
 //			console.log("Keyup working ");
@@ -900,15 +900,15 @@ $scope.pinService = function(pin,id){
 }
 
 // <!-------------------cursor move to next an prev
-$('input[type="password"]').keyup(function(e) {
+/*$('input[type="password"]').keyup(function(e) {
 	if (e.keyCode != 8) {
 		$(this).next().focus();
 	} else if (e.keyCode == 8) {
 		$(this).prev().focus();
 	}
-});
+});*/
 
-$(".next").click(function() {
+/*$(".next").click(function() {
 //	changees
 	$rootScope.errHead="";
 	$rootScope.errorMsg="";
@@ -960,9 +960,9 @@ $(".next").click(function() {
 		}
 	}
 	$scope.$apply();
-});
+});*/
 
-$(".previous").click(function() {
+/*$(".previous").click(function() {
 	if(animating)
 		return false;
 	var  animating = true;
@@ -992,17 +992,15 @@ $(".previous").click(function() {
 			}
 		});
 	$scope.$apply();
-});
+});*/
 
 // var countimg=0;
 $scope.onselectImg = function($files,type,index) 
-{           //console.log("inside file select"+type+" file:"+$files[0].name);
-			//alert("Hello");
+{        
 			var img_type ='';
 			for (var i = 0; i < $files.length; i++) 
 			{    	
 				var fname=$files[0].name;
-// countimg++;
 //		    	var re = (/\.(gif|jpg|jpeg|tiff|png)$/i);
 		    	var re = (/\.(jpg)$/i);
 				if(!re.exec(fname))
@@ -1161,7 +1159,6 @@ $scope.onselectImg = function($files,type,index)
 
 function UploadAllImgs(Ref,array,callType)
 {
-	// console.log("upload Image array :"+array.length);
 	for(var i=0 ; i<array.length ; i++){
 		var json ={
 				  "oHeader": {
@@ -1170,42 +1167,39 @@ function UploadAllImgs(Ref,array,callType)
 				  },
 				  "sRefID": Ref,
 				  "oUpldDtl": {
-				    "sFileID": "1", // ask yogesh
+				    "sFileID": "1", 
 				    "sFileName": array[i].kyc_name,
 				    "sFileType": array[i].type,
 				    "sfileData": array[i].image,
-				    "sStat": "", // ask yogesh
-				    "sReason": "" // ask yogesh
+				    "sStat": "", 
+				    "sReason": "" 
 				  }
 				};
 //		console.log("image JSon : "+JSON.stringify(json));
 		uploadImage(json,callType);		
 	}
-	if(callType=="ipa")
-		{
+	if(callType=="ipa"){
 		 $rootScope.errHead="Submit";
 	     $rootScope.errorMsg="Your application has been succesfully completed.";
-		}
+	}
 }
 
 function uploadImage(json,callType)
-{	$http({
+{	
+	$http({
 			method : 'POST',
 			url : APP_CONST.getConst('BASE_URL_GNG')+'upload-image',
 			data : json,
 			headers : {'Content-Type' : 'application/json'}
-		}).success(function(Response) 
-		{ if(Response.sStatus == 'SUCCESS')
-			{
+		}).success(function(Response){
+			 if(Response.sStatus == 'SUCCESS'){
 //				console.log("response for-"+JSON.stringify(Response));				
 			}
 		}).error(function(error) {
 			$scope.serviceHitCount=$scope.serviceHitCount+1;
-			if($scope.serviceHitCount<=3)
-				{
+			if($scope.serviceHitCount<=3){
 				  uploadImage(json,callType);
-				}
-			else{
+			}else{
 				$scope.serviceHitCount=1;
 				$scope.error="Sorry we can not process your PAN request";
 			}	
@@ -1773,7 +1767,7 @@ $scope.submitApplication=function(UrlKey)
 	}
 }*/
 
-function validation()
+/*function validation()
 {
 	var error =false;
 	var selectError=false;
@@ -2023,7 +2017,7 @@ function validation()
 		return true;
 	}
 	$scope.$apply();
-}
+}*/
 
 /*$(document.body).on("change","#addressType",function(){
 	if($(this).val()== "RENTED" )
@@ -2090,7 +2084,7 @@ $scope.remove_file = function(filetype, id, index) {
 			$scope.otherPresent=false;
 		}
 		else if(id == 0){	
-				$scope.selectImgInit = "";
+				$scope.selectImgInit = true;
 				$("#selectImgInit").attr("src","");
 				$scope.profileImage=false;
 		}
@@ -2423,13 +2417,11 @@ $scope.getEmployerNames=function(queryStr){
 		$scope.openDOBDialog=function(){
 
 			if(!$scope.applicant.dob){
-				console.log("DOB Dialog Opened");
 		 		var defaultDate = new Date();
 		 		defaultDate.setFullYear(defaultDate.getFullYear()-25);
 
 		 		$scope.applicant.dob=defaultDate;
 			}
-			console.log($scope.applicant.dob);
 
 			$scope.dobPopup.opened = true;			
 		};
@@ -2477,6 +2469,7 @@ $scope.getEmployerNames=function(queryStr){
 		}
 
 		$scope.resAddrTypeChange = function(type){
+			console.log(type);
 			if(type.indexOf('RENTED') != -1){ 
 				$scope.applicant.oResidence.oAddress.dRentPerMonth = "";
 			}
@@ -2487,5 +2480,7 @@ $scope.getEmployerNames=function(queryStr){
 				$scope.applicant.oPermanent.oAddress.dRentPerMonth = "";
 			}
 		}
+
+		//$scope.addressTypeoption = SelectArrays.getResidenceTypes();
 	}]);
 }).call(this);
