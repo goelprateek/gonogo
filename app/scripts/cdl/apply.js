@@ -505,7 +505,7 @@
 			// }
 		//				$scope.dealerObj=JSON.parse($scope.dealerObj);
 		}
-		$("input,select").siblings("help").css({"color": "#777777","display":"inline"});
+	//	$("input,select").siblings("help").css({"color": "#777777","display":"inline"});
 			// } // End of DE stage
 // 			else if(currentStage=="DCLN")
 // 			{
@@ -654,17 +654,17 @@
 	var lcount=1;
 	$scope.verifyMob=true;
 	$scope.verif=true;
-	$("form").trigger("reset");
+	/*$("form").trigger("reset");
 	$("input").each(function(){
 		$(this).attr("autocomplete","off");
-	});
+	});*/
 	
-	var top=$(window).height()-$(".header").height()-$(".footer").height();
+/*	var top=$(window).height()-$(".header").height()-$(".footer").height();
 	$("#msgContainer").css("top",top);
 	var containerHeight=top-150;
 	$(".getheight").css("height",containerHeight-35+"px");
 	$("#progressDiv").css("height",containerHeight+20);
-	
+	*/
 	/*$('#dob').datepicker({
 		changeMonth: true, changeYear: true, yearRange: "1945:1997", dateFormat: 'dd:mm:yy',
 		defaultDate:'01:01:1985',
