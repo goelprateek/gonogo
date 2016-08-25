@@ -23,18 +23,18 @@
 			sharedService.setApplicationData(null);
 		}
 
+		if(sharedService.getRefID()){
+			$scope.referenceID=sharedService.getRefID();
+			sharedService.setRefID(null);
+		}else{
+			$state.go("/cdl/basic-de");
+		}
+
 		if(sharedService.getApplicationStatus()){
 			$scope.statusObject=sharedService.getApplicationStatus();
 			sharedService.setApplicationStatus(null);
 		}else{
 			var user=UserService.getCurrentUser();
-
-			if(sharedService.getRefID()){
-				$scope.referenceID=sharedService.getRefID();
-				sharedService.setRefID(null);
-			}else{
-				$state.go("/cdl/basic-de");
-			}
 
 			var json={
 				"sRefID":$scope.referenceID,
