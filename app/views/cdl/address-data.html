@@ -53,12 +53,18 @@
 
 			<div class="row clearfix">
 				<div class="col-md-6 cdl-height form-group">
-					<input type="text" ng-model="applicant.oResidence.oAddress.sAddress2" class="cdl-form-control inputMaterial" capitalize />
+					<input type="text" ng-model="applicant.oResidence.oAddress.sAddress2" class="cdl-form-control inputMaterial" ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/" name="resAdd2" capitalize />
 					<label>Address Line 2</label>
+					<div ng-messages="addressData.resAdd2.$touched && addressData.resAdd2.$error" class="errorMsg">
+	   					<p ng-message="pattern">Please enter valid Address</p>
+					</div>
 				</div>
 				<div class="col-md-6 cdl-height form-group">
-					<input type="text" ng-model="applicant.oResidence.oAddress.sAddress3" class="cdl-form-control inputMaterial" capitalize />
+					<input type="text" ng-model="applicant.oResidence.oAddress.sAddress3" class="cdl-form-control inputMaterial" ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/" name="resAdd3" capitalize />
 					<label>Address Line 3</label>
+					<div ng-messages="addressData.resAdd3.$touched && addressData.resAdd3.$error" class="errorMsg">
+	   					<p ng-message="pattern">Please enter valid Address</p>
+					</div>
 				</div>
 			</div>
 
@@ -204,13 +210,19 @@
 				<div class="row clearfix">
 					<div class="col-md-6 cdl-height form-group">
 						<input type="text" ng-model="applicant.oPermanent.oAddress.sAddress2"
-							class="cdl-form-control inputMaterial" capitalize />
+							class="cdl-form-control inputMaterial" name="peradd2"  ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/" capitalize />
 						<label>Address Line 2</label>
+						<div ng-messages="addressData.peradd2.$touched && addressData.peradd2.$error" class="errorMsg">
+			   					<p ng-message="pattern">Please enter valid Address</p>
+						</div>
 					</div>
 					<div class="col-md-6 cdl-height form-group">
 						<input type="text" ng-model="applicant.oPermanent.oAddress.sAddress3"
-							class="cdl-form-control inputMaterial" capitalize />
+							class="cdl-form-control inputMaterial" name="peradd3"  ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/" capitalize />
 						<label>Address Line 3</label>
+						<div ng-messages="addressData.peradd3.$touched && addressData.peradd3.$error" class="errorMsg">
+			   					<p ng-message="pattern">Please enter valid Address</p>
+						</div>
 					</div>
 				</div>
 
