@@ -305,7 +305,7 @@
 			if($scope.basicInfo.aadhaarNumber){
 				requestObject.oReq.oApplicant.aKycDocs.push({
 					"sKycName":"AADHAAR",
-					"sKycNumber":$scope.basicInfo.panNumber
+					"sKycNumber":$scope.basicInfo.aadhaarNumber
 				});
 			}
 

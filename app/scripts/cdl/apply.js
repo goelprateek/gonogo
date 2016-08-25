@@ -319,7 +319,7 @@
 
 				//TODO
 				$scope.referenceID=CustID;
-//							console.log("Rquired:"+Response.oReq.sSuspAct +"and"+mApplicant.sCreditCardNum);
+//				console.log("Rquired:"+Response.oReq.sSuspAct +"and"+mApplicant.sCreditCardNum);
 				$scope.applicant.suspected=(!Response.oReq.sSuspAct) ? "No" : Response.oReq.sSuspAct;
 				$scope.applicant.creditCard=mApplicant.sCreditCardNum;
 
@@ -412,8 +412,8 @@
 
 				//$scope.dealerObj.name =Response.oHeader.sDealerId;
 				//$scope.dealerObj.name =Response.oHeader.sDealerId;
-//							console.log("Again check :"+Response.oReq.oApplication.aAssetDetail[0].sAssetCtg);
-//							$("#dlr").val($scope.dealerObj.DEALER_NAME);
+//				console.log("Again check :"+Response.oReq.oApplication.aAssetDetail[0].sAssetCtg);
+//				$("#dlr").val($scope.dealerObj.DEALER_NAME);
 
 				var assetDetails=Response.oReq.oApplication.aAssetDetail;
 
@@ -644,16 +644,16 @@
 	var img_array=[];
 	var addkyc_array=[];
 
-	$scope.mstatus="Single"
-	$scope.gender="Male";
-	$scope.Accommodation = "";
-	$scope.Salaried = "Salaried";
-	$scope.emiDebited = "Yes";
+	// $scope.mstatus="Single"
+	// $scope.gender="Male";
+	// $scope.Accommodation = "";
+	// $scope.Salaried = "Salaried";
+	// $scope.emiDebited = "Yes";
 	$scope.selectImg ="";
 	$scope.selectImg2 ="";
 	$scope.selectImg3="";
 	$scope.address="";
-	$scope.object={};
+	// $scope.object={};
 	var lcount=1;
 	$scope.verifyMob=true;
 	$scope.verif=true;
@@ -662,11 +662,11 @@
 		$(this).attr("autocomplete","off");
 	});
 	
-	var top=$(window).height()-$(".header").height()-$(".footer").height();
-	$("#msgContainer").css("top",top);
-	var containerHeight=top-150;
-	$(".getheight").css("height",containerHeight-35+"px");
-	$("#progressDiv").css("height",containerHeight+20);
+	// var top=$(window).height()-$(".header").height()-$(".footer").height();
+	// $("#msgContainer").css("top",top);
+	// var containerHeight=top-150;
+	// $(".getheight").css("height",containerHeight-35+"px");
+	// $("#progressDiv").css("height",containerHeight+20);
 	
 	/*$('#dob').datepicker({
 		changeMonth: true, changeYear: true, yearRange: "1945:1997", dateFormat: 'dd:mm:yy',
@@ -874,69 +874,32 @@ if($(this).val() =="")
 $scope.pinService = function(pin,id){
 	if(pin.length == 6){
 		var pinJson ={"oHeader":{"sInstID":user.institutionID},"sQuery":pin}; 
-		$http({
-			method : 'POST',
-			url : APP_CONST.getConst('BASE_URL_GNG')+'pincode-details-web',
-			data : pinJson,
-			headers : {'Content-Type' : 'application/json'}
-		}).success(function(Response) 
-		{		
-			if( id =="perpin")
+
+		RestService.saveToServer('pincode-details-web', pinJson).then(function(successResponse){
+			if(successResponse){
+				if( id =="perpin")
 				{
-					$scope.pcty =Response.sCity;
-					/*$("#percity").val(Response.sCity).prop("disabled","true").siblings("help").show();
-					$("#perstate").val(Response.sState).prop("disabled","true").siblings("help").show();
-					*/
-					$scope.applicant.oResidence.oAddress.sCity = Response.sCity;
-					$scope.applicant.oResidence.oAddress.sState = Response.sState;
+					$scope.applicant.oResidence.oAddress.sCity = successResponse.sCity;
+					$scope.applicant.oResidence.oAddress.sState = successResponse.sState;
 				}
 				else if(id =="wrkpin")
 				{
-					/*$("#wrkcity").val(Response.sCity).prop("disabled","true").siblings("help").show();
-					$("#wrkstate").val(Response.sState).prop("disabled","true").siblings("help").show();
-					*///sayali
-					$scope.applicant.empl.emplCity = Response.sCity;
-					$scope.applicant.empl.emplState = Response.sState;
+					$scope.applicant.empl.emplCity = successResponse.sCity;
+					$scope.applicant.empl.emplState = successResponse.sState;
 
 				}else if(id =="prmnt_perpin")
 				{
-					/*$("#prmnt_percity").val(Response.sCity).prop("disabled","true").siblings("help").show();
-					$("#prmnt_perstate").val(Response.sState).prop("disabled","true").siblings("help").show();
-					*/$scope.applicant.oPermanent.oAddress.sCity = Response.sCity;
-					$scope.applicant.oPermanent.oAddress.sState = Response.sState;
+					$scope.applicant.oPermanent.oAddress.sCity = successResponse.sCity;
+					$scope.applicant.oPermanent.oAddress.sState = successResponse.sState;
 				}
-		}).error(function(error) {
-	//		$scope.error = 'Sorry ! ';
-			console.log("Pincode Service Error:");
-			console.log(error);
-			$scope.serviceHitCount=$scope.serviceHitCount+1;
-			if($scope.serviceHitCount<=3)
-				{
-				 $scope.pinService(pin,id);
-				}
-			else{
-				$scope.serviceHitCount=1;
-				$scope.error="Sorry we can not process your PAN request";
+			}else{
+				notifier.logError("Some error occured at server, please retry !");
 			}
-		});	
-	}else if(pin.length != 6){
-		if( id =="perpin")
-		{
-			$scope.applicant.oResidence.oAddress.sCity = "";
-			$scope.applicant.oResidence.oAddress.sState = "";
-		}
-		else if(id =="wrkpin")
-		{
-			$scope.applicant.empl.emplCity = "";
-			$scope.applicant.empl.emplState = "";
-
-		}else if(id =="prmnt_perpin")
-		{
-			$scope.applicant.oPermanent.oAddress.sCity = "";
-			$scope.applicant.oPermanent.oAddress.sState = "";
-		}
+		},function(failedResponse){
+			notifier.logError("Some error occured at server, please retry !");
+		});
 	}
-}
+};
 
 // <!-------------------cursor move to next an prev
 /*$('input[type="password"]').keyup(function(e) {
@@ -1712,29 +1675,41 @@ $scope.submitApplication=function(UrlKey)
 	$.extend($scope.object,$scope.reqst);
 	// console.log("submit json= "+JSON.stringify($scope.object));*/
 
- /* var json = {"oHeader":{"sAppID":"","sAppSource":"WEB:1.06.01","sCroId":"default","dtSubmit":1471340384072,"sDealerId":"25052","sDsaId":"HDBFS_DSA1@softcell.com","sInstID":"4019","sReqType":"JSON"},"sRefID":"25052000159","oReq":{"oApplicant":{"residenceAddSameAsAbove":true,"aAddr":[{"sLine1":"QWWEQEQWEW","sLine2":"GYGUUYIUYI","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"IIUIUYIUYIU","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411005","sAddrType":"RESIDENCE","sResAddrType":"RENTED-FLAT","iMonthAtCity":"99","dRentAmt":"21212121","iMonthAtAddr":"90","iTimeAtAddr":"","iYearAtCity":""},{"sLine1":"DFSFSDFSD","sLine2":"SDFFDSFSD","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"SDFDSFDSFSD","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411004","sAddrType":"OFFICE","sResAddrType":"","iMonthAtCity":"","dRentAmt":"","iMonthAtAddr":"","iTimeAtAddr":"","iYearAtCity":""},{"sLine1":"QWWEQEQWEW","sLine2":"GYGUUYIUYI","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"IIUIUYIUYIU","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411005","sAddrType":"PERMANENT","sResAddrType":"RENTED-FLAT","iMonthAtCity":"99","dRentAmt":"21212121","iMonthAtAddr":"90","iTimeAtAddr":"","iYearAtCity":""}],"sApplID":"APPLICANT_1","oApplName":{"sFirstName":"SAYALI","sLastName":"MADAN","sMiddleName":"MULAY","sPrefix":null,"sSuffix":null},"oApplRef":null,"aBankingDetails":null,"sCreditCardNum":"121212","sDob":"15061985","sEdu":"DOCTORATE","aEmail":[{"sEmailAddr":"askdhaks@sdjf.com","sEmailType":"PERSONAL"},{"sEmailAddr":"askdhaks@sdjf.com","sEmailType":"PERMANENT"},{"sEmailAddr":"so@dfsn.com","sEmailType":"WORK"}],"aEmpl":[{"sConst":"TRUST","sDtJoin":null,"sDtLeave":null,"sDesig":null,"sEmplrBr":null,"sEmplrCode":null,"sEmplName":"SOFTCELL TRADE AND TECHNOLOGIES LTD","sEmplType":"PROFESSIONAL","aLastMonthIncome":[],"sItrID":null,"iTmWithEmplr":"223","dGrossSal":0,"dmonthSal":"32432442","dItrAmt":0}],"oFatherName":null,"sApplGndr":"Female","oIncomeDetails":null,"oSpouseName":null,"aKycDocs":[{"sExpiryDate":null,"sIssueDate":null,"sKycName":"AADHAAR","sKycNumber":"254234523452","sKycStat":null}],"aLoanDetails":null,"sMarStat":"Single","sReligion":null,"aPhone":[{"phoneType":"PERSONAL_MOBILE","sPhoneType":"PERSONAL_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":"","sPhoneNumber":"2323123123"},{"phoneType":"PERSONAL_PHONE","sPhoneType":"PERSONAL_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"4545454545"},{"phoneType":"RESIDENCE_MOBILE","sPhoneType":"RESIDENCE_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":""},{"phoneType":"RESIDENCE_PHONE","sPhoneType":"RESIDENCE_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"4545454545"},{"phoneType":"OFFICE_PHONE","sPhoneType":"OFFICE_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"5454545454"},{"phoneType":"OFFICE_MOBILE","sPhoneType":"OFFICE_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":"","sPhoneNumber":"2131321313"}],"iEarnMem":0,"iFamilyMem":0,"iNoOfDep":0,"bMobVer":true,"sAdharVer":false,"bSameAbove":true,"iAge":0},"oApplication":{"sApID":null,"sAppliedFor":null,"aAssetDetail":[{"sAssetCtg":"WASHING MACHINE","sAssetMake":"HITACHI","sAssetModelMake":"","sDlrName":"SATHYA AGENCIES-SLM","sModelNo":"SF-80PJ3CINEM","sPrice":""}],"oProperty":null,"sLoanType":"Consumer Durables","dEmi":0,"dLoanAmt":"12121212","dMarginAmt":0,"iAdvEmi":0,"iLoanTenor":"121"},"aCoApplicant":null,"sSuspAct":"No"}};*/
+	/* var json = {"oHeader":{"sAppID":"","sAppSource":"WEB:1.06.01","sCroId":"default","dtSubmit":1471340384072,"sDealerId":"25052","sDsaId":"HDBFS_DSA1@softcell.com","sInstID":"4019","sReqType":"JSON"},"sRefID":"25052000159","oReq":{"oApplicant":{"residenceAddSameAsAbove":true,"aAddr":[{"sLine1":"QWWEQEQWEW","sLine2":"GYGUUYIUYI","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"IIUIUYIUYIU","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411005","sAddrType":"RESIDENCE","sResAddrType":"RENTED-FLAT","iMonthAtCity":"99","dRentAmt":"21212121","iMonthAtAddr":"90","iTimeAtAddr":"","iYearAtCity":""},{"sLine1":"DFSFSDFSD","sLine2":"SDFFDSFSD","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"SDFDSFDSFSD","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411004","sAddrType":"OFFICE","sResAddrType":"","iMonthAtCity":"","dRentAmt":"","iMonthAtAddr":"","iTimeAtAddr":"","iYearAtCity":""},{"sLine1":"QWWEQEQWEW","sLine2":"GYGUUYIUYI","sCity":"PUNE","sCountry":"India","sVillage":null,"sDistrict":null,"sLandMark":null,"sLine3":"IIUIUYIUYIU","sLine4":null,"sState":"MAHARASHTRA","fDistFrom":0,"iPinCode":"411005","sAddrType":"PERMANENT","sResAddrType":"RENTED-FLAT","iMonthAtCity":"99","dRentAmt":"21212121","iMonthAtAddr":"90","iTimeAtAddr":"","iYearAtCity":""}],"sApplID":"APPLICANT_1","oApplName":{"sFirstName":"SAYALI","sLastName":"MADAN","sMiddleName":"MULAY","sPrefix":null,"sSuffix":null},"oApplRef":null,"aBankingDetails":null,"sCreditCardNum":"121212","sDob":"15061985","sEdu":"DOCTORATE","aEmail":[{"sEmailAddr":"askdhaks@sdjf.com","sEmailType":"PERSONAL"},{"sEmailAddr":"askdhaks@sdjf.com","sEmailType":"PERMANENT"},{"sEmailAddr":"so@dfsn.com","sEmailType":"WORK"}],"aEmpl":[{"sConst":"TRUST","sDtJoin":null,"sDtLeave":null,"sDesig":null,"sEmplrBr":null,"sEmplrCode":null,"sEmplName":"SOFTCELL TRADE AND TECHNOLOGIES LTD","sEmplType":"PROFESSIONAL","aLastMonthIncome":[],"sItrID":null,"iTmWithEmplr":"223","dGrossSal":0,"dmonthSal":"32432442","dItrAmt":0}],"oFatherName":null,"sApplGndr":"Female","oIncomeDetails":null,"oSpouseName":null,"aKycDocs":[{"sExpiryDate":null,"sIssueDate":null,"sKycName":"AADHAAR","sKycNumber":"254234523452","sKycStat":null}],"aLoanDetails":null,"sMarStat":"Single","sReligion":null,"aPhone":[{"phoneType":"PERSONAL_MOBILE","sPhoneType":"PERSONAL_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":"","sPhoneNumber":"2323123123"},{"phoneType":"PERSONAL_PHONE","sPhoneType":"PERSONAL_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"4545454545"},{"phoneType":"RESIDENCE_MOBILE","sPhoneType":"RESIDENCE_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":""},{"phoneType":"RESIDENCE_PHONE","sPhoneType":"RESIDENCE_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"4545454545"},{"phoneType":"OFFICE_PHONE","sPhoneType":"OFFICE_PHONE","sAreaCode":"020","sCountryCode":"+91","sExt":"","sPhoneNumber":"5454545454"},{"phoneType":"OFFICE_MOBILE","sPhoneType":"OFFICE_MOBILE","sAreaCode":"","sCountryCode":"+91","sExt":"","sPhoneNumber":"2131321313"}],"iEarnMem":0,"iFamilyMem":0,"iNoOfDep":0,"bMobVer":true,"sAdharVer":false,"bSameAbove":true,"iAge":0},"oApplication":{"sApID":null,"sAppliedFor":null,"aAssetDetail":[{"sAssetCtg":"WASHING MACHINE","sAssetMake":"HITACHI","sAssetModelMake":"","sDlrName":"SATHYA AGENCIES-SLM","sModelNo":"SF-80PJ3CINEM","sPrice":""}],"oProperty":null,"sLoanType":"Consumer Durables","dEmi":0,"dLoanAmt":"12121212","dMarginAmt":0,"iAdvEmi":0,"iLoanTenor":"121"},"aCoApplicant":null,"sSuspAct":"No"}};*/
 
- 	//Hard Coded - Commented for testing 
+ 	//Validate image for step 4
+ 	var docImageFound=false;
+	for(var docIndex=0;docIndex<$scope.kycArray.length;docIndex++){
+		if(!$scope.kycArray[docIndex].isDefault){
+			docImageFound=true;
+			break;
+		}
+	}
 
-  	$http({
-		method : 'POST',
-		url : APP_CONST.getConst('BASE_URL_GNG')+'submit-application/'+UrlKey,
-		data :json,
-		headers : {'Content-Type':'application/json'}
-	}).success(function(data){
-		if(data && data.sStat==="SUCCESS"){
-			$scope.referenceID = data.sRefID;
+	if(!docImageFound && UrlKey === 'step4' && $scope.kycDocImages.length==0){
+		notifier.logWarning("Please select atleast 1 image to upload.");
+	}else{
+		RestService.saveToServer('submit-application/'+UrlKey, json).then(function(data){
+			if(data && data.sStat==="SUCCESS"){
+				$scope.referenceID = data.sRefID;
 
-			if(UrlKey=="step1"){
-				GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP1"),1,"submit-application","",data.sRefID);
-			}else if(UrlKey=="step4"){
+				if(UrlKey=="step1"){
+					GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP1"),1,"submit-application","",data.sRefID);
+				}else if(UrlKey=="step4"){
 
-				GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP4"),1,"submit-application","",data.sRefID);
+					GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP4"),1,"submit-application","",data.sRefID);
+				}
+
+				if(UrlKey=="step3"){
+					// $rootScope.errHead = "Status"
+					// $rootScope.errorMsg = "Data Saved Successfully.";
+					notifier.logSuccess("Data Saved Successfully.");
+				}
 
 				if($scope.kycDocImages.length!=0){
 					UploadImages.upload($scope.referenceID,$scope.kycDocImages).then(function(imageUploadedCount) {
 					  	$log.debug('Image upload Success, Total image uploaded : ' + imageUploadedCount);
-					  //	$scope.updateStatus();
+					  //$scope.updateStatus();
 					  //action to be taken when we get success from server
 
 					}, function(reason) {
@@ -1743,48 +1718,28 @@ $scope.submitApplication=function(UrlKey)
 
 					sharedService.setRefID($scope.referenceID);
 					$state.go('/cdl/result');
-				}else{
-					notifier.logWarning("Please select atleast 1 image to upload.");
 				}
+			}else{
+				notifier.logError("Some error occured while application submission, please try again.");
+			}
+		},function(failedResponse){
+			if(UrlKey=="step1"){
+				GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP1"),1,"submit-application","",data.sRefID);
+			}else if(UrlKey=="step4"){
+
+				GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP4"),1,"submit-application","",data.sRefID);
 			}
 
-			if(UrlKey=="step3"){
-				// $rootScope.errHead = "Status"
-				// $rootScope.errorMsg = "Data Saved Successfully.";
-				notifier.logSuccess("Data Saved Successfully.");
+			$scope.serviceHitCount=$scope.serviceHitCount+1;
+			if($scope.serviceHitCount<=3){
+				$scope.submitApplication(UrlKey);
+			}else{
+				$scope.serviceHitCount=1;
+				//$scope.error="Sorry we can not process your Submit request";
+				notifier.logError("We are unable to submit your request, please try again later");
 			}
-		}else{
-			notifier.logError("Some error occured while application submission, please try again.");
-		}
-
-		
-		//console.log("before upload:"+img_array.length);
-		//UploadAllImgs(data.sRefID,img_array,"submit");
-		
-
-		//$scope.REFID = data.sRefID;
-
-	}).error(function(data){
-
-		if(UrlKey=="step1"){
-			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP1"),1,"submit-application","",data.sRefID);
-		}else if(UrlKey=="step4"){
-
-			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP4"),1,"submit-application","",data.sRefID);
-		}
-
-		$scope.serviceHitCount=$scope.serviceHitCount+1;
-		if($scope.serviceHitCount<=3){
-			$scope.submitApplication();
-		}else{
-			$scope.serviceHitCount=1;
-			//$scope.error="Sorry we can not process your Submit request";
-			notifier.logError("We are unable to submit your request, please try again later");
-		}
-	});
-	
-	//Hard Coded - Commented for testing 
-
+		});
+	}
 };
 
 /*var timer = null, startTime = null;*/
@@ -2261,22 +2216,20 @@ $scope.remove_file = function(filetype, id, index) {
 // $scope.empService();
 // $scope.Employee=["Pune","allahabad","Hello","apply","Alpha","Beta","Gama"];
 
-$scope.getEmployerNames=function(queryStr){
-			var ojs={"oHeader":{"sInstID":user.institutionID},"sQuery":queryStr};
+	$scope.getEmployerNames=function(queryStr){
+		var ojs={"oHeader":{"sInstID":user.institutionID},"sQuery":queryStr};
 
-			return RestService.saveToServer("employer-master-details-web",ojs)
-			.then(function(data)
-			{
-				var map=data.map(function(item){					
-			        return item.sEmpName;
-		      	});
-				return data.map(function(item){
-			        return item.sEmpName;
-		      	});
- 			});
-		};
-
-
+		return RestService.saveToServer("employer-master-details-web",ojs)
+		.then(function(data)
+		{
+			var map=data.map(function(item){					
+		        return item.sEmpName;
+	      	});
+			return data.map(function(item){
+		        return item.sEmpName;
+	      	});
+		});
+	};
 
 // ****************************************** ASSET MODEL
 //$scope.modelTags = [];
@@ -2455,11 +2408,11 @@ $scope.getEmployerNames=function(queryStr){
 			}
 			return message;
 		}*/
-	  
+
 		// $(document.body).on("click","#homePG",function(){
 	 //    	location.reload();
 	 //  	});
-		  
+
 	  /*$scope.onSaveAssetClicked=function(){
 		  // $scope.mkVal = $scope.mk;
 		  // $scope.mdlVal = $scope.mdl;
@@ -2475,7 +2428,7 @@ $scope.getEmployerNames=function(queryStr){
 		//  $("#HoldStage").hide();
 		//  $("#resultPanel").show();
 	 // }
-	 
+
 	 	/* dob popup */		
 		$scope.openDOBDialog=function(){
 
@@ -2509,6 +2462,10 @@ $scope.getEmployerNames=function(queryStr){
 		};
 		/* End of dob popup */
 
+		$scope.cancelApplication = function(){
+			location.reload();
+		}
+
 		$scope.isCurrPanel = function(currentPage){
 			if(currentPage==$scope.currentPageNumber)
 				return true;
@@ -2518,18 +2475,11 @@ $scope.getEmployerNames=function(queryStr){
 			$state.go(previousURL);
 		};
 		$scope.onNextClicked=function(nextURL,isInvalid){
-			if(isInvalid){
-				angular.element('input.ng-invalid').first().focus();
-			}else{
-
+			if(!isInvalid){
 				$scope.currentPageNumber++;
 				$state.go(nextURL);
 			}
 		};
-
-		$scope.cancelApplication = function(){
-			location.reload();
-		}
 
 		$scope.resAddrTypeChange = function(type){
 			console.log(type);

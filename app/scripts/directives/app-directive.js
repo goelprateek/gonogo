@@ -300,7 +300,7 @@
 	});
 
 	app.directive('documentItem', function ($compile) {
-		var linker = function(scope, element, attrs) {
+		var linker = function(scope, element, attrs,form) {
 			// var template = '<div class="row clearfix" style="padding: 8px;">';
 			// template=template+'<label>{{item.doc}}</label>';
 			// template=template+'<div class="preview" id="{{item.index}}">';
@@ -311,13 +311,21 @@
 			// template=template+'<div style="height:20px;display:inline"><a class="remove_image" id="{{item.index}}remove" name="{{item.index}}" style="display:none" ng-click="onImageRemove(item)">Remove</a></div>';
 			// template=template+'</div>';
 
+			scope.form = form; //save parent form
+
 			var template =    ' <style>';
 			template=template+'		.doc-number{position:relative;bottom:0px;width:100%;left:0px;margin-top: 10px;border: none;border-bottom: 1px solid black;}';
 			template=template+'		.btn-delete-doc{position:absolute;bottom:10px;right:10px;}';
 			template=template+' </style>';
 		 	template=template+'	<div class="col-md-4" style="padding: 8px;margin-bottom:20px;">';
-	        template=template+'		<select class="form-control control-select" ng-model="item.docType"><option value="">Document Type</option><option ng-repeat="obj in arrDocTypes" value="{{obj}}">{{obj}}</option></select>';
-	        template=template+'		<input type="text" class="doc-number" ng-model="item.docNumber" capitalize placeholder="{{item.docType}} Number" />';
+	        template=template+'		<select class="form-control control-select" ng-model="item.docType" name="doc_type_{{item.index}}" select-required><option value="">Document Type</option><option ng-repeat="obj in arrDocTypes" value="{{obj}}">{{obj}}</option></select>';
+	        template=template+'		<div ng-messages="form[\'doc_type_\'+item.index].$touched && form[\'doc_type_\'+item.index].$error" class="errorMsg">';
+	        template=template+'			<p ng-message="selectrequired">Please select Document Type</p>';
+	        template=template+'		</div>';
+	        template=template+'		<input type="text" class="doc-number" name="doc_no_{{item.index}}" ng-model="item.docNumber" capitalize placeholder="{{item.docType}} Number" required/>';
+	        template=template+'		<div ng-messages="form[\'doc_no_\'+item.index].$touched && form[\'doc_no_\'+item.index].$error" class="errorMsg">';
+	        template=template+'			<p ng-message="required">Please enter Document Number</p>';
+	        template=template+'		</div>';
 	        template=template+'		<div class="upload-preview" id="{{item.index}}"  title="Click to select image.">';
 	        template=template+'			<input id="l{{item.index}}" name="l{{item.index}}" type="file" ngf-select="onselectImg($files,{{item}});" />';
 	        template=template+'			<label for="l{{item.index}}" id="{{item.index}}label" title="Click to select image." ng-class="{\'upload-default\': item.isDefault,\'upload-preview\': !item.isDefault}" ng-style="item.style">';
@@ -397,6 +405,7 @@
 				item: "=",
 				removeKycDoc:"&"
 			},
+			require:"^form",
 			controller : _controller
 		};
 	});
