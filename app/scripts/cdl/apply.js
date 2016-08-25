@@ -2,99 +2,16 @@
 	'use strict';
 	var app = angular.module('gonogo.cdl');
 
-	/*app.service("ApplyObject",function(){
-    	var _obj = {
-	        "suspected": "No",
-	        "creditCard": "",
-	        "gender": "Male",
-	        "education": "",
-	        "maritalStat":"Single",
-	        "dob":"",
-	        "constitution":"",
-	        "sameAbove":false,
-	        "application":{
-	        	"loanType":"Consumer Durables",
-	        	"loanAmt":"",
-	        	"tenor":""
-	        },
-	        "aKycDocs":[],
-	        "empl":{
-	        	"emplType":"",
-	        	"emplMob":"",
-	        	"emplLandLine":"",
-	        	"emplStd":"",
-	        	"emplITReturn":"",
-	        	"emplSalary":"",
-	        	"emplMonthWithEmp":"",
-	        	"emplName":"",
-	        	"emplEmail":"",
-	        	"emplState":"",
-	        	"emplCity":"",
-	        	"emplPin":"",
-	        	"emplAddr1":"",
-	        	"emplAddr2":"",
-	        	"emplAddr3":""
-	        },
-	        "oResidence":{
-	        	"oAddress":{
-	        		"addrType":"",
-	        		"sAddress1":"",
-	        		"sAddress2":"",
-	        		"sAddress3":"",
-	        		"sState":"",
-	        		"sCity":"",
-	        		"sPinCode":"",
-	        		"addrType":"",
-	        		"iMonthCity":"",
-	        		"dRentPerMonth":"",
-	        		"iMonthAddress":""
-	        	},
-	        	"oPhone":{
-	        		"iMobile":"",
-	        		"iLandLine":"",
-	        		"sStdCode":""
-	        	},
-	        	"sEmail":""
-	        },
-	        "oPermanent":{
-	        	"oAddress":{
-	        		"addrType":"",
-	        		"sAddress1":"",
-	        		"sAddress2":"",
-	        		"sAddress3":"",
-	        		"sState":"",
-	        		"sCity":"",
-	        		"sPinCode":"",
-	        		"addrType":"",
-	        		"iMonthCity":"",
-	        		"dRentPerMonth":"",
-	        		"iMonthAddress":""
-	        	},"oPhone":{
-	        		"iMobile":"",
-	        		"iLandLine":"",
-	        		"sStdCode":""
-	        	},
-	        	"sEmail":""
-	        },
-	       	"asset":{
-	       		"category":"",
-	       		"make":"",
-	       		"model":""
-	       	}
-        };
-        return{
-        	dummy : _obj
-        }
-    });*/
+	
 
-	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA","$state","UploadImages","notifier","$filter",
-	 function($scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA,$state,UploadImages,notifier,$filter) {
+	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA","$state","ApplyObject","UploadImages","notifier","$filter",
+	 function($scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA,$state,ApplyObject,UploadImages,notifier,$filter) {
 
 		var CustID = null;
 
 		$scope.currentPageNumber=1;
 
-		//$scope.applicant = ApplyObject.dummy;
+	//	$scope.applicant = ApplyObject.dummy;
 
 		$scope.applicant = {
 	        "suspected": "No",
@@ -175,7 +92,7 @@
 	       		"model":""
 	       	}
         };
-
+		
 		$scope.kycArray=[];
 
 		$scope.kycDocImages=[];
@@ -1807,7 +1724,7 @@ $scope.submitApplication=function(UrlKey)
 
 			if(UrlKey=="step1"){
 				GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP1"),1,"submit-application","",data.sRefID);
-			}else if(UrlKey=="step4"){	
+			}else if(UrlKey=="step4"){
 
 				GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),GNG_GA.getConstCategory("CAT_API_CALL"),GNG_GA.getConstAction("ACTION_API_SUCCESS"),GNG_GA.getConstAction("API_STEP4"),1,"submit-application","",data.sRefID);
 
@@ -1820,6 +1737,7 @@ $scope.submitApplication=function(UrlKey)
 					}, function(reason) {
 					  	$log.debug('Image upload Failed, Total image uploaded : ' + imageUploadedCount);
 					});
+
 					sharedService.setRefID($scope.referenceID);
 					$state.go('/cdl/result');
 				}else{
@@ -2622,6 +2540,13 @@ $scope.getEmployerNames=function(queryStr){
 				$scope.applicant.oPermanent.oAddress.dRentPerMonth = "";
 			}
 		}
+
+		 // destructor function for scope 
+   /* $scope.$on("$destroy",function(){
+    	console.log("destroy");
+       $scope.applicant = {};
+       console.log($scope.applicant);
+    });*/
 
 		//$scope.addressTypeoption = SelectArrays.getResidenceTypes();
 	}]);
