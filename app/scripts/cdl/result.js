@@ -170,11 +170,17 @@
 			$interval.cancel(poller);
 		});
 
-		$(document.body).on("click","#postIPA",function(){
+		/*$(document.body).on("click","#postIPA",function(){
 //			$("#resultPanel").hide();
 //			$("#afterSubmit").show();
 			sharedService.setApplicationStatus($scope.statusObject);
 			$state.go("/cdl/after-submit");
-		});
+		});*/
+
+		$scope.nextOfResultPanel = function(){
+			sharedService.setApplicationStatus($scope.statusObject);
+			sharedService.setRefID($scope.referenceID);
+			$state.go("/cdl/after-submit");
+		}
  	}]);
 }).call(this);

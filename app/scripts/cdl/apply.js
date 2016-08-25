@@ -2,8 +2,18 @@
 	'use strict';
 	var app = angular.module('gonogo.cdl');
 
-	app.service("ApplyObject",function(){
-    	var _obj = {
+	
+
+	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA","$state","ApplyObject","UploadImages","notifier","$filter",
+	 function($scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA,$state,ApplyObject,UploadImages,notifier,$filter) {
+
+		var CustID = null;
+
+		$scope.currentPageNumber=1;
+
+	//	$scope.applicant = ApplyObject.dummy;
+
+		$scope.applicant = {
 	        "suspected": "No",
 	        "creditCard": "",
 	        "gender": "Male",
@@ -82,20 +92,7 @@
 	       		"model":""
 	       	}
         };
-        return{
-        	dummy : _obj
-        }
-    });
-
-	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA","$state","ApplyObject","UploadImages","notifier","$filter",
-	 function($scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA,$state,ApplyObject,UploadImages,notifier,$filter) {
-
-		var CustID = null;
-
-		$scope.currentPageNumber=1;
-
-		$scope.applicant = ApplyObject.dummy;
-
+		
 		$scope.kycArray=[];
 
 		$scope.kycDocImages=[];
@@ -508,7 +505,7 @@
 			// }
 		//				$scope.dealerObj=JSON.parse($scope.dealerObj);
 		}
-		$("input,select").siblings("help").css({"color": "#777777","display":"inline"});
+	//	$("input,select").siblings("help").css({"color": "#777777","display":"inline"});
 			// } // End of DE stage
 // 			else if(currentStage=="DCLN")
 // 			{
@@ -657,17 +654,19 @@
 	var lcount=1;
 	$scope.verifyMob=true;
 	$scope.verif=true;
-	$("form").trigger("reset");
+	/*$("form").trigger("reset");
 	$("input").each(function(){
 		$(this).attr("autocomplete","off");
-	});
+	});*/
 	
-	// var top=$(window).height()-$(".header").height()-$(".footer").height();
-	// $("#msgContainer").css("top",top);
-	// var containerHeight=top-150;
-	// $(".getheight").css("height",containerHeight-35+"px");
-	// $("#progressDiv").css("height",containerHeight+20);
-	
+
+/*	var top=$(window).height()-$(".header").height()-$(".footer").height();
+	$("#msgContainer").css("top",top);
+	var containerHeight=top-150;
+	$(".getheight").css("height",containerHeight-35+"px");
+	$("#progressDiv").css("height",containerHeight+20);
+	*/
+
 	/*$('#dob').datepicker({
 		changeMonth: true, changeYear: true, yearRange: "1945:1997", dateFormat: 'dd:mm:yy',
 		defaultDate:'01:01:1985',
@@ -1553,7 +1552,7 @@ $scope.submitApplication=function(UrlKey)
 	_.each($scope.kycArray,function(kycDoc){
 		var resultIndex = _.chain(json.oReq.oApplicant.aKycDocs).pluck("sKycName").indexOf(kycDoc.docType).value();
 		if(resultIndex === -1){
-			json.oReq.oApplicant.aKycDocs.push({ // whole block is remain
+			json.oReq.oApplicant.aKycDocs.push({ 
 				"sExpiryDate":null,
 				"sIssueDate":null,
 				"sKycName":kycDoc.docType,
@@ -2493,6 +2492,13 @@ $scope.remove_file = function(filetype, id, index) {
 				$scope.applicant.oPermanent.oAddress.dRentPerMonth = "";
 			}
 		}
+
+		 // destructor function for scope 
+   /* $scope.$on("$destroy",function(){
+    	console.log("destroy");
+       $scope.applicant = {};
+       console.log($scope.applicant);
+    });*/
 
 		//$scope.addressTypeoption = SelectArrays.getResidenceTypes();
 	}]);
