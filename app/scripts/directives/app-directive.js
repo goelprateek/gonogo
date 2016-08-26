@@ -155,9 +155,6 @@
 		};
 
 		var _controller=["$scope",function($scope){
-			//console.log("Image Array To Upload: ");
-			//console.log($scope.imagearray);
-			//var countimg=0;
 
 			$scope.onImageRemove=function(img){
 				$("#"+img.value+img.index+"").css("background-image", "");
@@ -173,7 +170,6 @@
 
 				for(var i=0; i<$scope.imagearray.length;i++){
 					if($scope.imagearray[i].kyc_name == kycName){
-						/* delete img_array[i]; */
 						$scope.imagearray.splice(i,1);
 					}
 				}
@@ -229,18 +225,7 @@
 	app.directive('documentItem', function ($compile) {
 
 		var linker = function(scope, element, attrs,form) {
-			// var template = '<div class="row clearfix" style="padding: 8px;">';
-			// template=template+'<label>{{item.doc}}</label>';
-			// template=template+'<div class="preview" id="{{item.index}}">';
-			// template=template+'<input id="l{{item.index}}" type="file" ngf-select="onselectImg($files,{{item}})">';
-			// template=template+'<label for="l{{item.index}}" id="{{item.index}}label">';
-			// template=template+'<img alt="" src="../images/camera-128.png" class="img_icon"></label></div>';
-			// template=template+'<small id="{{item.index}}size" class="size"></small>';
-			// template=template+'<div style="height:20px;display:inline"><a class="remove_image" id="{{item.index}}remove" name="{{item.index}}" style="display:none" ng-click="onImageRemove(item)">Remove</a></div>';
-			// template=template+'</div>';
-
 			scope.form = form; //save parent form
-
 
 			var template =    ' <style>';
 			template=template+'		.doc-number{position:relative;bottom:0px;width:100%;left:0px;margin-top: 10px;border: none;border-bottom: 1px solid black;}';

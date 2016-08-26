@@ -38,8 +38,7 @@
 	      spinnerSize: 10,
 	      spinnerColor: '#ffffff'
 	    });
-	}])
-
+	}]);
 
 	app.config(['$provide','$logProvider', function($provide,$logProvider){
 		$logProvider.debugEnabled(true);

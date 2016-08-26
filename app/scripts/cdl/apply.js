@@ -1126,39 +1126,9 @@ $scope.remove_file = function(filetype, id, index) {
 		
 };
 
-	$scope.getEmployerNames=function(queryStr){
-		var ojs={"oHeader":{"sInstID":user.institutionID},"sQuery":queryStr};
+	
 
-		return RestService.saveToServer("employer-master-details-web",ojs)
-		.then(function(data)
-		{
-			var map=data.map(function(item){					
-		        return item.sEmpName;
-	      	});
-			return data.map(function(item){
-		        return item.sEmpName;
-	      	});
-		});
-	};
-
-
-		$scope.openDOBDialog=function(){
-
-			if(!$scope.applicant.dob){
-		 		var defaultDate = new Date();
-		 		defaultDate.setFullYear(defaultDate.getFullYear()-25);
-
-		 		$scope.applicant.dob=defaultDate;
-			}
-
-			$scope.dobPopup.opened = true;			
-		};
-		$scope.dobFormat = "dd:MM:yyyy";
-	 	$scope.dobPopup = {
-		    opened: false
-	  	};
-
-		var minDa = new Date();
+		/*var minDa = new Date();
 		minDa.setFullYear(minDa.getFullYear()-100);
 
 		var maxDa = new Date();
@@ -1170,7 +1140,7 @@ $scope.remove_file = function(filetype, id, index) {
 		    maxDate: maxDa,
 		    minDate: minDa,
 		    startingDay: 1
-		};
+		};*/
 
 		$scope.cancelApplication = function(){
 			location.reload();
