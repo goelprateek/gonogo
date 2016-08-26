@@ -149,13 +149,13 @@
 		$scope.dealerCode;
 
 		$scope.basicInfo = {
-			firstName:"prateeek",
+			firstName:"",
 			middleName:"",
-			lastName:"goel",
-			mobileNumber:"9579321319",
+			lastName:"",
+			mobileNumber:"",
 			aadhaarNumber:"",
-			panNumber:"alvpg7356b",
-			productType:"Consumer Durables",
+			panNumber:"",
+			productType:"",
 			isMobileVerfied:false
 		};
 
