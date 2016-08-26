@@ -21,7 +21,7 @@
 
 		$scope.applicant = {
 	        "suspected": "No",
-	        "creditCard": "12312",
+	        "creditCard": "",
 	        "gender": "Male",
 	        "education": "DOCTORATE",
 	        "maritalStat":"Single",
@@ -30,67 +30,67 @@
 	        "sameAbove":false,
 	        "application":{
 	        	"loanType":"Consumer Durables",
-	        	"loanAmt":"234234324",
-	        	"tenor":"2"
+	        	"loanAmt":"",
+	        	"tenor":""
 	        },
 	        "aKycDocs":[],
 	        "empl":{
 	        	"emplType":"SELF-EMPLOYED",
-	        	"emplMob":"9579321319",
+	        	"emplMob":"",
 	        	"emplLandLine":"",
-	        	"emplStd":"333",
-	        	"emplITReturn":"3333",
-	        	"emplSalary":"33333333",
-	        	"emplMonthWithEmp":"33",
-	        	"emplName":"Madras Chemicals",
-	        	"emplEmail":"goelpratee@gmail.com",
-	        	"emplState":"MAHARASHTRA",
-	        	"emplCity":"PUNE",
-	        	"emplPin":"411005",
-	        	"emplAddr1":"asfds",
-	        	"emplAddr2":"sdf",
-	        	"emplAddr3":"sdfdsf"
+	        	"emplStd":"",
+	        	"emplITReturn":"",
+	        	"emplSalary":"",
+	        	"emplMonthWithEmp":"",
+	        	"emplName":"",
+	        	"emplEmail":"",
+	        	"emplState":"",
+	        	"emplCity":"",
+	        	"emplPin":"",
+	        	"emplAddr1":"",
+	        	"emplAddr2":"",
+	        	"emplAddr3":""
 	        },
 	        "oResidence":{
 	        	"oAddress":{
 	        		"addrType":"OWNED-FLAT",
-	        		"sAddress1":"asasf",
-	        		"sAddress2":"asda",
-	        		"sAddress3":"asdsa",
-	        		"sState":"MAHARASHTRA",
-	        		"sCity":"PUNE",
-	        		"sPinCode":"411005",
+	        		"sAddress1":"",
+	        		"sAddress2":"",
+	        		"sAddress3":"",
+	        		"sState":"",
+	        		"sCity":"",
+	        		"sPinCode":"",
 	        		"addrType":"OWNED-FLAT",
-	        		"iMonthCity":"33",
+	        		"iMonthCity":"",
 	        		"dRentPerMonth":"",
-	        		"iMonthAddress":"3"
+	        		"iMonthAddress":""
 	        	},
 	        	"oPhone":{
-	        		"iMobile":"9579321319",
+	        		"iMobile":"",
 	        		"iLandLine":"",
-	        		"sStdCode":"222"
+	        		"sStdCode":""
 	        	},
-	        	"sEmail":"goelpratee@gmail.com"
+	        	"sEmail":""
 	        },
 	        "oPermanent":{
 	        	"oAddress":{
 	        		"addrType":"OWNED-FLAT",
-	        		"sAddress1":"asasf",
-	        		"sAddress2":"asasf",
-	        		"sAddress3":"asasf",
+	        		"sAddress1":"",
+	        		"sAddress2":"",
+	        		"sAddress3":"",
 	        		"sState":"",
 	        		"sCity":"",
-	        		"sPinCode":"411005",
+	        		"sPinCode":"",
 	        		"addrType":"OWNED-FLAT",
-	        		"iMonthCity":"33",
+	        		"iMonthCity":"",
 	        		"dRentPerMonth":"",
-	        		"iMonthAddress":"3"
+	        		"iMonthAddress":""
 	        	},"oPhone":{
-	        		"iMobile":"9579321319",
+	        		"iMobile":"",
 	        		"iLandLine":"",
-	        		"sStdCode":"222"
+	        		"sStdCode":""
 	        	},
-	        	"sEmail":"goelpratee@gmail.com"
+	        	"sEmail":""
 	        },
 	       	"asset":{
 	       		"category":"",
@@ -924,15 +924,15 @@ $scope.submitApplication=function(UrlKey)
 					"sAreaCode":"",
 					"sCountryCode":"+91",
 					"sExt":"",
-					"sPhoneNumber":$scope.applicant.oPermanent.oPhone.iMobile
+					"sPhoneNumber":($scope.applicant.oPermanent.oPhone.iMobile ? $scope.applicant.oPermanent.oPhone.iMobile : '')
 				},
 				{
 					"phoneType":"PERSONAL_PHONE",
 					"sPhoneType":"PERSONAL_PHONE",
-					"sAreaCode":$scope.applicant.oPermanent.oPhone.sStdCode,
+					"sAreaCode":($scope.applicant.oPermanent.oPhone.sStdCode ? $scope.applicant.oPermanent.oPhone.sStdCode :''),
 					"sCountryCode":"+91",
 					"sExt":"",
-					"sPhoneNumber":$scope.applicant.oPermanent.oPhone.iLandLine
+					"sPhoneNumber":($scope.applicant.oPermanent.oPhone.iLandLine ? $scope.applicant.oPermanent.oPhone.iLandLine : '')
 				},
 				{
 					"phoneType":"RESIDENCE_MOBILE",
