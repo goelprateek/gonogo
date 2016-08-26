@@ -35,9 +35,9 @@
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Credit Card No</label>
 						<md-icon class="card" md-font-icon="fa fa-credit-card" aria-label="card"></md-icon>
-						<input  name="credit"  ng-model="applicant.creditCard" md-maxlength="6" only-digits>
+						<input  name="credit"   ng-pattern="/^[0-9\d]{1,6}$/" ng-model="applicant.creditCard" md-maxlength="6" only-digits>
 						<div ng-messages="personalData.credit.$error" >
-		   					<div ng-message="onlydigits">Please enter only digits</div>
+		   					<div ng-message="pattern">Please enter valid data</div>
 						</div>
 					</md-input-container>
 
