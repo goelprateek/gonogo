@@ -20,6 +20,12 @@
 			$state.go("/cdl/basic-de");
 		}
 
+		$scope.showRejectImg = false;
+		$scope.showApprvImg = false;
+		$scope.showQueImg = false;
+		$scope.showPendingImg = false;
+		$scope.showNextBtn = false;
+
 		$scope.check_status=function()
 		{
 			var json={
@@ -43,52 +49,59 @@
 					$scope.statusObject=data;
 					if(data.aCroDec && data.aCroDec.length >0)
 					{
-						$(document.body).find("#apvAmt").val(data.aCroDec[0].dAmtAppr).siblings("help").show();
+						//$(document.body).find("#apvAmt").val(data.aCroDec[0].dAmtAppr).siblings("help").show();
 						//console.log("data.aCroDec[0].dAmtAppr :" + data.aCroDec[0].dAmtAppr); 
 					}
 					if(typeof data.oIntrmStat != "undefined" && data.oIntrmStat != null)
 					{
-						if(data.oIntrmStat.sPanStat == "COMPLETE")
-						{	$("#vpc").fadeIn("500");
-						$scope.pstatus=data.oIntrmStat.oPanResult.sMsg;
+						if(data.oIntrmStat.sPanStat == "COMPLETE"){	//$("#vpc").fadeIn("500");
+							$scope.pstatus=data.oIntrmStat.oPanResult.sMsg;
 						}
-						if(data.oIntrmStat.sCblScore == "COMPLETE")
-						{	$("#cs").fadeIn("500");
-						$scope.Cstatus=data.oIntrmStat.oCibilResult.sMsg;
+						if(data.oIntrmStat.sCblScore == "COMPLETE"){	//$("#cs").fadeIn("500");
+							$scope.Cstatus=data.oIntrmStat.oCibilResult.sMsg;
 						}
 					}
 
 					if(data.sAppStat =="Declined")
 					{
-						status = data.sAppStat;
+						//status = data.sAppStat;
 						$scope.dstatus = data.sAppStat;
-						$("#dimg").attr("src","images/reject.png").show();
-						$("#postIPA").show();
+						$scope.showRejectImg = true;
+						$scope.showNextBtn = true;
 
-						$("#nmCntnr").hide();
+						//$("#dimg").attr("src","images/reject.png").show();
+						//$("#postIPA").show();
+
+						//$("#nmCntnr").hide();
 						$scope.stopTimer();
 					}
 					else if(data.sAppStat =="Approved")
 					{
-						status = data.sAppStat;
+						//status = data.sAppStat;
 						$scope.dstatus = data.sAppStat;
-						$("#ErrorContainer").show();
+						$scope.showNextBtn = true;
+						$scope.showApprvImg = true;
+						//$("#ErrorContainer").show();
 						//$scope.scmService();
-						$("#dimg").attr("src","images/approve.png").show();
-						$("#postIPA").show();
+						//$("#dimg").attr("src","images/approve.png").show();
+						//$("#postIPA").show();
 						$scope.stopTimer();
 					}
 					else if(data.sAppStat =="Queue")
 					{
-						status = data.sAppStat;
+						//status = data.sAppStat;
 						$scope.dstatus = data.sAppStat;
-						$("#dimg").attr("src","images/queue_status.png").show();
+						$scope.showQueImg = true;
+						$scope.stopTimer();
+						//$("#dimg").attr("src","images/queue_status.png").show();
 					}
 					else if(data.sAppStat =="OnHold")
 					{
 						$scope.dstatus = data.sAppStat;
-						$("#dimg").attr("src","images/pending.png").show();
-						$("#postIPA").show();
+						$scope.showNextBtn = true;
+						$scope.showPendingImg = true;
+						//$("#dimg").attr("src","images/pending.png").show();
+						//$("#postIPA").show();
 						$scope.stopTimer();
 						// for(var i=0; i<data.aCroJustification.length;i++)
 						// {
