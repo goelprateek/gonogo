@@ -1,3 +1,10 @@
+<style type="text/css">
+.basic-form  md-input-container.md-input-invalid > md-icon.phone,
+.basic-form  md-input-container.md-input-invalid > md-icon.name {
+    color: red; 
+}
+
+</style>
 <form id="nmCntnr" name="BasicInfoForm" novalidate role="form" autocomplete="off" ng-submit="BasicInfoForm.$valid && clickEvent('getOTP')">
 
 	<div class="col-md-8 col-md-offset-2" id="middleContainer">
@@ -6,9 +13,10 @@
 				<div id="basicInfo" style="margin-top: 20%">
 					<div class="row clearfix">
 						
-						<div layout-gt-sm="row">
+						<div layout-gt-sm="row" class="basic-form">
 							<md-input-container class="md-block" flex-gt-sm>
 					          <label>First Name</label>
+					          <md-icon md-font-icon="fa fa-user" class="name" aria-label="User Icon"></md-icon>
 					          <input required name="fName" ng-model="basicInfo.firstName" md-maxlength="30" ng-pattern="/^[a-zA-Z\s]+$/" capitalize ng-disabled="shwVerify" md-select-on-focus>
 					          <div ng-messages="projectForm.fName.$error"  >
 					            <div ng-message="required">Please enter first name</div>
@@ -35,9 +43,10 @@
 					        </md-input-container>
 				        </div>
 
-				        <div layout-gt-sm="row">
+				        <div layout-gt-sm="row" class="basic-form">
 				        	<md-input-container class="md-block" flex-gt-sm>
 				        		<label>Mobile Number</label>
+					          	<md-icon md-font-icon="fa fa-phone" class="phone" aria-label="Phone Icon"></md-icon>
 				        		<input  ng-model="basicInfo.mobileNumber"  ng-disabled="shwVerify" md-maxlength="10" required name="mobileNumber" ng-pattern="/^[0-9\d]{10}$/" />
 				        		<div ng-messages="BasicInfoForm.mobileNumber.$error" >
 									<div ng-message="required">Please enter mobile number</div>

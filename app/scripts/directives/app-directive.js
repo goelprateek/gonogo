@@ -294,22 +294,12 @@
 
 	app.directive('documentItem', function ($compile) {
 		var linker = function(scope, element, attrs) {
-			// var template = '<div class="row clearfix" style="padding: 8px;">';
-			// template=template+'<label>{{item.doc}}</label>';
-			// template=template+'<div class="preview" id="{{item.index}}">';
-			// template=template+'<input id="l{{item.index}}" type="file" ngf-select="onselectImg($files,{{item}})">';
-			// template=template+'<label for="l{{item.index}}" id="{{item.index}}label">';
-			// template=template+'<img alt="" src="../images/camera-128.png" class="img_icon"></label></div>';
-			// template=template+'<small id="{{item.index}}size" class="size"></small>';
-			// template=template+'<div style="height:20px;display:inline"><a class="remove_image" id="{{item.index}}remove" name="{{item.index}}" style="display:none" ng-click="onImageRemove(item)">Remove</a></div>';
-			// template=template+'</div>';
-
 			var template =    ' <style>';
 			template=template+'		.doc-number{position:relative;bottom:0px;width:100%;left:0px;margin-top: 10px;border: none;border-bottom: 1px solid black;}';
 			template=template+'		.btn-delete-doc{position:absolute;bottom:10px;right:10px;}';
 			template=template+' </style>';
 		 	template=template+'	<div class="col-md-4" style="padding: 8px;margin-bottom:20px;">';
-	        template=template+'		<select class="form-control control-select" ng-model="item.docType"><option value="">Document Type</option><option ng-repeat="obj in arrDocTypes" value="{{obj}}">{{obj}}</option></select>';
+	        template=template+'		<md-input-container class="md-block" flex-gt-sm > <label>Document Type</label> <md-select ng-model="item.docType"> <md-option ng-value="doc" ng-repeat="doc in arrDocTypes">{{ doc }}</md-option> </md-select> </md-input-container>';
 	        template=template+'		<input type="text" class="doc-number" ng-model="item.docNumber" capitalize placeholder="{{item.docType}} Number" />';
 	        template=template+'		<div class="upload-preview" id="{{item.index}}"  title="Click to select image.">';
 	        template=template+'			<input id="l{{item.index}}" name="l{{item.index}}" type="file" ngf-select="onselectImg($files,{{item}});" />';

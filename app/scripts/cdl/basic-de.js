@@ -149,13 +149,13 @@
 		$scope.dealerCode;
 
 		$scope.basicInfo = {
-			firstName:"",
+			firstName:"prateeek",
 			middleName:"",
-			lastName:"",
-			mobileNumber:"",
+			lastName:"goel",
+			mobileNumber:"9579321319",
 			aadhaarNumber:"",
-			panNumber:"",
-			productType:"",
+			panNumber:"alvpg7356b",
+			productType:"Consumer Durables",
 			isMobileVerfied:false
 		};
 
@@ -227,6 +227,7 @@
 				$scope.otp=successResponse.OTP;
 				$scope.shwVerify=true;
 			},function(failedResponse){
+				$scope.shwVerify=false;
 				notifier.logError("Some error occured, please retry !");
 			});
 		};

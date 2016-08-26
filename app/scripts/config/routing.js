@@ -3,6 +3,7 @@
 	'use strict';
 	
 	var app = angular.module('gonogo');
+			  
 	
 	app.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 		 $stateProvider.state('/', {
@@ -57,15 +58,20 @@
 			templateUrl: 'views/cdl/customer-form.html',
 			controller: 'CustomerFormCntrolr'
 		}).state('/cdl/apply.personal', {
+			url:"/personal",
 		    templateUrl: "views/cdl/personal-data.html",
 	    }).state('/cdl/apply.address', {
+	    	url:"/address",
 	     	templateUrl: "views/cdl/address-data.html",
 	    }).state('/cdl/apply.professional', {
+	    	url:"/professional",
 	        templateUrl: "views/cdl/professional-data.html",
-	    }).state('/cdl/apply.kyc', {
-	        templateUrl: "views/cdl/kyc-documents.html",
 	    }).state('/cdl/apply.asset', {
+	    	url:"/asset",
 	        templateUrl: "views/cdl/asset-data.html",
+	    }).state('/cdl/apply.kyc', {
+	    	url:'/kyc',
+	        templateUrl: "views/cdl/kyc-documents.html",
 	    }).state('/cdl/additnl-doc',{
 			templateUrl: 'views/cdl/upload-additnl-docs.html',
 			controller: 'AdditionalDocumentController'
@@ -73,8 +79,10 @@
 			templateUrl: 'views/cdl/post-do.html',
 			controller: 'PostDOCntrolr'
 		});
+		 
 		 $urlRouterProvider.otherwise('/');
-	}]);
+
+	}]),
 	
 	app.factory("Interceptor", function($q, $location) {
 		return {
@@ -101,13 +109,13 @@
 	});
 
 
-	app.run(function($rootScope, $location, APP_CONST){
 
+	app.run(['$rootScope', '$location', 'APP_CONST',function($rootScope, $location, APP_CONST){
 		$rootScope.$on('$routeChangeStart', function(event, nextLoc, currentLoc){
 			var guid = localStorage.getItem('GUID');
 			if (_.isUndefined(guid) || _.isNull(guid) ){
 				$location.path( APP_CONST.getConst('APP_CONTEXT'));
 			}	
 		})		
-	});
+	}]);
 }).call(this);

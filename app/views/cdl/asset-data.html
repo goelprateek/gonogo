@@ -1,22 +1,20 @@
-<div class="row clearfix getheight" slimscroll="{height:400,railVisible:true}">
-	<div id="assetContainer" class="col-md-10 col-md-offset-1">
-		<!-- <form id="assetObj">
-			<div class="row clearfix customRow" style="display: none;">
-				<div class="col-md-12 height">
-					<help style="display:inline-block">Dealer*</help>
-					<input type="text" id="dlr" ng-model="dealerName"
-						class="customInput" disabled="disabled" />
-					</div>
-			</div>  -->
-		<asset-selector asset="applicant.asset"></asset-selector>
-		<!-- </form> -->
+<form name="AssetForm" novalidate autocomplete="off" >
+	<div class="row clearfix getheight" slimscroll="{height:400,railVisible:true,alwaysVisible:true}">
+		<div id="assetContainer" class="col-md-10 col-md-offset-1">
+			<asset-selector asset="applicant.asset"></asset-selector>
+		</div>
 	</div>
-</div>
-<div class="row clearfix ">
-	<div class="col-md-10 col-md-offset-1">
-		<button class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.professional')">Previous</button>
-		<!-- <button  ui-sref="/cdl/apply.kyc" class="customButton next" ng-disabled="!asset.category || ! asset.make || !asset.model">Next</button> -->
-		<button type="submit" class="customButton next" ng-click="onNextClicked('/cdl/apply.kyc',!(applicant.asset.category && applicant.asset.make && applicant.asset.model))">Next</button>
-		<button class="customButton save" id="save" ng-click="submitApplication('step3')">Save</button>
+	<div class="row clearfix ">
+		<div class="col-md-10 col-md-offset-1">
+			<button class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.professional')">Previous</button>
+			<!-- !(applicant.asset.category && applicant.asset.make && applicant.asset.model) -->
+			<button type="submit" class="customButton next" ng-click="onNextClicked(AssetForm.$valid)">
+				Next
+				<i class="fa fa-arrow-circle-o-right"></i>
+			</button>
+			<button class="customButton save" id="save" ng-click="submitApplication('step3')">Save</button>
+		</div>
 	</div>
-</div>
+</form>
+
+

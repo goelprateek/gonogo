@@ -5,76 +5,76 @@
 	app.service("ApplyObject",function(){
     	var _obj = {
 	        "suspected": "No",
-	        "creditCard": "",
+	        "creditCard": "12312",
 	        "gender": "Male",
-	        "education": "",
+	        "education": "DOCTORATE",
 	        "maritalStat":"Single",
-	        "dob":"",
-	        "constitution":"",
+	        "dob":new Date(),
+	        "constitution":"TRUST",
 	        "sameAbove":false,
 	        "application":{
 	        	"loanType":"Consumer Durables",
-	        	"loanAmt":"",
-	        	"tenor":""
+	        	"loanAmt":"234234324",
+	        	"tenor":"2"
 	        },
 	        "aKycDocs":[],
 	        "empl":{
-	        	"emplType":"",
-	        	"emplMob":"",
+	        	"emplType":"SELF-EMPLOYED",
+	        	"emplMob":"9579321319",
 	        	"emplLandLine":"",
-	        	"emplStd":"",
-	        	"emplITReturn":"",
-	        	"emplSalary":"",
-	        	"emplMonthWithEmp":"",
-	        	"emplName":"",
-	        	"emplEmail":"",
-	        	"emplState":"",
-	        	"emplCity":"",
-	        	"emplPin":"",
-	        	"emplAddr1":"",
-	        	"emplAddr2":"",
-	        	"emplAddr3":""
+	        	"emplStd":"333",
+	        	"emplITReturn":"3333",
+	        	"emplSalary":"33333333",
+	        	"emplMonthWithEmp":"33",
+	        	"emplName":"Madras Chemicals",
+	        	"emplEmail":"goelpratee@gmail.com",
+	        	"emplState":"MAHARASHTRA",
+	        	"emplCity":"PUNE",
+	        	"emplPin":"411005",
+	        	"emplAddr1":"asfds",
+	        	"emplAddr2":"sdf",
+	        	"emplAddr3":"sdfdsf"
 	        },
 	        "oResidence":{
 	        	"oAddress":{
-	        		"addrType":"",
-	        		"sAddress1":"",
-	        		"sAddress2":"",
-	        		"sAddress3":"",
-	        		"sState":"",
-	        		"sCity":"",
-	        		"sPinCode":"",
-	        		"addrType":"",
-	        		"iMonthCity":"",
+	        		"addrType":"OWNED-FLAT",
+	        		"sAddress1":"asasf",
+	        		"sAddress2":"asda",
+	        		"sAddress3":"asdsa",
+	        		"sState":"MAHARASHTRA",
+	        		"sCity":"PUNE",
+	        		"sPinCode":"411005",
+	        		"addrType":"OWNED-FLAT",
+	        		"iMonthCity":"33",
 	        		"dRentPerMonth":"",
-	        		"iMonthAddress":""
+	        		"iMonthAddress":"3"
 	        	},
 	        	"oPhone":{
-	        		"iMobile":"",
+	        		"iMobile":"9579321319",
 	        		"iLandLine":"",
-	        		"sStdCode":""
+	        		"sStdCode":"222"
 	        	},
-	        	"sEmail":""
+	        	"sEmail":"goelpratee@gmail.com"
 	        },
 	        "oPermanent":{
 	        	"oAddress":{
-	        		"addrType":"",
-	        		"sAddress1":"",
-	        		"sAddress2":"",
-	        		"sAddress3":"",
+	        		"addrType":"OWNED-FLAT",
+	        		"sAddress1":"asasf",
+	        		"sAddress2":"asasf",
+	        		"sAddress3":"asasf",
 	        		"sState":"",
 	        		"sCity":"",
-	        		"sPinCode":"",
-	        		"addrType":"",
-	        		"iMonthCity":"",
+	        		"sPinCode":"411005",
+	        		"addrType":"OWNED-FLAT",
+	        		"iMonthCity":"33",
 	        		"dRentPerMonth":"",
-	        		"iMonthAddress":""
+	        		"iMonthAddress":"3"
 	        	},"oPhone":{
-	        		"iMobile":"",
+	        		"iMobile":"9579321319",
 	        		"iLandLine":"",
-	        		"sStdCode":""
+	        		"sStdCode":"222"
 	        	},
-	        	"sEmail":""
+	        	"sEmail":"goelpratee@gmail.com"
 	        },
 	       	"asset":{
 	       		"category":"",
@@ -87,8 +87,16 @@
         }
     });
 
-	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",  "$location", "$q", "APP_CONST", "sharedService", "RestService","$interval",'$log',"UserService","AclService","GNG_GA","$state","ApplyObject","UploadImages","notifier","$filter",
-	 function($scope,$rootScope,$http,$timeout,$location,$q,APP_CONST,sharedService,RestService,$interval, $log,UserService,AclService,GNG_GA,$state,ApplyObject,UploadImages,notifier,$filter) {
+	app.controller("ApplyController", ["$scope", "$rootScope", "$http", "$timeout",
+									   "$location", "$q", "APP_CONST", "sharedService", 
+									   "RestService","$interval",'$log',"UserService",
+									   "AclService","GNG_GA","$state","ApplyObject",
+									   "UploadImages","notifier","$filter","SelectArrays",
+	 					function($scope,$rootScope,$http,$timeout,
+	 							$location,$q,APP_CONST,sharedService,
+	 							RestService,$interval, $log,UserService,
+	 							AclService,GNG_GA,$state,ApplyObject,
+	 							UploadImages,notifier,$filter,SelectArrays) {
 
 		var CustID = null;
 
@@ -177,7 +185,82 @@
    		}),
    		$scope.maritalStat = ["Single","Married"].map(function(status){
    			return {view:status};
-   		})
+   		}),
+   		$scope.consitutions = ["TRUST","SELF-EMPLOYED","SALARIED","PARTNERSHIP","PRIVATE LIMITED COMPANY"].map(function(consitution){
+   			return {view:consitution};
+   		}),
+   		$scope.residenceTypes = SelectArrays.getResidenceTypes().map(function(resType){
+   			return {view:resType.value};
+   		}),
+   		$scope.employmentTypes = SelectArrays.getEmploymentType().map(function(empType){
+   			return {view:empType};
+   		}),
+   		$scope.employerNames = {
+	    	employerName : loadAll(),
+		    simulateQuery:false,
+		    isDisabled:false,
+		    querySearch: querySearch,
+	    }
+
+	    function querySearch (query) {
+	    	
+	      var results = query ? $filter("filter")($scope.employerNames.employerName.$$state.value,query) : $scope.employerNames.employerName;
+	      console.log(results);
+	      return results;
+	    }
+
+	    function createFilterFor(query) {
+	      var lowercaseQuery = angular.lowercase(query);
+
+	      return function filterFn(item) {
+	      	return (item.value.indexOf(lowercaseQuery) === 0);
+	      };
+
+	    }
+
+	    function loadAll(){
+	    	
+	    	var ojs={"oHeader":{"sInstID":user.institutionID},"sQuery":''};
+	    	
+			return RestService.saveToServer("employer-master-details-web",ojs).then(function(data){
+				return _.map(data,function(item){
+			        return item.sEmpName;
+		      	});
+ 			});
+	    }
+
+
+   		
+   		var nextState=function(currentState) {
+	      switch (currentState) {
+	          case '/cdl/apply.personal':
+	              return '/cdl/apply.address'
+	              break;
+	          case '/cdl/apply.address':
+	              return '/cdl/apply.professional'
+	              break;
+	          case '/cdl/apply.professional':
+	              return '/cdl/apply.asset';
+	              break;
+	          case '/cdl/apply.asset':
+	          	  return '/cdl/apply.kyc';
+	          	  break;	
+	          case '/cdl/apply.kyc' :
+	          		return '';
+	          		break;
+	          default:
+	              alert('Did not match any switch');
+	      }
+	      
+	    };
+
+	    $scope.onNextClicked=function(isInvalid){
+	      if(isInvalid) {
+	      	$scope.currentPageNumber++;
+	        $state.go(nextState($state.current.name));
+	      } 
+		};
+
 
     	// Start : If from step 1 screen
 		if(sharedService.getRefID()){
@@ -2534,15 +2617,8 @@ $scope.getEmployerNames=function(queryStr){
 			$scope.currentPageNumber--;
 			$state.go(previousURL);
 		};
-		$scope.onNextClicked=function(nextURL,isInvalid){
-			if(isInvalid){
-				angular.element('input.ng-invalid').first().focus();
-			}else{
-
-				$scope.currentPageNumber++;
-				$state.go(nextURL);
-			}
-		};
+		
+		
 
 		$scope.cancelApplication = function(){
 			location.reload();

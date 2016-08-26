@@ -108,12 +108,18 @@
 					{value:"PARENT OWNED-FLAT","text":"PARENT OWNED-FLAT"},
 					{value:"COMPANY PROVIDED-HOUSE","text":"COMPANY PROVIDED-HOUSE"}];
 	},
-  _getAddrType = function(){
+  	_getAddrType = function(){
 		return [{value:'selected', name:'Please Select Addr Type'},
 	                  {value:'Residence', name:'Residence'},
 	                  {value:'Office', name:'Office'},
 	                  {value:'Permanent', name:'Permanent'}
 	                  ]; 
+
+	},
+	_getEmploymentType = function(){
+		var employmentType ;
+		employmentType = ["SELF-EMPLOYED","PROFESSIONAL","RETIRED","SALARIED","OTHERS"];
+		return employmentType
 
 	},
 	_getOfferData = function(){
@@ -179,7 +185,8 @@
 	return {
 		getResidenceTypes :_getResidenceTypes,
 		getAddrType :_getAddrType,
-		getOfferData : _getOfferData
+		getOfferData : _getOfferData,
+		getEmploymentType :_getEmploymentType
 	};
 });
 

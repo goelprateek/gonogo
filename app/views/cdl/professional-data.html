@@ -1,8 +1,60 @@
-<form id="employmentContainer" name="professionalData" novalidate accessible-form>
-	<div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true}">
+<form id="employmentContainer" name="professionalData" novalidate autocomplete="off"  >
+	<div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true,alwaysVisible:true}">
 		<div class="row clearfix ">
 			<div class="col-md-10 col-md-offset-1">
-				<div class="row clearfix" style="margin-top: 40px;">
+				
+				<div layout-gt-sm="row">
+					
+					<md-autocomplete
+						  md-floating-label="Employer Name"
+						  md-input-name="empname"
+						  md-selected-item="applicant.empl.emplName"
+						  md-search-text="searchText"
+				          md-items=" item in employerNames.querySearch(searchText)"
+				          md-item-text="item"
+				          md-min-length="0"
+				          required
+				          flex="50"
+				          >
+				        <md-item-template>
+				          <span md-highlight-text="searchText" md-highlight-flags="^i">
+				          	{{item}}
+				          </span>
+				        </md-item-template>
+				        <md-not-found>
+				          No employer matching "{{searchText}}" were found.
+				        </md-not-found>
+				        <div ng-messages="professionalData.empname.$error" >
+	   						<div ng-message="required">Please enter Employer name</div>
+						</div>
+				      </md-autocomplete>
+					
+					
+					<!-- <md-input-container class="md-block" flex-gt-sm >
+						<label>Employer Name</label>
+						<input ng-model="applicant.empl.emplName" uib-typeahead="employers for employers in getEmployerNames($viewValue)" typeahead-min-length="3" typeahead-loading="loadingLocations" typeahead-no-results="noResults" md-maxlength="70" name="empname" required >
+						<div ng-messages="professionalData.empname.$error" >
+	   						<div ng-message="required">Please enter Employer name</div>
+						</div>
+					</md-input-container> -->
+
+					<div flex="5" hide-xs hide-sm></div>
+
+					<md-input-container class="md-block" flex-gt-sm >
+						<label>Employment Type</label>
+						<md-select ng-model="applicant.empl.emplType" name="emptype" ng-change="onChanged('WRKTYPE',applicant.empl.emplType)" select-required> 
+						  <md-option ng-value="employment.view" ng-repeat="employment in employmentTypes">
+						  	{{ employment.view }}
+						  </md-option>
+						</md-select>
+						<div ng-messages="professionalData.emptype.$error" >
+							<div ng-message="selectrequired">Please select Employment type </div>
+						</div>
+					</md-input-container>
+					
+				</div>
+
+				<!-- <div class="row clearfix" style="margin-top: 40px;">
 					<div class="col-md-6 cdl-height form-group">
 						<input type="text" ng-model="applicant.empl.emplName" id="wrkename" class="cdl-form-control inputMaterial" uib-typeahead="employers for employers in getEmployerNames($viewValue)" typeahead-loading="loadingLocations" typeahead-no-results="noResults" maxlength="70" name="empname" required/>
 						<label>Employer Name*</label>
@@ -24,9 +76,22 @@
 							<p ng-message="selectrequired">Please select Employment type </p>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
-				<div class="row clearfix">
+				<div layout-gt-sm="row">
+					
+					<md-input-container class="md-block" flex-gt-sm >
+						<label>Address Line 1</label>
+						<input name="empadd1" ng-model="applicant.empl.emplAddr1" ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/" required capitalize >
+						<div ng-messages="professionalData.empadd1.$error" >
+	   						<p ng-message="required">Please enter Address line 1</p>
+	   						<p ng-message="pattern">Please enter valid Address</p>
+						</div>
+					</md-input-container>
+
+				</div>	
+
+				<!-- <div class="row clearfix">
 					
 					<div class="col-md-12 cdl-height form-group">
 						<input type="text" id="wrka1" ng-model="applicant.empl.emplAddr1" class="cdl-form-control inputMaterial" capitalize style="width: 93%" ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/" name="empadd1" required/>
@@ -36,9 +101,31 @@
 	   						<p ng-message="pattern">Please enter valid Address</p>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
-				<div class="row clearfix">
+				<div layout-gt-sm="row">
+					
+					<md-input-container class="md-block" flex-gt-sm >
+						<label>Address Line 2</label>
+						<input name="empadd2" ng-model="applicant.empl.emplAddr2" ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/" capitalize>
+						<div ng-messages="professionalData.empadd2.$error" >
+	   						<div ng-message="pattern">Please enter valid Address</div>
+						</div>
+					</md-input-container>
+
+					<div flex="5" hide-xs hide-sm></div>					
+
+					<md-input-container class="md-block" flex-gt-sm >
+						<label>Address Line 3</label>
+						<input name="empadd3" ng-model="applicant.empl.emplAddr3" ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/" capitalize>
+						<div ng-messages="professionalData.empadd3.$error" >
+	   						<div ng-message="pattern">Please enter valid Address</div>
+						</div>
+					</md-input-container>
+
+				</div>	
+
+				<!-- <div class="row clearfix">
 					<div class="col-md-6 cdl-height form-group">
 						<input type="text" id="wrka2" ng-model="applicant.empl.emplAddr2" class="cdl-form-control inputMaterial" name="empadd2" ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/" capitalize />
 						<label>Address Line 2</label>
@@ -54,10 +141,44 @@
 	   						<p ng-message="pattern">Please enter valid Address</p>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
 
-				<div class="row clearfix">
+				<div layout-gt-sm="row">
+					
+					<md-input-container class="md-block" flex-gt-sm >
+						<label>Pincode</label>
+						<input name="emppin" ng-model="applicant.empl.emplPin" data-ng-keyup="pinService(applicant.empl.emplPin,'wrkpin')" md-maxlength="6" name="emppin" required only-digits>
+						<div ng-messages="professionalData.emppin.$error">
+	   						<div ng-message="required">Please enter Pincode</div>
+						</div>
+					</md-input-container>
+
+					<div flex="5" hide-xs hide-sm></div>	
+
+					<md-input-container class="md-block" flex-gt-sm >
+						<label>City</label>
+						<input name="empcity" ng-pattern="/^[A-Za-z]*$/" ng-disabled="true" ng-model="applicant.empl.emplCity"  required >
+						<div ng-messages="professionalData.empcity.$error" >
+	   						<div ng-message="required">Please enter Employer city</div>
+	   						<div ng-message="pattern">Please enter valid characters</div>
+						</div>
+					</md-input-container>
+
+					<div flex="5" hide-xs hide-sm></div>	
+
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>State</label>
+						<input name="empstate" ng-model="applicant.empl.emplState" ng-pattern="/^[A-Za-z ]*$/" ng-disabled="true" required >
+						<div ng-messages="professionalData.empstate.$error" >
+	   						<div ng-message="required">Please enter employer state</div>
+	   						<div ng-message="pattern">Please enter valid characters</div>
+						</div>
+					</md-input-container>
+
+				</div>	
+
+				<!-- <div class="row clearfix">
 					<div class="col-md-6 cdl-height form-group">
 						<input type="text" ng-model="applicant.empl.emplPin" id="wrkpin" class="cdl-form-control inputMaterial" data-ng-keyup="pinService(applicant.empl.emplPin,'wrkpin')" maxlength="6" name="emppin" required only-digits/>
 						<label>Pincode*</label>
@@ -84,9 +205,38 @@
 							</div>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
-				<div class="row clearfix">
+				<div layout-gt-sm="row">
+					
+					<md-input-container class="md-block" flex-gt-sm >
+						<label>STD Code</label>
+						<input name="empstd" ng-model="applicant.empl.emplStd" md-maxlength="5"  required only-digits>
+						<div ng-messages="professionalData.empstd.$error" >
+	   						<div ng-message="required">Please enter STD code</div>
+						</div>
+					</md-input-container>
+
+					<div flex="5" hide-xs hide-sm></div>	
+
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Landline Number</label>
+						<input ng-model="applicant.empl.emplLandLine" md-maxlength="10">
+					</md-input-container>
+
+					<div flex="5" hide-xs hide-sm></div>	
+
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Office Mobile</label>
+						<input name="empofcmob" ng-model="applicant.empl.emplMob" md-maxlength="10"  only-digits required>
+						<div ng-messages="professionalData.empofcmob.$error" >
+	   						<div ng-message="required">Please enter Office mobile</div>
+						</div>
+					</md-input-container>
+
+				</div>	
+
+				<!-- <div class="row clearfix">
 					<div class="col-md-2 cdl-height form-group">
 						<input type="text" id="wrkstd" ng-model="applicant.empl.emplStd" class="cdl-form-control inputMaterial" maxlength="5" name="empstd" required only-digits/>
 						<label>STD Code*</label>
@@ -106,9 +256,32 @@
 	   						<p ng-message="required">Please enter Office mobile</p>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
-				<div class="row clearfix">
+				<div layout-gt-sm="row">
+					
+					<md-input-container class="md-block" flex-gt-sm >
+						<label>Email</label>
+						<input name="empemail" ng-model="applicant.empl.emplEmail" ng-pattern="/^[a-zA-Z]+[a-zA-Z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required>
+						<div ng-messages="professionalData.empemail.$error" >
+	   						<div ng-message="required">Please enter Email ID</div>
+	   						<div ng-message="pattern">Please enter valid Email ID</div>
+						</div>
+					</md-input-container>
+
+					<div flex="5" hide-xs hide-sm></div>
+
+					<md-input-container class="md-block" flex-gt-sm>
+						<label>Months with Current Employer</label>
+						<input name="monthwithemp" ng-model="applicant.empl.emplMonthWithEmp" md-maxlength="3" only-digits required>
+						<div ng-messages="professionalData.monthwithemp.$error" >
+	   						<div ng-message="required">Please enter Month with current employer</div>
+						</div>
+					</md-input-container>
+
+				</div>	
+
+				<!-- <div class="row clearfix">
 					<div class="col-md-6 cdl-height form-group">
 						<input type="text" id="wrkemail" ng-model="applicant.empl.emplEmail" class="cdl-form-control inputMaterial" name="empemail" ng-pattern="/^[a-zA-Z]+[a-zA-Z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required/>
 						<label>Email*</label>
@@ -124,8 +297,32 @@
 	   						<p ng-message="required">Please enter Month with current employer</p>
 						</div>
 					</div>
-				</div>
-				<div class="row clearfix">
+				</div> -->
+
+				<div layout-gt-sm="row">
+					
+					<md-input-container class="md-block" flex-gt-sm >
+						<label>Last Month Salary</label>
+						<md-icon class="inr" md-font-icon="fa fa-inr" aria-label="inr"></md-icon>
+						<input name="lastmonth"   ng-model="applicant.empl.emplSalary" md-maxlength="12" rupees required>
+						<div ng-messages="professionalData.lastmonth.$error" >
+		   					<div ng-message="required">Please enter Last month salary</div>
+						</div>
+					</md-input-container>
+
+					<div flex="5" hide-xs hide-sm></div>
+
+					<md-input-container class="md-block" flex-gt-sm ng-if="applicant.empl.emplType =='SELF-EMPLOYED'">
+						<label>Last Year IT Return</label>
+						<input name="itreturn" ng-model="applicant.empl.emplITReturn"  md-maxlength="12" > 
+						<div ng-messages=" professionalData.itreturn.$error" >
+		   					<div ng-message="required">Please enter Last year IT return</div>
+						</div>
+					</md-input-container>
+
+				</div>	
+
+				<!-- <div class="row clearfix">
 					<div class="col-md-6 cdl-height form-group"
 						ng-if="applicant.empl.emplType!='SELF-EMPLOYED'">
 						<div class="div-rupee">
@@ -149,7 +346,7 @@
 							</div>
 						</div>						
 					</div>
-				</div>
+				</div> -->
 			</div>
 		</div>
 	</div>
@@ -157,10 +354,11 @@
 	<div class="row clearfix ">
 		<div class="col-md-10 col-md-offset-1">
 			<button class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.address')">Previous</button>
-			<!-- ng-disabled="professionalData.$invalid" -->
-			<!-- <button ui-sref="/cdl/apply.asset" class="customButton next" ng-disabled="professionalData.$invalid" id="fromemployment" >Next</button> -->
-			<button type="submit" class="customButton next" id="fromemployment" ng-click="onNextClicked('/cdl/apply.asset',professionalData.$invalid)">Next</button>
-				<button class="customButton save" id="save" ng-click="submitApplication('step3')">Save</button>
+			<button type="submit" class="customButton next" id="fromemployment"  ng-click="onNextClicked(professionalData.$valid)">
+				Next
+				<i class="fa fa-arrow-circle-right"></i>
+			</button>
+			<button class="customButton save" id="save" ng-click="submitApplication('step3')">Save</button>
 		</div>
 	</div>
 </form>

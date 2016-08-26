@@ -1538,3 +1538,11 @@ span.input-icon {
 .ladda-button .ladda-spinner{
   top: 0 !important;
 }
+
+._md-datepicker-floating-label > md-datepicker .md-datepicker-button{
+  margin:0px -11px !important;
+}
+
+.material-icon{
+  min-height:40px;
+}
