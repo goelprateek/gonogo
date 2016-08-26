@@ -75,13 +75,20 @@
 		<div class="row clearfix">
 			<div class="col-md-3">
 				<label class="control-label">Invoice Number</label> <input
-					class="form-control" ng-model="objectSet.oInvDtls.sInvNumber" id="invoiceNumId" type="text" ng-disabled="invoiceNumber"  replace>
+					class="form-control" ng-model="objectSet.oInvDtls.sInvNumber" id="invoiceNumId" type="text" ng-disabled="invoiceNumber" name="invoiceNo" ng-pattern="/^[a-zA-Z\d]+$/" required replace>
+					<div ng-messages=" ApplicantForm.invoiceNo.$error" class="errorMsg">
+	   					<div ng-message="required">Enter Invoice Number</div>
+	   					<div ng-message="pattern">Enter valid Number</div>
+					</div>
 			</div>
 			<div class="dob col-md-3">
 				<label class="control-label">Invoice Date</label> 			
 				<input date-range-picker  id="daterange"  name="daterange" class="form-control date-picker" 
 				type="text" ng-model="datefilter.date" options="datefilter.opts"  placeholder="Pick Date" 
-				 max="datefilter.opts.max" clearable="true" ng-disabled="invoiceDate"/>
+				 max="datefilter.opts.max" clearable="true" ng-disabled="invoiceDate" required/>
+				 <div ng-messages=" ApplicantForm.daterange.$error" class="errorMsg">
+	   					<div ng-message="required">Enter Invoice Date</div>
+					</div>
 			</div>
 			<a ng-if="objectSet.oAppReq.sCurrentStageId=='PD_DE' && applctnstatus.toLowerCase()==='approved'" ng-click="loadPDF()">
 				<img title="View DO" src="images/do-view.png" class="img-do"/>
