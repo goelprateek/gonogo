@@ -1,8 +1,8 @@
-'<form id="kyccontainer" name="personalData" novalidate autocomplete="off" >
+<form id="kyccontainer" name="personalData" novalidate autocomplete="off" >
 	<div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true,alwaysVisible:true}">
 		<div class="row clearfix ">
 			<div class="col-md-10 col-md-offset-1">
-				<div class="row clearfix" style="margin-bottom: 40px;">
+				<!-- <div class="row clearfix" style="margin-bottom: 40px;">
 					
 					<help style="display:block;margin:15px;">Applicant Photo</help>
 					
@@ -18,8 +18,8 @@
 						<small ng-show="image_url2" class="size">{{file_size2}}</small>
 						<a class="remove_image" ng-show="selectImgInit || profileImage" ng-click="remove_file('APPLICANT-PHOTO','0',selectImgInit)">Remove</a>
 					</div>
-				</div>
-
+				</div> -->
+				<content-item item="applicantPhoto" imagearray="kycDocImages"></content-item>
 
 				<div layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm>
@@ -35,9 +35,9 @@
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Credit Card No</label>
 						<md-icon class="card" md-font-icon="fa fa-credit-card" aria-label="card"></md-icon>
-						<input  name="credit"  ng-model="applicant.creditCard" md-maxlength="6" only-digits>
+						<input  name="credit"   ng-pattern="/^[0-9\d]{1,6}$/" ng-model="applicant.creditCard" md-maxlength="6" only-digits>
 						<div ng-messages="personalData.credit.$error" >
-		   					<div ng-message="onlydigits">Please enter only digits</div>
+		   					<div ng-message="pattern">Please enter valid data</div>
 						</div>
 					</md-input-container>
 
@@ -82,7 +82,7 @@
 				<div layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm>
 			            <label>Date of Birth</label>
-			            <md-datepicker ng-model="applicant.dob" name="dob" flex="50"></md-datepicker>
+			            <md-datepicker ng-model="applicant.dob" name="dob" flex="50" required></md-datepicker>
 			            <div ng-messages="personalData.dob.$error" class="errorMsg">
 						    <div ng-message="required">Please select date of birth </div>
 						</div>

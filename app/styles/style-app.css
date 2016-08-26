@@ -313,13 +313,13 @@ background-color
 }
 
 .form-control.otp {
-	width: 26px;
-	display: inline-table;
-	border-radius: 5px;
-	padding: 0px;
-	text-align: center;
-	font-size: 28px;
-	height: 30px;
+    width: 30px;
+    display: inline-table;
+    border-radius: 5px;
+    padding: 0px;
+    text-align: center;
+    font-size: 18px;
+    height: 30px;
 }
 
 /* #msform fieldset:first-of-type {

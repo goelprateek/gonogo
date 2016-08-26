@@ -80,7 +80,6 @@
 				$scope.fetchAssetModel = function(val1,val2){
 					$scope.mdlJson ={"oHeader":{"sInstID":user.institutionID},"sQuery":val1,"sQuery2":val2}; 
 
-
 					RestService.saveToServer("asset-model-all-web", $scope.mdlJson).then(function(successResponse){
 						if(successResponse){
 							$scope.modelTags=[];
@@ -134,6 +133,5 @@
        			};
        		}]
 		}
-		
 	});
 }).call(this);

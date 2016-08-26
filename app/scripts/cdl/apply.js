@@ -19,10 +19,9 @@
 
 		$scope.currentPageNumber=1;
 
-
 		$scope.applicant = {
 	        "suspected": "No",
-	        "creditCard": "12312",
+	        "creditCard": "",
 	        "gender": "Male",
 	        "education": "DOCTORATE",
 	        "maritalStat":"Single",
@@ -31,67 +30,67 @@
 	        "sameAbove":false,
 	        "application":{
 	        	"loanType":"Consumer Durables",
-	        	"loanAmt":"234234324",
-	        	"tenor":"2"
+	        	"loanAmt":"",
+	        	"tenor":""
 	        },
 	        "aKycDocs":[],
 	        "empl":{
 	        	"emplType":"SELF-EMPLOYED",
-	        	"emplMob":"9579321319",
+	        	"emplMob":"",
 	        	"emplLandLine":"",
-	        	"emplStd":"333",
-	        	"emplITReturn":"3333",
-	        	"emplSalary":"33333333",
-	        	"emplMonthWithEmp":"33",
-	        	"emplName":"Madras Chemicals",
-	        	"emplEmail":"goelpratee@gmail.com",
-	        	"emplState":"MAHARASHTRA",
-	        	"emplCity":"PUNE",
-	        	"emplPin":"411005",
-	        	"emplAddr1":"asfds",
-	        	"emplAddr2":"sdf",
-	        	"emplAddr3":"sdfdsf"
+	        	"emplStd":"",
+	        	"emplITReturn":"",
+	        	"emplSalary":"",
+	        	"emplMonthWithEmp":"",
+	        	"emplName":"",
+	        	"emplEmail":"",
+	        	"emplState":"",
+	        	"emplCity":"",
+	        	"emplPin":"",
+	        	"emplAddr1":"",
+	        	"emplAddr2":"",
+	        	"emplAddr3":""
 	        },
 	        "oResidence":{
 	        	"oAddress":{
 	        		"addrType":"OWNED-FLAT",
-	        		"sAddress1":"asasf",
-	        		"sAddress2":"asda",
-	        		"sAddress3":"asdsa",
-	        		"sState":"MAHARASHTRA",
-	        		"sCity":"PUNE",
-	        		"sPinCode":"411005",
+	        		"sAddress1":"",
+	        		"sAddress2":"",
+	        		"sAddress3":"",
+	        		"sState":"",
+	        		"sCity":"",
+	        		"sPinCode":"",
 	        		"addrType":"OWNED-FLAT",
-	        		"iMonthCity":"33",
+	        		"iMonthCity":"",
 	        		"dRentPerMonth":"",
-	        		"iMonthAddress":"3"
+	        		"iMonthAddress":""
 	        	},
 	        	"oPhone":{
-	        		"iMobile":"9579321319",
+	        		"iMobile":"",
 	        		"iLandLine":"",
-	        		"sStdCode":"222"
+	        		"sStdCode":""
 	        	},
-	        	"sEmail":"goelpratee@gmail.com"
+	        	"sEmail":""
 	        },
 	        "oPermanent":{
 	        	"oAddress":{
 	        		"addrType":"OWNED-FLAT",
-	        		"sAddress1":"asasf",
-	        		"sAddress2":"asasf",
-	        		"sAddress3":"asasf",
+	        		"sAddress1":"",
+	        		"sAddress2":"",
+	        		"sAddress3":"",
 	        		"sState":"",
 	        		"sCity":"",
-	        		"sPinCode":"411005",
+	        		"sPinCode":"",
 	        		"addrType":"OWNED-FLAT",
-	        		"iMonthCity":"33",
+	        		"iMonthCity":"",
 	        		"dRentPerMonth":"",
-	        		"iMonthAddress":"3"
+	        		"iMonthAddress":""
 	        	},"oPhone":{
-	        		"iMobile":"9579321319",
+	        		"iMobile":"",
 	        		"iLandLine":"",
-	        		"sStdCode":"222"
+	        		"sStdCode":""
 	        	},
-	        	"sEmail":"goelpratee@gmail.com"
+	        	"sEmail":""
 	        },
 	       	"asset":{
 	       		"category":"",
@@ -142,7 +141,7 @@
 
 			if(!docNameFound){
 				$scope.kycArray.push({
-  					index:1,
+  					index:($scope.kycArray[$scope.kycArray.length-1].index+1),
   					docType:pDocName,
   					docNumber:'',
   					style:{
@@ -223,8 +222,6 @@
  			});
 	    }
 
-
-   		
    		var nextState=function(currentState) {
 	      switch (currentState) {
 	          case '/cdl/apply.personal':
@@ -254,7 +251,6 @@
 	        $state.go(nextState($state.current.name));
 	      } 
 		};
-
 
     	// Start : If from step 1 screen
 		if(sharedService.getRefID()){
@@ -295,21 +291,8 @@
 		}
 		// End : If from step 1 screen
 
-
-	try {
-		
-
-		var status=null;
-	}catch (e){
-		console.log("ERROR : "+e);
-	}
-
-
 	sharedService.setRefID(null);
 	sharedService.setCurrentStage(null);
-
-	$scope.dstatus="";
-	$scope.statusJSON={};
 
 	if($scope.applicationObject==null && CustID!=null && CustID!="") {
 		var URL='';
@@ -465,9 +448,18 @@
 					RestService.saveToServer(URL,json).then(function(Response){
 
 						if(Response && Response.sByteCode){
-							$scope.addNewDocElementImage( kycName , "data:image/png;base64,"+Response.sByteCode );
+							if(kycName!=="APPLICANT-PHOTO"){
+								$scope.addNewDocElementImage( kycName , "data:image/png;base64,"+Response.sByteCode );
+							}else{
+								$scope.applicantPhoto={
+									doc:"Applicant Photo",
+									value:"APPLICANT-PHOTO",
+									index:1,
+									image:"data:image/png;base64,"+Response.sByteCode,
+                   					isDefault:false
+                   				};
+							}
 						}
-						
 					},function(error){
 						$scope.error = "Sorry, unable to fetch images from server !!";					
 					});
@@ -488,9 +480,8 @@
 					}
 				},function(error){
 					$scope.error = "Sorry, unable to fetch images from server !!";					
-				});	
-		}
-	
+				});
+			}
 		});
 	}else{
 		if(user.dealer){			
@@ -499,7 +490,16 @@
 		}else{
 			$location.path("/cdl/dealer");
 		}
+	}
 
+	if(!$scope.applicantPhoto){
+		$scope.applicantPhoto={
+				doc:"Applicant Photo",
+				value:"APPLICANT-PHOTO",
+				index:1,
+				image:null,
+				isDefault:true
+			};
 	}
 
 	$scope.serviceHitCount=1;
@@ -552,7 +552,7 @@ $scope.stateChanged = function (val){
 	}
 
 $scope.pinService = function(pin,id){
-	if(pin.length == 6){
+	if(pin && pin.length == 6){
 		var pinJson ={"oHeader":{"sInstID":user.institutionID},"sQuery":pin}; 
 
 		RestService.saveToServer('pincode-details-web', pinJson).then(function(successResponse){
@@ -582,203 +582,203 @@ $scope.pinService = function(pin,id){
 };
 
 
-$scope.onselectImg = function($files,type,index) 
-{        
-			var img_type ='';
-			for (var i = 0; i < $files.length; i++) 
-			{    	
-				var fname=$files[0].name;
-		    	var re = (/\.(jpg)$/i);
-				if(!re.exec(fname))
-		    	{
-			    	notifier.logWarning("Sorry..!! We can not upload your image. \n Only .Jpg images are allowed");
-			    	break;
-		    	}
-				img_type = fname.split(".")[1];
-				var $file = $files[i];
-				var base64;
-				var  reader=new FileReader();
-				if ($files[i] && $file) {
-					 var binaryString;
-					 var size=((($files[i].size)/1024).toFixed(2)) +" Kb";
-			         reader.onload = function(readerEvt) {
-			            binaryString = readerEvt.target.result;
-			            switch (type) {
-			            case "APPLICANT-PHOTO":
-							$scope.selectImgInit = binaryString	
-				        	img_array.push({kyc_name:"APPLICANT-PHOTO",image:$scope.selectImgInit.split(",")[1],type:img_type});
-							$scope.applicant.aKycDocs.push({
-									"sExpiryDate":null,
-									"sIssueDate":null,
-									"sKycName":"APPLICANT-PHOTO",
-									"sKycNumber":"",
-									"sKycStat":null
-							});
-							break;
-			            case "PAN":
-							$scope.selectImg1 = binaryString	
-				        	img_array.push({kyc_name:"PAN",image:$scope.selectImg1.split(",")[1],type:img_type});
-							break;
-						case "AADHAAR":
-							$scope.selectImg2 = binaryString
-							img_array.push({kyc_name:"AADHAAR",image:$scope.selectImg2.split(",")[1],type:img_type});
-							break;
-						case "PASSPORT":
-							$scope.selectImg3 = binaryString
-							img_array.push({kyc_name:"PASSPORT",image:$scope.selectImg3.split(",")[1],type:img_type});
-							$scope.applicant.aKycDocs.push({
-									"sExpiryDate":null,
-									"sIssueDate":null,
-									"sKycName":"PASSPORT",
-									"sKycNumber":"",
-									"sKycStat":null
-							});
-							break;
-						case "DRIVING-LICENSE":
-							$scope.selectImg4 = binaryString
-							img_array.push({kyc_name:"DRIVING-LICENSE",image:$scope.selectImg4.split(",")[1],type:img_type});
-							$scope.applicant.aKycDocs.push({
-									"sExpiryDate":null,
-									"sIssueDate":null,
-									"sKycName":"DRIVING-LICENSE",
-									"sKycNumber":"",
-									"sKycStat":null
-							});
-							break;
-						case "CUSTOMER-PHOTO":
-							$scope.selectImg5 = binaryString
-							img_array.push({kyc_name:"APPLICANT-PHOTO",image:$scope.selectImg5.split(",")[1],type:img_type});
-							break;
-						case "INCOME-PROOF1":
-							$scope.selectImg6 = binaryString
-							img_array.push({kyc_name:"INCOME-PROOF1",image:$scope.selectImg6.split(",")[1],type:img_type});
-							$scope.applicant.aKycDocs.push({
-									"sExpiryDate":null,
-									"sIssueDate":null,
-									"sKycName":"OTHER",
-									"sKycNumber":"",
-									"sKycStat":null
-							});
-							break;
-						case "INCOME-PROOF2":
-							$scope.selectImg7 = binaryString
-							img_array.push({kyc_name:"INCOME-PROOF2",image:$scope.selectImg7.split(",")[1],type:img_type});
-							$scope.applicant.aKycDocs.push({
-									"sExpiryDate":null,
-									"sIssueDate":null,
-									"sKycName":"OTHER",
-									"sKycNumber":"",
-									"sKycStat":null
-							});
-							break;
-						case "OTHER":
-							$scope.selectImg8 = binaryString
-							img_array.push({kyc_name:"OTHER",image:$scope.selectImg8.split(",")[1],type:img_type});
-							$scope.applicant.aKycDocs.push({
-									"sExpiryDate":null,
-									"sIssueDate":null,
-									"sKycName":"OTHER",
-									"sKycNumber":"",
-									"sKycStat":null
-							});
-							break;	
+// $scope.onselectImg = function($files,type,index) 
+// {        
+// 			var img_type ='';
+// 			for (var i = 0; i < $files.length; i++) 
+// 			{    	
+// 				var fname=$files[0].name;
+// 		    	var re = (/\.(jpg)$/i);
+// 				if(!re.exec(fname))
+// 		    	{
+// 			    	notifier.logWarning("Sorry..!! We can not upload your image. \n Only .Jpg images are allowed");
+// 			    	break;
+// 		    	}
+// 				img_type = fname.split(".")[1];
+// 				var $file = $files[i];
+// 				var base64;
+// 				var  reader=new FileReader();
+// 				if ($files[i] && $file) {
+// 					 var binaryString;
+// 					 var size=((($files[i].size)/1024).toFixed(2)) +" Kb";
+// 			         reader.onload = function(readerEvt) {
+// 			            binaryString = readerEvt.target.result;
+// 			            switch (type) {
+// 			            case "APPLICANT-PHOTO":
+// 							$scope.selectImgInit = binaryString	
+// 				        	img_array.push({kyc_name:"APPLICANT-PHOTO",image:$scope.selectImgInit.split(",")[1],type:img_type});
+// 							$scope.applicant.aKycDocs.push({
+// 									"sExpiryDate":null,
+// 									"sIssueDate":null,
+// 									"sKycName":"APPLICANT-PHOTO",
+// 									"sKycNumber":"",
+// 									"sKycStat":null
+// 							});
+// 							break;
+// 			            case "PAN":
+// 							$scope.selectImg1 = binaryString	
+// 				        	img_array.push({kyc_name:"PAN",image:$scope.selectImg1.split(",")[1],type:img_type});
+// 							break;
+// 						case "AADHAAR":
+// 							$scope.selectImg2 = binaryString
+// 							img_array.push({kyc_name:"AADHAAR",image:$scope.selectImg2.split(",")[1],type:img_type});
+// 							break;
+// 						case "PASSPORT":
+// 							$scope.selectImg3 = binaryString
+// 							img_array.push({kyc_name:"PASSPORT",image:$scope.selectImg3.split(",")[1],type:img_type});
+// 							$scope.applicant.aKycDocs.push({
+// 									"sExpiryDate":null,
+// 									"sIssueDate":null,
+// 									"sKycName":"PASSPORT",
+// 									"sKycNumber":"",
+// 									"sKycStat":null
+// 							});
+// 							break;
+// 						case "DRIVING-LICENSE":
+// 							$scope.selectImg4 = binaryString
+// 							img_array.push({kyc_name:"DRIVING-LICENSE",image:$scope.selectImg4.split(",")[1],type:img_type});
+// 							$scope.applicant.aKycDocs.push({
+// 									"sExpiryDate":null,
+// 									"sIssueDate":null,
+// 									"sKycName":"DRIVING-LICENSE",
+// 									"sKycNumber":"",
+// 									"sKycStat":null
+// 							});
+// 							break;
+// 						case "CUSTOMER-PHOTO":
+// 							$scope.selectImg5 = binaryString
+// 							img_array.push({kyc_name:"APPLICANT-PHOTO",image:$scope.selectImg5.split(",")[1],type:img_type});
+// 							break;
+// 						case "INCOME-PROOF1":
+// 							$scope.selectImg6 = binaryString
+// 							img_array.push({kyc_name:"INCOME-PROOF1",image:$scope.selectImg6.split(",")[1],type:img_type});
+// 							$scope.applicant.aKycDocs.push({
+// 									"sExpiryDate":null,
+// 									"sIssueDate":null,
+// 									"sKycName":"OTHER",
+// 									"sKycNumber":"",
+// 									"sKycStat":null
+// 							});
+// 							break;
+// 						case "INCOME-PROOF2":
+// 							$scope.selectImg7 = binaryString
+// 							img_array.push({kyc_name:"INCOME-PROOF2",image:$scope.selectImg7.split(",")[1],type:img_type});
+// 							$scope.applicant.aKycDocs.push({
+// 									"sExpiryDate":null,
+// 									"sIssueDate":null,
+// 									"sKycName":"OTHER",
+// 									"sKycNumber":"",
+// 									"sKycStat":null
+// 							});
+// 							break;
+// 						case "OTHER":
+// 							$scope.selectImg8 = binaryString
+// 							img_array.push({kyc_name:"OTHER",image:$scope.selectImg8.split(",")[1],type:img_type});
+// 							$scope.applicant.aKycDocs.push({
+// 									"sExpiryDate":null,
+// 									"sIssueDate":null,
+// 									"sKycName":"OTHER",
+// 									"sKycNumber":"",
+// 									"sKycStat":null
+// 							});
+// 							break;	
 							
-						case "APPLICATION_FORM":
-							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
-							$(document.body).find("#"+type+index+"label").hide();
-							$(document.body).find("#"+type+index+"remove").show();
-							addkyc_array.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
-							break;
+// 						case "APPLICATION_FORM":
+// 							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
+// 							$(document.body).find("#"+type+index+"label").hide();
+// 							$(document.body).find("#"+type+index+"remove").show();
+// 							addkyc_array.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
+// 							break;
 
-						case "AGREEMENT":
-							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
-							$(document.body).find("#"+type+index+"label").hide();
-							$(document.body).find("#"+type+index+"remove").show();
-							addkyc_array.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
-							break;	
+// 						case "AGREEMENT":
+// 							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
+// 							$(document.body).find("#"+type+index+"label").hide();
+// 							$(document.body).find("#"+type+index+"remove").show();
+// 							addkyc_array.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
+// 							break;	
 		
-						case "ACH":
-							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
-							$(document.body).find("#"+type+index+"label").hide();
-							$(document.body).find("#"+type+index+"remove").show();
-							addkyc_array.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
-							break;	
+// 						case "ACH":
+// 							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
+// 							$(document.body).find("#"+type+index+"label").hide();
+// 							$(document.body).find("#"+type+index+"remove").show();
+// 							addkyc_array.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
+// 							break;	
 
-						case "DISBURSEMENT":
-							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
-							$(document.body).find("#"+type+index+"label").hide();
-							$(document.body).find("#"+type+index+"remove").show();
-							addkyc_array.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
-							break;	
+// 						case "DISBURSEMENT":
+// 							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
+// 							$(document.body).find("#"+type+index+"label").hide();
+// 							$(document.body).find("#"+type+index+"remove").show();
+// 							addkyc_array.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
+// 							break;	
 				
-						case "ADDITIONAL_KYC":
-							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
-							$(document.body).find("#"+type+index+"label").hide();
-							$(document.body).find("#"+type+index+"remove").show();
-							addkyc_array.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
-							break;	
+// 						case "ADDITIONAL_KYC":
+// 							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
+// 							$(document.body).find("#"+type+index+"label").hide();
+// 							$(document.body).find("#"+type+index+"remove").show();
+// 							addkyc_array.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
+// 							break;	
 						
-						case "holdCase":
-							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
-							$(document.body).find("#"+type+index+"label").hide();
-							$(document.body).find("#"+type+index+"remove").show();
-							$scope.holdIndex.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
-							break;		
-			            }
-			      };
-			        reader.readAsDataURL($files[i]);
-			        $timeout(function(){
-					}, 1000);
-			}
-		}
-}
+// 						case "holdCase":
+// 							$(document.body).find("#"+type+index+"").css("background-image", "url("+binaryString+")");
+// 							$(document.body).find("#"+type+index+"label").hide();
+// 							$(document.body).find("#"+type+index+"remove").show();
+// 							$scope.holdIndex.push({kyc_name:(type+index),image:binaryString.split(",")[1],type:img_type});
+// 							break;		
+// 			            }
+// 			      };
+// 			        reader.readAsDataURL($files[i]);
+// 			        $timeout(function(){
+// 					}, 1000);
+// 			}
+// 		}
+// }
 
-function UploadAllImgs(Ref,array,callType)
-{
-	for(var i=0 ; i<array.length ; i++){
-		var json ={
-				  "oHeader": {
-				    "sAppID": Ref,  // application id
-				    "sApplID": "1" // applicant id
-				  },
-				  "sRefID": Ref,
-				  "oUpldDtl": {
-				    "sFileID": "1", 
-				    "sFileName": array[i].kyc_name,
-				    "sFileType": array[i].type,
-				    "sfileData": array[i].image,
-				    "sStat": "", 
-				    "sReason": "" 
-				  }
-				};
-		uploadImage(json,callType);		
-	}
-	if(callType=="ipa"){
-		 $rootScope.errHead="Submit";
-	     $rootScope.errorMsg="Your application has been succesfully completed.";
-	}
-}
+// function UploadAllImgs(Ref,array,callType)
+// {
+// 	for(var i=0 ; i<array.length ; i++){
+// 		var json ={
+// 				  "oHeader": {
+// 				    "sAppID": Ref,  // application id
+// 				    "sApplID": "1" // applicant id
+// 				  },
+// 				  "sRefID": Ref,
+// 				  "oUpldDtl": {
+// 				    "sFileID": "1", 
+// 				    "sFileName": array[i].kyc_name,
+// 				    "sFileType": array[i].type,
+// 				    "sfileData": array[i].image,
+// 				    "sStat": "", 
+// 				    "sReason": "" 
+// 				  }
+// 				};
+// 		uploadImage(json,callType);		
+// 	}
+// 	if(callType=="ipa"){
+// 		 $rootScope.errHead="Submit";
+// 	     $rootScope.errorMsg="Your application has been succesfully completed.";
+// 	}
+// }
 
-function uploadImage(json,callType)
-{	
-	$http({
-			method : 'POST',
-			url : APP_CONST.getConst('BASE_URL_GNG')+'upload-image',
-			data : json,
-			headers : {'Content-Type' : 'application/json'}
-		}).success(function(Response){
-			 if(Response.sStatus == 'SUCCESS'){
-			}
-		}).error(function(error) {
-			$scope.serviceHitCount=$scope.serviceHitCount+1;
-			if($scope.serviceHitCount<=3){
-				  uploadImage(json,callType);
-			}else{
-				$scope.serviceHitCount=1;
-				$scope.error="Sorry we can not process your PAN request";
-			}	
-		});
-}
+// function uploadImage(json,callType)
+// {	
+// 	$http({
+// 			method : 'POST',
+// 			url : APP_CONST.getConst('BASE_URL_GNG')+'upload-image',
+// 			data : json,
+// 			headers : {'Content-Type' : 'application/json'}
+// 		}).success(function(Response){
+// 			 if(Response.sStatus == 'SUCCESS'){
+// 			}
+// 		}).error(function(error) {
+// 			$scope.serviceHitCount=$scope.serviceHitCount+1;
+// 			if($scope.serviceHitCount<=3){
+// 				  uploadImage(json,callType);
+// 			}else{
+// 				$scope.serviceHitCount=1;
+// 				$scope.error="Sorry we can not process your PAN request";
+// 			}	
+// 		});
+// }
 
 
 $scope.submitApplication=function(UrlKey)
@@ -924,15 +924,15 @@ $scope.submitApplication=function(UrlKey)
 					"sAreaCode":"",
 					"sCountryCode":"+91",
 					"sExt":"",
-					"sPhoneNumber":$scope.applicant.oPermanent.oPhone.iMobile
+					"sPhoneNumber":($scope.applicant.oPermanent.oPhone.iMobile ? $scope.applicant.oPermanent.oPhone.iMobile : '')
 				},
 				{
 					"phoneType":"PERSONAL_PHONE",
 					"sPhoneType":"PERSONAL_PHONE",
-					"sAreaCode":$scope.applicant.oPermanent.oPhone.sStdCode,
+					"sAreaCode":($scope.applicant.oPermanent.oPhone.sStdCode ? $scope.applicant.oPermanent.oPhone.sStdCode :''),
 					"sCountryCode":"+91",
 					"sExt":"",
-					"sPhoneNumber":$scope.applicant.oPermanent.oPhone.iLandLine
+					"sPhoneNumber":($scope.applicant.oPermanent.oPhone.iLandLine ? $scope.applicant.oPermanent.oPhone.iLandLine : '')
 				},
 				{
 					"phoneType":"RESIDENCE_MOBILE",
@@ -1013,7 +1013,6 @@ $scope.submitApplication=function(UrlKey)
 		}
 	});
 
-
  	var docImageFound=false;
 	for(var docIndex=0;docIndex<$scope.kycArray.length;docIndex++){
 		if(!$scope.kycArray[docIndex].isDefault){
@@ -1048,8 +1047,10 @@ $scope.submitApplication=function(UrlKey)
 					  	$log.debug('Image upload Failed, Total image uploaded : ' + imageUploadedCount);
 					});
 
-					sharedService.setRefID($scope.referenceID);
-					$state.go('/cdl/result');
+					if(UrlKey=="step4"){
+						sharedService.setRefID($scope.referenceID);
+						$state.go('/cdl/result');
+					}
 				}
 			}else{
 				notifier.logError("Some error occured while application submission, please try again.");

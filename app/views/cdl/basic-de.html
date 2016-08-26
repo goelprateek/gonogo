@@ -17,8 +17,8 @@
 							<md-input-container class="md-block" flex-gt-sm>
 					          <label>First Name</label>
 					          <md-icon md-font-icon="fa fa-user" class="name" aria-label="User Icon"></md-icon>
-					          <input required name="fName" ng-model="basicInfo.firstName" md-maxlength="30" ng-pattern="/^[a-zA-Z\s]+$/" capitalize ng-disabled="shwVerify" md-select-on-focus>
-					          <div ng-messages="projectForm.fName.$error"  >
+					          <input required name="fName" ng-model="basicInfo.firstName" md-maxlength="30" ng-pattern="/^[a-zA-Z]+$/" capitalize ng-disabled="shwVerify" md-select-on-focus>
+					          <div ng-messages="projectForm.fName.$error">
 					            <div ng-message="required">Please enter first name</div>
 					            <div ng-message="pattern">Please enter valid first name</div>
 					          </div>
@@ -28,14 +28,17 @@
 					        
 					        <md-input-container class="md-block" flex-gt-sm>
 					          <label>Middle Name</label>
-					          <input  name="mname" ng-model="basicInfo.middleName" capitalize ng-disabled="shwVerify">
+					          <input  name="mname" ng-model="basicInfo.middleName" capitalize ng-disabled="shwVerify" md-maxlength="30" ng-pattern="/^[a-zA-Z]+$/">
+					          <div ng-messages="projectForm.mname.$error"  >
+					            <div ng-message="pattern">Please enter valid Middle name</div>
+					          </div>
 					        </md-input-container>
 							
 							<div flex="5" hide-xs hide-sm></div>
 					        
 					        <md-input-container class="md-block" flex-gt-sm>
 					          <label>Last Name</label>
-					          <input required name="lName" ng-model="basicInfo.lastName" ng-disabled="shwVerify" capitalize maxlength="30" ng-pattern="/^[a-zA-Z\s]+$/" required>
+					          <input required name="lName" ng-model="basicInfo.lastName" ng-disabled="shwVerify" capitalize md-maxlength="30" ng-pattern="/^[a-zA-Z]+$/" required>
 					          <div ng-messages="projectForm.mname.$error" >
 					            <div ng-message="required">Please enter last name</div>
 					            <div ng-message="pattern">Please enter valid last name</div>
@@ -47,7 +50,7 @@
 				        	<md-input-container class="md-block" flex-gt-sm>
 				        		<label>Mobile Number</label>
 					          	<md-icon md-font-icon="fa fa-phone" class="phone" aria-label="Phone Icon"></md-icon>
-				        		<input  ng-model="basicInfo.mobileNumber"  ng-disabled="shwVerify" md-maxlength="10" required name="mobileNumber" ng-pattern="/^[0-9\d]{10}$/" />
+				        		<input  ng-model="basicInfo.mobileNumber"  ng-disabled="shwVerify" md-maxlength="10" required name="mobileNumber" ng-pattern="/^[0-9\d]{10}$/" only-digits/>
 				        		<div ng-messages="BasicInfoForm.mobileNumber.$error" >
 									<div ng-message="required">Please enter mobile number</div>
 							   		<div ng-message="pattern">Please enter valid mobile number</div>
@@ -59,7 +62,7 @@
 
 				        	<md-input-container class="md-block" flex-gt-sm>
 				        		<label>Aadhaar Number</label>
-				        		<input name="Aadhar" ng-model="basicInfo.aadhaarNumber" ng-disabled="shwVerify"  ng-pattern="/^[0-9\d]{12}$/" md-maxlength="12" required-any="atleastOne"  />
+				        		<input name="Aadhar" ng-model="basicInfo.aadhaarNumber" ng-disabled="shwVerify"  ng-pattern="/^[0-9\d]{12}$/" md-maxlength="12" required-any="atleastOne"  only-digits/>
 				        		<div ng-messages="BasicInfoForm.aadhaarNumber.$error"  >
 				        			<div ng-message="required">Pan number or adhaar required</div>
 			  				  		<div ng-message="pattern">Please enter valid adhaar number</div>
@@ -168,14 +171,14 @@
 						<div class="col-md-7" style="text-align: right;">
 							<!--  ng-show="!shwVerify" ng-disabled="BasicInfoForm.$invalid" -->
 							<button  type="submit" class="customButton" style="float: right;" ng-if="generateOTP" >Get OTP</button>
-							<div id="otpContainer" ng-show="shwVerify">
+							<span id="otpContainer" ng-show="shwVerify">
 								<input class="form-control otp" ng-model='otpKey1' id='txt1' type="password" maxlength="1" tabindex="1" name="OTP" auto-next/>
 								<input class="form-control otp" ng-model='otpKey2' id='txt2' type="password" maxlength="1" tabindex="2" name="OTP" auto-next/>
 								<input class="form-control otp" ng-model='otpKey3' id='txt3' type="password" maxlength="1" tabindex="3" name="OTP" auto-next/>
 								<input class="form-control otp" ng-model='otpKey4' id='txt4' type="password" maxlength="1" tabindex="4" name="OTP" auto-next/>
 								<input class="form-control otp" ng-model='otpKey5' id='txt5' type="password" maxlength="1" tabindex="5" name="OTP" auto-next/>
-								<button id="verifybtn" class="customButton" ng-click="verifyOTP()">Verify</button>
-							</div>
+							</span>
+							<button id="verifybtn" class="customButton" ng-click="verifyOTP()" ng-show="shwVerify">Verify</button>
 						</div>
 					</div>
 

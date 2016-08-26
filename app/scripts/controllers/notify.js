@@ -434,64 +434,42 @@
         
 		if($rootScope.template == "notification"){
 
-			if(!AclService.can('NAPPDATADEF')){
-				if(user.id=="599"){ 
-                    $scope.json ={'sCroID':"STP_PL", 
-                    'sInstID':user.institutionID, 
-                    'sGrpID':"0", 'iSkip': minimum, 'iLimit' : $scope.limit,
-                        'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}}
-				}else{
-                    $scope.json ={'sCroID':"STA",  // CRO9
-                    'sInstID':user.institutionID,
+            //CRO ID - Application fetching based on CRO ID
+            $scope.json ={'sCroID':"", 'sInstID':user.institutionID,
                     'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit,
                     'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}};
-				}
-			}else if(user.id=="586"){
-                $scope.json ={'sCroID':"PL_QUEUE",  // CRO1 PL Normal
-                        'sInstID':user.institutionID, 
-                        'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,
-                        'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}};
-            }else{
-                $scope.json ={'sCroID':"default", // CRO1,CRO2 Normal
-                        'sInstID':user.institutionID, 
-                        'sGrpID':"0" , 'iSkip': minimum, 'iLimit' :$scope.limit,
-                        'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}};
-			}
 
-			var URL;
-
-			if(_.contains(user.role, "CRO3")){
-
-                URL = 'cro3-queue';
-                if(user.branches && user.branches.length>0)
-                {
-                    $scope.json ={
-                        'sCroID':"default", // CRO1,CRO2 Normal
-                        'sInstID':user.institutionID, 
-                        'sGrpID':"0",
-                        'iSkip': minimum,
-                        'iLimit' :$scope.limit,
-                        //'oCriteria':{"aBranches":user.branches,"aProducts":user.getProductNames()}
-                        'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}
-                    };
+            if(_.contains(user.role, "CRO9")){
+                if(_.contains(user.getProductNames(),"PERSONAL LOAN")){
+                    $scope.json.sCroID="STP_PL";
+                }else if(_.contains(user.getProductNames(),"CCBT")){
+                    $scope.json.sCroID="STP_CCBT";
+                }else{
+                    $scope.json.sCroID="STA";
                 }
+            }else if(_.contains(user.role, "CRO1")){
+                if(_.contains(user.getProductNames(),"CCBT")){
+                    $scope.json.sCroID="CCBT_QUEUE";
+                }else if(_.contains(user.getProductNames(),"PERSONAL LOAN")){
+                    $scope.json.sCroID="PL_QUEUE";
+                }else{
+                    $scope.json.sCroID="default";
+                }
+            }else{
+                $scope.json.sCroID="default";
+            }
+
+            //URL
+            var URL;
+            if(_.contains(user.role, "CRO3")){
+                URL = 'cro3-queue';
             }else if(_.contains(user.role, "CRO4")){
                 URL = 'cro4-queue';
-                $scope.json ={
-                    'sCroID':"default", // CRO1,CRO2 Normal
-                    'sInstID':user.institutionID, 
-                    'sGrpID':"0",
-                    'iSkip': minimum,
-                    'iLimit' :$scope.limit,
-                    'oCriteria':{"aProducts":user.getProductNames()}
-                };
-
+            }else if($scope.can('NCROQUE')){
+                URL = 'cro-queue';
+            }else{
+                URL = 'cro2-queue';
             }
-            else if(AclService.can('NCROQUE')){
-				URL = 'cro-queue'; //All 
-			}else{
-				URL = 'cro2-queue'; // Only CRO2
-			}
 
 			RestService.fetchDataQuietly(URL,$scope.json).then(function(data){
 				
@@ -926,8 +904,7 @@ function requestForStatus(json){
                         }  
                   });
              notifier.logSuccess("Application is successfully "+json.sAppStat+""); 
-        }
-        else{
+        }else{
             notifier.logWarning("Unable to Approve your application !");
         }
     }); 
