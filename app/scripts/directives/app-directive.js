@@ -31,6 +31,7 @@
 		            return capitalized;
 		         }
 		         modelCtrl.$parsers.push(capitalize);
+		         modelCtrl.$formatters.push(capitalize);
 		         capitalize(scope[attrs.ngModel]);  // capitalize initial value
 		     }
 		   };
@@ -124,7 +125,6 @@
 					notifier.logWarning("Please provide all images.") ;
 				}
 			};
-
 		}];
 
 		return {
@@ -141,12 +141,17 @@
 
 	app.directive('contentItem', function ($compile) {
 		var linker = function(scope, element, attrs) {
-			var template = '<div class="row clearfix" style="padding: 8px;">';
-			template=template+'<label>{{item.doc}}</label>';
+
+			var template =    ' <style>';
+			template=template+'		.doc-preview{position:relative;bottom:0px;width:100%;left:0px;border: none;border-bottom: 1px solid black;}';
+			template=template+' </style>';
+			template=template+'	<div class="row clearfix" style="padding: 8px;">';
+			template=template+'		<label>{{item.doc}}</label>';
 			template=template+'<div class="preview" id="{{item.value}}{{item.index}}">';
 			template=template+'<input id="{{item.value}}l{{item.index}}" type="file" ngf-select="onselectImg($files,{{item}})">';
 			template=template+'<label for="{{item.value}}l{{item.index}}" id="{{item.value}}{{item.index}}label">';
-			template=template+'<img alt="" src="../images/camera-128.png" class="img_icon"></label></div>';
+			template=template+'<img alt="" src="../images/camera-128.png" ng-if="item.isDefault" class="img_icon">';
+			template=template+'<img alt="" ng-src="{{item.image}}" ng-if="!item.isDefault" class="doc-preview"></label></div>';
 			template=template+'<small id="{{item.value}}{{item.index}}size" class="size"></small>';
 			template=template+'<div style="height:20px;display:inline"><a class="remove_image" id="{{item.value}}{{item.index}}remove" name="{{item.value}}{{item.index}}" style="display:none" ng-click="onImageRemove(item)">Remove</a></div>';
 			template=template+'</div>';
@@ -172,7 +177,7 @@
 				}
 
 				for(var i=0; i<$scope.imagearray.length;i++){
-					if($scope.imagearray[i].kyc_name == kycName){
+					if($scope.imagearray[i].kyc_name === kycName){
 						/* delete img_array[i]; */
 						$scope.imagearray.splice(i,1);
 					}
@@ -212,7 +217,7 @@
 				        reader.readAsDataURL($files[i]);
 					}
 				}
-			}
+			};
 		}];
 
 		return {
@@ -247,10 +252,11 @@
 			template=template+'		.btn-delete-doc{position:absolute;bottom:10px;right:10px;}';
 			template=template+' </style>';
 		 	template=template+'	<div class="col-md-4" style="padding: 8px;margin-bottom:20px;">';
-	        template=template+'     <md-input-container class="md-block" flex-gt-sm > <label>Document Type</label> <md-select ng-model="item.docType"> <md-option ng-value="doc" ng-repeat="doc in arrDocTypes">{{ doc }}</md-option> </md-select> <div ng-messages="form[doc_type_+item.index].$error" > <div ng-message="selectrequired">Please select Document Type</div> </div> </md-input-container>';
-	        template=template+'		<input type="text" class="doc-number" name="doc_no_{{item.index}}" ng-model="item.docNumber" capitalize placeholder="{{item.docType}} Number" required/>';
+	        template=template+'     <md-input-container class="md-block" flex-gt-sm > <label>Document Type</label> <md-select ng-model="item.docType" ng-change="onDocTypeSelected(item.docType)" select-required> <md-option ng-value="doc" ng-repeat="doc in arrDocTypes">{{ doc }}</md-option> </md-select> <div ng-messages="form[doc_type_+item.index].$error" > <div ng-message="selectrequired">Please select Document Type</div> </div> </md-input-container>';
+	        template=template+'		<input type="text" class="doc-number" name="doc_no_{{item.index}}" ng-model="item.docNumber" capitalize placeholder="{{item.docType}} Number" ng-pattern="docNumberPattern" required/>';
 	        template=template+'		<div ng-messages="form[\'doc_no_\'+item.index].$touched && form[\'doc_no_\'+item.index].$error" class="errorMsg">';
 	        template=template+'			<p ng-message="required">Please enter Document Number</p>';
+	        template=template+'			<p ng-message="pattern">Please enter valid Document Number</p>';        
 	        template=template+'		</div>';
 	        template=template+'		<div class="upload-preview" id="{{item.index}}"  title="Click to select image.">';
 	        template=template+'			<input id="l{{item.index}}" name="l{{item.index}}" type="file" ngf-select="onselectImg($files,{{item}});" />';
@@ -307,6 +313,18 @@
 					}
 				}
 			};
+
+			$scope.onDocTypeSelected=function(pDocType){
+				if(pDocType==="PAN"){
+					$scope.docNumberPattern= new RegExp("^[A-Z]{3}[P][A-Z]\\d{4}[A-Z]");
+				}else if(pDocType==="AADHAAR"){
+					$scope.docNumberPattern= new RegExp("^[0-9\\d]{12}$");
+				}else{
+					$scope.docNumberPattern= new RegExp("[a-zA-Z0-9_]*");
+				}
+			};
+
+			$scope.onDocTypeSelected($scope.item.docType);
 		}];
 
 		return {

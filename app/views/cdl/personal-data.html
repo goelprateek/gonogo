@@ -2,7 +2,7 @@
 	<div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true,alwaysVisible:true}">
 		<div class="row clearfix ">
 			<div class="col-md-10 col-md-offset-1">
-				<div class="row clearfix" style="margin-bottom: 40px;">
+				<!-- <div class="row clearfix" style="margin-bottom: 40px;">
 					
 					<help style="display:block;margin:15px;">Applicant Photo</help>
 					
@@ -18,8 +18,8 @@
 						<small ng-show="image_url2" class="size">{{file_size2}}</small>
 						<a class="remove_image" ng-show="selectImgInit || profileImage" ng-click="remove_file('APPLICANT-PHOTO','0',selectImgInit)">Remove</a>
 					</div>
-				</div>
-
+				</div> -->
+				<content-item item="applicantPhoto" imagearray="kycDocImages"></content-item>
 
 				<div layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm>

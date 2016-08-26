@@ -5,7 +5,7 @@
 
 	var app = angular.module('gonogo.factories',[]);
 
-	app.factory("timeataddress",function(){
+	/*app.factory("timeataddress",function(){
 		var timeataddress;
 		return timeataddress = [ { value: 'select', name: 'Select Time @ address'},
 	                         { value: '5', name: 'Less than 6 months'},
@@ -22,7 +22,7 @@
 	                  {value:'Business', name:'Bussiness'},
 	                  {value:'Job', name:'Job'}
 	                  ];
-	}),
+	}),*/
 
 	app.factory("addrType",function(){
 		var addrType;
