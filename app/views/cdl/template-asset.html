@@ -1,44 +1,42 @@
-<!-- <form name="AssetForm" novalidate > -->
+<div layout-gt-sm="row" >
+	<md-input-container class="md-block" flex-gt-sm>
+		<label>Asset Category</label>
+		<md-select name="category" ng-model="asset.category" ng-change="fetchAssetMake(asset.category)" select-required> 
+		  <md-option ng-value="asset" ng-repeat="asset in assetArray">
+		  	{{ asset }}
+		  </md-option>
+		</md-select>
+		<div ng-messages="form.category.$error" >
+    		<div ng-message="selectrequired">Please select Asset Category</div>
+		</div>	
+	</md-input-container>
+</div>	
 
-	<div layout-gt-sm="row" >
-		<md-input-container class="md-block" flex-gt-sm>
-			<label>Asset Category</label>
-			<md-select name="category" ng-model="asset.category" ng-change="fetchAssetMake(asset.category)" select-required> 
-			  <md-option ng-value="asset" ng-repeat="asset in assetArray">
-			  	{{ asset }}
-			  </md-option>
-			</md-select>
-			<div ng-messages="AssetForm.category.$error" >
-	    		<div ng-message="selectrequired">Please select Asset Category</div>
-			</div>	
-		</md-input-container>
-	</div>	
+<div layout-gt-sm="row" >
+	<md-input-container class="md-block" flex-gt-sm>
+		<label>Select Make</label>
+		<!-- {{makeTags.length}} -->
+		<md-select name="make" ng-model="asset.make" ng-change="fetchAssetModel(asset.category,asset.make)" select-required> 
+		  <md-option ng-value="make" ng-repeat="make in makeTags">{{ make }}</md-option>
+		</md-select>
+		<div ng-messages="form.make.$error" >
+    		<div ng-message="selectrequired">Please select Asset Make</div>
+		</div>
+	</md-input-container>
+</div>	
 
-	<div layout-gt-sm="row" >
-		<md-input-container class="md-block" flex-gt-sm>
-			<label>Select Make</label>
-			{{makeTags.length}}
-			<md-select name="make" ng-model="asset.make" ng-change="fetchAssetModel(asset.category,asset.make)" select-required> 
-			  <md-option ng-value="make" ng-repeat="make in makeTags">{{ make }}</md-option>
-			</md-select>
-			<div ng-messages="AssetForm.make.$error" >
-	    		<div ng-message="selectrequired">Please select Asset Make</div>
-			</div>
-		</md-input-container>
-	</div>	
-
-	<div layout-gt-sm="row" >
-		<md-input-container class="md-block" flex-gt-sm>
-			<label>Model</label>
-			{{modelTags.length}}
-			<md-select name="model" ng-model="asset.model" select-required> 
-			  <md-option ng-value="model" ng-repeat="model in modelTags">{{ model }}</md-option>
-			</md-select>
-			<div ng-messages="AssetForm.make.$error" >
-	    		<div ng-message="selectrequired">Please select Asset Make</div>
-			</div>
-		</md-input-container>
-	</div>	
+<div layout-gt-sm="row" >
+	<md-input-container class="md-block" flex-gt-sm>
+		<label>Model</label>
+		<!-- {{modelTags.length}} -->
+		<md-select name="model" ng-model="asset.model" select-required> 
+		  <md-option ng-value="model" ng-repeat="model in modelTags">{{ model }}</md-option>
+		</md-select>
+		<div ng-messages="form.make.$error" >
+    		<div ng-message="selectrequired">Please select Asset Make</div>
+		</div>
+	</md-input-container>
+</div>	
 
 	<!--<div class="row clearfix customRow" style="margin-top:30px;">
 		 <div class="col-md-12 height">
@@ -76,4 +74,4 @@
 		</div>
 	</div> -->
 
-<!-- </form> -->
+<!-- </form>
