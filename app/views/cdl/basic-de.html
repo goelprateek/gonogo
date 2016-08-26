@@ -18,7 +18,7 @@
 					          <label>First Name</label>
 					          <md-icon md-font-icon="fa fa-user" class="name" aria-label="User Icon"></md-icon>
 					          <input required name="fName" ng-model="basicInfo.firstName" md-maxlength="30" ng-pattern="/^[a-zA-Z]+$/" capitalize ng-disabled="shwVerify" md-select-on-focus>
-					          <div ng-messages="projectForm.fName.$error"  >
+					          <div ng-messages="projectForm.fName.$error">
 					            <div ng-message="required">Please enter first name</div>
 					            <div ng-message="pattern">Please enter valid first name</div>
 					          </div>

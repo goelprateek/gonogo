@@ -2,7 +2,7 @@
 	<div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true,alwaysVisible:true}">
 		<div class="row clearfix ">
 			<div class="col-md-10 col-md-offset-1">
-				
+			
 				<div layout-gt-sm="row">
 					
 					<md-autocomplete
@@ -41,7 +41,7 @@
 					<div flex="5" hide-xs hide-sm></div>
 
 					<md-input-container class="md-block" flex-gt-sm >
-						<label>Employment Type*</label>
+						<label>Employment Type</label>
 						<md-select ng-model="applicant.empl.emplType" name="emptype" ng-change="onChanged('WRKTYPE',applicant.empl.emplType)" ng-disabled="applicant.constitution === 'SELF-EMPLOYED'" select-required> 
 						  <md-option ng-value="employment.view" ng-repeat="employment in employmentTypes">
 						  	{{ employment.view }}
@@ -81,7 +81,7 @@
 				<div layout-gt-sm="row">
 					
 					<md-input-container class="md-block" flex-gt-sm >
-						<label>Address Line 1*</label>
+						<label>Address Line 1</label>
 						<input name="empadd1" ng-model="applicant.empl.emplAddr1" ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/" required capitalize >
 						<div ng-messages="professionalData.empadd1.$error" >
 	   						<p ng-message="required">Please enter Address line 1</p>
@@ -147,7 +147,7 @@
 				<div layout-gt-sm="row">
 					
 					<md-input-container class="md-block" flex-gt-sm >
-						<label>Pincode*</label>
+						<label>Pincode</label>
 						<input name="emppin" ng-model="applicant.empl.emplPin" data-ng-keyup="pinService(applicant.empl.emplPin,'wrkpin')" md-maxlength="6" name="emppin" ng-pattern="/^[0-9\d]{6}$/" required only-digits>
 						<div ng-messages="professionalData.emppin.$error">
 	   						<div ng-message="required">Please enter Pincode</div>
@@ -158,7 +158,7 @@
 					<div flex="5" hide-xs hide-sm></div>	
 
 					<md-input-container class="md-block" flex-gt-sm >
-						<label>City*</label>
+						<label>City</label>
 						<input name="empcity" ng-disabled="true" ng-model="applicant.empl.emplCity"  required >
 						<div ng-messages="professionalData.empcity.$error" >
 	   						<div ng-message="required">Please enter Employer city</div>
@@ -168,7 +168,7 @@
 					<div flex="5" hide-xs hide-sm></div>	
 
 					<md-input-container class="md-block" flex-gt-sm>
-						<label>State*</label>
+						<label>State</label>
 						<input name="empstate" ng-model="applicant.empl.emplState" ng-disabled="true" required >
 						<div ng-messages="professionalData.empstate.$error" >
 	   						<div ng-message="required">Please enter employer state</div>
@@ -207,7 +207,7 @@
 				<div layout-gt-sm="row">
 					
 					<md-input-container class="md-block" flex-gt-sm >
-						<label>STD Code*</label>
+						<label>STD Code</label>
 						<input name="empstd" ng-model="applicant.empl.emplStd" md-maxlength="5" ng-pattern="/^[0-9\d]{3,5}$/" required only-digits>
 						<div ng-messages="professionalData.empstd.$error" >
 	   						<div ng-message="required">Please enter STD code</div>
@@ -228,7 +228,7 @@
 					<div flex="5" hide-xs hide-sm></div>	
 
 					<md-input-container class="md-block" flex-gt-sm>
-						<label>Office Mobile*</label>
+						<label>Office Mobile</label>
 						<input name="empofcmob" ng-model="applicant.empl.emplMob" md-maxlength="10" ng-pattern="/^[0-9\d]{10}$/" only-digits required>
 						<div ng-messages="professionalData.empofcmob.$error" >
 	   						<div ng-message="required">Please enter Office mobile</div>
@@ -263,7 +263,7 @@
 				<div layout-gt-sm="row">
 					
 					<md-input-container class="md-block" flex-gt-sm >
-						<label>Email*</label>
+						<label>Email</label>
 						<input name="empemail" ng-model="applicant.empl.emplEmail" ng-pattern="/^[a-zA-Z]+[a-zA-Z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required>
 						<div ng-messages="professionalData.empemail.$error" >
 	   						<div ng-message="required">Please enter Email ID</div>
@@ -274,7 +274,7 @@
 					<div flex="5" hide-xs hide-sm></div>
 
 					<md-input-container class="md-block" flex-gt-sm>
-						<label>Months with Current Employer*</label>
+						<label>Months with Current Employer</label>
 						<input name="monthwithemp" ng-model="applicant.empl.emplMonthWithEmp" md-maxlength="3" only-digits required ng-pattern="/^[0-9\d]{1,3}$/">
 						<div ng-messages="professionalData.monthwithemp.$error" >
 	   						<div ng-message="required">Please enter Month with current employer</div>
@@ -305,7 +305,7 @@
 				<div layout-gt-sm="row">
 					
 					<md-input-container class="md-block" flex-gt-sm >
-						<label>Last Month Salary*</label>
+						<label>Last Month Salary</label>
 						<md-icon class="inr" md-font-icon="fa fa-inr" aria-label="inr"></md-icon>
 						<input name="lastmonth" ng-model="applicant.empl.emplSalary" md-maxlength="12" ng-pattern="/^[0-9\d,]{1,17}$/" rupees required>
 						<div ng-messages="professionalData.lastmonth.$error" >
