@@ -108,11 +108,6 @@
 		};
 
 		var _controller=["$scope",function($scope){
-			// console.log("Image Array Request: ");
-			// console.log($scope.requestImageArray);
-
-			//console.log("Reference ID: ");
-			//console.log($scope.referenceId);
 
 			$scope.imageArrayToUpload=[];
 
@@ -130,67 +125,6 @@
 				}
 			};
 
-			/*
-			 * Author Sayali uploadallimg function to upload img one by one
-			 */
-			 /*
-			$scope.uploadAllImgs=function(pReferenceID,pImageArrayToUpload)
-			{
-				// console.log("upload Image array :"+array.length);
-				for(var i=0 ; i<$scope.imageArrayToUpload.length ; i++){
-					if($scope.imageArrayToUpload[i] != null){
-						var json ={
-					  		"oHeader": {
-						    	"sAppID": pReferenceID,  // application id
-							    "sApplID": "1" // applicant id
-						  	},
-						  	"sRefID": pReferenceID,
-					  		"oUpldDtl": {
-							    "sFileID": "1", // ask yogesh
-							    "sFileName": pImageArrayToUpload[i].kyc_name,
-							    "sFileType": pImageArrayToUpload[i].type,
-							    "sfileData": pImageArrayToUpload[i].image,
-							    "sStat": "", // ask yogesh
-							    "sReason": "" // ask yogesh
-						  	}
-						};
-				//		console.log("image JSon : "+JSON.stringify(json));
-						uploadImage(json);	
-					}
-				}
-			};
-
-			function uploadImage(json)
-			{
-				RestService.saveToServer("upload-image",json)
-				.then(function(data)
-				{
-					$scope.imageUploadedCount=$scope.imageUploadedCount+1;
-
-					if($scope.imageUploadedCount == $scope.imageArrayToUpload.length){
-						$scope.onImageUploaded();
-					}
-
-					if(Response.sStatus == 'SUCCESS')
-					{
-		//				console.log("response for-"+JSON.stringify(Response));		
-					}
-	 			},function(failedResponse){
-	 				$scope.serviceHitCount=$scope.serviceHitCount+1;
-					if($scope.serviceHitCount<=3)
-					{
-					  	uploadImage(json);
-					}else{
-						$scope.serviceHitCount=1;
-
-						$scope.imageUploadedCount=$scope.imageUploadedCount+1;
-						if($scope.imageUploadedCount == $scope.imageArrayToUpload.length){
-							$scope.onImageUploaded();
-						}
-						alert("Sorry we can not process your image upload request");
-					}
-				});
-			};*/
 		}];
 
 		return {
@@ -293,52 +227,57 @@
 	});
 
 	app.directive('documentItem', function ($compile) {
-		var linker = function(scope, element, attrs) {
+
+		var linker = function(scope, element, attrs,form) {
+			// var template = '<div class="row clearfix" style="padding: 8px;">';
+			// template=template+'<label>{{item.doc}}</label>';
+			// template=template+'<div class="preview" id="{{item.index}}">';
+			// template=template+'<input id="l{{item.index}}" type="file" ngf-select="onselectImg($files,{{item}})">';
+			// template=template+'<label for="l{{item.index}}" id="{{item.index}}label">';
+			// template=template+'<img alt="" src="../images/camera-128.png" class="img_icon"></label></div>';
+			// template=template+'<small id="{{item.index}}size" class="size"></small>';
+			// template=template+'<div style="height:20px;display:inline"><a class="remove_image" id="{{item.index}}remove" name="{{item.index}}" style="display:none" ng-click="onImageRemove(item)">Remove</a></div>';
+			// template=template+'</div>';
+
+			scope.form = form; //save parent form
+
+
 			var template =    ' <style>';
 			template=template+'		.doc-number{position:relative;bottom:0px;width:100%;left:0px;margin-top: 10px;border: none;border-bottom: 1px solid black;}';
 			template=template+'		.btn-delete-doc{position:absolute;bottom:10px;right:10px;}';
 			template=template+' </style>';
 		 	template=template+'	<div class="col-md-4" style="padding: 8px;margin-bottom:20px;">';
-	        template=template+'		<md-input-container class="md-block" flex-gt-sm > <label>Document Type</label> <md-select ng-model="item.docType"> <md-option ng-value="doc" ng-repeat="doc in arrDocTypes">{{ doc }}</md-option> </md-select> </md-input-container>';
-	        template=template+'		<input type="text" class="doc-number" ng-model="item.docNumber" capitalize placeholder="{{item.docType}} Number" />';
+	        template=template+'     <md-input-container class="md-block" flex-gt-sm > <label>Document Type</label> <md-select ng-model="item.docType"> <md-option ng-value="doc" ng-repeat="doc in arrDocTypes">{{ doc }}</md-option> </md-select> <div ng-messages="form[doc_type_+item.index].$error" > <div ng-message="selectrequired">Please select Document Type</div> </div> </md-input-container>';
+	        template=template+'		<input type="text" class="doc-number" name="doc_no_{{item.index}}" ng-model="item.docNumber" capitalize placeholder="{{item.docType}} Number" required/>';
+	        template=template+'		<div ng-messages="form[\'doc_no_\'+item.index].$touched && form[\'doc_no_\'+item.index].$error" class="errorMsg">';
+	        template=template+'			<p ng-message="required">Please enter Document Number</p>';
+	        template=template+'		</div>';
 	        template=template+'		<div class="upload-preview" id="{{item.index}}"  title="Click to select image.">';
 	        template=template+'			<input id="l{{item.index}}" name="l{{item.index}}" type="file" ngf-select="onselectImg($files,{{item}});" />';
 	        template=template+'			<label for="l{{item.index}}" id="{{item.index}}label" title="Click to select image." ng-class="{\'upload-default\': item.isDefault,\'upload-preview\': !item.isDefault}" ng-style="item.style">';
 	        template=template+'			</label>';
 	        template=template+'			<button class="btn btn-danger btn-xs btn-delete-doc" title="Delete this document" ng-click="removeDoc(item.index)"><span class="glyphicon glyphicon-trash"></span></button>';
 	        template=template+'		</div>';
-	        // template=template+'		<button class="remove_image" id="{{item.index}}remove" name="{{item.index}}" href="remove_image()">Remove</button>';
 	        template=template+'	</div>';
 
 			element.html(template);
 			$compile(element.contents())(scope);
 
 			scope.removeDoc=function(pIndex){
-				//alert("Hi");
-				//$scope.inputs.splice(index,1);
-				//console.log("Index:"+index);
 				scope.removeKycDoc({index:pIndex});
-				// console.log("Image Object:");
-				// console.log($scope.addkyc_array);
 			};
 		};
 
 		var _controller=["$scope",function($scope){
-			//	console.log("Image Array To Upload: ");
-			//	console.log($scope.imagearray);
-			// 	var countimg=0;
 
 			$scope.arrDocTypes=["PAN","AADHAAR","PASSPORT","DRIVING-LICENSE","INCOME-PROOF1","INCOME-PROOF2","OTHER"];
 
 			$scope.onselectImg = function($files,item) 
 			{
-				//console.log("inside file select"+type+" file:"+$files[0].name);
-				//alert("Hello");
 				var img_type ='';
 				for (var i = 0; i < $files.length; i++){
 					var fname=$files[0].name;
 
-//		    		var re = (/\.(gif|jpg|jpeg|tiff|png)$/i);
 			    	var re = (/\.(jpg)$/i);
 					if(!re.exec(fname)){
 				    	alert("Sorry..!! We can not upload your image. \n Only .Jpg images are allowed");
@@ -363,8 +302,6 @@
 							}
 							$("#"+item.index).css("background-image", "url("+binaryString+")");
 							$("#"+item.index+"label").css("background-image", "none");
-							//$("#"+item.index+"label").hide();
-							//$("#"+item.index+"remove").show();
 						};
 				        reader.readAsDataURL($files[i]);
 					}
@@ -380,6 +317,7 @@
 				item: "=",
 				removeKycDoc:"&"
 			},
+			require:"^form",
 			controller : _controller
 		};
 	});

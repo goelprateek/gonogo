@@ -1,4 +1,4 @@
-<form id="bankingInfo" name="KycDoc" novalidate>
+<form id="bankingInfo" name="KycDocForm" novalidate accessible-form>
 	<div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true}">
 		<div class="row clearfix ">
 			<div class="col-md-10 col-md-offset-1">
@@ -173,7 +173,7 @@
 				</div> -->
 				<div class="col-md-12">
 					<document-item ng-repeat="item in kycArray" item="item" imagearray="kycDocImages" remove-kyc-doc="removeKycDoc(index)"></document-item>
-				</div>				
+				</div>
 			</div>
 		</div>
 	</div>
@@ -187,7 +187,7 @@
 			<button class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.asset')">Previous</button>
 			<button class="customButton cancel" id="cancel" ng-click="cancelApplication()">Cancel</button>
 			<button class="customButton save saveSubmit" id="save" ng-click="submitApplication('step3')">Save</button>
-			<button class="customButton submit" id="submit"	style="position: absolute; top: -1px;" ng-click="submitApplication('step4')">Submit</button>
+			<button class="customButton submit" id="submit"	style="position: absolute; top: -1px;" ng-click="KycDocForm.$valid ? submitApplication('step4') : fasle;">Submit</button>
 		</div>
 	</div>
 </form>

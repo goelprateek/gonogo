@@ -188,7 +188,92 @@
 		getOfferData : _getOfferData,
 		getEmploymentType :_getEmploymentType
 	};
-});
+}),
+
+app.factory("ApplyObject",function(){
+    	var _obj = {
+	        "suspected": "No",
+	        "creditCard": "",
+	        "gender": "Male",
+	        "education": "",
+	        "maritalStat":"Single",
+	        "dob":"",
+	        "constitution":"",
+	        "sameAbove":false,
+	        "application":{
+	        	"loanType":"Consumer Durables",
+	        	"loanAmt":"",
+	        	"tenor":""
+	        },
+	        "aKycDocs":[],
+	        "empl":{
+	        	"emplType":"",
+	        	"emplMob":"",
+	        	"emplLandLine":"",
+	        	"emplStd":"",
+	        	"emplITReturn":"",
+	        	"emplSalary":"",
+	        	"emplMonthWithEmp":"",
+	        	"emplName":"",
+	        	"emplEmail":"",
+	        	"emplState":"",
+	        	"emplCity":"",
+	        	"emplPin":"",
+	        	"emplAddr1":"",
+	        	"emplAddr2":"",
+	        	"emplAddr3":""
+	        },
+	        "oResidence":{
+	        	"oAddress":{
+	        		"addrType":"",
+	        		"sAddress1":"",
+	        		"sAddress2":"",
+	        		"sAddress3":"",
+	        		"sState":"",
+	        		"sCity":"",
+	        		"sPinCode":"",
+	        		"addrType":"",
+	        		"iMonthCity":"",
+	        		"dRentPerMonth":"",
+	        		"iMonthAddress":""
+	        	},
+	        	"oPhone":{
+	        		"iMobile":"",
+	        		"iLandLine":"",
+	        		"sStdCode":""
+	        	},
+	        	"sEmail":""
+	        },
+	        "oPermanent":{
+	        	"oAddress":{
+	        		"addrType":"",
+	        		"sAddress1":"",
+	        		"sAddress2":"",
+	        		"sAddress3":"",
+	        		"sState":"",
+	        		"sCity":"",
+	        		"sPinCode":"",
+	        		"addrType":"",
+	        		"iMonthCity":"",
+	        		"dRentPerMonth":"",
+	        		"iMonthAddress":""
+	        	},"oPhone":{
+	        		"iMobile":"",
+	        		"iLandLine":"",
+	        		"sStdCode":""
+	        	},
+	        	"sEmail":""
+	        },
+	       	"asset":{
+	       		"category":"",
+	       		"make":"",
+	       		"model":""
+	       	}
+        };
+        return{
+        	dummy : _obj
+        }
+    });
 
 
 
