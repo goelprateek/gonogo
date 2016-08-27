@@ -107,9 +107,10 @@
 			    	<md-input-container class="md-block" flex-gt-sm>
 			    		<label>Loan Amount</label>
 			    		<md-icon class="inr" md-font-icon="fa fa-inr" aria-label="Rupee"></md-icon>
-			    		<input name="loanamt" ng-model="applicant.application.loanAmt" md-maxlength="12" rupees required >
+			    		<input name="loanamt" ng-model="applicant.application.loanAmt" md-maxlength="12" ng-maxlength="12" rupees required >
 			    		<div ng-messages="personalData.loanamt.$error"  >
 							<div ng-message="required">Please enter loan amount</div>
+							<div ng-message="['maxlength','ng-maxlength']">loan amount should not be greater than 12 digits</div>
 						</div>
 			    	</md-input-container>
 					

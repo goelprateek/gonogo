@@ -209,7 +209,7 @@
 
 				<md-input-container class="md-block" flex-gt-sm >
 					<label>Landline Number</label>
-					<input ng-model="applicant.oResidence.oPhone.iLandLine" md-maxlength="10" ng-pattern="/^[0-9\d]{10}$/" only-digits name="resLandLine">	
+					<input ng-model="applicant.oResidence.oPhone.iLandLine" maxlength="10" ng-pattern="/^[0-9\d]{10}$/" only-digits name="resLandLine">	
 					<div ng-messages="addressData.resLandLine.$error" >
 	   					<div ng-message="pattern">Please enter valid Landline number</div>
 					</div>
@@ -275,13 +275,14 @@
 			</div> -->
 
 			<div layout-gt-sm="row">
-					
+					<!-- only-digits -->
 				<md-input-container class="md-block" flex-gt-sm >
 					<label>Months at current address</label>
-					<input name="monthaddr"  ng-model="applicant.oResidence.oAddress.iMonthAddress"  md-maxlength="3" only-digits required this-earlier-than="applicant.oResidence.oAddress.iMonthCity">
+					<input name="monthaddr"  ng-model="applicant.oResidence.oAddress.iMonthAddress" md-maxlength="3" ng-maxlength="3"  required this-earlier-than="applicant.oResidence.oAddress.iMonthCity">
 					<div ng-messages="addressData.monthaddr.$error" >
 	   					<div ng-message="required">Please enter months at current address</div>
 	   					<div ng-message="thisEarlierThan">Residence stay should be less than city stay </div>
+	   					<div ng-message-exp="['md-maxlength', 'maxlength']">Only three digit allowed</div>
 					</div>
 				</md-input-container>
 
