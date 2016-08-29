@@ -184,7 +184,7 @@
 	</div>
 	<div class="row clearfix ">
 		<div class="col-md-10 col-md-offset-1">
-			<button class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.asset')">Previous</button>
+			<button class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.asset',KycDocForm.$valid)">Previous</button>
 			<button class="customButton cancel" id="cancel" ng-click="cancelApplication()">Cancel</button>
 			<button class="customButton save saveSubmit" id="save" ng-click="submitApplication('step3')">Save</button>
 			<button class="customButton submit" id="submit"	style="position: absolute; top: -1px;" ng-click="KycDocForm.$valid ? submitApplication('step4') : fasle;">Submit</button>

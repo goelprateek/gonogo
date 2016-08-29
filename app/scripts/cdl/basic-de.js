@@ -83,9 +83,12 @@
 							 "Get OTP Button Clicked",1);
 
 			var json = {
-							"USER_ID":user.username, "PASSWORD":user.ePassword,
+							"USER_ID":user.username, 
+							"PASSWORD":user.ePassword,
 							"INSTITUTION_ID":user.institutionID,
-							"inputJson_":{ "MOBILE-NUMBER":$scope.mobileNo }
+							"inputJson_": { 
+									"MOBILE-NUMBER":$scope.basicInfo.mobileNumber 
+							}
 						};
 
 			RestService.postDataWithHeaders('get-otp', json, user.username, user.ePassword)
@@ -123,8 +126,6 @@
 				}
 			}else{
 				notifier.logError("Invalid OTP");
-		//		$("#errorHeading").text("OTP : ");
-		//		$("#main_error").text("Please enter OTP");
 			}
 		}
 

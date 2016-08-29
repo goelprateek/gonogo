@@ -476,6 +476,9 @@
                                 var itemDate = moment($filter('date')(item.date, "yyyy-MM-dd"),"YYYY-MM-DD");
                                 return itemDate.isBetween(startDate,endDate,'hours','[]')
                             });
+                            
+                            console.log(filteredData.length);
+
                        return $scope.drawTablularData(filteredData);
 
 

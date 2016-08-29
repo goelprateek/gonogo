@@ -15,57 +15,22 @@ app.controller('DecisionViewController', function ($scope,$uibModalInstance, dat
 
 app.controller("DashboardController",["$scope","$filter",'sharedService',"$uibModal",'APP_CONST',"RestService","UserService","$rootScope","GNG_GA","$state",
 							function($scope,$filter,sharedService,$uibModal,APP_CONST,RestService,UserService,$rootScope,GNG_GA,$state){
-	 //sayali (added stacked graph service using directive)
-	var user=UserService.getCurrentUser();
-
-	$scope.dashboardType="ApplicationList";
-	$scope.trueAppList = true;
 	
-	$scope.applnOptionChange=function(value){
+	var user = UserService.getCurrentUser();
 
-		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_DASHBOARD"),
-				 		GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
-				 		GNG_GA.getConstAction("ACTION_CLICK_DASHBOARD_DATA_TYPE"),
-				 		$scope.dashboardType,1);
+	if(user.role != "DSA"){
+		$state.go(APP_CONST.getConst('APP_CONTEXT'));
+	}
 
-	   	if(value == 'ApplicationList'){
-	   		$scope.trueAppList = true;
-	   	}else{
-			var json = {'sInstID':user.institutionID,'sDsaId':user.username,
-		'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}};
-			RestService.saveToServer("stack-graph",json).then(function(data){
-				$scope.orignalData = data;
-			});
-	   		$scope.trueAppList = false;
-	   	}
-  	}
-	//end
+	// TODO need to check with sayali & piyush
 
-	$scope.duration="LastYear";
-	$scope.dashboardResult=[];
+	if(!_.isUndefined(user.id) ){
 
-	$rootScope.errHead="";
-	$rootScope.errorMsg="";
-
-	//console.log("Scope :");
-	//console.log($scope);
-
-	$scope.sortType     = 'dDate'; // set the default sort type
-	$scope.sortDesc  = true;  // set the default sort order
-	$scope.searchText   = '';     // set the default search/filter term
-	$scope.query   = '';
-
-	$scope.fetchDashboardList=function(){
-		//alert("Search String: "+$scope.searchText+" Duration: "+$scope.duration);
-
-		if(!_.isUndefined(user.id) )
-		{
-			if(user.actions && user.actions.length!=0)
-			{ 
-				$scope.app=_.contains(user.actions,'APPLICATION' );
-				$scope.notif=_.contains(user.actions,'NOTIFICATION');
-				$scope.policy=_.contains(user.actions,'POLICY' );
-				$scope.analytics=_.contains(user.actions,'ANALYTCS');
+			if(user.actions && user.actions.length != 0) { 
+				$scope.app =_.contains(user.actions,'APPLICATION' );
+				$scope.notif =_.contains(user.actions,'NOTIFICATION');
+				$scope.policy =_.contains(user.actions,'POLICY' );
+				$scope.analytics =_.contains(user.actions,'ANALYTCS');
 			}
 
 			$scope.username = user.username;
@@ -75,50 +40,110 @@ app.controller("DashboardController",["$scope","$filter",'sharedService',"$uibMo
 			$scope.InstitutionID = user.InstitutionID;
 			$scope.userid = user.userid;
 			$scope.color = user.color;
-		}else{
-			$state.go(APP_CONST.getConst('APP_CONTEXT'));
+		
+	}else{
+			
+		$state.go(APP_CONST.getConst('APP_CONTEXT'));
+		
+	}
+
+	
+	$scope.trueAppList = 1;
+	
+	$scope.applnOptionChange = function(){
+
+		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_DASHBOARD"),
+				 		GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
+				 		GNG_GA.getConstAction("ACTION_CLICK_DASHBOARD_DATA_TYPE"),
+				 		$scope.dashboardType,1);
+
+	   	if($scope.dashfilters.type !== 'ApplicationList'){
+	   		
+	   		var json = {
+						'sInstID':user.institutionID,
+						'sDsaId':user.username,
+						'oCriteria': { 
+										"oHierarchy":user.hierarchy,
+										"aProducts":user.getProductNames()
+									 }
+						};
+			RestService.saveToServer("stack-graph",json).then(function(data){
+				$scope.orignalData = data;
+			});
+
+			$scope.trueAppList = 0;
+	   	}else{
+	   		$scope.trueAppList = 1;
+	   	}
+
+	   	
+
+  	}
+	//end
+
+	
+	$scope.dashboardResult=[];
+
+	$scope.sortType     = 'dDate'; 
+	$scope.sortDesc  = true; 
+
+	/*$scope.searchText   = ''; 
+	$scope.query   = '';*/
+
+	$scope.dashfilters = {
+		type:"ApplicationList",
+		duration : "",
+		search:""
+	},$scope.dashType = ['Application List','Application Summary'].map(function(item){
+		return {view:item, value : item.replace(/ +/g, "")};
+	}),$scope.durationTypes = ['Last Week','Last Month','Last Year'].map(function(item){
+		return {view : item, value : item.replace(/ +/g, "")};
+	})
+
+	function calculateFromDate($type){
+		switch($type) {
+			case 'LastYear' : 
+				return moment().subtract(1,'year').format('YYYY-MM-DD');
+				break;
+			case 'LastMonth' : 	
+				return  moment().subtract(1,'month').format('YYYY-MM-DD');
+				break;
+			case 'LastWeek' : 
+				return  moment().subtract(1,'week').format('YYYY-MM-DD');
+				break;
+			default : 
+				return moment().format('YYYY-MM-DD');
 		}
 
-//		alert($scope.useremail.toLowerCase());
-//		alert($scope.useremail.toLowerCase().indexOf("dsa"));
-		if(user.role!="DSA")
-		{
-//			console.log();
-//			alert("Moving to root");
-			$state.go(APP_CONST.getConst('APP_CONTEXT'));
-		}
+	}
 
+	$scope.fetchDashboardList=function(){
+		
 		$scope.isLoadingDashboardData=true;
 
 		$scope.query   = $scope.searchText;
 
-		var todayStr = $filter('date')(new Date(),'yyyy-MM-dd');
-
-		var fromDate=new Date();
-
-		if($scope.duration=="LastYear"){
-			fromDate.setYear(fromDate.getFullYear()-1);
-		}else if($scope.duration=="LastMonth"){
-			fromDate.setMonth(fromDate.getMonth()-1);
-		}else if($scope.duration=="LastWeek"){
-			fromDate.setDate(fromDate.getDate()-7);
-		}
-		var fromDateStr = $filter('date')(fromDate,'yyyy-MM-dd');
+		var todate = moment().format('YYYY-MM-DD'),
+			fromDate =	calculateFromDate($scope.dashfilters.duration),
 
 		//TODO Get sDsaId
-		dashboardJson={"iLimit":10000,"dtToDate":todayStr,"sDsaId":$scope.username,"iSkip":0,"dtFromDate":fromDateStr};
+		dashboardJson={
+				"iLimit":1000,
+				"dtToDate":todate,
+				"dtFromDate":fromDate,
+				"sDsaId":$scope.username,
+				"iSkip":0
+		};
 
-		var dashboardJson=JSON.stringify(dashboardJson);
-		// var urlConst= APP_CONST.getConst('BASE_URL_GNG');
-
-		//console.log("APP_CONST.getConst('BASE_URL_GNG')" + APP_CONST.getConst('BASE_URL_GNG'));
 		RestService.saveToServer("dashboard-detail",dashboardJson)
 		.then(function(data){
-			//console.log("dashboard-detail response:");
-			//console.log(data);
+			if(data){
+				console.log(data);
+				$scope.dashboardResult = data;	
+			}
+			
+		}).finally(function(){
 			$scope.isLoadingDashboardData=false;
-
-			$scope.dashboardResult=data;
 		});
 	};
 
@@ -129,37 +154,44 @@ app.controller("DashboardController",["$scope","$filter",'sharedService',"$uibMo
 					 "Dashboard Application Clicked",1,"","",refID);
 
 		sharedService.setRefID(refID);
+
 		sharedService.setDecisionStatus(decisionStatus);
+		
 		$state.go( "/cdl/customerForm" );
 	};
 
 	$scope.fetchDashboardList();
 
-    $scope.search = function (row) {
-//    	console.log("Row:");
-//    	console.log(row);
-    	var name=row.sName;
-    	name=name.toLowerCase();
+    $scope.dashSearch = function (row) {
 
-    	var query=$scope.query || "";
-    	query=query.toLowerCase();
+    	var name = row.sName,
+    	name=name.toLowerCase(),
 
-    	var stage=row.sStages;
-    	stage=stage.toLowerCase();
+    	stage = row.sStages,
+    	stage = stage.toLowerCase(),
 
-    	var refID=row.sRefId;
-    	refID=refID.toLowerCase();
+    	refID = row.sRefId,
+    	refID = refID.toLowerCase(),
 
-    	var amt=row.dAmtApprvd;
+    	amt = row.dAmtApprvd,
 
-    	var scheme=row.sScheme;
-    	scheme=scheme.toLowerCase();
+    	scheme=row.sScheme,
+ 	   	scheme=scheme.toLowerCase();
 
-        return (name.indexOf(query || '') !== -1 
-        		|| stage.indexOf(query || '') !== -1
-        		|| refID.indexOf(query || '') !== -1
-        		|| amt==query
-        		|| scheme.indexOf(query || '') !== -1);
+    	var query = $scope.dashfilters.search,
+    		query = query.toLowerCase();
+
+		if(!$scope.dashfilters.search || 
+			(name.indexOf(query) != -1)  || 
+			(stage.indexOf(query) != -1) || 
+			(refID.indexOf(query) != -1) || 
+			(amt == query) || 
+			(scheme.indexOf(query) != -1)){
+			return true;
+		}
+
+    	return false;	
+        
     };
 
     $scope.moreClicked=function(decision,remark,subject){ 
@@ -174,6 +206,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService',"$uibMo
 			remark:remark,
 			subject:subject
     	}
+    	
     	$scope.shwDecisionModal('lg',data);
     };
     

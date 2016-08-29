@@ -231,11 +231,19 @@
 	      
 	    };
 
-	    $scope.onNextClicked=function(isInvalid){
-	      if(isInvalid) {
+	    $scope.onNextClicked=function($valid){
+	      if($valid) {
 	      	$scope.currentPageNumber++;
 	        $state.go(nextState($state.current.name));
 	      } 
+		};
+
+		$scope.onPreviousClicked=function(previousURL,$valid){
+			if($valid){
+				$scope.currentPageNumber--;
+				$state.go(previousURL);	
+			}	
+			
 		};
 
     	// Start : If from step 1 screen
@@ -1143,13 +1151,11 @@ $scope.remove_file = function(filetype, id, index) {
 		}
 
 		$scope.isCurrPanel = function(currentPage){
-			if(currentPage==$scope.currentPageNumber)
+			if(currentPage == $scope.currentPageNumber)
 				return true;
 		};
-		$scope.onPreviousClicked=function(previousURL){
-			$scope.currentPageNumber--;
-			$state.go(previousURL);
-		};
+
+		
 
 
 		$scope.resAddrTypeChange = function(type){
