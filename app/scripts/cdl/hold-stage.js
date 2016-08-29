@@ -33,7 +33,8 @@
 					"index" :i+1,
 					"doc"  :$scope.statusObject.aCroJustification[i].sDocName,
 					"state":$scope.statusObject.aCroJustification[i].sCase,
-					"reason":$scope.statusObject.aCroJustification[i].sDescrip
+					"reason":$scope.statusObject.aCroJustification[i].sDescrip,
+					"isDefault" :true
 				};
 				$scope.holdStageArr.push(object);
 			}

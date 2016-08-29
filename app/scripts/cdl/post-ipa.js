@@ -1,18 +1,33 @@
 ;(function(){
 	'use strict';	
 	var app=angular.module("gonogo.cdl");
-	app.controller("ChangeAssetCtrlr",["$scope","asset","$uibModalInstance",function($scope,asset,$uibModalInstance){
+	app.controller("ChangeAssetCtrlr",["$scope","asset","$mdDialog",function($scope,asset,$mdDialog){
 		$scope.asset=asset;
 
-    	$scope.onSaveAssetClicked=function(){
-			// var json = {"make":$("#mk1").val(),"model":$("#mdl1").val()}
+   //  	$scope.onSaveAssetClicked=function(){
+			// // var json = {"make":$("#mk1").val(),"model":$("#mdl1").val()}
 
-			$uibModalInstance.close($scope.asset);
-	  	}
+			// $uibModalInstance.close($scope.asset);
+	  // 	}
+
+	  	$scope.onSaveAssetClicked = function() {
+      		$mdDialog.hide($scope.asset);
+	    };
+
+	    $scope.cancel = function() {
+      		$mdDialog.cancel();
+    	};
+	  	
 	}]);
 
-	app.controller("PostIPAController",["$scope","sharedService","UserService","RestService","notifier","$uibModal","$state",
-				function($scope,sharedService,UserService,RestService,notifier,$uibModal,$state){
+	// function ChangeAssetCtrlr($scope, $mdDialog) {
+	// 	$scope.onSaveAssetClicked = function() {
+ //      		$mdDialog.hide($scope.asset);
+	//     };
+	// }
+
+	app.controller("PostIPAController",["$scope","sharedService","UserService","RestService","notifier","$uibModal","$state","$mdDialog",
+				function($scope,sharedService,UserService,RestService,notifier,$uibModal,$state,$mdDialog){
 
 		$scope.asset={
 			category:"",
@@ -417,25 +432,43 @@
 
 		 	// console.log("post ipa request"+JSON.stringify($scope.ipaJson));
 		}*/
-		$scope.onChangeAssetClicked=function(asset){
-			var modalInstance = $uibModal.open({
-              	animation: $scope.animationsEnabled,
-              	templateUrl: 'views/cdl/modal-change-asset.html',
-              	controller: 'ChangeAssetCtrlr',
-              	size: 'lg',    
-              	resolve:{
-                	asset : function (){
-                    	return asset;
-                	}
-              	}
-            });
+		$scope.onChangeAssetClicked=function(event){
+			// var modalInstance = $uibModal.open({
+   //            	animation: $scope.animationsEnabled,
+   //            	templateUrl: 'views/cdl/modal-change-asset.html',
+   //            	controller: 'ChangeAssetCtrlr',
+   //            	size: 'lg',    
+   //            	resolve:{
+   //              	asset : function (){
+   //                  	return asset;
+   //              	}
+   //            	}
+   //          });
 
-            modalInstance.result.then(function (asset) {
-            	//console.log("New Asset");
-            	//console.log(asset);
-            	$scope.asset=asset;
+   //          modalInstance.result.then(function (asset) {
+   //          	//console.log("New Asset");
+   //          	//console.log(asset);
+   //          	$scope.asset=asset;
+			// 	$scope.scmService();
+   //      	}, function (array) {});
+
+        	$mdDialog.show({
+	      		controller: 'ChangeAssetCtrlr',
+		      	templateUrl: 'views/cdl/modal-change-asset.html',
+		      	parent: angular.element(document.body),
+		      	targetEvent: event,
+		      	clickOutsideToClose:true,
+		      	fullscreen: false,// Only for -xs, -sm breakpoints.
+		      	locals: {
+					asset: $scope.asset
+				} 
+		    })
+		    .then(function(asset) {
+		      	$scope.asset=asset;
 				$scope.scmService();
-        	}, function (array) {});
+		    }, function() {
+		      	$scope.status = 'You cancelled the dialog.';
+		    });
     	};
 	}]);
 }).call(this);
