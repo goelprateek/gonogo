@@ -230,9 +230,6 @@
 	          case '/cdl/apply.asset':
 	          	  return '/cdl/apply.kyc';
 	          	  break;	
-	          case '/cdl/apply.kyc' :
-	          		return '';
-	          		break;
 	          default:
 	              alert('Did not match any switch');
 	      }
