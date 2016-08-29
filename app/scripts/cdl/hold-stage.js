@@ -2,8 +2,8 @@
 	'use strict';	
 	var app=angular.module("gonogo.cdl");
 
-	app.controller("HoldStageController",["$scope","sharedService","UserService","$state","notifier",
-				function($scope,sharedService,UserService,$state,notifier){
+	app.controller("HoldStageController",["$scope","sharedService","UserService","$state","notifier","RestService",
+				function($scope,sharedService,UserService,$state,notifier,RestService){
 
 		var user=UserService.getCurrentUser();
 
@@ -130,7 +130,7 @@
 
 			RestService.saveToServer('reset-status', updateJson)
 			.then(function(data){
-				if(data && data.sStatus == 'SUCCESS'){
+				if(data && data.status == 'OK'){
 					sharedService.setRefID($scope.referenceID);
 					notifier.logSuccess("Your request has bee processed successfully.");
 					$state.go("/cdl/result");

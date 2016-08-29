@@ -148,7 +148,7 @@
 					
 					<md-input-container class="md-block" flex-gt-sm >
 						<label>Pincode</label>
-						<input name="emppin" ng-model="applicant.empl.emplPin" data-ng-keyup="pinService(applicant.empl.emplPin,'wrkpin')" md-maxlength="6" name="emppin" ng-pattern="/^[0-9\d]{6}$/" required only-digits>
+						<input name="emppin" ng-model="applicant.empl.emplPin" data-ng-keyup="pinService(applicant.empl.emplPin,'wrkpin')" name="emppin" ng-pattern="/^[0-9\d]{6}$/" required only-digits>
 						<div ng-messages="professionalData.emppin.$error">
 	   						<div ng-message="required">Please enter Pincode</div>
 	   						<div ng-message="pattern">Please enter valid Pincode</div>
@@ -264,7 +264,7 @@
 					
 					<md-input-container class="md-block" flex-gt-sm >
 						<label>Email</label>
-						<input name="empemail" ng-model="applicant.empl.emplEmail" ng-pattern="/^[a-zA-Z]+[a-zA-Z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required>
+						<input name="empemail" ng-model="applicant.empl.emplEmail" ng-pattern="/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i" required>
 						<div ng-messages="professionalData.empemail.$error" >
 	   						<div ng-message="required">Please enter Email ID</div>
 	   						<div ng-message="pattern">Please enter valid Email ID</div>
