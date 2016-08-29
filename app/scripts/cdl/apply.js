@@ -110,7 +110,7 @@
 					docType:pDocType,
 					docNumber:pDocNumber,
 					style:{
-                    	background:'url("../images/camera-128.png") center/60px no-repeat'
+                    	background:'url("images/camera-128.png") center/60px no-repeat'
                     },
                     isDefault:true
 				});
@@ -120,7 +120,7 @@
   					docType:pDocType,
   					docNumber:pDocNumber,
   					style:{
-                   		background:'url("../images/camera-128.png") center/60px no-repeat'
+                   		background:'url("images/camera-128.png") center/60px no-repeat'
                     },
                     isDefault:true
   				});
