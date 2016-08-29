@@ -5,7 +5,7 @@
 		<label class="assetHeader">Category</label>
 		<!-- 	<div class="list-group-item" ng-if="notifarray.length==0"
 								style="color: red; text-align: center;">Your Queue is Empty</div> -->
-		<div class="assetCol" slimscroll="{height: 400,railVisible:true}">
+		<div class="assetCol" slimscroll="{height: 400,railVisible:true,alwaysVisible:true}">
 			<div class="category " ng-repeat="category in categoryArray" style="font-size: 18px; cursor: pointer" ng-click="assetManufacturer(category)">
 				{{category}}
 			</div>

@@ -37,7 +37,7 @@
                 showMethod: "fadeIn",
                 hideMethod: "fadeOut",
                 closeMethod : 'fadeOut',
-                closeDuration : 5000,
+                closeDuration : 500,
                 closeEasing : 'linear',
             }, logIt = function(message, type) {
                 return toastr[type](message)
