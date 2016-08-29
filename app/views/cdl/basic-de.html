@@ -67,7 +67,7 @@
 
 				        	<md-input-container class="md-block" flex-gt-sm>
 				        		<label>Aadhaar Number</label>
-				        		<input name="Aadhar" ng-model="basicInfo.aadhaarNumber" ng-disabled="shwVerify"  ng-pattern="/^[0-9\d]{12}$/" required-any="atleastOne"  only-digits/>
+				        		<input name="Aadhar" ng-model="basicInfo.aadhaarNumber" ng-disabled="shwVerify"  ng-pattern="/^[0-9\d]{12}$/" required-any="atleastOne"  only-digits />
 				        		<div ng-messages="BasicInfoForm.aadhaarNumber.$error"  >
 				        			<div ng-message="required">Pan number or adhaar required</div>
 			  				  		<div ng-message="pattern">Please enter valid adhaar number</div>
