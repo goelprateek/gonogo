@@ -24,7 +24,7 @@
 	        "creditCard": "",
 	        "gender": "Male",
 	        "education": "",
-	        "maritalStat":"",
+	        "maritalStat":"Single",
 	        "dob": moment().subtract(18,'years').toDate(),
 	        "constitution":"",
 	        "sameAbove":false,
@@ -109,9 +109,7 @@
 					index:($scope.kycArray[$scope.kycArray.length-1].index+1),
 					docType:pDocType,
 					docNumber:pDocNumber,
-					style:{
-                    	background:'url("images/camera-128.png") center/60px no-repeat'
-                    },
+					image:null,
                     isDefault:true
 				});
   			}else{
@@ -119,9 +117,7 @@
   					index:1,
   					docType:pDocType,
   					docNumber:pDocNumber,
-  					style:{
-                   		background:'url("images/camera-128.png") center/60px no-repeat'
-                    },
+  					image:null,
                     isDefault:true
   				});
   			}
@@ -132,9 +128,7 @@
 			for(var docIndex=0;docIndex<$scope.kycArray.length;docIndex++){
 				if($scope.kycArray[docIndex].docType===pDocName && $scope.kycArray[docIndex].isDefault){
 					docNameFound=true;
-					$scope.kycArray[docIndex].style={
-                   		background:'url('+pDocByteImage+') center/contain no-repeat'
-                    };
+					$scope.kycArray[docIndex].image=pDocByteImage;
                     $scope.kycArray[docIndex].isDefault=false;
 				}
 			}
@@ -144,9 +138,7 @@
   					index:($scope.kycArray[$scope.kycArray.length-1].index+1),
   					docType:pDocName,
   					docNumber:'',
-  					style:{
-                   		background:'url('+pDocByteImage+') center/contain no-repeat'
-                    },
+  					image:pDocByteImage,
                     isDefault:false
   				});
 			}
@@ -315,15 +307,15 @@
 		  		if(mApplicant.aPhone){
 		  			for(var i=0;i<mApplicant.aPhone.length;i++){
 		  				if(mApplicant.aPhone[i].sPhoneType==="PERSONAL_MOBILE"){
-		  					$scope.applicant.oResidence.oPhone.iMobile=mApplicant.aPhone[i].sPhoneNumber;
+		  					$scope.applicant.oPermanent.oPhone.iMobile=mApplicant.aPhone[i].sPhoneNumber;
 		  				}else if(mApplicant.aPhone[i].sPhoneType==="PERSONAL_PHONE"){
-		  					$scope.applicant.oResidence.oPhone.sStdCode=mApplicant.aPhone[i].sAreaCode;
-							$scope.applicant.oResidence.oPhone.iLandLine=mApplicant.aPhone[i].sPhoneNumber;
-		  				}else if(mApplicant.aPhone[i].sPhoneType==="RESIDENCE_PHONE"){
 		  					$scope.applicant.oPermanent.oPhone.sStdCode=mApplicant.aPhone[i].sAreaCode;
 							$scope.applicant.oPermanent.oPhone.iLandLine=mApplicant.aPhone[i].sPhoneNumber;
+		  				}else if(mApplicant.aPhone[i].sPhoneType==="RESIDENCE_PHONE"){
+		  					$scope.applicant.oResidence.oPhone.sStdCode=mApplicant.aPhone[i].sAreaCode;
+							$scope.applicant.oResidence.oPhone.iLandLine=mApplicant.aPhone[i].sPhoneNumber;
 		  				}else if(mApplicant.aPhone[i].sPhoneType==="RESIDENCE_MOBILE"){
-		  					$scope.applicant.oPermanent.oPhone.iMobile=mApplicant.aPhone[i].sPhoneNumber;
+		  					$scope.applicant.oResidence.oPhone.iMobile=mApplicant.aPhone[i].sPhoneNumber;
 		  				}else if(mApplicant.aPhone[i].sPhoneType==="OFFICE_PHONE"){
 		  					$scope.applicant.empl.emplStd = mApplicant.aPhone[i].sAreaCode;
 							$scope.applicant.empl.emplLandLine = mApplicant.aPhone[i].sPhoneNumber;
@@ -431,7 +423,6 @@
 						}
 					}
 				}
-
 
 				var assetDetails=Response.oReq.oApplication.aAssetDetail;
 
@@ -551,6 +542,22 @@ $scope.stateChanged = function (val){
 	}
 
 $scope.pinService = function(pin,id){
+	if( id =="perpin")
+	{
+		$scope.applicant.oResidence.oAddress.sCity = "";
+		$scope.applicant.oResidence.oAddress.sState = "";
+	}
+	else if(id =="wrkpin")
+	{
+		$scope.applicant.empl.emplCity = "";
+		$scope.applicant.empl.emplState = "";
+
+	}else if(id =="prmnt_perpin")
+	{
+		$scope.applicant.oPermanent.oAddress.sCity = "";
+		$scope.applicant.oPermanent.oAddress.sState = "";
+	}
+
 	if(pin && pin.length == 6){
 		var pinJson ={"oHeader":{"sInstID":user.institutionID},"sQuery":pin}; 
 
@@ -572,7 +579,7 @@ $scope.pinService = function(pin,id){
 					$scope.applicant.oPermanent.oAddress.sState = successResponse.sState;
 				}
 			}else{
-				notifier.logError("Some error occured at server, please retry !");
+				notifier.logWarning("City and State for this pincode not found !");
 			}
 		},function(failedResponse){
 			notifier.logError("Some error occured at server, please retry !");
@@ -918,7 +925,6 @@ $scope.submitApplication=function(UrlKey){
 				"sMarStat":$scope.applicant.maritalStat,
 				"sReligion":null,
 				"aPhone":[{
-					"phoneType":"PERSONAL_MOBILE",
 					"sPhoneType":"PERSONAL_MOBILE",
 					"sAreaCode":"",
 					"sCountryCode":"+91",
@@ -926,7 +932,6 @@ $scope.submitApplication=function(UrlKey){
 					"sPhoneNumber":($scope.applicant.oPermanent.oPhone.iMobile ? $scope.applicant.oPermanent.oPhone.iMobile : '')
 				},
 				{
-					"phoneType":"PERSONAL_PHONE",
 					"sPhoneType":"PERSONAL_PHONE",
 					"sAreaCode":($scope.applicant.oPermanent.oPhone.sStdCode ? $scope.applicant.oPermanent.oPhone.sStdCode :''),
 					"sCountryCode":"+91",
@@ -934,7 +939,6 @@ $scope.submitApplication=function(UrlKey){
 					"sPhoneNumber":($scope.applicant.oPermanent.oPhone.iLandLine ? $scope.applicant.oPermanent.oPhone.iLandLine : '')
 				},
 				{
-					"phoneType":"RESIDENCE_MOBILE",
 					"sPhoneType":"RESIDENCE_MOBILE",
 					"sAreaCode":"",
 					"sCountryCode":"+91",
@@ -942,7 +946,6 @@ $scope.submitApplication=function(UrlKey){
 					"sPhoneNumber":$scope.applicant.oResidence.oPhone.iMobile
 				},
 				{
-					"phoneType":"RESIDENCE_PHONE",
 					"sPhoneType":"RESIDENCE_PHONE",
 					"sAreaCode":$scope.applicant.oResidence.oPhone.sStdCode,
 					"sCountryCode":"+91",
@@ -950,7 +953,6 @@ $scope.submitApplication=function(UrlKey){
 					"sPhoneNumber":$scope.applicant.oResidence.oPhone.iLandLine
 				},
 				{
-					"phoneType":"OFFICE_PHONE",
 					"sPhoneType":"OFFICE_PHONE",
 					"sAreaCode":$scope.applicant.empl.emplStd,
 					"sCountryCode":"+91",
@@ -958,7 +960,6 @@ $scope.submitApplication=function(UrlKey){
 					"sPhoneNumber":$scope.applicant.empl.emplLandLine
 				},
 				{
-					"phoneType":"OFFICE_MOBILE",
 					"sPhoneType":"OFFICE_MOBILE",
 					"sAreaCode":"",
 					"sCountryCode":"+91",

@@ -247,7 +247,10 @@
 	        template=template+'		</div>';
 	        template=template+'		<div class="upload-preview" id="{{item.index}}"  title="Click to select image.">';
 	        template=template+'			<input id="l{{item.index}}" name="l{{item.index}}" type="file" ngf-select="onselectImg($files,{{item}});" />';
-	        template=template+'			<label for="l{{item.index}}" id="{{item.index}}label" title="Click to select image." ng-class="{\'upload-default\': item.isDefault,\'upload-preview\': !item.isDefault}" ng-style="item.style">';
+	        // template=template+'			<label for="l{{item.index}}" id="{{item.index}}label" title="Click to select image." ng-class="{\'upload-default\': item.isDefault,\'upload-preview\': !item.isDefault}" ng-style="item.style">';
+	        template=template+'			<label for="l{{item.index}}" id="{{item.index}}label" title="Click to select image.">';
+   	        template=template+'				<img src="images/camera-128.png" ng-if="item.isDefault" class="upload-default">';
+			template=template+'				<img ng-src="{{item.image}}" ng-if="!item.isDefault" class="upload-preview">';
 	        template=template+'			</label>';
 	        template=template+'			<button class="btn btn-danger btn-xs btn-delete-doc" title="Delete this document" ng-click="removeDoc(item.index)"><span class="glyphicon glyphicon-trash"></span></button>';
 	        template=template+'		</div>';
@@ -293,8 +296,10 @@
 							}else{
 								$scope.imagearray[spliceIndex].image=binaryString.split(",")[1];
 							}
+
 							$("#"+item.index).css("background-image", "url("+binaryString+")");
-							$("#"+item.index+"label").css("background-image", "none");
+							// $("#"+item.index+"label").css("background-image", "none");
+							$("#"+item.index+"label").hide();
 						};
 				        reader.readAsDataURL($files[i]);
 					}

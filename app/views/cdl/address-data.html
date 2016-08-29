@@ -256,7 +256,7 @@
 				<md-input-container class="md-block" flex-gt-sm >
 					<label>Email</label>
 					<md-icon class="material-icon" md-font-icon="fa fa-envelope-o" aria-label="email"></md-icon>
-					<input name="resemail" ng-model="applicant.oResidence.sEmail" ng-pattern="/^[a-zA-Z]+[a-zA-Z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" required >
+					<input name="resemail" ng-model="applicant.oResidence.sEmail" ng-pattern="/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i" required >
 					<div ng-messages="addressData.resemail.$error" >
 	   					<div ng-message="required">Please enter Email ID</div>
 	   					<div ng-message="pattern">Please enter valid Email ID</div>
@@ -293,7 +293,7 @@
 
 				<md-input-container class="md-block" flex-gt-sm >
 					<label>Months at City</label>
-					<input name="monthaddr" ng-model="applicant.oResidence.oAddress.iMonthCity"  md-maxlength="3" only-digits required only-digits this-earlier-than="applicant.oResidence.oAddress.iMonthCity">
+					<input name="monthcity" ng-model="applicant.oResidence.oAddress.iMonthCity"  md-maxlength="3" only-digits required only-digits>
 					<div ng-messages="addressData.monthcity.$error" >
 	   					<div ng-message="required">Please enter months at city</div>
 						<div ng-message="md-maxlength">Only three digit allowed</div>
@@ -585,7 +585,7 @@
 					<md-input-container class="md-block" flex-gt-sm >
 						<label>Email</label>
 						<md-icon class="material-icon" md-font-icon="fa fa-envelope-o" aria-label="email"></md-icon>
-						<input name="peremail" ng-model="applicant.oPermanent.sEmail" ng-pattern="/^[a-zA-Z]+[a-zA-Z0-9._]+@[a-z]+\.[a-z.]{2,5}$/">
+						<input name="peremail" ng-model="applicant.oPermanent.sEmail" ng-pattern="/^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i">
 						<div ng-messages="addressData.peremail.$error" >
 		   					<p ng-message="pattern">Please enter valid Email ID</p>
 						</div>
