@@ -221,8 +221,7 @@
 				<md-input-container class="md-block" flex-gt-sm >
 					<label>Personal Mobile</label>
 					<md-icon class="material-icon" md-font-icon="fa fa-phone" aria-label="phone"></md-icon>
-					<input ng-model="applicant.oResidence.oPhone.iMobile" md-maxlength="10"
-					ng-disabled=true name="resPersonalNum">
+					<input ng-model="applicant.oResidence.oPhone.iMobile" ng-disabled=true name="resPersonalNum">
 					<div ng-messages="addressData.resLandLine.$error" >
 	   					<div ng-message="md-maxlength">only 10 digits allowed</div>
 					</div>

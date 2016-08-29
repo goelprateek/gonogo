@@ -26,29 +26,29 @@
 			sharedService.setDODocument(null);
 		}
 
-		$scope.applicationFormArr=[{value:"APPLICATION_FORM","index":1}];
-		$scope.agreementArr=[{value:"AGREEMENT","index":1}];
-		$scope.achArr=[{value:"ACH","index":1}];
-		$scope.disbursmentArr=[{value:"DISBURSEMENT","index":1}];
-		$scope.addtnlKycArr=[{value:"ADDITIONAL_KYC","index":1}];
+		$scope.applicationFormArr=[{value:"APPLICATION_FORM","index":1,isDefault :true}];
+		$scope.agreementArr=[{value:"AGREEMENT","index":1,isDefault :true}];
+		$scope.achArr=[{value:"ACH","index":1,isDefault :true}];
+		$scope.disbursmentArr=[{value:"DISBURSEMENT","index":1,isDefault :true}];
+		$scope.addtnlKycArr=[{value:"ADDITIONAL_KYC","index":1,isDefault :true}];
 
 		$scope.addNewElement=function(key)
 		{  
 			switch (key) {
 				case "APPLICATION_FORM":
-					$scope.applicationFormArr.push({value:key,"index":($scope.applicationFormArr[$scope.applicationFormArr.length-1].index)+1});
+					$scope.applicationFormArr.push({value:key,"index":($scope.applicationFormArr[$scope.applicationFormArr.length-1].index)+1,isDefault :true});
 					break;
 				case "AGREEMENT":
-					$scope.agreementArr.push({value:key,"index":($scope.agreementArr[$scope.agreementArr.length-1].index)+1});
+					$scope.agreementArr.push({value:key,"index":($scope.agreementArr[$scope.agreementArr.length-1].index)+1,isDefault :true});
 					break;
 				case "ACH":
-					$scope.achArr.push({value:key,"index":($scope.achArr[$scope.achArr.length-1].index)+1});
+					$scope.achArr.push({value:key,"index":($scope.achArr[$scope.achArr.length-1].index)+1,isDefault :true});
 					break;				
 				case "DISBURSEMENT":
-					$scope.disbursmentArr.push({value:key,"index":($scope.disbursmentArr[$scope.disbursmentArr.length-1].index)+1});
+					$scope.disbursmentArr.push({value:key,"index":($scope.disbursmentArr[$scope.disbursmentArr.length-1].index)+1,isDefault :true});
 					break;				
 				case "ADDITIONAL_KYC":
-					$scope.addtnlKycArr.push({value:key,"index":($scope.addtnlKycArr[$scope.addtnlKycArr.length-1].index)+1});
+					$scope.addtnlKycArr.push({value:key,"index":($scope.addtnlKycArr[$scope.addtnlKycArr.length-1].index)+1,isDefault :true});
 					break;
 			}		
 		};

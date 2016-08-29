@@ -20,9 +20,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService',"$uibMo
 
 	$scope.dashboardType="ApplicationList";
 	$scope.trueAppList = true;
-
-	$scope.isLoadingDashboardData=true;
-
+	
 	$scope.applnOptionChange=function(value){
 
 		GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_DASHBOARD"),
@@ -89,6 +87,8 @@ app.controller("DashboardController",["$scope","$filter",'sharedService',"$uibMo
 //			alert("Moving to root");
 			$state.go(APP_CONST.getConst('APP_CONTEXT'));
 		}
+
+		$scope.isLoadingDashboardData=true;
 
 		$scope.query   = $scope.searchText;
 

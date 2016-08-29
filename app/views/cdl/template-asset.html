@@ -8,7 +8,7 @@
 		  </md-option>
 		</md-select>
 		
-		<div ng-messages="AssetForm.category.$error" >
+		<div ng-messages="form.category.$error" >
     		<div ng-message="required">Please select Asset Category</div>
 		</div>	
 	</md-input-container>
@@ -21,7 +21,7 @@
 		<md-select name="make" ng-model="asset.make" md-on-close="onMakeChanged()" required> 
 		  <md-option ng-value="make" ng-repeat="make in makeTags track by $index">{{ make }}</md-option>
 		</md-select>
-		<div ng-messages="AssetForm.make.$error" >
+		<div ng-messages="form.make.$error" >
     		<div ng-message="required">Please select Asset Make</div>
 		</div>
 	</md-input-container>
@@ -34,7 +34,7 @@
 		<md-select name="model" ng-model="asset.model" md-on-close="onModelChanged()" required> 
 		  <md-option ng-value="model" ng-repeat="model in modelTags track by $index">{{ model }}</md-option>
 		</md-select>
-		<div ng-messages="AssetForm.make.$error" >
+		<div ng-messages="form.make.$error" >
     		<div ng-message="required">Please select Asset Make</div>
 		</div>
 	</md-input-container>

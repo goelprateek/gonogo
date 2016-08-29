@@ -157,3 +157,10 @@ input[type="file"] {
   border: none;
   background-size: 60px;
 }
+
+.logo-gonogo{
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 71px;
+}

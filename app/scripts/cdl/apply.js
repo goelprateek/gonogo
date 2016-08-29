@@ -866,8 +866,8 @@ $scope.submitApplication=function(UrlKey){
 				"sApplID":"APPLICANT_1",
 				"oApplName":{
 					"sFirstName":$scope.fname,
-					"sLastName":$scope.mname,
-					"sMiddleName":$scope.lname,
+					"sLastName":$scope.lname,
+					"sMiddleName":$scope.mname,
 					"sPrefix":null,
 					"sSuffix":null
 				},
