@@ -6,7 +6,10 @@
 	</div>
 	<div class="row clearfix ">
 		<div class="col-md-10 col-md-offset-1">
-			<button class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.professional')">Previous</button>
+			<button class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.professional')">
+				<i class="fa fa-arrow-circle-o-left"></i>
+				Previous
+			</button>
 			<!-- !(applicant.asset.category && applicant.asset.make && applicant.asset.model) -->
 			<button type="submit" class="customButton next" ng-click="onNextClicked(AssetForm.$valid)">
 				Next

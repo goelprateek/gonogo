@@ -150,7 +150,7 @@
 			template=template+'<div class="preview" id="{{item.value}}{{item.index}}">';
 			template=template+'<input id="{{item.value}}l{{item.index}}" type="file" ngf-select="onselectImg($files,{{item}})">';
 			template=template+'<label for="{{item.value}}l{{item.index}}" id="{{item.value}}{{item.index}}label">';
-			template=template+'<img alt="" src="../images/camera-128.png" ng-if="item.isDefault" class="img_icon">';
+			template=template+'<img alt="" src="images/camera-128.png" ng-if="item.isDefault" class="img_icon">';
 			template=template+'<img alt="" ng-src="{{item.image}}" ng-if="!item.isDefault" class="doc-preview"></label></div>';
 			template=template+'<small id="{{item.value}}{{item.index}}size" class="size"></small>';
 			template=template+'<div style="height:20px;display:inline"><a class="remove_image" id="{{item.value}}{{item.index}}remove" name="{{item.value}}{{item.index}}" style="display:none" ng-click="onImageRemove(item)">Remove</a></div>';
@@ -510,7 +510,7 @@
 	        require:"ngModel",
 	        link: function(element,scope,attr,controller){
 	            controller.$validators.selectrequired = function(modelValue){                   
-	                return  (!!modelValue) && !modelValue.startsWith('Select');
+	                return  (!!modelValue) && !modelValue.startsWith('Select') && modelValue != '';
 	            }
 	        }
 	    }

@@ -23,19 +23,19 @@
 	        "suspected": "No",
 	        "creditCard": "",
 	        "gender": "Male",
-	        "education": "DOCTORATE",
-	        "maritalStat":"Single",
-	        "dob":new Date(),
-	        "constitution":"TRUST",
+	        "education": "",
+	        "maritalStat":"",
+	        "dob": moment().subtract(18,'years').toDate(),
+	        "constitution":"",
 	        "sameAbove":false,
 	        "application":{
-	        	"loanType":"Consumer Durables",
+	        	"loanType":"",
 	        	"loanAmt":"",
 	        	"tenor":""
 	        },
 	        "aKycDocs":[],
 	        "empl":{
-	        	"emplType":"SELF-EMPLOYED",
+	        	"emplType":"",
 	        	"emplMob":"",
 	        	"emplLandLine":"",
 	        	"emplStd":"",
@@ -53,14 +53,14 @@
 	        },
 	        "oResidence":{
 	        	"oAddress":{
-	        		"addrType":"OWNED-FLAT",
+	        		"addrType":"",
 	        		"sAddress1":"",
 	        		"sAddress2":"",
 	        		"sAddress3":"",
 	        		"sState":"",
 	        		"sCity":"",
 	        		"sPinCode":"",
-	        		"addrType":"OWNED-FLAT",
+	        		"addrType":"",
 	        		"iMonthCity":"",
 	        		"dRentPerMonth":"",
 	        		"iMonthAddress":""
@@ -74,14 +74,14 @@
 	        },
 	        "oPermanent":{
 	        	"oAddress":{
-	        		"addrType":"OWNED-FLAT",
+	        		"addrType":"",
 	        		"sAddress1":"",
 	        		"sAddress2":"",
 	        		"sAddress3":"",
 	        		"sState":"",
 	        		"sCity":"",
 	        		"sPinCode":"",
-	        		"addrType":"OWNED-FLAT",
+	        		"addrType":"",
 	        		"iMonthCity":"",
 	        		"dRentPerMonth":"",
 	        		"iMonthAddress":""
@@ -167,6 +167,10 @@
         	$scope.$emit('onSuccessfulLogin');
    		}
 
+   		$scope.dobDate = {
+   			maxDate : moment().subtract(18,'years').toDate()
+   		},
+
    		$scope.suspectedActivities = ["Refer to Credit","Suspected Fraud","Confirmed Fraud"].map(function(activity){
    			return {view : activity}
    		}),
@@ -196,20 +200,10 @@
 	    }
 
 	    function querySearch (query) {
-	    	
 	      var results = query ? $filter("filter")($scope.employerNames.employerName.$$state.value,query) : $scope.employerNames.employerName;
-	      console.log(results);
 	      return results;
 	    }
 
-	    function createFilterFor(query) {
-	      var lowercaseQuery = angular.lowercase(query);
-
-	      return function filterFn(item) {
-	      	return (item.value.indexOf(lowercaseQuery) === 0);
-	      };
-
-	    }
 
 	    function loadAll(){
 	    	
@@ -781,8 +775,8 @@ $scope.pinService = function(pin,id){
 // }
 
 
-$scope.submitApplication=function(UrlKey)
-{
+$scope.submitApplication=function(UrlKey){
+
 	var dobFormatted = $filter('date')($scope.applicant.dob,"dd:MM:yyyy").replace(/:/g,'');
 	//console.log(dobFormatted);
 

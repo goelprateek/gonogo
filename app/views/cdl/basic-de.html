@@ -4,10 +4,11 @@
     color: red; 
 }
 </style>
-<form id="nmCntnr" name="BasicInfoForm" novalidate role="form" autocomplete="off" ng-submit="BasicInfoForm.$valid && clickEvent('getOTP')">
+
+<form  name="BasicInfoForm" novalidate role="form" autocomplete="off" accessible-form ng-submit="BasicInfoForm.$valid && clickEvent('getOTP')">
 
 
-	<div class="col-md-8 col-md-offset-2" id="middleContainer">
+	<div class="col-md-8 col-md-offset-2" id="middleContainer" >
 		<div class="row clearfix containerBorder">
 			<div class="col-md-10 col-md-offset-1">
 				<div id="basicInfo" style="margin-top: 20%">
@@ -17,10 +18,11 @@
 							<md-input-container class="md-block" flex-gt-sm>
 					          <label>First Name</label>
 					          <md-icon md-font-icon="fa fa-user" class="name" aria-label="User Icon"></md-icon>
-					          <input required name="fName" ng-model="basicInfo.firstName" md-maxlength="30" ng-pattern="/^[a-zA-Z]+$/" capitalize ng-disabled="shwVerify" md-select-on-focus>
-					          <div ng-messages="projectForm.fName.$error">
+					          <input  name="fName" ng-model="basicInfo.firstName"  ng-pattern="/^[a-zA-Z]{1,30}$/" md-maxlength="30" capitalize ng-disabled="shwVerify" required md-select-on-focus>
+					          <div ng-messages="BasicInfoForm.fName.$error">
 					            <div ng-message="required">Please enter first name</div>
 					            <div ng-message="pattern">Please enter valid first name</div>
+					            <div ng-message="md-maxlength">Only 30 characters allowed</div>
 					          </div>
 					        </md-input-container>
 							
@@ -29,8 +31,9 @@
 					        <md-input-container class="md-block" flex-gt-sm>
 					          <label>Middle Name</label>
 					          <input  name="mname" ng-model="basicInfo.middleName" capitalize ng-disabled="shwVerify" md-maxlength="30" ng-pattern="/^[a-zA-Z]+$/">
-					          <div ng-messages="projectForm.mname.$error"  >
+					          <div ng-messages="BasicInfoForm.mname.$error"  >
 					            <div ng-message="pattern">Please enter valid Middle name</div>
+					            <div ng-message="md-maxlength">Only 30 characters allowed</div>
 					          </div>
 					        </md-input-container>
 							
@@ -38,10 +41,11 @@
 					        
 					        <md-input-container class="md-block" flex-gt-sm>
 					          <label>Last Name</label>
-					          <input required name="lName" ng-model="basicInfo.lastName" ng-disabled="shwVerify" capitalize md-maxlength="30" ng-pattern="/^[a-zA-Z]+$/" required>
-					          <div ng-messages="projectForm.mname.$error" >
+					          <input  name="lName" ng-model="basicInfo.lastName" ng-disabled="shwVerify" md-maxlength="30"   ng-pattern="/^[a-zA-Z]+$/" required capitalize>
+					          <div ng-messages="BasicInfoForm.lName.$error" >
 					            <div ng-message="required">Please enter last name</div>
 					            <div ng-message="pattern">Please enter valid last name</div>
+					            <div ng-message="md-maxlength">Only 30 characters allowed</div>
 					          </div>
 					        </md-input-container>
 				        </div>
@@ -54,6 +58,7 @@
 				        		<div ng-messages="BasicInfoForm.mobileNumber.$error" >
 									<div ng-message="required">Please enter mobile number</div>
 							   		<div ng-message="pattern">Please enter valid mobile number</div>
+							   		<div ng-message="md-maxlength">Only 10 characters allowed</div>
 								</div>
 
 				        	</md-input-container>
@@ -62,7 +67,7 @@
 
 				        	<md-input-container class="md-block" flex-gt-sm>
 				        		<label>Aadhaar Number</label>
-				        		<input name="Aadhar" ng-model="basicInfo.aadhaarNumber" ng-disabled="shwVerify"  ng-pattern="/^[0-9\d]{12}$/" md-maxlength="12" required-any="atleastOne"  only-digits/>
+				        		<input name="Aadhar" ng-model="basicInfo.aadhaarNumber" ng-disabled="shwVerify"  ng-pattern="/^[0-9\d]{12}$/" required-any="atleastOne"  only-digits/>
 				        		<div ng-messages="BasicInfoForm.aadhaarNumber.$error"  >
 				        			<div ng-message="required">Pan number or adhaar required</div>
 			  				  		<div ng-message="pattern">Please enter valid adhaar number</div>
@@ -77,6 +82,7 @@
 				        		<div ng-messages="BasicInfoForm.panNumber.$error"  >
 				        			<div ng-message="required">Pan number or adhaar required</div>
 			  				  		<div ng-message="pattern">Please enter valid pan number</div>
+			  				  		<div ng-message="md-maxlength">Only 12 characters allowed</div>
 								</div>
 				        	</md-input-container>
 
@@ -85,13 +91,13 @@
 				        <div layout-gt-sm="row">
 				        	<md-input-container class="md-block" flex-gt-sm>
 				        		<label>Product Type</label>
-				        		<md-select  ng-model="basicInfo.productType" name="productType" ng-disabled="shwVerify" select-required >
+				        		<md-select  ng-model="basicInfo.productType" name="productType" ng-disabled="shwVerify" required >
 				        			<md-option data-ng-repeat="product in products" value="{{product.view}}">
 				        				{{product.view}}
 									</md-option>
 								</md-select>
 								<div ng-messages="BasicInfoForm.productType.$error" >
-							    	<div ng-message="selectrequired">Please select product type</div>
+							    	<div ng-message="required">Please select product type</div>
 								</div>
 				        	</md-input-container>
 				        </div>

@@ -208,7 +208,7 @@
 					
 					<md-input-container class="md-block" flex-gt-sm >
 						<label>STD Code</label>
-						<input name="empstd" ng-model="applicant.empl.emplStd" md-maxlength="5" ng-pattern="/^[0-9\d]{3,5}$/" required only-digits>
+						<input name="empstd" ng-model="applicant.empl.emplStd"  ng-pattern="/^[0-9\d]{3,5}$/" required only-digits>
 						<div ng-messages="professionalData.empstd.$error" >
 	   						<div ng-message="required">Please enter STD code</div>
 	   						<div ng-message="pattern">Please enter valid STD code</div>
@@ -219,7 +219,7 @@
 
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Landline Number</label>
-						<input ng-model="applicant.empl.emplLandLine" name="empLandline" md-maxlength="10" only-digits ng-pattern="/^[0-9\d]{10}$/">
+						<input ng-model="applicant.empl.emplLandLine" name="empLandline"  only-digits ng-pattern="/^[0-9\d]{10}$/">
 						<div ng-messages="professionalData.empLandline.$error" >
 	   						<div ng-message="pattern">Please enter valid LandLine Number</div>
 						</div>
@@ -229,7 +229,7 @@
 
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Office Mobile</label>
-						<input name="empofcmob" ng-model="applicant.empl.emplMob" md-maxlength="10" ng-pattern="/^[0-9\d]{10}$/" only-digits required>
+						<input name="empofcmob" ng-model="applicant.empl.emplMob"  ng-pattern="/^[0-9\d]{10}$/" only-digits required>
 						<div ng-messages="professionalData.empofcmob.$error" >
 	   						<div ng-message="required">Please enter Office mobile</div>
 	   						<div ng-message="pattern">Please enter valid Office mobile</div>
@@ -275,7 +275,7 @@
 
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Months with Current Employer</label>
-						<input name="monthwithemp" ng-model="applicant.empl.emplMonthWithEmp" md-maxlength="3" only-digits required ng-pattern="/^[0-9\d]{1,3}$/">
+						<input name="monthwithemp" ng-model="applicant.empl.emplMonthWithEmp"  only-digits required ng-pattern="/^[0-9\d]{1,3}$/">
 						<div ng-messages="professionalData.monthwithemp.$error" >
 	   						<div ng-message="required">Please enter Month with current employer</div>
 	   						<div ng-message="pattern">Please enter valid Months</div>
@@ -307,7 +307,7 @@
 					<md-input-container class="md-block" flex-gt-sm >
 						<label>Last Month Salary</label>
 						<md-icon class="inr" md-font-icon="fa fa-inr" aria-label="inr"></md-icon>
-						<input name="lastmonth" ng-model="applicant.empl.emplSalary" md-maxlength="12" ng-pattern="/^[0-9\d,]{1,17}$/" rupees required>
+						<input name="lastmonth" ng-model="applicant.empl.emplSalary" ng-pattern="/^[0-9\d,]{1,17}$/" rupees required>
 						<div ng-messages="professionalData.lastmonth.$error" >
 		   					<div ng-message="required">Please enter Last month salary</div>
 		   					<div ng-message="pattern">Please enter valid salary</div>
@@ -318,7 +318,7 @@
 
 					<md-input-container class="md-block" flex-gt-sm ng-if="applicant.empl.emplType =='SELF-EMPLOYED'">
 						<label>Last Year IT Return</label>
-						<input name="itreturn" ng-model="applicant.empl.emplITReturn" ng-pattern="/^[0-9\d,]{1,17}$/" rupees md-maxlength="12" required> 
+						<input name="itreturn" ng-model="applicant.empl.emplITReturn" ng-pattern="/^[0-9\d,]{1,17}$/" rupees  required> 
 						<div ng-messages=" professionalData.itreturn.$error" >
 		   					<div ng-message="required">Please enter Last year IT return</div>
 		   					<div ng-message="pattern">Please enter valid amount</div>
@@ -358,7 +358,10 @@
 
 	<div class="row clearfix ">
 		<div class="col-md-10 col-md-offset-1">
-			<button class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.address')">Previous</button>
+			<button class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.address')">
+				<i class="fa fa-arrow-circle-left"></i>	
+				Previous
+			</button>
 			<button type="submit" class="customButton next" id="fromemployment"  ng-click="onNextClicked(professionalData.$valid)">
 				Next
 				<i class="fa fa-arrow-circle-right"></i>

@@ -668,12 +668,6 @@ input[type="radio"] .styled:checked + label::after {
   color: #fff;
 }
 
-.open >.dropdown-menu-scaleIn {
-    opacity: 1;
-    -webkit-transform: scale(1);
-    transform: scale(1);
-}
-
 .dropdown-menu-scaleIn {
     display: block;
     opacity: 0;
@@ -682,7 +676,12 @@ input[type="radio"] .styled:checked + label::after {
     -webkit-transform: scale(0);
     transform: scale(0);
     -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
+    backface-visibility: hidden
+}
+.open>.dropdown-menu-scaleIn {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1)
 }
 
 .dropdown-menu.pull-right {
@@ -1544,4 +1543,81 @@ span.input-icon {
 
 .material-icon{
   min-height:40px;
+}
+
+
+.form-views.ng-enter,
+.form-views.ng-leave      { 
+    transition:0.5s all ease; -moz-transition:0.5s all ease;
+    -webkit-transition:0.5s all ease; 
+}
+    
+
+.form-views.ng-enter            { 
+    -webkit-animation:slideInRight 0.5s both ease;
+  -moz-animation:slideInRight 0.5s both ease;
+  animation:slideInRight 0.5s both ease; 
+}
+
+
+.form-views.ng-leave            { 
+    -webkit-animation:slideOutLeft 0.5s both ease;
+  -moz-animation:slideOutLeft 0.5s both ease;
+  animation:slideOutLeft 0.5s both ease;   
+}
+
+.animate-fade-up.ng-enter {
+    -webkit-animation: 0.35s fade-up-enter;
+    animation: 0.35s fade-up-enter
+}
+
+@-webkit-keyframes fade-up-enter {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateY(20px);
+        transform: translateY(20px)
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateY(0);
+        transform: translateY(0)
+    }
+}
+@keyframes fade-up-enter {
+    0% {
+        opacity: 0;
+        -webkit-transform: translateY(20px);
+        transform: translateY(20px)
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateY(0);
+        transform: translateY(0)
+    }
+}
+
+
+
+@keyframes slideOutLeft {
+  to    { transform: translateX(-200%); }
+}
+@-moz-keyframes slideOutLeft {  
+  to    { -moz-transform: translateX(-200%); }
+}
+@-webkit-keyframes slideOutLeft {
+  to    { -webkit-transform: translateX(-200%); }
+}
+
+/* slide in from the right */
+@keyframes slideInRight {
+  from  { transform:translateX(200%); }
+  to    { transform: translateX(0); }
+}
+@-moz-keyframes slideInRight {
+  from  { -moz-transform:translateX(200%); }
+  to    { -moz-transform: translateX(0); }
+}
+@-webkit-keyframes slideInRight {
+  from  { -webkit-transform:translateX(200%); }
+  to    { -webkit-transform: translateX(0); }
 }

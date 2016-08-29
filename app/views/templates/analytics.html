@@ -52,6 +52,8 @@ font-size:14px;}
 
 .highcharts-container{
 	width:100%!important;
+	height: 100%!important;
+	z-index:10!important;
 }
 
 </style>
@@ -79,7 +81,12 @@ font-size:14px;}
 			   <div class="col-md-12" style="height:40px;">&nbsp;&nbsp;&nbsp;&nbsp;</div>
 
 			   <div class="row" >
-					<div  hc-bar-chart  data="chartOptions" style="height:100%;width:100%;margin-bottom: 40px;"></div>
+			   <!-- style="height:100%;width:100%;margin-bottom: 40px;" -->
+					<!-- <div  hc-bar-chart  data="chartOptions" ></div> -->
+					
+					<hc-bar-chart data="chartOptions" ></hc-bar-chart>
+
+
 				</div>
 			</div>
 			

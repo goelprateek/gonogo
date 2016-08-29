@@ -29,8 +29,6 @@
     "angular-slimscroll": "^1.1.5",
     "highcharts": "^4.2.5",
     "angular-daterangepicker": "^0.2.2",
-    "angular-ez-plus": "^1.1.18",
-    "angular-ladda": "^0.4.2",
     "angular-ui-router": "^0.3.1",
     "angular-material": "^1.1.0"
   },

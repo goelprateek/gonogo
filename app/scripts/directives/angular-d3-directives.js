@@ -7,7 +7,7 @@
 	app.directive('hcBarChart',['UserService', 'RestService',function(UserService,RestService){
 		return {
 			restrict: 'EA',
-                    template: '<div></div>',
+                    template:'<div></div>',
                     scope: {
                         data: '=data'
 
@@ -16,10 +16,11 @@
                     link: function (scope,element,attribute, controller) {
                     	
                     	var user = UserService.getCurrentUser();
+                    	console.log(scope.data);
                     	scope.$watch('data', function(dataNew,dataOld){
-                    		
+                    		console.log('data changed',dataNew);
                     		if(dataNew){
-
+                    			console.log(dataNew);
                     			Highcharts.chart(element[0], {
 					            chart: {
 					                type: 'column',
@@ -112,7 +113,7 @@
 					              animation: true,
 					              shadow: true,
 					              useHTML:true,
-					             headerFormat: '<b>{point.x}</b><br/>',
+					              headerFormat: '<b>{point.x}</b><br/>',
 					                pointFormat: '<span style="color:{series.color}">{series.name}</span>: {point.y} </br>',
 					                footerFormat : 'Total: <b>{point.total}</b>',
 					                shared:true
@@ -142,6 +143,7 @@
 
                   }
                },true)
+			
             }
 		};
 	}]);

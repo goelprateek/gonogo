@@ -9,11 +9,10 @@
 			require: '^form',
 			scope:{
 				asset:"=",
+
 			},
 			restrict: 'E',
-			templateUrl: function(elem,attrs) {
-           		return 'views/cdl/template-asset.html'
-       		},
+			templateUrl: 'views/cdl/template-asset.html',
        		controller:["$scope","RestService","UserService",function($scope,RestService,UserService){
 
        			var user=UserService.getCurrentUser();
@@ -25,7 +24,7 @@
 					RestService.saveToServer("asset-category-web", $scope.assetJson).then(function(successResponse){
 						if(successResponse){
 							
-							$scope.assetArray=successResponse;
+							$scope.assetArray = successResponse;
 
 							if($scope.asset && $scope.asset.category){
 								$scope.fetchAssetMake($scope.asset.category);
@@ -49,6 +48,8 @@
 				$scope.fetchAssetCategory();
 
 				$scope.fetchAssetMake = function(val1){
+					if(val1 == '') return ;
+
 					$scope.makeJson ={"oHeader":{"sInstID":user.institutionID},"sQuery":val1};
 
 					RestService.saveToServer('asset-model-make-web', $scope.makeJson).then(function(successResponse){
@@ -73,20 +74,23 @@
 					});
 				};
 
-				if($scope.asset && $scope.asset.make){
+				/*if($scope.asset && $scope.asset.make){
 					$scope.fetchAssetMake($scope.asset.category);
-				}
+				}*/
 
 				$scope.fetchAssetModel = function(val1,val2){
+
+					if(val1 == '' && val2 == '') return ;
+
 					$scope.mdlJson ={"oHeader":{"sInstID":user.institutionID},"sQuery":val1,"sQuery2":val2}; 
 
 					RestService.saveToServer("asset-model-all-web", $scope.mdlJson).then(function(successResponse){
 						if(successResponse){
 							$scope.modelTags=[];
-							for(var i in successResponse)
-							{
-								if(successResponse[i].sMdlNo !=="")
-								{	
+							for(var i in successResponse){
+
+								if(successResponse[i].sMdlNo !== ""){	
+
 									$scope.modelTags.push(successResponse[i].sMdlNo);
 								}					
 							}
@@ -105,16 +109,20 @@
 					});
 				};
 
-				if($scope.asset && $scope.asset.model){
+				/*if($scope.asset && $scope.asset.model){
 					$scope.fetchAssetModel($scope.asset.category,$scope.asset.make);
-				}
+				}*/
+
+				$scope.assetArray  = [],
+       			$scope.makeTags  = [],
+       			$scope.modelTags = [];
 
        			$scope.onCategoryChanged=function(){
        				$scope.makeTags=[];
 					$scope.modelTags=[];
 
-					/*$scope.asset.make="";
-					$scope.asset.model="";*/
+					$scope.asset.make="";
+					$scope.asset.model="";
 
 					$scope.fetchAssetMake($scope.asset.category);
        			};
@@ -122,16 +130,20 @@
        			$scope.onMakeChanged=function(){
        				$scope.modelTags=[];
 
-					/*$scope.asset.make="";
-					$scope.asset.model="";*/
+					$scope.asset.model="";
 
 					$scope.fetchAssetModel($scope.asset.category,$scope.asset.make);
        			};
 
-       			$scope.onModelChanged=function(){       				
-					/*$scope.asset.model="";*/
+       			$scope.onModelChanged=function(){
+
        			};
-       		}]
+       		}],
+       		link: function(scope, element, attrs, ctrls) {
+       			console.log(scope);
+       			console.log(ctrls);
+       		}
+
 		}
 	});
 }).call(this);

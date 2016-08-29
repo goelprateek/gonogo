@@ -1,4 +1,4 @@
-<form id="kyccontainer" name="personalData" novalidate autocomplete="off" >
+<form id="kyccontainer" name="personalData" novalidate autocomplete="off" a>
 	<div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true,alwaysVisible:true}">
 		<div class="row clearfix ">
 			<div class="col-md-10 col-md-offset-1">
@@ -35,10 +35,11 @@
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Credit Card No</label>
 						<md-icon class="card" md-font-icon="fa fa-credit-card" aria-label="card"></md-icon>
-						<input  name="credit"   ng-pattern="/^[0-9\d]{1,6}$/" ng-model="applicant.creditCard" md-maxlength="6" only-digits>
+						<input  name="credit"   ng-pattern="/^[0-9\d]{1,6}$/" ng-model="applicant.creditCard" only-digits required>
 						<div ng-messages="personalData.credit.$error" >
+							<div ng-message="required">Please enter credit card no </div>
 		   					<div ng-message="pattern">Please enter valid data</div>
-						</div>
+		   				</div>
 					</md-input-container>
 
 					<div flex="5" hide-xs hide-sm></div>
@@ -82,7 +83,7 @@
 				<div layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm>
 			            <label>Date of Birth</label>
-			            <md-datepicker ng-model="applicant.dob" name="dob" flex="50" required></md-datepicker>
+			            <md-datepicker ng-model="applicant.dob" name="dob" flex="50"  md-max-date="dobDate.maxDate" required></md-datepicker>
 			            <div ng-messages="personalData.dob.$error" class="errorMsg">
 						    <div ng-message="required">Please select date of birth </div>
 						</div>
@@ -107,10 +108,10 @@
 			    	<md-input-container class="md-block" flex-gt-sm>
 			    		<label>Loan Amount</label>
 			    		<md-icon class="inr" md-font-icon="fa fa-inr" aria-label="Rupee"></md-icon>
-			    		<input name="loanamt" ng-model="applicant.application.loanAmt" md-maxlength="12" ng-maxlength="12" rupees required >
+			    		<input name="loanamt" ng-model="applicant.application.loanAmt" md-maxlength="12"  rupees required >
 			    		<div ng-messages="personalData.loanamt.$error"  >
 							<div ng-message="required">Please enter loan amount</div>
-							<div ng-message="['maxlength','ng-maxlength']">loan amount should not be greater than 12 digits</div>
+							<div ng-message="md-maxlength">loan amount should not be greater than 12 digits</div>
 						</div>
 			    	</md-input-container>
 					
@@ -121,6 +122,7 @@
 						<input type="text" name="tenor"  ng-model="applicant.application.tenor" md-maxlength="3" only-digits required>
 						<div ng-messages="personalData.tenor.$error" >
 							<div ng-message="required">Please enter Tenor</div>
+							<div ng-message="md-maxlength">Only 3 digits allowed</div>
 						</div>
 					</md-input-container>
 

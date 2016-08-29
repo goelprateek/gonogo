@@ -1,5 +1,5 @@
-<form name="addressData" novalidate autocomplete="off" >
-	<div class="row clearfix getheight" slimscroll="{height:405,railVisible:true,alwaysVisible:true}" style="height: 400px;">
+<form name="addressData" novalidate autocomplete="off" accessible-form >
+	<div class="row clearfix getheight" slimscroll="{height:405,railVisible:true,alwaysVisible:true}"  style="height: 400px;">
 		<div class="col-md-10 col-md-offset-1">
 			
 			<div layout-gt-sm="row">
@@ -20,7 +20,8 @@
 				<md-input-container class="md-block" flex-gt-sm  ng-if="applicant.oResidence.oAddress.addrType.indexOf('RENTED') != -1">
 					<label>Rent Per Month</label>
 					<md-icon class="material-icon" md-font-icon="fa fa-inr" aria-label="inr"></md-icon>
-					<input name="resRent" ng-pattern="/^[0-9\d,]{1,12}$/" ng-model="applicant.oResidence.oAddress.dRentPerMonth" md-maxlength="12" rupees required>
+					<!-- md-maxlength="12" -->
+					<input name="resRent" ng-pattern="/^[0-9\d,]{1,12}$/" ng-model="applicant.oResidence.oAddress.dRentPerMonth"  rupees required>
 					<div ng-messages="addressData.resRent.$error" >
 		   				<div ng-message="required">Please enter Rent per month</div>
 		   				<div ng-message="pattern">Please enter valid Rent</div>
@@ -134,7 +135,7 @@
 			<div layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm >
 						<label>Pincode</label>
-						<input ng-model="applicant.oResidence.oAddress.sPinCode" name="respin" md-maxlength="6" data-ng-keyup="pinService(applicant.oResidence.oAddress.sPinCode,'perpin')"  ng-pattern="/^[0-9\d]{6}$/" only-digits required >
+						<input ng-model="applicant.oResidence.oAddress.sPinCode" name="respin"  data-ng-keyup="pinService(applicant.oResidence.oAddress.sPinCode,'perpin')"  ng-pattern="/^[0-9\d]{6}$/" only-digits required >
 						<div ng-messages="addressData.respin.$error" >
 	   						<div ng-message="required">Please enter Pincode</div>
 	   						<div ng-message="pattern">Please enter valid Pincode</div>
@@ -222,6 +223,9 @@
 					<md-icon class="material-icon" md-font-icon="fa fa-phone" aria-label="phone"></md-icon>
 					<input ng-model="applicant.oResidence.oPhone.iMobile" md-maxlength="10"
 					ng-disabled=true name="resPersonalNum">
+					<div ng-messages="addressData.resLandLine.$error" >
+	   					<div ng-message="md-maxlength">only 10 digits allowed</div>
+					</div>
 				</md-input-container>
 
 			</div>	
@@ -278,11 +282,11 @@
 					<!-- only-digits -->
 				<md-input-container class="md-block" flex-gt-sm >
 					<label>Months at current address</label>
-					<input name="monthaddr"  ng-model="applicant.oResidence.oAddress.iMonthAddress" md-maxlength="3" ng-maxlength="3"  required this-earlier-than="applicant.oResidence.oAddress.iMonthCity">
+					<input name="monthaddr"  ng-model="applicant.oResidence.oAddress.iMonthAddress" md-maxlength="3" required this-earlier-than="applicant.oResidence.oAddress.iMonthCity">
 					<div ng-messages="addressData.monthaddr.$error" >
 	   					<div ng-message="required">Please enter months at current address</div>
 	   					<div ng-message="thisEarlierThan">Residence stay should be less than city stay </div>
-	   					<div ng-message-exp="['md-maxlength', 'maxlength']">Only three digit allowed</div>
+	   					<div ng-message="md-maxlength">Only three digit allowed</div>
 					</div>
 				</md-input-container>
 
@@ -290,9 +294,10 @@
 
 				<md-input-container class="md-block" flex-gt-sm >
 					<label>Months at City</label>
-					<input name="monthaddr" ng-model="applicant.oResidence.oAddress.iMonthCity"  md-maxlength="3"only-digits required only-digits this-earlier-than="applicant.oResidence.oAddress.iMonthCity">
+					<input name="monthaddr" ng-model="applicant.oResidence.oAddress.iMonthCity"  md-maxlength="3" only-digits required only-digits this-earlier-than="applicant.oResidence.oAddress.iMonthCity">
 					<div ng-messages="addressData.monthcity.$error" >
 	   					<div ng-message="required">Please enter months at city</div>
+						<div ng-message="md-maxlength">Only three digit allowed</div>
 					</div>
 				</md-input-container>	
 			</div>	
@@ -316,19 +321,19 @@
 				</div> 
 			</div> -->
 
-			<md-content >
+			<div layout-gt-sm="row">
 				<md-toolbar style="height:20px;">
 					<div class="md-toolbar-tools">
-						<h2>
+						<h4>
 				          <span>Permanent Address</span>
-				        </h2>
+				        </h4>
 				        <span flex></span>
 				        <md-checkbox style="margin-bottom:0px;" ng-model="applicant.sameAbove" aria-label="Checkbox" ng-change="stateChanged(applicant.sameAbove)">
 				            Same as Above
 				          </md-checkbox>
 					</div>
 				</md-toolbar>
-			</md-content>
+			</div>
 
 			<div layout-gt-sm="row">
 				<md-input-container class="md-block" flex-gt-sm flex="50">
@@ -348,6 +353,7 @@
 					<input ng-model="applicant.oPermanent.oAddress.dRentPerMonth" name="perrent" md-maxlength="12" ng-pattern="/^[0-9\d,]{1,12}$/" rupees>
 					<div ng-messages="addressData.perrent.$error" >
 			   			<div ng-message="pattern">Please enter valid Rent</div>
+			   			<div ng-message="md-maxlength">Only 12 digit allowed</div>
 					</div>
 				</md-input-container>
 
@@ -471,7 +477,7 @@
 				<div layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm >
 						<label>Pincode</label>
-						<input name="perpin"  ng-model="applicant.oPermanent.oAddress.sPinCode" id="prmnt_perpin" md-maxlength="6" ng-pattern="/^[0-9\d]{6}$/" data-ng-keyup="pinService(applicant.oPermanent.oAddress.sPinCode,'prmnt_perpin')" only-digits>
+						<input name="perpin"  ng-model="applicant.oPermanent.oAddress.sPinCode" id="prmnt_perpin" ng-pattern="/^[0-9\d]{6}$/" data-ng-keyup="pinService(applicant.oPermanent.oAddress.sPinCode,'prmnt_perpin')" only-digits>
 						<div ng-messages="addressData.perpin.$error" >
 			   				<div ng-message="pattern">Please enter valid Pincode</div>
 						</div>
@@ -525,7 +531,7 @@
 					
 					<md-input-container class="md-block" flex-gt-sm >
 						<label>STD Code</label>
-						<input ng-model="applicant.oPermanent.oPhone.sStdCode" ng-pattern="/^[0-9\d]{3,5}$/"  name="perstd" md-maxlength="5" only-digits>
+						<input ng-model="applicant.oPermanent.oPhone.sStdCode" ng-pattern="/^[0-9\d]{3,5}$/"  name="perstd"  only-digits>
 						<div ng-messages="addressData.perstd.$error" >
 			   				<div ng-message="pattern">Please enter valid STD code</div>
 						</div>
@@ -536,7 +542,7 @@
 					<md-input-container>
 						<label>Phone</label>
 						<md-icon class="material-icon" md-font-icon="fa fa-phone" aria-label="phone"></md-icon>
-						<input ng-model="applicant.oPermanent.oPhone.iLandLine" md-maxlength="10" ng-pattern="/^[0-9\d]{10}$/" name="perLandLine" only-digits>
+						<input name="perLandLine" ng-model="applicant.oPermanent.oPhone.iLandLine" ng-pattern="/^[0-9\d]{10}$/"  only-digits>
 						<div ng-messages="addressData.perLandLine.$error" >
 		   					<div ng-message="pattern">Please enter valid Phone number</div>
 						</div>
@@ -547,7 +553,7 @@
 					<md-input-container>
 						<label>Mobile</label>
 						<md-icon class="material-icon" md-font-icon="fa fa-mobile" aria-label="phone"></md-icon>
-						<input  ng-model="applicant.oPermanent.oPhone.iMobile" md-maxlength="10" ng-pattern="/^[0-9\d]{10}$/" name="perMob" only-digits >
+						<input  ng-model="applicant.oPermanent.oPhone.iMobile"  ng-pattern="/^[0-9\d]{10}$/" name="perMob" only-digits >
 						<div ng-messages="addressData.perMob.$error" >
 		   					<div ng-message="pattern">Please enter valid Mobile number</div>
 						</div>
@@ -606,7 +612,8 @@
 						<label>Months at Permanent address</label>
 						<input ng-model="applicant.oPermanent.oAddress.iMonthAddress" name="permonthadd" md-maxlength="3" only-digits this-earlier-than="applicant.oPermanent.oAddress.iMonthCity">
 						<div ng-messages="addressData.permonthadd.$error" >
-		   					<p ng-message="thisEarlierThan">Residence stay should be less than city stay </p>
+		   					<div ng-message="thisEarlierThan">Residence stay should be less than city stay </div>
+		   					<div ng-message="md-maxlength" >Only three figits allowed</div>
 						</div>
 					</md-input-container>
 

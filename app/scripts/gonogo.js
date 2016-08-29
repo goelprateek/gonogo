@@ -14,7 +14,6 @@
 	                                     'ngFileUpload',
 	                                     'angular-svg-round-progressbar',
 	                                     'ngTagsInput',
-	                                     'angular-ladda',
 	                                     'gonogo.analytics',
 	                                     'gonogo.login',
 	                                     'gonogo.directives',

@@ -32,13 +32,6 @@
 
 	}]);
 
-	app.config(['laddaProvider',function(laddaProvider){
-		laddaProvider.setOption({ 
-	      style: 'expand-right',
-	      spinnerSize: 10,
-	      spinnerColor: '#ffffff'
-	    });
-	}]);
 
 	app.config(['$provide','$logProvider', function($provide,$logProvider){
 		$logProvider.debugEnabled(true);

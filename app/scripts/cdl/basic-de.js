@@ -5,141 +5,7 @@
 
 	app.controller("BasicDEController",["$scope","APP_CONST","sharedService","RestService",'$log',"UserService","AclService","GNG_GA","notifier","$state",function(
 	 									$scope,APP_CONST,sharedService,RestService,$log,UserService,AclService,GNG_GA,notifier,$state) {
-		// var obj={
-		// 	"oHeader":{
-		// 		"sAppSource":"WEB",
-		// 		"sDsaId":user.username,
-		// 		"sInstID":user.institutionID,
-		// 		"sReqType":"JSON",
-		// 		"sDealerId":$scope.dealerCode
-		// 	},
-		// 	"oReq":{
-		// 		"oApplicant":{
-		// 			"aAddr":[
-		// 				{
-		// 					"sLine1":"",
-		// 					"sLine2":"",
-		// 					"sCountry":"INDIA",
-		// 					"sCity":"",
-		// 					"sLine3":"",
-		// 					"sState":"",
-		// 					"iPinCode":"",
-		// 					"sAddrType":"RESIDENCE",
-		// 					"sResAddrType":"",
-		// 					"iMonthAtCity":"",
-		// 					"dRentAmt":"",
-		// 					"iMonthAtAddr":""
-		// 				},{
-		// 					"sLine1":"",
-		// 					"sLine2":"",
-		// 					"sCountry":"INDIA",
-		// 					"sCity":"","sLine3":"",
-		// 					"sState":"","iPinCode":"",
-		// 					"sAddrType":"PERMANENT",
-		// 					"sResAddrType":"",
-		// 					"iMonthAtCity":"",
-		// 					"dRentAmt":"","iMonthAtAddr":""
-		// 				},
-		// 				{	
-		// 					"sLine1":"",
-		// 					"sLine2":"",
-		// 					"sCountry":"INDIA",
-		// 					"sCity":"",
-		// 					"sLine3":"",
-		// 					"sState":"",
-		// 					"iPinCode":"",
-		// 					"sAddrType":"OFFICE"
-		// 				}
-		// 			],
-		// 			"aPhone":[
-		// 				{
-		// 					"sPhoneType":"PERSONAL_PHONE",
-		// 					"sAreaCode":"",
-		// 					"sPhoneNumber":"",
-		// 					"sCountryCode":"+91"
-		// 				},{
-		// 					"sPhoneType":"RESIDENCE_PHONE",
-		// 					"sAreaCode":"",
-		// 					"sPhoneNumber":"",
-		// 					"sCountryCode":"+91"
-		// 				},{
-		// 					"sPhoneType":"OFFICE_PHONE",
-		// 					"sAreaCode":"",
-		// 					"sPhoneNumber":"",
-		// 					"sCountryCode":"+91"
-		// 				},{
-		// 					"sPhoneType":"PERSONAL_MOBILE",
-		// 					"sPhoneNumber":"9999999999",
-		// 					"sCountryCode":"+91"
-		// 				},{
-		// 					"sPhoneType":"RESIDENCE_MOBILE",
-		// 					"sPhoneNumber":"","sCountryCode":"+91"
-		// 				},{
-		// 					"sPhoneType":"OFFICE_MOBILE",
-		// 					"sPhoneNumber":"","sCountryCode":"+91"
-		// 				}
-		// 			],
-		// 			"oApplName":{
-		// 				"sFirstName":"FGDGFDGFDGFD",
-		// 				"sLastName":"SADDSADSADAS",
-		// 				"sMiddleName":""
-		// 			},
-		// 			"sCreditCardNum":"",
-		// 			"sDob":"","sEdu":"",
-		// 			"aEmail":[
-		// 				{
-		// 					"sEmailAddr":"",
-		// 					"sEmailType":"PERSONAL"
-		// 				},{
-		// 					"sEmailAddr":"",
-		// 					"sEmailType":"RESIDENCE"
-		// 				},{
-		// 					"sEmailAddr":"","sEmailType":"WORK"
-		// 				}
-		// 			],
-		// 			"aEmpl":[
-		// 				{
-		// 					"sConst":"",
-		// 					"sEmplName":"",
-		// 					"sEmplType":"",
-		// 					"iTmWithEmplr":"",
-		// 					"dmonthSal":"",
-		// 					"dGrossSal":"",
-		// 					"dItrAmt":""
-		// 				}
-		// 			],
-		// 			"sApplGndr":"Male",
-		// 			"aKycDocs":[
-		// 				{
-		// 					"sKycName":"PAN",
-		// 					"sKycNumber":""
-		// 				},
-		// 				{
-		// 					"sKycName":"AADHAAR",
-		// 					"sKycNumber":"333333333333"
-		// 				}
-		// 			],
-		// 			"sMarStat":"Single",
-		// 			"bMobVer":true,
-		// 			"iAge":null,
-		// 			"sApplID":"APPLICANT_1"
-		// 		},
-		// 		"oApplication":{
-		// 			"aAssetDetail":[
-		// 				{
-		// 					"sAssetCtg":"",
-		// 					"sAssetMake":"",
-		// 					"sDlrName":"SATHYA AGENCIES-SLM",
-		// 					"sModelNo":"","sPrice":""
-		// 				}
-		// 			],
-		// 			"sLoanType":"Consumer Durables",
-		// 			"iLoanTenor":"",
-		// 			"dLoanAmt":""
-		// 		},
-		// 		"sSuspAct":"No"
-		// 	}	
-		// };
+		
 
 		$scope.products = ["Consumer Durables"].map(function(product){
 			 return {view: product}
@@ -149,13 +15,13 @@
 		$scope.dealerCode;
 
 		$scope.basicInfo = {
-			firstName:"prateeek",
+			firstName:"",
 			middleName:"",
-			lastName:"goel",
-			mobileNumber:"9579321319",
+			lastName:"",
+			mobileNumber:"",
 			aadhaarNumber:"",
-			panNumber:"alvpg7356b",
-			productType:"Consumer Durables",
+			panNumber:"",
+			productType:"",
 			isMobileVerfied:false
 		};
 
