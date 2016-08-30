@@ -305,7 +305,7 @@
 				<div layout-gt-sm="row">
 					
 					<md-input-container class="md-block" flex-gt-sm >
-						<label>Last Month Salary</label>
+						<label>Last Month Salary*</label>
 						<md-icon class="inr" md-font-icon="fa fa-inr" aria-label="inr"></md-icon>
 						<input name="lastmonth" ng-model="applicant.empl.emplSalary" ng-pattern="/^[0-9\d,]{1,17}$/" rupees required>
 						<div ng-messages="professionalData.lastmonth.$error" >
@@ -316,14 +316,14 @@
 
 					<div flex="5" hide-xs hide-sm></div>
 
-					<md-input-container class="md-block" flex-gt-sm ng-if="applicant.empl.emplType =='SELF-EMPLOYED'">
+					<!-- <md-input-container class="md-block" flex-gt-sm ng-if="applicant.empl.emplType =='SELF-EMPLOYED'">
 						<label>Last Year IT Return</label>
 						<input name="itreturn" ng-model="applicant.empl.emplITReturn" ng-pattern="/^[0-9\d,]{1,17}$/" rupees  required> 
 						<div ng-messages=" professionalData.itreturn.$error" >
 		   					<div ng-message="required">Please enter Last year IT return</div>
 		   					<div ng-message="pattern">Please enter valid amount</div>
 						</div>
-					</md-input-container>
+					</md-input-container> -->
 
 				</div>	
 
