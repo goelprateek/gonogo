@@ -138,7 +138,7 @@
 		<div class="col-md-12" id="notification-main-container" style="border-top: 1px solid #DADADB;padding: 0px;height: 600px;" data-ng-if="container">
 
 			<div class="col-lg-3 col-sm-12 col-xs-12" style="padding:0px; margin-top:5px;">
-			    <div class="widget">
+			    <!-- <div class="widget">
 			        <div class="widget-body no-padding"> 
 			            <div class="task-container">
 			                <div class="task-search">
@@ -167,7 +167,43 @@
 			                </ul>
 			            </div>
 			        </div>
-			    </div>
+			    </div> -->
+			    <div class="widget">
+			        <div class="widget-body no-padding"> 
+			            <div class="task-container">
+			                <div class="task-search">
+			                    <span class="input-icon">
+			                        <input type="text" class="form-control" data-ng-keyup="searchNotification(search)" placeholder="Search" ng-model="search">
+			                        <i class="fa fa-search gray"></i>
+			                    </span>
+			                </div>
+			                <div class="orders-container">
+				                <ul class="orders-list" slimscroll="{height: 470,railVisible:true}"  when-scrolled="loadData()">
+				                	<li class="order-item" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search"  ng-click='load_details(user.sRefID,true,user.sRqTyp)' ng-class="{'active-queue': user.sRefID == Picked }">
+				                		<div class="row" >
+				                			<div class="col-lg-7 col-sm-7 col-md-7 col-xs-7 item-left">
+				                				<div class="item-booker" >
+				                					<h5>{{user.sDsaName.split("@")[0]}}</h5>
+				                				</div>
+				                				<div class="item-time"> 
+				                					<i class="fa fa-calendar"></i>
+				                					<span>{{user.dtDateTime | dateFormat }}</span>
+				                				</div>
+				                			</div>	
+				                			<div class="col-lg-5 col-sm-5 col-md-5 col-xs-5 item-right">
+				                				<div class="item-price">
+				                					<span class="price">{{user.dloanAmt | currency:"&#x20B9; "}}</span>
+				                				</div>
+				                			</div>	
+				                		</div>
+				                		<a class="item-more badge" href="javascript:;" ng-model="user.sRefID" ng-class="{'bg-primary': user.sStat.toUpperCase() == 'ONHOLD', 'bg-success': user.sStat.toUpperCase() == 'APPROVED', 'bg-danger':user.sStat.toUpperCase() == 'DECLINED','bg-lightgray':user.sStat.toUpperCase() == 'QUEUE'} ">&nbsp;
+				                        </a>	
+				                	</li>	
+				                </ul>
+			                </div>	
+			               </div>
+			        	</div> 
+			        </div>
 			</div>
 
 

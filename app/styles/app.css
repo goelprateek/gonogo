@@ -126,6 +126,48 @@ ng:form {
 }
 
 
+.loader {
+  margin: 60px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 1.1em solid rgba(99,182,231, 0.2);
+  border-right: 1.1em solid rgba(99,182,231, 0.2);
+  border-bottom: 1.1em solid rgba(99,182,231, 0.2);
+  border-left: 1.1em solid #63b6e7;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+}
+.loader,
+.loader:after {
+  border-radius: 50%;
+  width: 6em;
+  height: 6em;
+}
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
 
 .form-validation .ng-invalid.ng-dirty {
     border-color: #E94B3B;
@@ -1144,17 +1186,381 @@ input[type="radio"] .styled:checked + label::after {
 }
 
 .widget-buttons .btn {
-    margin-top: -2px
-}
-
-/*.widget-body {
+    margin-top: -2px.widget-body {
     background-color: #fbfbfb;
     -webkit-box-shadow: 1px 0 10px 1px rgba(0, 0, 0, .3);
     -moz-box-shadow: 1px 0 10px 1px rgba(0, 0, 0, .3);
     box-shadow: 1px 0 10px 1px rgba(0, 0, 0, .3);
     padding: 12px
 }
-*/
+
+}
+
+.widget-body {
+    background-color: #fbfbfb;
+    -webkit-box-shadow: 1px 0 10px 1px rgba(0, 0, 0, .3);
+    -moz-box-shadow: 1px 0 10px 1px rgba(0, 0, 0, .3);
+    box-shadow: 1px 0 10px 1px rgba(0, 0, 0, .3);
+    padding: 12px
+}
+
+
+.bg-themeprimary {
+    background-color: #2dc3e8 !important
+}
+
+.bg-themesecondary {
+    background-color: #fb6e52 !important
+}
+
+.bg-themethirdcolor {
+    background-color: #ffce55 !important
+}
+
+.bg-themefourthcolor {
+    background-color: #a0d468 !important
+}
+
+.bg-themefifthcolor {
+    background-color: #e75b8d !important
+}
+
+.bg-white {
+    background-color: #fff !important
+}
+
+.bg-snow {
+    background-color: #fbfbfb !important
+}
+
+.bg-whitesmoke {
+    background-color: #f5f5f5 !important
+}
+
+.bg-seashell {
+    background-color: #f3f3f3 !important
+}
+
+.bg-ivory {
+    background-color: #eee !important
+}
+
+.bg-platinum {
+    background-color: #e5e5e5 !important
+}
+
+.bg-lightgray {
+    background-color: #d0d0d0 !important
+}
+
+.bg-gray {
+    background-color: #ccc !important
+}
+
+.bg-darkgray {
+    background-color: #999 !important
+}
+
+.bg-silver {
+    background-color: #777 !important
+}
+
+.bg-sonic-silver {
+    background-color: #737373 !important
+}
+
+.bg-storm-cloud {
+    background-color: #666 !important
+}
+
+.bg-lightcarbon {
+    background-color: #555 !important
+}
+
+.bg-carbon {
+    background-color: #444 !important
+}
+
+.bg-slate-gray {
+    background-color: #333 !important
+}
+
+.bg-dark-blue{
+    background-color: #456778 !important;
+} 
+
+.bg-darkcarbon {
+    background-color: #262626 !important
+}
+
+.bg-blue {
+    background-color: #5db2ff !important
+}
+
+.bg-info {
+    background-color: #57b5e3 !important
+}
+
+.bg-sky {
+    background-color: #11a9cc !important
+}
+
+.bg-primary {
+    background-color: #4374e0 !important
+}
+
+.bg-azure {
+    background-color: #2dc3e8 !important
+}
+
+.bg-blueberry {
+    background-color: #6f85bf !important
+}
+
+.bg-palegreen {
+    background-color: #a0d468 !important
+}
+
+.bg-success {
+    background-color: #53a93f !important
+}
+
+.bg-green {
+    background-color: #8cc474 !important
+}
+
+.bg-lightyellow {
+    background-color: #f6d52e !important
+}
+
+.bg-yellow {
+    background-color: #ffce55 !important
+}
+
+.bg-warning {
+    background-color: #f4b400 !important
+}
+
+.bg-gold {
+    background-color: #f9b256 !important
+}
+
+.bg-orange {
+    background-color: #fb6e52 !important
+}
+
+.bg-lightred {
+    background-color: #e46f61 !important
+}
+
+.bg-darkorange {
+    background-color: #ed4e2a !important
+}
+
+.bg-red {
+    background-color: #df5138 !important
+}
+
+.bg-danger {
+    background-color: #d73d32 !important
+}
+
+.bg-pink {
+    background-color: #e75b8d !important
+}
+
+.bg-darkpink {
+    background-color: #cc324b !important
+}
+
+.bg-magenta {
+    background-color: #bc5679 !important
+}
+
+.bg-purple {
+    background-color: #7e3794 !important
+}
+
+.bg-maroon {
+    background-color: #981b48 !important
+}
+
+.before-themeprimary:before {
+    background-color: #2dc3e8 !important
+}
+
+.before-themesecondary:before {
+    background-color: #fb6e52 !important
+}
+
+.before-themethirdcolor:before {
+    background-color: #ffce55 !important
+}
+
+.before-themefourthcolor:before {
+    background-color: #a0d468 !important
+}
+
+.before-themefifthcolor:before {
+    background-color: #e75b8d !important
+}
+
+.before-white:before {
+    background-color: #fff !important
+}
+
+.before-snow:before {
+    background-color: #fbfbfb !important
+}
+
+.before-whitesmoke:before {
+    background-color: #f5f5f5 !important
+}
+
+.before-seashell:before {
+    background-color: #f3f3f3 !important
+}
+
+.before-ivory:before {
+    background-color: #eee !important
+}
+
+.before-platinum:before {
+    background-color: #e5e5e5 !important
+}
+
+.before-lightgray:before {
+    background-color: #d0d0d0 !important
+}
+
+.before-gray:before {
+    background-color: #ccc !important
+}
+
+.before-darkgray:before {
+    background-color: #999 !important
+}
+
+.before-silver:before {
+    background-color: #777 !important
+}
+
+.before-sonic-silver:before {
+    background-color: #737373 !important
+}
+
+.before-storm-cloud:before {
+    background-color: #666 !important
+}
+
+.before-lightcarbon:before {
+    background-color: #555 !important
+}
+
+.before-carbon:before {
+    background-color: #444 !important
+}
+
+.before-slate-gray:before {
+    background-color: #333 !important
+}
+
+.before-darkcarbon:before {
+    background-color: #262626 !important
+}
+
+.before-blue:before {
+    background-color: #5db2ff !important
+}
+
+.before-info:before {
+    background-color: #57b5e3 !important
+}
+
+.before-sky:before {
+    background-color: #11a9cc !important
+}
+
+.before-primary:before {
+    background-color: #4374e0 !important
+}
+
+.before-azure:before {
+    background-color: #2dc3e8 !important
+}
+
+.before-blueberry:before {
+    background-color: #6f85bf !important
+}
+
+.before-palegreen:before {
+    background-color: #a0d468 !important
+}
+
+.before-success:before {
+    background-color: #53a93f !important
+}
+
+.before-green:before {
+    background-color: #8cc474 !important
+}
+
+.before-lightyellow:before {
+    background-color: #f6d52e !important
+}
+
+.before-yellow:before {
+    background-color: #ffce55 !important
+}
+
+.before-warning:before {
+    background-color: #f4b400 !important
+}
+
+.before-gold:before {
+    background-color: #f9b256 !important
+}
+
+.before-orange:before {
+    background-color: #fb6e52 !important
+}
+
+.before-lightred:before {
+    background-color: #e46f61 !important
+}
+
+.before-darkorange:before {
+    background-color: #ed4e2a !important
+}
+
+.before-red:before {
+    background-color: #df5138 !important
+}
+
+.before-danger:before {
+    background-color: #d73d32 !important
+}
+
+.before-pink:before {
+    background-color: #e75b8d !important
+}
+
+.before-darkpink:before {
+    background-color: #cc324b !important
+}
+
+.before-magenta:before {
+    background-color: #bc5679 !important
+}
+
+.before-purple:before {
+    background-color: #7e3794 !important
+}
+
+.before-maroon:before {
+    background-color: #981b48 !important
+}
+
 .widget-body.bordered-left {
     border-left: 3px solid #fff
 }
@@ -1217,6 +1623,45 @@ input[type="radio"] .styled:checked + label::after {
     padding: 0
 }
 
+
+
+
+.orders-container .orders-footer {
+    position: relative;
+    background-color: #fff;
+    height: 34px;
+    padding: 7px;
+    text-align: center;
+    background-color: #fbfbfb
+}
+
+.orders-container .orders-footer a {
+    margin: 0 auto;
+    font-size: 11px;
+    color: #999;
+    font-weight: 500
+}
+
+.orders-container .orders-footer a:hover {
+    text-decoration: none
+}
+
+.orders-container .orders-footer .help {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 37px;
+    height: 37px;
+    border-left: 1px solid #e5e5e5;
+    text-align: center;
+    padding: 8px
+}
+
+.orders-container .orders-footer .help a i {
+    font-size: 18px;
+    color: #ccc
+}
+
 .task-container .task-search {
     padding: 15px 16px 15px;
     background-color: #f3f3f3;
@@ -1241,9 +1686,8 @@ input[type="radio"] .styled:checked + label::after {
 
 .task-container .tasks-list .task-item {
     position: relative;
+    min-height: 50px;
     height: auto;
-  /*  padding:10px;*/
-      padding: 5px 0px 5px 0px;
     border-bottom: 1px solid #e5e5e5
 }
 
@@ -1251,9 +1695,10 @@ input[type="radio"] .styled:checked + label::after {
     border-bottom: 0
 }
 
+
 .task-container .tasks-list .task-item .task-check {
     position: absolute;
-    top: 20px;
+    top: 15px;
     left: 15px;
     margin-right: 5px
 }
@@ -1272,7 +1717,7 @@ input[type="radio"] .styled:checked + label::after {
 
 .task-container .tasks-list .task-item .task-time {
     position: absolute;
-    top: 20px;
+    top: 15px;
     right: 20px;
     font-size: 11px;
     color: #999
@@ -1535,6 +1980,139 @@ span.input-icon {
 
 .ladda-button .ladda-spinner{
   top: 0 !important;
+}
+
+
+.orders-container {
+    position: relative;
+    padding: 0;
+    background-color: #fff;
+    -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .2);
+    -moz-box-shadow: 0 0 3px rgba(0, 0, 0, .2);
+    box-shadow: 0 0 3px rgba(0, 0, 0, .2);
+    margin-bottom: 30px
+}
+
+.orders-container .orders-header {
+    position: relative;
+    height: 43px;
+    padding: 14px 10px;
+    border-bottom: 1px solid #e5e5e5;
+    background-color: #fbfbfb
+}
+
+.orders-container .orders-header h6 {
+    margin: 0
+}
+
+.orders-container .orders-list {
+    list-style: none;
+    padding: 0;
+    margin: 0
+
+}
+
+.orders-container .orders-list .order-item {
+    position: relative;
+    padding: 7px 10px;
+    vertical-align: top;
+    border-bottom: 1px solid #e5e5e5;
+    outline:none;
+}
+
+.orders-container .orders-list .order-item:before {
+    display: none;
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -4px;
+    width: 4px;
+    max-width: 4px;
+    overflow: hidden;
+    background-color: #2dc3e8
+}
+
+.orders-container .orders-list .order-item:hover {
+    background-color: #fbfbfb
+}
+
+.orders-container .orders-list .order-item:hover:before {
+    display: block
+}
+
+.orders-container .orders-list .order-item.top:hover:before {
+    background-color: #fb6e52
+}
+
+.orders-container .orders-list .order-item.top .item-more {
+    color: #fb6e52
+}
+
+.orders-container .orders-list .order-item .item-left {
+    padding-right: 0
+}
+
+.orders-container .orders-list .order-item .item-left .item-booker {
+    margin: 6px 0;
+    color: #666
+}
+
+.orders-container .orders-list .order-item .item-left .item-time {
+    font-size: 11px;
+    margin-bottom: 2px;
+    color: #999
+}
+
+.orders-container .orders-list .order-item .item-right {
+    padding-left: 0;
+    text-align: center
+}
+
+.orders-container .orders-list .order-item .item-right .item-price {
+    font-size: 13px;
+    margin: 17px auto;
+    color: #666
+}
+
+.orders-container .orders-list .order-item .item-more {
+    position: absolute;
+    right: 5px;
+    -lh-property: 0;
+    top: -webkit-calc(50% - 13px);
+    top: -moz-calc(50% - 13px);
+    top: calc(50% - 13px);
+    width: 25px;
+    height: 25px;
+    font-size: 14px;
+    text-align: center;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 3px solid #fff;
+    vertical-align: middle;
+    color: #2dc3e8;
+    -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, .2);
+    -moz-box-shadow: 0 0 3px rgba(0, 0, 0, .2);
+    box-shadow: 0 0 3px rgba(0, 0, 0, .2)
+}
+
+.orders-container .orders-list .order-item .item-more i {
+    font-size: 17px;
+    display: inline-block;
+    font-family: 'FontAwesome';
+    font-style: normal;
+    font-weight: normal;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased
+}
+
+.orders-container .orders-list .order-item .item-more i:before {
+    /*content: ""*/
+}
+
+.active-queue{
+  border-left : 4px solid #5bc0de;
+  background-color: #fbfbfb;
 }
 
 ._md-datepicker-floating-label > md-datepicker .md-datepicker-button{

@@ -1,7 +1,3 @@
-/* body {
-	background-color: rgba(252, 252, 252, 0.68);
-} */
-
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
@@ -43,11 +39,7 @@ a:hover{
 	background-color: transparent;
 	color: red;
 }
-/* .TC_button {
-		float: right;
-	margin: 12px 0px 0px 18px;
-	cursor: pointer;
-} */
+
 .LoaderSpinner {
 height: 24px;
 width: 24px;

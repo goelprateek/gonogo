@@ -342,28 +342,9 @@ display:none;
 	margin-right: 5px;
 }
 
-#email {
-	display: none;
-}
 
-<!--
-------
-#btn-group {
-	width: 95%;
-}
 
-#row5 {
-	padding: 10px;
-}
 
-#row5 :first-child div {
-	padding: 1px 5px 0px 5px;
-}
-
-#row5 .row {
-	margin-left: 0px;
-	margin-right: 0px;
-}
 
 .space {
 	float: left;
@@ -1116,109 +1097,6 @@ visible
 #tooltip.hidden {
 	display: none;
 }
-/* ********************************************Rule Engine.Html******************************************************************************* */
-.lft {
-	float: left;
-	margin-left: 10px;
-	padding: 2px;
-}
-
-.report_page th[id^="col"] {
-	color: white;
-}
-
-.btnfltr {
-	padding: 2px 9px;
-	color: white;
-	font-weight: bold;
-}
-
-.rght {
-	float: right;
-	margin-right: 10px;
-	padding: 2px 5px;
-	border-radius: 15px;
-	width: 65px;
-	text-align: right;
-}
-
-.baseapprove {
-	width: 20%;
-}
-
-.basequeue {
-	width: 50%;
-}
-
-.basedecline {
-	width: 30%;
-}
-
-.v1approve {
-	width: 26%;
-}
-
-.v1queue {
-	width: 48%
-}
-
-.v1decline {
-	width: 26%
-}
-
-.imgbox {
-	box-shadow: 0px 0px 4px 0px #BCBCBC;
-	border-radius: 15px;
-	max-height: 200px;
-}
-
-.imgbox img {
-	width: 100%;
-	max-height: 200px;
-}
-
-.resultClass {
-	background-color: rgb(255, 255, 255);
-	box-shadow: 0px 0px 10px 0px rgb(188, 188, 188);
-	padding: 0px 0px 5px;
-	border-radius: 10px;
-	/* float: right; */
-	margin-right: 0px;
-}
-
-.resultContainer {
-	margin-top: 3%;
-	/*    display: none; */
-	margin-right: 0px;
-	position: relative;
-	margin-bottom: 3%;
-}
-
-#image_report {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background-image: url("img/scoregraph.png");
-	background-repeat: no-repeat;
-	background-size: contain;
-}
-
-.const {
-	font-size: 12px;
-	color: rgb(158, 19, 19);
-}
-
-.base {
-	display: block;
-	color: #5D6B7E;
-}
-
-/* *************************************************************************Style.css****************************************************** */
-body {
-	background-color: rgba(252, 252, 252, 0.68);
-}
 
 @media ( min-width : 700px) {
 	.img-responsive {
@@ -1374,7 +1252,7 @@ text-align: justify;*/
 .div-heading.kyc {
 	background: none repeat scroll 0% 0% rgb(255, 112, 67);
 	padding: 9px 0px 4px 12px;
-	/*to remove extra padding at bottom of view old*/
+
 }
 
 .div-heading.property {
@@ -1385,13 +1263,13 @@ text-align: justify;*/
 	background: none repeat scroll 0% 0% rgb(165, 83, 242);
 }
 
-.badge {
+/* .badge {
 	float: right;
 	padding: 6px 9px;
 	margin: -3px;
 	font-size: 15px;
 	background-color: transparent;
-}
+} */
 
 
 .div-heading {

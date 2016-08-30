@@ -79,20 +79,15 @@ app.controller("DashboardController",["$scope","$filter",'sharedService',"$uibMo
 	   	
 
   	}
-	//end
-
 	
 	$scope.dashboardResult=[];
 
 	$scope.sortType     = 'dDate'; 
 	$scope.sortDesc  = true; 
 
-	/*$scope.searchText   = ''; 
-	$scope.query   = '';*/
-
 	$scope.dashfilters = {
 		type:"ApplicationList",
-		duration : "",
+		duration : "LastWeek",
 		search:""
 	},$scope.dashType = ['Application List','Application Summary'].map(function(item){
 		return {view:item, value : item.replace(/ +/g, "")};
@@ -120,9 +115,6 @@ app.controller("DashboardController",["$scope","$filter",'sharedService',"$uibMo
 	$scope.fetchDashboardList=function(){
 		
 		$scope.isLoadingDashboardData=true;
-
-		$scope.query   = $scope.searchText;
-
 		var todate = moment().format('YYYY-MM-DD'),
 			fromDate =	calculateFromDate($scope.dashfilters.duration),
 
@@ -211,7 +203,6 @@ app.controller("DashboardController",["$scope","$filter",'sharedService',"$uibMo
     };
     
 	$scope.shwDecisionModal = function (size,data) {
-		 //alert('modal baseURL'+baseURL);
 	 	var modalInstance = $uibModal.open({
 	 		animation: true,
 	 		templateUrl: 'views/cdl/dashboard-result.html',
@@ -219,7 +210,6 @@ app.controller("DashboardController",["$scope","$filter",'sharedService',"$uibMo
 	 		size: size,
 	 		resolve: {
 	 			data:function(){
-	 				//alert("Data :"+data);
 	 				return data;
 	 			}
 	 		}
@@ -227,32 +217,3 @@ app.controller("DashboardController",["$scope","$filter",'sharedService',"$uibMo
 	};
 }]);
 
-app.directive('ngModelOnblur',['GNG_GA', function(GNG_GA) {
-    return {
-        restrict: 'A',
-        require: 'ngModel',
-        scope:{
-        	durationSelected:"=",
-        	fetchDashboard:"&"
-        },
-        link: function(scope, elm, attr, ngModelCtrl) {        	 
-            if (attr.type === 'radio' || attr.type === 'checkbox') return;           
-            elm.unbind('input').unbind('change');
-            elm.bind('keyup', function() {            	
-                scope.$apply(function() {
-                	//console.log("Duration Fetched:"+scope.durationSelected+" Value:"+elm.val());
-                	ngModelCtrl.$setViewValue(elm.val());
-                	if(elm.val().length>=0)
-                	{
-						GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_DEALER"),
-									 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
-									 GNG_GA.getConstAction("ACTION_CLICK_DASHBOARD_SEARCH"),
-									 "Dashboard Search Clicked",1);
-
-                		scope.fetchDashboard();
-                	}                   
-                });         
-            });
-        }
-    };
-}]);

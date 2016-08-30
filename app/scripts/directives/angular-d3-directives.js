@@ -7,7 +7,7 @@
 	app.directive('hcBarChart',['UserService', 'RestService',function(UserService,RestService){
 		return {
 			restrict: 'EA',
-                    template:'<div></div>',
+                    template:'<div id="chart-container" style="margin: 0 auto" >not working</div>',
                     scope: {
                         data: '=data'
 
@@ -16,19 +16,18 @@
                     link: function (scope,element,attribute, controller) {
                     	
                     	var user = UserService.getCurrentUser();
-                    	console.log(scope.data);
-                    	scope.$watch('data', function(dataNew,dataOld){
-                    		console.log('data changed',dataNew);
-                    		if(dataNew){
-                    			console.log(dataNew);
-                    			Highcharts.chart(element[0], {
-					            chart: {
-					                type: 'column',
+                    	
+                    	scope.$watch('data', function(dataNew){
+                    		
+                    		if(!dataNew) return ;
+
+                    		var chartOption = {
+                    			chart: {
+					            	renderTo: 'chart-container',
+					            	type: 'column',
 					                animation: true,  
-					                reflow: true,  
-					                spacing: [10, 10, 15, 10]					                
+					                spacing: [10, 10, 10, 10],					                
 					            },
-					        
 					            title: {
 					                text: ''
 					            },
@@ -66,6 +65,7 @@
 					                gridLineColor:"#DFDFDF",
 					                gridLineWidth: 0.5,
 					                gridZIndex: 1,  
+					                allowDecimals:false
 					            },
 					            navigation : {
 					            	buttonOptions:{
@@ -75,7 +75,7 @@
 										background: '#4572A5',
 										color: '#FFFFFF'
 									}
-					            },	
+					            },
 					            plotOptions: {
 					                allowPointSelect: true,
 					                column: {
@@ -137,12 +137,10 @@
 					                    data: dataNew[2].y, 
 					                    name: dataNew[2].name,
 					                }]
+                    		}
 
-             
-                        });
-
-                  }
-               },true)
+                    		var chart = new Highcharts.chart(chartOption);
+               });
 			
             }
 		};
