@@ -477,8 +477,6 @@
                                 return itemDate.isBetween(startDate,endDate,'hours','[]')
                             });
                             
-                            console.log(filteredData.length);
-
                        return $scope.drawTablularData(filteredData);
 
 
@@ -604,14 +602,24 @@
 			$scope.isTableData = !$scope.isTableData;
 			
 			if(!$scope.isTableData){
-				var json = {'sInstID':user.institutionID,'iSkip':"0",'iLimit':"0",
-        'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}};
+				var json = {
+                            'sInstID':user.institutionID,
+                            'iSkip':"0",
+                            'iLimit':"0",
+                            'oCriteria':{
+                                        "oHierarchy":user.hierarchy,
+                                        "aProducts":user.getProductNames()
+                                        }
+                           };
+                $scope.isLoadingAnalyticsData = 1 ;           
 				RestService.saveToServer('score-log',json).then(function(data){
 			     if(data){
                     $scope.copydataSourceCol = data;
 		          	$scope.drawTablularData(data);
 		          };
-			    });
+			    }).finally(function(){
+                    $scope.isLoadingAnalyticsData =0 ;
+                });
 			}
 		};
 
@@ -647,7 +655,7 @@
 
                               return $scope.row !== rowName ? ($scope.row = rowName, $scope.filteredStores = $filter("orderBy")($scope.filteredStores, rowName), $scope.onOrderChange()) : void 0;
 
-                          }, $scope.numPerPageOpt = [20,30,50],
+                          }, $scope.numPerPageOpt = [50,100,200],
 
                           $scope.numPerPage = $scope.numPerPageOpt[0], 
 

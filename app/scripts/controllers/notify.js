@@ -337,6 +337,9 @@
         $state.go(APP_CONST.getConst('APP_CONTEXT'));
     }
 
+    var timer ;
+    
+
     $scope.selectResidence = SelectArrays.getResidenceTypes();
     $scope.objectSet = NotificationObject.dummy;
 
@@ -378,11 +381,29 @@
 	$scope.minVal = 0;
 	$scope.limit = 100;
     $scope.notifarray = [];
-    var timer ;
     
+    var startPoling = function(){
+        if(_.isUndefined(timer)){
+          timer  = $interval(function(){
+                   console.log('polling started');
+                   polling($scope.minVal);
+          }, 600, 0,true);    
+        }
+    }
+
+    var stopPoling = function(){
+        if(angular.isDefined(timer)){
+            console.log('going to cancel timer as search hit',1);
+            $interval.cancel(timer);   
+            timer = undefined; 
+        }
+    }
+
     // method to implement ELSearch
     $scope.searchNotification = function($viewValue){
         if($viewValue.length >= 3){
+            
+        stopPoling();
         var _serviceInput = {
                       "oHeader": {
                         "sAppID":null,
@@ -411,8 +432,7 @@
                     }
 
             RestService.fetchDataQuietly("api/es/search",_serviceInput).then(function(data){
-                  if(data.notifications.length>0){
-                        $interval.cancel(timer);
+                  if(data.notifications.length > 0){
                         $scope.notifarray = [];
                         var filteredSearchData = _.uniq(data.notifications, function(item, key, sRefID) { 
                             return item.sRefID;
@@ -422,10 +442,7 @@
             });
         }else if($viewValue.length == 0){
             $scope.notifarray = [];
-            polling(0);
-            timer  = $interval(function(){
-                 polling(0);
-            }, 60000, 0,true); 
+            startPoling();
         }
 
     }
@@ -487,13 +504,9 @@
   		}
 	}
 
-    if(_.isUndefined(timer)){
-          timer  = $interval(function(){
-                    polling($scope.minVal);
-          }, 60000, 0,true);    
-    }
-
+    startPoling();
     polling($scope.minVal);
+
 
     $scope.addrType = SelectArrays.getAddrType();
 	$scope.addr_type = $scope.addrType[1];   //to set default address
@@ -1354,10 +1367,8 @@ $scope.onchange = function(id) {
 
     // destructor function for scope 
     $scope.$on("$destroy",function(){
-        if(angular.isDefined(timer)){
-             $interval.cancel(timer);
-             timer = undefined;
-        }
+        console.log('scope destroyed');
+        stopPoling();
     });
 }]);
 

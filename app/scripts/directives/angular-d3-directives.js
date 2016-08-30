@@ -21,14 +21,13 @@
                     		
                     		if(!dataNew) return ;
 
-                    		  var chart = new Highcharts.chart({
-					            chart: {
+                    		var chartOption = {
+                    			chart: {
 					            	renderTo: 'chart-container',
 					            	type: 'column',
 					                animation: true,  
 					                spacing: [10, 10, 10, 10],					                
 					            },
-					        
 					            title: {
 					                text: ''
 					            },
@@ -65,7 +64,8 @@
 					                type: 'linear',
 					                gridLineColor:"#DFDFDF",
 					                gridLineWidth: 0.5,
-					                gridZIndex: 1 
+					                gridZIndex: 1,  
+					                allowDecimals:false
 					            },
 					            navigation : {
 					            	buttonOptions:{
@@ -75,7 +75,7 @@
 										background: '#4572A5',
 										color: '#FFFFFF'
 									}
-					            },	
+					            },
 					            plotOptions: {
 					                allowPointSelect: true,
 					                column: {
@@ -137,9 +137,9 @@
 					                    data: dataNew[2].y, 
 					                    name: dataNew[2].name,
 					                }]
+                    		}
 
-             
-                        });
+                    		var chart = new Highcharts.chart(chartOption);
                });
 			
             }

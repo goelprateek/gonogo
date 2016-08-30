@@ -8,7 +8,7 @@
 			<md-select name="ApplicationList" ng-model="dashfilters.type" data-ng-change="applnOptionChange()" >
 			  <md-option ng-value="dash.value" ng-repeat="dash in dashType" data-ng-bind="dash.view"></md-option>
 			</md-select>
-		</md-input-container>	
+		</md-noinput-container>	
 
 		<div flex="5" hide-xs hide-sm></div>
 
@@ -23,7 +23,6 @@
 
 		<md-input-container class="md-block" flex-gt-sm flex="33" ng-if="trueAppList">
 			<label>Search</label>
-			<!-- data-ng-keyup="fetchDashboardList()" -->
 			<input name="search"  ng-model="dashfilters.search"  >
 		</md-input-container>
 
@@ -108,8 +107,8 @@
 				</tr>
 			</tbody>
 		</table>
-		<div ng-if="isLoadingDashboardData" style="text-align: center;margin-top:20px;">
-			<img src="images/loading.gif" style="height: 60px;"/>
+		<div ng-if="isLoadingDashboardData" style="text-align: center;margin:0 auto">
+			<div class="loader">Loading...</div>
 		</div>
 	</div>
 </div>
