@@ -59,10 +59,10 @@ font-size:14px;}
 </style>
  
 
-<div data-ng-controller="AnalyticsController" id="analyticsContainer"  class="col-md-12 pull-left">	
-	<div class="col-md-12" contextmenu="blur">
+<div data-ng-controller="AnalyticsController" id="analyticsContainer"  class="col-md-12 pull-left" >	
+	<div class="col-md-12" > <!-- contextmenu="blur" -->
 		<div class="row">
-		<section class="content-container animate-fade-up" >
+		<section class="content-container " >
 			 <div class="col-md-12 pull-left">&nbsp;&nbsp;&nbsp;&nbsp;</div>
 			 <div class="col-md-12 pull-left" data-ng-if="isTableData" >
 			 	
@@ -80,13 +80,12 @@ font-size:14px;}
 			   
 			   <div class="col-md-12" style="height:40px;">&nbsp;&nbsp;&nbsp;&nbsp;</div>
 
+			   
 			   <div class="row" >
 			   <!-- style="height:100%;width:100%;margin-bottom: 40px;" -->
 					<!-- <div  hc-bar-chart  data="chartOptions" ></div> -->
+					<div  hc-bar-chart  data="chartOptions" style="height:100%;width:100%;margin-bottom: 40px;" ></div>
 					
-					<hc-bar-chart data="chartOptions" ></hc-bar-chart>
-
-
 				</div>
 			</div>
 			

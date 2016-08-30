@@ -92,7 +92,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService',"$uibMo
 
 	$scope.dashfilters = {
 		type:"ApplicationList",
-		duration : "",
+		duration : "LastWeek",
 		search:""
 	},$scope.dashType = ['Application List','Application Summary'].map(function(item){
 		return {view:item, value : item.replace(/ +/g, "")};
@@ -120,9 +120,6 @@ app.controller("DashboardController",["$scope","$filter",'sharedService',"$uibMo
 	$scope.fetchDashboardList=function(){
 		
 		$scope.isLoadingDashboardData=true;
-
-		$scope.query   = $scope.searchText;
-
 		var todate = moment().format('YYYY-MM-DD'),
 			fromDate =	calculateFromDate($scope.dashfilters.duration),
 

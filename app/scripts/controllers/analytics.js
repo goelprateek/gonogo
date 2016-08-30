@@ -536,6 +536,7 @@
             });
         } 
 
+        $scope.chartObj ;
 		var json = {'sInstID':user.institutionID,'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}};
 		RestService.saveToServer("stack-graph",json).then(function(data){
             $scope.chartOptions = data;
