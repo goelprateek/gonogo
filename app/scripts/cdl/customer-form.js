@@ -770,7 +770,7 @@ app.controller("CustomerFormCntrolr",
 			if(status=="approved"){
 				$scope.loadPDF();
 			}else if(status==="declined"){
-				alert("This application has been declined.");
+				notifier.logWarning("This application has been declined.") ;
 				sharedService.setRefID($scope.refID);
 				$state.go("/cdl/dashboard");
 			}

@@ -690,9 +690,35 @@
             }catch(e){
                  $scope.foirAmount = '';
             }
+
+            //Surrogate
+            $scope.surrogate=$scope.objectSet.oAppReq.oReq.oApplicant.oSurrogate
+//          console.log("Surrogate");
+//          console.log($scope.surrogate);
+            if($scope.surrogate){
+                if($scope.surrogate.aCar){
+                    $scope.surrTypeSelected="Owned Car";
+                }
+                else if($scope.surrogate.aOwnHouse){
+                    $scope.surrTypeSelected="Owned House";
+                }
+                if($scope.surrogate.aSalary){
+                    $scope.surrTypeSelected="Salary House";
+                }
+                else if($scope.surrogate.aTrader){
+                    $scope.surrTypeSelected="Business";
+                }
+                else if($scope.surrogate.aCreditCard){
+                    $scope.surrTypeSelected="Credit Card";
+                }
+                else if($scope.surrogate.aBankAccount){
+                    $scope.surrTypeSelected="Banking";
+                }
+            }
+
             return response;
-			
 		}).then(function(data){
+             $scope.bankSurrogateImages=[];
             if(data){            
                 var objArray = _.map(_.pluck(data.aAppImgDtl, 'aImgMap'),function(data){
                         return data;
@@ -701,37 +727,42 @@
                 $scope.imageDataArray = [];
                 var evidenceData = [];
                 var maindata = [];
-                 _.each(_.flatten(objArray),function(val){
-                     if(val.sImgType.indexOf("_EVIDENCE") > -1){
+                _.each(_.flatten(objArray),function(val){
+                    if(val.sImgType.indexOf("_EVIDENCE") > -1){
                         evidenceData.push(val);
-                     }
-                      maindata.push(val);
-                 });
+                    }
+                    maindata.push(val);
+                });
     
-                 _.each(evidenceData,function(val){
-                     var whosEvdnc = val.sImgType.slice(0,-10);
-                     _.each(maindata,function(data){
+                _.each(evidenceData,function(val){
+                    var whosEvdnc = val.sImgType.slice(0,-10);
+                    _.each(maindata,function(data){
                         if(data.sImgType == whosEvdnc){
                             if(!data.evdncArray)
                               data.evdncArray = [];
                             data.evdncArray.push(val);                           
                         }
                     });
-                 });
-                  
-                    _.each(maindata,function(val){
-                        return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
-                            if(!_.isUndefined(data) || !_.isNull(data)){
-                                if(!_.isEmpty(data.sByteCode)){
+                });
+
+                _.each(maindata,function(val){
+                    return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
+                        if(!_.isUndefined(data) || !_.isNull(data)){
+                            if(!_.isEmpty(data.sByteCode)){
                                 val["sByteCode"] = "data:image/png;base64,"+data.sByteCode; 
                                 if(val.sReason == null){
                                     val.sReason = "";
                                 }
-                                 $scope.imageDataArray.push(val); 
-                                }  
-                            }
-                        });
+
+                                if($scope.surrogate && val.sImgType==="BANK_STATEMENT"){
+                                    $scope.bankSurrogateImages.push(val)
+                                }else{
+                                    $scope.imageDataArray.push(val); 
+                                }
+                            }  
+                        }
                     });
+                });
 
                 var rejectImgFromServer =[];
                 _.each($scope.imageDataArray,function(val){
@@ -742,7 +773,7 @@
                 $scope.rejectImgFromServer = rejectImgFromServer;
             }
         });
-    }
+    };
 
     $scope.newApplication = function(){ 
     	if(AclService.can('NCROQUE')){
@@ -993,7 +1024,7 @@ $scope.onchange = function(id) {
         			        "sUtr":utr
         			    }
         			};	 
-            		 
+
             		RestService.saveToServer('update-los-details',jsondata).then(function(Response){
             				if(Response.status == "SUCCESS"){
                                 notifier.logSuccess("LOS Status updated successfully");
@@ -1199,8 +1230,25 @@ $scope.onchange = function(id) {
         modalInstance.result.then(function (isSuccess,refID) {           
             if(isSuccess){
                 $scope.objectSet.iNoReTry=$scope.objectSet.iNoReTry +1;
-                 //$scope.showReinitiateStatusModal("lg",$scope.refID);
+                 $scope.showReinitiateStatusModal("lg",$scope.refID);
             }
+        });
+    };
+
+    $scope.showReinitiateStatusModal = function (size,refID) {
+        //alert('modal baseURL'+baseURL);
+        var modalInstance = $uibModal.open({
+           animation: $scope.animationsEnabled,
+           templateUrl: 'views/modal-reinitiate-status.html',
+           controller: 'ReinitiateStatusModalController',
+           size: size,
+           resolve: {
+               refID:function(){
+                   return refID;
+               }
+           },
+           backdrop  : 'static',
+           keyboard  : false
         });
     };
 
@@ -1370,6 +1418,144 @@ $scope.onchange = function(id) {
         console.log('scope destroyed');
         stopPoling();
     });
+
+    /* Surrogate */
+    $scope.surrogateType=["Banking","Business","Credit Card","Owned House","Owned Car","Salary House"];
+}]);
+
+app.controller("ReinitiateStatusModalController",["$scope","$uibModalInstance","UserService","RestService","refID","$interval",
+                                          function($scope,$uibModalInstance,UserService,RestService,refID,$interval){
+    var user=UserService.getCurrentUser();
+    
+    //Hard Coded for testing
+//  $scope.showPanStatus=true;
+//  $scope.showCibilStatus=true;
+//  $scope.showAadhaarStatus=true;
+//  $scope.showDedupeStatus=true;
+//  $scope.showAppScoreStatus=true;
+//  $scope.showVeriScoreStatus=true;
+//  $scope.showNegPinStatus=true;
+    //Hard Coded for testing
+    
+    $scope.panVerified=false;
+    $scope.cibilVerified=false;
+    $scope.aadhaarVerified=false;
+    $scope.dedupeVerified=false;
+    $scope.appScoreVerified=false;
+    $scope.verifScoreVerified=false;
+    $scope.negPinVerified=false;
+
+    $scope.showCibilStatus=true;
+    
+    var URL="status";
+    var statusJSON ={
+          "sRefID":refID,
+          "oHeader": {
+            "sCroId": "default",
+            "dtSubmit":new Date().getTime(),
+            "sReqType": "JSON",
+            "sAppSource" : "WEB",
+            "sDsaId":user.username,
+            "sAppID": "",
+            "sSourceID":"",
+            "sInstID":user.institutionID
+          }
+    };
+
+    var statusPoller = $interval(function(){
+        RestService.saveToServer(URL,JSON.stringify(statusJSON)).then(function(resp){
+            //[{"applicationLog":{},"sRefID":"5788d78b5bc7ec48de2796c2","bStatFlag":false,"iNoReTry":0,"oCompRes":{},"oIntrmStat":{"sRefId":null,"sAppID":null,"sInstID":null,"dtStart":1468681176705,"dtETime":null,"sAppStart":"DEFAULT","sDedupe":"DEFAULT","sEmailStat":"DEFAULT","sOtpStat":"COMPLETE","sAppStat":"DEFAULT","sPanStat":"DEFAULT","sAadharStat":"DEFAULT","sMbStat":"DEFAULT","sVarScoreStat":"DEFAULT","sScoreStat":"DEFAULT","sCblScore":"DEFAULT","sCroStat":"DEFAULT","oPanResult":null,"oCibilResult":null,"oResAddressResult":null,"oOffAddressResult":null,"oScoringResult":null,"oAadharResult":null,"oExperianResult":null,"oEquifaxResult":null,"oCHMResult":null,"oMbResult":null},"bNegPinCodeFlag":false,"aAppScoRslt":[]},{"applicationLog":{},"sRefID":"5788d78b5bc7ec48de2796c3","bStatFlag":false,"iNoReTry":0,"oCompRes":{},"oIntrmStat":{"sRefId":null,"sAppID":null,"sInstID":null,"dtStart":1468681176705,"dtETime":null,"sAppStart":"DEFAULT","sDedupe":"DEFAULT","sEmailStat":"DEFAULT","sOtpStat":"COMPLETE","sAppStat":"DEFAULT","sPanStat":"DEFAULT","sAadharStat":"DEFAULT","sMbStat":"DEFAULT","sVarScoreStat":"DEFAULT","sScoreStat":"DEFAULT","sCblScore":"DEFAULT","sCroStat":"DEFAULT","oPanResult":null,"oCibilResult":null,"oResAddressResult":null,"oOffAddressResult":null,"oScoringResult":null,"oAadharResult":null,"oExperianResult":null,"oEquifaxResult":null,"oCHMResult":null,"oMbResult":null},"bNegPinCodeFlag":false,"aAppScoRslt":[]}]
+            if(resp){
+                if(resp.oIntrmStat){
+                    if(resp.oIntrmStat.sAadharStat == "COMPLETE"){
+                        $scope.showAadhaarStatus=true;
+                        if(resp.oIntrmStat.sAadharStat.sMsg == "EXIST")                
+                        {
+                            $scope.aadhaarVerified=true;
+                        }else{
+                            $scope.aadhaarVerified=false;                 
+                        }
+                    }
+
+                    if(resp.oIntrmStat.sPanStat == "COMPLETE"){
+                        $scope.showPanStatus=true;
+                        if(resp.oIntrmStat.oPanResult.sMsg == "EXIST")                
+                        {
+                            $scope.panVerified=true;
+                        }else{
+                            $scope.panVerified=false;                 
+                        }
+                    }
+
+                    if(resp.oIntrmStat.sCblScore == "COMPLETE"){              
+                        $scope.showCibilStatus=true;
+                        if(resp.oIntrmStat.oCibilResult.sMsg == "SUCCESS")                
+                        {
+                            $scope.cibilVerified=true;
+                        }else{
+                            $scope.cibilVerified=false;
+                        }
+                    }
+                    
+                    if(resp.oIntrmStat.sScoreStat == "COMPLETE"){              
+                        $scope.showAppScoreStatus=true;
+                        if(resp.oIntrmStat.oCibilResult.sMsg == "SUCCESS")                
+                        {
+                            $scope.cibilVerified=true;
+                        }else{
+                            $scope.cibilVerified=false;
+                        }
+                    }
+
+                    if(resp.oIntrmStat.sVarScoreStat == "COMPLETE"){              
+                        $scope.showAppScoreStatus=true;
+                        if(resp.oIntrmStat.oCibilResult.sMsg == "SUCCESS")                
+                        {
+                            $scope.appScoreVerified=true;
+                        }else{
+                            $scope.appScoreVerified=false;
+                        }
+                    }
+                }
+
+                if(resp.sAppStat){
+                    //DECISION
+                    if(['queue'].indexOf(resp.sAppStat.toLowerCase()) > -1){
+                    }else if(['approved','declined'].indexOf(resp.sAppStat.toLowerCase()) > -1){
+                        $interval.cancel(statusPoller);
+                    }
+
+                    if(resp.sAppStat.toLowerCase()=="approved")
+                    {
+                        $scope.decision="Approved";
+                        $scope.plApproved=true;
+
+                        if(resp.aCroDec!=null && resp.aCroDec!=undefined && resp.aCroDec.length>0){
+                            $scope.decisionMessage="Your loan of amount ₹ " + resp.aCroDec[0].dAmtAppr +" has been approved.";
+                        }
+                        $scope.progressStatus="Your application for HDBFS Ziploan is approved. We will get in touch with you shortly for further processing.";
+                    }else if(resp.sAppStat.toLowerCase()=="declined"){
+                        $scope.decision="Declined";
+
+                        $scope.progressStatus="Unfortunately, due to our internal polices, we are unable to process your Loan application form.";
+                    }
+                    else if(resp.sAppStat.toLowerCase()=="queue"){
+                        $scope.decision="Queue";
+
+                        $scope.progressStatus="for processing your application for HDBFS Ziploan of Rs. "+ resp.aCroDec[0].dAmtAppr +". We will get in touch with you shortly.";
+                    }
+                    else if(resp.sAppStat.toLowerCase()=="new"){
+                        // $scope.decision="Queue";
+                    }
+                }
+            }
+        });
+    },3000);
+    
+    $scope.onProceedClicked=function(){
+        $interval.cancel(statusPoller);
+        $uibModalInstance.dismiss();
+    }
 }]);
 
 app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$uibModalInstance","requestObj","UserService","notifier",

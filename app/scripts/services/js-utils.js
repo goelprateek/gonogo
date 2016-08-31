@@ -18,7 +18,9 @@
 				if(pImageArrayToUpload[i] != null){
 					var json ={
 				  		"oHeader": {
-					    	"sAppID": pReferenceID,  // application id
+				  			"sCroId":"default",
+				  			"sAppSource":"WEB",
+					    	"sApplID":"APPLICANT_1"  // applicant id
 					  	},
 					  	"sRefID": pReferenceID,
 				  		"oUpldDtl": {
