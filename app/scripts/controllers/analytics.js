@@ -389,9 +389,9 @@
     }), 
 	
     app.controller('AnalyticsController',['$scope','notifier',  '$timeout',
-                                          'RestService','$filter','APP_CONST', '$uibModal','UserService','$log','AnalyticsObject','SelectArrays','AclService',
+                                          'RestService','$filter','APP_CONST', '$uibModal','UserService','$log','AnalyticsObject','SelectArrays','AclService','$mdDialog',
                                             function($scope, notifier ,  $timeout,
-                                                RestService,$filter,APP_CONST,$uibModal,UserService,$log,AnalyticsObject,SelectArrays,AclService) {
+                                                RestService,$filter,APP_CONST,$uibModal,UserService,$log,AnalyticsObject,SelectArrays,AclService,$mdDialog) {
 
 
 		var user = UserService.getCurrentUser();
@@ -579,6 +579,15 @@
                          "aProductType" :["CONSUMER DURABLE"],              
                          "dtAccessDate":""             
                         } ;
+
+            $mdDialog.show({
+                  templateUrl: 'views/templates/report-modal.html',
+                  controller: 'CustomReportController',
+                  size: 'lg',
+                  windowClass:"report-modal-popup" 
+            }).then(function(){
+                
+            })
 
 			var modalInstance = $uibModal.open({
 							      templateUrl: 'views/templates/report-modal.html',
