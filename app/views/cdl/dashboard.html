@@ -3,12 +3,13 @@
 		
 		<div layout-gt-sm="row" >
 
+
 			<md-input-container class="md-block"  flex-gt-sm >
 				<label>Type</label>
 				<md-select name="ApplicationList" ng-model="dashfilters.type" data-ng-change="applnOptionChange()" >
 				  <md-option ng-value="dash.value" ng-repeat="dash in dashType" data-ng-bind="dash.view"></md-option>
 				</md-select>
-			</md-noinput-container>	
+			</md-input-container>
 
 			<div flex="5" hide-xs hide-sm></div>
 
