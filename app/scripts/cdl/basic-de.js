@@ -13,6 +13,7 @@
 
 		$scope.productType="";
 		$scope.dealerCode;
+		$scope.disableButton=0;
 
 		$scope.basicInfo = {
 			firstName:"",
@@ -77,6 +78,8 @@
 		};
 
 		$scope.fetchOTP=function(){
+			console.log('otp service called');
+			$scope.disableButton =1;
 			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),
 							 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
 							 GNG_GA.getConstAction("ACTION_CLICK_GET_OTP"),
@@ -93,15 +96,20 @@
 
 			RestService.postDataWithHeaders('get-otp', json, user.username, user.ePassword)
 			.then(function(successResponse){
-				$scope.otp=successResponse.OTP;
-				$scope.shwVerify=true;
+				$scope.otp = successResponse.OTP;
+				$scope.shwVerify = true;
 			},function(failedResponse){
-				$scope.shwVerify=false;
+				$scope.shwVerify = false;
 				notifier.logError("Some error occured, please retry !");
+			}).finally(function(){
+				$scope.disableButton = 0;
 			});
 		};
 
 		$scope.verifyOTP=function(){
+
+			$scope.disableButton =1;
+
 			GNG_GA.sendEvent(
 				GNG_GA.getConstScreen("SCRN_CDL_APPLY"),
 				GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
@@ -110,23 +118,36 @@
 			);
 			var otp=$scope.otpKey1 + $scope.otpKey2 + $scope.otpKey3 + $scope.otpKey4 + $scope.otpKey5;
 
-			if(otp.length==5)
-			{
-				if(otp ==$scope.otp)
-			  	{
+			if(otp.length == 5){
+
+				if(otp === $scope.otp ){
 			  		$scope.submitLoanRequest();
-			  		$scope.basicInfo.isMobileVerfied=true;
-			  	}else if(otp=="11111"){
+			  		$scope.basicInfo.isMobileVerfied = true;
+			  	
+			  	}else if(otp === "11111"){
+			  	
 			  		$scope.submitLoanRequest();
-			  		$scope.basicInfo.isMobileVerfied=false;
-			  	}
-				else
-				{ 
+			  		$scope.basicInfo.isMobileVerfied = false;
+			  	
+			  	}else{
+			  		$scope.otpKey1='';
+			  		$scope.otpKey2='';
+			  		$scope.otpKey3='';
+			  		$scope.otpKey4='';
+			  		$scope.otpKey5='';
 					notifier.logError("Invalid OTP");
 				}
+
 			}else{
+				$scope.otpKey1='';
+		  		$scope.otpKey2='';
+		  		$scope.otpKey3='';
+		  		$scope.otpKey4='';
+		  		$scope.otpKey5='';
 				notifier.logError("Invalid OTP");
 			}
+
+			$scope.disableButton = 0;
 		}
 
 		$scope.submitLoanRequest=function(){

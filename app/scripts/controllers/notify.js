@@ -387,7 +387,7 @@
           timer  = $interval(function(){
                    console.log('polling started');
                    polling($scope.minVal);
-          }, 600, 0,true);    
+          }, 60000, 0,true);    
         }
     }
 

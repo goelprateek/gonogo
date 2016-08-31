@@ -332,6 +332,10 @@
 								<!-- <div class="list-group-item" ng-if="emp.dGrossSal!=0">
 									<span>Gross Annual : {{ emp.dGrossSal | rupee:"&#x20B9; "}}</span>
 								</div> -->
+
+								<div class="list-group-item">
+									<span>Emp Type : {{ emp.sEmplType}}</span> 	
+								</div>
 								<div class="list-group-item" ng-if="emp.sConst.toUpperCase()=='SELF-EMPLOYED'">
 									<span>ITR Amount : &nbsp{{emp.dItrAmt | currency:'&#8377;'}}</span> 
 								</div>

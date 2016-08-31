@@ -10,7 +10,7 @@
                     <div class="row" >
                         <div class="col-md-12">
                             <div class="col-md-6">
-                                 <div class="form-group">
+                                 <!-- <div class="form-group">
                                     <label for="reportName" class="col-sm-4 control-label">Report Name</label>
                                     <div class="col-md-6 input-group" >
                                         <input id="reportName"  type="text" ng-model="reportName" placeholder="Add report name" uib-typeahead="reports.reportName for reports in getReportConfiguration($viewValue) " typeahead-loading="loadingReports" typeahead-no-results="noResults" class="form-control" typeahead-min-length="3" typeahead-on-select="selectedReport($item, $model, $label, $event)" typeahead-show-hint="true">
@@ -20,13 +20,42 @@
                                             <a class="fa fa-plus" ng-click="addnewReport()"></a>
                                         </span>
                                         
-                                        <!-- <div ng-show="noResults">
+                                        <div ng-show="noResults">
                                           <i class="fa fa-remove"></i> 
                                           No Results Found
-                                        </div> -->
+                                        </div>
                                     </div>
-                                 </div>   
-                                </div>
+                                 </div> -->   
+
+                                 <div layout-gt-sm="row" class="basic-form">
+                                        <md-input-container class="md-block" flex-gt-sm>
+                                            <md-autocomplete
+                                                  md-floating-label="Report Name"
+                                                  md-input-name="reportName"
+                                                  md-selected-item="applicant.empl.emplName"
+                                                  md-search-text="searchText"
+                                                  md-items="item  in getReportConfiguration(searchText)"
+                                                  md-item-text="item"
+                                                  md-min-length="0"
+                                                  required
+                                                  flex="50"
+                                                  >
+                                                <md-item-template>
+                                                  <span md-highlight-text="searchText" md-highlight-flags="^i">
+                                                    {{item}}
+                                                  </span>
+                                                </md-item-template>
+                                                <md-not-found>
+                                                  No employer matching "{{searchText}}" were found.
+                                                </md-not-found>
+                                                <div ng-messages="professionalData.empname.$error" >
+                                                    <div ng-message="required">Please enter Employer name</div>
+                                                </div>
+                                            </md-autocomplete>
+                                        </md-input-container>
+                                 </div>
+
+                            </div>
                             <div class="col-md-6">
                                 <div class="form-group" ng-if="models">
                                     <label for="daterange" class="col-md-4 control-label">Select Date</label>

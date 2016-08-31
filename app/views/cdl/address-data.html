@@ -76,7 +76,7 @@
 				<md-input-container class="md-block" flex-gt-sm>
 					<label>Address Line 1</label>
 					<md-icon class="material-icon" md-font-icon="fa fa-map-marker" aria-label="description"></md-icon>
-					<input name="resAdd1" ng-model="applicant.oResidence.oAddress.sAddress1"  ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/"  capitalize required >	
+					<input name="resAdd1" ng-model="applicant.oResidence.oAddress.sAddress1"  ng-pattern="/^[a-zA-Z\d\s#,.\/\\]{10,30}$/"   capitalize required >	
 					<div ng-messages="addressData.resAdd1.$error" >
 	   					<div ng-message="required">Please enter Address line 1</div>
 	   					<div ng-message="pattern">Please enter valid Address</div>
@@ -648,7 +648,7 @@
 	</div>
 	<div class="row clearfix ">
 		<div class="col-md-10 col-md-offset-1">
-			<button type="submit" class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.personal',addressData.$valid)">
+			<button type="button" class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.personal')">
 				<i class="fa fa-arrow-circle-left"></i>	
 				Previous 
 			</button>

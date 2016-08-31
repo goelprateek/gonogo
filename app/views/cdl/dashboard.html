@@ -1,30 +1,31 @@
 <div class="col-md-12">
 	<div style="margin-top:50px;" class="row clearfix" >
 		
-		<div layout-gt-sm="row" class="basic-form">
+		<div layout-gt-sm="row" >
 
-		<md-input-container class="md-block"  flex="35" > 
-			<label>Type</label>
-			<md-select name="ApplicationList" ng-model="dashfilters.type" data-ng-change="applnOptionChange()" >
-			  <md-option ng-value="dash.value" ng-repeat="dash in dashType" data-ng-bind="dash.view"></md-option>
-			</md-select>
-		</md-input-container>	
 
-		<div flex="5" hide-xs hide-sm></div>
+			<md-input-container class="md-block"  flex-gt-sm >
+				<label>Type</label>
+				<md-select name="ApplicationList" ng-model="dashfilters.type" data-ng-change="applnOptionChange()" >
+				  <md-option ng-value="dash.value" ng-repeat="dash in dashType" data-ng-bind="dash.view"></md-option>
+				</md-select>
+			</md-noinput-container>
 
-		<md-input-container class="md-block" flex="33" flex-gt-sm ng-if="trueAppList">
-			<label>Duration</label>
-			<md-select  name="Duration" ng-model="dashfilters.duration" ng-change="fetchDashboardList()"> 
-			  <md-option ng-value="durationType.value" ng-repeat="durationType in durationTypes" data-ng-bind="durationType.view"></md-option>
-			</md-select>
-		</md-input-container>
+			<div flex="5" hide-xs hide-sm></div>
 
-		<div flex="5" hide-xs hide-sm></div>
+			<md-input-container class="md-block"  flex-gt-sm ng-if="trueAppList">
+				<label>Duration</label>
+				<md-select  name="Duration" ng-model="dashfilters.duration" ng-change="fetchDashboardList()"> 
+				  <md-option ng-value="durationType.value" ng-repeat="durationType in durationTypes" data-ng-bind="durationType.view"></md-option>
+				</md-select>
+			</md-input-container>
 
-		<md-input-container class="md-block" flex-gt-sm flex="33" ng-if="trueAppList">
-			<label>Search</label>
-			<input name="search"  ng-model="dashfilters.search"  >
-		</md-input-container>
+			<div flex="5" hide-xs hide-sm></div>
+
+			<md-input-container class="md-block" flex-gt-sm  ng-if="trueAppList">
+				<label>Search</label>
+				<input name="search"  ng-model="dashfilters.search"  >
+			</md-input-container>
 
 		</div>
 

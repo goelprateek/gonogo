@@ -6,13 +6,13 @@
 	
 	var app = angular.module("gng.cdl.dealer",[]);
 
-	app.controller("DealerController",["$rootScope","$scope",'UserService','APP_CONST','GNG_GA',"$state",
-							function($rootScope,$scope,UserService,APP_CONST,GNG_GA,$state){
+	app.controller("DealerController",["$rootScope","$scope",'UserService','APP_CONST','GNG_GA',"$state",'notifier',
+							function($rootScope,$scope,UserService,APP_CONST,GNG_GA,$state,notifier){
 
 		var user = UserService.getCurrentUser();
 
-		$rootScope.errHead="";
-		$rootScope.errorMsg="";
+		/*$rootScope.errHead="";
+		$rootScope.errorMsg="";*/
 
 	    if(user.id){
 	        $scope.$emit('onSuccessfulLogin');
@@ -53,8 +53,7 @@
 
 				$state.go("/cdl/basic-de");
 			}else {
-				$rootScope.errHead="Dealer";
-				$rootScope.errorMsg="Please select Dealer";
+				notifier.logError("Please select Dealer");
 			}
 		}
 	}]);

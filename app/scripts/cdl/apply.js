@@ -164,7 +164,10 @@
    		},
 
    		$scope.suspectedActivities = ["Refer to Credit","Suspected Fraud","Confirmed Fraud"].map(function(activity){
-   			return {view : activity}
+   			return {
+   						view : activity == "Refer to Credit" ? 'No' : activity,
+   						value: activity
+   					}
    		}),
    		$scope.genders = ["Male" , "Female"].map(function(gender){
    			return {view:gender};
@@ -235,12 +238,9 @@
 	      } 
 		};
 
-		$scope.onPreviousClicked=function(previousURL,$valid){
-			if($valid){
-				$scope.currentPageNumber--;
-				$state.go(previousURL);	
-			}	
-			
+		$scope.onPreviousClicked=function(previousURL){
+			$scope.currentPageNumber--;
+			$state.go(previousURL);	
 		};
 
     	// Start : If from step 1 screen
