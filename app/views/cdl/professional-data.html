@@ -1,4 +1,4 @@
-<form id="employmentContainer" name="professionalData" novalidate autocomplete="off"  >
+<form id="employmentContainer" name="professionalData" novalidate autocomplete="off" accessible-form>
 	<div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true,alwaysVisible:true}">
 		<div class="row clearfix ">
 			<div class="col-md-10 col-md-offset-1">
@@ -305,7 +305,7 @@
 				<div layout-gt-sm="row">
 					
 					<md-input-container class="md-block" flex-gt-sm >
-						<label>Last Month Salary*</label>
+						<label>Last Month Salary</label>
 						<md-icon class="inr" md-font-icon="fa fa-inr" aria-label="inr"></md-icon>
 						<input name="lastmonth" ng-model="applicant.empl.emplSalary" ng-pattern="/^[0-9\d,]{1,17}$/" rupees required>
 						<div ng-messages="professionalData.lastmonth.$error" >
