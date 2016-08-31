@@ -7,7 +7,7 @@
 	app.directive('hcBarChart',['UserService', 'RestService',function(UserService,RestService){
 		return {
 			restrict: 'EA',
-                    template:'<div id="chart-container" style="margin: 0 auto" >not working</div>',
+                    template:'<div id="chart-container" style="margin: 0 auto" ></div>',
                     scope: {
                         data: '=data'
 
