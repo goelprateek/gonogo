@@ -35,9 +35,9 @@
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Credit Card No</label>
 						<md-icon class="card" md-font-icon="fa fa-credit-card" aria-label="card"></md-icon>
-						<input  name="credit" ng-pattern="/^[0-9\d]{6}$/" ng-model="applicant.creditCard" only-digits >
+						<input  name="credit" ng-pattern="/^[0-9\d]{6}$/"  md-maxlength="6" ng-model="applicant.creditCard" only-digits maxlength="6">
 						<div ng-messages="personalData.credit.$error" >
-		   					<div ng-message="pattern">only 6 digits are</div>
+		   					<div ng-message="pattern">only 6 digits are allowed</div>
 						</div>
 					</md-input-container>
 
@@ -107,7 +107,7 @@
 			    	<md-input-container class="md-block" flex-gt-sm>
 			    		<label>Loan Amount</label>
 			    		<md-icon class="inr" md-font-icon="fa fa-inr" aria-label="Rupee"></md-icon>
-			    		<input name="loanamt" ng-model="applicant.application.loanAmt" md-maxlength="12" rupees required >
+			    		<input name="loanamt" ng-model="applicant.application.loanAmt" md-maxlength="12" rupees required maxlength="12">
 			    		<div ng-messages="personalData.loanamt.$error"  >
 							<div ng-message="required">Please enter loan amount</div>
 							<div ng-message="md-maxlength">Only 12 digits allowed</div>
@@ -118,7 +118,7 @@
 
 					<md-input-container class="md-block" flex-gt-sm>
 						<label>Tenor in Months</label>
-						<input type="text" name="tenor"  ng-model="applicant.application.tenor" ng-pattern="/^[0-9\d]{1,3}$/" only-digits required>
+						<input type="text" name="tenor"  ng-model="applicant.application.tenor" ng-pattern="/^[0-9\d]{1,3}$/"  md-maxlength="3" maxlength="3" only-digits required>
 						<div ng-messages="personalData.tenor.$error" >
 							<div ng-message="required">Please enter Tenor</div>
 							<div ng-message="pattern">Maximum length of Tenor is 3</div>
