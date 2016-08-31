@@ -32,9 +32,9 @@
                                             <md-autocomplete
                                                   md-floating-label="Report Name"
                                                   md-input-name="reportName"
-                                                  md-selected-item="applicant.empl.emplName"
+                                                  md-selected-item="reportName"
                                                   md-search-text="searchText"
-                                                  md-items="item  in getReportConfiguration(searchText)"
+                                                  md-items="item in getReportConfiguration(searchText)"
                                                   md-item-text="item"
                                                   md-min-length="0"
                                                   required
@@ -46,7 +46,7 @@
                                                   </span>
                                                 </md-item-template>
                                                 <md-not-found>
-                                                  No employer matching "{{searchText}}" were found.
+                                                  No record matching "{{searchText}}" were found.
                                                 </md-not-found>
                                                 <div ng-messages="professionalData.empname.$error" >
                                                     <div ng-message="required">Please enter Employer name</div>
