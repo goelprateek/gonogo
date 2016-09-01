@@ -2,7 +2,7 @@
 	
 	'use strict';
 	
-	var app = angular.module('gonogo.analytics' ,['gonogo-directives','dndLists','ui.slimscroll','ngMaterial']);
+	var app = angular.module('gonogo.analytics' ,['gonogo-directives','dndLists','ui.slimscroll']);
 
     app.factory("AnalyticsObject",function(){
         var _obj = {
@@ -581,15 +581,20 @@
                         } ;
 
             $mdDialog.show({
-                  templateUrl: 'views/templates/report-modal.html',
                   controller: 'CustomReportController',
-                  size: 'lg',
-                  windowClass:"report-modal-popup" 
-            }).then(function(){
-                
+                  templateUrl: 'views/templates/report-modal.html',
+                  parent: angular.element(document.body),
+                  targetEvent: event,
+                  clickOutsideToClose:false,
+                  escapeToClose:false,
+                  fullscreen: true,
+            }).then(function(selectedItem){
+                $scope.selected = selectedItem;
+            },function(){
+                $log.info('Modal dismissed at: ' + new Date());
             })
 
-			var modalInstance = $uibModal.open({
+			/*var modalInstance = $uibModal.open({
 							      templateUrl: 'views/templates/report-modal.html',
 							      controller: 'CustomReportController',
 							      size: 'lg',
@@ -600,7 +605,7 @@
 		      $scope.selected = selectedItem;
 		    }, function () {
 		      $log.info('Modal dismissed at: ' + new Date());
-		    });
+		    });*/
 		};
 
 	    $scope.appView = false;
@@ -810,7 +815,7 @@ app.controller("imagesCtr",['$scope', 'ImageFeed','$uibModalInstance','$timeout'
     };
 }]);
 
-app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModalInstance' ,'RestService','UserService' ,'ReportStorage','APP_CONST',function($scope,$log,notifier,$uibModalInstance,RestService,UserService,ReportStorage,APP_CONST){
+app.controller("CustomReportController", [ '$scope','$log','notifier','$mdDialog' ,'$filter','RestService','UserService' ,'ReportStorage','APP_CONST',function($scope,$log,notifier,$mdDialog,$filter,RestService,UserService,ReportStorage,APP_CONST){
 
         var user = UserService.getCurrentUser();
         $scope.preview = 0;
@@ -866,8 +871,8 @@ app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModal
             }
         }
 
-        $scope.$watch('reportName',function(newVal,oldval){
-            if(!_.isUndefined(newVal) && newVal.length === 0){
+        /*$scope.$watch('reportName',function(newVal,oldval){
+            if(newVal && newVal.length === 0){
                 $scope.models = undefined;
                 $scope.preview = 0;
                 $scope.header = 0;
@@ -875,28 +880,25 @@ app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModal
                 $scope.selectedPropertyList = [];
                 $scope.models = undefined;
             }
-        },true);
+        },true);*/
 
          
         $scope.$watch('models[1].items',function(newVal,oldVal){
-
             if(newVal == oldVal) return ;
-
-            if(newVal && oldVal){
+            if(newVal){
                 $scope.preview = 1;
                 $scope.header = 0;
             }
             
         },true);
 
-        $scope.addnewReport = function(){
+        $scope.addnewReport = function($typedText){
             
             var serviceInput = {
                 "oHeader":{
                     "sInstID" : user.institutionID,
                      "sAppSource":"",
                      "dtSubmit":moment(),
-
                 },
                 "sUserId":user.username,
                 "aProductType":["Consumer Durables"],
@@ -925,8 +927,6 @@ app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModal
                         })
 
                         $scope.systemPropertyList = response.oUnSelectedColumns;
-
-                        
                     }
 
                     $scope.models = [
@@ -937,49 +937,89 @@ app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModal
             })
         }
 
-        $scope.getReportConfiguration = function(viewValue){
+        $scope.custreport = {
+            reportConfig: getReportConfiguration(),
+            querySearch: querySearch,
+        }
+
+        function querySearch (query) {
+          var results = query ? $filter("filter")($scope.custreport.reportConfig.$$state.value,query) : $scope.custreport.reportConfig;
+          return results;
+        }
+
+        function getReportConfiguration(){
             var searchObj = {
                 "oHeader": {
-                    "sInstID": user.institutionID,
+                    "sInstID": user.institutionID
                 },
-                "sReportName":viewValue
-            }
+                "sReportName":''
+            };
+
             return RestService.saveToServer('report/search-report-name',searchObj).then(function(data){
                 return data;
                 
             });
         }
 
-        
-        $scope.selectedReport = function($item, $model, $label, $event){
-            $scope.reportId = $item.reportId;
-            var _serviceinput = {
-                "oHeader": {
-                    "sInstID": user.institutionID
-                 },
-                 "sUserId":user.username,
-                 "sReportId":$item.reportId
+        /*$scope.$watch('customReportName', function(newVal,oldval){
+            if(newVal && newVal.length === 0){
+                $scope.models = undefined;
+                $scope.preview = 0;
+                $scope.header = 0;
+                $scope.noResults = 0;
+                $scope.selectedPropertyList = [];
+                $scope.models = undefined;
+            }
+        },true);*/
 
-            };
+        $scope.toggleListSearch = function(){
+            $scope.showSearch = !$scope.showSearch;
+            $scope.query = '';
+        }
 
-            RestService.saveToServer('report/fetch-report-config',_serviceinput).then(function(data){
-                    
-                    if(data){
+        $scope.selectedReport = function(){
+
+            if($scope.customReportName == null){
+                $scope.models = undefined;
+                $scope.preview = 0;
+                $scope.header = 0;
+                $scope.noResults = 0;
+                $scope.selectedPropertyList = [];
+                $scope.models = undefined;
+            }
+            
+            if($scope.customReportName){
+                
+                $scope.reportId = $scope.customReportName.reportId;
+                
+                var _serviceinput = {
+                    "oHeader": {
+                        "sInstID": user.institutionID
+                     },
+                     "sUserId":user.username,
+                     "sReportId":$scope.customReportName.reportId
+
+                };
+
+                RestService.saveToServer('report/fetch-report-config',_serviceinput).then(function(data){
                         
-                        _.map(data.aFlatConfig.mHeaderMap,function(item){
-                            $scope.selectedPropertyList.push(item);
-                        })
-                        
-                        $scope.systemPropertyList = data.oUnSelectedColumns;
+                        if(data){
+                            
+                            _.map(data.aFlatConfig.mHeaderMap,function(item){
+                                $scope.selectedPropertyList.push(item);
+                            })
+                            
+                            $scope.systemPropertyList = data.oUnSelectedColumns;
 
-                        
-                    }
+                            
+                        }
 
-                    $scope.models = [
-                        {listName: "Available", items: $scope.systemPropertyList, dragging: false},
-                        {listName: "Selected", items: $scope.selectedPropertyList, dragging: false}
-                    ];
-            });
+                        $scope.models = [
+                            {listName: "Available", items: $scope.systemPropertyList, dragging: false},
+                            {listName: "Selected", items: $scope.selectedPropertyList, dragging: false}
+                        ];
+                });
+            }
         }
 
 	    $scope.getSelectedItemsIncluding = function(list, item) {
@@ -1067,7 +1107,7 @@ app.controller("CustomReportController", [ '$scope','$log','notifier','$uibModal
         
 
         $scope.dismiss = function(){
-            $uibModalInstance.dismiss('close');
+            $mdDialog.hide('close');
         }
 
 	  	$scope.previewConfiguration = function () {

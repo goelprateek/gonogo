@@ -2201,3 +2201,6 @@ span.input-icon {
 }
 
 
+md-input-container:not(.md-input-has-value) input:not(:focus){
+  color:black!important;
+}

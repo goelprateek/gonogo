@@ -9,6 +9,7 @@
 	                                     'ngCookies',
 	                                     'ngSanitize',
 	                                     'ngAnimate',
+	                                     'ngMaterial',
 	                                     'ui.bootstrap',
 	                                     'angular-loading-bar',
 	                                     'ngFileUpload',
@@ -22,7 +23,7 @@
 	                                     'gonogo.commons',
 	                                     'gonogo.factories',
 	                                     'score-directives',
-	                                     'daterangepicker'
+	                                     'daterangepicker',
 	                                    ]);
 
 	app.controller("Maincontroller",['$scope', '$log', 'notifier' , '$timeout','RestService','$location','UserService','APP_CONST','AclService',

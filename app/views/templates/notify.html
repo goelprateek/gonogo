@@ -279,14 +279,17 @@
 									<span>Address Line2 : {{objectSet.oAppReq.oReq.oApplicant.aAddr[0].sLine2}}</span>
 								</div> 
 							</div>
-							<div data-ng-if="imageDataArray.length!=0"  slimscroll="{height: 54,railVisible:true}">
-							<div class="notify-scroll-container" >
-								 <ul style="padding: 0px;"> 
-									<li ng-repeat="d in imageDataArray">
-										<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index,true)"><img ng-src="{{d.sByteCode}}"> </a>
-									</li>
-								 </ul> 
-							</div>
+							<!-- slimscroll="{height: 54,railVisible:true}" -->
+							<div data-ng-if="imageDataArray.length!=0"  >
+								<div class="notify-scroll-container" >
+									 <ul style="padding: 0px;"> 
+									 	<slick infinite="true" slides-to-show="3" slides-to-scroll="3">
+										<li ng-repeat="d in imageDataArray">
+											<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index,true)"><img ng-src="{{d.sByteCode}}"> </a>
+										</li>
+										</slick>
+									 </ul> 
+								</div>
 							</div>
 
 							<!-- <div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">

@@ -82,7 +82,7 @@
 				<div layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm>
 			            <label>Date of Birth</label>
-			            <md-datepicker ng-model="applicant.dob" name="dob" flex="50"></md-datepicker>
+			            <md-datepicker ng-model="applicant.dob" name="dob" flex="50" md-open-on-focus></md-datepicker>
 			            <div ng-messages="personalData.dob.$error" class="errorMsg">
 						    <div ng-message="required">Please select date of birth </div>
 						</div>
