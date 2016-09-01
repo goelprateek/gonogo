@@ -143,7 +143,7 @@
 		var linker = function(scope, element, attrs) {
 
 			var template =    ' <style>';
-			template=template+'		.doc-preview{position:relative;bottom:0px;width:100%;left:0px;border: none;border-bottom: 1px solid black;}';
+			template=template+'		.doc-preview{position:relative;bottom:0px;width:100%;height:100px;left:0px;border: none;border-bottom: 1px solid black;}';
 			template=template+' </style>';
 			template=template+'	<div class="row clearfix" style="padding: 8px;">';
 			template=template+'		<label>{{item.doc}}</label>';
@@ -180,9 +180,16 @@
 						$scope.imagearray.splice(i,1);
 					}
 				}
+
+				$scope.item.isDefault=true;
+				$scope.item.image=null;
 			};
 
-			$scope.onselectImg = function($files,item) {
+			$scope.onselectImg = function($files,pItem) {
+
+				// console.log("Image selected");
+				// console.log($scope.item);
+
 				var img_type ='';
 				for (var i = 0; i < $files.length; i++){
 					var fname=$files[0].name;
@@ -200,21 +207,37 @@
 						var size=((($files[i].size)/1024).toFixed(2)) +" Kb";
 						reader.onload = function(readerEvt) {
 							binaryString = readerEvt.target.result;
-							if(_.contains(["APPLICANT-PHOTO","PAN","AADHAAR","PASSPORT","DRIVING-LICENSE","CUSTOMER-PHOTO","INCOME-PROOF1","INCOME-PROOF2","OTHER"],item.value)){
-								$scope.imagearray.push({kyc_name:item.value,image:binaryString.split(",")[1],type:img_type});
-							}else if(_.contains(["APPLICATION_FORM","AGREEMENT","ACH","DISBURSEMENT","ADDITIONAL_KYC"],item.value)){
-								$scope.imagearray.push({kyc_name:(item.value+item.index),image:binaryString.split(",")[1],type:img_type});
-							}else if(item.value==="holdCase"){
-								$scope.imagearray.push({kyc_name:item.doc, image:binaryString.split(",")[1], type:img_type, state:item.state,reason:item.reason});
+
+							var spliceIndex = _.chain($scope.imagearray).pluck("index").indexOf(pItem.index).value();
+							if(spliceIndex==-1){
+								if(_.contains(["APPLICANT-PHOTO","PAN","AADHAAR","PASSPORT","DRIVING-LICENSE","CUSTOMER-PHOTO","INCOME-PROOF1","INCOME-PROOF2","OTHER"],pItem.value)){
+									$scope.imagearray.push({index:pItem.index,kyc_name:pItem.value,image:binaryString.split(",")[1],type:img_type});
+								}else if(_.contains(["APPLICATION_FORM","AGREEMENT","ACH","DISBURSEMENT","ADDITIONAL_KYC"],pItem.value)){
+									$scope.imagearray.push({index:pItem.index,kyc_name:(pItem.value+pItem.index),image:binaryString.split(",")[1],type:img_type});
+								}else if(pItem.value==="holdCase"){
+									$scope.imagearray.push({index:pItem.index,kyc_name:pItem.doc, image:binaryString.split(",")[1], type:img_type, state:pItem.state,reason:pItem.reason});
+								}
+							}else{
+								$scope.imagearray[spliceIndex].image=binaryString.split(",")[1];
 							}
 
-							$("#"+item.value+item.index+"").css("background-image", "url("+binaryString+")");
-							$("#"+item.value+item.index+"label").hide();
-							$("#"+item.value+item.index+"remove").show();
+							console.log("Images to upload");
+							console.log($scope.imagearray);
+
+							$("#"+pItem.value+pItem.index+"").css("background-image", "url("+binaryString+")");
+							$("#"+pItem.value+pItem.index+"label").hide();
+							$("#"+pItem.value+pItem.index+"remove").show();
+
+
+							// console.log("Image selected");
+							// console.log($scope.item);
+
+							$scope.item.isDefault=false;
+							$scope.item.image=binaryString;
 						};
 				        reader.readAsDataURL($files[i]);
 					}
-				}
+				}				
 			};
 		}];
 
@@ -248,7 +271,7 @@
 	        template=template+'		<div class="upload-preview" id="{{item.index}}"  title="Click to select image.">';
 	        template=template+'			<input id="l{{item.index}}" name="l{{item.index}}" type="file" ngf-select="onselectImg($files,{{item}});" />';
 	        // template=template+'			<label for="l{{item.index}}" id="{{item.index}}label" title="Click to select image." ng-class="{\'upload-default\': item.isDefault,\'upload-preview\': !item.isDefault}" ng-style="item.style">';
-	        template=template+'			<label for="l{{item.index}}" id="{{item.index}}label" title="Click to select image.">';
+	        template=template+'			<label for="l{{item.index}}" id="{{item.index}}label" title="Click to select image." style="line-height: 12;width: 100%;">';
    	        template=template+'				<img src="images/camera-128.png" ng-if="item.isDefault" class="upload-default">';
 			template=template+'				<img ng-src="{{item.image}}" ng-if="!item.isDefault" class="upload-preview">';
 	        template=template+'			</label>';
@@ -268,8 +291,10 @@
 
 			$scope.arrDocTypes=["PAN","AADHAAR","PASSPORT","DRIVING-LICENSE","INCOME-PROOF1","INCOME-PROOF2","OTHER"];
 
-			$scope.onselectImg = function($files,item) 
+			$scope.onselectImg = function($files,pItem) 
 			{
+				console.log("Image selected");
+				console.log($scope.item);
 				var img_type ='';
 				for (var i = 0; i < $files.length; i++){
 					var fname=$files[0].name;
@@ -290,20 +315,25 @@
 						reader.onload = function(readerEvt) {
 							binaryString = readerEvt.target.result;
 
-							var spliceIndex = _.chain($scope.imagearray).pluck("index").indexOf(item.index).value();
+							var spliceIndex = _.chain($scope.imagearray).pluck("index").indexOf(pItem.index).value();
 							if(spliceIndex==-1){
-								$scope.imagearray.push({index:item.index,kyc_name:item.docType,kyc_number:item.docNumber,image:binaryString.split(",")[1],type:img_type});
+								$scope.imagearray.push({index:pItem.index,kyc_name:pItem.docType,kyc_number:pItem.docNumber,image:binaryString.split(",")[1],type:img_type});
 							}else{
 								$scope.imagearray[spliceIndex].image=binaryString.split(",")[1];
 							}
 
-							$("#"+item.index).css("background-image", "url("+binaryString+")");
-							// $("#"+item.index+"label").css("background-image", "none");
-							$("#"+item.index+"label").hide();
+							$("#"+pItem.index).css("background-image", "url("+binaryString+")");
+							// $("#"+pItem.index+"label").css("background-image", "none");
+							//$("#"+pItem.index+"label").hide();
+							$scope.item.isDefault=false;
+							$scope.item.image=binaryString;
 						};
 				        reader.readAsDataURL($files[i]);
 					}
 				}
+
+				// console.log("Image selected");
+				// console.log($scope.item);
 			};
 
 			$scope.onDocTypeSelected=function(pDocType){

@@ -307,15 +307,15 @@
 		  		if(mApplicant.aPhone){
 		  			for(var i=0;i<mApplicant.aPhone.length;i++){
 		  				if(mApplicant.aPhone[i].sPhoneType==="PERSONAL_MOBILE"){
-		  					$scope.applicant.oPermanent.oPhone.iMobile=mApplicant.aPhone[i].sPhoneNumber;
+		  					$scope.applicant.oResidence.oPhone.iMobile=mApplicant.aPhone[i].sPhoneNumber;
 		  				}else if(mApplicant.aPhone[i].sPhoneType==="PERSONAL_PHONE"){
-		  					$scope.applicant.oPermanent.oPhone.sStdCode=mApplicant.aPhone[i].sAreaCode;
-							$scope.applicant.oPermanent.oPhone.iLandLine=mApplicant.aPhone[i].sPhoneNumber;
-		  				}else if(mApplicant.aPhone[i].sPhoneType==="RESIDENCE_PHONE"){
 		  					$scope.applicant.oResidence.oPhone.sStdCode=mApplicant.aPhone[i].sAreaCode;
 							$scope.applicant.oResidence.oPhone.iLandLine=mApplicant.aPhone[i].sPhoneNumber;
-		  				}else if(mApplicant.aPhone[i].sPhoneType==="RESIDENCE_MOBILE"){
-		  					$scope.applicant.oResidence.oPhone.iMobile=mApplicant.aPhone[i].sPhoneNumber;
+		  				}else if(mApplicant.aPhone[i].sPhoneType==="RESIDENCE_PHONE"){
+							$scope.applicant.oPermanent.oPhone.sStdCode=mApplicant.aPhone[i].sAreaCode;
+							$scope.applicant.oPermanent.oPhone.iLandLine=mApplicant.aPhone[i].sPhoneNumber;
+		  				}else if(mApplicant.aPhone[i].sPhoneType==="RESIDENCE_MOBILE"){		  					
+		  					$scope.applicant.oPermanent.oPhone.iMobile=mApplicant.aPhone[i].sPhoneNumber;
 		  				}else if(mApplicant.aPhone[i].sPhoneType==="OFFICE_PHONE"){
 		  					$scope.applicant.empl.emplStd = mApplicant.aPhone[i].sAreaCode;
 							$scope.applicant.empl.emplLandLine = mApplicant.aPhone[i].sPhoneNumber;
@@ -444,7 +444,7 @@
 								$scope.applicantPhoto={
 									doc:"Applicant Photo",
 									value:"APPLICANT-PHOTO",
-									index:1,
+									index:0,
 									image:"data:image/png;base64,"+Response.sByteCode,
                    					isDefault:false
                    				};
@@ -486,7 +486,7 @@
 		$scope.applicantPhoto={
 				doc:"Applicant Photo",
 				value:"APPLICANT-PHOTO",
-				index:1,
+				index:0,
 				image:null,
 				isDefault:true
 			};
@@ -528,18 +528,35 @@ $scope.onChanged=function(type,val)
 }
 
 $scope.stateChanged = function (val){
+
+	$scope.applicant.oPermanent={
+    	"oAddress":{
+    		"addrType":"",
+    		"sAddress1":"",
+    		"sAddress2":"",
+    		"sAddress3":"",
+    		"sState":"",
+    		"sCity":"",
+    		"sPinCode":"",
+    		"addrType":"",
+    		"iMonthCity":"",
+    		"dRentPerMonth":"",
+    		"iMonthAddress":""
+    	},"oPhone":{
+    		"iMobile":"",
+    		"iLandLine":"",
+    		"sStdCode":""
+    	},
+    	"sEmail":""
+    };
+
 	if(val==true)
-		{
-			if($scope.applicant.oPermanent==undefined){
-				$scope.applicant.oPermanent="";
-			}
-			var backUpResidenceData = angular.copy($scope.applicant.oResidence);
-			$scope.applicant.oPermanent = backUpResidenceData;
-			
-		}else{
-				$scope.applicant.oPermanent="";
-		}
+	{
+		var backUpResidenceData = angular.copy($scope.applicant.oResidence);
+		$scope.applicant.oPermanent = backUpResidenceData;
+		
 	}
+};
 
 $scope.pinService = function(pin,id){
 	if( id =="perpin")
@@ -929,28 +946,28 @@ $scope.submitApplication=function(UrlKey){
 					"sAreaCode":"",
 					"sCountryCode":"+91",
 					"sExt":"",
-					"sPhoneNumber":($scope.applicant.oPermanent.oPhone.iMobile ? $scope.applicant.oPermanent.oPhone.iMobile : '')
+					"sPhoneNumber":($scope.applicant.oResidence.oPhone.iMobile? $scope.applicant.oResidence.oPhone.iMobile : '')
 				},
 				{
 					"sPhoneType":"PERSONAL_PHONE",
-					"sAreaCode":($scope.applicant.oPermanent.oPhone.sStdCode ? $scope.applicant.oPermanent.oPhone.sStdCode :''),
+					"sAreaCode":$scope.applicant.oResidence.oPhone.sStdCode? $scope.applicant.oResidence.oPhone.sStdCode :'',
 					"sCountryCode":"+91",
 					"sExt":"",
-					"sPhoneNumber":($scope.applicant.oPermanent.oPhone.iLandLine ? $scope.applicant.oPermanent.oPhone.iLandLine : '')
+					"sPhoneNumber":$scope.applicant.oResidence.oPhone.iLandLine ? $scope.applicant.oResidence.oPhone.iLandLine : ''
 				},
 				{
 					"sPhoneType":"RESIDENCE_MOBILE",
 					"sAreaCode":"",
 					"sCountryCode":"+91",
 					"sExt":"",
-					"sPhoneNumber":$scope.applicant.oResidence.oPhone.iMobile
+					"sPhoneNumber":($scope.applicant.oPermanent.oPhone.iMobile ? $scope.applicant.oPermanent.oPhone.iMobile : '')
 				},
 				{
 					"sPhoneType":"RESIDENCE_PHONE",
-					"sAreaCode":$scope.applicant.oResidence.oPhone.sStdCode,
+					"sAreaCode":($scope.applicant.oPermanent.oPhone.sStdCode ? $scope.applicant.oPermanent.oPhone.sStdCode :''),
 					"sCountryCode":"+91",
 					"sExt":"",
-					"sPhoneNumber":$scope.applicant.oResidence.oPhone.iLandLine
+					"sPhoneNumber":($scope.applicant.oPermanent.oPhone.iLandLine ? $scope.applicant.oPermanent.oPhone.iLandLine : '')
 				},
 				{
 					"sPhoneType":"OFFICE_PHONE",

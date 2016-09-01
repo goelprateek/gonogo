@@ -20,8 +20,7 @@
 				<md-input-container class="md-block" flex-gt-sm  ng-if="applicant.oResidence.oAddress.addrType.indexOf('RENTED') != -1">
 					<label>Rent Per Month</label>
 					<md-icon class="material-icon" md-font-icon="fa fa-inr" aria-label="inr"></md-icon>
-					<!-- md-maxlength="12" -->
-					<input name="resRent" ng-pattern="/^[0-9\d,]{1,12}$/" ng-model="applicant.oResidence.oAddress.dRentPerMonth"  rupees required>
+					<input name="resRent" ng-pattern="/^[0-9\d,]{1,12}$/" ng-model="applicant.oResidence.oAddress.dRentPerMonth"  md-maxlength="12" maxlength="12" rupees required>
 					<div ng-messages="addressData.resRent.$error" >
 		   				<div ng-message="required">Please enter Rent per month</div>
 		   				<div ng-message="pattern">Please enter valid Rent</div>
@@ -76,7 +75,7 @@
 				<md-input-container class="md-block" flex-gt-sm>
 					<label>Address Line 1</label>
 					<md-icon class="material-icon" md-font-icon="fa fa-map-marker" aria-label="description"></md-icon>
-					<input name="resAdd1" ng-model="applicant.oResidence.oAddress.sAddress1"  ng-pattern="/^[a-zA-Z\d\s#,.\/\\]{10,30}$/"   capitalize required >	
+					<input name="resAdd1" ng-model="applicant.oResidence.oAddress.sAddress1"  ng-pattern="/^[a-zA-Z\d\s#,.\/\\]{10,30}$/" capitalize required >	
 					<div ng-messages="addressData.resAdd1.$error" >
 	   					<div ng-message="required">Please enter Address line 1</div>
 	   					<div ng-message="pattern">Please enter valid Address</div>
@@ -135,7 +134,7 @@
 			<div layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm >
 						<label>Pincode</label>
-						<input ng-model="applicant.oResidence.oAddress.sPinCode" name="respin"  data-ng-keyup="pinService(applicant.oResidence.oAddress.sPinCode,'perpin')"  ng-pattern="/^[0-9\d]{6}$/" only-digits required >
+						<input ng-model="applicant.oResidence.oAddress.sPinCode" name="respin"  data-ng-keyup="pinService(applicant.oResidence.oAddress.sPinCode,'perpin')"  ng-pattern="/^[0-9\d]{6}$/" only-digits required maxlength="6">
 						<div ng-messages="addressData.respin.$error" >
 	   						<div ng-message="required">Please enter Pincode</div>
 	   						<div ng-message="pattern">Please enter valid Pincode</div>
@@ -222,9 +221,9 @@
 					<label>Personal Mobile</label>
 					<md-icon class="material-icon" md-font-icon="fa fa-phone" aria-label="phone"></md-icon>
 					<input ng-model="applicant.oResidence.oPhone.iMobile" ng-disabled=true name="resPersonalNum">
-					<div ng-messages="addressData.resLandLine.$error" >
+					<!-- <div ng-messages="addressData.resLandLine.$error" >
 	   					<div ng-message="md-maxlength">only 10 digits allowed</div>
-					</div>
+					</div> -->
 				</md-input-container>
 
 			</div>	
@@ -281,11 +280,11 @@
 					<!-- only-digits -->
 				<md-input-container class="md-block" flex-gt-sm >
 					<label>Months at current address</label>
-					<input name="monthaddr"  ng-model="applicant.oResidence.oAddress.iMonthAddress" md-maxlength="3" required this-earlier-than="applicant.oResidence.oAddress.iMonthCity">
+					<input name="monthaddr"  ng-model="applicant.oResidence.oAddress.iMonthAddress" md-maxlength="3" maxlength="3" required this-earlier-than="applicant.oResidence.oAddress.iMonthCity">
 					<div ng-messages="addressData.monthaddr.$error" >
 	   					<div ng-message="required">Please enter months at current address</div>
 	   					<div ng-message="thisEarlierThan">Residence stay should be less than city stay </div>
-	   					<div ng-message="md-maxlength">Only three digit allowed</div>
+	   					<div ng-message="md-maxlength">Only three digits allowed</div>
 					</div>
 				</md-input-container>
 
@@ -293,10 +292,10 @@
 
 				<md-input-container class="md-block" flex-gt-sm >
 					<label>Months at City</label>
-					<input name="monthcity" ng-model="applicant.oResidence.oAddress.iMonthCity"  md-maxlength="3" only-digits required only-digits>
+					<input name="monthcity" ng-model="applicant.oResidence.oAddress.iMonthCity" maxlength="3"  md-maxlength="3" only-digits required only-digits>
 					<div ng-messages="addressData.monthcity.$error" >
 	   					<div ng-message="required">Please enter months at city</div>
-						<div ng-message="md-maxlength">Only three digit allowed</div>
+						<div ng-message="md-maxlength">Only three digits allowed</div>
 					</div>
 				</md-input-container>	
 			</div>	
@@ -349,10 +348,10 @@
 				<md-input-container class="md-block" flex-gt-sm flex="50" ng-if="applicant.oPermanent.oAddress.addrType.indexOf('RENTED') != -1">
 					<label>Rent Per Month</label>
 					<md-icon class="inr" md-font-icon="fa fa-inr" aria-label="inr"></md-icon>
-					<input ng-model="applicant.oPermanent.oAddress.dRentPerMonth" name="perrent" md-maxlength="12" ng-pattern="/^[0-9\d,]{1,12}$/" rupees>
+					<input ng-model="applicant.oPermanent.oAddress.dRentPerMonth" name="perrent" md-maxlength="12" maxlength="12" ng-pattern="/^[0-9\d,]{1,12}$/" rupees>
 					<div ng-messages="addressData.perrent.$error" >
 			   			<div ng-message="pattern">Please enter valid Rent</div>
-			   			<div ng-message="md-maxlength">Only 12 digit allowed</div>
+			   			<div ng-message="md-maxlength">Only 12 digits allowed</div>
 					</div>
 				</md-input-container>
 
@@ -476,7 +475,7 @@
 				<div layout-gt-sm="row">
 					<md-input-container class="md-block" flex-gt-sm >
 						<label>Pincode</label>
-						<input name="perpin"  ng-model="applicant.oPermanent.oAddress.sPinCode" id="prmnt_perpin" ng-pattern="/^[0-9\d]{6}$/" data-ng-keyup="pinService(applicant.oPermanent.oAddress.sPinCode,'prmnt_perpin')" only-digits>
+						<input name="perpin"  ng-model="applicant.oPermanent.oAddress.sPinCode" id="prmnt_perpin" ng-pattern="/^[0-9\d]{6}$/" data-ng-keyup="pinService(applicant.oPermanent.oAddress.sPinCode,'prmnt_perpin')" maxlength="6" only-digits>
 						<div ng-messages="addressData.perpin.$error" >
 			   				<div ng-message="pattern">Please enter valid Pincode</div>
 						</div>
@@ -530,7 +529,7 @@
 					
 					<md-input-container class="md-block" flex-gt-sm >
 						<label>STD Code</label>
-						<input ng-model="applicant.oPermanent.oPhone.sStdCode" ng-pattern="/^[0-9\d]{3,5}$/"  name="perstd"  only-digits>
+						<input ng-model="applicant.oPermanent.oPhone.sStdCode" ng-pattern="/^[0-9\d]{3,5}$/"  name="perstd" maxlength="5" only-digits>
 						<div ng-messages="addressData.perstd.$error" >
 			   				<div ng-message="pattern">Please enter valid STD code</div>
 						</div>
@@ -541,7 +540,7 @@
 					<md-input-container>
 						<label>Phone</label>
 						<md-icon class="material-icon" md-font-icon="fa fa-phone" aria-label="phone"></md-icon>
-						<input name="perLandLine" ng-model="applicant.oPermanent.oPhone.iLandLine" ng-pattern="/^[0-9\d]{10}$/"  only-digits>
+						<input name="perLandLine" ng-model="applicant.oPermanent.oPhone.iLandLine" ng-pattern="/^[0-9\d]{10}$/" maxlength="10"  only-digits>
 						<div ng-messages="addressData.perLandLine.$error" >
 		   					<div ng-message="pattern">Please enter valid Phone number</div>
 						</div>
@@ -552,7 +551,7 @@
 					<md-input-container>
 						<label>Mobile</label>
 						<md-icon class="material-icon" md-font-icon="fa fa-mobile" aria-label="phone"></md-icon>
-						<input  ng-model="applicant.oPermanent.oPhone.iMobile"  ng-pattern="/^[0-9\d]{10}$/" name="perMob" only-digits >
+						<input  ng-model="applicant.oPermanent.oPhone.iMobile"  maxlength="10" ng-pattern="/^[0-9\d]{10}$/" name="perMob" only-digits >
 						<div ng-messages="addressData.perMob.$error" >
 		   					<div ng-message="pattern">Please enter valid Mobile number</div>
 						</div>
@@ -609,10 +608,10 @@
 					
 					<md-input-container class="md-block" flex-gt-sm >
 						<label>Months at Permanent address</label>
-						<input ng-model="applicant.oPermanent.oAddress.iMonthAddress" name="permonthadd" md-maxlength="3" only-digits this-earlier-than="applicant.oPermanent.oAddress.iMonthCity">
+						<input ng-model="applicant.oPermanent.oAddress.iMonthAddress" name="permonthadd" md-maxlength="3" maxlength="3" only-digits this-earlier-than="applicant.oPermanent.oAddress.iMonthCity">
 						<div ng-messages="addressData.permonthadd.$error" >
 		   					<div ng-message="thisEarlierThan">Residence stay should be less than city stay </div>
-		   					<div ng-message="md-maxlength" >Only three figits allowed</div>
+		   					<div ng-message="md-maxlength" >Only three digits allowed</div>
 						</div>
 					</md-input-container>
 
@@ -620,7 +619,7 @@
 
 					<md-input-container>
 						<label>Months at City</label>
-						<input name="permonthcity" ng-model="applicant.oPermanent.oAddress.iMonthCity" md-maxlength="3" only-digits>
+						<input name="permonthcity" ng-model="applicant.oPermanent.oAddress.iMonthCity" md-maxlength="3" maxlength="3" only-digits>
 					</md-input-container>
 
 				</div>
