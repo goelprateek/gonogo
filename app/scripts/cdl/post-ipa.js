@@ -20,6 +20,19 @@
 	  	
 	}]);
 
+	app.controller("DeductionCntrl",["$scope","deductionAmts","$mdDialog",function($scope,deductionAmts,$mdDialog){
+
+		$scope.dealerSubvention=deductionAmts.dealerSubvention,
+    	$scope.manufactureSubvention=deductionAmts.manufactureSubvention,
+    	$scope.manufacturerProcessingFee=deductionAmts.manufacturerProcessingFee,
+    	$scope.manufactureSubventionBourneByDealer=deductionAmts.manufactureSubventionBourneByDealer,
+    	$scope.otherCharges=deductionAmts.otherCharges;
+
+	    $scope.cancel = function() {
+      		$mdDialog.cancel();
+    	};
+	}]);
+
 	// function ChangeAssetCtrlr($scope, $mdDialog) {
 	// 	$scope.onSaveAssetClicked = function() {
  //      		$mdDialog.hide($scope.asset);
@@ -187,22 +200,24 @@
 			if($scope.SchemeObject){
 			// 	var tAprAmt = parseFloat($("#apvAmt").val().toString().replace(/,/g,""));
 			// 	var tAsstCst = parseFloat($("#astCst").val().toString().replace(/,/g,""));
-			// 	if(!$scope.SchemeObject.sMxTenu)
-			// 	{
-			// 		$scope.SchemeObject.sMxTenu=0;
-			// 	}
-			// 	if(!$scope.SchemeObject.sMinTenu)
-			// 	{
-			// 		$scope.SchemeObject.sMinTenu=0;
-			// 	}
-			// 	if(!$scope.SchemeObject.sDint)
-			// 	{
-			// 		$scope.SchemeObject.sDint=0;
-			// 	}	
-			// 	if(!$scope.SchemeObject.sMinAmt)
-			// 	{
-			// 		$scope.SchemeObject.sMinAmt=0;
-			// 	}
+				if(!$scope.SchemeObject.sMxTenu)
+				{
+					$scope.SchemeObject.sMxTenu=0;
+				}
+				if(!$scope.SchemeObject.sMinTenu)
+				{
+					$scope.SchemeObject.sMinTenu=0;
+				}
+				if(!$scope.SchemeObject.sDint)
+				{
+					$scope.SchemeObject.sDint=0;
+				}	
+				if(!$scope.SchemeObject.sMinAmt)
+				{
+					$scope.SchemeObject.sMinAmt=0;
+				}
+
+				$scope.pstIpaSchmExp = ""+$scope.SchemeObject.sSchID+"("+$scope.SchemeObject.sMinTenu+"/"+$scope.SchemeObject.sMxTenu+")";
 
 			// 	var tadEmi = 0;
 			// 	var temi=0;
@@ -218,7 +233,7 @@
 			// 	}
 
 			// 	tadEmi=  Math.ceil(tadEmi);
-			// 	$scope.pstIpaSchmExp = ""+$scope.SchemeObject.sSchID+"("+$scope.SchemeObject.sMinTenu+"/"+$scope.SchemeObject.sMxTenu+")";
+				
 
 			// 	if(tAprAmt < tAsstCst)
 			// 	{
@@ -232,7 +247,9 @@
 			// //	$("#mrgnMny").val(tMrgnMny).prev().show();
 			// 	$("#prcsfee").val( Math.ceil($scope.SchemeObject.sMinAmt)).siblings("help").show();
 
-				$scope.calculateEmi();
+				$scope.calculateValues();
+			}else{
+				notifier.logError("Sorry scheme not found");
 			}
 		};
 
@@ -242,6 +259,7 @@
 		// 	{	$scope.ipaService(); }	
 		// });
 
+		/*
 		$scope.calculateEmi=function(){			
 			var tAprAmt = parseFloat(($scope.approvedAmt ? ($scope.approvedAmt+"") : "0").replace(/,/g,""));	
 			var tAsstCst = parseFloat(($scope.astCst ? $scope.astCst : "0") .replace(/,/g,""));
@@ -258,9 +276,6 @@
 			// }else{
 			// 	$("#mnyInstrDiv, #mnyCnfmDiv").show();
 			// }
-
-			/*var tAprAmt = parseFloat($("#apvAmt").val().toString().replace(/,/g,""));
-			var tAsstCst = parseFloat($("#astCst").val().toString().replace(/,/g,""));*/
 
 			if($scope.SchemeObject){
 				if(!$scope.SchemeObject.sMxTenu)
@@ -308,79 +323,212 @@
 				$scope.SchemeObject.sMinAmt=Math.ceil($scope.SchemeObject.sMinAmt);
 				//$("#prcsfee").val( Math.ceil($scope.SchemeObject.sMinAmt)).siblings("help").show();
 			}
-		};
+		};*/
+
+
+		$scope.calculateValues=function() {
+			// $("#financeAmt").siblings("help").show();
+			// $("#prcsfee").siblings("help").show();
+			// $("#aEMI").siblings("help").show();
+			// $("#emi").siblings("help").show();
+			// $("#mrgnMny").siblings("help").show();
+			// $("#ipaTenor").siblings("help").show();
+			// $("#ipaAdvEmiTenor").siblings("help").show();
+			// $("#ipaNetFundingAmt").siblings("help").show();
+			// $("#ipaNetDisbAmt").siblings("help").show();
+
+			if($scope.SchemeObject){
+				//console.log("Scheme selected");
+				//console.log($scope.SchemeObject);
+
+				var totalAssetCostVal=parseFloat( ( $scope.astCst ? $scope.astCst : 0 ).toString().replace(/,/g,""));
+				var marginMoneyVal=parseFloat(( $scope.tMrgnMny ? $scope.tMrgnMny : 0 ).toString().replace(/,/g,""));
+				var tenorVal=$scope.SchemeObject.sMxTenu ? $scope.SchemeObject.sMxTenu : 0;
+				var advanceEmiTenorVal=$scope.SchemeObject.sMinTenu ? $scope.SchemeObject.sMinTenu : 0;
+				var processingFeeVal=parseInt($scope.SchemeObject.sMinAmt ? $scope.SchemeObject.sMinAmt : 0);
+				var sdIntVal=$scope.SchemeObject.sDint ? $scope.SchemeObject.sDint : 0;
+				var sdRateVal=$scope.SchemeObject.sDRte ? $scope.SchemeObject.sDRte : 0;
+				var sdAmtVal=$scope.SchemeObject.sDAmt ? $scope.SchemeObject.sDAmt : 0;
+
+			    //Total Asset Cost - Margin Money
+			    var financeAmount = totalAssetCostVal - marginMoneyVal;
+
+			//     if (financeAmount > 0) {
+			//         financeAmount = 0;
+			//     }
+			    //console.log("Value for finance amount :" + financeAmount);
+
+			    //Finance Amount / Tenor
+			    var emiWithoutCeil = financeAmount / tenorVal;
+			    var emi = Math.ceil(emiWithoutCeil);
+			//     emi = emiWithoutCeil;
+
+			    //EMI * Advance EMI Tenor
+			    var advanceEMI = emi * advanceEmiTenorVal;
+
+			    //Finance Amount - Advance EMI
+			    var netFundingAmount = financeAmount - advanceEMI;
+
+			    //financeAmount * ((sdInt)/100)
+			    var dealerSubventionBeforeRound = financeAmount * (sdIntVal / 100);
+			    var dealerSubvention = Math.round(dealerSubventionBeforeRound);
+
+			    //financeAmount * ((sdRate)/100)
+			    var manufactureSubventionBourneByDealerBeforeRound = financeAmount * (sdRateVal / 100);
+			    var manufactureSubventionBourneByDealer = Math.round(manufactureSubventionBourneByDealerBeforeRound);
+
+			    //financeAmount * ((sdAmt)/100)
+			    var manufactureSubventionBeforeRound = financeAmount * (sdAmtVal / 100);
+
+			    var manufactureSubvention = Math.round(manufactureSubventionBeforeRound);
+
+			    var manufacturerProcessingFee = 0;
+
+			    var otherCharges = 0;
+
+			    //Finance Amount - (Advance EMI + Processing Fee + Dealer Subvention + Manufacture Subvention + Other Charges)
+			    var netDisbursalAmount = financeAmount -
+			            (advanceEMI + processingFeeVal + dealerSubvention + manufactureSubvention + otherCharges);
+
+			    $scope.financeAmt=financeAmount;
+			    $scope.prcsfee=processingFeeVal;
+			    $scope.temi=emi;
+			    $scope.tadEmi=advanceEMI;
+			    $scope.ipaTenor=tenorVal;
+			    $scope.ipaAdvEmiTenor=advanceEmiTenorVal;
+			    $scope.ipaNetFundingAmt=netFundingAmount;
+			    $scope.ipaNetDisbAmt=netDisbursalAmount;
+
+			    $scope.dealerSubvention=dealerSubvention;	    
+			    $scope.manufactureSubvention=manufactureSubvention;
+			    $scope.manufacturerProcessingFee=manufacturerProcessingFee;
+			    $scope.manufactureSubventionBourneByDealer=manufactureSubventionBourneByDealer;
+			    $scope.otherCharges=otherCharges;
+			}else{
+				 notifier.logError("Please select scheme !");
+			}
+		}
 
 		//send post ipa data and start flow
-		$scope.ipaService = function()
+		$scope.sendPostIPAData = function(isFormInvalid)
 		{	
-			$scope.ipaJson={
-				"oHeader": {
-					"sCroId": "default",
-					"dtSubmit": new Date().getTime(),
-					"sReqType":"JSON",
-					"sAppSource": "WEB",
-					"sDsaId": $scope.username,
-					"sAppID": "",
-					"sDealerId":$scope.dealerID,
-					"sSourceID":"HDBFS_CDL",
-					"sInstID": user.institutionID
-				},
-				"opostIPA": {
-					"dOtherChrg": 0,
-					"sScheme": $scope.pstIpaSchmExp,
-					"dDelSubven": $scope.dltSrchrg,
-					"aAssMdl": [],
-					"sMarginMoneyInstru": $scope.mnyInstn,
-					"dTotAssCost":$scope.astCst.replace(/,/g,''),
-					"aAssMdls": [{
-						"sAssetCtg":$scope.asset.category,
-						"sDlrName":$scope.dealerName,
-						"sModelNo":$scope.asset.model,
-						"sAssetMake":$scope.asset.make
-					}],
-					"dProcFees": ($scope.SchemeObject.sMinAmt+"").replace(/,/g,''),
-					"dApvAmt": $scope.approvedAmt.replace(/,/g,''),
-					"sMarMoneyConfirm": $scope.mnyCnfm,
-					"dMarMoney": ($scope.tMrgnMny+"").replace(/,/g,''),
-					"dAdvEmi": $scope.tadEmi ? ($scope.tadEmi+"").replace(/,/g,'') : "0" ,
-					"dManfSubDel": 0
-				},
-				"sRefID": $scope.referenceID,
-				"dtDateTime": new Date().getTime()
-			};
-		//	console.log("$scope.ipaJson :"+$scope.ipaJson);
+			// $scope.ipaJson={
+			// 	"oHeader": {
+			// 		"sCroId": "default",
+			// 		"dtSubmit": new Date().getTime(),
+			// 		"sReqType":"JSON",
+			// 		"sAppSource": "WEB",
+			// 		"sDsaId": $scope.username,
+			// 		"sAppID": "",
+			// 		"sDealerId":$scope.dealerID,
+			// 		"sSourceID":"HDBFS_CDL",
+			// 		"sInstID": user.institutionID
+			// 	},
+			// 	"opostIPA": {
+			// 		"dOtherChrg": 0,
+			// 		"sScheme": $scope.pstIpaSchmExp,
+			// 		"dDelSubven": $scope.dltSrchrg,
+			// 		"aAssMdl": [],
+			// 		"sMarginMoneyInstru": $scope.mnyInstn,
+			// 		"dTotAssCost":$scope.astCst.replace(/,/g,''),
+			// 		"aAssMdls": [{
+			// 			"sAssetCtg":$scope.asset.category,
+			// 			"sDlrName":$scope.dealerName,
+			// 			"sModelNo":$scope.asset.model,
+			// 			"sAssetMake":$scope.asset.make
+			// 		}],
+			// 		"dProcFees": ($scope.SchemeObject.sMinAmt+"").replace(/,/g,''),
+			// 		"dApvAmt": $scope.approvedAmt.replace(/,/g,''),
+			// 		"sMarMoneyConfirm": $scope.mnyCnfm,
+			// 		"dMarMoney": ($scope.tMrgnMny+"").replace(/,/g,''),
+			// 		"dAdvEmi": $scope.tadEmi ? ($scope.tadEmi+"").replace(/,/g,'') : "0" ,
+			// 		"dManfSubDel": 0
+			// 	},
+			// 	"sRefID": $scope.referenceID,
+			// 	"dtDateTime": new Date().getTime()
+			// };
+			if(!isFormInvalid){
+				$scope.ipaJson={
+					"oHeader":
+					{
+						"sCroId":"default",
+						"dtSubmit":new Date().getTime(),
+						"sReqType":"JSON",
+						"sAppSource":"WEB",
+						"sDsaId":user.username,
+						"sAppID":$scope.applicationID,
+						"sDealerId": $scope.dealerID,
+						"sSourceID": "GONOGO_HDBFS",
+						"sInstID": user.institutionID
+					},
+					"opostIPA":
+					{
+						"dOtherChrg":$scope.otherCharges,
+						"sScheme":$scope.pstIpaSchmExp,
+						"dManSubMbd":$scope.manufactureSubventionBourneByDealer,
+						"aAssMdl":null,
+						"dNetDisbursalAmt": $scope.ipaNetDisbAmt.toString().replace(/,/g,''),
+						"dNetFundingAmt":$scope.ipaNetFundingAmt.toString().replace(/,/g,''),
+						"aAssMdls":[
+						            {
+						            	"sAssetCtg":$scope.asset.category,
+						            	"sPrice":"",
+						            	"sDlrName":$scope.dealerName,
+						            	"sModelNo":$scope.asset.model,
+						            	"sAssetMake":$scope.asset.make
+				            		}],
+			    		"iAdvEmiTenor":$scope.ipaAdvEmiTenor,
+			    		"dProcFees":$scope.prcsfee.toString().replace(/,/g,''),
+			    		"sMarMoneyConfirm":$scope.mnyCnfm,
+			    		"dEmi":$scope.temi.toString().replace(/,/g,''),
+			    		"dManfSubDel": $scope.manufactureSubvention.toString().replace(/,/g,''),
+			    		"dFinanceAmt": $scope.financeAmt.toString().replace(/,/g,''),
+			    		"dManProcFee":$scope.manufacturerProcessingFee.toString().replace(/,/g,''),
+			    		"dDelSubven":$scope.dealerSubvention.toString().replace(/,/g,''),
+			    		"iTenor":$scope.ipaTenor,
+			    		"sMarginMoneyInstru":$scope.mnyInstn,
+			    		"dTotAssCost":$scope.astCst.toString().replace(/,/g,''),
+			    		"dApvAmt":$scope.approvedAmt.toString().replace(/,/g,''),
+			    		"dMarMoney":$scope.tMrgnMny.toString().replace(/,/g,''),
+			    		"dAdvEmi":$scope.tadEmi ? $scope.tadEmi.toString().replace(/,/g,'') : "0" ,
+			    	},
+					"sRefID":$scope.referenceID,
+					"dtDateTime":new Date().getTime()
+				};	
 
-			RestService.saveToServer('post-ipa-pdf', $scope.ipaJson)
-			.then(function(data){
-				if(data && data.sStat=="SUCCESS"){
+				console.log("$scope.ipaJson :"+JSON.stringify($scope.ipaJson));
+				RestService.saveToServer('post-ipa-pdf', $scope.ipaJson)
+				.then(function(data){
+					if(data && data.sStat=="SUCCESS"){
 
-					var doDoc={
-						sDocID:data.sDocID,
-						sByteCode:data.sByteCode
+						var doDoc={
+							sDocID:data.sDocID,
+							sByteCode:data.sByteCode
+						}
+						// $scope.postIpaPdfId=data.sDocID;
+						// $scope.postIpaPDFCode = "data:application/pdf;base64,"+data.sByteCode;
+						// $("#pOrder").hide();
+						// $("#additionalDoc").show();
+
+						sharedService.setRefID($scope.referenceID);
+						sharedService.setApplicationStatus($scope.statusObject);
+						sharedService.setDODocument(doDoc);
+
+					 	$state.go("/cdl/additnl-doc");
+					}else{
+						notifier.logError("Sorry we can not process your asset request, please try again or contact system admin.");
 					}
-					// $scope.postIpaPdfId=data.sDocID;
-					// $scope.postIpaPDFCode = "data:application/pdf;base64,"+data.sByteCode;
-					// $("#pOrder").hide();
-					// $("#additionalDoc").show();
-
-					sharedService.setRefID($scope.referenceID);
-					sharedService.setApplicationStatus($scope.statusObject);
-					sharedService.setDODocument(doDoc);
-
-				 	$state.go("/cdl/additnl-doc");
-				}else{
-					notifier.logError("Sorry we can not process your asset request, please try again or contact system admin.");
-				}
-			},function(failedResponse){
-				$scope.serviceHitCount=$scope.serviceHitCount+1;
-				if($scope.serviceHitCount<=3)
-				{
-				  	$scope.ipaService();
-				} else {
-					$scope.serviceHitCount=1;
-					notifier.logError("Sorry we can not process your Asset request");
-				}
-			});
+				},function(failedResponse){
+					$scope.serviceHitCount=$scope.serviceHitCount+1;
+					if($scope.serviceHitCount<=3)
+					{
+					  	$scope.sendPostIPAData();
+					} else {
+						$scope.serviceHitCount=1;
+						notifier.logError("Sorry we can not process your Asset request");
+					}
+				});
+			}
 		};
 
 		/*
@@ -469,6 +617,30 @@
 		    }, function() {
 		      	$scope.status = 'You cancelled the dialog.';
 		    });
+    	};
+
+    	$scope.onShowDeductionClicked=function(event){
+
+    		var amts={
+    			dealerSubvention:$scope.dealerSubvention,
+    			manufactureSubvention:$scope.manufactureSubvention,
+    			manufacturerProcessingFee:$scope.manufacturerProcessingFee,
+    			manufactureSubventionBourneByDealer:$scope.manufactureSubventionBourneByDealer,
+    			otherCharges:$scope.otherCharges
+    		};
+
+        	$mdDialog.show({
+	      		controller: 'DeductionCntrl',
+		      	templateUrl: 'views/cdl/modal-ipa-deduction.html',
+		      	parent: angular.element(document.body),
+		      	targetEvent: event,
+		      	clickOutsideToClose:true,
+		      	fullscreen: false,// Only for -xs, -sm breakpoints.
+		      	locals: {
+					deductionAmts: amts
+				} 
+		    })
+		    .then(function() {},function() {});
     	};
 	}]);
 }).call(this);
