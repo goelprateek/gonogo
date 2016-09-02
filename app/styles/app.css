@@ -1,5 +1,6 @@
 @charset "UTF-8"; 
 
+
 .body-special #content {
 	z-index: 2;
 	top: 0;
@@ -2203,4 +2204,25 @@ span.input-icon {
 
 md-input-container:not(.md-input-has-value) input:not(:focus){
   color:black!important;
+}
+
+.highcharts-container{
+  width:100%!important;
+  height: 100%!important;
+  position: inherit!important;
+  z-index: 10!important;
+}
+
+.js-chart .highcharts-tooltip > span {
+  left: 25px!important;
+    top: 75px!important;
+    padding: 2px 10px;
+
+}
+
+.js-dash-chart .highcharts-tooltip > span {
+  left: 25px!important;
+  top: 125px!important;
+  padding: 2px 10px;
+
 }

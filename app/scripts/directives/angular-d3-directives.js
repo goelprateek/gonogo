@@ -9,7 +9,7 @@
 			restrict: 'EA',
                     template:'<div id="chart-container" style="margin: 0 auto" ></div>',
                     scope: {
-                        data: '=data'
+                        data: '=data',
 
                     },
                     replace:true,
@@ -26,7 +26,16 @@
 					            	renderTo: 'chart-container',
 					            	type: 'column',
 					                animation: true,  
-					                spacing: [10, 10, 10, 10],					                
+					                spacing: [10, 10, 10, 10],
+					                events: {
+					                	load : function(event){
+					                		scope.$parent.$parent.isChartLoaded = 1;
+					                		
+					                	},
+					                	redraw: function(event){
+					                		console.log('redraw',event);
+					                	}
+					                }
 					            },
 					            title: {
 					                text: ''
@@ -111,12 +120,13 @@
 					       
 					            tooltip: {
 					              animation: true,
-					              shadow: true,
 					              useHTML:true,
+					              borderWidth: 0,
+					              enabled: true,
 					              headerFormat: '<b>{point.x}</b><br/>',
-					                pointFormat: '<span style="color:{series.color}">{series.name}</span>: {point.y} </br>',
-					                footerFormat : 'Total: <b>{point.total}</b>',
-					                shared:true
+					              pointFormat: '<span style="color:{series.color}">{series.name}</span>: {point.y} </br>',
+					              footerFormat : 'Total: <b>{point.total}</b>',
+					              shared:true
 					            },
 					        	credits: {
 								      enabled: false
@@ -140,9 +150,17 @@
                     		}
 
                     		var chart = new Highcharts.chart(chartOption);
+
+                    		/*angular.element(window).bind('resize', function(){
+						         chart.reflow();
+						         scope.$digest();
+						    });	*/
+
+
                });
 			
             }
+
 		};
 	}]);
 

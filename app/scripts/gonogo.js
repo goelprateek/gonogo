@@ -14,7 +14,6 @@
 	                                     'angular-loading-bar',
 	                                     'ngFileUpload',
 	                                     'angular-svg-round-progressbar',
-	                                     'ngTagsInput',
 	                                     'gonogo.analytics',
 	                                     'gonogo.login',
 	                                     'gonogo.directives',
