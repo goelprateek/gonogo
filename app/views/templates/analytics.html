@@ -79,8 +79,8 @@ font-size:14px;}
 
 			   
 			   <div class="row js-chart" >
-
-					<div  hc-bar-chart  data="chartOptions" style="height:100%;width:100%;margin-bottom: 40px;" ></div>
+				
+					<div  hc-bar-chart  data="chartOptions"  loaded="isChartLoaded" style="height:100%;width:100%;margin-bottom: 40px;" ></div>
 					
 					<div class="col-md-12" ng-if="!isChartLoaded" style="text-align: center;margin:0 auto">
 						<div class="loader">Loading...</div>
@@ -88,8 +88,7 @@ font-size:14px;}
 					</div>
 				</div>
 			</div>
-			
-			
+
 			<div class="col-md-12 " data-ng-if="!isTableData && !appView" style="padding: 0px;" >
 				 <div class="col-md-12 pull-left" fix-to-top="fix-to-top"  padding-when-at-top="50">
 

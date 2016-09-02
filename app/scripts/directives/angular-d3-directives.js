@@ -10,6 +10,7 @@
                     template:'<div id="chart-container" style="margin: 0 auto" ></div>',
                     scope: {
                         data: '=data',
+                        isChartLoaded : '=loaded'
 
                     },
                     replace:true,
@@ -29,8 +30,7 @@
 					                spacing: [10, 10, 10, 10],
 					                events: {
 					                	load : function(event){
-					                		scope.$parent.$parent.isChartLoaded = 1;
-					                		
+					                		scope.isChartLoaded = !scope.isChartLoaded;
 					                	},
 					                	redraw: function(event){
 					                		console.log('redraw',event);

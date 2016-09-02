@@ -406,7 +406,11 @@
         $scope.invoiceDate = true;
         $scope.invoiceNumber = true;
         $scope.copydataSourceCol =[];
-        $scope.isChartLoaded = 0;
+        $scope.isChartLoaded = false;
+        
+        $scope.clickChartEvent = function(){
+            console.log('chart called');
+        }
 
         $scope.isSearchable = 1;
         $scope.dateRanger = 0;
