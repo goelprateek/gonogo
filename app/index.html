@@ -23,7 +23,7 @@
     
     <link rel="stylesheet" href="styles/style-app.css" >
     <link rel="stylesheet" href="styles/style.css" >
-    <link rel="stylesheet" href="styles/scoring.css" >
+    <!-- <link rel="stylesheet" href="styles/scoring.css" > -->
     <link rel="stylesheet" href="styles/mygraphics.css" >
     <link rel="stylesheet" href="styles/app.css" >
     <link rel="stylesheet" href="styles/report.css" />
@@ -34,13 +34,13 @@
 
     <!-- endbuild -->
   </head>
-  <body data-ng-app="gonogo" layout="column" class="layout-column">
+  <body data-ng-app="gonogo" >
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     
-    <div data-ng-controller="Maincontroller">
+    <div class="app-container" data-ng-controller="Maincontroller">
       
       <div data-ng-show="!isSpecificPage() && !isCdlPage()"  data-ng-cloak="" >
         <section data-ng-include="'views/header.html'"  class="top-header"></section>
@@ -158,6 +158,7 @@
         <script src="scripts/controllers/modal/view-do.js"></script>
         <script src="scripts/filter/app-filter.js"></script>
         <script src="scripts/login.js"></script>
+        <script src="scripts/directives/pagination.js"></script>
 
         <!-- <script src="https://www.google-analytics.com/analytics.js"></script> -->
 

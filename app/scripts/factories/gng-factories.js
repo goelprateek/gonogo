@@ -574,12 +574,395 @@ app.factory("ApplyObject",function(){
 					     };
 			return object;
 
+		};
+
+		function analyticsObject(){
+			var obj;
+			obj = {
+			        "applicationLog": {},
+			        "sRefID": "",
+			        "bStatFlag": "",
+			        "iNoReTry": "",
+			        "oAppReq": {
+			            "sInstId": "",
+			            "sUserId": "",
+			            "sPassword": "",
+			            "sRefID": "",
+			            "oHeader": {
+			                "sAppID": "",
+			                "sInstID": "",
+			                "sSourceID": "",
+			                "sAppSource": "",
+			                "sReqType": "",
+			                "dtSubmit": "",
+			                "sDsaId": "",
+			                "sCroId": "",
+			                "sDealerId": ""
+			            },
+			            "oReq": {
+			                "oApplicant": {
+			                    "residenceAddSameAsAbove": "",
+			                    "sApplID": "",
+			                    "oApplName": {
+			                        "sFirstName": "",
+			                        "sMiddleName": "",
+			                        "sLastName": "",
+			                        "sPrefix": "",
+			                        "sSuffix": ""
+			                    },
+			                    "oFatherName": "",
+			                    "oSpouseName": "",
+			                    "sReligion": "",
+			                    "sApplGndr": "",
+			                    "sDob": "",
+			                    "iAge": "",
+			                    "sMarStat": "",
+			                    "aKycDocs": [
+			                        {
+			                            "sKycName": "",
+			                            "sKycNumber": "",
+			                            "sKycStat": "",
+			                            "sIssueDate": "",
+			                            "sExpiryDate": ""
+			                        }
+			                    ],
+			                    "bSameAbove": "",
+			                    "aAddr": [
+			                        {
+			                            "sLine1": "",
+			                            "sLine2": "",
+			                            "sCity": "",
+			                            "iPinCode": "",
+			                            "sState": "",
+			                            "sCountry": "",
+			                            "sLandLoard": "",
+			                            "sLine3": "",
+			                            "sLine4": "",
+			                            "sVillage": "",
+			                            "sDistrict": "",
+			                            "fDistFrom": "",
+			                            "sLandMark": "",
+			                            "sAccm": "",
+			                            "iTimeAtAddr": "",
+			                            "sAddrType": "",
+			                            "sResAddrType": "",
+			                            "iMonthAtCity": "",
+			                            "iMonthAtAddr": "",
+			                            "dRentAmt": "",
+			                            "iYearAtCity": ""
+			                        }
+			                    ],
+			                    "aPhone": [
+			                        {
+			                            "sPhoneType": "",
+			                            "sAreaCode": "",
+			                            "sCountryCode": "",
+			                            "sPhoneNumber": "",
+			                            "sExt": ""
+			                        }
+			                    ],
+			                    "aEmail": [
+			                        {
+			                            "sEmailType": "",
+			                            "sEmailAddr": ""
+			                        }
+			                    ],
+			                    "aEmpl": [
+			                        {
+			                            "sEmplType": "",
+			                            "sEmplName": "",
+			                            "iTmWithEmplr": "",
+			                            "sDtJoin": "",
+			                            "sDtLeave": "",
+			                            "dmonthSal": "",
+			                            "dGrossSal": "",
+			                            "aLastMonthIncome": [],
+			                            "sConst": "",
+			                            "sItrID": "",
+			                            "dItrAmt": "",
+			                            "sDesig": "",
+			                            "sEmplrCode": "",
+			                            "sEmplrBr": "",
+			                            "sModePayment": "",
+			                            "sDeptmt": "",
+			                            "sWorkExps": "",
+			                            "sBusinesName": "",
+			                            "dtComencemnt": ""
+			                        }
+			                    ],
+			                    "iNoOfDep": "",
+			                    "iEarnMem": "",
+			                    "iFamilyMem": "",
+			                    "oApplRef": "",
+			                    "sEdu": "",
+			                    "sCreditCardNum": "",
+			                    "bMobVer": "",
+			                    "sAdharVer": "",
+			                    "aBankingDetails": "",
+			                    "aLoanDetails": "",
+			                    "oIncomeDetails": "",
+			                    "oSurrogate": ""
+			                },
+			                "aCoApplicant": "",
+			                "oApplication": {
+			                    "sAppID": "",
+			                    "sLoanType": "",
+			                    "sAppliedFor": "",
+			                    "dLoanAmt": "",
+			                    "iLoanTenor": "",
+			                    "oProperty": "",
+			                    "sLnPurp": "",
+			                    "dLnApr": "",
+			                    "dEmi": "",
+			                    "iAdvEmi": "",
+			                    "dMarginAmt": "",
+			                    "aAssetDetail": [
+			                        {
+			                            "sAssetCtg": "",
+			                            "sDlrName": "",
+			                            "sAssetMake": "",
+			                            "sModelNo": "",
+			                            "sPrice": ""
+			                        }
+			                    ],
+			                    "aOwndAst": ""
+			                },
+			                "sSuspAct": ""
+			            },
+			            "sRespFormat": "",
+			            "sCurrentStageId": ""
+			        },
+			        "oCompRes": {
+			            "multiBureauJsonRespose": {},
+			            "scoringServiceResponse": {
+			                "ELIGIBILITY_RESPONSE": {
+			                    "ElgbltyID":"",
+			                    "GridID": "",
+			                    "FOIR_AMOUNT": "",
+			                    "APPROVED_AMOUNT": "",
+			                    "Error": "",
+			                    "DECISION": "",
+			                    "COMPUTE_DISP": "",
+			                    "COMPUTE_LOGIC": "",
+			                    "MAX_AMOUNT": "",
+			                    "MIN_AMOUNT": "",
+			                    "DP": "",
+			                    "MAX_TENOR": "",
+			                    "REMARK": "",
+			                    "COMPUTED_AMOUNT": "",
+			                    "ELIGIBILITY_AMOUNT": "",
+			                    "CNT": "",
+			                    "RULE-SEQ": "",
+			                    "GRID_EXP": ""
+			                },
+			                "DECISION_RESPONSE": {
+			                    "RuleID": "",
+			                    "Decision": "",
+			                    "Details": [
+			                        {
+			                            "CriteriaID": "",
+			                            "RuleName": "",
+			                            "Outcome": " ",
+			                            "Remark": "",
+			                            "Exp": "",
+			                            "Value": "",
+			                            "Values": {
+			                                "SCORE_VALUE": "",
+			                                "NEG_PINCODE_CHECK": ""
+			                            }
+			                        }
+			                    ]
+			                }
+			            }
+			        },
+			        "oIntrmStat": {
+			            "sRefId": "",
+			            "sAppID": "",
+			            "sInstID": "",
+			            "dtStart": "",
+			            "dtETime": "",
+			            "sAppStart": "",
+			            "sDedupe": "",
+			            "sEmailStat": "",
+			            "sOtpStat": "",
+			            "sAppStat": "",
+			            "sPanStat": "",
+			            "sAadharStat": "",
+			            "sMbStat": "",
+			            "sVarScoreStat": "",
+			            "sScoreStat": "",
+			            "sCblScore": "",
+			            "sCroStat": "",
+			            "oPanResult": {
+			                "sCustID": "",
+			                "sFldName": "",
+			                "iOrder": "",
+			                "sFldVal": "",
+			                "sMsg": "",
+			                "iAddrStblty": "",
+			                "fNameScore": ""
+			            },
+			            "aCoApplicant": "",
+			            "oApplication": {
+			                "sAppID": "",
+			                "sLoanType": "",
+			                "sAppliedFor": "",
+			                "dLoanAmt": "",
+			                "iLoanTenor": "",
+			                "oProperty": "",
+			                "sLnPurp": null,
+			                "dLnApr": "",
+			                "dEmi": "",
+			                "iAdvEmi": "",
+			                "dMarginAmt": "",
+			                "aAssetDetail": [
+			                    {
+			                        "sAssetCtg": "",
+			                        "sDlrName": "",
+			                        "sAssetMake": "",
+			                        "sModelNo": "",
+			                        "sPrice": ""
+			                    }
+			                ],
+			                "aOwndAst": ""
+
+			            },
+			            "oResAddressResult": {
+			                "sCustID": "",
+			                "sFldName": "",
+			                "iOrder": "",
+			                "sFldVal": "",
+			                "sMsg": "",
+			                "iAddrStblty": "",
+			                "fNameScore": ""
+			            },
+			            "oOffAddressResult": {
+			                "sCustID": "",
+			                "sFldName": "",
+			                "iOrder": "",
+			                "sFldVal": "",
+			                "sMsg": "",
+			                "iAddrStblty": "",
+			                "fNameScore": ""
+			            },
+			            "oScoringResult": {
+			                "sCustID": "",
+			                "sFldName": "",
+			                "iOrder": "",
+			                "sFldVal": "",
+			                "sMsg": "",
+			                "iAddrStblty": "",
+			                "fNameScore": ""
+			            },
+			            "oAadharResult": "",
+			            "oExperianResult": "",
+			            "oEquifaxResult": "",
+			            "oCHMResult": "",
+			            "oMbResult": ""
+			        },
+			        "aCroDec": [
+			            {
+			                "dAmtAppr": "",
+			                "dItrRt": "",
+			                "dDpay": "",
+			                "dEmi": "",
+			                "iTenor": "",
+			                "dEligibleAmt": ""
+			            }
+			        ],
+			        "bNegPinCodeFlag": "",
+			        "aAppScoRslt": [
+			            {
+			                "sCustID": "",
+			                "sFldName": "",
+			                "iOrder": "",
+			                "sFldVal": "",
+			                "sMsg": "",
+			                "iAddrStblty": "",
+			                "fNameScore": ""
+			            }
+			        ],
+			        "aDeDupe": [],
+			        "aAppImgDtl": [
+			            {
+			                "sApplID": "",
+			                "aImgMap": [
+			                    {
+			                        "sImgID": "",
+			                        "sImgType": "",
+			                        "sStat": "",
+			                        "sReason": ""
+			                    }
+			                ],
+			                "sImageBlock": ""
+			            }
+			          ]
+			}
+
+			return obj;	
+		}
+
+		function reportObject(){
+			var reportConfig ;
+	        return reportConfig = {
+	              "oColumns": [
+	                {
+	                  "sCloumnKey": "",
+	                  "sColDispName": "",
+	                  "sColIndex": 0,
+	                  "bViewable": false,
+	                  "bDownloadable": false
+	                }],
+	              "oReports": [
+	                {
+	                  "oHeader": {
+	                    "sAppID": null,
+	                    "sInstID": "",
+	                    "sSourceID": null,
+	                    "sAppSource": null,
+	                    "sReqType": null,
+	                    "dtSubmit": "",
+	                    "sDsaId": "",
+	                    "sCroId": null,
+	                    "sDealerId": null
+	                  },
+	                  "sReportId": "",
+	                  "aProductType": [
+	                    "Consumer Durables"
+	                  ],
+	                  "aFlatConfig": {
+	                    "fileHeader": "Phone1,Phone2,Phone2,Phone3,Date",
+	                    "mHeaderMap": {
+	                      "0": {
+	                        "sCloumnKey": "",
+	                        "sColDispName": "",
+	                        "sColIndex": 0,
+	                        "bViewable": false,
+	                        "bDownloadable": false
+	                      }
+	                    },
+	                    "sReportName": null,
+	                    "sReportType": null,
+	                    "sReportFomat": null,
+	                    "sHeader": null,
+	                    "sSeperator": ","
+	                  },
+	                  "sBranchId": null,
+	                  "sUserId": "",
+	                  "oPaggination": {
+	                    "iPageId": 1,
+	                    "iLimit": 1,
+	                    "iSkip": 0
+	                  }
+	                },
+	        ]};
 		}
 
 
 		return {
 			notify : NotifyObject,
-
+			analytics : analyticsObject,
+			report : reportObject
 		}
 
 	}]);
