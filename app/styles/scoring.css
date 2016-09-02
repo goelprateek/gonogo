@@ -1,41 +1,10 @@
 body {
 	background-color: #fff;
 }
+
 a:hover{
 	cursor: pointer;
 }
- #scoring_main_container .list-group-item {
-padding: 10px 9px;
-height: 47px;
-color: #FFF;
-/* font-weight: bold; */
-border-right: 1px solid #FFF;
-}
-#scoring_main_container .leftbar_scroll {
-	border: none;
-	min-height: 300px;
-	max-height: 492px;
-	margin-bottom: 40px;
-}
-
-
-/* this is for policy and analytics */
-.Name {
-	float: left;
-	width: 85%;
-	font-weight:bold;
-	display: inline-block;
-}
-
-.list-group-item:hover {
-	cursor: pointer;
-	background-color: #fff;
-}
-
-
-
-
-
 
 
 .list-group-item.item {
@@ -74,8 +43,7 @@ border-right: 1px solid #FFF;
 
 .form-control.weight, .form-control.context_values {
 	width: 60px;
-/* 	padding-right: 6px; */
-/* 	text-align: center; */
+
 }
 
 
