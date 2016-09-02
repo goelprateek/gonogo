@@ -130,7 +130,7 @@ app.controller("DashboardController",["$scope","$filter",'sharedService',"$uibMo
 		RestService.saveToServer("dashboard-detail",dashboardJson)
 		.then(function(data){
 			if(data){
-				console.log(data);
+				// console.log(data);
 				$scope.dashboardResult = data;	
 			}
 			

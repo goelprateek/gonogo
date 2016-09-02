@@ -702,7 +702,7 @@
 				</div>
 				<div ng-if="kyc.sKycName=='AADHAR' || kyc.sKycName=='AADHAAR'">
 					<label class="control-label">{{kyc.sKycName}} NUMBER</label>
-					<input name="Aadhaar" class="form-control" type="text" ng-model="kyc.sKycNumber" ng-disabled="!isUpdating" maxlength="10" change-on-blur="onValueChanged('aadhaar')"/>
+					<input name="Aadhaar" class="form-control" type="text" ng-model="kyc.sKycNumber" ng-disabled="!isUpdating" maxlength="12" change-on-blur="onValueChanged('aadhaar')"/>
 					<span ng-show="isUpdating && ApplicantForm.Aadhaar.$error.maxlength" class="text-danger">
 				        Please enter valid Aadhaar number
 				    </span>
@@ -817,18 +817,10 @@
 			</div>
 		</div>
 		<div class="row clearfix" ng-if="surrTypeSelected==='Banking'">
-			<div class="notify-scroll-container">
-				 <ul style="padding: 0px;"> 
-					<li ng-repeat="bankImg in bankSurrogateImages" >
-						<a href="javascript:;" data-ng-click="showimage(bankSurrogateImages,isImg,$index,false)"><img ng-src="{{bankImg.sByteCode}}" title="{{bankImg.sImgType}}"> </a>
-					</li>
-				 </ul> 
-			</div>
-		
-			<!-- <div class="col-md-3" ng-repeat="">
+			<div class="col-md-3" ng-repeat="bankImg in extra_array">
 				<img alt="Document Not available" title="{{bankImg.kyc_name}} " accesskey="{{bankImg.image}}" data-toggle="modal"
 						data-target="#myModalnew" class="preview" src="{{bankImg.image}}" name="{{bankImg.kyc_name}}" style="border: none;">
-			</div> -->
+			</div>
 		</div>
 		<div class="row clearfix" ng-if="surrTypeSelected==='Business'">
 			<div class="clearfix" ng-repeat="surr in surrogate.aTrader">
@@ -892,5 +884,5 @@
 				</div>
 			</div>
 		</div>
-	</fieldset>	
+	</fieldset>
 </form>

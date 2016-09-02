@@ -914,18 +914,18 @@ $scope.onchange = function(id) {
         modalInstance.result.then(function (isSuccess,refID) {           
             if(isSuccess){
                 $scope.objectSet.iNoReTry=$scope.objectSet.iNoReTry +1;
-                 $scope.showReinitiateStatusModal("lg",$scope.refID);
+                $scope.showReinitiateStatusModal($scope.refID);
             }
         });
     };
 
-    $scope.showReinitiateStatusModal = function (size,refID) {
+    $scope.showReinitiateStatusModal = function (refID) {
         //alert('modal baseURL'+baseURL);
         var modalInstance = $uibModal.open({
            animation: $scope.animationsEnabled,
            templateUrl: 'views/modal-reinitiate-status.html',
            controller: 'ReinitiateStatusModalController',
-           size: size,
+           size: "lg",
            resolve: {
                refID:function(){
                    return refID;

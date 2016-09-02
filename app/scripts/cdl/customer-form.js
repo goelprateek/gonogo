@@ -491,8 +491,8 @@ app.controller("CustomerFormCntrolr",
                             }
                         });
                     });
-                    console.log($scope.applicantPhoto);
-                    console.log($scope.imageDataArray);
+                    // console.log($scope.applicantPhoto);
+                    // console.log($scope.imageDataArray);
                 });
             }
         },function(error){
