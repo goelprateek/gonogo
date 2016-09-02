@@ -40,7 +40,6 @@ module.exports = function(config) {
       'bower_components/ng-file-upload-shim/ng-file-upload-shim.js',
       'bower_components/angular-loading-bar/build/loading-bar.js',
       'bower_components/angularjs-acl/dist/acl.js',
-      'bower_components/ng-tags-input/ng-tags-input.js',
       'bower_components/toastr/toastr.js',
       'bower_components/angular-svg-round-progressbar/build/roundProgress.min.js',
       'bower_components/angular-drag-and-drop-lists/angular-drag-and-drop-lists.js',

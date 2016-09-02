@@ -406,6 +406,11 @@
         $scope.invoiceDate = true;
         $scope.invoiceNumber = true;
         $scope.copydataSourceCol =[];
+        $scope.isChartLoaded = false;
+        
+        $scope.clickChartEvent = function(){
+            console.log('chart called');
+        }
 
         $scope.isSearchable = 1;
         $scope.dateRanger = 0;
@@ -536,7 +541,8 @@
 
         $scope.chartObj ;
 		var json = {'sInstID':user.institutionID,'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}};
-		RestService.saveToServer("stack-graph",json).then(function(data){
+
+        RestService.saveToServer("stack-graph",json).then(function(data){
             $scope.chartOptions = data;
     	});
 

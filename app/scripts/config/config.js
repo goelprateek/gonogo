@@ -74,6 +74,11 @@
 		};
 	}]);
 
+	app.config(['$compileProvider',function( $compileProvider ){   
+			$compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|ftp|file|blob):|data:image|data:application\//);
+		}
+	]);
+
 	app.config(function($mdThemingProvider) {
 	  var customBlueMap = 		$mdThemingProvider.extendPalette('light-blue', {
 	    'contrastDefaultColor': 'light',
