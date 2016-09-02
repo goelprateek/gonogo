@@ -22,7 +22,6 @@
     }
 
     var timer ;
-    
 
     $scope.selectResidence = SelectArrays.getResidenceTypes();
     $scope.objectSet = ObjectStore.notify();
@@ -182,7 +181,6 @@
                     $scope.notifarray = _.uniq(_.union($scope.notifarray,data), function(item, key, sRefID) { 
                         return item.sRefID;
                     });
-
 				}
 			});	
   		}
@@ -190,7 +188,6 @@
 
     startPoling();
     polling($scope.minVal);
-
 
     $scope.addrType = SelectArrays.getAddrType();
 	$scope.addr_type = $scope.addrType[1];   //to set default address
@@ -301,6 +298,12 @@
                 $scope.ElgbltyGrid = ( $scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID ? $scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.ElgbltyID : "" ) 
                                      +"."
                                      + ($scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID ? $scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID : ($scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] ? $scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] : "" ));
+            }
+
+            if($scope.objectSet.oPostIPA && $scope.objectSet.oPostIPA.aAssMdls){
+                $scope.assetData = $scope.objectSet.oPostIPA.aAssMdls;
+            }else{
+                $scope.assetData = $scope.objectSet.oAppReq.oReq.oApplication.aAssetDetail;
             }
 
             if($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob!=""){
@@ -1128,8 +1131,6 @@ app.controller("ReinitiateStatusModalController",["$scope","$uibModalInstance","
     $scope.appScoreVerified=false;
     $scope.verifScoreVerified=false;
     $scope.negPinVerified=false;
-
-    $scope.showCibilStatus=true;
     
     var URL="status";
     var statusJSON ={
@@ -1183,7 +1184,7 @@ app.controller("ReinitiateStatusModalController",["$scope","$uibModalInstance","
                     
                     if(resp.oIntrmStat.sScoreStat == "COMPLETE"){              
                         $scope.showAppScoreStatus=true;
-                        if(resp.oIntrmStat.oCibilResult.sMsg == "SUCCESS")                
+                        if(resp.oIntrmStat.oCibilResult.sMsg == "COMPLETED")                
                         {
                             $scope.cibilVerified=true;
                         }else{
@@ -1207,29 +1208,6 @@ app.controller("ReinitiateStatusModalController",["$scope","$uibModalInstance","
                     if(['queue'].indexOf(resp.sAppStat.toLowerCase()) > -1){
                     }else if(['approved','declined'].indexOf(resp.sAppStat.toLowerCase()) > -1){
                         $interval.cancel(statusPoller);
-                    }
-
-                    if(resp.sAppStat.toLowerCase()=="approved")
-                    {
-                        $scope.decision="Approved";
-                        $scope.plApproved=true;
-
-                        if(resp.aCroDec!=null && resp.aCroDec!=undefined && resp.aCroDec.length>0){
-                            $scope.decisionMessage="Your loan of amount ₹ " + resp.aCroDec[0].dAmtAppr +" has been approved.";
-                        }
-                        $scope.progressStatus="Your application for HDBFS Ziploan is approved. We will get in touch with you shortly for further processing.";
-                    }else if(resp.sAppStat.toLowerCase()=="declined"){
-                        $scope.decision="Declined";
-
-                        $scope.progressStatus="Unfortunately, due to our internal polices, we are unable to process your Loan application form.";
-                    }
-                    else if(resp.sAppStat.toLowerCase()=="queue"){
-                        $scope.decision="Queue";
-
-                        $scope.progressStatus="for processing your application for HDBFS Ziploan of Rs. "+ resp.aCroDec[0].dAmtAppr +". We will get in touch with you shortly.";
-                    }
-                    else if(resp.sAppStat.toLowerCase()=="new"){
-                        // $scope.decision="Queue";
                     }
                 }
             }
@@ -1271,9 +1249,9 @@ app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$ui
                             "sCroId":user.id,
                             "sDealerId":null
                           },
-                     "sRefID":requestObj.oAppReq.sRefID,
-                     "sProduct":"Consumer Durables",
-                     "iNoOfRecord":2
+                     "sRefID" : requestObj.oAppReq.sRefID,
+                     "sProduct" : "Consumer Durables",
+                     "iNoOfRecord" : requestObj.iNoReTry
                   }
 
 

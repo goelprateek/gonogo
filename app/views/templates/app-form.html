@@ -505,30 +505,28 @@
 	</fieldset>
 	<fieldset class="formfield" style="display: block;">
 		<legend> Product Information</legend>
-		<div class="row clearfix" ng-repeat="dealer in  objectSet.oAppReq.oReq.oApplication.aAssetDetail">
+		<div class="row clearfix" ng-repeat="asset in assetData">
 			<div class="col-md-3">
 				<label class="control-label">Dealer Name</label> <input
-					ng-model="dealer.sDlrName" class="form-control" type="text"
+					ng-model="asset.sDlrName" class="form-control" type="text"
 					 disabled="disabled">
 			</div>
 			<div class="col-md-3">
 				<label class="control-label">Asset Category</label> <input id="newcity"
-					ng-model="dealer.sAssetCtg" class="form-control" type="text" disabled="disabled">
+					ng-model="asset.sAssetCtg" class="form-control" type="text" disabled="disabled">
 			</div>
 			<div class="col-md-3">
-				<label class="control-label">Make</label> <input
-					id="projectname" ng-model="dealer.sAssetMake" class="form-control"
+				<label class="control-label">Make</label>
+				<input id="projectname" ng-model="asset.sAssetMake" class="form-control"
 					type="text" name="Project" disabled="disabled">
 			</div>
 			<div class="col-md-3">
-				<label class="control-label">Model</label> <input
-					 ng-model="dealer.sModelNo" class="form-control"
-					type="text" disabled="disabled">
+				<label class="control-label">Model</label>
+				<input ng-model="asset.sModelNo" class="form-control" type="text" disabled="disabled">
 			</div>
 			<div class="col-md-3">
-				<label class="control-label">Price</label> <input
-					 ng-model="dealer.sPrice" class="form-control"
-					type="text" disabled="disabled">
+				<label class="control-label">Price</label>
+				<input ng-model="asset.sPrice" class="form-control" type="text" disabled="disabled">
 			</div>
 
 		</div>
@@ -566,8 +564,92 @@
 			</div>
 		</div>
 	</fieldset>
+	<fieldset class="formfield" style="display: block;" ng-if="surrogate">
+		<legend>Surrogate Information</legend>
+		<div class="row clearfix">
+			<div class="col-md-3 column">
+				<label class="control-label">Select Surrogate Type</label>
+			</div>
+			<div class="col-md-3 column">
+				<select class="form-control" name="SurrogateType" ng-model="surrTypeSelected"
+				ng-options="option as option for option in surrogateType" disabled="true"></select>
+			</div>
+		</div>
+		<div class="row clearfix" ng-if="surrTypeSelected==='Banking'">
+			<div class="col-md-3" ng-repeat="bankImg in extra_array">
+				<img alt="Document Not available" title="{{bankImg.kyc_name}} " accesskey="{{bankImg.image}}" data-toggle="modal"
+						data-target="#myModalnew" class="preview" src="{{bankImg.image}}" name="{{bankImg.kyc_name}}" style="border: none;">
+			</div>
+		</div>
+		<div class="row clearfix" ng-if="surrTypeSelected==='Business'">
+			<div class="clearfix" ng-repeat="surr in surrogate.aTrader">
+				<div class="col-md-3">
+					<label class="control-label">Year in Business</label>
+					<input id="" class="form-control" type="text" name="" ng-model="surr.iYrsInBussines" value="{{surr.iYrsInBussines}}" disabled="disabled">
+				</div>
+				<div class="col-md-3">
+					<label class="control-label">Business Proof</label>
+					<input id="" class="form-control" type="text" name="" ng-model="surr.sBussinesProof" value="{{surr.sBussinesProof}}" disabled="disabled">
+				</div>
+			</div>
+		</div>
+		<div class="row clearfix" ng-if="surrTypeSelected==='Credit Card'">
+			<div class="clearfix" ng-repeat="surr in surrogate.aCreditCard">
+				<div class="col-md-3">
+					<label class="control-label">Card Number</label>
+					<input id="" class="form-control" type="text" name="" ng-model="surr.sCardNumber" value="{{surr.sCardNumber}}" disabled="disabled">
+				</div>
+				<div class="col-md-3">
+					<label class="control-label">Card Category</label>
+					<input id="" class="form-control" type="text" name="" ng-model="surr.sCardCategory" value="{{surr.sCardCategory}}" disabled="disabled">
+				</div>
+			</div>
+		</div>
+		<div class="row clearfix" ng-if="surrTypeSelected==='Owned House'">
+			<div class="clearfix" ng-repeat="surr in surrogate.aOwnHouse">
+				<div class="col-md-3">
+					<label class="control-label">Document Type</label> <input
+						id=""  class="form-control"
+						type="text" name="" ng-model="surr.sDocumentType" value="{{surr.sDocumentType}}" disabled="disabled">
+				</div>
+				<div class="col-md-3">
+					<label class="control-label">House Type</label> <input
+						id=""  class="form-control"
+						type="text" name="" ng-model="surr.sHouseType" value="{{surr.sHouseType}}" disabled="disabled">
+				</div>
+			</div>
+		</div>
+		<div class="row clearfix" ng-if="surrTypeSelected==='Owned Car'">
+			<div class="clearfix" ng-repeat="surr in surrogate.aCar">
+				<div class="col-md-3">
+					<label class="control-label">Model Number</label>
+					<input id=""  class="form-control" type="text" name="" ng-model="surr.sModelNo" value="{{surr.sModelNo}}" disabled="disabled">
+				</div>
+				<div class="col-md-3">
+					<label class="control-label">Category</label>
+					<input id=""  class="form-control" type="text" name="" ng-model="surr.sCat" value="{{surr.sCat}}" disabled="disabled">
+				</div>
+				<div class="col-md-3">
+					<label class="control-label">Manufacture Year</label>
+					<input id="" class="form-control" type="text" name="" ng-model="surr.dtManufactureDate" value="{{surr.dtManufactureDate}}" disabled="disabled">
+				</div>
+				<div class="col-md-3">
+					<label class="control-label">Registration Number</label>
+					<input id=""  class="form-control" type="text" name="" ng-model="surr.sRegNumber" value="{{surr.sRegNumber}}" disabled="disabled">
+				</div>
+			</div>
+		</div>
+		<div class="row clearfix" ng-if="surrTypeSelected==='Salary House'">
+			<div class="clearfix" ng-repeat="surr in surrogate.aSalary">
+				<div class="col-md-3">
+					<label class="control-label">Net Home Take</label>
+					<input id=""  class="form-control" type="text" name="" ng-model="surr.dNetTakeHome" value="{{surr.dNetTakeHome}}" disabled="disabled">
+				</div>
+			</div>
+		</div>
+	</fieldset>
 	<fieldset class="formfield" style="display: block;">
-		<legend> BRE Information</legend>
+		<legend>BRE Information</legend>
 		<div class="row clearfix">
 			<div class="col-md-3">
 				<label class="control-label">CIBIL Score</label> <input 
@@ -687,7 +769,152 @@
 							 disabled="disabled">
 					</div>
 			</div>
-	</fieldset>				
+	</fieldset>
+	<fieldset class="formfield" style="display: block;">
+		<legend>IPA Details</legend>
+		<div ng-if="objectSet.oPostIPA">
+			<div class="row clearfix">
+				<div class="col-sm-4 col-md-3">
+					<label class="control-label">Approved Amount</label>
+					<div class="input-group input-group-md">
+						<span class="input-group-addon" id="sizing-addon3">
+							<i class="fa fa-inr"></i>
+						</span>
+						<input id="" class="form-control" type="text" name="" ng-model="objectSet.oPostIPA.dApvAmt" disabled="disabled">
+					</div>
+				</div>
+				<div class="col-sm-4 col-md-3">
+					<label class="control-label">Scheme</label> <input
+						id=""  class="form-control"
+						type="text" name="" ng-model="objectSet.oPostIPA.sScheme" disabled="disabled">
+				</div>
+				<div class="col-sm-4 col-md-3">
+					<label class="control-label">Total Asset Cost</label>
+					<div class="input-group input-group-md">
+						<span class="input-group-addon" id="sizing-addon3"><i
+							class="fa fa-inr"></i></span> <input id=""
+							class="form-control"  type="text"
+							name="" accesskey="commas" ng-model="objectSet.oPostIPA.dTotAssCost" disabled="disabled">
+					</div>
+				</div>
+				<div class="col-sm-4 col-md-3">
+					<label class="control-label">Margin Money</label>
+					<div class="input-group input-group-md">
+						<span class="input-group-addon" id="sizing-addon3">
+							<i class="fa fa-inr"></i>
+						</span>
+						<input id="" class="form-control" type="text" name="" ng-model="objectSet.oPostIPA.dMarMoney" disabled="disabled">
+					</div>
+				</div>
+			</div>
+			<div class="row clearfix">
+				<div class="col-sm-4 col-md-3">
+					<label class="control-label">Finance Amount</label>
+					<div class="input-group input-group-md">
+						<span class="input-group-addon" id="sizing-addon3">
+						<i class="fa fa-inr"></i></span>
+						<input class="form-control"  type="text" accesskey="commas" ng-model="objectSet.oPostIPA.dFinanceAmt" disabled="disabled">
+					</div>
+				</div>
+				<div class="col-sm-4 col-md-3">
+					<label class="control-label">Margin Money Instrument</label> <input
+						id=""  class="form-control"
+						type="text" name="" ng-model="objectSet.oPostIPA.sMarginMoneyInstru" disabled="disabled">
+				</div>
+				<div class="col-sm-4 col-md-3">
+					<label class="control-label" style="width: 104%;">Margin Money Confirmation</label>
+					<input id="" class="form-control"  type="text" name="" accesskey="commas" ng-model="objectSet.oPostIPA.sMarMoneyConfirm" disabled="disabled">
+				</div>
+				<div class="col-sm-4 col-md-3">
+					<label class="control-label">EMI</label>
+					<div class="input-group input-group-md">
+						<span class="input-group-addon" id="sizing-addon3">
+						<i class="fa fa-inr"></i>
+						</span>
+						<input class="form-control" type="text" accesskey="commas" ng-model="objectSet.oPostIPA.dEmi" disabled="disabled">
+					</div>
+				</div>
+			</div>
+			<div class="row clearfix">
+				<div class="col-sm-4 col-md-3">
+				<label class="control-label">Advanced EMI</label>
+					<div class="input-group input-group-md">
+						<span class="input-group-addon" id="sizing-addon3">
+							<i class="fa fa-inr"></i>
+						</span>
+						<input class="form-control" type="text" accesskey="commas" ng-model="objectSet.oPostIPA.dAdvEmi" disabled="disabled">
+					</div>
+				</div>
+				<div class="col-sm-4 col-md-3">
+				<label class="control-label">Processing Fees</label>
+					<div class="input-group input-group-md">
+						<span class="input-group-addon" id="sizing-addon3">
+							<i class="fa fa-inr"></i>
+						</span>
+						<input class="form-control" type="text" accesskey="commas" ng-model="objectSet.oPostIPA.dProcFees" disabled="disabled">
+					</div>
+				</div>
+				<div class="col-sm-4 col-md-3">
+					<label class="control-label">Tenor</label>
+					<input class="form-control"  type="text" accesskey="commas" ng-model="objectSet.oPostIPA.iTenor" disabled="disabled">
+				</div>
+				<div class="col-sm-4 col-md-3">
+					<label class="control-label">Advance Emi Tenor</label>
+					<input class="form-control"  type="text" accesskey="commas" ng-model="objectSet.oPostIPA.iAdvEmiTenor" disabled="disabled">
+				</div>
+			</div>
+			<div class="row clearfix">
+				<div class="col-sm-4 col-md-3">
+					<label class="control-label">Net Funding Amount</label>
+					<div class="input-group input-group-md">
+						<span class="input-group-addon" id="sizing-addon3">
+						<i class="fa fa-inr"></i></span>
+						<input class="form-control"  type="text" accesskey="commas" ng-model="objectSet.oPostIPA.dNetFundingAmt" disabled="disabled">
+					</div>
+				</div>
+				<div class="col-sm-4 col-md-3">
+					<label class="control-label">Net Disbursal Amount</label>
+					<div class="input-group input-group-md">
+						<span class="input-group-addon" id="sizing-addon3">
+						<i class="fa fa-inr"></i></span>
+						<input class="form-control"  type="text" accesskey="commas" ng-model="objectSet.oPostIPA.dNetDisbursalAmt" disabled="disabled">
+					</div>
+				</div>
+				<!-- <div class="col-sm-4 col-md-3">
+					<label class="control-label">Manufacturer Processing Fee</label>
+					<div class="input-group input-group-md">
+						<span class="input-group-addon" id="sizing-addon3">
+						<i class="fa fa-inr"></i></span>
+						<input class="form-control"  type="text" accesskey="commas" ng-model="objectSet.oPostIPA.dManProcFee" disabled="disabled">
+					</div>
+				</div>
+				<div class="col-sm-4 col-md-3">
+					<label class="control-label">Manufacture Subvention</label>
+					<div class="input-group input-group-md">
+						<span class="input-group-addon" id="sizing-addon3">
+						<i class="fa fa-inr"></i></span>
+						<input class="form-control"  type="text" accesskey="commas" ng-model="objectSet.oPostIPA.dManfSubDel" disabled="disabled">
+					</div>
+				</div>-->
+				<div class="col-sm-4 col-md-3">
+					<label class="control-label">Other Charges</label>
+					<div class="input-group input-group-md">
+						<span class="input-group-addon" id="sizing-addon3">
+						<i class="fa fa-inr"></i></span>
+						<input class="form-control"  type="text" accesskey="commas" ng-model="objectSet.oPostIPA.dOtherChrg" disabled="disabled">
+					</div>
+				</div>
+				<div class="col-sm-4 col-md-3">
+					<label class="control-label">Manufacture Subvention Bourne By Dealer</label>
+					<div class="input-group input-group-md">
+						<span class="input-group-addon" id="sizing-addon3">
+						<i class="fa fa-inr"></i></span>
+						<input class="form-control"  type="text" accesskey="commas" ng-model="objectSet.oPostIPA.dManSubMbd" disabled="disabled">
+					</div>
+				</div>
+			</div>
+		</div>
+	</fieldset>			
 	<fieldset class="formfield" style="display: block;">
 		<legend>KYC Information</legend>
 		<div class="row clearfix">
@@ -718,81 +945,7 @@
 			</div>
 	
 		</div>
-	</fieldset>
-	<fieldset class="formfield" style="display: block;">
-		<legend>IPA Details</legend>
-		<div class="row clearfix">
-			<div class="col-md-3">
-				<label class="control-label">Approved Amount</label> <input id=""
-					 class="form-control" type="text"
-					name="" ng-model="objectSet.oPostIPA.dApvAm" disabled="disabled">
-			</div>
-			<div class="col-md-3">
-				<label class="control-label">Scheme</label> <input
-					id=""  class="form-control"
-					type="text" name="" ng-model="objectSet.oPostIPA.sScheme" disabled="disabled">
-			</div>
-			<div class="col-md-3">
-				<label class="control-label">Total Asset Cost</label>
-				<div class="input-group input-group-md">
-					<span class="input-group-addon" id="sizing-addon3"><i
-						class="fa fa-inr"></i></span> <input id=""
-						class="form-control"  type="text"
-						name="" accesskey="commas" ng-model="objectSet.oPostIPA.dTotAssCost" disabled="disabled">
-				</div>
-			</div>
-			<div class="col-md-3">
-				<label class="control-label">Margin Money</label> <input id=""
-					 class="form-control" type="text"
-					name="" ng-model="objectSet.oPostIPA.dMarMoney" disabled="disabled">
-			</div>
-		</div>
-		<div class="row clearfix">
-			<div class="col-md-3">
-				<label class="control-label">Margin Money Instrument</label> <input
-					id=""  class="form-control"
-					type="text" name="" ng-model="objectSet.oPostIPA.sMarginMoneyInstru" disabled="disabled">
-			</div>
-			<div class="col-md-3">
-				<label class="control-label" style="width: 104%;">Margin Money Confirmation</label>
-				<div class="input-group input-group-md">
-					<span class="input-group-addon" id="sizing-addon3"><i
-						class="fa fa-inr"></i></span> <input id=""
-						class="form-control"  type="text"
-						name="" accesskey="commas" ng-model="objectSet.oPostIPA.sMarMoneyConfirm" disabled="disabled">
-				</div>
-			</div>
-			<div class="col-md-3">
-			<label class="control-label">Advanced EMI</label>
-				<div class="input-group input-group-md">
-					<span class="input-group-addon" id="sizing-addon3"><i
-						class="fa fa-inr"></i></span> <input 
-						class="form-control"  type="text"
-						 accesskey="commas" ng-model="objectSet.oPostIPA.dAdvEmi" disabled="disabled">
-				</div>
-			</div>
-			<div class="col-md-3">
-			<label class="control-label">Processing Fees</label>
-				<div class="input-group input-group-md">
-					<span class="input-group-addon" id="sizing-addon3"><i
-						class="fa fa-inr"></i></span> <input 
-						class="form-control"  type="text"
-						accesskey="commas" ng-model="objectSet.oPostIPA.dProcFees" disabled="disabled">
-				</div>
-			</div>
-		</div>
-			<div class="row clearfix">
-			<div class="col-md-3" ng-repeat="data in objectSet.oPostIPA.aAssMdl">
-			<label class="control-label">Asset Model No</label>
-				<div class="input-group input-group-md">
-					<span class="input-group-addon" id="sizing-addon3"><i
-						class="fa fa-inr"></i></span> <input 
-						class="form-control"  type="text"
-						accesskey="commas" value="{{data}}" disabled="disabled">
-				</div>
-			</div>
-			</div>
-	</fieldset>
+	</fieldset>	
 	<fieldset class="formfield" id="kyc_fielset" data-ng-if="imageDataArray && imageDataArray.length!=0"
 		style="margin-bottom: 40px; display: block;">
 		<legend>Uploaded Documents</legend>
@@ -803,86 +956,5 @@
 					</li>
 				 </ul> 
 			</div>
-	</fieldset>
-
-	<fieldset class="formfield" style="display: block;" ng-if="surrogate">
-		<legend>Surrogate Information</legend>
-		<div class="row clearfix">
-			<div class="col-md-3 column">
-				<label class="control-label">Select Surrogate Type</label>
-			</div>
-			<div class="col-md-3 column">
-				<select class="form-control" name="SurrogateType" ng-model="surrTypeSelected"
-				ng-options="option as option for option in surrogateType" disabled="true"></select>
-			</div>
-		</div>
-		<div class="row clearfix" ng-if="surrTypeSelected==='Banking'">
-			<div class="col-md-3" ng-repeat="bankImg in extra_array">
-				<img alt="Document Not available" title="{{bankImg.kyc_name}} " accesskey="{{bankImg.image}}" data-toggle="modal"
-						data-target="#myModalnew" class="preview" src="{{bankImg.image}}" name="{{bankImg.kyc_name}}" style="border: none;">
-			</div>
-		</div>
-		<div class="row clearfix" ng-if="surrTypeSelected==='Business'">
-			<div class="clearfix" ng-repeat="surr in surrogate.aTrader">
-				<div class="col-md-3">
-					<label class="control-label">Year in Business</label>
-					<input id="" class="form-control" type="text" name="" ng-model="surr.iYrsInBussines" value="{{surr.iYrsInBussines}}" disabled="disabled">
-				</div>
-				<div class="col-md-3">
-					<label class="control-label">Business Proof</label>
-					<input id="" class="form-control" type="text" name="" ng-model="surr.sBussinesProof" value="{{surr.sBussinesProof}}" disabled="disabled">
-				</div>
-			</div>
-		</div>
-		<div class="row clearfix" ng-if="surrTypeSelected==='Credit Card'">
-			<div class="clearfix" ng-repeat="surr in surrogate.aCreditCard">
-				<div class="col-md-3">
-					<label class="control-label">Card Number</label>
-					<input id="" class="form-control" type="text" name="" ng-model="surr.sCardNumber" value="{{surr.sCardNumber}}" disabled="disabled">
-				</div>
-			</div>
-		</div>
-		<div class="row clearfix" ng-if="surrTypeSelected==='Owned House'">
-			<div class="clearfix" ng-repeat="surr in surrogate.aOwnHouse">
-				<div class="col-md-3">
-					<label class="control-label">Document Type</label> <input
-						id=""  class="form-control"
-						type="text" name="" ng-model="surr.sDocumentType" value="{{surr.sDocumentType}}" disabled="disabled">
-				</div>
-				<div class="col-md-3">
-					<label class="control-label">House Type</label> <input
-						id=""  class="form-control"
-						type="text" name="" ng-model="surr.sHouseType" value="{{surr.sHouseType}}" disabled="disabled">
-				</div>
-			</div>
-		</div>
-		<div class="row clearfix" ng-if="surrTypeSelected==='Owned Car'">
-			<div class="clearfix" ng-repeat="surr in surrogate.aCar">
-				<div class="col-md-3">
-					<label class="control-label">Model Number</label>
-					<input id=""  class="form-control" type="text" name="" ng-model="surr.sModelNo" value="{{surr.sModelNo}}" disabled="disabled">
-				</div>
-				<div class="col-md-3">
-					<label class="control-label">Category</label>
-					<input id=""  class="form-control" type="text" name="" ng-model="surr.sCat" value="{{surr.sCat}}" disabled="disabled">
-				</div>
-				<div class="col-md-3">
-					<label class="control-label">Manufacture Year</label>
-					<input id="" class="form-control" type="text" name="" ng-model="surr.dtManufactureDate" value="{{surr.dtManufactureDate}}" disabled="disabled">
-				</div>
-				<div class="col-md-3">
-					<label class="control-label">Registration Number</label>
-					<input id=""  class="form-control" type="text" name="" ng-model="surr.sRegNumber" value="{{surr.sRegNumber}}" disabled="disabled">
-				</div>
-			</div>
-		</div>
-		<div class="row clearfix" ng-if="surrTypeSelected==='Salary House'">
-			<div class="clearfix" ng-repeat="surr in surrogate.aSalary">
-				<div class="col-md-3">
-					<label class="control-label">Net Home Take</label>
-					<input id=""  class="form-control" type="text" name="" ng-model="surr.dNetTakeHome" value="{{surr.dNetTakeHome}}" disabled="disabled">
-				</div>
-			</div>
-		</div>
 	</fieldset>
 </form>

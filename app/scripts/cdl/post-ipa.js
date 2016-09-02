@@ -386,9 +386,8 @@
 
 			    var otherCharges = 0;
 
-			    //Finance Amount - (Advance EMI + Processing Fee + Dealer Subvention + Manufacture Subvention + Other Charges)
 			    var netDisbursalAmount = financeAmount -
-			            (advanceEMI + processingFeeVal + dealerSubvention + manufactureSubvention + otherCharges);
+	               (advanceEMI + processingFeeVal + dealerSubvention + otherCharges);
 
 			    $scope.financeAmt=financeAmount;
 			    $scope.prcsfee=processingFeeVal;

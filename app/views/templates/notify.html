@@ -423,7 +423,7 @@
 							<div class="scroll-divs-outer">
 								<label class="div-heading property">ASSET </label>
 								<div id="property" slimscroll="{height: 210,railVisible:true}">
-								<div ng-repeat="asset in objectSet.oAppReq.oReq.oApplication.aAssetDetail" ng-if=" objectSet.oAppReq.oReq.oApplication.aAssetDetail" >
+								<div ng-repeat="asset in assetData">
 									<div class="list-group-item" style="border-top: 2px solid rgb(221, 221, 221);">
 										<span>Asset Category : {{asset.sAssetCtg}}</span>
 									</div>
