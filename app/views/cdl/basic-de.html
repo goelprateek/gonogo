@@ -171,12 +171,10 @@
 						</div> -->
 					</div>
 
-
 					<div class="row clearfix" style="margin-bottom: 15px">
 						<div class="col-md-5"></div>
 						<div class="col-md-7" style="text-align: right;">
-							
-							<button  type="submit" class="btn customButton" ng-disabled="disableButton" style="float: right;" ng-if="generateOTP" >Get OTP</button>
+							<button  type="submit" class="btn customButton" ng-disabled="disableButton" style="float: right;" ng-if="shwGenerateOTP">Get OTP</button>
 							<span id="otpContainer" ng-show="shwVerify">
 								<input class="form-control otp" ng-model='otpKey1' id='txt1' type="password" maxlength="1" tabindex="1" name="OTP" auto-next/>
 								<input class="form-control otp" ng-model='otpKey2' id='txt2' type="password" maxlength="1" tabindex="2" name="OTP" auto-next/>
@@ -184,7 +182,7 @@
 								<input class="form-control otp" ng-model='otpKey4' id='txt4' type="password" maxlength="1" tabindex="4" name="OTP" auto-next/>
 								<input class="form-control otp" ng-model='otpKey5' id='txt5' type="password" maxlength="1" tabindex="5" name="OTP" auto-next/>
 							</span>
-							<button type="button" class="btn customButton" ng-disabled="disableButton"ng-click="verifyOTP()" ng-show="shwVerify">Verify</button>
+							<button type="button" class="btn customButton" ng-disabled="disableButton" ng-click="verifyOTP()" ng-show="shwVerify">Verify</button>
 						</div>
 					</div>
 

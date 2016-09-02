@@ -285,7 +285,7 @@
 									 <ul style="padding: 0px;"> 
 									 	<slick infinite="true" slides-to-show="3" slides-to-scroll="3">
 										<li ng-repeat="d in imageDataArray">
-											<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index,true)"><img ng-src="{{d.sByteCode}}"> </a>
+											<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index,true)"><img ng-src="{{d.sByteCode}}" title="{{d.sImgType}}"> </a>
 										</li>
 										</slick>
 									 </ul> 

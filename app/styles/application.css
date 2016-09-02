@@ -537,12 +537,6 @@ input, select {
 	z-index: 1050;
 }
 
-.saveSubmit {
-	position: absolute;
-	right: 18%;
-	top: 0px;
-}
-
 .assetCol {
 	overflow-y: auto;
 	height: 435px;
@@ -555,7 +549,6 @@ input, select {
 	font-size: 22px;
 	width: 100%;
 }
-
 
 .view-container{
 	height:525px;

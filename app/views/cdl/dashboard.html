@@ -1,10 +1,8 @@
 <div class="col-md-12">
-	<div style="margin-top:50px;" class="row clearfix" >
+	<div style="margin-top:25px;" class="row clearfix" >
 		
 		<div layout-gt-sm="row" >
-
-
-			<md-input-container class="md-block"  flex-gt-sm >
+			<md-input-container class="md-block" flex-gt-sm >
 				<label>Type</label>
 				<md-select name="ApplicationList" ng-model="dashfilters.type" data-ng-change="applnOptionChange()" >
 				  <md-option ng-value="dash.value" ng-repeat="dash in dashType" data-ng-bind="dash.view"></md-option>
@@ -13,7 +11,7 @@
 
 			<div flex="5" hide-xs hide-sm></div>
 
-			<md-input-container class="md-block"  flex-gt-sm ng-if="trueAppList">
+			<md-input-container class="md-block" flex-gt-sm ng-if="trueAppList">
 				<label>Duration</label>
 				<md-select  name="Duration" ng-model="dashfilters.duration" ng-change="fetchDashboardList()"> 
 				  <md-option ng-value="durationType.value" ng-repeat="durationType in durationTypes" data-ng-bind="durationType.view"></md-option>
@@ -22,11 +20,10 @@
 
 			<div flex="5" hide-xs hide-sm></div>
 
-			<md-input-container class="md-block" flex-gt-sm  ng-if="trueAppList">
+			<md-input-container class="md-block" flex-gt-sm ng-if="trueAppList">
 				<label>Search</label>
 				<input name="search"  ng-model="dashfilters.search"  >
 			</md-input-container>
-
 		</div>
 
 		<!-- <div class="form-group col-md-4">
@@ -63,7 +60,7 @@
 		</div>
 	</div>
 
-	<div class="form-group" slimscroll="{height: 430,railVisible:true,alwaysVisible:true}" ng-if="dashfilters.type === 'ApplicationList'">
+	<div class="form-group" slimscroll="{height: 390,railVisible:true,alwaysVisible:true}" ng-if="dashfilters.type === 'ApplicationList'">
 
 		<table class="table table-striped" style="font-size:13px" ng-if="!isLoadingDashboardData">
 			<thead>
