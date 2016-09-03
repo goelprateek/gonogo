@@ -3,7 +3,7 @@
 
     'use strict';
 
-    var app = angular.module('gonogo.analytics', ['gonogo-directives', 'dndLists', 'ui.slimscroll']);
+    var app = angular.module('gonogo.analytics', ['gonogo-directives', 'dndLists', 'ui.slimscroll','angularUtils.directives.dirPagination']);
 
     app.controller('AnalyticsController', ['$scope', 'notifier', '$timeout',
         'RestService', '$filter', 'APP_CONST',
@@ -165,6 +165,55 @@
                 $scope.chartOptions = data;
             });
 
+            $scope.onSeriesClicked = function($value){
+               if( user.role != "DSA" ){
+                    $scope.datasource = []; 
+                    var json = { 
+                                "dtFrmDate":$value.category,
+                                "sStat":$value.series.name,
+                                'sInstID':user.institutionID,
+                                'iSkip': 1,
+                                'iLimit': 10,
+                                'oCriteria': { 
+                                        "oHierarchy":user.hierarchy,
+                                        "aProducts":user.getProductNames()
+                                }
+                            };
+                    RestService.saveToServer("table-view",json).then(function(data){
+                        $scope.datasource = data;
+                        $scope.isTableData = false;
+                    });
+                }
+            }
+
+
+            $scope.total_count = 10000;
+            $scope.datasource = [];
+            $scope.pageno = 1;
+            $scope.itemPerPage = 50;
+            $scope.itemPerPageMeta = [50,100,150];
+            $scope.fetchDateFromServer = function($pageno){
+                $scope.isLoadingAnalyticsData = 1;
+                $scope.datasource = [];
+                var json = {
+                            'sInstID': user.institutionID,
+                            'iSkip': ($scope.itemPerPage * ($pageno -1)),
+                            'iLimit': $scope.itemPerPage,
+                            'oCriteria': {
+                                "oHierarchy": user.hierarchy,
+                                "aProducts": user.getProductNames()
+                            }
+                    };
+
+                RestService.saveToServer('score-log',json).then(function(response){
+                    $scope.datasource = response;
+                }).finally(function(){
+                    $scope.isLoadingAnalyticsData = 0;
+                })
+
+            }
+            
+
             $scope.reportDownload = function() {
 
                 var _data = {
@@ -229,9 +278,10 @@
             $scope.toggleView = function() {
 
                 $scope.isTableData = !$scope.isTableData;
+                $scope.fetchDateFromServer($scope.pageno); 
 
                 if (!$scope.isTableData) {
-                    var json = {
+                    /*var json = {
                         'sInstID': user.institutionID,
                         'iSkip': "0",
                         'iLimit': "0",
@@ -248,7 +298,7 @@
                         };
                     }).finally(function() {
                         $scope.isLoadingAnalyticsData = 0;
-                    });
+                    });*/
                 }
             };
 
@@ -256,7 +306,7 @@
 
 
 
-            $scope.drawTablularData = function(data) {
+            /*$scope.drawTablularData = function(data) {
                 return $scope.dataSourceCol = data,
                     $scope.stores = $scope.dataSourceCol, $scope.searchKeywords = "",
 
@@ -299,7 +349,7 @@
                         return $scope.search(), $scope.select($scope.currentPage);
                     })();
 
-            }
+            }*/
 
 
             $scope.viewApplication = function(CustID, status) {

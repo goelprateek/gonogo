@@ -4,19 +4,18 @@
 	
 	var app = angular.module('gonogo-directives',["d3"]);
 
-	app.directive('hcBarChart',['UserService', 'RestService',function(UserService,RestService){
+	app.directive('hcBarChart',function(){
 		return {
 			restrict: 'EA',
                     template:'<div id="chart-container" style="margin: 0 auto" ></div>',
                     scope: {
                         data: '=data',
-                        isChartLoaded : '=loaded'
+                        isChartLoaded : '=loaded',
+                        onChartClick : '&'
 
                     },
                     replace:true,
                     link: function (scope,element,attribute, controller) {
-                    	
-                    	var user = UserService.getCurrentUser();
                     	
                     	scope.$watch('data', function(dataNew){
                     		
@@ -100,18 +99,9 @@
 					                    point: {
 					                         events: {
 					                            click: function() {
-					                               if( user.role != "DSA" ){
-														var json = { 
-																	"dtFrmDate":this.category,
-																	"sStat":this.series.name,
-																	'sInstID':user.institutionID,'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}
-																};
-														RestService.saveToServer("table-view",json).then(function(data){
-															scope.$parent.$parent.drawTablularData(data);
-															scope.$parent.$parent.isTableData = false;
-														});
-													}
-
+					                            	
+					                            	scope.onChartClick({message:this});
+					                            	
 					                            }
 					                        }
 					                    }
@@ -151,18 +141,13 @@
 
                     		var chart = new Highcharts.chart(chartOption);
 
-                    		/*angular.element(window).bind('resize', function(){
-						         chart.reflow();
-						         scope.$digest();
-						    });	*/
-
 
                });
 			
             }
 
 		};
-	}]);
+	});
 
 	app.directive('gngStackedBarGraph',['d3','RestService','UserService',function(d3,RestService,UserService){
 		console.log("gngStackedBarGraph bar graph");

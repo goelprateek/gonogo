@@ -23,6 +23,7 @@
 	                                     'gonogo.factories',
 	                                     'score-directives',
 	                                     'daterangepicker',
+	                                     'test'
 	                                    ]);
 
 	app.controller("Maincontroller",['$scope', '$log', 'notifier' , '$timeout','RestService','$location','UserService','APP_CONST','AclService',
@@ -63,7 +64,7 @@
 
 		$scope.isSpecificPage = function() {
 			var path;
-			return path = $location.path(),  _.contains(["/"], path) ;
+			return path = $location.path(),  _.contains(["/",'/test'], path) ;
 		}
 
 		$scope.isCdlPage = function() {

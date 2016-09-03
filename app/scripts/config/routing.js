@@ -78,6 +78,10 @@
 		}).state('/cdl/post-do', {
 			templateUrl: 'views/cdl/post-do.html',
 			controller: 'PostDOCntrolr'
+		}).state('/test', {
+			url:'/test',
+			templateUrl: 'views/test.html',
+			controller: 'TestCntrl'
 		});
 		 
 		 $urlRouterProvider.otherwise('/');
