@@ -3,8 +3,8 @@
 	<button class="customButton" style="float: right;" ng-click="gotoDashboard()">Back</button>
 </div>
 
-<div class="col-md-10 col-md-offset-1"  style="height:420px">
-<form id="msform" slimscroll="{height: 420,railVisible:true}">
+<div class="col-md-10 col-md-offset-1">
+<form id="msform" slimscroll="{height: 430,railVisible:true}">
 	<div class="row clearfix" ng-if="applicantPhoto.length!=0" style="display: block;">
 		<div class="col-md-2" ng-repeat="kyc_doc in applicantPhoto">
 			<label class="control-label">{{kyc_doc.sImgType}}</label>
@@ -358,7 +358,7 @@
 </div>
 <div class="col-md-offset-1 col-md-10" style="text-align: center"
 	ng-if="objectSet.sCurrentStageId!='BRE'">
-	<button style="margin: 20px; text-align: center" ng-click="restartClicked()" class="customButton" ng-disabled="!isApplicationDataLoaded">
+	<button style="text-align: center" ng-click="restartClicked()" class="customButton" ng-disabled="!isApplicationDataLoaded">
 		Restart
 	</button>
 </div>

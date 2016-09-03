@@ -159,7 +159,7 @@
 			$compile(element.contents())(scope);
 		};
 
-		var _controller=["$scope",function($scope){
+		var _controller=["$scope","$log",function($scope,$log){
 
 			$scope.onImageRemove=function(img){
 				$("#"+img.value+img.index+"").css("background-image", "");
@@ -221,13 +221,12 @@
 								$scope.imagearray[spliceIndex].image=binaryString.split(",")[1];
 							}
 
-							console.log("Images to upload");
-							console.log($scope.imagearray);
+							$log.debug("Images to upload");
+							$log.debug(JSON.stringify($scope.imagearray));
 
 							$("#"+pItem.value+pItem.index+"").css("background-image", "url("+binaryString+")");
 							$("#"+pItem.value+pItem.index+"label").hide();
 							$("#"+pItem.value+pItem.index+"remove").show();
-
 
 							// console.log("Image selected");
 							// console.log($scope.item);

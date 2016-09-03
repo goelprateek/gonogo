@@ -3,12 +3,12 @@
 
 	var app = angular.module('gonogo.cdl');
 
-	app.controller("BasicDEController",["$scope","APP_CONST","sharedService","RestService",'$log',"UserService","AclService","GNG_GA","notifier","$state",function(
-	 									$scope,APP_CONST,sharedService,RestService,$log,UserService,AclService,GNG_GA,notifier,$state) {
-		
+	app.controller("BasicDEController",[
+		"$scope","APP_CONST","sharedService","RestService",'$log',"UserService","AclService","GNG_GA","notifier","$state","$window",
+		function($scope,APP_CONST,sharedService,RestService,$log,UserService,AclService,GNG_GA,notifier,$state,$window) {
 
 		$scope.products = ["Consumer Durables"].map(function(product){
-			 return {view: product}
+			return {view: product}
 		})
 
 		$scope.productType="";
@@ -26,7 +26,7 @@
 			isMobileVerfied:false
 		};
 
-		$scope.generateOTP = 1;
+		$scope.shwGenerateOTP = 1;
 
 		var user=UserService.getCurrentUser();
 
@@ -48,8 +48,7 @@
 									 GNG_GA.getConstAction("ACTION_CLICK_GET_OTP"),
 									 "Get OTP Button Clicked",1);
 					$scope.fetchOTP();
-					$scope.generateOTP = 0;
-					$scope.shwVerify=true;
+					
 					break;
 
 				case "Resend":
@@ -78,7 +77,7 @@
 		};
 
 		$scope.fetchOTP=function(){
-			console.log('otp service called');
+			//console.log('otp service called');
 			$scope.disableButton =1;
 			GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_APPLY"),
 							 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
@@ -97,8 +96,10 @@
 			RestService.postDataWithHeaders('get-otp', json, user.username, user.ePassword)
 			.then(function(successResponse){
 				$scope.otp = successResponse.OTP;
+				$scope.shwGenerateOTP = false;
 				$scope.shwVerify = true;
 			},function(failedResponse){
+				$scope.shwGenerateOTP = true;
 				$scope.shwVerify = false;
 				notifier.logError("Some error occured, please retry !");
 			}).finally(function(){
@@ -107,7 +108,6 @@
 		};
 
 		$scope.verifyOTP=function(){
-
 			$scope.disableButton =1;
 
 			GNG_GA.sendEvent(
@@ -148,7 +148,7 @@
 			}
 
 			$scope.disableButton = 0;
-		}
+		};
 
 		$scope.submitLoanRequest=function(){
 			var requestObject={
@@ -224,6 +224,17 @@
 			},function(failedResponse){
 				notifier.logError("Some error occured at server, please retry !");
 			});
+		};
+
+		$window.onbeforeunload = function (event) {
+			var message = 'Are you sure you want to leave, if yes all your data will be lost.';
+			if (typeof event == 'undefined') {
+				event = $window.event;
+			}
+			if (event) {
+				event.returnValue = message;
+			}
+			return message;
 		};
 	}]);
 }).call(this);

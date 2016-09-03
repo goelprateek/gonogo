@@ -1,5 +1,5 @@
 <form id="employmentContainer" name="professionalData" novalidate autocomplete="off" accessible-form>
-	<div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true,alwaysVisible:true}">
+	<div class="getheight" id="kycHeight" slimscroll="{height:425,railVisible:true,alwaysVisible:true}">
 		<div class="row clearfix ">
 			<div class="col-md-10 col-md-offset-1">
 			
@@ -82,7 +82,7 @@
 					
 					<md-input-container class="md-block" flex-gt-sm >
 						<label>Address Line 1</label>
-						<input name="empadd1" ng-model="applicant.empl.emplAddr1" ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/" required capitalize >
+						<input name="empadd1" ng-model="applicant.empl.emplAddr1" ng-pattern="/^[a-zA-Z\d\s'#,.\/\\]{10,50}$/" required capitalize >
 						<div ng-messages="professionalData.empadd1.$error" >
 	   						<p ng-message="required">Please enter Address line 1</p>
 	   						<p ng-message="pattern">Please enter valid Address</p>
@@ -107,7 +107,7 @@
 					
 					<md-input-container class="md-block" flex-gt-sm >
 						<label>Address Line 2</label>
-						<input name="empadd2" ng-model="applicant.empl.emplAddr2" ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/" capitalize>
+						<input name="empadd2" ng-model="applicant.empl.emplAddr2" ng-pattern="/^[a-zA-Z\d\s'#,.\/\\]{10,50}$/" capitalize>
 						<div ng-messages="professionalData.empadd2.$error" >
 	   						<div ng-message="pattern">Please enter valid Address</div>
 						</div>
@@ -117,7 +117,7 @@
 
 					<md-input-container class="md-block" flex-gt-sm >
 						<label>Address Line 3</label>
-						<input name="empadd3" ng-model="applicant.empl.emplAddr3" ng-pattern="/^[a-zA-Z\d\s#,.\/\\]+$/" capitalize>
+						<input name="empadd3" ng-model="applicant.empl.emplAddr3" ng-pattern="/^[a-zA-Z\d\s'#,.\/\\]{10,50}$/" capitalize>
 						<div ng-messages="professionalData.empadd3.$error" >
 	   						<div ng-message="pattern">Please enter valid Address</div>
 						</div>
