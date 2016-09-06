@@ -107,7 +107,9 @@ select.form-control {
 								</span>
                                 </div>
                             </form>
-                            <span data-ng-show="searchKeywords.length >= 1 "> Showing {{filteredStores.length}}/{{stores.length}} entries </span>
+                            <span data-ng-show="search.query.length >= 1 "> 
+                                Showing {{(datasource|filter:search.query).length}}/{{datasource.length}} entries 
+                            </span>
                         </div>
                         <div class="col-md-3 ">
                             <div class="panel-bttn pull-right">
@@ -211,7 +213,7 @@ select.form-control {
                                         </div>
                                     </td>
                                 </tr>
-                                <tr dir-paginate="store in datasource | filter:search.query | itemsPerPage:itemPerPage" total-items="total_count">
+                                <tr dir-paginate="store in datasource  | filter:search.query | itemsPerPage:itemPerPage" total-items="total_count">
                                     <td><a ng-click="viewApplication(store.applicationId,store.applicationStatus)">{{store.applicationId}}</a></td>
                                     <td>{{store.date | dateFormat}}</td>
                                     <td>{{store.city.toUpperCase()}}</td>

@@ -98,19 +98,19 @@
 
                             var startDate = picker.startDate,
                                 endDate = picker.endDate;
-                            var filteredData = _.filter($scope.copydataSourceCol, function(item) {
+                            $scope.datasource = _.filter($scope.datasource, function(item) {
                                 var itemDate = moment($filter('date')(item.date, "yyyy-MM-dd"), "YYYY-MM-DD");
                                 return itemDate.isBetween(startDate, endDate, 'hours', '[]')
                             });
 
-                            return $scope.drawTablularData(filteredData);
+                            //return $scope.drawTablularData(filteredData);
 
 
                         },
                         'show.daterangepicker': function(ev, picker) {
                             $scope.datefilter.date.startDate = undefined;
                             $scope.datefilter.date.endDate = undefined;
-                            $scope.drawTablularData($scope.copydataSourceCol);
+                           // $scope.drawTablularData($scope.copydataSourceCol);
                         },
 
                         'hide.daterangepicker': function(ev, picker) {
