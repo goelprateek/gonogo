@@ -99,7 +99,7 @@ app.filter('expression', function() {
 
 app.filter('dateFormat', function() {
 	return function(item) {
-		console.log(item);
+		
 		var result;
 
 		if(!item) return;

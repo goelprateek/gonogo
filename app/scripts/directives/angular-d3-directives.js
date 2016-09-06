@@ -150,7 +150,6 @@
 	});
 
 	app.directive('gngStackedBarGraph',['d3','RestService','UserService',function(d3,RestService,UserService){
-		console.log("gngStackedBarGraph bar graph");
 		return {
 			restrict:"EA",
 			scope: {

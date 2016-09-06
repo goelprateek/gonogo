@@ -290,10 +290,7 @@
 
 			$scope.arrDocTypes=["PAN","AADHAAR","PASSPORT","DRIVING-LICENSE","INCOME-PROOF1","INCOME-PROOF2","OTHER"];
 
-			$scope.onselectImg = function($files,pItem) 
-			{
-				console.log("Image selected");
-				console.log($scope.item);
+			$scope.onselectImg = function($files,pItem) {
 				var img_type ='';
 				for (var i = 0; i < $files.length; i++){
 					var fname=$files[0].name;

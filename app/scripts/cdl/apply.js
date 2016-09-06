@@ -935,7 +935,6 @@
 		};
 
 		$scope.resAddrTypeChange = function(type){
-			console.log(type);
 			if(type.indexOf('RENTED') != -1){ 
 				$scope.applicant.oResidence.oAddress.dRentPerMonth = "";
 			}

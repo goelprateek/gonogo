@@ -1100,7 +1100,6 @@ $scope.onchange = function(id) {
 
     // destructor function for scope 
     $scope.$on("$destroy",function(){
-        console.log('scope destroyed');
         stopPoling();
     });
 
@@ -1586,23 +1585,9 @@ $scope.requestDoc = function () {
      }
 };
 
-$scope.closeDocument = function () {
-    $uibModalInstance.dismiss('cancel');
-  };
-}]);
-
-app.filter('dateFilter', function() {
-
-    return function(date){
-        console.log(date)
-         var result = '';
-        if(date){
-           result = date.slice(0,2)+"/"+date.slice(2,4)+"/"+date.slice(4);
-        }
-        return result;
-    };
-});
-
-
+    $scope.closeDocument = function () {
+        $uibModalInstance.dismiss('cancel');
+      };
+    }]);
 
 }).call(this)

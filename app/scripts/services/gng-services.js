@@ -42,7 +42,6 @@
 		},
 		getStreamFromServer = function (url, data) {
 			var deferred = $q.defer();
-			console.log(data);
 			$http({
 				url: url,
 				method: "POST",

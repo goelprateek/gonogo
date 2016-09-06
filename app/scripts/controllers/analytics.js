@@ -236,7 +236,6 @@
                 query: ''
             }
             $scope.fetchDataFromServer = function($pageno){
-                console.log("fetchDataFromServer",$pageno); 
                 $scope.isLoadingAnalyticsData = 1;
                 $scope.datasource = [];
                 var json = {
@@ -842,7 +841,6 @@
             }
 
             RestService.getStreamFromServer(APP_CONST.getConst('BASE_URL_GNG') + "report/download-zip-report", serviceInput).then(function(data) {
-                console.log(data);
                 var blob = new Blob([data], { type: "application/zip" });
                 var downloadUrl = window.URL.createObjectURL(blob);
                 var a = document.createElement("a");
