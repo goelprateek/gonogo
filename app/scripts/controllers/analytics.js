@@ -9,11 +9,11 @@
         'RestService', '$filter', 'APP_CONST',
         '$uibModal', 'UserService', '$log',
         'ObjectStore', 'SelectArrays', 'AclService',
-        '$mdDialog',
+        '$mdDialog','$interval',
         function($scope, notifier, $timeout,
             RestService, $filter, APP_CONST, $uibModal,
             UserService, $log, ObjectStore,
-            SelectArrays, AclService, $mdDialog) {
+            SelectArrays, AclService, $mdDialog,$interval) {
 
 
             var user = UserService.getCurrentUser();
@@ -28,11 +28,13 @@
             $scope.invoiceDate = true;
             $scope.invoiceNumber = true;
             $scope.copydataSourceCol = [];
-            $scope.isChartLoaded = false;
+            $scope.isChartLoaded = 1;
 
 
             $scope.isSearchable = 1;
             $scope.dateRanger = 0;
+
+           
 
             $scope.toggleSearch = function() {
                 if ($scope.dateRanger) {
@@ -158,12 +160,43 @@
                 });
             }
 
-            $scope.chartObj;
-            var json = { 'sInstID': user.institutionID, 'oCriteria': { "oHierarchy": user.hierarchy, "aProducts": user.getProductNames() } };
+            var graphTimer,
+                startGraphTimer = function(){
 
-            RestService.saveToServer("stack-graph", json).then(function(data) {
-                $scope.chartOptions = data;
-            });
+               if(_.isUndefined(graphTimer)){
+                graphTimer =  $interval(function(){
+                    startGraph();
+                },60000,0,true);  
+               } 
+            }
+
+            var stopGraphTimer = function(){
+                if(angular.isDefined(graphTimer)){
+                    $interval.cancel(graphTimer); 
+                    graphTimer = undefined;  
+                }
+            }
+
+
+            var startGraph = function(){
+                $scope.chartObj;
+                var json = { 
+                            'sInstID': user.institutionID, 
+                            'oCriteria': { 
+                                    "oHierarchy": user.hierarchy,
+                                    "aProducts": user.getProductNames() 
+                                } 
+                            };
+
+                RestService.saveToServer("stack-graph", json).then(function(data) {
+                    $scope.chartOptions = data;
+                });    
+            }
+
+            
+            startGraph();
+            startGraphTimer();
+            
 
             $scope.onSeriesClicked = function($value){
                if( user.role != "DSA" ){
@@ -192,6 +225,9 @@
             $scope.pageno = 1;
             $scope.itemPerPage = 50;
             $scope.itemPerPageMeta = [50,100,150];
+            $scope.search = {
+                query: ''
+            }
             $scope.fetchDateFromServer = function($pageno){
                 $scope.isLoadingAnalyticsData = 1;
                 $scope.datasource = [];

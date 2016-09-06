@@ -75,11 +75,11 @@ select.form-control {
                     </div>
                     <div class="col-md-12" style="height:40px;">&nbsp;&nbsp;&nbsp;&nbsp;</div>
                     <div class="row js-chart">
-                        <div hc-bar-chart data="chartOptions" loaded="isChartLoaded" on-chart-click="onSeriesClicked(message)" style="height:100%;width:100%;margin-bottom: 40px;"></div>
-                        <div class="col-md-12" ng-if="!isChartLoaded" style="text-align: center;margin:0 auto">
+                            <div hc-bar-chart data="chartOptions" loaded="isChartLoaded" on-chart-click="onSeriesClicked(message)" style="height:100%;width:100%;margin-bottom: 40px;"></div>
+                        <!-- <div class="col-md-12" ng-if="isChartLoaded" style="text-align: center;margin:0 auto">
                             <div class="loader">Loading...</div>
                             <span>Loading...</span>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="col-md-12 " data-ng-if="!isTableData && !appView" style="padding: 0px;">
@@ -92,8 +92,9 @@ select.form-control {
                         <div class="col-sm-3 col-md-offset-2 col-xs-6" style="padding: 0px;">
                             <form name="gridsearch" autocomplete="off" class="form-group form-inline">
                                 <div class="input-group">
+                                    <!-- data-ng-keyup="search(searchKeywords)" -->
                                     <div ng-if="isSearchable" ng-cloak class="col-md-12">
-                                        <input type="text" name="searchKeywords" data-ng-cloak placeholder="Search..." autofocus class="form-control" data-ng-model="searchKeywords" data-ng-keyup="search(searchKeywords)">
+                                        <input type="text" name="searchKeywords" data-ng-cloak placeholder="Search..." autofocus class="form-control" data-ng-model="search.query" >
                                     </div>
                                     <div ng-if="dateRanger" ng-cloak class="col-md-12">
                                         <input date-range-picker id="daterange" name="daterange" class="form-control date-picker" type="text" ng-model="datefilter.date" options="datefilter.opts" placeholder="Pick Date" max="datefilter.opts.max" min="datefilter.opts.min" clearable="true" />
@@ -210,7 +211,7 @@ select.form-control {
                                         </div>
                                     </td>
                                 </tr>
-                                <tr dir-paginate="store in datasource | itemsPerPage:itemPerPage" total-items="total_count">
+                                <tr dir-paginate="store in datasource | filter:search.query | itemsPerPage:itemPerPage" total-items="total_count">
                                     <td><a ng-click="viewApplication(store.applicationId,store.applicationStatus)">{{store.applicationId}}</a></td>
                                     <td>{{store.date | dateFormat}}</td>
                                     <td>{{store.city.toUpperCase()}}</td>
@@ -233,12 +234,10 @@ select.form-control {
                                 </tr>
                             </tbody>
                         </table>
-                        
                     </div>
                     <div class="col-md-12 pull-left" style="margin-bottom: 50px;">
-                        
                         <div class="col-md-6 page-num-info">
-		                    <span>
+                            <span>
 		                        Show &nbsp;<select data-ng-model="itemPerPage"
 		                                data-ng-options="num for num in itemPerPageMeta"
 		                                
@@ -247,9 +246,9 @@ select.form-control {
 		                        </select> 
 		                        entries per page
 		                    </span>
-	                	</div>	
-			            <div class="col-md-6 text-right pagination-container">
-			               <!--  <uib-pagination 
+                        </div>
+                        <div class="col-md-6 text-right pagination-container">
+                            <!--  <uib-pagination 
 			                	class="pagination-sm" 
 			                	ng-model="currentPage"
 			                    total-items="filteredStores.length"
@@ -260,11 +259,9 @@ select.form-control {
 	                            previous-text="&lsaquo;" next-text="&rsaquo;"
 	                            boundary-links="true"
 			                ></uib-pagination> -->
-
-			                <dir-pagination-controls max-size="10" direction-links="true" boundary-links="true" on-page-change="fetchDateFromServer(newPageNumber)">
-	                        </dir-pagination-controls>
-			                   
-			            </div>
+                            <dir-pagination-controls max-size="10" direction-links="true" boundary-links="true" on-page-change="fetchDateFromServer(newPageNumber)">
+                            </dir-pagination-controls>
+                        </div>
                     </div>
                 </div>
                 <div data-ng-if="appView" data-ng-include="'views/templates/app-form.html'"></div>

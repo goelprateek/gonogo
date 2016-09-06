@@ -21,7 +21,7 @@
         $state.go(APP_CONST.getConst('APP_CONTEXT'));
     }
 
-    var timer ;
+    
 
     $scope.selectResidence = SelectArrays.getResidenceTypes();
     $scope.objectSet = ObjectStore.notify();
@@ -64,11 +64,10 @@
 	$scope.minVal = 0;
 	$scope.limit = 100;
     $scope.notifarray = [];
-    
+    var timer ;
     var startPoling = function(){
         if(_.isUndefined(timer)){
           timer  = $interval(function(){
-                   console.log('polling started');
                    polling($scope.minVal);
           }, 60000, 0,true);    
         }
@@ -76,7 +75,6 @@
 
     var stopPoling = function(){
         if(angular.isDefined(timer)){
-            console.log('going to cancel timer as search hit',1);
             $interval.cancel(timer);   
             timer = undefined; 
         }
