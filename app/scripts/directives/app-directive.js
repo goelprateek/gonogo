@@ -707,5 +707,43 @@
 		
 	});
 
+	app.directive('changeOnBlur', function() {
+	    return {
+	        restrict: 'A',
+	        require: 'ngModel',
+	        priority:1,
+	        link: function(scope, elm, attrs, ngModelCtrl) {
+	            if (attrs.type === 'radio' || attrs.type === 'checkbox') 
+	                return;
+
+	            var expressionToCall = attrs.changeOnBlur;
+
+	            var oldValue = null;
+	            elm.bind('focus',function() {
+	                oldValue = elm.val();
+	            })
+	            elm.bind('blur', function() {
+	                scope.$apply(function() {
+	                    var newValue = elm.val();
+	                    if (newValue !== oldValue){
+	                        scope.$eval(expressionToCall);
+	                    }
+	                });         
+	            });
+	        }
+	    };
+	});
+
+	app.directive("whenScrolled",function(){
+	    return function(scope, elm, attr) {
+	      var raw = elm[0];
+	      elm.bind('scroll', function() {
+	        if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+	          scope.$apply(attr.whenScrolled);
+	        }
+	      });
+	    };
+	});
+
 
 }).call(this);

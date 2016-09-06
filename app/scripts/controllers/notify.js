@@ -304,7 +304,7 @@
                 $scope.assetData = $scope.objectSet.oAppReq.oReq.oApplication.aAssetDetail;
             }
 
-            ;if($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob!=""){
+                ;if($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob!=""){
 
                 var dateOfBirth=new Date();
                 dateOfBirth.setFullYear(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4)));
@@ -1591,46 +1591,10 @@ $scope.closeDocument = function () {
   };
 }]);
 
-app.directive('changeOnBlur', function() {
-    return {
-        restrict: 'A',
-        require: 'ngModel',
-        priority:1,
-        link: function(scope, elm, attrs, ngModelCtrl) {
-            if (attrs.type === 'radio' || attrs.type === 'checkbox') 
-                return;
-
-            var expressionToCall = attrs.changeOnBlur;
-
-            var oldValue = null;
-            elm.bind('focus',function() {
-                oldValue = elm.val();
-            })
-            elm.bind('blur', function() {
-                scope.$apply(function() {
-                    var newValue = elm.val();
-                    if (newValue !== oldValue){
-                        scope.$eval(expressionToCall);
-                    }
-                });         
-            });
-        }
-    };
-});
-
-app.directive("whenScrolled",function(){
-    return function(scope, elm, attr) {
-      var raw = elm[0];
-      elm.bind('scroll', function() {
-        if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
-          scope.$apply(attr.whenScrolled);
-        }
-      });
-    };
-});
-
 app.filter('dateFilter', function() {
+
     return function(date){
+        console.log(date)
          var result = '';
         if(date){
            result = date.slice(0,2)+"/"+date.slice(2,4)+"/"+date.slice(4);
@@ -1639,24 +1603,6 @@ app.filter('dateFilter', function() {
     };
 });
 
-app.filter('currency', function() {
-	return function(value, symbol) {
-		if(value != undefined){
-		if ($.isNumeric(value) || value.length >3 ) {
-			value = value.toString();
-			for (var i = 0; i < value.length; i++)
-				value = value.replace(",", "");
-			var lastThree = value.substring(value.length - 3);
-			var otherNumbers = value.substring(0, value.length - 3);
-			if (otherNumbers != '')
-				lastThree = ',' + lastThree;
-			var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",")+ lastThree;
-
-			return symbol + res;
-		}}
-		return value;		
-	};
-});
 
 
 }).call(this)

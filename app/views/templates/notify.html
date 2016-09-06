@@ -181,16 +181,16 @@
 				                <ul class="orders-list" slimscroll="{height: 470,railVisible:true}"  when-scrolled="loadData()">
 				                	<li class="order-item" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search"  ng-click='load_details(user.sRefID,true,user.sRqTyp)' ng-class="{'active-queue': user.sRefID == Picked }">
 				                		<div class="row" >
-				                			<div class="col-lg-7 col-sm-7 col-md-7 col-xs-7 item-left">
+				                			<div class="col-lg-6 col-sm-6 col-md-6 col-xs-6 item-left">
 				                				<div class="item-booker" >
 				                					<h5>{{user.sDsaName.split("@")[0]}}</h5>
 				                				</div>
 				                				<div class="item-time"> 
 				                					<i class="fa fa-calendar"></i>
-				                					<span>{{user.dtDateTime | dateFormat }}</span>
+				                					<span>{{user.dtDateTime |  dateFormat }}</span>
 				                				</div>
 				                			</div>	
-				                			<div class="col-lg-5 col-sm-5 col-md-5 col-xs-5 item-right">
+				                			<div class="col-lg-6 col-sm-6 col-md-6 col-xs-6 item-right">
 				                				<div class="item-price">
 				                					<span class="price">{{user.dloanAmt | currency:"&#x20B9; "}}</span>
 				                				</div>
@@ -263,7 +263,7 @@
 									<span>Name : <span >{{name}}
 
 									</span></span></div>
-								<div class="list-group-item"><span>D.O.B : {{objectSet.oAppReq.oReq.oApplicant.sDob | dateFilter}}</span></div>
+								<div class="list-group-item"><span>D.O.B : {{objectSet.oAppReq.oReq.oApplicant.sDob | dateFormat }}</span></div>
 
 								<div class="list-group-item" ng-repeat="data in objectSet.oAppReq.oReq.oApplicant.aPhone" ng-if="data.sPhoneType=='PERSONAL_MOBILE' || data.sPhoneType=='Personal Mobile'">
 									<span >Mobile : {{data.sPhoneNumber}}

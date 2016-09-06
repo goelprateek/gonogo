@@ -99,25 +99,44 @@ app.filter('expression', function() {
 
 app.filter('dateFormat', function() {
 	return function(item) {
-		var month = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug','Sep', 'Oct', 'Nov', 'Dec' ];
+		console.log(item);
 		var result;
-		var curdate= new Date(new Date());
-		var dt=curdate.getDate();
-		var mnth=curdate.getMonth()+1;
-		var year=curdate.getFullYear();
+
+		if(!item) return;
+
+		// handling for dob type date
+		if(8 === item.length ){
+			return moment(item,'DDmmYYYY').format('DD/MM/YYYY');
+		}
 		
-		var receivedDay = new Date(item).getDate();
-		var receivedMon = new Date(item).getMonth()+1;
-		
-		if(receivedDay == dt && receivedMon== mnth){
-			var time = new Date(item).getHours()+":"+new Date(item).getMinutes()+":"+new Date(item).getSeconds();
-			result = time;
-		}else if(receivedDay == dt-1 && receivedMon== mnth){
+		if(moment().diff(moment(item),'days') == 0 ){
+			result = moment(item).format('HH:mm:ss');
+		}else if(moment().diff(moment(item),'days') == 1){
 			result='Yesterday';	
 		}else{
-			result  = receivedDay+"-"+month[new Date(item).getMonth()]+"-"+new Date(item).getFullYear();
-		}	
+			result = moment(item).format('DD/MM/YYYY');
+		}
+
 		return result;
+	};
+}),
+
+app.filter('currency', function() {
+	return function(value, symbol) {
+		if(value != undefined){
+		if ($.isNumeric(value) || value.length >3 ) {
+			value = value.toString();
+			for (var i = 0; i < value.length; i++)
+				value = value.replace(",", "");
+			var lastThree = value.substring(value.length - 3);
+			var otherNumbers = value.substring(0, value.length - 3);
+			if (otherNumbers != '')
+				lastThree = ',' + lastThree;
+			var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",")+ lastThree;
+
+			return symbol + res;
+		}}
+		return value;		
 	};
 });
 

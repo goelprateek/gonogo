@@ -320,7 +320,6 @@
             $scope.isTableData = true;
 
             $scope.toggleView = function() {
-
                 $scope.isTableData = !$scope.isTableData;
                 $scope.datasource = [];
                 if(!$scope.isTableData){
@@ -533,7 +532,7 @@
 
 
         $scope.$watch('models[1].items', function(newVal, oldVal) {
-            if (newVal == oldVal) return;
+            if (newVal === oldVal) return;
             if (newVal) {
                 $scope.preview = 1;
                 $scope.header = 0;
