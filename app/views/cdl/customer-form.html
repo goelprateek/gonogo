@@ -337,7 +337,7 @@
 		<legend>KYC Document</legend>
 		<div class="col-md-4" ng-repeat="kyc_doc in imageDataArray">
 			<label class="control-label">{{kyc_doc.sImgType}}</label> 
-			<label class="control-label"><span ng-if="kyc_doc.val!=''">Number :</span> {{kyc_doc.sImgVal}}
+			<label class="control-label"><span ng-if="kyc_doc.sImgVal">Number :</span> {{kyc_doc.sImgVal}}
 			</label>
 			<a>
 			<img alt="Document Not available" title="{{kyc_doc.kyc_name}}" accesskey="{{kyc_doc.sByteCode}}" ng-src="{{kyc_doc.sByteCode}}" style="border: none;width: 170px;" ng-click="showPreviewModal(imageDataArray,true,$index,false)" />
