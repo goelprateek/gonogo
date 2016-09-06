@@ -75,7 +75,7 @@ select.form-control {
                     </div>
                     <div class="col-md-12" style="height:40px;">&nbsp;&nbsp;&nbsp;&nbsp;</div>
                     <div class="row js-chart">
-                            <div hc-bar-chart data="chartOptions" loaded="isChartLoaded" on-chart-click="onSeriesClicked(message)" style="height:100%;width:100%;margin-bottom: 40px;"></div>
+                            <div hc-bar-chart data="chartOptions" loaded="isChartLoaded" on-chart-click="onSeriesClicked(message,'')" style="height:100%;width:100%;margin-bottom: 40px;"></div>
                         <!-- <div class="col-md-12" ng-if="isChartLoaded" style="text-align: center;margin:0 auto">
                             <div class="loader">Loading...</div>
                             <span>Loading...</span>
@@ -250,18 +250,9 @@ select.form-control {
 		                    </span>
                         </div>
                         <div class="col-md-6 text-right pagination-container">
-                            <!--  <uib-pagination 
-			                	class="pagination-sm" 
-			                	ng-model="currentPage"
-			                    total-items="filteredStores.length"
-			                    max-size="4"
-	                            ng-change="select(currentPage)"
-	                            items-per-page="numPerPage"
-	                            rotate="false"
-	                            previous-text="&lsaquo;" next-text="&rsaquo;"
-	                            boundary-links="true"
-			                ></uib-pagination> -->
-                            <dir-pagination-controls max-size="10" direction-links="true" boundary-links="true" on-page-change="fetchDateFromServer(newPageNumber)">
+                            <dir-pagination-controls ng-if="!ifSeriesClicked" max-size="10" direction-links="true" boundary-links="true" on-page-change="fetchDataFromServer(newPageNumber)">
+                            </dir-pagination-controls>
+                            <dir-pagination-controls ng-if="ifSeriesClicked" max-size="10" direction-links="true" boundary-links="true" on-page-change="onSeriesClicked('',newPageNumber)">
                             </dir-pagination-controls>
                         </div>
                     </div>

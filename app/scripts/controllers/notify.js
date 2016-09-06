@@ -304,7 +304,7 @@
                 $scope.assetData = $scope.objectSet.oAppReq.oReq.oApplication.aAssetDetail;
             }
 
-            if($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob!=""){
+            ;if($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob!=""){
 
                 var dateOfBirth=new Date();
                 dateOfBirth.setFullYear(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4)));

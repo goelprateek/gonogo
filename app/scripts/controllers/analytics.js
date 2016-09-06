@@ -197,21 +197,28 @@
             startGraph();
             startGraphTimer();
             
+            $scope.ifSeriesClicked = 0;
+            $scope.prev$value ;
+            $scope.onSeriesClicked = function($value,$pageno){
+               
+               $scope.prev$value = $value || $scope.prev$value;
 
-            $scope.onSeriesClicked = function($value){
+               $scope.ifSeriesClicked = 1;
                if( user.role != "DSA" ){
                     $scope.datasource = []; 
-                    var json = { 
-                                "dtFrmDate":$value.category,
-                                "sStat":$value.series.name,
+                    if($scope.prev$value){
+                        var json = { 
+                                "dtFrmDate":$scope.prev$value.category,
+                                "sStat":$scope.prev$value.series.name,
                                 'sInstID':user.institutionID,
-                                'iSkip': 1,
-                                'iLimit': 10,
+                                'iSkip': ($scope.itemPerPage * (($pageno || 1) -1)),
+                                'iLimit': $scope.itemPerPage,
                                 'oCriteria': { 
                                         "oHierarchy":user.hierarchy,
                                         "aProducts":user.getProductNames()
                                 }
-                            };
+                            };    
+                    }
                     RestService.saveToServer("table-view",json).then(function(data){
                         $scope.datasource = data;
                         $scope.isTableData = false;
@@ -228,7 +235,8 @@
             $scope.search = {
                 query: ''
             }
-            $scope.fetchDateFromServer = function($pageno){
+            $scope.fetchDataFromServer = function($pageno){
+                console.log("fetchDataFromServer",$pageno); 
                 $scope.isLoadingAnalyticsData = 1;
                 $scope.datasource = [];
                 var json = {
@@ -314,78 +322,11 @@
             $scope.toggleView = function() {
 
                 $scope.isTableData = !$scope.isTableData;
-                $scope.fetchDateFromServer($scope.pageno); 
-
-                if (!$scope.isTableData) {
-                    /*var json = {
-                        'sInstID': user.institutionID,
-                        'iSkip': "0",
-                        'iLimit': "0",
-                        'oCriteria': {
-                            "oHierarchy": user.hierarchy,
-                            "aProducts": user.getProductNames()
-                        }
-                    };
-                    $scope.isLoadingAnalyticsData = 1;
-                    RestService.saveToServer('score-log', json).then(function(data) {
-                        if (data) {
-                            $scope.copydataSourceCol = data;
-                            $scope.drawTablularData(data);
-                        };
-                    }).finally(function() {
-                        $scope.isLoadingAnalyticsData = 0;
-                    });*/
+                $scope.datasource = [];
+                if(!$scope.isTableData){
+                  $scope.fetchDataFromServer($scope.pageno);   
                 }
             };
-
-
-
-
-
-            /*$scope.drawTablularData = function(data) {
-                return $scope.dataSourceCol = data,
-                    $scope.stores = $scope.dataSourceCol, $scope.searchKeywords = "",
-
-                    $scope.filteredStores = [],
-
-                    $scope.row = "",
-
-                    $scope.select = function(page) {
-                        var end, start;
-                        return start = (page - 1) * $scope.numPerPage, end = start + $scope.numPerPage, $scope.dataSourceCol = $scope.filteredStores.slice(start, end);
-                    },
-
-                    $scope.onFilterChange = function() {
-                        return $scope.select(1), $scope.currentPage = 1, $scope.row = "";
-
-                    }, $scope.onNumPerPageChange = function(number) {
-                        $scope.numPerPage = number;
-                        return $scope.select(1), $scope.currentPage = 1;
-
-                    }, $scope.onOrderChange = function() {
-
-                        return $scope.select(1), $scope.currentPage = 1;
-
-                    }, $scope.search = function(value) {
-                        return $scope.filteredStores = $filter("filter")($scope.stores, value), $scope.onFilterChange();
-
-                    }, $scope.order = function(rowName) {
-
-                        return $scope.row !== rowName ? ($scope.row = rowName, $scope.filteredStores = $filter("orderBy")($scope.filteredStores, rowName), $scope.onOrderChange()) : void 0;
-
-                    }, $scope.numPerPageOpt = [50, 100, 200],
-
-                    $scope.numPerPage = $scope.numPerPageOpt[0],
-
-                    $scope.currentPage = 1,
-
-                    $scope.dataSourceCol = [],
-
-                    ($scope.init = function() {
-                        return $scope.search(), $scope.select($scope.currentPage);
-                    })();
-
-            }*/
 
 
             $scope.viewApplication = function(CustID, status) {
