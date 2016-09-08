@@ -696,16 +696,13 @@
 	                group[scope.$id] = !modelCtrl.$isEmpty(value);
 	                group.isRequired = determineIfRequired(groupName);
 	                updateValidity();
-	                return group.isRequired ? undefined : value;
+	                return value;
 	            };
 
 	            modelCtrl.$formatters.push(validate);
-	            modelCtrl.$parsers.unshift(validate);
+	            modelCtrl.$parsers.push(validate);
 	            scope.$watch('group.isRequired', updateValidity);
 	        }
 	    };
-		
 	});
-
-
 }).call(this);

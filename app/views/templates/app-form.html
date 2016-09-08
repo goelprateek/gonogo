@@ -13,10 +13,10 @@
 <form id="msform" name="ApplicantForm" style="margin-bottom:30px;" novalidate>
 	<div class="row clearfix" ng-if="can('NRPRCS')">
 		<div class="col-md-8 text-left">
-			<div class="alert alert-danger" id="erro-msg"
+			<!-- <div class="alert alert-danger" id="erro-msg"
 				style="float: none; text-align: left; margin: 0px">
 				<strong>Error ! &nbsp;&nbsp;&nbsp;</strong><span id="error"></span>
-			</div>
+			</div> -->
 		</div>
 		<div class="col-md-4 text-right" id="top-fixed" ng-if="can('NRPRCS')">
 			
@@ -25,7 +25,7 @@
                 Update
             </a>
 
-            <a class="btn btn-primary btn-sm" ng-show="showReinitiate && (can('NRPRCS') && ((isUpdating && ApplicantForm.$valid) || !isUpdating))" ng-click="updateForm();" >
+            <a class="btn btn-primary btn-sm" ng-show="showReinitiate && can('NRPRCS') && ((isUpdating && ApplicantForm.$valid) || !isUpdating)" ng-click="updateForm();" >
             	<span class="fa fa-repeat"></span>
             	Reinitiate
             </a>
@@ -576,7 +576,7 @@
 		<div class="row clearfix" ng-if="surrTypeSelected==='Banking'">
 			<div class="col-md-3" ng-repeat="bankImg in extra_array">
 				<img alt="Document Not available" title="{{bankImg.kyc_name}} " accesskey="{{bankImg.image}}" data-toggle="modal"
-						data-target="#myModalnew" class="preview" src="{{bankImg.image}}" name="{{bankImg.kyc_name}}" style="border: none;">
+						data-target="#myModalnew" class="preview" ng-src="{{bankImg.image}}" name="{{bankImg.kyc_name}}" style="border: none;">
 			</div>
 		</div>
 		<div class="row clearfix" ng-if="surrTypeSelected==='Business'">
@@ -919,24 +919,32 @@
 			<div class="col-md-3" ng-repeat="kyc in objectSet.oAppReq.oReq.oApplicant.aKycDocs">
 				<div ng-if="kyc.sKycName=='PAN'">
 					<label class="control-label">{{kyc.sKycName}} NUMBER</label>
-					<input class="form-control" name="pan_number" type="text" ng-model="kyc.sKycNumber" ng-disabled="!isUpdating" maxlength="10" ng-pattern="/^[A-Z]{3}[P][A-Z]\d{4}[A-Z]/i" change-on-blur="onValueChanged('pan')" capitalize/>
+					<input class="form-control" name="pan_number" type="text" ng-model="kyc.sKycNumber" ng-disabled="!isUpdating" maxlength="10" ng-pattern="/^[A-Z]{3}[P][A-Z]\d{4}[A-Z]/i" change-on-blur="onValueChanged('pan')" capitalize required-any="atleastOne" />
 					<div ng-messages="isUpdating && ApplicantForm.pan_number.$error" class="errorMsg">
 	   					<p ng-message="maxlength">Please enter valid pan number</p>
 	   					<p ng-message="pattern">Please enter valid pan number</p>
+	   					<p ng-message="required">Atleast one KYC document required</p>
 					</div>
 				</div>
 				<div ng-if="kyc.sKycName=='AADHAR' || kyc.sKycName=='AADHAAR'">
 					<label class="control-label">{{kyc.sKycName}} NUMBER</label>
-					<input name="Aadhaar" class="form-control" type="text" ng-model="kyc.sKycNumber" ng-disabled="!isUpdating" maxlength="12" change-on-blur="onValueChanged('aadhaar')"/>
-					<span ng-show="isUpdating && ApplicantForm.Aadhaar.$error.maxlength" class="text-danger">
+					<input name="Aadhaar" class="form-control" type="text" ng-model="kyc.sKycNumber" ng-disabled="!isUpdating" maxlength="12" change-on-blur="onValueChanged('aadhaar')" required-any="atleastOne" />
+					<!-- <span ng-show="isUpdating && ApplicantForm.Aadhaar.$error.maxlength" class="text-danger">
 				        Please enter valid Aadhaar number
-				    </span>
+				    </span> -->
+				    <div ng-messages="isUpdating && ApplicantForm.Aadhaar.$error" class="errorMsg">
+	   					<p ng-message="maxlength">Please enter valid Aadhaar number</p>
+	   					<p ng-message="required">Atleast one KYC document required</p>
+					</div>
 				</div>
-				<div ng-if="kyc.sKycName=='VOTERID'">
+				<div ng-if="kyc.sKycName=='VOTER-ID' || kyc.sKycName=='VOTERID'">
 					<label class="control-label">{{kyc.sKycName}} NUMBER</label>
-					<input class="form-control" type="text" ng-model="kyc.sKycNumber" ng-disabled="!isUpdating" change-on-blur="onValueChanged('voter')"/>
+					<input class="form-control" name="voterID" type="text" ng-model="kyc.sKycNumber" ng-disabled="!isUpdating" change-on-blur="onValueChanged('voter')" required-any="atleastOne" />
+				 	<div ng-messages="isUpdating && ApplicantForm.voterID.$error" class="errorMsg">
+	   					<p ng-message="required">Atleast one KYC document required</p>
+					</div>
 				</div>
-				<div ng-if="kyc.sKycName!='AADHAR' && kyc.sKycName!='AADHAAR' && kyc.sKycName!='PAN' && kyc.sKycName!='VOTERID'">
+				<div ng-if="kyc.sKycName!='AADHAR' && kyc.sKycName!='AADHAAR' && kyc.sKycName!='PAN' && kyc.sKycName!='VOTER-ID'">
 					<label class="control-label">{{kyc.sKycName}} NUMBER</label>
 					<input class="form-control" type="text" ng-model="kyc.sKycNumber" ng-disabled="!isUpdating" change-on-blur="onValueChanged('KYC')"/>
 				</div>

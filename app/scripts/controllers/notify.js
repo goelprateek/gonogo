@@ -238,6 +238,8 @@
 
         $scope.currentApplicationFormRefID=CustID;
 
+        $scope.surrTypeSelected=null;
+
         $scope.isUpdating=false;        
 		
         var URL='';
@@ -820,7 +822,7 @@ $scope.onchange = function(id) {
                     var newKYC={
                         sExpiryDate:null,
                         sIssueDate:null,
-                        sKycName:"VOTERID",
+                        sKycName:"VOTER-ID",
                         sKycNumber:"",
                         sKycStat:null
                     }
@@ -871,9 +873,19 @@ $scope.onchange = function(id) {
 
                 $scope.isUpdating=!$scope.isUpdating;
 
+                if($scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs){
+                    for(var kycIndex=0;kycIndex<$scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.length;kycIndex++){
+                        if(!$scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs[kycIndex].sKycNumber)
+                        {
+                            $scope.objectSet.oAppReq.oReq.oApplicant.aKycDocs.splice(kycIndex,1);
+                            kycIndex=kycIndex-1;
+                        }
+                    }
+                }
+
                 $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet,$scope.fieldsUpdated);
             }else{
-                 $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet);
+                $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet);
             }
         }
     };
@@ -1014,7 +1026,7 @@ $scope.onchange = function(id) {
      $scope.saveInvoice = function(invoiceNum,invoiceDate){
           if($scope.objectSet.oAppReq.sRefID!=""){
             if(invoiceNum && invoiceDate ){
-               var dobFormatted=$filter('date')(invoiceDate._d,"dd-MM-yyyy HH:mm:ss"),
+               //var dobFormatted=$filter('date')(invoiceDate._d,"dd-MM-yyyy HH:mm:ss"),
                json = {
                        "oHeader":{
                        "sInstID":user.institutionID,
@@ -1024,7 +1036,7 @@ $scope.onchange = function(id) {
                        "sRefID":$scope.objectSet.oAppReq.sRefID,
                        "oInvDtls":{
                        "sInvNumber":invoiceNum,
-                       "dtInv":dobFormatted
+                       "dtInv":invoiceDate._d.getTime()
                        }
                     };
 
