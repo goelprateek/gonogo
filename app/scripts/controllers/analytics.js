@@ -9,11 +9,11 @@
         'RestService', '$filter', 'APP_CONST',
         '$uibModal', 'UserService', '$log',
         'ObjectStore', 'SelectArrays', 'AclService',
-        '$mdDialog',
+        '$mdDialog','$interval',
         function($scope, notifier, $timeout,
             RestService, $filter, APP_CONST, $uibModal,
             UserService, $log, ObjectStore,
-            SelectArrays, AclService, $mdDialog) {
+            SelectArrays, AclService, $mdDialog,$interval) {
 
 
             var user = UserService.getCurrentUser();
@@ -28,11 +28,13 @@
             $scope.invoiceDate = true;
             $scope.invoiceNumber = true;
             $scope.copydataSourceCol = [];
-            $scope.isChartLoaded = false;
+            $scope.isChartLoaded = 1;
 
 
             $scope.isSearchable = 1;
             $scope.dateRanger = 0;
+
+           
 
             $scope.toggleSearch = function() {
                 if ($scope.dateRanger) {
@@ -96,19 +98,19 @@
 
                             var startDate = picker.startDate,
                                 endDate = picker.endDate;
-                            var filteredData = _.filter($scope.copydataSourceCol, function(item) {
+                            $scope.datasource = _.filter($scope.datasource, function(item) {
                                 var itemDate = moment($filter('date')(item.date, "yyyy-MM-dd"), "YYYY-MM-DD");
                                 return itemDate.isBetween(startDate, endDate, 'hours', '[]')
                             });
 
-                            return $scope.drawTablularData(filteredData);
+                            //return $scope.drawTablularData(filteredData);
 
 
                         },
                         'show.daterangepicker': function(ev, picker) {
                             $scope.datefilter.date.startDate = undefined;
                             $scope.datefilter.date.endDate = undefined;
-                            $scope.drawTablularData($scope.copydataSourceCol);
+                           // $scope.drawTablularData($scope.copydataSourceCol);
                         },
 
                         'hide.daterangepicker': function(ev, picker) {
@@ -158,27 +160,65 @@
                 });
             }
 
-            $scope.chartObj;
-            var json = { 'sInstID': user.institutionID, 'oCriteria': { "oHierarchy": user.hierarchy, "aProducts": user.getProductNames() } };
+            var graphTimer,
+                startGraphTimer = function(){
 
-            RestService.saveToServer("stack-graph", json).then(function(data) {
-                $scope.chartOptions = data;
-            });
+               if(_.isUndefined(graphTimer)){
+                graphTimer =  $interval(function(){
+                    startGraph();
+                },60000,0,true);  
+               } 
+            }
 
-            $scope.onSeriesClicked = function($value){
+            var stopGraphTimer = function(){
+                if(angular.isDefined(graphTimer)){
+                    $interval.cancel(graphTimer); 
+                    graphTimer = undefined;  
+                }
+            }
+
+
+            var startGraph = function(){
+                $scope.chartObj;
+                var json = { 
+                            'sInstID': user.institutionID, 
+                            'oCriteria': { 
+                                    "oHierarchy": user.hierarchy,
+                                    "aProducts": user.getProductNames() 
+                                } 
+                            };
+
+                RestService.saveToServer("stack-graph", json).then(function(data) {
+                    $scope.chartOptions = data;
+                });    
+            }
+
+            
+            startGraph();
+            startGraphTimer();
+            
+            $scope.ifSeriesClicked = 0;
+            $scope.prev$value ;
+            $scope.onSeriesClicked = function($value,$pageno){
+               
+               $scope.prev$value = $value || $scope.prev$value;
+
+               $scope.ifSeriesClicked = 1;
                if( user.role != "DSA" ){
                     $scope.datasource = []; 
-                    var json = { 
-                                "dtFrmDate":$value.category,
-                                "sStat":$value.series.name,
+                    if($scope.prev$value){
+                        var json = { 
+                                "dtFrmDate":$scope.prev$value.category,
+                                "sStat":$scope.prev$value.series.name,
                                 'sInstID':user.institutionID,
-                                'iSkip': 1,
-                                'iLimit': 10,
+                                'iSkip': ($scope.itemPerPage * (($pageno || 1) -1)),
+                                'iLimit': $scope.itemPerPage,
                                 'oCriteria': { 
                                         "oHierarchy":user.hierarchy,
                                         "aProducts":user.getProductNames()
                                 }
-                            };
+                            };    
+                    }
                     RestService.saveToServer("table-view",json).then(function(data){
                         $scope.datasource = data;
                         $scope.isTableData = false;
@@ -192,7 +232,10 @@
             $scope.pageno = 1;
             $scope.itemPerPage = 50;
             $scope.itemPerPageMeta = [50,100,150];
-            $scope.fetchDateFromServer = function($pageno){
+            $scope.search = {
+                query: ''
+            }
+            $scope.fetchDataFromServer = function($pageno){
                 $scope.isLoadingAnalyticsData = 1;
                 $scope.datasource = [];
                 var json = {
@@ -276,80 +319,12 @@
             $scope.isTableData = true;
 
             $scope.toggleView = function() {
-
                 $scope.isTableData = !$scope.isTableData;
-                $scope.fetchDateFromServer($scope.pageno); 
-
-                if (!$scope.isTableData) {
-                    /*var json = {
-                        'sInstID': user.institutionID,
-                        'iSkip': "0",
-                        'iLimit': "0",
-                        'oCriteria': {
-                            "oHierarchy": user.hierarchy,
-                            "aProducts": user.getProductNames()
-                        }
-                    };
-                    $scope.isLoadingAnalyticsData = 1;
-                    RestService.saveToServer('score-log', json).then(function(data) {
-                        if (data) {
-                            $scope.copydataSourceCol = data;
-                            $scope.drawTablularData(data);
-                        };
-                    }).finally(function() {
-                        $scope.isLoadingAnalyticsData = 0;
-                    });*/
+                $scope.datasource = [];
+                if(!$scope.isTableData){
+                  $scope.fetchDataFromServer($scope.pageno);   
                 }
             };
-
-
-
-
-
-            /*$scope.drawTablularData = function(data) {
-                return $scope.dataSourceCol = data,
-                    $scope.stores = $scope.dataSourceCol, $scope.searchKeywords = "",
-
-                    $scope.filteredStores = [],
-
-                    $scope.row = "",
-
-                    $scope.select = function(page) {
-                        var end, start;
-                        return start = (page - 1) * $scope.numPerPage, end = start + $scope.numPerPage, $scope.dataSourceCol = $scope.filteredStores.slice(start, end);
-                    },
-
-                    $scope.onFilterChange = function() {
-                        return $scope.select(1), $scope.currentPage = 1, $scope.row = "";
-
-                    }, $scope.onNumPerPageChange = function(number) {
-                        $scope.numPerPage = number;
-                        return $scope.select(1), $scope.currentPage = 1;
-
-                    }, $scope.onOrderChange = function() {
-
-                        return $scope.select(1), $scope.currentPage = 1;
-
-                    }, $scope.search = function(value) {
-                        return $scope.filteredStores = $filter("filter")($scope.stores, value), $scope.onFilterChange();
-
-                    }, $scope.order = function(rowName) {
-
-                        return $scope.row !== rowName ? ($scope.row = rowName, $scope.filteredStores = $filter("orderBy")($scope.filteredStores, rowName), $scope.onOrderChange()) : void 0;
-
-                    }, $scope.numPerPageOpt = [50, 100, 200],
-
-                    $scope.numPerPage = $scope.numPerPageOpt[0],
-
-                    $scope.currentPage = 1,
-
-                    $scope.dataSourceCol = [],
-
-                    ($scope.init = function() {
-                        return $scope.search(), $scope.select($scope.currentPage);
-                    })();
-
-            }*/
 
 
             $scope.viewApplication = function(CustID, status) {
@@ -556,7 +531,7 @@
 
 
         $scope.$watch('models[1].items', function(newVal, oldVal) {
-            if (newVal == oldVal) return;
+            if (newVal === oldVal) return;
             if (newVal) {
                 $scope.preview = 1;
                 $scope.header = 0;
@@ -866,7 +841,6 @@
             }
 
             RestService.getStreamFromServer(APP_CONST.getConst('BASE_URL_GNG') + "report/download-zip-report", serviceInput).then(function(data) {
-                console.log(data);
                 var blob = new Blob([data], { type: "application/zip" });
                 var downloadUrl = window.URL.createObjectURL(blob);
                 var a = document.createElement("a");

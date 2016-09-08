@@ -495,7 +495,6 @@
 					"dtDateTime":new Date().getTime()
 				};	
 
-				console.log("$scope.ipaJson :"+JSON.stringify($scope.ipaJson));
 				RestService.saveToServer('post-ipa-pdf', $scope.ipaJson)
 				.then(function(data){
 					if(data && data.sStat=="SUCCESS"){

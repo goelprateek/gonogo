@@ -140,8 +140,7 @@
        			};
        		}],
        		link: function(scope, element, attrs, ctrls) {
-       			console.log(scope);
-       			console.log(ctrls);
+       			
        		}
 
 		}

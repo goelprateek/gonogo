@@ -7,7 +7,7 @@
 	app.directive('hcBarChart',function(){
 		return {
 			restrict: 'EA',
-                    template:'<div id="chart-container" style="margin: 0 auto" ></div>',
+                    template:'<div id="chart-container" style="margin: 0 auto" >  <div class="col-md-12" ng-if="isChartLoaded" style="text-align: center;margin:0 auto"> <div class="loader">Loading...</div> <span>Loading...</span> </div>  </div>',
                     scope: {
                         data: '=data',
                         isChartLoaded : '=loaded',
@@ -17,9 +17,9 @@
                     replace:true,
                     link: function (scope,element,attribute, controller) {
                     	
-                    	scope.$watch('data', function(dataNew){
-                    		
-                    		if(!dataNew) return ;
+                    	scope.$watch('data', function(dataNew,dataOld){
+                    		scope.isChartLoaded = 1;
+                    		if(!dataNew && (dataNew === dataOld)) return ;
 
                     		var chartOption = {
                     			chart: {
@@ -29,10 +29,10 @@
 					                spacing: [10, 10, 10, 10],
 					                events: {
 					                	load : function(event){
-					                		scope.isChartLoaded = !scope.isChartLoaded;
+					                		scope.isChartLoaded = 0
 					                	},
 					                	redraw: function(event){
-					                		console.log('redraw',event);
+					                		
 					                	}
 					                }
 					            },
@@ -125,7 +125,7 @@
 					              hideDuration: 100,      
 					              showDuration: 100      
 					            },
-					            colors: ["#CCC","#F44336","#4CAF50"],
+					            colors: ["#939393","#F44336","#4CAF50"],
 					            series: [{
 					                data: dataNew[0].y, 
 					                name: dataNew[0].name
@@ -142,7 +142,7 @@
                     		var chart = new Highcharts.chart(chartOption);
 
 
-               });
+               },true);
 			
             }
 
@@ -150,7 +150,6 @@
 	});
 
 	app.directive('gngStackedBarGraph',['d3','RestService','UserService',function(d3,RestService,UserService){
-		console.log("gngStackedBarGraph bar graph");
 		return {
 			restrict:"EA",
 			scope: {

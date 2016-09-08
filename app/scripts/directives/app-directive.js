@@ -290,10 +290,7 @@
 
 			$scope.arrDocTypes=["PAN","AADHAAR","PASSPORT","DRIVING-LICENSE","INCOME-PROOF1","INCOME-PROOF2","OTHER"];
 
-			$scope.onselectImg = function($files,pItem) 
-			{
-				console.log("Image selected");
-				console.log($scope.item);
+			$scope.onselectImg = function($files,pItem) {
 				var img_type ='';
 				for (var i = 0; i < $files.length; i++){
 					var fname=$files[0].name;
@@ -703,6 +700,44 @@
 	            modelCtrl.$parsers.push(validate);
 	            scope.$watch('group.isRequired', updateValidity);
 	        }
+	    };
+	});
+
+	app.directive('changeOnBlur', function() {
+	    return {
+	        restrict: 'A',
+	        require: 'ngModel',
+	        priority:1,
+	        link: function(scope, elm, attrs, ngModelCtrl) {
+	            if (attrs.type === 'radio' || attrs.type === 'checkbox') 
+	                return;
+
+	            var expressionToCall = attrs.changeOnBlur;
+
+	            var oldValue = null;
+	            elm.bind('focus',function() {
+	                oldValue = elm.val();
+	            })
+	            elm.bind('blur', function() {
+	                scope.$apply(function() {
+	                    var newValue = elm.val();
+	                    if (newValue !== oldValue){
+	                        scope.$eval(expressionToCall);
+	                    }
+	                });         
+	            });
+	        }
+	    };
+	});
+
+	app.directive("whenScrolled",function(){
+	    return function(scope, elm, attr) {
+	      var raw = elm[0];
+	      elm.bind('scroll', function() {
+	        if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+	          scope.$apply(attr.whenScrolled);
+	        }
+	      });
 	    };
 	});
 }).call(this);
