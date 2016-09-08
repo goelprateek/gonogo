@@ -115,11 +115,11 @@
 			$scope.uploadImages=function(){
 
 				if($scope.requestImageArray.length == $scope.imageArrayToUpload.length){
-					UploadImages.upload($scope.referenceId,$scope.imageArrayToUpload).then(function(imageUploadedCount) {
-					  	$log.debug('Image upload Success, Total image uploaded : ' + imageUploadedCount);
+					UploadImages.upload($scope.referenceId,$scope.imageArrayToUpload).then(function(responseArray) {
+					  	$log.debug('Image upload Success, Total image uploaded : ' +  JSON.stringify(responseArray);
 					  	$scope.onImageUploaded();
 					}, function(reason) {
-					  	$log.debug('Image upload Failed, Total image uploaded : ' + imageUploadedCount);
+					  	$log.debug('Image upload Failed, Total image uploaded : ' +  JSON.stringify(responseArray));
 					});
 				}else{
 					notifier.logWarning("Please provide all images.") ;
@@ -221,8 +221,8 @@
 								$scope.imagearray[spliceIndex].image=binaryString.split(",")[1];
 							}
 
-							$log.debug("Images to upload");
-							$log.debug(JSON.stringify($scope.imagearray));
+							//$log.debug("Images to upload");
+							//$log.debug(JSON.stringify($scope.imagearray));
 
 							$("#"+pItem.value+pItem.index+"").css("background-image", "url("+binaryString+")");
 							$("#"+pItem.value+pItem.index+"label").hide();

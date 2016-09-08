@@ -56,11 +56,11 @@
 		$scope.submitImages = function()
 		{
 			if($scope.additnlDocArrayToUpload.length!=0){
-				UploadImages.upload($scope.referenceID,$scope.additnlDocArrayToUpload).then(function(imageUploadedCount) {
-				  	$log.debug('Image upload Success, Total image uploaded : ' + imageUploadedCount);
+				UploadImages.upload($scope.referenceID,$scope.additnlDocArrayToUpload).then(function(responseArray) {
+				  	$log.debug('Image upload Success, Total image uploaded : ' + JSON.stringify(responseArray));
 				  	$scope.updateStatus();
 				}, function(reason) {
-				  	$log.debug('Image upload Failed, Total image uploaded : ' + imageUploadedCount);
+				  	$log.debug('Image upload Failed, Total image uploaded : ' + JSON.stringify(responseArray));
 				});
 			}else{
 				notifier.logWarning("Please select atleast 1 image to upload.");

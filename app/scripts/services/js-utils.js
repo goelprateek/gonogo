@@ -8,13 +8,38 @@
 		var imageCountUploaded=0;
 		var imageCountToUpload=0;
 		var serviceHitCount=0;
-		this.upload=function(pReferenceID,pImageArrayToUpload){
+		
+		this.upload = function(pReferenceID,pImageArrayToUpload){
 			imageCountUploaded=0;
 			var defer = $q.defer();
 
 			// console.log("upload Image array :"+array.length);
 			imageCountToUpload=pImageArrayToUpload.length;
-			for(var i=0 ; i<pImageArrayToUpload.length ; i++){
+
+			var promiseList = _.map(pImageArrayToUpload,function(value){
+				var json ={
+				  		"oHeader": {
+				  			"sCroId":"default",
+				  			"sAppSource":"WEB",
+					    	"sApplID":"APPLICANT_1"  // applicant id
+					  	},
+					  	"sRefID": pReferenceID,
+				  		"oUpldDtl": {
+						    "sFileID": "1", // ask yogesh
+						    "sFileName": value.kyc_name,
+						    "sFileType": value.type,
+						    "sfileData": value.image,
+						    "sStat": value.state,
+						    "sReason": value.reason 
+					  	}
+					};
+				return RestService.saveToServer("upload-image",json);
+
+			});
+
+			return $q.all(promiseList);
+
+			/*for(var i=0 ; i<pImageArrayToUpload.length ; i++){
 				if(pImageArrayToUpload[i] != null){
 					var json ={
 				  		"oHeader": {
@@ -35,19 +60,19 @@
 					//$log.debug("image JSon : "+JSON.stringify(json));
 					this.uploadImage(defer,json);
 				}
-			}
+			}*/
 
-			return defer.promise;
+			/*return defer.promise;*/
 		};
 
+		/*
 		this.uploadImage=function(defer,json)
 		{
 			RestService.saveToServer("upload-image",json).then(function(data)
 			{
-				imageCountUploaded = imageCountUploaded+1;
-
 				if(data.sStatus === 'SUCCESS')
 				{
+					imageCountUploaded = imageCountUploaded+1;
 	//				console.log("response for-"+JSON.stringify(Response));
 					if(imageCountUploaded == imageCountToUpload){
 						defer.resolve(imageCountUploaded);
@@ -67,6 +92,6 @@
 					alert("Sorry we can not process your image upload request");
 				}
 			});
-		};
+		};*/
 	}]);
 }).call(this);
