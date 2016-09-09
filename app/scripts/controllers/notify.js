@@ -849,7 +849,7 @@ $scope.onchange = function(id) {
     $scope.updateForm=function(){
         if($scope.objectSet.iNoReTry >= 2){
             notifier.logWarning("This application is already re-initiated twice");
-        }else{
+        }else if($scope.objectSet.oAppReq.sCurrentStageId==="CR_H" || $scope.objectSet.oAppReq.sCurrentStageId==="APRV" || $scope.objectSet.oAppReq.sCurrentStageId==="CR_Q" || $scope.objectSet.oAppReq.sCurrentStageId==="DCLN"){
             if($scope.isUpdating){
                 var dobFormatted=$filter('date')($scope.app_form.pickerDob,"dd/MM/yyyy");
                 if(dobFormatted && dobFormatted!="")
@@ -885,6 +885,8 @@ $scope.onchange = function(id) {
             }else{
                 $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet);
             }
+        }else{
+            notifier.logWarning("This application is not allowed to be reinitiated.");
         }
     };
 
@@ -924,10 +926,10 @@ $scope.onchange = function(id) {
             }
         });
 
-        modalInstance.result.then(function (isSuccess,refID) {           
-            if(isSuccess){
+        modalInstance.result.then(function (response) {           
+            if(response.isSuccess){
                 $scope.objectSet.iNoReTry=$scope.objectSet.iNoReTry +1;
-                $scope.showReinitiateStatusModal($scope.refID);
+                $scope.showReinitiateStatusModal(response.referenceID);
             }
         });
     };
@@ -1156,7 +1158,16 @@ app.controller("ReinitiateStatusModalController",["$scope","$uibModalInstance","
           }
     };
 
+    var statusCheckedCounter=0;
+    $scope.showProgress=true;
     var statusPoller = $interval(function(){
+        statusCheckedCounter++;
+
+        if(statusCheckedCounter===40){
+            $interval.cancel(statusPoller);
+            $scope.showProgress=false;
+        }
+
         RestService.saveToServer(URL,JSON.stringify(statusJSON)).then(function(resp){
             //[{"applicationLog":{},"sRefID":"5788d78b5bc7ec48de2796c2","bStatFlag":false,"iNoReTry":0,"oCompRes":{},"oIntrmStat":{"sRefId":null,"sAppID":null,"sInstID":null,"dtStart":1468681176705,"dtETime":null,"sAppStart":"DEFAULT","sDedupe":"DEFAULT","sEmailStat":"DEFAULT","sOtpStat":"COMPLETE","sAppStat":"DEFAULT","sPanStat":"DEFAULT","sAadharStat":"DEFAULT","sMbStat":"DEFAULT","sVarScoreStat":"DEFAULT","sScoreStat":"DEFAULT","sCblScore":"DEFAULT","sCroStat":"DEFAULT","oPanResult":null,"oCibilResult":null,"oResAddressResult":null,"oOffAddressResult":null,"oScoringResult":null,"oAadharResult":null,"oExperianResult":null,"oEquifaxResult":null,"oCHMResult":null,"oMbResult":null},"bNegPinCodeFlag":false,"aAppScoRslt":[]},{"applicationLog":{},"sRefID":"5788d78b5bc7ec48de2796c3","bStatFlag":false,"iNoReTry":0,"oCompRes":{},"oIntrmStat":{"sRefId":null,"sAppID":null,"sInstID":null,"dtStart":1468681176705,"dtETime":null,"sAppStart":"DEFAULT","sDedupe":"DEFAULT","sEmailStat":"DEFAULT","sOtpStat":"COMPLETE","sAppStat":"DEFAULT","sPanStat":"DEFAULT","sAadharStat":"DEFAULT","sMbStat":"DEFAULT","sVarScoreStat":"DEFAULT","sScoreStat":"DEFAULT","sCblScore":"DEFAULT","sCroStat":"DEFAULT","oPanResult":null,"oCibilResult":null,"oResAddressResult":null,"oOffAddressResult":null,"oScoringResult":null,"oAadharResult":null,"oExperianResult":null,"oEquifaxResult":null,"oCHMResult":null,"oMbResult":null},"bNegPinCodeFlag":false,"aAppScoRslt":[]}]
             if(resp){
@@ -1211,12 +1222,12 @@ app.controller("ReinitiateStatusModalController",["$scope","$uibModalInstance","
                         }
                     }
                 }
-
                 if(resp.sAppStat){
                     //DECISION
                     if(['queue'].indexOf(resp.sAppStat.toLowerCase()) > -1){
                     }else if(['approved','declined'].indexOf(resp.sAppStat.toLowerCase()) > -1){
                         $interval.cancel(statusPoller);
+                        $scope.showProgress=false;
                     }
                 }
             }
@@ -1492,9 +1503,9 @@ app.controller('DeclInstanceCtrl', ['$scope','$rootScope','NotificationObject',
     };
 }]);
 
-app.controller('onholdModelCtrl', ['$scope','$rootScope','NotificationObject',
+app.controller('onholdModelCtrl', ['$scope','$rootScope',
    '$uibModalInstance','holdModelFeed','SelectArrays','notifier',
-    function($scope, $rootScope,NotificationObject,$uibModalInstance,holdModelFeed,SelectArrays,notifier){ 
+    function($scope, $rootScope,$uibModalInstance,holdModelFeed,SelectArrays,notifier){ 
 
     var docData =  SelectArrays.getOfferData();
     $scope.OfferArrey =docData ;

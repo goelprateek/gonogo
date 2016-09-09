@@ -57,6 +57,7 @@ module.exports = function(config) {
       'bower_components/angular-material/angular-material.js',
       'bower_components/slick-carousel/slick/slick.min.js',
       'bower_components/angular-slick/dist/slick.js',
+      'bower_components/ng-tags-input/ng-tags-input.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',

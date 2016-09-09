@@ -205,10 +205,10 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
             RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
                 if(Response && Response.sStat=="SUCCESS"){
                     notifier.logSuccess("Application has been reinitiated successfully");
-                    $uibModalInstance.close(true,$scope.refID);
+                    $uibModalInstance.close({isSuccess:true,referenceID:$scope.refID});
                 }else{
                     notifier.logWarning("Error occured while reinitiating") ;
-                    $uibModalInstance.close(false,$scope.refID);
+                    $uibModalInstance.close({isSuccess:false,referenceID:$scope.refID});
                 }                
             });
         }else{
@@ -222,10 +222,10 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
             RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
                 if(Response && Response.sStat=="SUCCESS"){
                     notifier.logSuccess("Application has been reinitiated successfully");
-                    $uibModalInstance.close(true,$scope.refID);
+                    $uibModalInstance.close({isSuccess:true,referenceID:$scope.refID});
                 }else{
                     notifier.logWarning("Error occured while reinitiating") ;
-                    $uibModalInstance.close(false,$scope.refID);
+                    $uibModalInstance.close({isSuccess:false,referenceID:$scope.refID});
                 }
                 //$uibModalInstance.dismiss();
             });
@@ -233,6 +233,6 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
     };
 
     $scope.closeModal = function(){
-        $uibModalInstance.close();
+        $uibModalInstance.dismiss();
     };
 }]);

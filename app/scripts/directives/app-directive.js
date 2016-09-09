@@ -116,7 +116,7 @@
 
 				if($scope.requestImageArray.length == $scope.imageArrayToUpload.length){
 					UploadImages.upload($scope.referenceId,$scope.imageArrayToUpload).then(function(responseArray) {
-					  	$log.debug('Image upload Success, Total image uploaded : ' +  JSON.stringify(responseArray);
+					  	$log.debug('Image upload Success, Total image uploaded : ' +  JSON.stringify(responseArray));
 					  	$scope.onImageUploaded();
 					}, function(reason) {
 					  	$log.debug('Image upload Failed, Total image uploaded : ' +  JSON.stringify(responseArray));
