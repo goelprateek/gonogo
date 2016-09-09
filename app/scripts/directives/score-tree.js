@@ -39,7 +39,16 @@
                         {
                             var field = att[temp.Scores[i].Plans[0][j].Fields[0][k].name];
                             var exp = field["FieldName"]; //fieldname
-                            var dscore = field["value"]; //
+                            var finalValue=[];
+                            var expValue = field["value"];
+                            Object.getOwnPropertyNames(expValue).forEach(function(val,inx,array){
+                                finalValue.push({"expKey":val , "expVal":expValue[val]});
+                            });
+
+                             /*_.each(field["value"], function(value,key){
+                                finalValue = value[key];
+                             });*/
+                            var dscore = finalValue; //
                             var weight = field["weight"];
                             treeData[0].children[i].children[j].children.push({"score":temp.Scores[i].Plans[0][j].Fields[0][k].score, "color":color,"dscore":dscore, "exp":exp, "weight":weight});
                         }
@@ -140,8 +149,12 @@
                     .style("left", Math.max(0, d3.event.pageX - 350) + "px")
                     .style("top", (d3.event.pageY - 184) + "px");
 
-                    $('#node_expression').text(d.exp);
-                    $('#node_details').text("Value : "+ d.dscore);
+                   /* $('#node_expression').text(d.exp);*/
+                   //sayali - remain for multiple values
+                    _.each(d.dscore, function(value,key){
+                        $('#node_details').text(value.expKey.split("$")[1]+":"+value.expVal); 
+                   });
+                      
                     d3.select("#tooltip").classed("hidden", false); 
 
                 })

@@ -112,7 +112,7 @@
 							router(data.ROLES[0]);
 						}
 					} else {
-						$scope.alert = "Sorry ! User Details are not availeble.\n Please contact system admin";
+						$scope.alert = "Sorry ! User Details are not available.\n Please contact system admin";
 					}
 
 				} else if (data.ERRORS.length > 0) {

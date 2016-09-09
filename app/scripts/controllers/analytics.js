@@ -9,18 +9,17 @@
         'RestService', '$filter', 'APP_CONST',
         '$uibModal', 'UserService', '$log',
         'ObjectStore', 'SelectArrays', 'AclService',
-        '$mdDialog','$interval',
+        '$mdDialog','sharedService','$state',
         function($scope, notifier, $timeout,
             RestService, $filter, APP_CONST, $uibModal,
             UserService, $log, ObjectStore,
-            SelectArrays, AclService, $mdDialog,$interval) {
-
+            SelectArrays, AclService, $mdDialog,sharedService,$state) {
 
             var user = UserService.getCurrentUser();
 
             $scope.can = AclService.can;
             $scope.objectSet = ObjectStore.analytics();
-            $scope.isImg = true;
+          //  $scope.isImg = true;
             $scope.dataSourceCol = [];
             $scope.losIdval = true;
             $scope.utrVal = true;
@@ -28,13 +27,12 @@
             $scope.invoiceDate = true;
             $scope.invoiceNumber = true;
             $scope.copydataSourceCol = [];
-            $scope.isChartLoaded = 1;
-
+            $scope.isChartLoaded = false;
+            $scope.appView = false;
+            $scope.isTableData = true;
 
             $scope.isSearchable = 1;
             $scope.dateRanger = 0;
-
-           
 
             $scope.toggleSearch = function() {
                 if ($scope.dateRanger) {
@@ -127,7 +125,7 @@
                 return (angular.lowercase(orignal) == angular.lowercase(final));
             }
 
-            $scope.showimage = function(obj, isImgFlag, index, editMode) {
+            /*$scope.showimage = function(obj, isImgFlag, index, editMode) {
 
                 var modalInstance = $uibModal.open({
                     animation: $scope.animationsEnabled,
@@ -158,7 +156,7 @@
                     });
                     $scope.rejectImgFromServer = filter;
                 });
-            }
+            }*/
 
             var graphTimer,
                 startGraphTimer = function(){
@@ -221,9 +219,11 @@
                     }
                     RestService.saveToServer("table-view",json).then(function(data){
                         $scope.datasource = data;
-                        $scope.isTableData = false;
+                        $scope.isTableData = !$scope.isTableData;
                     });
                 }
+                sharedService.setAnalyticsServiceName("onSeriesClicked");
+                sharedService.setAnalyticsServiceParm($value);
             }
 
 
@@ -252,10 +252,22 @@
                     $scope.datasource = response;
                 }).finally(function(){
                     $scope.isLoadingAnalyticsData = 0;
-                })
-
+                });
+                sharedService.setAnalyticsServiceName("fetchDateFromServer");
+                sharedService.setAnalyticsServiceParm($pageno);
             }
             
+            if(sharedService.getAnalyticsServiceName() && sharedService.getAnalyticsServiceParm()){
+                if(sharedService.getAnalyticsServiceName() === "onSeriesClicked"){
+                    $scope.onSeriesClicked(sharedService.getAnalyticsServiceParm());
+                }else{
+                    $scope.isTableData = false;
+                    $scope.appView = false;
+                    $scope.fetchDateFromServer(sharedService.getAnalyticsServiceParm());
+                }
+                sharedService.setAnalyticsServiceName(null);
+                sharedService.setAnalyticsServiceParm(null);
+            }
 
             $scope.reportDownload = function() {
 
@@ -315,9 +327,6 @@
 
             };
 
-            $scope.appView = false;
-            $scope.isTableData = true;
-
             $scope.toggleView = function() {
                 $scope.isTableData = !$scope.isTableData;
                 $scope.datasource = [];
@@ -335,14 +344,23 @@
                 var URL = 'application-data';
                 var json = { 'sRefID': CustID };
                 RestService.saveToServer(URL, json).then(function(response) {
-                    if (response)
-                        $scope.objectSet = response;
-                    else
-                        $scope.objectSet = NotificationObject.dummy();
+                    if (response){
+                      //  $scope.objectSet = response;
+                        sharedService.setApplicationData(response);
+                     }
+                    else{
+                         sharedService.setApplicationData(ObjectStore.analytics());
+                        //$scope.objectSet = NotificationObject.dummy();
+                    }
+
+                    sharedService.setApplicationSource("analytics");
+                    sharedService.set
+
+                    $state.go("/app-form");
 
                     $scope.Picked = CustID;
 
-                    if ($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob != "") {
+                  /*  if ($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob != "") {
                         $scope.dob = $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0, 2) + "/" + $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2, 4) + "/" + $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4);
                         var dateOfBirth = new Date();
                         dateOfBirth.setFullYear(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4)));
@@ -351,17 +369,17 @@
 
                         $scope.app_form = { pickerDob: dateOfBirth };
 
-                    }
+                    }*/
 
                     $scope.showrefid = "true";
-                    $scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName + "  " + $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName + "  " + $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
-                    var data = $scope.dataSourceCol;
+/*                    $scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName + "  " + $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName + "  " + $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
+*/                    var data = $scope.dataSourceCol;
                     _.each(data, function(value, key) {
                         if (value.applicationId == $scope.objectSet.oAppReq.sRefID) {
                             $scope.applctnstatus = value.applicationStatus;
                         }
                     });
-                    $scope.croDecision = response.aCroDec;
+                   /* $scope.croDecision = response.aCroDec;
 
                     try {
                         $scope.pdfData = "data:application/pdf;base64," + $scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];
@@ -373,12 +391,12 @@
                         $scope.foirAmount = $scope.objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT'].toFixed(2);
                     } catch (e) {
                         $scope.foirAmount = '';
-                    }
+                    }*/
                     return response;
 
                 }).then(function(data) {
 
-                    if (data) {
+                   /* if (data) {
                         var objArray = _.map(_.pluck(data.aAppImgDtl, 'aImgMap'), function(data) {
                             return data;
                         });
@@ -422,14 +440,14 @@
                             }
                         });
                         $scope.rejectImgFromServer = rejectImgFromServer;
-                    }
+                    }*/
                 });
             };
 
-            $scope.toggleForm = function() {
+           /* $scope.toggleForm = function() {
                 $scope.isTableData = false;
                 $scope.appView = !$scope.appView;
-            }
+            }*/
         }
     ]);
 
