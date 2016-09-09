@@ -9,11 +9,11 @@
         'RestService', '$filter', 'APP_CONST',
         '$uibModal', 'UserService', '$log',
         'ObjectStore', 'SelectArrays', 'AclService',
-        '$mdDialog','sharedService','$state',
+        '$mdDialog','sharedService','$state','$interval',
         function($scope, notifier, $timeout,
             RestService, $filter, APP_CONST, $uibModal,
             UserService, $log, ObjectStore,
-            SelectArrays, AclService, $mdDialog,sharedService,$state) {
+            SelectArrays, AclService, $mdDialog,sharedService,$state,$interval) {
 
             var user = UserService.getCurrentUser();
 
