@@ -383,11 +383,11 @@
                                      + ($scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID ? $scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.GridID : ($scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] ? $scope.objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE["RULE-SEQ"] : "" ));
             }
 
-            if($scope.objectSet.oPostIPA && $scope.objectSet.oPostIPA.aAssMdls){
-                $scope.assetData = $scope.objectSet.oPostIPA.aAssMdls;
-            }else{
-                $scope.assetData = $scope.objectSet.oAppReq.oReq.oApplication.aAssetDetail;
-            }
+            // if($scope.objectSet.oPostIPA && $scope.objectSet.oPostIPA.aAssMdls){
+            //     $scope.assetData = $scope.objectSet.oPostIPA.aAssMdls;
+            // }else{
+            //     $scope.assetData = $scope.objectSet.oAppReq.oReq.oApplication.aAssetDetail;
+            // }
 
             if($scope.objectSet.oAppReq.oReq.oApplicant.sDob){
                 
@@ -897,7 +897,7 @@ app.controller("ReinitiateStatusModalController",["$scope","$uibModalInstance","
     $scope.dedupeVerified=false;
     $scope.appScoreVerified=false;
     $scope.verifScoreVerified=false;
-    $scope.negPinVerified=false;
+    // $scope.negPinVerified=false;
     
     var URL="status";
     var statusJSON ={
