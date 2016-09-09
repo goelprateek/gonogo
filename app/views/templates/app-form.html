@@ -8,29 +8,32 @@
 	.img-do{
 		width: 50px;
 	}
+
+	.form-padding {
+		padding:1% 7% 0% 7%;
+	}
 </style>
 
-<form id="msform" name="ApplicantForm" style="margin-bottom:30px;" novalidate>
-	<div class="row clearfix" ng-if="can('NRPRCS')">
-		<div class="col-md-8 text-left">
-			<div class="alert alert-danger" id="erro-msg"
+<form id="msform" name="ApplicantForm" ng-class="{'form-padding': (can('NCONTAINER') || (!can('NCONTAINER') &&source!='notification'))}" novalidate data-ng-controller="appFormController">
+	<div class="row clearfix" >
+		<!-- <div class="col-md-8 text-left">
+			<div class="alert alert-danger" id="erro-pmsg"
 				style="float: none; text-align: left; margin: 0px">
 				<strong>Error ! &nbsp;&nbsp;&nbsp;</strong><span id="error"></span>
 			</div>
-		</div>
-		<div class="col-md-4 text-right" id="top-fixed" ng-if="can('NRPRCS')">
+		</div> -->
+		<div class="col-md-4 text-right pull-right" id="top-fixed">
 			
-			<a class="btn btn-primary btn-sm" ng-show="showReinitiate && (can('NRPRCS') && !isUpdating)" ng-click="enableForm();">
+			<a class="btn btn-primary btn-sm" ng-show="source=='notification' && (can('NRPRCS') && !isUpdating)" ng-click="enableForm();">
                 <span class="fa fa-pencil-square-o"></span>
                 Update
             </a>
 
-            <a class="btn btn-primary btn-sm" ng-show="showReinitiate && (can('NRPRCS') && ((isUpdating && ApplicantForm.$valid) || !isUpdating))" ng-click="updateForm();" >
+            <a class="btn btn-primary btn-sm" ng-show="source=='notification' && (can('NRPRCS') && ((isUpdating && ApplicantForm.$valid) || !isUpdating))" ng-click="updateForm();" >
             	<span class="fa fa-repeat"></span>
             	Reinitiate
             </a>
-
-            <a class="btn btn-primary btn-sm"  ng-click="toggleForm()">
+            <a class="btn btn-primary btn-sm"  ng-click="toggleForm(source)" ng-show="(can('NRPRCS')) || (!can('NRPRCS') && source!='notification')">
             	<span class="fa fa-reply"></span>
             	Back
             </a>
@@ -76,7 +79,7 @@
 		<div class="col-md-3">
 			<label class="control-label">Invoice Number</label> <input
 				class="form-control" ng-model="objectSet.oInvDtls.sInvNumber" id="invoiceNumId" type="text" ng-disabled="invoiceNumber" name="invoiceNo" ng-pattern="/^[a-zA-Z\d]+$/" required replace>
-				<div ng-messages=" ApplicantForm.invoiceNo.$error" class="errorMsg">
+				<div ng-messages="ApplicantForm.invoiceNo.$error && isInvoiceAvailable" class="errorMsg">
    					<div ng-message="required">Enter Invoice Number</div>
    					<div ng-message="pattern">Enter valid Number</div>
 				</div>
@@ -86,7 +89,7 @@
 			<input date-range-picker  id="daterange"  name="daterange" class="form-control date-picker" 
 			type="text" ng-model="datefilter.date" options="datefilter.opts"  placeholder="Pick Date" 
 			 max="datefilter.opts.max" clearable="true" ng-disabled="invoiceDate" required/>
-			 <div ng-messages=" ApplicantForm.daterange.$error" class="errorMsg">
+			 <div ng-messages="ApplicantForm.daterange.$error" class="errorMsg">
    					<div ng-message="required">Enter Invoice Date</div>
 				</div>
 		</div>

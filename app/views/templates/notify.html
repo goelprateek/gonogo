@@ -260,7 +260,7 @@
 							<label class="div-heading customer">DEMOGRAPHICS</label>
 							<div id="customer" slimscroll="{height: 158,railVisible:true}">
 								<div class="list-group-item">
-									<span>Name : <span >{{name}}
+									<span>Name : <span >{{objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"   "+objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"   "+objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName}}
 
 									</span></span></div>
 								<div class="list-group-item"><span>D.O.B : {{objectSet.oAppReq.oReq.oApplicant.sDob | dateFilter}}</span></div>
@@ -281,14 +281,14 @@
 							</div>
 							<!-- slimscroll="{height: 54,railVisible:true}" -->
 							<div data-ng-if="imageDataArray.length!=0"  >
-								<div class="notify-scroll-container" >
+								<div class="notify-scroll-container" slimscroll="{height: 54,railVisible:true}">
 									 <ul style="padding: 0px;"> 
-									 	<slick infinite="true" slides-to-show="3" slides-to-scroll="3">
-										<li ng-repeat="d in imageDataArray">
+<!-- 									 	<slick infinite="true" slides-to-show="3" slides-to-scroll="3">
+ -->										<li ng-repeat="d in imageDataArray">
 											<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index,true)"><img ng-src="{{d.sByteCode}}" title="{{d.sImgType}}"> </a>
 										</li>
-										</slick>
-									 </ul> 
+<!-- 										</slick>
+ -->									 </ul> 
 								</div>
 							</div>
 
@@ -561,18 +561,18 @@
  				</ul>
 				<div class="row clearfix" ng-init="applicant" id="applicant_panel" style=" width: 102%;margin-left: 14px;max-height: 515px;margin-right: -14px;overflow-y:scroll">
 					<div id="application-temp-container"style="padding-top: 10px;width: 98%;">
-		<!-- ***************************  Common Form *************************** -->
-		 				<div ng-include="'views/templates/app-form.html'" ></div> 
+		<!-- ***************************  Common Form ***************************using ui-ref -->
+		 				 <div ng-include="'views/templates/app-form.html'" ></div>  
 					</div>
 				</div>
 			</div>
 		</div>
 <!-- 	ng-if="authenticate('NRPRCS')" -->
-		<div class="row clearfix" id="application-main-container" data-ng-if="!container"
+	<!-- 	<div class="row clearfix" id="application-main-container" data-ng-if="!container"
 			style="border-top: 1px solid #DADADB; padding-top: 10px;">
 						<div ng-include="'views/templates/app-form.html'"></div> 
-				</div>
-			</div>
+		</div> -->
+	</div>
 		<!-- ****************Second Common Form ************************************** -->
 		</div>
 	</div>

@@ -111,7 +111,11 @@
 		dealerCode=null,
 		applicationData=null,
 		applicationStatus=null,
-		doDocument=null;
+		doDocument=null,
+		source = '',
+		images = '',
+		service = '',
+		parameters = '';
 
 	  	return {
 	        getRefID: function () {
@@ -167,6 +171,30 @@
 	        },
 	        setDODocument: function(value) {
 	        	doDocument = value;
+	        },
+	        setApplicationSource: function(value){
+	        	source = value;
+	        },
+	        getApplicationSource: function(){
+	        	return source;
+	        },
+	        setApplicationImages: function(value){
+	        	images = value;
+	        },
+	        getApplicationImages: function(){
+	        	return images;
+	        },
+	        setAnalyticsServiceName: function(value){
+	        	service = value;
+	        },
+	        getAnalyticsServiceName: function(){
+	        	return service;
+	        },
+	        setAnalyticsServiceParm: function(value){
+	        	parameters = value;
+	        },
+	        getAnalyticsServiceParm: function(){
+	        	return parameters;
 	        }
 	    };
   	});

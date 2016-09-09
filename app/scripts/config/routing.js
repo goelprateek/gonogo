@@ -78,6 +78,10 @@
 		}).state('/cdl/post-do', {
 			templateUrl: 'views/cdl/post-do.html',
 			controller: 'PostDOCntrolr'
+		}).state('/app-form', {
+			//url:'/form',
+			templateUrl: 'views/templates/app-form.html'
+		/*	controller: 'appFormController'*/
 		}).state('/test', {
 			url:'/test',
 			templateUrl: 'views/test.html',
