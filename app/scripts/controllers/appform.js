@@ -54,6 +54,16 @@
 	//from analytics
 	$scope.isImg = true;
 
+    $scope.datefilter.date = '';
+
+    if($scope.objectSet.oInvDtls && $scope.objectSet.oInvDtls.dtInv && $scope.objectSet.oInvDtls.sInvNumber){
+        var Dateformat = moment($scope.objectSet.oInvDtls.dtInv);
+        $scope.datefilter.date = Dateformat._d;
+        $scope.invoiceDate = true;
+        $scope.invoiceNumber = true;
+        $scope.isInvoiceAvailable = false;
+    }
+
     if($scope.objectSet.oAppReq.oReq.oApplicant.sDob){
         $scope.app_form = { 
                 pickerDob : moment($scope.objectSet.oAppReq.oReq.oApplicant.sDob,'DDmmYYYY')._d

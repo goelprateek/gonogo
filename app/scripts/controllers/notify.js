@@ -304,8 +304,7 @@
             $scope.isInvoiceAvailable = true;
             $scope.losIdval = false;
             $scope.pdfData = '';
-            $scope.foirAmount = '';
-            $scope.datefilter.date = '';
+            $scope.foirAmount = 
 
             setModifiedData(response);
 
@@ -385,15 +384,6 @@
                         $scope.applctnstatus = value.sStat;
                 }
             });
-
-            if($scope.objectSet.oInvDtls && $scope.objectSet.oInvDtls.dtInv && $scope.objectSet.oInvDtls.sInvNumber){
-                var Dateformat = moment($scope.objectSet.oInvDtls.dtInv,'DD-MM-YYYY hh:mm:s a');
-                 $scope.datefilter.date = Dateformat;
-                 $scope.invoiceDate = true;
-                 $scope.invoiceNumber = true;
-                 $scope.isInvoiceAvailable = false;
-                
-            }
 
             if($scope.objectSet.oLosDtls && $scope.objectSet.oLosDtls.sLosID){
                 $scope.losIdval = true;
