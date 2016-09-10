@@ -28,7 +28,7 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
                           {name:"Aadhaar",id:202,isSuccess:true}]},
         // {main:"Dedupe" , subs: [{name:"Dedupe",id:301,isSuccess:true},
         //                      {name:"Negative Pin Code",id:302,isSuccess:true}]},
-        {main:"SOBRE" , subs: [{name:"Verificaton scoring",id:401,isSuccess:true},
+        {main:"Scoring" , subs: [{name:"Verificaton scoring",id:401,isSuccess:true},
                             {name:"Application scoring",id:402,isSuccess:true}]}
     ];
     

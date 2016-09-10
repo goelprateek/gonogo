@@ -4,24 +4,35 @@
 
 	var app = angular.module('gonogo');
 
-	app.controller('appFormController', ['$scope','$filter','RestService','UserService','AclService','$log','notifier','$state','sharedService','$uibModal','SelectArrays',
-                                function($scope,$filter,RestService,UserService,AclService,$log,notifier,$state,sharedService,$uibModal,SelectArrays){
+	app.controller('appFormController', ['$scope','$filter','RestService','UserService','AclService','$log','notifier','$state','sharedService','$uibModal','SelectArrays','$stateParams',
+                                function($scope,$filter,RestService,UserService,AclService,$log,notifier,$state,sharedService,$uibModal,SelectArrays,$stateParams){
 	var user=UserService.getCurrentUser();
     $scope.can=AclService.can;
+
+    $scope.isUpdating=false; 
 
     if(user.id){
         $scope.$emit('onSuccessfulLogin');
     }
-    
+
+    //console.log("Reference ID : "+$stateParams.id);
+
     if(sharedService.getApplicationData())
 	{
 		$scope.objectSet=sharedService.getApplicationData();
+        //console.log("objectSet");
+        //console.log($scope.objectSet);
 		sharedService.setApplicationData(null);
-	}
+	}else{
+        $state.go("notification");
+        return;
+    }
 
-	 if(sharedService.getApplicationSource())
+    if(sharedService.getApplicationSource())
 	{
 		$scope.source=sharedService.getApplicationSource();
+        //console.log("source");
+        //console.log($scope.source);
 		sharedService.setApplicationData(null);
         if($scope.source != "notification"){
             $scope.losIdval = true;
@@ -31,27 +42,57 @@
             $scope.invoiceNumber = true;
         }
 	}
-//from notification
+
+    //from notification
     $scope.isUpdating = false;
     $scope.addrType = SelectArrays.getAddrType();
     $scope.addr_type = $scope.addrType[1]; 
     $scope.findAddressType = function(orignal,final){
         return (angular.lowercase(orignal) == angular.lowercase(final));
-    }                               
+    }
     $scope.selectResidence = SelectArrays.getResidenceTypes();
 	//from analytics
 	$scope.isImg = true;
 
-	if ($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob != "") {
-        $scope.dob = $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0, 2) + "/" + $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2, 4) + "/" + $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4);
-        var dateOfBirth = new Date();
-        dateOfBirth.setFullYear(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4)));
-        dateOfBirth.setDate(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0, 2)));
-        dateOfBirth.setMonth((parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2, 4)) - 1));
-
-        $scope.app_form = { pickerDob: dateOfBirth };
-
+    if($scope.objectSet.oAppReq.oReq.oApplicant.sDob){
+        $scope.app_form = { 
+                pickerDob : moment($scope.objectSet.oAppReq.oReq.oApplicant.sDob,'DDmmYYYY')._d
+        };
     }
+
+    if($scope.objectSet.oPostIPA && $scope.objectSet.oPostIPA.aAssMdls){
+        $scope.assetData = $scope.objectSet.oPostIPA.aAssMdls;
+    }else{
+        $scope.assetData = $scope.objectSet.oAppReq.oReq.oApplication.aAssetDetail;
+    }
+
+    //Surrogate
+    $scope.surrTypeSelected=null;
+
+    $scope.surrogateType=["Banking","Business","Credit Card","Owned House","Owned Car","Salary House"];
+
+    $scope.surrogate=$scope.objectSet.oAppReq.oReq.oApplicant.oSurrogate
+    if($scope.surrogate){
+        if($scope.surrogate.aCar){
+            $scope.surrTypeSelected="Owned Car";
+        }
+        else if($scope.surrogate.aOwnHouse){
+            $scope.surrTypeSelected="Owned House";
+        }
+        if($scope.surrogate.aSalary){
+            $scope.surrTypeSelected="Salary House";
+        }
+        else if($scope.surrogate.aTrader){
+            $scope.surrTypeSelected="Business";
+        }
+        else if($scope.surrogate.aCreditCard){
+            $scope.surrTypeSelected="Credit Card";
+        }
+        else if($scope.surrogate.aBankAccount){
+            $scope.surrTypeSelected="Banking";
+        }
+    }
+
     //check reason of this variable
     $scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName + "  " + $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName + "  " + $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
 
@@ -74,6 +115,7 @@
 	        return data;
 	    });
 
+        $scope.bankSurrogateImages=[];
 	    $scope.imageDataArray = [];
 	    var evidenceData = [];
 	    var maindata = [];
@@ -100,7 +142,12 @@
 	            if (!_.isUndefined(data) || !_.isNull(data)) {
 	                if (!_.isEmpty(data.sByteCode)) {
 	                    val["sByteCode"] = "data:image/png;base64," + data.sByteCode;
-	                    $scope.imageDataArray.push(val);
+
+                        if($scope.surrogate && val.sImgType==="BANK_STATEMENT"){
+                            $scope.bankSurrogateImages.push(val)
+                        }else{
+                            $scope.imageDataArray.push(val); 
+                        }
 	                }
 	            }
 	        });
@@ -131,10 +178,8 @@
     		sharedService.setApplicationData($scope.objectSet);
     		sharedService.setRefID($scope.objectSet.oAppReq.sRefID);
     		sharedService.setApplicationImages($scope.imageDataArray);
-    		$state.go('/hdbfsnotification');
-
+    		$state.go('notification');
     	}
-       
     }
 
     //reinitiate form
@@ -163,7 +208,8 @@
         maxDate: maxDa, 
         minDate: minDa,
         startingDay: 1
-    };    
+    };
+
     $scope.updateForm=function(){
         console.log("updateForm");
         if($scope.objectSet.iNoReTry >= 2){
@@ -192,7 +238,7 @@
 
                 $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet,$scope.fieldsUpdated);
             }else{
-                 $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet);
+                $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet);
             }
         }
     };
@@ -366,41 +412,244 @@
 
     $scope.showimage = function(obj, isImgFlag, index, editMode) {
 
-                var modalInstance = $uibModal.open({
-                    animation: $scope.animationsEnabled,
-                    templateUrl: 'views/templates/modal.html',
-                    controller: 'supportedDocuments',
-                    size: 'lg',
-                    resolve: {
-                        ImageFeed: function() {
-                            var imageData;
-                            return imageData = {
-                                isImage: isImgFlag,
-                                docData: obj,
-                                index: index,
-                                applicationId: $scope.objectSet.oAppReq.oHeader.sAppID,
-                                applicantId: $scope.objectSet.oAppReq.oReq.oApplicant.sApplID,
-                                institutionId: user.institutionID,
-                                refId: $scope.objectSet.oAppReq.sRefID,
-                                editMode: editMode
-                            }
-                        }
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'views/templates/modal.html',
+            controller: 'supportedDocuments',
+            size: 'lg',
+            resolve: {
+                ImageFeed: function() {
+                    var imageData;
+                    return imageData = {
+                        isImage: isImgFlag,
+                        docData: obj,
+                        index: index,
+                        applicationId: $scope.objectSet.oAppReq.oHeader.sAppID,
+                        applicantId: $scope.objectSet.oAppReq.oReq.oApplicant.sApplID,
+                        institutionId: user.institutionID,
+                        refId: $scope.objectSet.oAppReq.sRefID,
+                        editMode: editMode
+                    }
+                }
+            }
+        });
+
+        modalInstance.result.then(function(selected) {}, function(array) {
+            $log.info($scope.rejectImgFromServer);
+            var filter = _.filter(array, function(arr2obj) {
+                return arr2obj.sStat == "Reject";
+            });
+            $scope.rejectImgFromServer = filter;
+        });
+    };
+    //copied
+    $scope.saveInvoice = function(invoiceNum,invoiceDate){
+          if($scope.objectSet.oAppReq.sRefID!=""){
+            if(invoiceNum && invoiceDate ){
+               //var dobFormatted=$filter('date')(invoiceDate._d,"dd-MM-yyyy HH:mm:ss"),
+               json = {
+                       "oHeader":{
+                       "sInstID":user.institutionID,
+                       "sCroId":user.id,
+                       "sAppSource":"WEB"
+                       },
+                       "sRefID":$scope.objectSet.oAppReq.sRefID,
+                       "oInvDtls":{
+                       "sInvNumber":invoiceNum,
+                       "dtInv":invoiceDate._d.getTime()
+                       }
+                    };
+
+                RestService.saveToServer("update-invoice-details",json).then(function(Response){
+                    if(Response.status == "SUCCESS"){
+                        notifier.logSuccess("Invoice details updated successfully");
+                        $scope.invoiceNumber = true;
+                        $scope.invoiceDate = true;
+                        $scope.isInvoiceAvailable = false;
+                    }else{
+                        notifier.logWarning("We are unable to update Invoice details") ;
                     }
                 });
-
-                modalInstance.result.then(function(selected) {}, function(array) {
-                    $log.info($scope.rejectImgFromServer);
-                    var filter = _.filter(array, function(arr2obj) {
-                        return arr2obj.sStat == "Reject";
-                    });
-                    $scope.rejectImgFromServer = filter;
-                });
             }
-    //copied
+        }else{
+            notifier.logWarning("Please select application from queue !") ;
+        }
+    };
 
-   
+    $scope.loadPDF=function(){        
+        var postIPARequest = {
+            oHeader: {
+                sCroId:"default",
+                dtSubmit:new Date().getTime(),
+                sReqType:null,
+                sAppSource:"WEB",
+                sDsaId:user.username,
+                sAppID:"",
+                sDealerId:null,
+                sSourceID:null,
+                sInstID:user.institutionID
+            },
+            opostIPA:null,
+            sRefID:$scope.currentApplicationFormRefID,
+            dtDateTime:new Date().getTime()
+        };
+
+        RestService.saveToServer('get-post-ipa',JSON.stringify(postIPARequest)).then(function(response){
+            if(response){        
+                postIPARequest.opostIPA=response;
+                
+                RestService.saveToServer("get-pdf-ref",JSON.stringify(postIPARequest)).then(function(response){
+                    if(response){
+                        $scope.shwPDFModal(response,$scope.currentApplicationFormRefID,false);
+                    }else{
+                        notifier.logWarning("We are unable to load DO for this application") ;
+                    }
+                });
+            }else{
+                notifier.logWarning("We are unable to load DO for this application") ;
+            }
+        });
+    };
+
+    $scope.shwPDFModal = function (response,refID,canSubmit) {
+        //alert('modal baseURL'+baseURL);
+        var modalInstance = $uibModal.open({
+            animation: $scope.animationsEnabled,
+            templateUrl: 'views/modal-do-view.html',
+            controller: 'PDFViewerModalCtrl',
+            size: 'lg',
+            resolve: {
+                response:function(){
+                    return response;
+                },
+                refID:function(){
+                    return refID;
+                },
+                canSubmit:function(){
+                    return canSubmit;
+                }
+            }
+        });
+    };
 }]);
 
+app.controller("ReinitiateStatusModalController",["$scope","$uibModalInstance","UserService","RestService","refID","$interval",
+                                          function($scope,$uibModalInstance,UserService,RestService,refID,$interval){
+    var user=UserService.getCurrentUser();
+    
+    //Hard Coded for testing
+//  $scope.showPanStatus=true;
+//  $scope.showCibilStatus=true;
+//  $scope.showAadhaarStatus=true;
+//  $scope.showDedupeStatus=true;
+//  $scope.showAppScoreStatus=true;
+//  $scope.showVeriScoreStatus=true;
+//  $scope.showNegPinStatus=true;
+    //Hard Coded for testing
+    
+    $scope.panVerified=false;
+    $scope.cibilVerified=false;
+    $scope.aadhaarVerified=false;
+    $scope.dedupeVerified=false;
+    $scope.appScoreVerified=false;
+    $scope.verifScoreVerified=false;
+    // $scope.negPinVerified=false;
+    
+    var URL="status";
+    var statusJSON ={
+          "sRefID":refID,
+          "oHeader": {
+            "sCroId": "default",
+            "dtSubmit":new Date().getTime(),
+            "sReqType": "JSON",
+            "sAppSource" : "WEB",
+            "sDsaId":user.username,
+            "sAppID": "",
+            "sSourceID":"",
+            "sInstID":user.institutionID
+          }
+    };
 
+    var statusCheckedCounter=0;
+    $scope.showProgress=true;
+    var statusPoller = $interval(function(){
+        statusCheckedCounter++;
+
+        if(statusCheckedCounter===40){
+            $interval.cancel(statusPoller);
+            $scope.showProgress=false;
+        }
+
+        RestService.saveToServer(URL,JSON.stringify(statusJSON)).then(function(resp){
+            //[{"applicationLog":{},"sRefID":"5788d78b5bc7ec48de2796c2","bStatFlag":false,"iNoReTry":0,"oCompRes":{},"oIntrmStat":{"sRefId":null,"sAppID":null,"sInstID":null,"dtStart":1468681176705,"dtETime":null,"sAppStart":"DEFAULT","sDedupe":"DEFAULT","sEmailStat":"DEFAULT","sOtpStat":"COMPLETE","sAppStat":"DEFAULT","sPanStat":"DEFAULT","sAadharStat":"DEFAULT","sMbStat":"DEFAULT","sVarScoreStat":"DEFAULT","sScoreStat":"DEFAULT","sCblScore":"DEFAULT","sCroStat":"DEFAULT","oPanResult":null,"oCibilResult":null,"oResAddressResult":null,"oOffAddressResult":null,"oScoringResult":null,"oAadharResult":null,"oExperianResult":null,"oEquifaxResult":null,"oCHMResult":null,"oMbResult":null},"bNegPinCodeFlag":false,"aAppScoRslt":[]},{"applicationLog":{},"sRefID":"5788d78b5bc7ec48de2796c3","bStatFlag":false,"iNoReTry":0,"oCompRes":{},"oIntrmStat":{"sRefId":null,"sAppID":null,"sInstID":null,"dtStart":1468681176705,"dtETime":null,"sAppStart":"DEFAULT","sDedupe":"DEFAULT","sEmailStat":"DEFAULT","sOtpStat":"COMPLETE","sAppStat":"DEFAULT","sPanStat":"DEFAULT","sAadharStat":"DEFAULT","sMbStat":"DEFAULT","sVarScoreStat":"DEFAULT","sScoreStat":"DEFAULT","sCblScore":"DEFAULT","sCroStat":"DEFAULT","oPanResult":null,"oCibilResult":null,"oResAddressResult":null,"oOffAddressResult":null,"oScoringResult":null,"oAadharResult":null,"oExperianResult":null,"oEquifaxResult":null,"oCHMResult":null,"oMbResult":null},"bNegPinCodeFlag":false,"aAppScoRslt":[]}]
+            if(resp){
+                if(resp.oIntrmStat){
+                    if(resp.oIntrmStat.sAadharStat == "COMPLETE"){
+                        $scope.showAadhaarStatus=true;
+                        if(resp.oIntrmStat.sAadharStat.sMsg == "EXIST")                
+                        {
+                            $scope.aadhaarVerified=true;
+                        }else{
+                            $scope.aadhaarVerified=false;                 
+                        }
+                    }
+
+                    if(resp.oIntrmStat.sPanStat == "COMPLETE"){
+                        $scope.showPanStatus=true;
+                        if(resp.oIntrmStat.oPanResult.sMsg == "EXIST")                
+                        {
+                            $scope.panVerified=true;
+                        }else{
+                            $scope.panVerified=false;                 
+                        }
+                    }
+
+                    if(resp.oIntrmStat.sCblScore == "COMPLETE"){              
+                        $scope.showCibilStatus=true;
+                        if(resp.oIntrmStat.oCibilResult.sMsg == "SUCCESS")                
+                        {
+                            $scope.cibilVerified=true;
+                        }else{
+                            $scope.cibilVerified=false;
+                        }
+                    }
+                    
+                    if(resp.oIntrmStat.sScoreStat == "COMPLETE"){              
+                        $scope.showAppScoreStatus=true;
+                        if(resp.oIntrmStat.oCibilResult.sMsg == "COMPLETED")                
+                        {
+                            $scope.cibilVerified=true;
+                        }else{
+                            $scope.cibilVerified=false;
+                        }
+                    }
+
+                    if(resp.oIntrmStat.sVarScoreStat == "COMPLETE"){              
+                        $scope.showAppScoreStatus=true;
+                        if(resp.oIntrmStat.oCibilResult.sMsg == "SUCCESS")                
+                        {
+                            $scope.appScoreVerified=true;
+                        }else{
+                            $scope.appScoreVerified=false;
+                        }
+                    }
+                }
+                if(resp.sAppStat){
+                    //DECISION
+                    if(['queue'].indexOf(resp.sAppStat.toLowerCase()) > -1){
+                    }else if(['approved','declined'].indexOf(resp.sAppStat.toLowerCase()) > -1){
+                        $interval.cancel(statusPoller);
+                        $scope.showProgress=false;
+                    }
+                }
+            }
+        });
+    },3000);
+
+    $scope.onProceedClicked=function(){
+        $interval.cancel(statusPoller);
+        $uibModalInstance.dismiss();
+    }
+}]);
 
 }).call(this)

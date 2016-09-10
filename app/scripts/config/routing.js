@@ -12,8 +12,8 @@
 		}).state('/apply', {
 			url : '/apply',
 			templateUrl: 'views/template/hdbfs-cdl/application.html',
-		}).state('/hdbfsnotification', {
-			url : '/hdbfsnotification',
+		}).state('notification', {
+			url : '/notification',
 			templateUrl: 'views/templates/notify.html',
 		}).state('/analytics', {
 			url : '/analytics',
@@ -79,13 +79,13 @@
 			templateUrl: 'views/cdl/post-do.html',
 			controller: 'PostDOCntrolr'
 		}).state('/app-form', {
-			//url:'/form',
-			templateUrl: 'views/templates/app-form.html'
-		/*	controller: 'appFormController'*/
-		}).state('/test', {
-			url:'/test',
-			templateUrl: 'views/test.html',
-			controller: 'TestCntrl'
+			url:'/app-form',
+			templateUrl: 'views/templates/app-form.html',
+			controller: 'appFormController',
+		}).state('notification.appForm', {
+			url:'/appForm/:id',
+			templateUrl: 'views/templates/app-form.html',
+			controller:'appFormController'
 		});
 
 		$urlRouterProvider.otherwise('/');

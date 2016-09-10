@@ -134,7 +134,7 @@
 
 			}else if (role.indexOf("CRO")!=-1) {	
 
-				$(location).attr('href', '#/hdbfsnotification');
+				$(location).attr('href', '#/notification');
 
 			}else{
 				$scope.alert = "Sorry... User has been blocked. Please contact your system Admin !!!";

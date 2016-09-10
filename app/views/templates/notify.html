@@ -106,7 +106,7 @@
 
 							<li><span ng-show="showrefid"
 								style="margin-top: 13px; display: block;"> 
-								<a href="javascript:;" ng-click="newApplication()">{{objectSet.oAppReq.sRefID}}</a></span></li>
+								<a ui-sref="/app-form">{{objectSet.oAppReq.sRefID}}</a></span></li>
 							<li><a id="dsa_chat" ng-if="can('NCHAT')">DSA Chat</a></li>
 							<li ><a id="onhold" title="{{objectSet.oAppReq.sRefID}}"
 								ng-if="can('NHOLD') && isDedupeSelected"  
@@ -179,7 +179,8 @@
 			                </div>
 			                <div class="orders-container">
 				                <ul class="orders-list" slimscroll="{height: 470,railVisible:true}"  when-scrolled="loadData()">
-				                	<li class="order-item" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search"  ng-click='load_details(user.sRefID,true,user.sRqTyp)' ng-class="{'active-queue': user.sRefID == Picked }">
+				                	<!-- <li class="order-item" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search"  ng-click='load_details(user.sRefID,true,user.sRqTyp)' ng-class="{'active-queue': user.sRefID == Picked }"> -->
+				                	<li class="order-item" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" ng-click="load_details(user.sRefID,true,user.sRqTyp)" ng-class="{'active-queue': user.sRefID == Picked }">
 				                		<div class="row" >
 				                			<div class="col-lg-6 col-sm-6 col-md-6 col-xs-6 item-left">
 				                				<div class="item-booker" >
@@ -559,10 +560,12 @@
 	                	<option ng-repeat="count in objectSet.aDeDupe">{{count.sRefID}}</option>
 					</select>
  				</ul>
-				<div class="row clearfix" ng-init="applicant" id="applicant_panel" style=" width: 102%;margin-left: 14px;max-height: 515px;margin-right: -14px;overflow-y:scroll">
-					<div id="application-temp-container"style="padding-top: 10px;width: 98%;">
+ 				<div class="row clearfix" ng-init="applicant" id="applicant_panel" slimscroll="{height: 515,railVisible:true,alwaysVisible:false}" style=" width: 102%;margin-left: 14px;margin-right: -14px;">
+					<div id="application-temp-container" style="padding-top: 10px;width: 98%;">
 		<!-- ***************************  Common Form ***************************using ui-ref -->
-		 				 <div ng-include="'views/templates/app-form.html'" ></div>  
+		 				 <!-- <div ng-include="'views/templates/app-form.html'" ></div>   -->
+
+		 				 <div ui-view ></div>  
 					</div>
 				</div>
 			</div>
