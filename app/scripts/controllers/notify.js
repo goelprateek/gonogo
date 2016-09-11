@@ -679,45 +679,6 @@ $scope.onchange = function(id) {
 
    /* $scope.invoiceDate = false;
     $scope.invoiceNumber = false;*/
-
-    $scope.datefilter =  {            
-         date : {
-             startDate: null,
-             endDate: moment()        
-         },
-         timePickerIncrement: 1,
-         opts: {
-             timePicker: true,
-             singleDatePicker : true,
-             max: moment().format('YYYY-MM-DD'), 
-             opens : "center",
-             applyClass: 'btn-primary',
-             isCustomDate: function(data){
-                 return '';
-             },
-             locale: {
-                 applyLabel: "Apply",
-                 fromLabel: "From",
-                 format: "DD/MM/YYYY h:mm:ss A",
-                 cancelLabel: 'Cancel',
-                 customRangeLabel: 'Custom range',
-                 daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
-                 monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                 firstDay: 1
-             }, 
-             eventHandlers: {
-                 "apply.daterangepicker" : function(ev, picker){
-                     //TODO call service to fetch data based on date range
-                 },
-                 'show.daterangepicker' : function(ev , picker){
-                     $scope.datefilter.date.startDate = undefined;
-                 },
-                 'hide.daterangepicker': function(ev,picker){
-                     //TODO hide picker;
-                 }
-             }   
-         }
-     };
 }]);
 
 app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$uibModalInstance","requestObj","UserService","notifier",

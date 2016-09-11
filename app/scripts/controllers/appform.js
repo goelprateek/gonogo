@@ -16,12 +16,16 @@
     }
 
     //console.log("Reference ID : "+$stateParams.id);
+    
 
     if(sharedService.getApplicationData())
 	{
 		$scope.objectSet=sharedService.getApplicationData();
         //console.log("objectSet");
         //console.log($scope.objectSet);
+
+        $scope.referenceID=$scope.objectSet.sRefID;
+
 		sharedService.setApplicationData(null);
 	}else{
         $state.go("notification");
@@ -49,10 +53,50 @@
     $scope.addr_type = $scope.addrType[1]; 
     $scope.findAddressType = function(orignal,final){
         return (angular.lowercase(orignal) == angular.lowercase(final));
-    }
+    };
+
     $scope.selectResidence = SelectArrays.getResidenceTypes();
 	//from analytics
 	$scope.isImg = true;
+
+    $scope.datefilter =  {            
+        date : {
+            startDate: null,
+            endDate: moment()        
+        },
+        timePickerIncrement: 1,
+        opts: {
+            timePicker: true,
+            singleDatePicker : true,
+            max: moment().format('YYYY-MM-DD'), 
+            opens : "center",
+            applyClass: 'btn-primary',
+            isCustomDate: function(data){
+            return '';
+            },
+            locale: {
+                applyLabel: "Apply",
+                fromLabel: "From",
+                format: "DD/MM/YYYY h:mm:ss A",
+                cancelLabel: 'Cancel',
+                customRangeLabel: 'Custom range',
+                daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr','Sa'],
+                monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                firstDay: 1
+            }, 
+            eventHandlers: {
+                "apply.daterangepicker" : function(ev, picker){
+                    //TODO call service to fetch data based on date range
+                },
+                'show.daterangepicker' : function(ev , picker){
+                    $scope.datefilter.date.startDate = undefined;
+                },
+                'hide.daterangepicker': function(ev,picker){
+                //TODO hide picker;
+                }
+            }
+        }
+    };
 
     $scope.datefilter.date = '';
 
@@ -148,7 +192,7 @@
 	    });
 
 	    _.each(maindata, function(val) {
-	        return RestService.saveToServer('get-image-by-id-base64', { 'sImgID': val.sImgID }).then(function(data) {
+	        return RestService.saveToServer('get-image-by-id-base64', { 'sImgID': val.sImgID,"oHeader":{"sInstID":user.institutionID} }).then(function(data) {
 	            if (!_.isUndefined(data) || !_.isNull(data)) {
 	                if (!_.isEmpty(data.sByteCode)) {
 	                    val["sByteCode"] = "data:image/png;base64," + data.sByteCode;
@@ -246,9 +290,9 @@
 
                 $scope.isUpdating=!$scope.isUpdating;
 
-                $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet,$scope.fieldsUpdated);
+                $scope.showReinitiateModal("lg",$scope.referenceID,$scope.objectSet,$scope.fieldsUpdated);
             }else{
-                $scope.showReinitiateModal("lg",$scope.currentApplicationFormRefID,$scope.objectSet);
+                $scope.showReinitiateModal("lg",$scope.referenceID,$scope.objectSet);
             }
         }
     };
@@ -289,10 +333,10 @@
             }
         });
 
-        modalInstance.result.then(function (isSuccess,refID) {           
-            if(isSuccess){
+        modalInstance.result.then(function (response) {           
+            if(response.isSuccess){
                 $scope.objectSet.iNoReTry=$scope.objectSet.iNoReTry +1;
-                $scope.showReinitiateStatusModal($scope.refID);
+                $scope.showReinitiateStatusModal(response.referenceID);
             }
         });
     };
@@ -460,7 +504,7 @@
                json = {
                        "oHeader":{
                        "sInstID":user.institutionID,
-                       "sCroId":user.id,
+                       "sCroId":user.username,
                        "sAppSource":"WEB"
                        },
                        "sRefID":$scope.objectSet.oAppReq.sRefID,
@@ -500,17 +544,17 @@
                 sInstID:user.institutionID
             },
             opostIPA:null,
-            sRefID:$scope.currentApplicationFormRefID,
+            sRefID:$scope.referenceID,
             dtDateTime:new Date().getTime()
         };
 
         RestService.saveToServer('get-post-ipa',JSON.stringify(postIPARequest)).then(function(response){
             if(response){        
                 postIPARequest.opostIPA=response;
-                
+
                 RestService.saveToServer("get-pdf-ref",JSON.stringify(postIPARequest)).then(function(response){
                     if(response){
-                        $scope.shwPDFModal(response,$scope.currentApplicationFormRefID,false);
+                        $scope.shwPDFModal(response,$scope.referenceID,false);
                     }else{
                         notifier.logWarning("We are unable to load DO for this application") ;
                     }
@@ -546,7 +590,7 @@
 app.controller("ReinitiateStatusModalController",["$scope","$uibModalInstance","UserService","RestService","refID","$interval",
                                           function($scope,$uibModalInstance,UserService,RestService,refID,$interval){
     var user=UserService.getCurrentUser();
-    
+
     //Hard Coded for testing
 //  $scope.showPanStatus=true;
 //  $scope.showCibilStatus=true;
@@ -556,7 +600,7 @@ app.controller("ReinitiateStatusModalController",["$scope","$uibModalInstance","
 //  $scope.showVeriScoreStatus=true;
 //  $scope.showNegPinStatus=true;
     //Hard Coded for testing
-    
+
     $scope.panVerified=false;
     $scope.cibilVerified=false;
     $scope.aadhaarVerified=false;
@@ -564,7 +608,7 @@ app.controller("ReinitiateStatusModalController",["$scope","$uibModalInstance","
     $scope.appScoreVerified=false;
     $scope.verifScoreVerified=false;
     // $scope.negPinVerified=false;
-    
+
     var URL="status";
     var statusJSON ={
           "sRefID":refID,

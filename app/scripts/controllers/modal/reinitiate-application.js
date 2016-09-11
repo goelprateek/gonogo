@@ -1,7 +1,9 @@
 var app=angular.module("gonogo");
 
-app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantData","$uibModalInstance","fieldsUpdated","notifier",
-    function($scope,RestService,refID,applicantData,$uibModalInstance,fieldsUpdated,notifier){
+app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantData","$uibModalInstance","fieldsUpdated","notifier","UserService",
+    function($scope,RestService,refID,applicantData,$uibModalInstance,fieldsUpdated,notifier,UserService){
+
+        var user=UserService.getCurrentUser();
     $scope.refID = refID;
     $scope.applicantData = applicantData;
     $scope.fieldsUpdated=fieldsUpdated;
@@ -193,6 +195,11 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
         // }
         if($scope.fieldsUpdated && ($scope.fieldsUpdated.isNameUpdated || $scope.fieldsUpdated.isResAddressUpdated || $scope.fieldsUpdated.isOffAddressUpdated || $scope.fieldsUpdated.isPerAddressUpdated || $scope.fieldsUpdated.isPanUpdated || $scope.fieldsUpdated.isVoterIDUpdated || $scope.fieldsUpdated.isAadhaarUpdated || $scope.fieldsUpdated.isDobUpdated)){
             var requestJson={
+                oHeader:{
+                    sInstID : user.institutionID,
+                    sCroId : user.username,
+                    sAppSource : "WEB"
+                },
                 oWorkFlowConfig : {
                     sGngRefId : $scope.refID,
                     aModuleConfig : requestReinitiateModules
@@ -213,6 +220,11 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
             });
         }else{
             var requestJson={
+                oHeader:{
+                   "sInstID":user.institutionID,
+                   "sCroId":user.username,
+                   "sAppSource":"WEB"
+                },
                 sGngRefId:$scope.refID,
                 aModuleConfig:requestReinitiateModules
             };
