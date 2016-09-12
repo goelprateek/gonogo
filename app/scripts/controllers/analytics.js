@@ -242,6 +242,8 @@
                     RestService.saveToServer("table-view",json).then(function(data){
                         $scope.datasource = data;
                         $scope.isTableData = !$scope.isTableData;
+                    }).finally(function(){
+                        $scope.ifSeriesClicked = 0;
                     });
                 }
                 sharedService.setAnalyticsServiceName("onSeriesClicked");
