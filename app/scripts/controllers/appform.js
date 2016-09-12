@@ -547,7 +547,7 @@
     $scope.loadPDF=function(){        
         var postIPARequest = {
             oHeader: {
-                sCroId:"default",
+                sCroId:user.username,
                 dtSubmit:new Date().getTime(),
                 sReqType:null,
                 sAppSource:"WEB",
@@ -627,7 +627,7 @@ app.controller("ReinitiateStatusModalController",["$scope","$uibModalInstance","
     var statusJSON ={
           "sRefID":refID,
           "oHeader": {
-            "sCroId": "default",
+            "sCroId": user.username,
             "dtSubmit":new Date().getTime(),
             "sReqType": "JSON",
             "sAppSource" : "WEB",
