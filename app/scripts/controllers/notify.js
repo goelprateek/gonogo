@@ -643,17 +643,6 @@ function requestFordclnOnhold(json){
     });
 }
 
-$scope.losStatusChange=function(status){
-    var utr =  $scope.objectSet.oLosDtls.sUtr;
-     if(status == "LOS_DISB" &&   $scope.applctnstatus.toUpperCase()=="APPROVED"){ 
-            if(utr=='' || utr==null){
-                 $scope.isUtr();
-                $scope.utrVal = false;     
-            }
-        }else{
-             $scope.utrVal = true;
-        }
-}
 
 $scope.onchange = function(id) {
         $scope.backUpDefaultRefId.push($scope.objectSet);

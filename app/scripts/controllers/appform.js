@@ -99,6 +99,14 @@
     };
 
     $scope.datefilter.date = '';
+    $scope.pdfData = '';
+    $scope.foirAmount = '';
+
+    if($scope.objectSet.oLosDtls){
+        $scope.foundLosData = true;
+    }else{
+        $scope.foundLosData = false;
+    }
 
     if($scope.objectSet.oInvDtls && $scope.objectSet.oInvDtls.dtInv && $scope.objectSet.oInvDtls.sInvNumber){
         var Dateformat = moment($scope.objectSet.oInvDtls.dtInv);
@@ -152,16 +160,12 @@
 
     $scope.croDecision = $scope.objectSet.aCroDec;
 
-    try {
+    if($scope.objectSet.oCompRes.multiBureauJsonRespose && $scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED && $scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"]){
         $scope.pdfData = "data:application/pdf;base64," + $scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];
-    } catch (e) {
-        $scope.pdfData = '';
     }
 
-    try {
+    if($scope.objectSet.oCompRes.scoringServiceResponse && $scope.objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE'] && $scope.objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']){
         $scope.foirAmount = $scope.objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT'].toFixed(2);
-    } catch (e) {
-        $scope.foirAmount = '';
     }
 
     if ($scope.objectSet) {
@@ -592,6 +596,20 @@
             notifier.logWarning("Please select application from queue !");
         }
     };
+
+    $scope.losStatusChange=function(status){
+       /* if foundLosData from server remove utr value + utr should be non editable*/
+    var utr =  $scope.objectSet.oLosDtls.sUtr;
+     if(status == "LOS_DISB" &&   $scope.applctnstatus.toUpperCase()=="APPROVED"){ 
+            if(utr=='' || utr==null){
+                 $scope.isUtr();
+                $scope.utrVal = false;     
+            }
+        }else if($scope.foundLosData != true){
+            $scope.utrVal = true;
+            $scope.objectSet.oLosDtls.sUtr = "";
+        }
+    }
 
     $scope.loadPDF=function(){        
         var postIPARequest = {
