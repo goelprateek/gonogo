@@ -75,15 +75,15 @@ select.form-control {
                     </div>
                     <div class="col-md-12" style="height:40px;">&nbsp;&nbsp;&nbsp;&nbsp;</div>
                     <div class="row js-chart">
-                            <div hc-bar-chart data="chartOptions" loaded="isChartLoaded" on-chart-click="onSeriesClicked(message,'')" style="height:100%;width:100%;margin-bottom: 40px;"></div>
+                        <div hc-bar-chart data="chartOptions" loaded="isChartLoaded" on-chart-click="onSeriesClicked(message,'')" style="height:100%;width:100%;margin-bottom: 40px;"></div>
                         <!-- <div class="col-md-12" ng-if="isChartLoaded" style="text-align: center;margin:0 auto">
                             <div class="loader">Loading...</div>
                             <span>Loading...</span>
                         </div> -->
                     </div>
                 </div>
-                <div class="col-md-12 " data-ng-if="!isTableData && !appView" style="padding: 0px;">
-                    <div class="col-md-12 pull-left" fix-to-top="fix-to-top" padding-when-at-top="50">
+                <div class="col-md-12" data-ng-if="!isTableData && !appView" style="padding: 0px;">
+                    <div class="col-md-12 pull-left" fix-to-top="fix-to-top" padding-when-at-top="10">
                         <div class="col-md-3 ">
                             <select id="dashboardType" class="form-control" ng-model="type" ng-init="type='application'">
                                 <option ng-selected="true" value="application">Application Logs</option>

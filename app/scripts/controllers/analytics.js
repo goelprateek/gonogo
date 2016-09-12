@@ -102,8 +102,6 @@
                             });
 
                             //return $scope.drawTablularData(filteredData);
-
-
                         },
                         'show.daterangepicker': function(ev, picker) {
                             $scope.datefilter.date.startDate = undefined;
@@ -175,41 +173,39 @@
                 }
             }
 
-
             var startGraph = function(){
                 $scope.chartObj;
                 var json = {
-                                "oHeader": {
-                                    "sAppID":null,
-                                    "sInstID": user.institutionID,
-                                    "sSourceID": "WEB",
-                                    "sAppSource": "GNG_WEB",
-                                    "sReqType": "JSON",
-                                    "dtSubmit":"",
-                                    "sDsaId":null,
-                                    "sCroId":user.username,
-                                    "sDealerId":null
-                                },
-                                'sInstID': user.institutionID, 
-                                'oCriteria': { 
-                                    "oHierarchy": user.hierarchy,
-                                    "aProducts": user.getProductNames() 
-                                } 
-                            };
+                    "oHeader": {
+                        "sAppID":null,
+                        "sInstID": user.institutionID,
+                        "sSourceID": "WEB",
+                        "sAppSource": "GNG_WEB",
+                        "sReqType": "JSON",
+                        "dtSubmit":"",
+                        "sDsaId":null,
+                        "sCroId":user.username,
+                        "sDealerId":null
+                    },
+                    'sInstID': user.institutionID,
+                    'oCriteria': {
+                        "oHierarchy": user.hierarchy,
+                        "aProducts": user.getProductNames()
+                    }
+                };
 
                 RestService.saveToServer("stack-graph", json).then(function(data) {
                     $scope.chartOptions = data;
                 });    
-            }
+            };
 
-            
             startGraph();
             startGraphTimer();
-            
+
             $scope.ifSeriesClicked = 0;
             $scope.prev$value ;
             $scope.onSeriesClicked = function($value,$pageno){
-               
+
                $scope.prev$value = $value || $scope.prev$value;
 
                $scope.ifSeriesClicked = 1;
@@ -217,30 +213,31 @@
                     $scope.datasource = []; 
                     if($scope.prev$value){
                         var json = {
-                                "oHeader": {
-                                    "sAppID":null,
-                                    "sInstID": user.institutionID,
-                                    "sSourceID": "WEB",
-                                    "sAppSource": "GNG_WEB",
-                                    "sReqType": "JSON",
-                                    "dtSubmit":"",
-                                    "sDsaId":null,
-                                    "sCroId":user.username,
-                                    "sDealerId":null
-                                },
-                                "dtFrmDate":$scope.prev$value.category,
-                                "sStat":$scope.prev$value.series.name,
-                                'sInstID':user.institutionID,
-                                'iSkip': ($scope.itemPerPage * (($pageno || 1) -1)),
-                                'iLimit': $scope.itemPerPage,
-                                'oCriteria': { 
-                                        "oHierarchy":user.hierarchy,
-                                        "aProducts":user.getProductNames()
-                                }
-                            };    
+                            "oHeader": {
+                                "sAppID":null,
+                                "sInstID": user.institutionID,
+                                "sSourceID": "WEB",
+                                "sAppSource": "GNG_WEB",
+                                "sReqType": "JSON",
+                                "dtSubmit":"",
+                                "sDsaId":null,
+                                "sCroId":user.username,
+                                "sDealerId":null
+                            },
+                            "dtFrmDate":$scope.prev$value.category,
+                            "sStat":$scope.prev$value.series.name,
+                            'sInstID':user.institutionID,
+                            'iSkip': ($scope.itemPerPage * (($pageno || 1) -1)),
+                            'iLimit': $scope.itemPerPage,
+                            'oCriteria': { 
+                                "oHierarchy":user.hierarchy,
+                                "aProducts":user.getProductNames()
+                            }
+                        };
                     }
-                    RestService.saveToServer("table-view",json).then(function(data){
-                        $scope.datasource = data;
+                    RestService.saveToServer("table-view-new",json).then(function(data){
+                        $scope.datasource = data.stackTable;
+                        $scope.total_count = data.totalCount;
                         $scope.isTableData = !$scope.isTableData;
                     }).finally(function(){
                         $scope.ifSeriesClicked = 0;
@@ -248,8 +245,7 @@
                 }
                 sharedService.setAnalyticsServiceName("onSeriesClicked");
                 sharedService.setAnalyticsServiceParm($value);
-            }
-
+            };
 
             $scope.total_count = 10000;
             $scope.datasource = [];
@@ -263,7 +259,6 @@
                 $scope.isLoadingAnalyticsData = 1;
                 $scope.datasource = [];
                 var json = {
-
                     "oHeader": {
                         "sAppID":null,
                         "sInstID": user.institutionID,
@@ -286,10 +281,9 @@
                     }
                 };
 
-
                 RestService.saveToServer('table-view-new',json).then(function(response){
                     $scope.datasource = response.stackTable;
-                    $scope.total_count = response.totalCount;       
+                    $scope.total_count = response.totalCount;
                 }).finally(function(){
                     $scope.isLoadingAnalyticsData = 0;
                 });

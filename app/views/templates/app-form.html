@@ -3,26 +3,14 @@
     display: inline
 }
 
-.errorMsg {
-    color: #b94a48;
-}
 
-.img-do {
-    width: 50px;
-}
-
-.form-padding {
-    padding: 1% 7% 0% 7%;
-}
+	.form-padding {
+		padding:1% 7% 0% 7%;
+	}
 </style>
-<form id="msform" name="ApplicantForm" ng-class="{'form-padding': (can('NCONTAINER') || (!can('NCONTAINER') && source!='notification'))}" novalidate>
-    <div class="row clearfix">
-        <!-- <div class="col-md-8 text-left">
-			<div class="alert alert-danger" id="erro-pmsg"
-				style="float: none; text-align: left; margin: 0px">
-				<strong>Error ! &nbsp;&nbsp;&nbsp;</strong><span id="error"></span>
-			</div>
-		</div> -->
+<!-- can('NCONTAINER') is true for CRO1  -->
+<form id="msform" name="ApplicantForm" ng-class="{'form-padding': (!(!can('NCONTAINER') && source=='notification'))}" novalidate>
+	<div class="row clearfix" >
         <div class="col-md-4 text-right pull-right" id="top-fixed">
             <a class="btn btn-primary btn-sm" ng-show="source=='notification' && (can('NRPRCS') && !isUpdating)" ng-click="enableForm();">
                 <span class="fa fa-pencil-square-o"></span> Update
@@ -33,224 +21,253 @@
             <a class="btn btn-primary btn-sm" ng-click="toggleForm(source)" ng-show="(can('NRPRCS')) || (!can('NRPRCS') && source!='notification')">
                 <span class="fa fa-reply"></span> Back
             </a>
-        </div>
-    </div>
-    <!-- ng-if="!authenticate('NCONTAINER')"  ng-if="objectSet.oLosDtls"-->
-    <fieldset class="formfield" ng-if="!can('NCONTAINER')">
-        <legend> LOS Information</legend>
-        <div class="row clearfix">
-            <div class="col-md-3">
-                <label class="control-label">LOS ID</label>
-                <input class="form-control" ng-model="objectSet.oLosDtls.sLosID" type="text" maxlength="10" ng-disabled="losIdval" replace>
-            </div>
-            <div class="col-md-3">
-                <label class="control-label">UTR#</label>
-                <input class="form-control" ng-model="objectSet.oLosDtls.sUtr" ng-disabled="utrVal" type="text" maxlength="25" replace>
-            </div>
-            <div class="col-md-3">
-                <label class="control-label">LOS Status</label>
-                <select class="form-control" ng-disabled="editLosStat" ng-model="objectSet.oLosDtls.sStat" data-ng-change="losStatusChange(objectSet.oLosDtls.sStat)">
-                    <option value="">Please Select LOS Status</option>
-                    <option value="LOS_QDE">LOS_QDE</option>
-                    <option value="LOS_APRV">LOS_APRV</option>
-                    <option value="LOS_DCLN">LOS_DCLN</option>
-                    <option value="LOS_DISB">LOS_DISB</option>
-                    <option value="DO">DO</option>
-                </select>
-            </div>
-        </div>
-        <!-- 	Sayali- used template variable , have to remove further when this template structure is modularised, which is defined in notify.js-->
-        <div class="row clearfix" ng-if="template == 'notification'">
-            <div class="col-md-3" style="float: right;">
-                <a class="add-button-div-notification" ng-click="updateLosData(objectSet.oLosDtls.sStat)" style="float: right;margin-top: 7px;margin-bottom: -4px; width: 35%;">Update</a>
-            </div>
-        </div>
-    </fieldset>
-    <fieldset class="formfield" ng-if="!can('NCONTAINER')">
-        <legend> Invoice Information</legend>
-        <div class="row clearfix">
-            <div class="col-md-3">
-                <label class="control-label">Invoice Number</label>
-                <input class="form-control" ng-model="objectSet.oInvDtls.sInvNumber" id="invoiceNumId" type="text" ng-disabled="invoiceNumber" name="invoiceNo" ng-pattern="/^[a-zA-Z\d]+$/" required replace>
-                <div ng-messages="ApplicantForm.invoiceNo.$error && isInvoiceAvailable" class="errorMsg">
-                    <div ng-message="required">Enter Invoice Number</div>
-                    <div ng-message="pattern">Enter valid Number</div>
-                </div>
-            </div>
-            <div class="dob col-md-3">
-                <label class="control-label">Invoice Date</label>
-                <input date-range-picker id="daterange" name="daterange" class="form-control date-picker" type="text" ng-model="datefilter.date" options="datefilter.opts" placeholder="Pick Date" max="datefilter.opts.max" clearable="true" ng-disabled="invoiceDate" required/>
-                <div ng-messages="ApplicantForm.daterange.$error" class="errorMsg">
-                    <div ng-message="required">Enter Invoice Date</div>
-                </div>
-            </div>
-            <a ng-if="objectSet.oAppReq.sCurrentStageId=='PD_DE' && applctnstatus.toLowerCase()==='approved'" ng-click="loadPDF()">
-                <img title="View DO" src="images/do-view.png" class="img-do" />
-            </a>
-        </div>
-        <!-- 	Sayali- used template variable , have to remove further when this template structure is modularised, which is defined in notify.js-->
-        <div class="row clearfix" ng-if="template == 'notification' && isInvoiceAvailable">
-            <div class="col-md-3" style="float: right;">
-                <a class="add-button-div-notification" ng-click="saveInvoice(objectSet.oInvDtls.sInvNumber,datefilter.date)" style="float: right;margin-top: 7px;margin-bottom: -4px; width: 35%;">Save</a>
-            </div>
-        </div>
-    </fieldset>
-    <fieldset class="formfield" style="display: block;" ng-if="objectSet.aCroJustification!='' && objectSet.aCroJustification!=undefined ">
-        <legend>CRO Justification</legend>
-        <div class="row clearfix">
-            <div ng-repeat="data in objectSet.aCroJustification">
-                <div class="col-md-3" ng-if="data.sRemark!='' && data.sRemark!=null">
-                    <label class="control-label">CRO Name</label>
-                    <textarea class="form-control" rows="1" readonly>{{data.sCroID}}</textarea>
-                </div>
-                <div class="col-md-3" ng-if="data.sRemark!='' && data.sRemark!=null">
-                    <label class="control-label">Remark</label>
-                    <textarea class="form-control" rows="1" readonly>{{data.sRemark}}</textarea>
-                </div>
-                <div class="col-md-3" ng-if="data.sRemark!='' && data.sRemark!=null ">
-                    <label class="control-label">Subject To</label>
-                    <textarea class="form-control" rows="1" readonly>{{data.sSubTo}}</textarea>
-                </div>
-            </div>
-        </div>
-    </fieldset>
-    <fieldset class="formfield" style="display: block;">
-        <legend>Personal Information</legend>
-        <div class="row clearfix">
-            <div class="col-md-3" ng-class="{'has-error': ApplicantForm.applicant_fname.$touched && ApplicantForm.applicant_fname.$invalid}">
-                <label class="control-label">First Name</label>
-                <input class="form-control" ng-model="objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName" type="text" change-on-blur="onValueChanged('name')" name="applicant_fname" ng-disabled="!isUpdating" ng-pattern="/^[a-zA-Z\s]+$/" required initcap>
-                <div ng-messages="ApplicantForm.applicant_fname.$touched && ApplicantForm.applicant_fname.$error" class="errorMsg">
-                    <p ng-message="pattern">Please enter valid first name</p>
-                    <p ng-message="required">Please enter first name</p>
-                </div>
-            </div>
-            <div class="col-md-3" ng-class="{'has-error': ApplicantForm.applicant_mname.$touched && ApplicantForm.applicant_mname.$invalid}">
-                <label class="control-label">Middle Name</label>
-                <input class="form-control" ng-model="objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName" type="text" change-on-blur="onValueChanged('name')" name="applicant_mname" ng-disabled="!isUpdating" ng-pattern="/^[a-zA-Z\s]+$/" initcap>
-                <div ng-messages="ApplicantForm.applicant_mname.$touched && ApplicantForm.applicant_mname.$error" class="errorMsg">
-                    <p ng-message="pattern">Please enter valid middle name</p>
-                    <p ng-message="required">Please enter middle name</p>
-                </div>
-            </div>
-            <div class="col-md-3" ng-class="{'has-error': ApplicantForm.applicant_lname.$touched && ApplicantForm.applicant_lname.$invalid}">
-                <label class="control-label">Last Name</label>
-                <input class="form-control" ng-model="objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName" type="text" change-on-blur="onValueChanged('name')" name="applicant_lname" ng-disabled="!isUpdating" ng-pattern="/^[a-zA-Z\s]+$/" required initcap>
-                <div ng-messages="ApplicantForm.applicant_lname.$touched && ApplicantForm.applicant_lname.$error" class="errorMsg">
-                    <p ng-message="pattern">Please enter valid last name</p>
-                    <p ng-message="required">Please enter last name</p>
-                </div>
-            </div>
-            <div class="dob col-md-3">
-                <label class="control-label">Date of Birth</label>
-                <input class="form-control" ng-model="app_form.pickerDob" type="text" name="dob" ng-click="openDOBDialog()" ng-focus="openDOBDialog()" ng-disabled="!isUpdating" uib-datepicker-popup="{{dobFormat}}" is-open="dobPopup.opened" datepicker-options="dateOptions" close-text="Close" ng-pattern="/^[0-9]{2}/[0-9]{2}/[0-9]{4}/i" required />
-                <div ng-messages="ApplicantForm.dob.$touched && ApplicantForm.dob.$error" class="errorMsg">
-                    <p ng-message="pattern">Please select valid date of birth</p>
-                    <p ng-message="required">Please select date of birth</p>
-                </div>
-            </div>
-        </div>
-        <div class="row clearfix">
-            <div class="col-md-3">
-                <label class="control-label">Gender</label>
-                <input type="radio" name="Gender" checked="checked" value="Male" ng-model="objectSet.oAppReq.oReq.oApplicant.sApplGndr" disabled="disabled" /> Male &nbsp;
-                <input type="radio" name="Gender" value="Female" ng-model="objectSet.oAppReq.oReq.oApplicant.sApplGndr" disabled="disabled" /> Female
-            </div>
-            <div class="col-md-3">
-                <label class="control-label">Marital Status</label>
-                <input type="radio" name="mstatus" checked="checked" value="Married" ng-model="objectSet.oAppReq.oReq.oApplicant.sMarStat" disabled="disabled" /> Married &nbsp;
-                <input type="radio" value="Single" ng-model="objectSet.oAppReq.oReq.oApplicant.sMarStat" disabled="disabled" /> Single
-            </div>
-            <div class="col-md-3">
-                <label class="control-label">Credit Card No</label>
-                <input class="form-control" ng-model="objectSet.oAppReq.oReq.oApplicant.sCreditCardNum" type="text" maxlength="6" disabled="disabled">
-            </div>
-            <div class="col-md-3">
-                <label class="control-label">Tenor Applied</label>
-                <input class="form-control" ng-model="objectSet.oAppReq.oReq.oApplication.iLoanTenor" type="text" maxlength="6" disabled="disabled">
-            </div>
-        </div>
-        <div class="row clearfix">
-            <div class="col-md-3">
-                <label class="control-label">Constitution</label>
-                <input class="form-control" type="text" ng-model="objectSet.oAppReq.oReq.oApplicant.aEmpl[0].sConst" disabled="disabled">
-            </div>
-            <div class="col-md-3">
-                <label class="control-label">Education</label>
-                <input class="form-control" type="text" ng-model="objectSet.oAppReq.oReq.oApplicant.sEdu" disabled="disabled">
-            </div>
-            <div class="col-md-3">
-                <label class="control-label">Age</label>
-                <input class="form-control" type="text" ng-model="objectSet.oAppReq.oReq.oApplicant.iAge" disabled="disabled">
-            </div>
-            <div class="col-md-3">
-                <label class="control-label">Refer To Credit</label>
-                <input class="form-control" type="text" ng-model="objectSet.oAppReq.oReq.sSuspAct" disabled="disabled">
-            </div>
-        </div>
-        <div class="row clearfix">
-            <div class="col-md-3">
-                <label class="control-label">DSA Name</label>
-                <input class="form-control" type="text" ng-model="objectSet.oAppReq.oHeader.sDsaId.split('@')[0]" disabled="disabled">
-            </div>
-        </div>
-    </fieldset>
-    <fieldset class="formfield" style="display: block;">
-        <legend>Email Information</legend>
-        <div class="row clearfix">
-            <div class="col-md-3" ng-repeat="id in objectSet.oAppReq.oReq.oApplicant.aEmail">
-                <label class="control-label">{{id.sEmailType.charAt(0).toUpperCase()+id.sEmailType.slice(1).toLowerCase()}} Email</label>
-                <input class="form-control" ng-model="id.sEmailAddr" type="text" disabled="disabled">
-            </div>
-        </div>
-    </fieldset>
-    <fieldset class="formfield" style="display: block;">
-        <legend>Contact Information</legend>
-        <div class="row clearfix">
-            <div ng-repeat="phone in objectSet.oAppReq.oReq.oApplicant.aPhone">
-                <div class="col-md-3" ng-if="phone.sPhoneType=='PERSONAL_MOBILE'">
-                    <label class="control-label">Personal Mobile</label>
-                    <input ng-if="phone.sAreaCode" class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
-                    <input ng-if="!phone.sAreaCode" class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
-                </div>
-                <div class="col-md-3" ng-if="phone.sPhoneType=='PERSONAL_PHONE'">
-                    <label class="control-label">Personal Phone</label>
-                    <input ng-if="phone.sAreaCode" class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
-                    <input ng-if="!phone.sAreaCode" class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
-                </div>
-                <div class="col-md-3" ng-if="phone.sPhoneType=='RESIDENCE_MOBILE'">
-                    <label class="control-label">Residence Mobile</label>
-                    <input ng-if="phone.sAreaCode" class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
-                    <input ng-if="!phone.sAreaCode" class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
-                </div>
-                <div class="col-md-3" ng-if="phone.sPhoneType=='RESIDENCE_PHONE'">
-                    <label class="control-label">Residence Phone</label>
-                    <input ng-if="phone.sAreaCode" class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
-                    <input ng-if="!phone.sAreaCode" class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
-                </div>
-                <div class="col-md-3" ng-if="phone.sPhoneType=='OFFICE_PHONE'">
-                    <label class="control-label">Office Phone</label>
-                    <input ng-if="phone.sAreaCode" class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
-                    <input ng-if="!phone.sAreaCode" class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
-                </div>
-                <div class="col-md-3" ng-if="phone.sPhoneType=='OFFICE_MOBILE'">
-                    <label class="control-label">Office Mobile</label>
-                    <input ng-if="phone.sAreaCode" class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
-                    <input ng-if="!phone.sAreaCode" class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
-                </div>
-            </div>
-        </div>
-    </fieldset>
-    <fieldset class="formfield" style="display: block;">
-        <legend>Address Details</legend>
-        <div class="row clearfix">
-            <div class="col-md-3 column">
-                <label class="control-label">Address Type</label>
-            </div>
-            <div class="col-md-3 column">
-                <!-- 	<select class="form-control" name="Employment Type"
-					ng-model="addr_type"
-					ng-options="addr.name for addr in addrType track by addr.name"></select> -->
+		</div>
+	</div>
+	<!-- ng-if="!authenticate('NCONTAINER')"  ng-if="objectSet.oLosDtls"-->
+	<fieldset class="formfield" ng-if="!can('NCONTAINER')">
+	<legend> LOS Information</legend>
+
+	<div class="row clearfix">
+		<div class="col-md-3">
+			<label class="control-label">LOS ID</label> <input
+				class="form-control" ng-model="objectSet.oLosDtls.sLosID" type="text" maxlength="10" ng-disabled="losIdval"  replace>
+		</div>
+		<div class="col-md-3">
+			<label class="control-label">UTR#</label> <input class="form-control"
+				ng-model="objectSet.oLosDtls.sUtr" ng-disabled="utrVal" type="text" maxlength="25" replace>
+		</div>
+		<div class="col-md-3">
+			<label class="control-label">LOS Status</label> 		
+				<select class="form-control" ng-disabled="editLosStat" ng-model="objectSet.oLosDtls.sStat" data-ng-change="losStatusChange(objectSet.oLosDtls.sStat)" >
+					<option value="">Please Select LOS Status</option>
+					<option value="LOS_QDE">LOS_QDE</option>
+					<option value="LOS_APRV">LOS_APRV</option>
+					<option value="LOS_DCLN">LOS_DCLN</option>
+					<option value="LOS_DISB">LOS_DISB</option>
+					<option value="DO">DO</option>
+				</select>
+		</div>
+	</div>
+<!-- 	Sayali- used template variable , have to remove further when this template structure is modularised, which is defined in notify.js--> 
+	<div class="row clearfix" ng-if="template == 'notification'">
+		<div class="col-md-3" style="float: right;">
+			<a class="add-button-div-notification" ng-click="updateLosData(objectSet.oLosDtls.sStat)"
+			style="float: right;margin-top: 7px;margin-bottom: -4px; width: 35%;">Update</a>
+		</div>
+	</div>
+</fieldset>
+<fieldset class="formfield" ng-if="!can('NCONTAINER')">
+	<legend> Invoice Information</legend>
+	<div class="row clearfix">
+		<div class="col-md-3">
+			<label class="control-label">Invoice Number</label> <input
+				class="form-control" ng-model="objectSet.oInvDtls.sInvNumber" id="invoiceNumId" type="text" ng-disabled="invoiceNumber" name="invoiceNo" replace>
+				<!--ng-pattern="/^[a-zA-Z\d]+$/" required <div ng-messages="ApplicantForm.invoiceNo.$error && isInvoiceAvailable" class="errorMsg">
+   					<div ng-message="required">Enter Invoice Number</div>
+   					<div ng-message="pattern">Enter valid Number</div>
+				</div> -->
+		</div>
+		<div class="dob col-md-3">
+			<label class="control-label">Invoice Date</label> 			
+			<input date-range-picker  id="daterange"  name="daterange" class="form-control date-picker" 
+			type="text" ng-model="datefilter.date" options="datefilter.opts"  placeholder="Pick Date" 
+			 max="datefilter.opts.max" clearable="true" ng-disabled="invoiceDate" />
+			<!--required  <div ng-messages="ApplicantForm.daterange.$error" class="errorMsg">
+   					<div ng-message="required">Enter Invoice Date</div>
+				</div> -->
+		</div>
+		<a ng-if="objectSet.oAppReq.sCurrentStageId=='PD_DE' && applctnstatus.toLowerCase()==='approved'" ng-click="loadPDF()">
+			<img title="View DO" src="images/do-view.png" class="img-do"/>
+		</a>
+	</div>
+	<!-- 	Sayali- used template variable , have to remove further when this template structure is modularised, which is defined in notify.js--> 
+	<div class="row clearfix" ng-if="template == 'notification' && isInvoiceAvailable">
+		<div class="col-md-3" style="float: right;">
+			<a class="add-button-div-notification" ng-click="saveInvoice(objectSet.oInvDtls.sInvNumber,datefilter.date)"
+			style="float: right;margin-top: 7px;margin-bottom: -4px; width: 35%;">Save</a>
+		</div>
+	</div>
+</fieldset>
+<fieldset class="formfield" style="display: block;" ng-if="objectSet.aCroJustification!='' && objectSet.aCroJustification!=undefined ">
+	<legend>CRO Justification</legend>
+	<div class="row clearfix">
+		<div ng-repeat="data in objectSet.aCroJustification">
+			<div class="col-md-3" ng-if="data.sRemark!='' && data.sRemark!=null">
+				<label class="control-label">CRO Name</label>
+				<textarea class="form-control" rows="1" readonly>{{data.sCroID}}</textarea>
+			</div>
+			<div class="col-md-3" ng-if="data.sRemark!='' && data.sRemark!=null">
+				<label class="control-label">Remark</label>
+				<textarea class="form-control" rows="1" readonly>{{data.sRemark}}</textarea>
+			</div>
+			<div class="col-md-3" ng-if="data.sRemark!='' && data.sRemark!=null ">
+				<label class="control-label">Subject To</label>
+				<textarea class="form-control" rows="1" readonly>{{data.sSubTo}}</textarea>
+			</div>
+		</div>	
+	</div>
+</fieldset>
+<fieldset class="formfield" style="display: block;">
+		<legend>Personal Information</legend>
+		<div class="row clearfix">
+			<div class="col-md-3" ng-class="{'has-error': ApplicantForm.applicant_fname.$touched && ApplicantForm.applicant_fname.$invalid}">
+				<label class="control-label">First Name</label>
+				<input
+					class="form-control" ng-model="objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName" type="text" change-on-blur="onValueChanged('name')"
+					name="applicant_fname" ng-disabled="!isUpdating" ng-pattern="/^[a-zA-Z\s]+$/" required initcap>
+				<div ng-messages="ApplicantForm.applicant_fname.$touched && ApplicantForm.applicant_fname.$error" class="errorMsg">
+   					<p ng-message="pattern">Please enter valid first name</p>
+   					<p ng-message="required">Please enter first name</p>
+				</div>
+			</div>
+			<div class="col-md-3" ng-class="{'has-error': ApplicantForm.applicant_mname.$touched && ApplicantForm.applicant_mname.$invalid}">
+				<label class="control-label">Middle Name</label>
+				<input
+					class="form-control" ng-model="objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName" type="text" change-on-blur="onValueChanged('name')"
+					name="applicant_mname" ng-disabled="!isUpdating" ng-pattern="/^[a-zA-Z\s]+$/" initcap>
+				<div ng-messages="ApplicantForm.applicant_mname.$touched && ApplicantForm.applicant_mname.$error" class="errorMsg">
+   					<p ng-message="pattern">Please enter valid middle name</p>
+   					<p ng-message="required">Please enter middle name</p>
+				</div>
+			</div>
+			<div class="col-md-3" ng-class="{'has-error': ApplicantForm.applicant_lname.$touched && ApplicantForm.applicant_lname.$invalid}">
+				<label class="control-label">Last Name</label>
+				<input
+					class="form-control" ng-model="objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName" type="text" change-on-blur="onValueChanged('name')"
+					name="applicant_lname" ng-disabled="!isUpdating" ng-pattern="/^[a-zA-Z\s]+$/" required initcap>
+				<div ng-messages="ApplicantForm.applicant_lname.$touched && ApplicantForm.applicant_lname.$error" class="errorMsg">
+   					<p ng-message="pattern">Please enter valid last name</p>
+   					<p ng-message="required">Please enter last name</p>
+				</div>
+			</div>
+			<div class="dob col-md-3">
+				<label class="control-label">Date of Birth</label>
+				<input class="form-control" ng-model="app_form.pickerDob" type="text" name="dob" ng-click="openDOBDialog()" ng-focus="openDOBDialog()" ng-disabled="!isUpdating" uib-datepicker-popup="{{dobFormat}}" is-open="dobPopup.opened" datepicker-options="dateOptions" close-text="Close" ng-pattern="/^[0-9]{2}/[0-9]{2}/[0-9]{4}/i" required />
+				<div ng-messages="ApplicantForm.dob.$touched && ApplicantForm.dob.$error" class="errorMsg">
+				    <p ng-message="pattern">Please select valid date of birth</p>
+				    <p ng-message="required">Please select date of birth</p>
+				</div>
+			</div>				
+		</div>
+		<div class="row clearfix">
+			<div class="col-md-3">
+				<label class="control-label">Gender</label> <input
+					type="radio" name="Gender" checked="checked" value="Male"
+					ng-model="objectSet.oAppReq.oReq.oApplicant.sApplGndr" disabled="disabled" /> Male &nbsp; <input type="radio"
+					name="Gender" value="Female" ng-model="objectSet.oAppReq.oReq.oApplicant.sApplGndr" disabled="disabled" /> Female
+			</div>
+			<div class="col-md-3">
+				<label class="control-label">Marital Status</label><input
+					type="radio" name="mstatus" checked="checked" value="Married"
+					ng-model="objectSet.oAppReq.oReq.oApplicant.sMarStat" disabled="disabled" /> Married &nbsp; <input type="radio"
+					 value="Single" ng-model="objectSet.oAppReq.oReq.oApplicant.sMarStat" disabled="disabled" /> Single
+			</div>
+			<div class="col-md-3">
+				<label class="control-label">Credit Card No</label><input
+					class="form-control" ng-model="objectSet.oAppReq.oReq.oApplicant.sCreditCardNum" type="text" 
+					maxlength="6" disabled="disabled">
+			</div>
+			<div class="col-md-3">
+				<label class="control-label">Tenor Applied</label><input
+					class="form-control" ng-model="objectSet.oAppReq.oReq.oApplication.iLoanTenor" type="text" 
+					maxlength="6"  disabled="disabled">
+			</div>
+		</div>
+		<div class="row clearfix">
+			<div class="col-md-3">
+				<label class="control-label">Constitution</label><input
+					class="form-control" type="text"  ng-model="objectSet.oAppReq.oReq.oApplicant.aEmpl[0].sConst"
+					 disabled="disabled">
+			</div>
+			<div class="col-md-3">
+					<label class="control-label">Education</label><input
+						class="form-control" type="text" ng-model="objectSet.oAppReq.oReq.oApplicant.sEdu"
+						 disabled="disabled">
+				</div>
+			<div class="col-md-3">
+					<label class="control-label">Age</label><input
+						class="form-control" type="text" ng-model="objectSet.oAppReq.oReq.oApplicant.iAge"
+						 disabled="disabled">
+			</div>
+			<div class="col-md-3">
+				<label class="control-label">Refer To Credit</label><input
+					class="form-control" type="text" ng-model="objectSet.oAppReq.oReq.sSuspAct"
+					disabled="disabled">
+			</div>
+		</div>
+		<div class="row clearfix">
+			<div class="col-md-3">
+				<label class="control-label">DSA Name</label><input
+					class="form-control" type="text" ng-model="objectSet.oAppReq.oHeader.sDsaId.split('@')[0]"
+					disabled="disabled">
+			</div>
+		</div>
+	</fieldset>
+	<fieldset class="formfield" style="display: block;">
+		<legend>Email Information</legend>
+		<div class="row clearfix">
+			<div class="col-md-3" ng-repeat="id in objectSet.oAppReq.oReq.oApplicant.aEmail">
+				<label class="control-label">{{id.sEmailType.charAt(0).toUpperCase()+id.sEmailType.slice(1).toLowerCase()}} Email</label> <input
+					class="form-control" ng-model="id.sEmailAddr" type="text" disabled="disabled">
+			</div>
+		</div>
+	</fieldset>
+	<fieldset class="formfield" style="display: block;">
+		<legend>Contact Information</legend>
+		<div class="row clearfix">
+		<div  ng-repeat="phone in objectSet.oAppReq.oReq.oApplicant.aPhone">
+			<div class="col-md-3" ng-if="phone.sPhoneType=='PERSONAL_MOBILE'">
+				<label class="control-label">Personal Mobile</label><input  ng-if="phone.sAreaCode"
+					class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+					<input ng-if="!phone.sAreaCode"
+					class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+				
+			</div>
+			<div class="col-md-3" ng-if="phone.sPhoneType=='PERSONAL_PHONE'">
+				<label class="control-label">Personal Phone</label><input  ng-if="phone.sAreaCode"
+					class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+					<input ng-if="!phone.sAreaCode"
+					class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+				
+			</div>
+			<div class="col-md-3" ng-if="phone.sPhoneType=='RESIDENCE_MOBILE'">
+				<label class="control-label">Residence Mobile</label><input  ng-if="phone.sAreaCode"
+					class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+					<input ng-if="!phone.sAreaCode"
+					class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+				
+			</div>
+			<div class="col-md-3" ng-if="phone.sPhoneType=='RESIDENCE_PHONE'">
+				<label class="control-label">Residence Phone</label><input  ng-if="phone.sAreaCode"
+					class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+					<input ng-if="!phone.sAreaCode"
+					class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+				
+			</div>
+			<div class="col-md-3" ng-if="phone.sPhoneType=='OFFICE_PHONE'">
+				<label class="control-label">Office Phone</label><input  ng-if="phone.sAreaCode"
+					class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+					<input ng-if="!phone.sAreaCode"
+					class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+				
+			</div>
+			<div class="col-md-3" ng-if="phone.sPhoneType=='OFFICE_MOBILE'">
+				<label class="control-label">Office Mobile</label><input  ng-if="phone.sAreaCode"
+					class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+					<input ng-if="!phone.sAreaCode"
+					class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+				
+			</div>
+			</div>
+		</div>
+	</fieldset>
+	<fieldset class="formfield" style="display: block;">
+		<legend>Address Details</legend>
+		<div class="row clearfix">
+			<div class="col-md-3 column">
+				<label class="control-label">Address Type</label>
+			</div>
+			<div class="col-md-3 column">
                 <select class="form-control control-select inputMaterial" name="ResiAddrType" ng-model="addr_type" ng-options="addr.name for addr in addrType track by addr.name"></select>
             </div>
         </div>
@@ -775,22 +792,6 @@
                         <input class="form-control" type="text" accesskey="commas" ng-model="objectSet.oPostIPA.dNetDisbursalAmt" disabled="disabled">
                     </div>
                 </div>
-                <!-- <div class="col-sm-4 col-md-3">
-					<label class="control-label">Manufacturer Processing Fee</label>
-					<div class="input-group input-group-md">
-						<span class="input-group-addon" id="sizing-addon3">
-						<i class="fa fa-inr"></i></span>
-						<input class="form-control"  type="text" accesskey="commas" ng-model="objectSet.oPostIPA.dManProcFee" disabled="disabled">
-					</div>
-				</div>
-				<div class="col-sm-4 col-md-3">
-					<label class="control-label">Manufacture Subvention</label>
-					<div class="input-group input-group-md">
-						<span class="input-group-addon" id="sizing-addon3">
-						<i class="fa fa-inr"></i></span>
-						<input class="form-control"  type="text" accesskey="commas" ng-model="objectSet.oPostIPA.dManfSubDel" disabled="disabled">
-					</div>
-				</div>-->
                 <div class="col-sm-4 col-md-3">
                     <label class="control-label">Other Charges</label>
                     <div class="input-group input-group-md">
@@ -826,9 +827,6 @@
                 <div ng-if="kyc.sKycName=='AADHAR' || kyc.sKycName=='AADHAAR'">
                     <label class="control-label">{{kyc.sKycName}} NUMBER</label>
                     <input name="Aadhaar" class="form-control" type="text" ng-model="kyc.sKycNumber" ng-disabled="!isUpdating" maxlength="12" change-on-blur="onValueChanged('aadhaar')" required-any="atleastOne" />
-                    <!-- <span ng-show="isUpdating && ApplicantForm.Aadhaar.$error.maxlength" class="text-danger">
-				        Please enter valid Aadhaar number
-				    </span> -->
                     <div ng-messages="isUpdating && ApplicantForm.Aadhaar.$error" class="errorMsg">
                         <p ng-message="maxlength">Please enter valid Aadhaar number</p>
                         <p ng-message="required">Atleast one KYC document required</p>

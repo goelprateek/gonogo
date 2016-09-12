@@ -402,13 +402,13 @@ app.factory("ApplyObject",function(){
 					                    "iAdvEmi": "",
 					                    "dMarginAmt": "",
 					                    "aAssetDetail": [
-					                        {
+					                       /* {
 					                            "sAssetCtg": "",
 					                            "sDlrName": "",
 					                            "sAssetMake": "",
 					                            "sModelNo": "",
 					                            "sPrice": ""
-					                        }
+					                        }*/
 					                    ],
 					                    "aOwndAst": ""
 					                },

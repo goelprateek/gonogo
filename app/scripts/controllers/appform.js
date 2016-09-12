@@ -18,7 +18,6 @@
 
             //console.log("Reference ID : "+$stateParams.id);
 
-
             if (sharedService.getApplicationData()) {
                 $scope.objectSet = sharedService.getApplicationData();
                 //console.log("objectSet");
@@ -98,6 +97,14 @@
             };
 
             $scope.datefilter.date = '';
+            $scope.pdfData = '';
+            $scope.foirAmount = '';
+
+            if ($scope.objectSet.oLosDtls) {
+                $scope.foundLosData = true;
+            } else {
+                $scope.foundLosData = false;
+            }
 
             if ($scope.objectSet.oInvDtls && $scope.objectSet.oInvDtls.dtInv && $scope.objectSet.oInvDtls.sInvNumber) {
                 var Dateformat = moment($scope.objectSet.oInvDtls.dtInv);
@@ -147,19 +154,15 @@
 
             $scope.croDecision = $scope.objectSet.aCroDec;
 
-            try {
+            if ($scope.objectSet.oCompRes.multiBureauJsonRespose && $scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED && $scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"]) {
                 $scope.pdfData = "data:application/pdf;base64," + $scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];
-            } catch (e) {
-                $scope.pdfData = '';
             }
 
-            try {
+            if ($scope.objectSet.oCompRes.scoringServiceResponse && $scope.objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE'] && $scope.objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']) {
                 $scope.foirAmount = $scope.objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT'].toFixed(2);
-            } catch (e) {
-                $scope.foirAmount = '';
             }
 
-            if ($scope.objectSet) {
+            if ($scope.objectSet.aAppImgDtl) {
                 var objArray = _.map(_.pluck($scope.objectSet.aAppImgDtl, 'aImgMap'), function(data) {
                     return data;
                 });
@@ -233,7 +236,7 @@
                     $state.go('/analytics');
 
                     /* $scope.isTableData = false;
-             $scope.appView = !$scope.appView;*/
+                     $scope.appView = !$scope.appView;*/
                 } else {
                     sharedService.setApplicationData($scope.objectSet);
                     sharedService.setRefID($scope.objectSet.oAppReq.sRefID);
@@ -532,16 +535,79 @@
                                 notifier.logWarning("We are unable to update Invoice details");
                             }
                         });
+                    } else {
+                        notifier.logWarning("Please provide Invoice Data!");
                     }
                 } else {
                     notifier.logWarning("Please select application from queue !");
                 }
             };
 
+            $scope.updateLosData = function(status) {
+                if ($scope.objectSet.oAppReq.sRefID != "") {
+                    var losStat = status;
+                    var losId = '';
+                    var utr = '';
+                    if ($scope.objectSet.oLosDtls) {
+                        losId = $scope.objectSet.oLosDtls.sLosID;
+                        utr = $scope.objectSet.oLosDtls.sUtr;
+                    }
+
+                    if ((!$scope.utrVal && (utr != null && utr != '')) || ($scope.utrVal)) {
+                        if ((losId != null && losId != "") && (losStat != null && losStat != '')) {
+                            var jsondata = {
+                                "sRefID": $scope.objectSet.oAppReq.sRefID,
+                                "oHeader": {
+                                    "sAppID": $scope.objectSet.oAppReq.oHeader.sAppID,
+                                    "sInstID": user.institutionID,
+                                    "sSourceID": "WEB",
+                                    "sAppSource": "WEB",
+                                    "sReqType": "JSON",
+                                    "sCroId": user.username
+                                },
+                                "oLosDtls": {
+                                    "sLosID": losId,
+                                    "sStat": losStat,
+                                    "sUtr": utr
+                                }
+                            };
+
+                            RestService.saveToServer('update-los-details', jsondata).then(function(Response) {
+                                if (Response.status == "SUCCESS") {
+                                    notifier.logSuccess("LOS Status updated successfully");
+                                    $scope.losIdval = true;
+                                    $scope.utrVal = true;
+                                } else {
+                                    notifier.logWarning("Sorry! We are unable to update your LOS Status");
+                                }
+                            });
+                        } else {
+                            notifier.logWarning("Please provide LOS Data !");
+                        }
+                    }
+                } else {
+                    notifier.logWarning("Please select application from queue !");
+                }
+            };
+
+            $scope.losStatusChange = function(status) {
+                /* if foundLosData from server remove utr value + utr should be non editable*/
+                var utr = $scope.objectSet.oLosDtls.sUtr;
+                if (status == "LOS_DISB" && $scope.applctnstatus.toUpperCase() == "APPROVED") {
+                    if (utr == '' || utr == null) {
+                        $scope.isUtr();
+                        $scope.utrVal = false;
+                    }
+                } else if ($scope.foundLosData != true) {
+                    $scope.utrVal = true;
+                    $scope.objectSet.oLosDtls.sUtr = "";
+                }
+            }
+
             $scope.loadPDF = function() {
                 var postIPARequest = {
                     oHeader: {
-                        sCroId: "default",
+                        sCroId: user.username,
                         dtSubmit: new Date().getTime(),
                         sReqType: null,
                         sAppSource: "WEB",
@@ -622,7 +688,7 @@
             var statusJSON = {
                 "sRefID": refID,
                 "oHeader": {
-                    "sCroId": "default",
+                    "sCroId": user.username,
                     "dtSubmit": new Date().getTime(),
                     "sReqType": "JSON",
                     "sAppSource": "WEB",
