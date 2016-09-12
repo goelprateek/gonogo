@@ -432,7 +432,7 @@
                     var newKYC={
                         sExpiryDate:null,
                         sIssueDate:null,
-                        sKycName:"VOTERID",
+                        sKycName:"VOTER-ID",
                         sKycNumber:"",
                         sKycStat:null
                     }
@@ -681,7 +681,7 @@ app.controller("ReinitiateStatusModalController",["$scope","$uibModalInstance","
                             $scope.cibilVerified=false;
                         }
                     }
-                    
+
                     if(resp.oIntrmStat.sScoreStat == "COMPLETE"){              
                         $scope.showAppScoreStatus=true;
                         if(resp.oIntrmStat.oCibilResult.sMsg == "COMPLETED")                

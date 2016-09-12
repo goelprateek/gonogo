@@ -178,9 +178,20 @@
 
             var startGraph = function(){
                 $scope.chartObj;
-                var json = { 
-                            'sInstID': user.institutionID, 
-                            'oCriteria': { 
+                var json = {
+                                "oHeader": {
+                                    "sAppID":null,
+                                    "sInstID": user.institutionID,
+                                    "sSourceID": "WEB",
+                                    "sAppSource": "GNG_WEB",
+                                    "sReqType": "JSON",
+                                    "dtSubmit":"",
+                                    "sDsaId":null,
+                                    "sCroId":user.username,
+                                    "sDealerId":null
+                                },
+                                'sInstID': user.institutionID, 
+                                'oCriteria': { 
                                     "oHierarchy": user.hierarchy,
                                     "aProducts": user.getProductNames() 
                                 } 
@@ -205,7 +216,18 @@
                if( user.role != "DSA" ){
                     $scope.datasource = []; 
                     if($scope.prev$value){
-                        var json = { 
+                        var json = {
+                                "oHeader": {
+                                    "sAppID":null,
+                                    "sInstID": user.institutionID,
+                                    "sSourceID": "WEB",
+                                    "sAppSource": "GNG_WEB",
+                                    "sReqType": "JSON",
+                                    "dtSubmit":"",
+                                    "sDsaId":null,
+                                    "sCroId":user.username,
+                                    "sDealerId":null
+                                },
                                 "dtFrmDate":$scope.prev$value.category,
                                 "sStat":$scope.prev$value.series.name,
                                 'sInstID':user.institutionID,
@@ -239,14 +261,29 @@
                 $scope.isLoadingAnalyticsData = 1;
                 $scope.datasource = [];
                 var json = {
-                            'sInstID': user.institutionID,
-                            'iSkip': ($scope.itemPerPage * ($pageno -1)),
-                            'iLimit': $scope.itemPerPage,
-                            'oCriteria': {
-                                "oHierarchy": user.hierarchy,
-                                "aProducts": user.getProductNames()
-                            }
-                    };
+
+                    "oHeader": {
+                        "sAppID":null,
+                        "sInstID": user.institutionID,
+                        "sSourceID": "WEB",
+                        "sAppSource": "GNG_WEB",
+                        "sReqType": "JSON",
+                        "dtSubmit":"",
+                        "sDsaId":null,
+                        "sCroId":user.username,
+                        "sDealerId":null
+                    },
+                    "dtFrmDate":moment().subtract('1','months'),
+                    "dtToDate" : moment(),
+                    'sInstID': user.institutionID,
+                    'iSkip': ($scope.itemPerPage * ($pageno -1)),
+                    'iLimit': $scope.itemPerPage,
+                    'oCriteria': {
+                        "oHierarchy": user.hierarchy,
+                        "aProducts": user.getProductNames()
+                    }
+                };
+
 
                 RestService.saveToServer('table-view-new',json).then(function(response){
                     $scope.datasource = response.stackTable;
