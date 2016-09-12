@@ -16,7 +16,6 @@
     }
 
     //console.log("Reference ID : "+$stateParams.id);
-    
 
     if(sharedService.getApplicationData())
 	{
@@ -168,7 +167,7 @@
         $scope.foirAmount = $scope.objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT'].toFixed(2);
     }
 
-    if ($scope.objectSet) {
+    if ($scope.objectSet.aAppImgDtl) {
 	    var objArray = _.map(_.pluck($scope.objectSet.aAppImgDtl, 'aImgMap'), function(data) {
 	        return data;
 	    });
