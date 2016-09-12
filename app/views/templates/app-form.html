@@ -568,10 +568,10 @@
 				ng-options="option as option for option in surrogateType" disabled="true"></select>
 			</div>
 		</div>
-		<div class="row clearfix" ng-if="surrTypeSelected==='Banking'">
+		<div class="row clearfix" ng-if="surrTypeSelected === 'Banking'">
 			<div class="col-md-3" ng-repeat="bankImg in extra_array">
 				<img alt="Document Not available" title="{{bankImg.kyc_name}} " accesskey="{{bankImg.image}}" data-toggle="modal"
-						data-target="#myModalnew" class="preview" src="{{bankImg.image}}" name="{{bankImg.kyc_name}}" style="border: none;">
+						data-target="#myModalnew" class="preview" src="{{bankImg.image}}"  style="border: none;">
 			</div>
 		</div>
 		<div class="row clearfix" ng-if="surrTypeSelected==='Business'">
