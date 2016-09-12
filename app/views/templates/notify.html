@@ -70,7 +70,7 @@
 
 							<li><span ng-show="showrefid"
 								style="margin-top: 13px; display: block;"> 
-								<a href="javascript:;" ng-click="newApplication()">{{objectSet.oAppReq.sRefID}}</a></span></li>
+								<a ui-sref="/app-form">{{objectSet.oAppReq.sRefID}}</a></span></li>
 							<li><a id="dsa_chat" ng-if="can('NCHAT')">DSA Chat</a></li>
 							<li ><a id="onhold" title="{{objectSet.oAppReq.sRefID}}"
 								ng-if="can('NHOLD') && isDedupeSelected"  
@@ -143,7 +143,8 @@
 			                </div>
 			                <div class="orders-container">
 				                <ul class="orders-list" slimscroll="{height: 470,railVisible:true}"  when-scrolled="loadData()">
-				                	<li class="order-item" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search"  ng-click='load_details(user.sRefID,true,user.sRqTyp)' ng-class="{'active-queue': user.sRefID == Picked }">
+				                	<!-- <li class="order-item" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search"  ng-click='load_details(user.sRefID,true,user.sRqTyp)' ng-class="{'active-queue': user.sRefID == Picked }"> -->
+				                	<li class="order-item" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" ng-click="load_details(user.sRefID,true,user.sRqTyp)" ng-class="{'active-queue': user.sRefID == Picked }">
 				                		<div class="row" >
 				                			<div class="col-lg-6 col-sm-6 col-md-6 col-xs-6 item-left">
 				                				<div class="item-booker" >
@@ -224,7 +225,7 @@
 							<label class="div-heading customer">DEMOGRAPHICS</label>
 							<div id="customer" slimscroll="{height: 158,railVisible:true}">
 								<div class="list-group-item">
-									<span>Name : <span >{{name}}
+									<span>Name : <span >{{objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"   "+objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"   "+objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName}}
 
 									</span></span></div>
 								<div class="list-group-item"><span>D.O.B : {{objectSet.oAppReq.oReq.oApplicant.sDob | dateFormat }}</span></div>
@@ -245,14 +246,14 @@
 							</div>
 							<!-- slimscroll="{height: 54,railVisible:true}" -->
 							<div data-ng-if="imageDataArray.length!=0"  >
-								<div class="notify-scroll-container" >
+								<div class="notify-scroll-container" slimscroll="{height: 54,railVisible:true}">
 									 <ul style="padding: 0px;"> 
-									 	
-										<li ng-repeat="d in imageDataArray">
+<!-- 									 	<slick infinite="true" slides-to-show="3" slides-to-scroll="3">
+ -->										<li ng-repeat="d in imageDataArray">
 											<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index,true)"><img ng-src="{{d.sByteCode}}" title="{{d.sImgType}}"> </a>
 										</li>
-										
-									 </ul> 
+<!-- 										</slick>
+ -->									 </ul> 
 								</div>
 							</div>
 
@@ -523,20 +524,22 @@
 	                	<option ng-repeat="count in objectSet.aDeDupe">{{count.sRefID}}</option>
 					</select>
  				</ul>
-				<div class="row clearfix" ng-init="applicant" id="applicant_panel" style=" width: 102%;margin-left: 14px;max-height: 515px;margin-right: -14px;overflow-y:scroll">
-					<div id="application-temp-container"style="padding-top: 10px;width: 98%;">
-		<!-- ***************************  Common Form *************************** -->
-		 				<div ng-include="'views/templates/app-form.html'" ></div> 
+ 				<div class="row clearfix" ng-init="applicant" id="applicant_panel" slimscroll="{height: 515,railVisible:true,alwaysVisible:false}" style=" width: 102%;margin-left: 14px;margin-right: -14px;">
+					<div id="application-temp-container" style="padding-top: 10px;width: 98%;">
+		<!-- ***************************  Common Form ***************************using ui-ref -->
+		 				 <!-- <div ng-include="'views/templates/app-form.html'" ></div>   -->
+
+		 				 <div ui-view ></div>  
 					</div>
 				</div>
 			</div>
 		</div>
 <!-- 	ng-if="authenticate('NRPRCS')" -->
-		<div class="row clearfix" id="application-main-container" data-ng-if="!container"
+	<!-- 	<div class="row clearfix" id="application-main-container" data-ng-if="!container"
 			style="border-top: 1px solid #DADADB; padding-top: 10px;">
 						<div ng-include="'views/templates/app-form.html'"></div> 
-				</div>
-			</div>
+		</div> -->
+	</div>
 		<!-- ****************Second Common Form ************************************** -->
 		</div>
 	</div>

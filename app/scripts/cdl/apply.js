@@ -840,11 +840,19 @@
 						}
 
 						if($scope.kycDocImages.length!=0){
-							UploadImages.upload($scope.referenceID,$scope.kycDocImages).then(function(imageUploadedCount) {
-							  	$log.debug('Image upload Success, Total image uploaded : ' + imageUploadedCount);
+							UploadImages.upload($scope.referenceID,$scope.kycDocImages).then(function(responseArray) {
+								
+								_.map(responseArray,function(image,index){
+									if(image.sStatus==="SUCCESS")
+									{
+										$scope.kycDocImages.splice(0,1);
+									}
+								});
+
+							  	$log.debug('Image upload Success, Total image uploaded : ' + JSON.stringify(responseArray));
 
 							}, function(reason) {
-							  	$log.debug('Image upload Failed, Total image uploaded : ' + imageUploadedCount);
+							  	$log.debug('Image upload Failed, Total image uploaded : ' + JSON.stringify(responseArray));
 							});
 
 							if(UrlKey=="step4"){

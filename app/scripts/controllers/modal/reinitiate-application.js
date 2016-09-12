@@ -1,7 +1,9 @@
 var app=angular.module("gonogo");
 
-app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantData","$uibModalInstance","fieldsUpdated","notifier",
-    function($scope,RestService,refID,applicantData,$uibModalInstance,fieldsUpdated,notifier){
+app.controller("ReinitiateModalController",["$scope","RestService","refID","applicantData","$uibModalInstance","fieldsUpdated","notifier","UserService",
+    function($scope,RestService,refID,applicantData,$uibModalInstance,fieldsUpdated,notifier,UserService){
+
+        var user=UserService.getCurrentUser();
     $scope.refID = refID;
     $scope.applicantData = applicantData;
     $scope.fieldsUpdated=fieldsUpdated;
@@ -26,9 +28,9 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
         {main:"MB" ,subs: [{name:"Cibil",id:101,isSuccess:true}]},
         {main:"KYC" , subs: [{name:"PAN",id:201,isSuccess:true},
                           {name:"Aadhaar",id:202,isSuccess:true}]},
-        {main:"Dedupe" , subs: [{name:"Dedupe",id:301,isSuccess:true},
-                             {name:"Negative Pin Code",id:302,isSuccess:true}]},
-        {main:"SOBRE" , subs: [{name:"Verificaton scoring",id:401,isSuccess:true},
+        // {main:"Dedupe" , subs: [{name:"Dedupe",id:301,isSuccess:true},
+        //                      {name:"Negative Pin Code",id:302,isSuccess:true}]},
+        {main:"Scoring" , subs: [{name:"Verificaton scoring",id:401,isSuccess:true},
                             {name:"Application scoring",id:402,isSuccess:true}]}
     ];
     
@@ -193,6 +195,11 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
         // }
         if($scope.fieldsUpdated && ($scope.fieldsUpdated.isNameUpdated || $scope.fieldsUpdated.isResAddressUpdated || $scope.fieldsUpdated.isOffAddressUpdated || $scope.fieldsUpdated.isPerAddressUpdated || $scope.fieldsUpdated.isPanUpdated || $scope.fieldsUpdated.isVoterIDUpdated || $scope.fieldsUpdated.isAadhaarUpdated || $scope.fieldsUpdated.isDobUpdated)){
             var requestJson={
+                oHeader:{
+                    sInstID : user.institutionID,
+                    sCroId : user.username,
+                    sAppSource : "WEB"
+                },
                 oWorkFlowConfig : {
                     sGngRefId : $scope.refID,
                     aModuleConfig : requestReinitiateModules
@@ -205,14 +212,19 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
             RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
                 if(Response && Response.sStat=="SUCCESS"){
                     notifier.logSuccess("Application has been reinitiated successfully");
-                    $uibModalInstance.close(true,$scope.refID);
+                    $uibModalInstance.close({isSuccess:true,referenceID:$scope.refID});
                 }else{
                     notifier.logWarning("Error occured while reinitiating") ;
-                    $uibModalInstance.close(false,$scope.refID);
+                    $uibModalInstance.close({isSuccess:false,referenceID:$scope.refID});
                 }                
             });
         }else{
             var requestJson={
+                oHeader:{
+                   "sInstID":user.institutionID,
+                   "sCroId":user.username,
+                   "sAppSource":"WEB"
+                },
                 sGngRefId:$scope.refID,
                 aModuleConfig:requestReinitiateModules
             };
@@ -222,10 +234,10 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
             RestService.saveToServer(URL,JSON.stringify(requestJson)).then(function(Response){
                 if(Response && Response.sStat=="SUCCESS"){
                     notifier.logSuccess("Application has been reinitiated successfully");
-                    $uibModalInstance.close(true,$scope.refID);
+                    $uibModalInstance.close({isSuccess:true,referenceID:$scope.refID});
                 }else{
                     notifier.logWarning("Error occured while reinitiating") ;
-                    $uibModalInstance.close(false,$scope.refID);
+                    $uibModalInstance.close({isSuccess:false,referenceID:$scope.refID});
                 }
                 //$uibModalInstance.dismiss();
             });
@@ -233,6 +245,6 @@ app.controller("ReinitiateModalController",["$scope","RestService","refID","appl
     };
 
     $scope.closeModal = function(){
-        $uibModalInstance.close();
+        $uibModalInstance.dismiss();
     };
 }]);

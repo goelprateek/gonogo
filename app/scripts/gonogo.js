@@ -22,7 +22,8 @@
 	                                     'gonogo.commons',
 	                                     'gonogo.factories',
 	                                     'score-directives',
-	                                     'daterangepicker'
+	                                     'daterangepicker',
+	                                     'ngTagsInput'
 	                                    ]);
 
 	app.controller("Maincontroller",['$scope', '$log', 'notifier' , '$timeout','RestService','$location','UserService','APP_CONST','AclService',
