@@ -665,53 +665,6 @@ $scope.onchange = function(id) {
             $scope.load_details($scope.defaultRefId,true);
         }
 }
-
-    $scope.updateLosData = function(status){
-        if($scope.objectSet.oAppReq.sRefID!=""){
-        	var losStat = status;
-            var losId = '';
-            var utr = '';
-            if($scope.objectSet.oLosDtls){
-                losId = $scope.objectSet.oLosDtls.sLosID;
-                utr = $scope.objectSet.oLosDtls.sUtr;
-            }
-
-            if((!$scope.utrVal && ( utr!=null && utr!='')) || ($scope.utrVal)){
-            	if((losId !=null && losId != "") && (losStat !=null && losStat !='')){
-            		 var jsondata=	 {
-        			    "sRefID":$scope.objectSet.oAppReq.sRefID,
-        			    "oHeader":{
-        			         "sAppID":$scope.objectSet.oAppReq.oHeader.sAppID,
-        			         "sInstID":user.institutionID,
-        			         "sSourceID":"WEB",
-        			         "sAppSource":"WEB",
-        			         "sReqType":"JSON",
-        			         "sCroId":user.username
-        			    },
-        			    "oLosDtls":{
-        			        "sLosID":losId,
-        			        "sStat":losStat,
-        			        "sUtr":utr
-        			    }
-        			};	 
-
-            		RestService.saveToServer('update-los-details',jsondata).then(function(Response){
-            				if(Response.status == "SUCCESS"){
-                                notifier.logSuccess("LOS Status updated successfully");
-            					$scope.losIdval = true;
-                                $scope.utrVal = true;
-            				}else{
-                                notifier.logWarning("Sorry! We are unable to update your LOS Status");
-            				}
-            		 });
-            	}else{
-                     notifier.logWarning("Please provide LOS Data !");
-                }
-        	}
-        }else{
-            notifier.logWarning("Please select application from queue !");
-        }
-    };
 	
     $scope.showReinitiatedDecisionData=function(size,requestObj){
         var modalInstance = $uibModal.open({
