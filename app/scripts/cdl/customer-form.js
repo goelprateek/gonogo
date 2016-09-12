@@ -164,17 +164,27 @@ app.controller("kycDocuments",['$scope', 'ImageFeed','$uibModalInstance','$timeo
 }]);
 
 app.controller("CustomerFormCntrolr",
-	['$scope','$rootScope','sharedService',"RestService","APP_CONST","$uibModal","GNG_GA","notifier","$state",
-	function($scope,$rootScope,sharedService, RestService, APP_CONST,$uibModal,GNG_GA,notifier,$state){
+	['$scope','$rootScope','sharedService',"RestService","APP_CONST","$uibModal","GNG_GA","notifier","$state","UserService",
+	function($scope,$rootScope,sharedService, RestService, APP_CONST,$uibModal,GNG_GA,notifier,$state,UserService){
 
 	$scope.isApplicationDataLoaded=false;
 	var CustID=sharedService.getRefID();
 	sharedService.setRefID(null);
+	var user=UserService.getCurrentUser();
 
 	$scope.refID = CustID;
 
 	//TODO
-	var json ={'sRefID':CustID};
+	var json ={
+		"oHeader":{
+			  "sApplID": "",
+			  "sInstID":user.institutionID,
+			  "sSourceID":"",
+			  "sAppSource":"WEB",
+			  "sReqType":"JSON",
+		      "sDsaId":user.username
+		},
+		'sRefID':CustID};
 
 	if(CustID==null || CustID==""){
 		$state.go("/cdl/dashboard");
@@ -469,7 +479,17 @@ app.controller("CustomerFormCntrolr",
 		  return Response;
 	}).then(function(data){
             if(data){
-            	var json ={'sRefID':data.sRefID};
+            	var json ={
+            		"oHeader":{
+							  "sApplID": "",
+							  "sInstID":user.institutionID,
+							  "sSourceID":"",
+							  "sAppSource":"WEB",
+							  "sReqType":"JSON",
+						      "sDsaId":user.username,
+						      "sDealerId":data.oHeader.sDealerId
+						},
+            		'sRefID':data.sRefID};
 				RestService.saveToServer('application-images',json).then(function(Response){
 	                var objArray = _.flatten(_.map(_.pluck(Response, 'aImgMap'),function(data){
 	                        return data;
@@ -478,7 +498,19 @@ app.controller("CustomerFormCntrolr",
 	                $scope.imageDataArray = [];
 	                $scope.applicantPhoto = [];
                     _.each(objArray,function(val){
-                        return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
+                    	var imageJson = {
+                    		"oHeader":{
+								  "sApplID": "",
+								  "sInstID":user.institutionID,
+								  "sSourceID":"",
+								  "sAppSource":"WEB",
+								  "sReqType":"JSON",
+							      "sDsaId":user.username,
+							      "sDealerId":data.oHeader.sDealerId
+							},
+							'sImgID' : val.sImgID
+                    	};
+                        return RestService.saveToServer('get-image-by-id-base64', imageJson).then(function(data){
                             if(!_.isUndefined(data) || !_.isNull(data)){
                                 if(!_.isEmpty(data.sByteCode)){
 	                                val["sByteCode"] = "data:image/png;base64,"+data.sByteCode;

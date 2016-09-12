@@ -5,7 +5,7 @@
 	app.factory("APP_CONST", function () {
 		var END_POINT = {
 
-			BASE_URL_GNG : "http://localhost:8080/GoNoGo/",
+			BASE_URL_GNG : "http://gng.softcell.in/GoNoGo/",
 			// BASE_URL_GNG : "http://172.26.1.211:9090/GoNoGo/",
 
 			BASE_URL_SOBRE: 'http://gng.softcell.in/SoBRE',

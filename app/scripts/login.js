@@ -60,7 +60,14 @@
 
 			UserService.cleanUpUserDetails();
 
-			var _data = { 'userName': $scope.login.userName, 'password': SHA1($scope.login.password) };
+			var _data = {
+			"oHeader":
+			{
+				"sReqType":"JSON",
+				"sAppSource":"WEB",
+				"sSourceID":"GONOGO_HDBFS"
+			},
+			'userName': $scope.login.userName, 'password': SHA1($scope.login.password) };
 
 			RestService.saveToServer("login-web", _data).then(function (data) {
 

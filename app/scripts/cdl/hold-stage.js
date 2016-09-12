@@ -113,7 +113,7 @@
 		$scope.onImageUploaded=function(){
 			var updateJson = {
 			  	"sRefID": $scope.referenceID,
-			  	"sHeader": {
+			  	"oHeader": {
 				    "sCroId": "default",
 				    "dtSubmit": new Date().getTime(),
 				    "sReqType": "JSON",

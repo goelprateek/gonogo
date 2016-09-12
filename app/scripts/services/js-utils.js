@@ -21,7 +21,8 @@
 				  		"oHeader": {
 				  			"sCroId":"default",
 				  			"sAppSource":"WEB",
-					    	"sApplID":"APPLICANT_1"  // applicant id
+					    	"sApplID":"APPLICANT_1",  // applicant id
+                			"sReqType":"JSON"
 					  	},
 					  	"sRefID": pReferenceID,
 				  		"oUpldDtl": {

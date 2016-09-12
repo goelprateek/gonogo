@@ -280,7 +280,16 @@
 
 		if($scope.applicationObject == null && CustID!=null && CustID!="") {
 			var URL='';
-			var json ={'sRefID':CustID};
+			var json ={
+					"oHeader":{
+						  "sApplID": "",
+						  "sInstID":user.institutionID,
+						  "sSourceID":"",
+						  "sAppSource":"WEB",
+						  "sReqType":"JSON",
+					      "sDsaId":user.username
+					},
+				'sRefID':CustID};
 
 			RestService.saveToServer('dashboard-application-data',json).then(function(Response){
 
@@ -425,7 +434,17 @@
 					}
 
 					var kyc_img = function (kycName , imgId ,status , reason,value){
-						var json ={'sImgID':imgId}
+						var json ={
+							"oHeader":{
+								  "sApplID": "",
+								  "sInstID":user.institutionID,
+								  "sSourceID":"",
+								  "sAppSource":"WEB",
+								  "sReqType":"JSON",
+							      "sDsaId":user.username,
+							      "sDealerId":$scope.dealerCode
+							},
+							'sImgID':imgId}
 						var URL = 'get-image-by-id-base64';
 						RestService.saveToServer(URL,json).then(function(Response){
 
@@ -447,7 +466,18 @@
 						});
 					};
 
-					var json ={'sRefID':CustID};
+					var json ={
+						"oHeader":{
+							  "sApplID": "",
+							  "sInstID":user.institutionID,
+							  "sSourceID":"",
+							  "sAppSource":"WEB",
+							  "sReqType":"JSON",
+						      "sDsaId":user.username,
+						      "sDealerId":$scope.dealerCode
+						},
+						'sRefID':CustID
+					};
 
 					RestService.saveToServer('application-images',json).then(function(Response){
 						if(Response!=null && Response!==""){

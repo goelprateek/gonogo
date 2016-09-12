@@ -6,6 +6,7 @@
 		function($scope,sharedService,UserService,RestService,UploadImages,$log,notifier,$state){
 
 		$scope.additnlDocArrayToUpload=[];
+		var user=UserService.getCurrentUser();
 
 		if(sharedService.getRefID()){
 			$scope.referenceID=sharedService.getRefID();
@@ -82,12 +83,22 @@
 		};
 
 		$scope.updateStatus = function(){
-			var updateJson ={"sRefID":$scope.referenceID};
+			var updateJson ={
+				"oHeader":{
+					  "sApplID": "",
+					  "sInstID":user.institutionID,
+					  "sSourceID":"",
+					  "sAppSource":"WEB",
+					  "sReqType":"JSON",
+				      "sDsaId":user.username
+				     /* "sDealerId":""*/
+				},
+				"sRefID":$scope.referenceID};
 			// console.log("Input JSON for status update :"+$scope.updateJson);
 
-			// RestService.saveToServer('post-ipa-stage-update', updateJson)
-			// .then(function(data){
-			// 	if(data && data.sStat==="SUCCESS"){
+			 RestService.saveToServer('post-ipa-stage-update', updateJson)
+			 .then(function(data){
+			 	if(data && data.sStat==="SUCCESS"){
 					if($scope.statusObject.sAppStat === "Declined")
 					{
 						notifier.logSuccess("Image has been uploaded successfully.");
@@ -98,12 +109,12 @@
 						sharedService.setApplicationStatus($scope.statusObject);
 						$state.go("/cdl/post-do");
 					}
-			// 	}else{
-			// 		notifier.logError("Unable to update status, please try again or contact system admin.");
-			// 	}
-			// },function(failedResponse){
-			// 	notifier.logError("Sorry we can not reset the stage.");
-			// });
+				}else{
+					notifier.logError("Unable to update status, please try again or contact system admin.");
+				}
+			},function(failedResponse){
+				notifier.logError("Sorry we can not reset the stage.");
+			});
 		};
 	}]);
 }).call(this);
