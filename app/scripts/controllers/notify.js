@@ -96,7 +96,7 @@
                         "sReqType": "JSON",
                         "dtSubmit":"",
                         "sDsaId":null,
-                        "sCroId":user.id,
+                        "sCroId":user.username,
                         "sDealerId":null
                       },
                       "oFilter": {
