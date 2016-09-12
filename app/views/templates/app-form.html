@@ -13,8 +13,8 @@
 		padding:1% 7% 0% 7%;
 	}
 </style>
-
-<form id="msform" name="ApplicantForm" ng-class="{'form-padding': (can('NCONTAINER') || (!can('NCONTAINER') && source!='notification'))}" novalidate>
+<!-- can('NCONTAINER') is true for CRO1  -->
+<form id="msform" name="ApplicantForm" ng-class="{'form-padding': (!(!can('NCONTAINER') && source=='notification'))}" novalidate>
 	<div class="row clearfix" >
 		<!-- <div class="col-md-8 text-left">
 			<div class="alert alert-danger" id="erro-pmsg"
