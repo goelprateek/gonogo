@@ -179,7 +179,10 @@
             var startGraph = function(){
                 $scope.chartObj;
                 var json = { 
-                            'sInstID': user.institutionID, 
+                            
+                            'oHeader' : {
+                                "sInstID" :  user.institutionID 
+                            },    
                             'oCriteria': { 
                                     "oHierarchy": user.hierarchy,
                                     "aProducts": user.getProductNames() 
@@ -239,9 +242,13 @@
                 $scope.isLoadingAnalyticsData = 1;
                 $scope.datasource = [];
                 var json = {
-                            'sInstID': user.institutionID,
                             'iSkip': ($scope.itemPerPage * ($pageno -1)),
                             'iLimit': $scope.itemPerPage,
+                            "dtFrmDate":moment().subtract('1','months'),
+                            "dtToDate" : moment(),
+                            'oHeader' : {
+                                'sInstID': user.institutionID    
+                            },
                             'oCriteria': {
                                 "oHierarchy": user.hierarchy,
                                 "aProducts": user.getProductNames()
