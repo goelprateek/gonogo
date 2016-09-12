@@ -944,7 +944,10 @@
 				</div>
 				<div ng-if="kyc.sKycName!='AADHAR' && kyc.sKycName!='AADHAAR' && kyc.sKycName!='PAN' && kyc.sKycName!='VOTER-ID'">
 					<label class="control-label">{{kyc.sKycName}} NUMBER</label>
-					<input class="form-control" type="text" ng-model="kyc.sKycNumber" ng-disabled="!isUpdating" change-on-blur="onValueChanged('KYC')"/>
+					<input class="form-control" name="kycNumber{{$index}}" type="text" ng-model="kyc.sKycNumber" ng-disabled="!isUpdating" change-on-blur="onValueChanged('KYC')" required-any="atleastOne"/>
+					<div ng-messages="isUpdating && ApplicantForm['kycNumber' + $index].$error" class="errorMsg">
+	   					<p ng-message="required">Atleast one KYC document required</p>
+					</div>
 				</div>
 			</div>
 	
