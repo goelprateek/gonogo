@@ -178,14 +178,6 @@
 
             var startGraph = function(){
                 $scope.chartObj;
-<<<<<<< HEAD
-                var json = { 
-                            
-                            'oHeader' : {
-                                "sInstID" :  user.institutionID 
-                            },    
-                            'oCriteria': { 
-=======
                 var json = {
                                 "oHeader": {
                                     "sAppID":null,
@@ -200,7 +192,6 @@
                                 },
                                 'sInstID': user.institutionID, 
                                 'oCriteria': { 
->>>>>>> 9cfcb7d23dc85c18225514515827f015815f8209
                                     "oHierarchy": user.hierarchy,
                                     "aProducts": user.getProductNames() 
                                 } 
