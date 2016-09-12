@@ -199,7 +199,7 @@
                                   "sSourceID":"",
                                   "sAppSource":"WEB",
                                   "sReqType":"JSON",
-                                  "sCroId":user.id,
+                                  "sCroId":user.username,
                             },
                             'sImgID' : val.sImgID
                         };

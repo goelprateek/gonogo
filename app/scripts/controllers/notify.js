@@ -141,7 +141,7 @@
                      "sSourceID":"WEB",
                      "sAppSource":"WEB",
                      "sReqType":"JSON",
-                     "sCroId":user.id
+                     "sCroId":user.username
                 },
                 'sCroID':"", 
                 'sInstID':user.institutionID,
@@ -270,7 +270,7 @@
                              "sSourceID":"WEB",
                              "sAppSource":"WEB",
                              "sReqType":"JSON",
-                             "sCroId":user.id
+                             "sCroId":user.username
                         },
             'sRefID':CustID};	
 
@@ -368,7 +368,7 @@
                                   "sSourceID":"",
                                   "sAppSource":"WEB",
                                   "sReqType":"JSON",
-                                  "sCroId":user.id,
+                                  "sCroId":user.username,
                             },
                             'sImgID' : val.sImgID
                         };
@@ -494,7 +494,7 @@
                             'oHeader':{
                                 'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
                                 'sInstID':user.institutionID,
-                                'sCroId':user.id,
+                                'sCroId':user.username,
                                 'sAppSource':"WEB",
                                 'sReqType':"JSON",
                             },
@@ -533,7 +533,7 @@
                                     'oHeader':{
                                         'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
                                         'sInstID':user.institutionID,
-                                        'sCroId':user.id,
+                                        'sCroId':user.username,
                                         'sAppSource':"WEB",
                                         'sReqType':"JSON"
                                     },
@@ -580,7 +580,7 @@
                                 'sInstID':user.institutionID,
                                 'sAppSource':"WEB",
                                 'sReqType':"JSON",
-                                'sCroId':user.id
+                                'sCroId':user.username
                             },
                             'sRefID':$scope.objectSet.oAppReq.sRefID,
                             'sAppStat':"Approved",
@@ -686,7 +686,7 @@ $scope.onchange = function(id) {
         			         "sSourceID":"WEB",
         			         "sAppSource":"WEB",
         			         "sReqType":"JSON",
-        			         "sCroId":user.id
+        			         "sCroId":user.username
         			    },
         			    "oLosDtls":{
         			        "sLosID":losId,
@@ -755,7 +755,7 @@ app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$ui
                             "sReqType":"JSON",
                             "dtSubmit":new Date().getTime(), 
                             "sDsaId":null,
-                            "sCroId":user.id,
+                            "sCroId":user.username,
                             "sDealerId":null
                           },
                      "sRefID" : requestObj.oAppReq.sRefID,

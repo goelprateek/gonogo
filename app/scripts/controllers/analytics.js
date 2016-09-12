@@ -386,7 +386,7 @@
                              "sSourceID":"WEB",
                              "sAppSource":"WEB",
                              "sReqType":"JSON",
-                             "sCroId":user.id
+                             "sCroId":user.username
                         },
                     'sRefID': CustID };
                 RestService.saveToServer(URL, json).then(function(response) {
