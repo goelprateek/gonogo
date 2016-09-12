@@ -1,17 +1,15 @@
-<div class="row clearfix" style="margin-top: 4%;" id="dlrContainer"  ng-controller="DealerController">
-	<div class="col-md-8 col-md-offset-2">
+<div class="row clearfix" style="min-height:450px;margin-top: 4%;" id="dlrContainer"  ng-controller="DealerController">
+	<div class="col-md-8 col-md-offset-2" >
 		<div class="panel panel-default">
-			<div class="panel-heading "
-				style="text-align: center; font-size: 16px">Dealer Name</div>
-			<div class="panel-body" style="height: 185px; overflow-y: scroll;">
+			<div class="panel-heading " style="text-align: center; font-size: 16px">Dealer Name</div>
+			<div class="panel-body" slimscroll="{height: 185,railVisible:true,alwaysVisible:true}" >
 				<table class="table table-striped table-hover">
 					<tbody>
 						<tr ng-repeat="dealer in dealers">
 							<td>
-								<label style="width: 100%" for="dealer{{$index}}">
-									<input id="dealer{{$index}}" type="radio" ng-model="$parent.currentDealer" name="name" value="{{dealer}}" />
-									{{dealer.DEALER_NAME}}
-								</label>
+								<md-radio-group ng-model="$parent.currentDealer" >
+							      <md-radio-button  value="{{dealer}}"  class="md-primary">{{dealer.DEALER_NAME}}</md-radio-button>
+							    </md-radio-group>
 							</td>
 						</tr>
 					</tbody>

@@ -2152,7 +2152,7 @@ span.input-icon {
 }
     
 
-.form-views.ng-enter            { 
+.form-views.ng-enter{ 
     -webkit-animation:slideInRight 0.5s both ease;
   -moz-animation:slideInRight 0.5s both ease;
   animation:slideInRight 0.5s both ease; 
@@ -2242,7 +2242,7 @@ md-input-container:not(.md-input-has-value) input:not(:focus){
 
 .js-dash-chart .highcharts-tooltip > span {
   left: 25px!important;
-  top: 125px!important;
+  top: 100px!important;
   padding: 2px 10px;
 
 }

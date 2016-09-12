@@ -281,8 +281,9 @@
                     }
                 };
 
-                RestService.saveToServer('score-log',json).then(function(response){
-                    $scope.datasource = response;
+                RestService.saveToServer('table-view-new',json).then(function(response){
+                    $scope.datasource = response.stackTable;
+                    $scope.total_count = response.totalCount;       
                 }).finally(function(){
                     $scope.isLoadingAnalyticsData = 0;
                 });
