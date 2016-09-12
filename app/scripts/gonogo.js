@@ -75,6 +75,13 @@
 		$scope.logout = function() {
 
 			var json ={
+					"oHeader":
+					{
+						"sReqType":"JSON",
+						"sAppSource":"WEB",
+						"sSourceID":"GONOGO_HDBFS",
+						"sInstID":$scope.InstitutionID
+					},
 					"sInstID": $scope.InstitutionID,
 					"sUserID": $scope.userid
 			}

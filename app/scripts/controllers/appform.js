@@ -192,7 +192,18 @@
 	    });
 
 	    _.each(maindata, function(val) {
-	        return RestService.saveToServer('get-image-by-id-base64', { 'sImgID': val.sImgID,"oHeader":{"sInstID":user.institutionID} }).then(function(data) {
+             var imageJson = {
+                            "oHeader":{
+                                  "sApplID": "",
+                                  "sInstID":user.institutionID,
+                                  "sSourceID":"",
+                                  "sAppSource":"WEB",
+                                  "sReqType":"JSON",
+                                  "sCroId":user.username,
+                            },
+                            'sImgID' : val.sImgID
+                        };
+	        return RestService.saveToServer('get-image-by-id-base64', imageJson).then(function(data) {
 	            if (!_.isUndefined(data) || !_.isNull(data)) {
 	                if (!_.isEmpty(data.sByteCode)) {
 	                    val["sByteCode"] = "data:image/png;base64," + data.sByteCode;
@@ -501,11 +512,14 @@
           if($scope.objectSet.oAppReq.sRefID!=""){
             if(invoiceNum && invoiceDate ){
                //var dobFormatted=$filter('date')(invoiceDate._d,"dd-MM-yyyy HH:mm:ss"),
-               json = {
+               var json = {
                        "oHeader":{
-                       "sInstID":user.institutionID,
-                       "sCroId":user.username,
-                       "sAppSource":"WEB"
+                           "sInstID":user.institutionID,
+                           "sCroId":user.username,
+                           "sAppSource":"WEB",
+                           "sAppID":$scope.objectSet.oAppReq.oHeader.sAppID,
+                           "sSourceID":"WEB",
+                           "sReqType":"JSON",
                        },
                        "sRefID":$scope.objectSet.oAppReq.sRefID,
                        "oInvDtls":{

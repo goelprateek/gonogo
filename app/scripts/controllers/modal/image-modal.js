@@ -2,9 +2,9 @@
 
   'use strict';
     var app = angular.module('gonogo');
-    app.controller("supportedDocuments",['$scope','$uibModalInstance','$timeout','RestService','notifier','sharedService','ImageFeed',
-        function($scope,$uibModalInstance,$timeout,RestService,notifier,sharedService,ImageFeed){
-        console.log(ImageFeed);
+    app.controller("supportedDocuments",['$scope','$uibModalInstance','$timeout','RestService','notifier','sharedService','ImageFeed','UserService',
+        function($scope,$uibModalInstance,$timeout,RestService,notifier,sharedService,ImageFeed,UserService){
+        var user=UserService.getCurrentUser();
         $scope.croImages = true;
         $scope.noWrapSlides = true;
         $scope.active = ImageFeed.index;
@@ -28,7 +28,11 @@
                  var json ={
                       "oHeader": {
                         "sAppID": ImageFeed.applicationId,
-                        "sApplID": ImageFeed.applicantId
+                        "sApplID": ImageFeed.applicantId,
+                        "sInstID":user.institutionID,
+                        "sSourceID":"",
+                        "sAppSource":"WEB",
+                        "sReqType":"JSON"
                       },
                       "sRefID": ImageFeed.refId,
                       "sImageID":$scope.slides[index].sImgID,
@@ -52,7 +56,11 @@
                  var json ={
                           "oHeader": {
                             "sAppID": ImageFeed.applicationId,
-                            "sApplID": ImageFeed.applicantId
+                            "sApplID": ImageFeed.applicantId,
+                            "sInstID":user.institutionID,
+                            "sSourceID":"",
+                            "sAppSource":"WEB",
+                            "sReqType":"JSON"
                           },
                           "sRefID": ImageFeed.refId,
                           "sImageID": $scope.slides[index].sImgID,
@@ -104,7 +112,9 @@
                                           "oHeader": {
                                             "sAppID": ImageFeed.applicationId,
                                             "sApplID": ImageFeed.applicantId,
-                                            "sInstID": ImageFeed.institutionId
+                                            "sInstID": ImageFeed.institutionId,
+                                            "sAppSource":"WEB",
+                                            "sReqType":"JSON"       
                                           },
                                           "sRefID": ImageFeed.refId,
                                           "oUpldDtl": {

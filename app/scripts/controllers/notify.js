@@ -134,9 +134,25 @@
 		if($rootScope.template == "notification"){
 
             //CRO ID - Application fetching based on CRO ID
-            $scope.json ={'sCroID':"", 'sInstID':user.institutionID,
-                    'sGrpID':"0" , 'iSkip': minimum, 'iLimit' : $scope.limit,
-                    'oCriteria':{"oHierarchy":user.hierarchy,"aProducts":user.getProductNames()}};
+            $scope.json ={
+                "oHeader":{
+                    /* not working with this institution id*/
+                     "sInstID":user.institutionID,
+                     "sSourceID":"WEB",
+                     "sAppSource":"WEB",
+                     "sReqType":"JSON",
+                     "sCroId":user.username
+                },
+                'sCroID':"", 
+                'sInstID':user.institutionID,
+                'sGrpID':"0" , 
+                'iSkip': minimum, 
+                'iLimit' : $scope.limit,
+                'oCriteria':{
+                    "oHierarchy":user.hierarchy,
+                    "aProducts":user.getProductNames()
+                }
+            };
 
             if(_.contains(user.role, "CRO9")){
                 if(_.contains(user.getProductNames(),"PERSONAL LOAN")){
@@ -248,7 +264,15 @@
         $scope.currentApplicationFormRefID=CustID;
 
         var URL='';
-		var json ={'sRefID':CustID};	
+		var json ={
+              "oHeader":{
+                             "sInstID":user.institutionID,
+                             "sSourceID":"WEB",
+                             "sAppSource":"WEB",
+                             "sReqType":"JSON",
+                             "sCroId":user.username
+                        },
+            'sRefID':CustID};	
 
         if((_.contains(user.role, "CRO4") || _.contains(user.role, "CRO3")) && applicationRequestType && applicationRequestType=="PS"){
             URL = 'application-data-partial';
@@ -337,7 +361,18 @@
                 });
 
                 _.each(maindata,function(val){
-                    return RestService.saveToServer('get-image-by-id-base64', { 'sImgID' : val.sImgID}).then(function(data){
+                    var imageJson = {
+                            "oHeader":{
+                                  "sApplID": "",
+                                  "sInstID":user.institutionID,
+                                  "sSourceID":"",
+                                  "sAppSource":"WEB",
+                                  "sReqType":"JSON",
+                                  "sCroId":user.username,
+                            },
+                            'sImgID' : val.sImgID
+                        };
+                    return RestService.saveToServer('get-image-by-id-base64', imageJson).then(function(data){
                         if(!_.isUndefined(data) || !_.isNull(data)){
                             if(!_.isEmpty(data.sByteCode)){
                                 val["sByteCode"] = "data:image/png;base64,"+data.sByteCode; 
@@ -456,9 +491,13 @@
                      modalInstance.result.then(function (offerarray) {
                         var json = {
                             "sRefID":$scope.objectSet.oAppReq.sRefID,
-                            'sHeader':{'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
-                            'sInstID':user.institutionID,
-                            'sCroId':user.id},
+                            'oHeader':{
+                                'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
+                                'sInstID':user.institutionID,
+                                'sCroId':user.username,
+                                'sAppSource':"WEB",
+                                'sReqType':"JSON",
+                            },
                             "sAppStat":"OnHold",
                             "aCroJustification":offerarray,
                             "aDedupeRefID": ($scope.dedupeRefArray ? $scope.dedupeRefArray : [])
@@ -491,8 +530,13 @@
                         });
                         var json = {
                                     "sRefID":$scope.objectSet.oAppReq.sRefID,
-                                    'sHeader':{'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
-                                    'sInstID':user.institutionID,'sCroId':user.id},
+                                    'oHeader':{
+                                        'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
+                                        'sInstID':user.institutionID,
+                                        'sCroId':user.username,
+                                        'sAppSource':"WEB",
+                                        'sReqType':"JSON"
+                                    },
                                     "sAppStat":"Declined",
                                     "aCroJustification":arrayDclnDesc, 
                                     "aDedupeRefID ": ($scope.dedupeRefArray ? $scope.dedupeRefArray : [])
@@ -531,8 +575,13 @@
                             sRemark:$scope.selected.apprvRemark
                         });
                         var json={
-                            'sHeader':{'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
-                            'sInstID':user.institutionID,'sCroId':user.id},
+                            'oHeader':{
+                                'sAppID':$scope.objectSet.oAppReq.oHeader.sAppID,
+                                'sInstID':user.institutionID,
+                                'sAppSource':"WEB",
+                                'sReqType':"JSON",
+                                'sCroId':user.username
+                            },
                             'sRefID':$scope.objectSet.oAppReq.sRefID,
                             'sAppStat':"Approved",
                             "aCroJustification":arrayApprvDesc,
@@ -637,7 +686,7 @@ $scope.onchange = function(id) {
         			         "sSourceID":"WEB",
         			         "sAppSource":"WEB",
         			         "sReqType":"JSON",
-        			         "sCroId":user.id
+        			         "sCroId":user.username
         			    },
         			    "oLosDtls":{
         			        "sLosID":losId,
@@ -706,7 +755,7 @@ app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$ui
                             "sReqType":"JSON",
                             "dtSubmit":new Date().getTime(), 
                             "sDsaId":null,
-                            "sCroId":user.id,
+                            "sCroId":user.username,
                             "sDealerId":null
                           },
                      "sRefID" : requestObj.oAppReq.sRefID,
@@ -892,9 +941,9 @@ app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$ui
 
 }]),*/
 
-    app.controller('ModalInstanceCtrl', ['$scope','$rootScope','NotificationObject','modalFeed',
+    app.controller('ModalInstanceCtrl', ['$scope','$rootScope','modalFeed',
        '$uibModalInstance','$log','notifier', 
-       function($scope, $rootScope,NotificationObject,modalFeed,$uibModalInstance,$log,notifier){
+       function($scope, $rootScope,modalFeed,$uibModalInstance,$log,notifier){
 
         $scope.modalFeed = modalFeed;
 
@@ -921,9 +970,9 @@ app.controller("ReinitiatedDecisionModalController",["$scope","RestService","$ui
         };
     }]);
 
-    app.controller('DeclInstanceCtrl', ['$scope','$rootScope','NotificationObject',
+    app.controller('DeclInstanceCtrl', ['$scope','$rootScope',
        '$uibModalInstance','dclnModelFeed','notifier', 
-       function($scope, $rootScope,NotificationObject,$uibModalInstance,dclnModelFeed,notifier){ 
+       function($scope, $rootScope,$uibModalInstance,dclnModelFeed,notifier){ 
            
         $scope.dclnModelFeed = dclnModelFeed;
         $scope.saveDclnPanel = function () {
