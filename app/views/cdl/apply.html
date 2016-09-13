@@ -1,51 +1,50 @@
 <div class="row clearfix" id="infoContainer" style="padding-top: 20px;">
-	<div class="col-sm-4 col-md-3" id="progressDiv"	style="border-right: 01px solid #24a1ed; padding-right: 0px; padding-top: 22px;">
-		<div id="responsive">
-
-			<div style="padding-left: 25%">
-				<div style="display: inline-block; color: #24a1ed; float: left;">Name : &nbsp 
-				</div>
-				<div style="display: inline-block; width: 75%;">
-				{{ fname +"	"+ mname +" "+ lname}}
-				</div>
-			</div>			
-			<div style="margin-top: 10px; padding-left: 25%">
-				<div style="display: inline-block; color: #24a1ed; float: left;">Ref ID :&nbsp</div>
-				<div style="display: inline-block; width: 75%;"> {{ referenceID }}</div>
-			</div>			
-			<div style="margin-top: 10px; padding-left: 25%">
-				<div style="display: inline-block; color: #24a1ed; float: left;">Product :&nbsp</div>
-				<div style="display: inline-block; width: 70%;"> {{applicant.application.loanType}}</div>
-			</div>
-			<div style="margin-top: 18%;">
-				<ul class="progressbar">
-					<!-- <li ui-sref-active="active" ui-sref="/cdl/apply.personal"> PERSONAL DETAILS</li>
+    <div class="col-sm-4 col-md-3" id="progressDiv" style="border-right: 01px solid #24a1ed; padding-right: 0px; padding-top: 22px;">
+        <div id="responsive">
+            <div style="padding-left: 25%">
+                <div style="display: inline-block; color: #24a1ed; float: left;">Name : &nbsp
+                </div>
+                <div style="display: inline-block; width: 75%;">
+                    {{ fname +" "+ mname +" "+ lname}}
+                </div>
+            </div>
+            <div style="margin-top: 10px; padding-left: 25%">
+                <div style="display: inline-block; color: #24a1ed; float: left;">Ref ID :&nbsp</div>
+                <div style="display: inline-block; width: 75%;"> {{ referenceID }}</div>
+            </div>
+            <div style="margin-top: 10px; padding-left: 25%">
+                <div style="display: inline-block; color: #24a1ed; float: left;">Product :&nbsp</div>
+                <div style="display: inline-block; width: 70%;"> {{applicant.application.loanType}}</div>
+            </div>
+            <div style="margin-top: 18%;">
+                <ul class="progressbar">
+                    <!-- <li ui-sref-active="active" ui-sref="/cdl/apply.personal"> PERSONAL DETAILS</li>
 					<li ui-sref-active="active" ui-sref="/cdl/apply.address"> ADDRESS DETAILS</li>
 					<li ui-sref-active="active" ui-sref="/cdl/apply.professional"> WORK DETAILS</li>
 					<li ui-sref-active="active" ui-sref="/cdl/apply.asset"> ASSET DETAILS</li>
 					<li ui-sref-active="active" ui-sref="/cdl/apply.kyc"> PROOF</li> -->
-
-					<li id="KYCList" ng-class= "{ active : isCurrPanel(1)}">PERSONAL DETAILS</li>
-					<li id="personalList" ng-class= "{ active : isCurrPanel(2)}">ADDRESS DETAILS</li>
-					<li id="employmentList" ng-class= "{ active : isCurrPanel(3)}">WORK DETAILS</li>
-					<li id="IncomeList" ng-class= "{ active : isCurrPanel(4)}">ASSET DETAILS</li>
-					<li id="BankingList" ng-class= "{ active : isCurrPanel(5)}">PROOF</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div class=" col-sm-8 col-md-9">
-		<!-- personal data -->
-		<!-- address data -->
-		<!-- professional data -->
-		<!-- asset data -->
-		<!-- kyc documents -->
-		<div class="form-views" ui-view data-ng-cloak ></div>
-	</div>
+                    <li id="KYCList" ng-class="{ active : isCurrPanel(1)}">PERSONAL DETAILS</li>
+                    <li id="personalList" ng-class="{ active : isCurrPanel(2)}">ADDRESS DETAILS</li>
+                    <li id="employmentList" ng-class="{ active : isCurrPanel(3)}">WORK DETAILS</li>
+                    <li id="IncomeList" ng-class="{ active : isCurrPanel(4)}">ASSET DETAILS</li>
+                    <li id="BankingList" ng-class="{ active : isCurrPanel(5)}">PROOF</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class=" col-sm-8 col-md-9">
+        <!-- personal data -->
+        <!-- address data -->
+        <!-- professional data -->
+        <!-- asset data -->
+        <!-- kyc documents -->
+        <div class="form-views" ui-view data-ng-cloak></div>
+    </div>
 </div>
 <!-- change -->
 <div class="row clearfix" style="background-color: white;" id="ErrorContainer">
-</div><!-- 
+</div>
+<!--
 <div id="myModalnew" class="modal fade">
 	<div class="modal-dialog"
 		style="width: 55%; max-height: 600px; height: 65%">

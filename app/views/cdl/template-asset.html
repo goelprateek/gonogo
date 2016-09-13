@@ -1,46 +1,42 @@
 <!-- <form> -->
-<div layout-gt-sm="row" >
-	<md-input-container class="md-block" flex-gt-sm>
-		<label>Asset Category</label>
-		<md-select name="category" ng-model="asset.category" md-on-close="onCategoryChanged()" required> 
-		  <md-option ng-value="asset" ng-repeat="asset in assetArray track by $index">
-		  	{{ asset }}
-		  </md-option>
-		</md-select>
-		
-		<div ng-messages="form.category.$error" >
-    		<div ng-message="required">Please select Asset Category</div>
-		</div>	
-	</md-input-container>
-</div>	
-
-<div layout-gt-sm="row" >
-	<md-input-container class="md-block" flex-gt-sm>
-		<label>Select Make</label>
-		<!-- {{makeTags.length}} -->
-		<md-select name="make" ng-model="asset.make" md-on-close="onMakeChanged()" required> 
-		  <md-option ng-value="make" ng-repeat="make in makeTags track by $index">{{ make }}</md-option>
-		</md-select>
-		<div ng-messages="form.make.$error" >
-    		<div ng-message="required">Please select Asset Make</div>
-		</div>
-	</md-input-container>
-</div>	
-
-<div layout-gt-sm="row" >
-	<md-input-container class="md-block" flex-gt-sm>
-		<label>Model</label>
-		<!-- {{modelTags.length}} -->
-		<md-select name="model" ng-model="asset.model" md-on-close="onModelChanged()" required> 
-		  <md-option ng-value="model" ng-repeat="model in modelTags track by $index">{{ model }}</md-option>
-		</md-select>
-		<div ng-messages="form.make.$error" >
-    		<div ng-message="required">Please select Asset Make</div>
-		</div>
-	</md-input-container>
-</div>	
-
-	<!--<div class="row clearfix customRow" style="margin-top:30px;">
+<div layout-gt-sm="row">
+    <md-input-container class="md-block" flex-gt-sm>
+        <label>Asset Category</label>
+        <md-select name="category" ng-model="asset.category" md-on-close="onCategoryChanged()" required>
+            <md-option ng-value="asset" ng-repeat="asset in assetArray track by $index">
+                {{ asset }}
+            </md-option>
+        </md-select>
+        <div ng-messages="form.category.$error">
+            <div ng-message="required">Please select Asset Category</div>
+        </div>
+    </md-input-container>
+</div>
+<div layout-gt-sm="row">
+    <md-input-container class="md-block" flex-gt-sm>
+        <label>Select Make</label>
+        <!-- {{makeTags.length}} -->
+        <md-select name="make" ng-model="asset.make" md-on-close="onMakeChanged()" required>
+            <md-option ng-value="make" ng-repeat="make in makeTags track by $index">{{ make }}</md-option>
+        </md-select>
+        <div ng-messages="form.make.$error">
+            <div ng-message="required">Please select Asset Make</div>
+        </div>
+    </md-input-container>
+</div>
+<div layout-gt-sm="row">
+    <md-input-container class="md-block" flex-gt-sm>
+        <label>Model</label>
+        <!-- {{modelTags.length}} -->
+        <md-select name="model" ng-model="asset.model" md-on-close="onModelChanged()" required>
+            <md-option ng-value="model" ng-repeat="model in modelTags track by $index">{{ model }}</md-option>
+        </md-select>
+        <div ng-messages="form.make.$error">
+            <div ng-message="required">Please select Asset Make</div>
+        </div>
+    </md-input-container>
+</div>
+<!--<div class="row clearfix customRow" style="margin-top:30px;">
 		 <div class="col-md-12 height">
 			<select id="ast1" name="category" ng-model="asset.category" class="form-control control-select inputMaterial" ng-options = "d for d in assetArray track by d" ng-change="fetchAssetMake(asset.category)" select-required>
 				<option value="">Select Category*</option>
@@ -48,11 +44,10 @@
 			<label>Asset Category*</label>
 			<div ng-messages="AssetForm.category.$error" ng-show="AssetForm.category.$touched" class="errorMsg">
 	    		<p ng-message="selectrequired">Please select Asset Category</p>
-			</div>	
-		</div> 
+			</div>
+		</div>
 	</div> -->
-
-	<!-- <div class="row clearfix customRow">
+<!-- <div class="row clearfix customRow">
 		<div class="col-md-12 height">
 			<select id="mk1" name="make" ng-model="asset.make" class="form-control control-select inputMaterial" ng-options = "d for d in makeTags track by d" ng-change="fetchAssetModel(asset.category,asset.make)" select-required>
 				<option value="">Select Make*</option>
@@ -63,8 +58,7 @@
 			</div>
 		</div>
 	</div> -->
-
-	<!-- <div class="row clearfix customRow">
+<!-- <div class="row clearfix customRow">
 		<div class="col-md-12 height">
 			<select id="mdl1" name="model" ng-model="asset.model" class="form-control control-select inputMaterial" ng-options = "d for d in modelTags track by d" select-required>
 				<option value="">Select Model*</option>
@@ -75,5 +69,4 @@
 			</div>
 		</div>
 	</div> -->
-
 <!-- </form> -->

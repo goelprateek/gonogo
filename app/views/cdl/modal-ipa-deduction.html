@@ -1,40 +1,42 @@
 <md-dialog aria-label="options dialog">
-	<style>
-		.save-btn{
-			border: 1px solid #24a1ed;
-			background-color: white;
-			padding: 4px 16px 5px;
-			color: #24a1ed;
-		}
-		md-dialog{
-			min-width: 500px;
-		}
-		.lbl-deductions{
-			font-size: 20px;
-			padding-top: 10px;
-			padding-bottom: 10px;
-			border-bottom: 1px solid #e5e5e5;
-		}
-	</style>
-	<form>
-		<div class="modal-header">
-			<button type="button" class="close" ng-click="cancel()" aria-hidden="true">&times;</button>
-			<h4 class="modal-title">Other Deductions</h4>
-		</div>
+    <style>
+    .save-btn {
+        border: 1px solid #24a1ed;
+        background-color: white;
+        padding: 4px 16px 5px;
+        color: #24a1ed;
+    }
+
+    md-dialog {
+        min-width: 500px;
+    }
+
+    .lbl-deductions {
+        font-size: 20px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e5e5e5;
+    }
+    </style>
+    <form>
+        <div class="modal-header">
+            <button type="button" class="close" ng-click="cancel()" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Other Deductions</h4>
+        </div>
         <md-dialog-content layout-padding>
-          	<form>
-				<div class="lbl-deductions">Dealer Subvention : &#x20B9; {{dealerSubvention}}</div>
-				<!-- <div class="lbl-deductions">Manufacture Subvention : &#x20B9; {{manufactureSubvention}}</div>
+            <form>
+                <div class="lbl-deductions">Dealer Subvention : &#x20B9; {{dealerSubvention}}</div>
+                <!-- <div class="lbl-deductions">Manufacture Subvention : &#x20B9; {{manufactureSubvention}}</div>
 				<div class="lbl-deductions">Manufacture Processing Fee : &#x20B9; {{manufacturerProcessingFee}}</div> -->
-				<div class="lbl-deductions">Manufacture Subvention Bourne by Dealer : &#x20B9; {{manufactureSubventionBourneByDealer}}</div>
-				<div class="lbl-deductions">Other Charges : &#x20B9; {{otherCharges}}</div>
-			</form>
+                <div class="lbl-deductions">Manufacture Subvention Bourne by Dealer : &#x20B9; {{manufactureSubventionBourneByDealer}}</div>
+                <div class="lbl-deductions">Other Charges : &#x20B9; {{otherCharges}}</div>
+            </form>
         </md-dialog-content>
         <md-dialog-actions>
-			<span flex></span>
-			<md-button  class="customButton" ng-click="cancel()" >
-			OK
-			</md-button>
+            <span flex></span>
+            <md-button class="customButton" ng-click="cancel()">
+                OK
+            </md-button>
         </md-dialog-actions>
-	</form>
+    </form>
 </md-dialog>

@@ -1,114 +1,85 @@
-
-<md-dialog class="custom-report"  >
-
-<form name="customReportForm" class="form-horizontal" ng-cloak>
-    <md-toolbar class="md-light-blue" style="background-color:cornflowerblue">
-      <div class="md-toolbar-tools"> 
-        <h2>Custom Report Designer</h2>
-        <span flex></span>
-        <md-button class="md-icon-button" ng-click="dismiss()" aria-hidden="true" >
-          <md-icon class="close" md-font-icon="fa fa-times"  aria-label="Close dialog" style="color:white;"></md-icon>  
-        </md-button>
-      </div>  
-    </md-toolbar>
-    <md-dialog-content >
-        <div class="md-dialog-content" style="min-height:600px;height:auto">
-            <div layout-gt-sm="row" >
-              <md-input-container class="md-block" flex-gt-sm >
-                <md-autocomplete
-                        md-floating-label="Report Name"
-                        md-input-name="reportName"
-                        md-selected-item="customReportName"
-                        md-search-text="searchText"
-                        md-items="item in custreport.querySearch(searchText)"
-                        md-item-text="item.reportName"
-                        md-min-length="0"
-                        md-selected-item-change="selectedReport()"
-                        flex="50"
-                        >
-                      <md-item-template>
-                        <span md-highlight-text="searchText" md-highlight-flags="^i">
+<md-dialog class="custom-report">
+    <form name="customReportForm" class="form-horizontal" ng-cloak>
+        <md-toolbar class="md-light-blue" style="background-color:cornflowerblue">
+            <div class="md-toolbar-tools">
+                <h2>Custom Report Designer</h2>
+                <span flex></span>
+                <md-button class="md-icon-button" ng-click="dismiss()" aria-hidden="true">
+                    <md-icon class="close" md-font-icon="fa fa-times" aria-label="Close dialog" style="color:white;"></md-icon>
+                </md-button>
+            </div>
+        </md-toolbar>
+        <md-dialog-content>
+            <div class="md-dialog-content" style="min-height:600px;height:auto">
+                <div layout-gt-sm="row">
+                    <md-input-container class="md-block" flex-gt-sm>
+                        <md-autocomplete md-floating-label="Report Name" md-input-name="reportName" md-selected-item="customReportName" md-search-text="searchText" md-items="item in custreport.querySearch(searchText)" md-item-text="item.reportName" md-min-length="0" md-selected-item-change="selectedReport()" flex="50">
+                            <md-item-template>
+                                <span md-highlight-text="searchText" md-highlight-flags="^i">
                           {{item.reportName}}
                         </span>
-                      </md-item-template>
-                      <md-not-found>
-                        No record matching "{{searchText}}" were found.
-                        <md-button class="md-raised md-red" ng-click="addnewReport(searchText)">Add new</md-button>
-                      </md-not-found>
-                </md-autocomplete>
-              </md-input-container>
-            </div>
-
-            <div layout-gt-sm="row" >
-              <div ng-repeat="list in models" class="col-md-6" >
-
-                <md-toolbar  ng-show="!showSearch" style="background-color:cornflowerblue">
-                  <div class="md-toolbar-tools">
-                    <h4>
-                       <span>{{list.listName}} Fields</span> 
+                            </md-item-template>
+                            <md-not-found>
+                                No record matching "{{searchText}}" were found.
+                                <md-button class="md-raised md-red" ng-click="addnewReport(searchText)">Add new</md-button>
+                            </md-not-found>
+                        </md-autocomplete>
+                    </md-input-container>
+                </div>
+                <div layout-gt-sm="row">
+                    <div ng-repeat="list in models" class="col-md-6">
+                        <md-toolbar ng-show="!showSearch" style="background-color:cornflowerblue">
+                            <div class="md-toolbar-tools">
+                                <h4>
+                       <span>{{list.listName}} Fields</span>
                     </h4>
-                    <span flex></span>
-                    <md-button aria-label="Search" class="md-icon-button" ng-click="toggleListSearch()" >
-                        <md-icon class="search" style="font-size:20px;" md-font-icon="fa fa-search" aria-label="search"></md-icon>
-                    </md-button>
-                    <md-button class="md-fab md-mini" aria-label="count">
-                        <span>{{list.items.length}}</span>
-                    </md-button>
-                  </div>
-                </md-toolbar>
-
-                <md-toolbar  ng-show="showSearch" style="background-color:cornflowerblue">
-                    <div class="md-toolbar-tools">
-                      <md-button ng-click="toggleListSearch()" class="md-icon-button" aria-label="Back">
-                        <md-icon class="back" style="font-size:20px;" md-font-icon="fa fa-arrow-left" aria-label="back"></md-icon>
-                      </md-button>
-                      <md-input-container  flex layout-padding layout-margin layout-fill >
-                        <label>&nbsp;</label>
-                        <input ng-model="query" placeholder="Search" style="margin-top:10px;">
-                      </md-input-container>
-                      <md-button aria-label="Search" class="md-icon-button" ng-click="toggleListSearch()" >
-                        <md-icon class="search" style="font-size:20px;" md-font-icon="fa fa-search" aria-label="search"></md-icon>
-                      </md-button>
-                      <md-button class="md-fab md-mini" aria-label="count">
-                        <span>{{list.items.length}}</span>
-                      </md-button>
-                    </div>
-                </md-toolbar>
-
-                   
-                <md-content flex="" slimscroll="{height: 300,railVisible:true}">
-                    <md-list dnd-list dnd-drop="onDrop(list, item, index)">
-                          <md-list-item class="md-1-line" ng-repeat="item in list.items | filter:query"
-                            dnd-draggable="getSelectedItemsIncluding(list, item)"
-                            dnd-dragstart="onDragstart(list, event)"
-                            dnd-moved="onMoved(list)"
-                            dnd-dragend="list.dragging = false"
-                            dnd-selected="item.selected = !item.selected"
-                            ng-class="{'selected': item.selected}"
-                            ng-hide="list.dragging && item.selected"
-                          >
-                              <div class="md-list-item-text" layout="column">
-                                  <p>{{item.sColDispName}}</p>
-                              </div>
-                              <md-divider inset="" ng-if="!$last"></md-divider>
-                          </md-list-item>
-
-                          <li class="dndPlaceholder list-group-item" >
-                              <i class="fa fa-clone"></i>
-                              Drop any <strong>Column</strong> here
-                          </li>
-
-                    </md-list>
-                </md-content>
-
-               <!--  <div class="panel panel-info">
+                                <span flex></span>
+                                <md-button aria-label="Search" class="md-icon-button" ng-click="toggleListSearch()">
+                                    <md-icon class="search" style="font-size:20px;" md-font-icon="fa fa-search" aria-label="search"></md-icon>
+                                </md-button>
+                                <md-button class="md-fab md-mini" aria-label="count">
+                                    <span>{{list.items.length}}</span>
+                                </md-button>
+                            </div>
+                        </md-toolbar>
+                        <md-toolbar ng-show="showSearch" style="background-color:cornflowerblue">
+                            <div class="md-toolbar-tools">
+                                <md-button ng-click="toggleListSearch()" class="md-icon-button" aria-label="Back">
+                                    <md-icon class="back" style="font-size:20px;" md-font-icon="fa fa-arrow-left" aria-label="back"></md-icon>
+                                </md-button>
+                                <md-input-container flex layout-padding layout-margin layout-fill>
+                                    <label>&nbsp;</label>
+                                    <input ng-model="query" placeholder="Search" style="margin-top:10px;">
+                                </md-input-container>
+                                <md-button aria-label="Search" class="md-icon-button" ng-click="toggleListSearch()">
+                                    <md-icon class="search" style="font-size:20px;" md-font-icon="fa fa-search" aria-label="search"></md-icon>
+                                </md-button>
+                                <md-button class="md-fab md-mini" aria-label="count">
+                                    <span>{{list.items.length}}</span>
+                                </md-button>
+                            </div>
+                        </md-toolbar>
+                        <md-content flex="" slimscroll="{height: 300,railVisible:true}">
+                            <md-list dnd-list dnd-drop="onDrop(list, item, index)">
+                                <md-list-item class="md-1-line" ng-repeat="item in list.items | filter:query" dnd-draggable="getSelectedItemsIncluding(list, item)" dnd-dragstart="onDragstart(list, event)" dnd-moved="onMoved(list)" dnd-dragend="list.dragging = false" dnd-selected="item.selected = !item.selected" ng-class="{'selected': item.selected}" ng-hide="list.dragging && item.selected">
+                                    <div class="md-list-item-text" layout="column">
+                                        <p>{{item.sColDispName}}</p>
+                                    </div>
+                                    <md-divider inset="" ng-if="!$last"></md-divider>
+                                </md-list-item>
+                                <li class="dndPlaceholder list-group-item">
+                                    <i class="fa fa-clone"></i> Drop any <strong>Column</strong> here
+                                </li>
+                            </md-list>
+                        </md-content>
+                        <!--  <div class="panel panel-info">
                   <div class="panel-heading">
                     <div class="row">
-                                            
+
                         <h3 style="margin-top:5px;" class="panel-title pull-left"> {{list.listName}} Fields </h3>
 
                         <span style="margin-top:5px;" class="badge bage-info pull-right" tooltip-placement="right" uib-tooltip="Count of {{list.listName}} Fields" >{{list.items.length}}</span>
-                                            
+
                         <div class="col-xs-7">
                             <div class="input-group">
                                 <input type="text" class="form-control"  ng-model="query" placeholder="Search">
@@ -119,7 +90,7 @@
                        </div>
                     </div>
                   </div>
-                  <div class="pannel-body" ></div>  
+                  <div class="pannel-body" ></div>
                   <div class="scroll-body report"  slimscroll="{height: 300,railVisible:true}">
                     <ul dnd-list class="list-group" dnd-drop="onDrop(list, item, index)" >
                         <li ng-repeat="item in list.items | filter:query"
@@ -137,61 +108,54 @@
                                 {{item.sColDispName}}
                             </span>
                         </li>
-                            
+
                         <li class="dndPlaceholder list-group-item" >
                             <i class="fa fa-clone"></i>
                             Drop any <strong>Column</strong> here
                         </li>
                     </ul>
                   </div>
-                </div>   -->        
-              </div>
+                </div>   -->
+                    </div>
+                </div>
+                <div layout="row" layout-gt-sm="row" ng-if="preview" layout-align="center center">
+                    <md-button class="md-raised md-primary" ng-click="previewConfiguration()">
+                        <span class="fa fa-eye"> Preview</span>
+                    </md-button>
+                </div>
+                <div layout="row" layout-gt-sm="row" ng-if="header">
+                    <table class="table table-striped table-responsive table-condensed table-hover" style="height: auto;white-space: nowrap;">
+                        <thead>
+                            <tr>
+                                <th data-ng-repeat="head in header  ">
+                                    <div class="th">
+                                        {{head}}
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody style="font-size: 12px;">
+                            <tr data-ng-repeat="value in values">
+                                <td data-ng-repeat="val in value track by $index">
+                                    {{val}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-
-            <div layout="row" layout-gt-sm="row" ng-if="preview"  layout-align="center center" >
-              <md-button  class="md-raised md-primary" ng-click="previewConfiguration()">
-                  <span class="fa fa-eye"> Preview</span>
-              </md-button>
-            </div>
-
-            <div layout="row" layout-gt-sm="row" ng-if="header">
-                  <table class="table table-striped table-responsive table-condensed table-hover" style="height: auto;white-space: nowrap;">
-                      <thead>
-                          <tr>
-                              <th data-ng-repeat="head in header  ">
-                                  <div class="th">
-                                      {{head}}
-                                  </div>
-                              </th>
-                          </tr>
-                      </thead>
-                      <tbody style="font-size: 12px;">
-
-                          <tr data-ng-repeat="value in values" >
-                              <td data-ng-repeat="val in value track by $index">
-                                {{val}}
-                              </td>
-                          </tr>
-                      </tbody>
-                </table> 
-            </div>
-
-        </div>
-      </md-dialog-content>
-      <md-dialog-actions layout="row" class="layout-row">
-          <span flex></span>
-          <md-button class="md-primary md-raised" ng-click="saveConfiguration()"  >
-            Save
-          </md-button>
-          <md-button class="md-primary md-raised" ng-click="downloadCustomReport()" > 
-            Download
-          </md-button>
-    </md-dialog-actions>
-</form>
-
+        </md-dialog-content>
+        <md-dialog-actions layout="row" class="layout-row">
+            <span flex></span>
+            <md-button class="md-primary md-raised" ng-click="saveConfiguration()">
+                Save
+            </md-button>
+            <md-button class="md-primary md-raised" ng-click="downloadCustomReport()">
+                Download
+            </md-button>
+        </md-dialog-actions>
+    </form>
 </md-dialog>
-
-
 <!-- <div class="custom-reports">
         <div class="modal-header">
             <button type="button" class="close"  ng-click="dismiss()" aria-hidden="true" tooltip-placement="right" uib-tooltip="close workspace">&times;</button>
@@ -209,17 +173,17 @@
                                     <div class="col-md-6 input-group" >
                                         <input id="reportName"  type="text" ng-model="reportName" placeholder="Add report name" uib-typeahead="reports.reportName for reports in getReportConfiguration($viewValue) " typeahead-loading="loadingReports" typeahead-no-results="noResults" class="form-control" typeahead-min-length="3" typeahead-on-select="selectedReport($item, $model, $label, $event)" typeahead-show-hint="true">
                                         <i ng-show="loadingReports" class="fa fa-refresh"></i>
-                                        
+
                                         <span ng-show="noResults" class="input-group-addon" >
                                             <a class="fa fa-plus" ng-click="addnewReport()"></a>
                                         </span>
-                                        
+
                                         <div ng-show="noResults">
-                                          <i class="fa fa-remove"></i> 
+                                          <i class="fa fa-remove"></i>
                                           No Results Found
                                         </div>
                                     </div>
-                                 </div>   
+                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group" ng-if="models">
@@ -233,19 +197,19 @@
                     </div>
 
                  <div class="form-group">
-                    
+
                     <div class="col-md-12">
                         <div class="row" >
-                        
+
                             <div ng-repeat="list in models" class="col-md-6">
                                 <div class="panel panel-info">
                                     <div class="panel-heading">
                                         <div class="row">
-                                            
+
                                             <h3 style="margin-top:5px;" class="panel-title pull-left"> {{list.listName}} Fields </h3>
 
                                             <span style="margin-top:5px;" class="badge bage-info pull-right" tooltip-placement="right" uib-tooltip="Count of {{list.listName}} Fields" >{{list.items.length}}</span>
-                                            
+
                                             <div class="col-xs-7">
                                                 <div class="input-group">
                                                     <input type="text" class="form-control"  ng-model="query" placeholder="Search">
@@ -254,12 +218,12 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                        
+
                                         </div>
                                     </div>
                                     <div class="pannel-body" >
 
-                                    </div>  
+                                    </div>
                                        <div class="scroll-body report"  slimscroll="{height: 300,railVisible:true}">
                                        <ul dnd-list class="list-group" dnd-drop="onDrop(list, item, index)" >
                                             <li ng-repeat="item in list.items | filter:query"
@@ -277,19 +241,19 @@
                                                     {{item.sColDispName}}
                                                 </span>
                                             </li>
-                                                
+
                                             <li class="dndPlaceholder list-group-item" >
                                                 Drop any <strong>Column</strong> here
                                             </li>
                                         </ul>
                                         </div>
-                                </div>          
                                 </div>
-                                
+                                </div>
+
                             </div>
                         </div>
-                 </div> 
-                 
+                 </div>
+
                  <div class="form-group">
                      <div class="col-md-12" ng-if="preview">
                         <div class="col-md-5">&nbsp;</div>
@@ -304,7 +268,7 @@
 
                  <div class="form-group">
                     <div class="col-md-12"  ng-if="header">
-                        <div class="row"  style="overflow-x:scroll; overflow-y:hidden;"> 
+                        <div class="row"  style="overflow-x:scroll; overflow-y:hidden;">
                             <table class="table table-striped table-responsive table-condensed table-hover" style="height: auto;white-space: nowrap;">
                                 <thead>
                                     <tr>
@@ -323,11 +287,11 @@
                                         </td>
                                     </tr>
                                 </tbody>
-                            </table> 
+                            </table>
                         </div>
                     </div>
-                 </div>   
-             </form>       
+                 </div>
+             </form>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" type="button" ng-click="saveConfiguration()" tooltip-placement="top" uib-tooltip="Save created configuration">
@@ -338,5 +302,5 @@
                 <span class="fa fa-download"> Download</span>
             </button>
         </div>
-    
+
 </div> -->

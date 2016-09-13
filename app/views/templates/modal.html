@@ -1,15 +1,15 @@
- <!--  Modal for Images and PDF -->
- 
+<!--  Modal for Images and PDF -->
 <style>
-.imageModal .reject{
-color: #fff;
-background-color: #EF160B;
-border-color: #EF160B;
+.imageModal .reject {
+    color: #fff;
+    background-color: #EF160B;
+    border-color: #EF160B;
 }
-.imageModal .approve{
-	color: #fff;
-	background-color: #008000;
-	/*border-color: #EF160B;*/
+
+.imageModal .approve {
+    color: #fff;
+    background-color: #008000;
+    /*border-color: #EF160B;*/
 }
 
 .maximized {
@@ -23,71 +23,53 @@ border-color: #EF160B;
     overflow: auto
 }
 
-.maximized .modal-body{
+.maximized .modal-body {
     padding: 12px 0
 }
 
-.expand{
-	margin-right: 12px;
+.expand {
+    margin-right: 12px;
     font-size: 15px;
     margin-top: 1px;
 }
-
 </style>
 <div class="modal-content imageModal">
-	<div class="modal-header">
-		<button type="button" class="close"  ng-click="closeModal()" aria-hidden="true">&times;</button>
-		<a class="close expand" ng-if="!imageTag" widget-maximize ></a>
-		<h4 class="modal-title">Document Preview</h4>
-	</div>
-	<div class="modal-body">
-		<div class="row clearfix" >
-			 <uib-carousel  ng-if="imageTag" active="active" interval="myInterval" no-wrap="noWrapSlides" no-transition="true">
-			      <uib-slide ng-repeat="slide in slides  track by slide.id" index="slide.id">
-			      <h4>{{slide.sImgType}}</h4>
-			       <img  ng-src="{{slide.sByteCode}}" ng-modal="slide.sImgType"
-						style="width: 100%; height: 100%; max-height: 400px; margin:auto;">
-					
-					<div class="row clearfix" style="margin-top: 3%;" ng-if="croImages">
-						<div class="col-md-7" style="padding-right: 0px; padding-left: 15%;">
-							<div class="col-md-4" style="padding: 0px">
-								<div class="btn-group" style="width: 128%; height: 34px;">
-									<button ng-class="{'btn-default btn':slide.sStat =='' || slide.sStat == 'null' || slide.sStat =='Reject','approve btn':slide.sStat=='Approve'}" 
-									ng-click="approveImg($index)"
-									style="padding: 6px">Approve</button>
-
-									<button ng-class="{'btn-default btn':slide.sStat =='' || slide.sStat == 'null' || slide.sStat =='Approve' ,'reject btn':slide.sStat =='Reject'}" ng-click="rejectImg($index)" style="padding: 6p">Reject</button>
-								</div>
-							</div>
-							<div class="col-md-2" ng-if="slide.sStat =='Reject'">
-								<input type="text" class="form-control" maxlength="150"
-									ng-model="slide.sReason" style="height: 33px; width: 150px;">
-							</div>
-							<div class="col-md-1" style="margin-top: 15px;" ng-if="slide.sStat =='Reject'">
-								<a ng-click="rejectService($index)" style="margin-left: 105px;">OK</a>
-							</div>
-						</div>
-					
-						<div class="col-md-1" style="padding: 0px; width: 10%;" ng-if="slide.evdncArray" 
-						ng-repeat="data in slide.evdncArray track by data.id">
-							<a style="padding: 10px;"><img alt="Preview Not Availeble"
-								class="custom_img_rounded" ng-src="{{data.sByteCode}}"
-								style="margin: 0px; margin-top: -4px;"></a>
-						</div>
-					
-						<div class="col-md-1" id="upload_button" ng-if="iseditMode"
-							style="padding: 0px; width: 10%; top: 8px;">
-							<input type="submit" class="form-control upload"
-								value="Upload Image" dropzone="FileDropZone"
-								ngf-select="onFileSelect($files,slide.sImgType,$index);" name="File" />
-						</div>
-
-					</div>
-			      </uib-slide>
-			   </uib-carousel>
-
-			<object data="{{pdf}}" ng-if="!imageTag" type="text/html" width="100%" height="480px"
-				style="border: none;"></object>
-		</div>
-	</div>
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
+        <a class="close expand" ng-if="!imageTag" widget-maximize></a>
+        <h4 class="modal-title">Document Preview</h4>
+    </div>
+    <div class="modal-body">
+        <div class="row clearfix">
+            <uib-carousel ng-if="imageTag" active="active" interval="myInterval" no-wrap="noWrapSlides" no-transition="true">
+                <uib-slide ng-repeat="slide in slides  track by slide.id" index="slide.id">
+                    <h4>{{slide.sImgType}}</h4>
+                    <img ng-src="{{slide.sByteCode}}" ng-modal="slide.sImgType" style="width: 100%; height: 100%; max-height: 400px; margin:auto;">
+                    <div class="row clearfix" style="margin-top: 3%;" ng-if="croImages">
+                        <div class="col-md-7" style="padding-right: 0px; padding-left: 15%;">
+                            <div class="col-md-4" style="padding: 0px">
+                                <div class="btn-group" style="width: 128%; height: 34px;">
+                                    <button ng-class="{'btn-default btn':slide.sStat =='' || slide.sStat == 'null' || slide.sStat =='Reject','approve btn':slide.sStat=='Approve'}" ng-click="approveImg($index)" style="padding: 6px">Approve</button>
+                                    <button ng-class="{'btn-default btn':slide.sStat =='' || slide.sStat == 'null' || slide.sStat =='Approve' ,'reject btn':slide.sStat =='Reject'}" ng-click="rejectImg($index)" style="padding: 6p">Reject</button>
+                                </div>
+                            </div>
+                            <div class="col-md-2" ng-if="slide.sStat =='Reject'">
+                                <input type="text" class="form-control" maxlength="150" ng-model="slide.sReason" style="height: 33px; width: 150px;">
+                            </div>
+                            <div class="col-md-1" style="margin-top: 15px;" ng-if="slide.sStat =='Reject'">
+                                <a ng-click="rejectService($index)" style="margin-left: 105px;">OK</a>
+                            </div>
+                        </div>
+                        <div class="col-md-1" style="padding: 0px; width: 10%;" ng-if="slide.evdncArray" ng-repeat="data in slide.evdncArray track by data.id">
+                            <a style="padding: 10px;"><img alt="Preview Not Availeble" class="custom_img_rounded" ng-src="{{data.sByteCode}}" style="margin: 0px; margin-top: -4px;"></a>
+                        </div>
+                        <div class="col-md-1" id="upload_button" ng-if="iseditMode" style="padding: 0px; width: 10%; top: 8px;">
+                            <input type="submit" class="form-control upload" value="Upload Image" dropzone="FileDropZone" ngf-select="onFileSelect($files,slide.sImgType,$index);" name="File" />
+                        </div>
+                    </div>
+                </uib-slide>
+            </uib-carousel>
+            <object data="{{pdf}}" ng-if="!imageTag" type="text/html" width="100%" height="480px" style="border: none;"></object>
+        </div>
+    </div>
 </div>

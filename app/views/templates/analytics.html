@@ -94,21 +94,21 @@ select.form-control {
                                 <div class="input-group">
                                     <!-- data-ng-keyup="search(searchKeywords)" -->
                                     <div ng-if="isSearchable" ng-cloak class="col-md-12">
-                                        <input type="text" name="searchKeywords" data-ng-cloak placeholder="Search..." autofocus class="form-control" data-ng-model="search.query" >
+                                        <input type="text" name="searchKeywords" data-ng-cloak placeholder="Search..." autofocus class="form-control" data-ng-model="search.query">
                                     </div>
                                     <div ng-if="dateRanger" ng-cloak class="col-md-12">
                                         <input date-range-picker id="daterange" name="daterange" class="form-control date-picker" type="text" ng-model="datefilter.date" options="datefilter.opts" placeholder="Pick Date" max="datefilter.opts.max" min="datefilter.opts.min" clearable="true" />
                                     </div>
                                     <span class="input-group-addon">
-								      <a class="fa fa-search" ng-click="toggleSearch()" ></a>
-								</span>
-                                    <span class="input-group-addon"> 
-								     <a class="fa fa-calendar" ng-click="toggleDatepicker($event)"></a>
-								</span>
+                                      <a class="fa fa-search" ng-click="toggleSearch()" ></a>
+                                </span>
+                                    <span class="input-group-addon">
+                                     <a class="fa fa-calendar" ng-click="toggleDatepicker($event)"></a>
+                                </span>
                                 </div>
                             </form>
-                            <span data-ng-show="search.query.length >= 1 "> 
-                                Showing {{(datasource|filter:search.query).length}}/{{datasource.length}} entries 
+                            <span data-ng-show="search.query.length >= 1 ">
+                                Showing {{(datasource|filter:search.query).length}}/{{datasource.length}} entries
                             </span>
                         </div>
                         <div class="col-md-3 ">
@@ -228,7 +228,7 @@ select.form-control {
                                     <td>{{store.applicationScore}}</td>
                                     <td>
                                         <span class="label" data-ng-class="{'label-danger' : store.applicationStatus.toUpperCase() == 'DECLINED', 'label-success' : store.applicationStatus.toUpperCase() == 'APPROVED' , 'label-dirty' : store.applicationStatus.toUpperCase() == 'QUEUE'}">{{store.applicationStatus.toUpperCase()}}
-			                    	</span>
+                                    </span>
                                     </td>
                                     <td>{{store.stageID}}</td>
                                     <td>{{store.dealerId}}</td>
@@ -240,14 +240,14 @@ select.form-control {
                     <div class="col-md-12 pull-left" style="margin-bottom: 50px;">
                         <div class="col-md-6 page-num-info">
                             <span>
-		                        Show &nbsp;<select data-ng-model="itemPerPage"
-		                                data-ng-options="num for num in itemPerPageMeta"
-		                                
-		                               >
-		                               <!-- data-ng-change="onNumPerPageChange(numPerPage)" -->
-		                        </select> 
-		                        entries per page
-		                    </span>
+                                Show &nbsp;<select data-ng-model="itemPerPage"
+                                        data-ng-options="num for num in itemPerPageMeta"
+
+                                       >
+                                       <!-- data-ng-change="onNumPerPageChange(numPerPage)" -->
+                                </select>
+                                entries per page
+                            </span>
                         </div>
                         <div class="col-md-6 text-right pagination-container">
                             <dir-pagination-controls ng-if="!ifSeriesClicked" max-size="10" direction-links="true" boundary-links="true" on-page-change="fetchDataFromServer(newPageNumber)">
@@ -257,7 +257,7 @@ select.form-control {
                         </div>
                     </div>
                 </div>
-              <!--   <div data-ng-if="appView" data-ng-include="'views/templates/app-form.html'"></div> -->
+                <!--   <div data-ng-if="appView" data-ng-include="'views/templates/app-form.html'"></div> -->
             </section>
         </div>
     </div>

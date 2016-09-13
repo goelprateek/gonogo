@@ -1,228 +1,216 @@
-  <div id="scoring_main_container" style="display: none;">
-	<div class="col-sm-2 table_panels" id="Cat_box">
-		<div class="list-group">
-			<div class="leftbar_scroll" style="margin: 0px; overflow: visible;">
-			<div class="row clearfix">
-				<div class="col-md-12" id="table_heading">									
-					<label>Category</label>									
-				</div>
-			</div>
-			<div class="list-group-item Cat" id="Cat{{$index}}" ng-repeat="Cat in CatArray" 
-			ng-click="load_attributes($index,Cat.color,Cat.CatID); $event.stopPropagation()" style="background-color:{{Cat.color}};">
-				<div class="Name" id="{{Cat.CatID}}">{{Cat.name}}<sup ng-if="Cat.weight != 1">{{Cat.weight}}</sup></div>
-				<img src="img/arrow_right.png" class="navigation_icon"/>
-				<span ng-click="editCategory(Cat.CatID); $event.stopPropagation()" class="attr edit_btn" ng-show="!ViewMode && authenticate('CATEDIT')">Edit</span>
-				<span ng-click="deleteCategory(Cat.CatID); $event.stopPropagation()" class="attr delete_btn" ng-show="!ViewMode && authenticate('CATDLT')">Delete</span>
-			</div>		
-										
-				<div class="list-group-item add_new_box" id="Cat_input_box">
-					<input type="text" class="form-control" id="CatName" ng-model="cname" autocomplete="off" capitalize/>
-					<select class="form-inline" id="category_weight">
-					  <option value="1" ng-selected="true">1</option>
-					  <option value="2">2</option>
-					  <option value="3">3</option>
-					  <option value="4">4</option>
-					  <option value="5">5</option>
-					</select>
-					<a class="TC_button small" ng-if="!cat" ng-click="create_Category();">Add</a>
-					<a class="TC_button small" ng-if="cat"  ng-click="update_category();">Update</a>
-				</div>		
-				<img src="images/loading.gif" style="width: 25px; text-align: center; margin: 4% 3% 3% 41%; display: none;" id="C_LoaderSpinner">					
-				<button class="add-button-div" id="add_Cat_box" ng-if="!ViewMode && authenticate('CATADD')">Add Category</button>
-			</div>
-		</div>
-	</div>
-	<div class="col-sm-2 table_panels" id="plan_box" ng-show="display_plan_box">
-			<div class="list-group">
-				<div class="leftbar_scroll" style="margin: 0px;overflow: visible">
-					<div class="row clearfix">
-					<div class="col-md-12" id="table_heading">									
-							<label> Attribute </label>									
-					</div>
-				</div>
-					<div class="list-group-item Attr" id="attribute{{$index}}" ng-repeat="plan in planarrey" 
-					ng-click="load_field(plan.name, plan.AtID); $event.stopPropagation()" style="background-color:{{plan.color}};">
-						<div id="{{plan.AtID}}" class="Name">{{plan.name}}<sup ng-if="plan.weight != 1">{{plan.weight}}</sup></div>
-						<img src="img/arrow_right.png" class="navigation_icon"/>
-						<span ng-click="editAttribute(plan.AtID); $event.stopPropagation()" class="attr edit_btn" ng-show="!ViewMode && authenticate('ATREDIT')">Edit</span>
-						<span ng-click="deleteAttribute(plan.AtID); $event.stopPropagation()" class="attr delete_btn" ng-show="!ViewMode && authenticate('ATRDLT')">Delete</span>
-						</div>
-					<div class="list-group-item add_new_box" id="attribute_box">
-						<input type="text" class="form-control" id="attributeName" autocomplete="off" ng-model="aname" capitalize>
-						<select class="form-inline" id="attribute_weight">
-						  <option value="1" ng-selected="true">1</option>
-						  <option value="2">2</option>
-						  <option value="3">3</option>
-						  <option value="4">4</option>
-						  <option value="5">5</option>
-						</select>
-						<a class="TC_button small" ng-if="!plan" ng-click="create_attribute();">Add</a>
-						<a class="TC_button small" ng-if="plan" ng-click="update_attribute();">Update</a>
-					</div>
-					<img src="images/loading.gif" style="width: 25px; text-align: center; margin: 4% 3% 3% 41%; display: none;" id="A_LoaderSpinner">	
-					<button class="add-button-div" id="add_attribute_box" ng-if="!ViewMode && authenticate('ATRADD')"> Add Attribute</button>
-				</div>								
-		</div>
-	</div>
-			<div class="col-md-8 table_panels" id="item_box" ng-show="display_item_box">
-			             <div class="row clearfix" style="border-bottom: 1px solid #D0D8DB;">
-								<div class="col-md-12">
-								<div class="col-md-10">
-									<div id="table_heading">	
-										<label>Score Matrix</label>
-										<label style="float: right;margin-right: 5%">Score</label>
-									</div>
-								</div>
-<!-- 								<div class="col-md-3">
-									<div id="table_heading" style="text-align: left;width: 185px;">	
+<div id="scoring_main_container" style="display: none;">
+    <div class="col-sm-2 table_panels" id="Cat_box">
+        <div class="list-group">
+            <div class="leftbar_scroll" style="margin: 0px; overflow: visible;">
+                <div class="row clearfix">
+                    <div class="col-md-12" id="table_heading">
+                        <label>Category</label>
+                    </div>
+                </div>
+                <div class="list-group-item Cat" id="Cat{{$index}}" ng-repeat="Cat in CatArray" ng-click="load_attributes($index,Cat.color,Cat.CatID); $event.stopPropagation()" style="background-color:{{Cat.color}};">
+                    <div class="Name" id="{{Cat.CatID}}">{{Cat.name}}<sup ng-if="Cat.weight != 1">{{Cat.weight}}</sup></div>
+                    <img src="img/arrow_right.png" class="navigation_icon" />
+                    <span ng-click="editCategory(Cat.CatID); $event.stopPropagation()" class="attr edit_btn" ng-show="!ViewMode && authenticate('CATEDIT')">Edit</span>
+                    <span ng-click="deleteCategory(Cat.CatID); $event.stopPropagation()" class="attr delete_btn" ng-show="!ViewMode && authenticate('CATDLT')">Delete</span>
+                </div>
+                <div class="list-group-item add_new_box" id="Cat_input_box">
+                    <input type="text" class="form-control" id="CatName" ng-model="cname" autocomplete="off" capitalize/>
+                    <select class="form-inline" id="category_weight">
+                        <option value="1" ng-selected="true">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <a class="TC_button small" ng-if="!cat" ng-click="create_Category();">Add</a>
+                    <a class="TC_button small" ng-if="cat" ng-click="update_category();">Update</a>
+                </div>
+                <img src="images/loading.gif" style="width: 25px; text-align: center; margin: 4% 3% 3% 41%; display: none;" id="C_LoaderSpinner">
+                <button class="add-button-div" id="add_Cat_box" ng-if="!ViewMode && authenticate('CATADD')">Add Category</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-2 table_panels" id="plan_box" ng-show="display_plan_box">
+        <div class="list-group">
+            <div class="leftbar_scroll" style="margin: 0px;overflow: visible">
+                <div class="row clearfix">
+                    <div class="col-md-12" id="table_heading">
+                        <label> Attribute </label>
+                    </div>
+                </div>
+                <div class="list-group-item Attr" id="attribute{{$index}}" ng-repeat="plan in planarrey" ng-click="load_field(plan.name, plan.AtID); $event.stopPropagation()" style="background-color:{{plan.color}};">
+                    <div id="{{plan.AtID}}" class="Name">{{plan.name}}<sup ng-if="plan.weight != 1">{{plan.weight}}</sup></div>
+                    <img src="img/arrow_right.png" class="navigation_icon" />
+                    <span ng-click="editAttribute(plan.AtID); $event.stopPropagation()" class="attr edit_btn" ng-show="!ViewMode && authenticate('ATREDIT')">Edit</span>
+                    <span ng-click="deleteAttribute(plan.AtID); $event.stopPropagation()" class="attr delete_btn" ng-show="!ViewMode && authenticate('ATRDLT')">Delete</span>
+                </div>
+                <div class="list-group-item add_new_box" id="attribute_box">
+                    <input type="text" class="form-control" id="attributeName" autocomplete="off" ng-model="aname" capitalize>
+                    <select class="form-inline" id="attribute_weight">
+                        <option value="1" ng-selected="true">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                    <a class="TC_button small" ng-if="!plan" ng-click="create_attribute();">Add</a>
+                    <a class="TC_button small" ng-if="plan" ng-click="update_attribute();">Update</a>
+                </div>
+                <img src="images/loading.gif" style="width: 25px; text-align: center; margin: 4% 3% 3% 41%; display: none;" id="A_LoaderSpinner">
+                <button class="add-button-div" id="add_attribute_box" ng-if="!ViewMode && authenticate('ATRADD')"> Add Attribute</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 table_panels" id="item_box" ng-show="display_item_box">
+        <div class="row clearfix" style="border-bottom: 1px solid #D0D8DB;">
+            <div class="col-md-12">
+                <div class="col-md-10">
+                    <div id="table_heading">
+                        <label>Score Matrix</label>
+                        <label style="float: right;margin-right: 5%">Score</label>
+                    </div>
+                </div>
+                <!-- 								<div class="col-md-3">
+									<div id="table_heading" style="text-align: left;width: 185px;">
 										<label>Contextual Adjustments</label>
 									</div>
 								</div> -->
-								<div class="col-md-2">
-									<div id="table_heading" style="margin-left: 20px">	
-										<label>Weightage</label>
-									</div>
-								</div>
-							</div>
-				     </div>
-					<div class="list-group">
-						<div class="leftbar_scroll" id="autosc" style="width:101%;margin-left: 5px;">									
-						<div class="row list-group-item item" id="item_rule_box" ng-repeat="field in fieldarrey" 
-						     style="height:auto;border-bottom:1px solid #DADADB; color:{{itemcolor}};">
-							<div class="col-md-12">
-							<div class="col-md-11" id="score_matrix_main_div">
-								<div class="logic" ng-repeat="logic in field.logic" >
-									<div id="logic_expression">
-										<span class="logic_matrix" style="width: 15%;text-align: left">{{ logic.val1| rupee:""}}</span>
-										<span class="logic_matrix" style="width: 12%;text-align: left"> {{ logic.exp1 }}</span> 
-										<span class="logic_matrix" ng-click="(logic.FType=='ANALYTICAL') && iffSpecificationView(logic.fieldname,logic.AFSpec)" style="width: 33%;text-align: left">{{ logic.displayname }}</span> 
-										<span class="logic_matrix" style="width: 12%;text-align: left">{{ logic.exp2 }}</span> 
-										<span class="logic_matrix" style="width: 15%;text-align: left">{{ logic.val2| rupee:""}}</span>
-										<span class="logic_matrix score" style="width: 7%;text-align: left;">{{logic.score}}</span>
-									</div>
-									<div id="logic_expression" ng-repeat="ref in logic.ref">
-										<span class="logic_matrix" style="width: 15%;text-align: left">{{ ref.val1| rupee:""}}</span>
-										<span class="logic_matrix" style="width: 12%;text-align: left"> {{ ref.exp1 }}</span> 
-										<span class="logic_matrix" ng-click="(logic.FType=='ANALYTICAL') && iffSpecificationView(logic.fieldname,logic.AFSpec)" style="width: 33%;text-align: left">{{ ref.displayname }}</span> 
-										<span class="logic_matrix" style="width: 12%;text-align: left">{{ ref.exp2 }}</span> 
-										<span class="logic_matrix" style="width: 15%;text-align: left">{{ ref.val2| rupee:""}}</span>
-									</div>
-								</div>
-					
-							</div>
-							<!-- <div class="col-md-4" id="adjustment_main_div">
+                <div class="col-md-2">
+                    <div id="table_heading" style="margin-left: 20px">
+                        <label>Weightage</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="list-group">
+            <div class="leftbar_scroll" id="autosc" style="width:101%;margin-left: 5px;">
+                <div class="row list-group-item item" id="item_rule_box" ng-repeat="field in fieldarrey" style="height:auto;border-bottom:1px solid #DADADB; color:{{itemcolor}};">
+                    <div class="col-md-12">
+                        <div class="col-md-11" id="score_matrix_main_div">
+                            <div class="logic" ng-repeat="logic in field.logic">
+                                <div id="logic_expression">
+                                    <span class="logic_matrix" style="width: 15%;text-align: left">{{ logic.val1| rupee:""}}</span>
+                                    <span class="logic_matrix" style="width: 12%;text-align: left"> {{ logic.exp1 }}</span>
+                                    <span class="logic_matrix" ng-click="(logic.FType=='ANALYTICAL') && iffSpecificationView(logic.fieldname,logic.AFSpec)" style="width: 33%;text-align: left">{{ logic.displayname }}</span>
+                                    <span class="logic_matrix" style="width: 12%;text-align: left">{{ logic.exp2 }}</span>
+                                    <span class="logic_matrix" style="width: 15%;text-align: left">{{ logic.val2| rupee:""}}</span>
+                                    <span class="logic_matrix score" style="width: 7%;text-align: left;">{{logic.score}}</span>
+                                </div>
+                                <div id="logic_expression" ng-repeat="ref in logic.ref">
+                                    <span class="logic_matrix" style="width: 15%;text-align: left">{{ ref.val1| rupee:""}}</span>
+                                    <span class="logic_matrix" style="width: 12%;text-align: left"> {{ ref.exp1 }}</span>
+                                    <span class="logic_matrix" ng-click="(logic.FType=='ANALYTICAL') && iffSpecificationView(logic.fieldname,logic.AFSpec)" style="width: 33%;text-align: left">{{ ref.displayname }}</span>
+                                    <span class="logic_matrix" style="width: 12%;text-align: left">{{ ref.exp2 }}</span>
+                                    <span class="logic_matrix" style="width: 15%;text-align: left">{{ ref.val2| rupee:""}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-md-4" id="adjustment_main_div">
 							<div class="row" style="margin-top: 8px;text-align: justify;">
 								<div ng-repeat="context in field.contextname">
-									<span class="add-button-div" id="context{{$index}}" ng-repeat="context in field.contextname" 
+									<span class="add-button-div" id="context{{$index}}" ng-repeat="context in field.contextname"
 									style="color:#fff; background-color: {{context.color}}" ng-click="!ViewMode && update_logic_body(context.field,field.ItemID,'Update')">{{context.field}}</span>
-				
-							<img src="images/loading.gif" style="width: 25px; text-align: center; margin: 0% 18% 1% 0%; display: none;" id="L_LoaderSpinner">	
-							<button class="add-button-div" id="add_context" ng-click="AddContext(field.ItemID)" ng-hide="hide_add_context_button || ViewMode">Add Context</button>
-								</div>                  
-                                  					
-					       </div> -->
-					       <div class="col-md-1">
-							<select id="weight{{$index}}" class="form-control weight" accesskey="{{field.ItemID}}"
-							ng-disabled="!authenticate('SCRULEDIT')" style="margin: 10px 0px;">
-<!-- 						<option ng-repeat="option in WeightValueArray" value="{{option}}" ng-selected="{{option == field.weight}}">{{option}}</option>									 -->
-							<option value="1" >1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-							</select>
-							</div>
-						</div>
-						 <a class="rule_delete_btn hiden" title="Delete" ng-if="!ViewMode && authenticate('SCRULDLT')" 
-						     ng-click="DeleteScoringRules(field.ItemID)" style="bottom: 5px;top:auto; right: 76px">Delete</a>
-						 <a class="rule_edit_btn hiden" title="Edit" ng-if="!ViewMode && authenticate('SCRULEDIT')" 
-						     ng-click="UpdateScoringRules(field.ItemID)" style="bottom: 5px;top:auto; right: 43px">Edit</a>
-						</div>
-						<div class="row clearfix" >
-							<div class="col-md-6">
-							   <button class="add-button-div" id="addScoreField" ng-if="!ViewMode && authenticate('SCRULADD')">Add Scoring Rule</button>
-							</div>
-						</div>
-							
-						<div id="logic_panel">
-						<div id="logic_panel_heading">Scoring Rule Frame</div>
-							<div class="col-md-12">									
-								<div class="row clearfix" id="logic_panel_body">
-								<span style="float: right; margin-top: -30px;color: red" ><span id="rule_error"></span>{{error}}</span>
-									<div class="row clearfix" id="first_row">
-										<div class="col-md-5" id="Field_Container0">
-											<select id="logic_IFF_file0" class="form-control IffDrpDwn" style="width: 45%; display: inline-block;">
-											 <option ng-selected="true" value="Select">Select IFF File</option>
-											<select>
-											<select id="logic_field0" class="form-control" style="width: 45%; display: inline-block;">
-											 <option value="Select" selected="selected">Select Field</option>
-											</select>
-										</div>
-										<div class="col-md-1">
-										<button class="add-button-div" id="Operator" style="min-width:45px; margin: 0px 10px 0px 0px" value="AND">AND</button>
-										</div>
-										
-									</div>										
-								
-								</div>
-								<div class="row clearfix" id="logic_panel_row3">									
-									<button class="add-button-div" ng-click="createRuleRow()" id="add_range">Add Range</button> 																						
-									<div class="col-md-4 " style="float:right; text-align:right; margin-top: 7px;">										
-										<a ng-hide ="rule_update" id="add_item_level_rule" ng-click="saveLogic('Create')"><b>Add</b></a>
-										<a ng-if="rule_update" ng-click="saveLogic('Update')"><b>Update</b></a>
-										<a id="close_logic_panel" style="margin-left: 20px "> <b>Close</b> </a>
-									</div>
-							</div>
-						</div>
-					</div>
-					<div id="context_panel">
-						<div id="context_panel_heading">Context Frame</div>
-							<div class="col-md-12">									
-								<div class="row clearfix" id="context_panel_body"><span style="float: right; margin-top: -30px;color: red" >{{context_error}}</span>
-									<div class="row clearfix" ng-hide="update_context">
-										<div class="col-md-3">
-											<select id="category_dropdown_field" class="form-control" ng-model="category_dropdown" ng-change="update_attribute_dropdown()">													
-											<option ng-repeat="cat in category_list" value="{{cat.value}}" ng-selected="cat.value=='Select Category'">{{cat.value}}</option>
-											</select>
-										</div>
-										<div class="col-md-3">
-											<select id="attribute_dropdown_field" class="form-control" ng-model="attribute_dropdown" ng-change="update_field_dropdown()">	
-											 <option ng-repeat="att in attribute_list" value="{{att.value}}" ng-selected="att.value=='Select Attribute'">{{att.value}}</option>												
-											</select>
-										</div>
-										<div class="col-md-3">
-											<select id="item_dropdown_field" class="form-control" ng-model="field_dropdown" ng-change="update_logic_body(1,'null','Create')">													
-											<option ng-repeat="field in field_list" value="{{field.value}}" ng-selected="field.value=='Select Field'">{{field.value}}</option>		
-											</select>
-										</div>
-										<div class="col-md-2">
-											<label id="context_field_type" class="control-label"></label>
-										</div>
-									</div>
-									<div class="row clearfix" id="context_panel_row2">
-										<div class="row clearfix">
-											<div class="col-md-8">Score Matrix</div>
-											<div class="col-md-4">Adj Value</div>
-										</div>
-										<div id="context_Smatrix_panel" style="border-top: 1px solid #DADADB;"></div>
-									</div>
 
-								</div>							
-								<div class="row clearfix" id="context_panel_row3">				
-									<div class="col-md-4 " style="float:right;text-align: right;">
-									<a class="TC_button" id="close_context_panel" ng-click="close_context_panel()"> <b>Close</b> </a>
-									<a class="TC_button" id="add_item_level_context" ng-hide="update_context" ng-click="save_context('Create')"><b>Add</b> </a>
-									<a class="TC_button" id="add_item_level_context" ng-show="update_context" ng-click="save_context('Update')"><b>Update</b> </a>										
-									</div>
-							</div>
-							</div>
-						</div>
-					</div>
-		</div>
-	</div>
-	<div class="row clearfix">
-	<span class="CatError" ng-if="CatArray.length==0"> No categories has been defined for this table...!!!</span>
-	<span class="CatError" ng-if="planarrey.length==0 && display_plan_box"> No Attributes has been defined for this Category...!!!</span>
-	<span class="CatError" ng-if="fieldarrey.length==0 && display_item_box"> No Field Rules has been defined for this Attribute...!!!</span>
-	</div>
-	</div>
+							<img src="images/loading.gif" style="width: 25px; text-align: center; margin: 0% 18% 1% 0%; display: none;" id="L_LoaderSpinner">
+							<button class="add-button-div" id="add_context" ng-click="AddContext(field.ItemID)" ng-hide="hide_add_context_button || ViewMode">Add Context</button>
+								</div>
+
+					       </div> -->
+                        <div class="col-md-1">
+                            <select id="weight{{$index}}" class="form-control weight" accesskey="{{field.ItemID}}" ng-disabled="!authenticate('SCRULEDIT')" style="margin: 10px 0px;">
+                                <!-- 						<option ng-repeat="option in WeightValueArray" value="{{option}}" ng-selected="{{option == field.weight}}">{{option}}</option>									 -->
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                    </div>
+                    <a class="rule_delete_btn hiden" title="Delete" ng-if="!ViewMode && authenticate('SCRULDLT')" ng-click="DeleteScoringRules(field.ItemID)" style="bottom: 5px;top:auto; right: 76px">Delete</a>
+                    <a class="rule_edit_btn hiden" title="Edit" ng-if="!ViewMode && authenticate('SCRULEDIT')" ng-click="UpdateScoringRules(field.ItemID)" style="bottom: 5px;top:auto; right: 43px">Edit</a>
+                </div>
+                <div class="row clearfix">
+                    <div class="col-md-6">
+                        <button class="add-button-div" id="addScoreField" ng-if="!ViewMode && authenticate('SCRULADD')">Add Scoring Rule</button>
+                    </div>
+                </div>
+                <div id="logic_panel">
+                    <div id="logic_panel_heading">Scoring Rule Frame</div>
+                    <div class="col-md-12">
+                        <div class="row clearfix" id="logic_panel_body">
+                            <span style="float: right; margin-top: -30px;color: red"><span id="rule_error"></span>{{error}}</span>
+                            <div class="row clearfix" id="first_row">
+                                <div class="col-md-5" id="Field_Container0">
+                                    <select id="logic_IFF_file0" class="form-control IffDrpDwn" style="width: 45%; display: inline-block;">
+                                        <option ng-selected="true" value="Select">Select IFF File</option>
+                                        <select>
+                                            <select id="logic_field0" class="form-control" style="width: 45%; display: inline-block;">
+                                                <option value="Select" selected="selected">Select Field</option>
+                                            </select>
+                                </div>
+                                <div class="col-md-1">
+                                    <button class="add-button-div" id="Operator" style="min-width:45px; margin: 0px 10px 0px 0px" value="AND">AND</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row clearfix" id="logic_panel_row3">
+                            <button class="add-button-div" ng-click="createRuleRow()" id="add_range">Add Range</button>
+                            <div class="col-md-4 " style="float:right; text-align:right; margin-top: 7px;">
+                                <a ng-hide="rule_update" id="add_item_level_rule" ng-click="saveLogic('Create')"><b>Add</b></a>
+                                <a ng-if="rule_update" ng-click="saveLogic('Update')"><b>Update</b></a>
+                                <a id="close_logic_panel" style="margin-left: 20px "> <b>Close</b> </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="context_panel">
+                    <div id="context_panel_heading">Context Frame</div>
+                    <div class="col-md-12">
+                        <div class="row clearfix" id="context_panel_body"><span style="float: right; margin-top: -30px;color: red">{{context_error}}</span>
+                            <div class="row clearfix" ng-hide="update_context">
+                                <div class="col-md-3">
+                                    <select id="category_dropdown_field" class="form-control" ng-model="category_dropdown" ng-change="update_attribute_dropdown()">
+                                        <option ng-repeat="cat in category_list" value="{{cat.value}}" ng-selected="cat.value=='Select Category'">{{cat.value}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select id="attribute_dropdown_field" class="form-control" ng-model="attribute_dropdown" ng-change="update_field_dropdown()">
+                                        <option ng-repeat="att in attribute_list" value="{{att.value}}" ng-selected="att.value=='Select Attribute'">{{att.value}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select id="item_dropdown_field" class="form-control" ng-model="field_dropdown" ng-change="update_logic_body(1,'null','Create')">
+                                        <option ng-repeat="field in field_list" value="{{field.value}}" ng-selected="field.value=='Select Field'">{{field.value}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-2">
+                                    <label id="context_field_type" class="control-label"></label>
+                                </div>
+                            </div>
+                            <div class="row clearfix" id="context_panel_row2">
+                                <div class="row clearfix">
+                                    <div class="col-md-8">Score Matrix</div>
+                                    <div class="col-md-4">Adj Value</div>
+                                </div>
+                                <div id="context_Smatrix_panel" style="border-top: 1px solid #DADADB;"></div>
+                            </div>
+                        </div>
+                        <div class="row clearfix" id="context_panel_row3">
+                            <div class="col-md-4 " style="float:right;text-align: right;">
+                                <a class="TC_button" id="close_context_panel" ng-click="close_context_panel()"> <b>Close</b> </a>
+                                <a class="TC_button" id="add_item_level_context" ng-hide="update_context" ng-click="save_context('Create')"><b>Add</b> </a>
+                                <a class="TC_button" id="add_item_level_context" ng-show="update_context" ng-click="save_context('Update')"><b>Update</b> </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row clearfix">
+        <span class="CatError" ng-if="CatArray.length==0"> No categories has been defined for this table...!!!</span>
+        <span class="CatError" ng-if="planarrey.length==0 && display_plan_box"> No Attributes has been defined for this Category...!!!</span>
+        <span class="CatError" ng-if="fieldarrey.length==0 && display_item_box"> No Field Rules has been defined for this Attribute...!!!</span>
+    </div>
+</div>

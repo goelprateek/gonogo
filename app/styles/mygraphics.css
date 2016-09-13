@@ -1,138 +1,178 @@
-
-#graphArea{
-	background-color: none;
+#graphArea {
+    background-color: none;
 }
 
-a:hover, td{
+a:hover,
+td {
     cursor: pointer;
 }
 
-.axis path, .axis line {
-	fill: none;
-	stroke: black;
-	shape-rendering: crispEdges;
+.axis path,
+.axis line {
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
 }
 
-.xaxis path, .xaxis line{
-	display: block;
-	fill: none;
-	stroke: black;
-	shape-rendering: crispEdges;
+.xaxis path,
+.xaxis line {
+    display: block;
+    fill: none;
+    stroke: black;
+    shape-rendering: crispEdges;
 }
+
 .xaxis text {
-	font-family: sans-serif;
-	font-size: 11px;
+    font-family: sans-serif;
+    font-size: 11px;
 }
+
 .axis text {
-	font-family: sans-serif;
-	font-size: 11px;
+    font-family: sans-serif;
+    font-size: 11px;
 }
 
 .dot {
-	stroke: #000;
+    stroke: #000;
 }
 
 #scoring_table td {
-	border: none;
+    border: none;
 }
 
 
 /*Legend css*/
+
+
 /* basic positioning */
-.legend { list-style: none; }
-.legend li { float: left; margin-right: 10px; }
-.legend span {float: left; width: 12px; height: 12px; margin: 2px; }
+
+.legend {
+    list-style: none;
+}
+
+.legend li {
+    float: left;
+    margin-right: 10px;
+}
+
+.legend span {
+    float: left;
+    width: 12px;
+    height: 12px;
+    margin: 2px;
+}
+
+
 /* your colors */
-.legend .approved { background-color: #4CAF50; }
-.legend .declined { background-color: #F44336; }
-.legend .queue { background-color: #807B83; }
-.legend .onhold { background-color: #2196f3; }
-.legend .pending { background-color: #CCC; }
+
+.legend .approved {
+    background-color: #4CAF50;
+}
+
+.legend .declined {
+    background-color: #F44336;
+}
+
+.legend .queue {
+    background-color: #807B83;
+}
+
+.legend .onhold {
+    background-color: #2196f3;
+}
+
+.legend .pending {
+    background-color: #CCC;
+}
 
 
 /* Tree Graph css */
+
 .node ellipse {
-	fill: #fff;
-	stroke: none; //
-	stroke-width: 2px;
+    fill: #fff;
+    stroke: none; //
+    stroke-width: 2px;
 }
 
 .node:hover {
-	cursor: pointer;
+    cursor: pointer;
 }
 
 .node circle {
-	fill: #fff;
-	stroke: steelblue;
-	stroke-width: 2px;
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 2px;
 }
 
 .node text {
-	font: 12px sans-serif;
+    font: 12px sans-serif;
 }
 
 .link {
-	fill: none;
-	stroke: green;
-	stroke-width: 1px;
-	z-index: 1000;
+    fill: none;
+    stroke: green;
+    stroke-width: 1px;
+    z-index: 1000;
 }
 
-svg:not (:root ) {
-	overflow: auto;
+svg:not (:root) {
+    overflow: auto;
 }
+
 
 /* Thumbnail css*/
+
 div .thumb {
-	float: left;
-	border: 1px solid #ccc;
-	width: 90px;
-	margin-right: 10px;
-	margin-bottom: 5px;
-	text-align: center;
+    float: left;
+    border: 1px solid #ccc;
+    width: 90px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    text-align: center;
 }
 
 .thumb a {
-	display: block;
-	width: 100%;
-	overflow: hidden;
+    display: block;
+    width: 100%;
+    overflow: hidden;
 }
 
 .thumb a img {
-	width: 100%;
-	height: 90px;
+    width: 100%;
+    height: 90px;
 }
 
 .thumb div {
-	padding: 4px;
-	font-size: 12px;
-}
-.thumb:hover{
-	cursor: pointer;
+    padding: 4px;
+    font-size: 12px;
 }
 
+.thumb:hover {
+    cursor: pointer;
+}
 
-div.treeTooltip{
-    display:inline;    
+div.treeTooltip {
+    display: inline;
     position: absolute;
-	text-align: -moz-left;	
-	padding: 2px;
-	font: 12px sans-serif;
-	background: black;
-	color: white;
-	border: 2px solid #FFF;;
-	border-radius: 10px;
-	pointer-events: none;
-	padding-top: 10px;
-	padding-left: 10px;
-	padding-bottom: 10px;
-	padding-right: 10px;
+    text-align: -moz-left;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: black;
+    color: white;
+    border: 2px solid #FFF;
+    ;
+    border-radius: 10px;
+    pointer-events: none;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
 }
 
-#graphArea #thumbnailPanel{
-	5px solid red;
+#graphArea #thumbnailPanel {
+    5px solid red;
 }
 
-#mbars{
-	text-align: center;
+#mbars {
+    text-align: center;
 }

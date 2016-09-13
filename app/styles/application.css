@@ -1,175 +1,182 @@
-.pagination{
-	margin:0px;
+.pagination {
+    margin: 0px;
 }
 
 .remove_image {
-	cursor: pointer;
-	color: red;
+    cursor: pointer;
+    color: red;
 }
 
 .fa-rupee {
-	position: absolute;
-	top: 50%;
-	left: 4%;
-	z-index: 1;
+    position: absolute;
+    top: 50%;
+    left: 4%;
+    z-index: 1;
 }
 
 .abs_rght_mdl {
-	position: absolute;
-	right: 1%;
-	top: 43%;
+    position: absolute;
+    right: 1%;
+    top: 43%;
 }
 
 .margin_state {
-	margin-left: 40%;
+    margin-left: 40%;
 }
 
 #bankingInfo .customInput {
-	position: inherit;
+    position: inherit;
 }
 
 #bankingInfo .preview {
-	width: 85%;
+    width: 85%;
 }
 
 #bankingInfo .row {
-	margin-bottom: 2px;
+    margin-bottom: 2px;
 }
 
-@media ( max-width :368px) {
-	#progressDiv {
-		display: none;
-	}
+@media ( max-width:368px) {
+    #progressDiv {
+        display: none;
+    }
 }
 
-@media ( max-width :980px) {
-	#msgContainer {
-		left: 35%;
-		width: 62%;
-	}
+@media ( max-width:980px) {
+    #msgContainer {
+        left: 35%;
+        width: 62%;
+    }
 }
 
 .gngimg {
-
-height: 71px;
+    height: 71px;
 }
 
 .progressbar {
-	margin-bottom: 0px;
-	overflow: hidden;
-	counter-reset: step;
-	padding-left: 25%;
+    margin-bottom: 0px;
+    overflow: hidden;
+    counter-reset: step;
+    padding-left: 25%;
 }
 
 .progressbar li::before {
-	content: counter(step, decimal);
-	counter-increment: step;
-	width: 23px;
-	line-height: 20px;
-	display: block;
-	font-size: 15px;
-	color: rgb(36, 161, 237);
-	background: none repeat scroll 0% 0% #FFF;
-	border: 1px solid rgb(36, 161, 237);
-	border-radius: 12px;
-	margin: -3px auto 5px;
-	font-weight: bold;
-	position: absolute;
-	left: 96%;
-	text-align: center;
+    content: counter(step, decimal);
+    counter-increment: step;
+    width: 23px;
+    line-height: 20px;
+    display: block;
+    font-size: 15px;
+    color: rgb(36, 161, 237);
+    background: none repeat scroll 0% 0% #FFF;
+    border: 1px solid rgb(36, 161, 237);
+    border-radius: 12px;
+    margin: -3px auto 5px;
+    font-weight: bold;
+    position: absolute;
+    left: 96%;
+    text-align: center;
 }
 
-.progressbar li.active::before, .progressbar li.active::after {
-	background: none repeat scroll 0% 0% rgb(36, 161, 237);;
-	color: white;
+.progressbar li.active::before,
+.progressbar li.active::after {
+    background: none repeat scroll 0% 0% rgb(36, 161, 237);
+    ;
+    color: white;
 }
 
-.progressbar li.active, .progressbar li.Error {
-	/*     font-weight: bold; */
-	color: rgb(36, 161, 237);
+.progressbar li.active,
+.progressbar li.Error {
+    /*     font-weight: bold; */
+    color: rgb(36, 161, 237);
 }
 
 .progressbar li {
-	border-bottom: 01px solid rgb(36, 161, 237);
-	text-align: left;
-	list-style-type: none;
-	margin-bottom: 13%;
-	padding-left: 8px;
+    border-bottom: 01px solid rgb(36, 161, 237);
+    text-align: left;
+    list-style-type: none;
+    margin-bottom: 13%;
+    padding-left: 8px;
 }
 
 .circle {
-	position: absolute;
-	border: 1px solid #24A1ED;
-	padding: 3px;
-	border-radius: 50%;
-	left: -16px;
-	top: 90%;
-	background: #FFF none repeat scroll 0% 0%;
-	width: 30px;
-	height: 30px;
+    position: absolute;
+    border: 1px solid #24A1ED;
+    padding: 3px;
+    border-radius: 50%;
+    left: -16px;
+    top: 90%;
+    background: #FFF none repeat scroll 0% 0%;
+    width: 30px;
+    height: 30px;
 }
 
 .p {
-	margin-bottom: 0px
+    margin-bottom: 0px
 }
 
 .customButton {
-	border: 1px solid #24a1ed;
-	background-color: white;
-	padding: 4px 16px 5px;
-	color: #24a1ed;
+    border: 1px solid #24a1ed;
+    background-color: white;
+    padding: 4px 16px 5px;
+    color: #24a1ed;
 }
 
 .customButton:focus {
-	border: 1px inset #24a1ed;
+    border: 1px inset #24a1ed;
 }
 
-.next, .save, .submit, .Pnext {
-	/* position: relative; */
-	top: 15px;
-	right: 23px;
-	text-align: right;
-	float: right;
-	padding: 6px 37px;
-	margin-top: 3%;
-	margin-right: 5px;
-	/*  bottom: 23px;  */
+.next,
+.save,
+.submit,
+.Pnext {
+    /* position: relative; */
+    top: 15px;
+    right: 23px;
+    text-align: right;
+    float: right;
+    padding: 6px 37px;
+    margin-top: 3%;
+    margin-right: 5px;
+    /*  bottom: 23px;  */
 }
 
-.previous, .cancel {
-	/* position: relative; */
-	top: 15px;
-	/* float: right; */
-	/* left: 28px; */
-	float: left;
-	padding: 6px 28px;
-	margin-top: 3%;
-	margin-left: 5px;
-	/* margin-bottom: 23px; */
+.previous,
+.cancel {
+    /* position: relative; */
+    top: 15px;
+    /* float: right; */
+    /* left: 28px; */
+    float: left;
+    padding: 6px 28px;
+    margin-top: 3%;
+    margin-left: 5px;
+    /* margin-bottom: 23px; */
 }
 
 .customRow {
-	margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 .customDiv {
-	border-right: 1px solid #999999;
-	text-align: right;
+    border-right: 1px solid #999999;
+    text-align: right;
 }
 
 .customInput {
-	border: medium none;
-	border-bottom: 1px solid #727272;
-	width: 85%;
-	position: absolute;
-	bottom: 10px;
-	left: 14px;
-	outline: none;
+    border: medium none;
+    border-bottom: 1px solid #727272;
+    width: 85%;
+    position: absolute;
+    bottom: 10px;
+    left: 14px;
+    outline: none;
 }
 
 .border {
-	border-right: 1px solid #999999;
+    border-right: 1px solid #999999;
 }
+
 
 /* .customSelect
 {
@@ -181,6 +188,8 @@ display: inline-block;
 width: 85%
 }
  */
+
+
 /*  .customarrow
 {
 position: relative;
@@ -189,38 +198,40 @@ font-size: 21px;
 font-weight: bold;
 vertical-align: middle;
 }  */
+
 .customarrow {
-	position: absolute;
-	right: 11%;
-	top: 46%;
-	width: 24px
+    position: absolute;
+    right: 11%;
+    top: 46%;
+    width: 24px
 }
 
 .customSelect {
-	padding: 2px;
-	/* box-shadow: unset; */
-	width: 85%;
-	border: none;
-	display: inline-block;
-	background: no-repeat;
-	border-bottom: 1px solid rgb(114, 114, 114);
-	appearance: none;
-	-moz-appearance: none;
-	-webkit-appearance: initial;
-	/* text-indent: 0.01px; */
-	/* text-overflow: ''; */
-	position: absolute;
-	bottom: 10px;
-	left: 14px;
-	outline: none;
-	/* 	z-index: 1000; */
-	/*text-indent: -2px;*/
-	color:black;
+    padding: 2px;
+    /* box-shadow: unset; */
+    width: 85%;
+    border: none;
+    display: inline-block;
+    background: no-repeat;
+    border-bottom: 1px solid rgb(114, 114, 114);
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: initial;
+    /* text-indent: 0.01px; */
+    /* text-overflow: ''; */
+    position: absolute;
+    bottom: 10px;
+    left: 14px;
+    outline: none;
+    /* 	z-index: 1000; */
+    /*text-indent: -2px;*/
+    color: black;
 }
 
 .customSelect:focus {
-	outline: none;
+    outline: none;
 }
+
 
 /*label {
 	color: black;
@@ -228,154 +239,163 @@ vertical-align: middle;
 }*/
 
 #progressbar li::before {
-	content: counter(step, decimal);
-	counter-increment: step;
-	width: 25px;
-	line-height: 20px;
-	display: block;
-	font-size: 15px;
-	color: #2A62E9;
-	background: #FFF none repeat scroll 0% 0%;
-	border: 3px solid #2A62E9;
-	border-radius: 12px;
-	margin: 37px 0px -18px -14px;
-	font-weight: bold;
+    content: counter(step, decimal);
+    counter-increment: step;
+    width: 25px;
+    line-height: 20px;
+    display: block;
+    font-size: 15px;
+    color: #2A62E9;
+    background: #FFF none repeat scroll 0% 0%;
+    border: 3px solid #2A62E9;
+    border-radius: 12px;
+    margin: 37px 0px -18px -14px;
+    font-weight: bold;
 }
 
 .mask {
-	position: relative;
-	left: 505px;
+    position: relative;
+    left: 505px;
 }
 
 .resultNode {
-	position: absolute;
-	padding: 3px;
-	border-radius: 50%;
-	width: 9px;
-	height: 9px;
-	border: 1px solid rgb(36, 161, 237);
-	top: -5%;
-	left: -2%;
-	background: rgb(36, 161, 237);
+    position: absolute;
+    padding: 3px;
+    border-radius: 50%;
+    width: 9px;
+    height: 9px;
+    border: 1px solid rgb(36, 161, 237);
+    top: -5%;
+    left: -2%;
+    background: rgb(36, 161, 237);
 }
 
 .userHeader {
-	border: 01px solid rgb(36, 161, 237);
-	color: rgb(36, 161, 237);
-	cursor: pointer;
+    border: 01px solid rgb(36, 161, 237);
+    color: rgb(36, 161, 237);
+    cursor: pointer;
 }
 
+
 /* .coApplicantArray > .coapp */
+
+
 /* { */
+
+
 /*  overflow-y: auto; */
+
+
 /* } */
 
-/* .coApplicantArray .getheight:hover 
+
+/* .coApplicantArray .getheight:hover
 {
  overflow-y: auto;
 } */
+
 .usrimg {
-	text-align: center;
-	width: 14%;
-	height: 43px;
-	margin-top: 3%;
+    text-align: center;
+    width: 14%;
+    height: 43px;
+    margin-top: 3%;
 }
 
 .footer {
-	background-color: #24A1ED;
-	position: fixed;
-	bottom: 0px;
-	z-index: 1;
-	height: 12px;
-	width: 100%;
+    background-color: #24A1ED;
+    position: fixed;
+    bottom: 0px;
+    z-index: 1;
+    height: 12px;
+    width: 100%;
 }
 
 .height {
-	height: 60px;
+    height: 60px;
 }
 
 help {
-	display: none;
-	font-size: 12px;
+    display: none;
+    font-size: 12px;
 }
 
-
 .state {
-	width: 41%;
-	left: 48%;
+    width: 41%;
+    left: 48%;
 }
 
 .Add-Icon {
-	background: #1F98E4 none repeat scroll 0% 0%;
-	display: inline-block;
-	border-radius: 50%;
-	width: 37px;
-	font-size: 25px;
-	color: #FFF;
-	text-align: center;
-	cursor: pointer;
+    background: #1F98E4 none repeat scroll 0% 0%;
+    display: inline-block;
+    border-radius: 50%;
+    width: 37px;
+    font-size: 25px;
+    color: #FFF;
+    text-align: center;
+    cursor: pointer;
 }
 
 legend {
-	color: #727272;
+    color: #727272;
 }
 
 .preview {
-	width: 175px;
-	height: 100px;
-	line-height: 7;
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
-	/*     background-color: #F6F6F6; */
-	border: 1px solid #CECFD1;
-	text-align: center;
-	margin-bottom: 0px;
+    width: 175px;
+    height: 100px;
+    line-height: 7;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    /*     background-color: #F6F6F6; */
+    border: 1px solid #CECFD1;
+    text-align: center;
+    margin-bottom: 0px;
 }
 
 input[type="file"] {
-	width: 80px;
-	height: 85px;
-	margin: 15px;
-	display: none;
-	opacity: 0.08;
+    width: 80px;
+    height: 85px;
+    margin: 15px;
+    display: none;
+    opacity: 0.08;
 }
 
 small {
-	width: 76px;
+    width: 76px;
 }
 
 .img_icon {
-	height: 44px;
-	width: 45px;
-	/*     margin-top: 7px; */
-	vertical-align: middle;
-	opacity: 0.5;
+    height: 44px;
+    width: 45px;
+    /*     margin-top: 7px; */
+    vertical-align: middle;
+    opacity: 0.5;
 }
 
 .sui-progressbar-circular {
-	width: 100%;
-	height: 150px;
-	border-width: 0px;
-	border-style: none;
-	margin: 20px 10px;
+    width: 100%;
+    height: 150px;
+    border-width: 0px;
+    border-style: none;
+    margin: 20px 10px;
 }
 
 .sui-progressbar {
-	position: relative;
-	display: block;
-	width: 100%;
-	/*     height: 100%; */
-	font-size: 14px;
-	font-family: "Arial,Helvetica,sans-serif";
+    position: relative;
+    display: block;
+    width: 100%;
+    /*     height: 100%; */
+    font-size: 14px;
+    font-family: "Arial,Helvetica,sans-serif";
 }
 
 .sui-progressbar-text {
-	display: block;
-	top: 41%;
-	left: 40%;
-	z-index: 100;
-	position: absolute;
+    display: block;
+    top: 41%;
+    left: 40%;
+    z-index: 100;
+    position: absolute;
 }
+
 
 /* //sayali impacting on pick date for invoice calender
 select {
@@ -383,45 +403,45 @@ select {
 }*/
 
 .rlabel {
-	float: none;
-	position: absolute;
-	bottom: 0px;
+    float: none;
+    position: absolute;
+    bottom: 0px;
 }
 
 .r1 {
-	float: none;
-	position: absolute;
-	bottom: 0px;
-	left: 35%;
+    float: none;
+    position: absolute;
+    bottom: 0px;
+    left: 35%;
 }
 
 .r2 {
-	float: none;
-	position: absolute;
-	bottom: 0px;
-	left: 57%;
+    float: none;
+    position: absolute;
+    bottom: 0px;
+    left: 57%;
 }
 
 .rc {
-/* 	border-bottom: 1px solid; */
-	position: absolute;
-	width: 85%;
-	bottom: 40px;
-	font-size: 16px;
+    /* 	border-bottom: 1px solid; */
+    position: absolute;
+    width: 85%;
+    bottom: 40px;
+    font-size: 16px;
 }
 
 #msgContainer {
-/* 	border-top: 2px solid #999; */
-	background-color: #FFF;
-	position: fixed;
-	left: 23%;
-	text-align: center;
-	width: 61%;
-	vertical-align: middle;
-	line-height: 4;
-	bottom: 13px;
-	height: 60px;
-	font-size: 15px;
+    /* 	border-top: 2px solid #999; */
+    background-color: #FFF;
+    position: fixed;
+    left: 23%;
+    text-align: center;
+    width: 61%;
+    vertical-align: middle;
+    line-height: 4;
+    bottom: 13px;
+    height: 60px;
+    font-size: 15px;
 }
 
 .hdbImg {
@@ -430,145 +450,148 @@ select {
 }
 
 .getheight {
-	overflow-x: hidden;
-	overflow-y: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 #logout_dropdown_panel {
-	height: 185px;
-	width: 340px;
-	padding: 18px;
+    height: 185px;
+    width: 340px;
+    padding: 18px;
 }
 
 .profile_icon {
-	width: 95px;
-	height: 95px;
-	background-size: 100% 100%;
-	position: relative;
+    width: 95px;
+    height: 95px;
+    background-size: 100% 100%;
+    position: relative;
 }
 
 .user_data {
-	float: right;
-	width: 62%;
+    float: right;
+    width: 62%;
 }
 
 .logout_footer {
-	background: #F5F5F5 none repeat scroll 0% 0%;
-	border-top: 1px solid rgba(0, 0, 0, 0.2);
-	padding: 10px 0px;
-	width: 100%;
-	position: absolute;
-	bottom: 0px;
-	left: 0px;
+    background: #F5F5F5 none repeat scroll 0% 0%;
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 10px 0px;
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
 }
 
 .info {
-	color: #24A1ED
+    color: #24A1ED
 }
 
 .dsnimg {
-	width: 65px;
-	margin-top: 10%;
+    width: 65px;
+    margin-top: 10%;
 }
 
-.ui-menu, .ui-menu>.ui-menu-item, .ui-menu-item>a {
-	max-height: 250px !important;
-	overflow-x: hidden;
+.ui-menu,
+.ui-menu>.ui-menu-item,
+.ui-menu-item>a {
+    max-height: 250px !important;
+    overflow-x: hidden;
 }
 
-input, select {
-	font-size: 16px;
+input,
+select {
+    font-size: 16px;
 }
 
 .user {
-	width: 97px;
-	height: 114px;
-	background-image: url("../img/user.png");
+    width: 97px;
+    height: 114px;
+    background-image: url("../img/user.png");
 }
 
 .logoutPanel::before {
-	content: " ";
-	position: absolute;
-	width: 55px;
-	height: 0px;
-	right: 13px;
-	border-width: 13px;
-	border-style: solid;
-	-moz-border-top-colors: none;
-	-moz-border-right-colors: none;
-	-moz-border-bottom-colo rs: none;
-	-moz-border-left-colors: none;
-	border-image: none;
-	border-color: #24A1ED transparent transparent #24A1ED;
-	transform: rotate(50deg) skew(35deg);
+    content: " ";
+    position: absolute;
+    width: 55px;
+    height: 0px;
+    right: 13px;
+    border-width: 13px;
+    border-style: solid;
+    -moz-border-top-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-bottom-colo rs: none;
+    -moz-border-left-colors: none;
+    border-image: none;
+    border-color: #24A1ED transparent transparent #24A1ED;
+    transform: rotate(50deg) skew(35deg);
 }
 
 .dlr {
-	position: fixed;
-	top: 15%;
-	width: 70%;
-	left: 18%;
-	background: white none repeat scroll 0% 0%;
-	height: 40%;
-	z-index: 1001;
+    position: fixed;
+    top: 15%;
+    width: 70%;
+    left: 18%;
+    background: white none repeat scroll 0% 0%;
+    height: 40%;
+    z-index: 1001;
 }
 
 .adnlMdl .glyphicon-remove {
-	float: right;
-	display: none;
-	margin-top: 2%;
+    float: right;
+    display: none;
+    margin-top: 2%;
 }
 
 #temp {
-	position: absolute;
-	right: 0%;
-	top: 5%;
+    position: absolute;
+    right: 0%;
+    top: 5%;
 }
 
 .linkIcons {
-	height: 51px;
-	width: 40px;
-	margin: 10px;
-	cursor: pointer;
-	color: white;
+    height: 51px;
+    width: 40px;
+    margin: 10px;
+    cursor: pointer;
+    color: white;
 }
 
 .ui-autocomplete {
-	z-index: 1050;
+    z-index: 1050;
 }
 
 .assetCol {
-	overflow-y: auto;
-	height: 435px;
-	overflow-x: hidden;
+    overflow-y: auto;
+    height: 435px;
+    overflow-x: hidden;
 }
 
 .assetHeader {
-	background-color: rgb(36, 161, 237);
-	color: white;
-	font-size: 22px;
-	width: 100%;
+    background-color: rgb(36, 161, 237);
+    color: white;
+    font-size: 22px;
+    width: 100%;
 }
 
-.view-container{
-	height:525px;
-	overflow-y: auto;
+.view-container {
+    height: 525px;
+    overflow-y: auto;
 }
 
-.row{
-	margin-right: 0px; 
+.row {
+    margin-right: 0px;
     margin-left: 0px;
 }
 
-input[disabled]{
-	background:white;
+input[disabled] {
+    background: white;
 }
 
 .otp {
-	width: 30px;
-	display: inline;
-	height: 29px;
-	padding: 0px;
-	font-size: 17px;
-	text-align: center;
+    width: 30px;
+    display: inline;
+    height: 29px;
+    padding: 0px;
+    font-size: 17px;
+    text-align: center;
 }

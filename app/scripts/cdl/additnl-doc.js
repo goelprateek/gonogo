@@ -1,120 +1,120 @@
-;(function(){
-	'use strict';	
-	var app=angular.module("gonogo.cdl");
+;
+(function() {
+    'use strict';
+    var app = angular.module("gonogo.cdl");
 
-	app.controller("AdditionalDocumentController",["$scope","sharedService","UserService","RestService","UploadImages","$log","notifier","$state",
-		function($scope,sharedService,UserService,RestService,UploadImages,$log,notifier,$state){
+    app.controller("AdditionalDocumentController", ["$scope", "sharedService", "UserService", "RestService", "UploadImages", "$log", "notifier", "$state",
+        function($scope, sharedService, UserService, RestService, UploadImages, $log, notifier, $state) {
 
-		$scope.additnlDocArrayToUpload=[];
-		var user=UserService.getCurrentUser();
+            $scope.additnlDocArrayToUpload = [];
+            var user = UserService.getCurrentUser();
 
-		if(sharedService.getRefID()){
-			$scope.referenceID=sharedService.getRefID();
-			sharedService.setRefID(null);
-		}else{
-			$state.go("/cdl/basic-de");
-		}
+            if (sharedService.getRefID()) {
+                $scope.referenceID = sharedService.getRefID();
+                sharedService.setRefID(null);
+            } else {
+                $state.go("/cdl/basic-de");
+            }
 
-		if(sharedService.getApplicationStatus()){
-			$scope.statusObject=sharedService.getApplicationStatus();
-			sharedService.setApplicationStatus(null);
-		}else{
-			$state.go("/cdl/basic-de");
-		}
-		
-		$scope.doDocument=sharedService.getDODocument();
-		if($scope.doDocument){	
-			sharedService.setDODocument(null);
-		}
+            if (sharedService.getApplicationStatus()) {
+                $scope.statusObject = sharedService.getApplicationStatus();
+                sharedService.setApplicationStatus(null);
+            } else {
+                $state.go("/cdl/basic-de");
+            }
 
-		$scope.applicationFormArr=[{value:"APPLICATION_FORM","index":1,isDefault :true}];
-		$scope.agreementArr=[{value:"AGREEMENT","index":1,isDefault :true}];
-		$scope.achArr=[{value:"ACH","index":1,isDefault :true}];
-		$scope.disbursmentArr=[{value:"DISBURSEMENT","index":1,isDefault :true}];
-		$scope.addtnlKycArr=[{value:"ADDITIONAL_KYC","index":1,isDefault :true}];
+            $scope.doDocument = sharedService.getDODocument();
+            if ($scope.doDocument) {
+                sharedService.setDODocument(null);
+            }
 
-		$scope.addNewElement=function(key)
-		{  
-			switch (key) {
-				case "APPLICATION_FORM":
-					$scope.applicationFormArr.push({value:key,"index":($scope.applicationFormArr[$scope.applicationFormArr.length-1].index)+1,isDefault :true});
-					break;
-				case "AGREEMENT":
-					$scope.agreementArr.push({value:key,"index":($scope.agreementArr[$scope.agreementArr.length-1].index)+1,isDefault :true});
-					break;
-				case "ACH":
-					$scope.achArr.push({value:key,"index":($scope.achArr[$scope.achArr.length-1].index)+1,isDefault :true});
-					break;				
-				case "DISBURSEMENT":
-					$scope.disbursmentArr.push({value:key,"index":($scope.disbursmentArr[$scope.disbursmentArr.length-1].index)+1,isDefault :true});
-					break;				
-				case "ADDITIONAL_KYC":
-					$scope.addtnlKycArr.push({value:key,"index":($scope.addtnlKycArr[$scope.addtnlKycArr.length-1].index)+1,isDefault :true});
-					break;
-			}		
-		};
+            $scope.applicationFormArr = [{ value: "APPLICATION_FORM", "index": 1, isDefault: true }];
+            $scope.agreementArr = [{ value: "AGREEMENT", "index": 1, isDefault: true }];
+            $scope.achArr = [{ value: "ACH", "index": 1, isDefault: true }];
+            $scope.disbursmentArr = [{ value: "DISBURSEMENT", "index": 1, isDefault: true }];
+            $scope.addtnlKycArr = [{ value: "ADDITIONAL_KYC", "index": 1, isDefault: true }];
 
-		$scope.submitImages = function()
-		{
-			if($scope.additnlDocArrayToUpload.length!=0){
-				UploadImages.upload($scope.referenceID,$scope.additnlDocArrayToUpload).then(function(responseArray) {
-				  	$log.debug('Image upload Success, Total image uploaded : ' + JSON.stringify(responseArray));
-				  	$scope.updateStatus();
-				}, function(reason) {
-				  	$log.debug('Image upload Failed, Total image uploaded : ' + JSON.stringify(responseArray));
-				});
-			}else{
-				notifier.logWarning("Please select atleast 1 image to upload.");
-			}
+            $scope.addNewElement = function(key) {
+                switch (key) {
+                    case "APPLICATION_FORM":
+                        $scope.applicationFormArr.push({ value: key, "index": ($scope.applicationFormArr[$scope.applicationFormArr.length - 1].index) + 1, isDefault: true });
+                        break;
+                    case "AGREEMENT":
+                        $scope.agreementArr.push({ value: key, "index": ($scope.agreementArr[$scope.agreementArr.length - 1].index) + 1, isDefault: true });
+                        break;
+                    case "ACH":
+                        $scope.achArr.push({ value: key, "index": ($scope.achArr[$scope.achArr.length - 1].index) + 1, isDefault: true });
+                        break;
+                    case "DISBURSEMENT":
+                        $scope.disbursmentArr.push({ value: key, "index": ($scope.disbursmentArr[$scope.disbursmentArr.length - 1].index) + 1, isDefault: true });
+                        break;
+                    case "ADDITIONAL_KYC":
+                        $scope.addtnlKycArr.push({ value: key, "index": ($scope.addtnlKycArr[$scope.addtnlKycArr.length - 1].index) + 1, isDefault: true });
+                        break;
+                }
+            };
 
-		 	//    UploadAllImgs($scope.REFID,addkyc_array,"ipa");
-		 	//    $scope.updateStatus();
-		    // console.log("$scope.dstatus :"+$scope.dstatus);
-		 	//    if(status == "Declined")
-			// {	
-		 	//    	$("loaderImg").show();
-		 	//    	$timeout( function(){ $state.go("/cdl/dashboard"); }, 3000);
-			//      $rootScope.errHead="";
-			//      $rootScope.errorMsg="";
-			// }  else {
-			// 	$('#additionalDoc').hide();
-			// 	$('#additionalDocfinal').show();
-			// }
-		};
+            $scope.submitImages = function() {
+                if ($scope.additnlDocArrayToUpload.length != 0) {
+                    UploadImages.upload($scope.referenceID, $scope.additnlDocArrayToUpload).then(function(responseArray) {
+                        $log.debug('Image upload Success, Total image uploaded : ' + JSON.stringify(responseArray));
+                        $scope.updateStatus();
+                    }, function(reason) {
+                        $log.debug('Image upload Failed, Total image uploaded : ' + JSON.stringify(responseArray));
+                    });
+                } else {
+                    notifier.logWarning("Please select atleast 1 image to upload.");
+                }
 
-		$scope.updateStatus = function(){
-			var updateJson ={
-				"oHeader":{
-					  "sApplID": "",
-					  "sInstID":user.institutionID,
-					  "sSourceID":"",
-					  "sAppSource":"WEB",
-					  "sReqType":"JSON",
-				      "sDsaId":user.username
-				     /* "sDealerId":""*/
-				},
-				"sRefID":$scope.referenceID};
-			// console.log("Input JSON for status update :"+$scope.updateJson);
+                //    UploadAllImgs($scope.REFID,addkyc_array,"ipa");
+                //    $scope.updateStatus();
+                // console.log("$scope.dstatus :"+$scope.dstatus);
+                //    if(status == "Declined")
+                // {
+                //    	$("loaderImg").show();
+                //    	$timeout( function(){ $state.go("/cdl/dashboard"); }, 3000);
+                //      $rootScope.errHead="";
+                //      $rootScope.errorMsg="";
+                // }  else {
+                // 	$('#additionalDoc').hide();
+                // 	$('#additionalDocfinal').show();
+                // }
+            };
 
-			 RestService.saveToServer('post-ipa-stage-update', updateJson)
-			 .then(function(data){
-			 	if(data && data.sStat==="SUCCESS"){
-					if($scope.statusObject.sAppStat === "Declined")
-					{
-						notifier.logSuccess("Image has been uploaded successfully.");
-				    	$state.go("/cdl/dashboard");
-					} else if($scope.statusObject.sAppStat === "Approved"){
-						sharedService.setRefID($scope.referenceID);
-						sharedService.setDODocument($scope.doDocument);
-						sharedService.setApplicationStatus($scope.statusObject);
-						$state.go("/cdl/post-do");
-					}
-				}else{
-					notifier.logError("Unable to update status, please try again or contact system admin.");
-				}
-			},function(failedResponse){
-				notifier.logError("Sorry we can not reset the stage.");
-			});
-		};
-	}]);
+            $scope.updateStatus = function() {
+                var updateJson = {
+                    "oHeader": {
+                        "sApplID": "",
+                        "sInstID": user.institutionID,
+                        "sSourceID": "",
+                        "sAppSource": "WEB",
+                        "sReqType": "JSON",
+                        "sDsaId": user.username
+                            /* "sDealerId":""*/
+                    },
+                    "sRefID": $scope.referenceID
+                };
+                // console.log("Input JSON for status update :"+$scope.updateJson);
+
+                RestService.saveToServer('post-ipa-stage-update', updateJson)
+                    .then(function(data) {
+                        if (data && data.sStat === "SUCCESS") {
+                            if ($scope.statusObject.sAppStat === "Declined") {
+                                notifier.logSuccess("Image has been uploaded successfully.");
+                                $state.go("/cdl/dashboard");
+                            } else if ($scope.statusObject.sAppStat === "Approved") {
+                                sharedService.setRefID($scope.referenceID);
+                                sharedService.setDODocument($scope.doDocument);
+                                sharedService.setApplicationStatus($scope.statusObject);
+                                $state.go("/cdl/post-do");
+                            }
+                        } else {
+                            notifier.logError("Unable to update status, please try again or contact system admin.");
+                        }
+                    }, function(failedResponse) {
+                        notifier.logError("Sorry we can not reset the stage.");
+                    });
+            };
+        }
+    ]);
 }).call(this);

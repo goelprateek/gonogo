@@ -1,52 +1,45 @@
 <div class="row clearfix header " style="background-color: #24A1ED;">
-
-	<div class="col-md-2 col-sm-2 col-xs-3 logo-gonogo" style="background-image: url('images/gonogo.png');">
-	</div>
-	<div class="col-md-9 col-sm-9 col-xs-8" id="msgHdr">
-		<div class="col-md-1 col-sm-4 col-xs-4" >
-			<a ui-sref="/cdl/basic-de">
-				<img alt="Application" class="linkIcons" id="application"
-				src="images/apply.png">
-			</a>
-		</div>
-
-		<div class="col-md-1 col-sm-4 col-xs-4" >
-			<a ui-sref="/cdl/dashboard">
-			<img alt="Dashboard" class="linkIcons" src="images/dashboard.png"
-				style="width: 66px">
-			</a>
-		</div>
-		
-		<div class="col-md-1 col-sm-4 col-xs-4" >
-			<a ui-sref="/cdl/assetMaster">
-			<img alt="AssetMaster" class="linkIcons" src="images/asset.png"
-			style="width: 80px">
-			</a>
-		</div>
-		
-	</div>
-	<div class="col-md-1 col-sm-1 col-xs-1">
-		<ul class="nav navbar-nav">
-			<li uib-dropdown  class="dropdown text-normal nav-profile" is-open="statusCdl.isopen">
-				<a href="javascript:;" uib-dropdown-toggle class="dropdown-toggle" aria-haspopup="true" aria-expanded="true" >
-				  <i class="fa fa-user" style="font-size:24px;color: rgba(5, 51, 74, 0.95);"></i>
-				</a>	
-				<div class="dropdown-menu with-arrow pull-right dropdown-menu-scaleIn" id="logout_dropdown_panel" uib-dropdown-menu >
-					<div class="profile_icon " style="float: left;" >
-						<i class="fa fa-user" style="font-size:95px;height:100%;width:100%;text-align: center;"></i>
-						<div id="change_thumb">Change photo</div>
-					</div>
-					<div class="user_data">
-						<label id="user_name" title="{{userid}}">{{username}}</label>
-						<div class="copyright">{{useremail}}</div>
-						<div class="copyright">{{dealerName}}</div>
-						<a class="btn-primary" id="view_profile">View profile</a>
-					</div>
-					<div class="logout_footer">
-						<a data-ng-click="logout()">LogOut</a>
-					</div>
-				</div>
-		  	</li>
-		</ul>
-	</div>
+    <div class="col-md-2 col-sm-2 col-xs-3 logo-gonogo" style="background-image: url('images/gonogo.png');">
+    </div>
+    <div class="col-md-9 col-sm-9 col-xs-8" id="msgHdr">
+        <div class="col-md-1 col-sm-4 col-xs-4">
+            <a ui-sref="/cdl/basic-de">
+                <img alt="Application" class="linkIcons" id="application" src="images/apply.png">
+            </a>
+        </div>
+        <div class="col-md-1 col-sm-4 col-xs-4">
+            <a ui-sref="/cdl/dashboard">
+                <img alt="Dashboard" class="linkIcons" src="images/dashboard.png" style="width: 66px">
+            </a>
+        </div>
+        <div class="col-md-1 col-sm-4 col-xs-4">
+            <a ui-sref="/cdl/assetMaster">
+                <img alt="AssetMaster" class="linkIcons" src="images/asset.png" style="width: 80px">
+            </a>
+        </div>
+    </div>
+    <div class="col-md-1 col-sm-1 col-xs-1">
+        <ul class="nav navbar-nav">
+            <li uib-dropdown class="dropdown text-normal nav-profile" is-open="statusCdl.isopen">
+                <a href="javascript:;" uib-dropdown-toggle class="dropdown-toggle" aria-haspopup="true" aria-expanded="true">
+                    <i class="fa fa-user" style="font-size:24px;color: rgba(5, 51, 74, 0.95);"></i>
+                </a>
+                <div class="dropdown-menu with-arrow pull-right dropdown-menu-scaleIn" id="logout_dropdown_panel" uib-dropdown-menu>
+                    <div class="profile_icon " style="float: left;">
+                        <i class="fa fa-user" style="font-size:95px;height:100%;width:100%;text-align: center;"></i>
+                        <div id="change_thumb">Change photo</div>
+                    </div>
+                    <div class="user_data">
+                        <label id="user_name" title="{{userid}}">{{username}}</label>
+                        <div class="copyright">{{useremail}}</div>
+                        <div class="copyright">{{dealerName}}</div>
+                        <a class="btn-primary" id="view_profile">View profile</a>
+                    </div>
+                    <div class="logout_footer">
+                        <a data-ng-click="logout()">LogOut</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>

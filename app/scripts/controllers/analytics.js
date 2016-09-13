@@ -3,23 +3,23 @@
 
     'use strict';
 
-    var app = angular.module('gonogo.analytics', ['gonogo-directives', 'dndLists', 'ui.slimscroll','angularUtils.directives.dirPagination']);
+    var app = angular.module('gonogo.analytics', ['gonogo-directives', 'dndLists', 'ui.slimscroll', 'angularUtils.directives.dirPagination']);
 
     app.controller('AnalyticsController', ['$scope', 'notifier', '$timeout',
         'RestService', '$filter', 'APP_CONST',
         '$uibModal', 'UserService', '$log',
         'ObjectStore', 'SelectArrays', 'AclService',
-        '$mdDialog','sharedService','$state','$interval',
+        '$mdDialog', 'sharedService', '$state', '$interval',
         function($scope, notifier, $timeout,
             RestService, $filter, APP_CONST, $uibModal,
             UserService, $log, ObjectStore,
-            SelectArrays, AclService, $mdDialog,sharedService,$state,$interval) {
+            SelectArrays, AclService, $mdDialog, sharedService, $state, $interval) {
 
             var user = UserService.getCurrentUser();
 
             $scope.can = AclService.can;
             $scope.objectSet = ObjectStore.analytics();
-          //  $scope.isImg = true;
+            //  $scope.isImg = true;
             $scope.dataSourceCol = [];
             $scope.losIdval = true;
             $scope.utrVal = true;
@@ -106,7 +106,7 @@
                         'show.daterangepicker': function(ev, picker) {
                             $scope.datefilter.date.startDate = undefined;
                             $scope.datefilter.date.endDate = undefined;
-                           // $scope.drawTablularData($scope.copydataSourceCol);
+                            // $scope.drawTablularData($scope.copydataSourceCol);
                         },
 
                         'hide.daterangepicker': function(ev, picker) {
@@ -157,35 +157,35 @@
             }*/
 
             var graphTimer,
-                startGraphTimer = function(){
+                startGraphTimer = function() {
 
-               if(_.isUndefined(graphTimer)){
-                graphTimer =  $interval(function(){
-                    startGraph();
-                },60000,0,true);  
-               } 
-            }
+                    if (_.isUndefined(graphTimer)) {
+                        graphTimer = $interval(function() {
+                            startGraph();
+                        }, 60000, 0, true);
+                    }
+                }
 
-            var stopGraphTimer = function(){
-                if(angular.isDefined(graphTimer)){
-                    $interval.cancel(graphTimer); 
-                    graphTimer = undefined;  
+            var stopGraphTimer = function() {
+                if (angular.isDefined(graphTimer)) {
+                    $interval.cancel(graphTimer);
+                    graphTimer = undefined;
                 }
             }
 
-            var startGraph = function(){
+            var startGraph = function() {
                 $scope.chartObj;
                 var json = {
                     "oHeader": {
-                        "sAppID":null,
+                        "sAppID": null,
                         "sInstID": user.institutionID,
                         "sSourceID": "WEB",
                         "sAppSource": "GNG_WEB",
                         "sReqType": "JSON",
-                        "dtSubmit":"",
-                        "sDsaId":null,
-                        "sCroId":user.username,
-                        "sDealerId":null
+                        "dtSubmit": "",
+                        "sDsaId": null,
+                        "sCroId": user.username,
+                        "sDealerId": null
                     },
                     'sInstID': user.institutionID,
                     'oCriteria': {
@@ -196,50 +196,50 @@
 
                 RestService.saveToServer("stack-graph", json).then(function(data) {
                     $scope.chartOptions = data;
-                });    
+                });
             };
 
             startGraph();
             startGraphTimer();
 
             $scope.ifSeriesClicked = 0;
-            $scope.prev$value ;
-            $scope.onSeriesClicked = function($value,$pageno){
+            $scope.prev$value;
+            $scope.onSeriesClicked = function($value, $pageno) {
 
-               $scope.prev$value = $value || $scope.prev$value;
+                $scope.prev$value = $value || $scope.prev$value;
 
-               $scope.ifSeriesClicked = 1;
-               if( user.role != "DSA" ){
-                    $scope.datasource = []; 
-                    if($scope.prev$value){
+                $scope.ifSeriesClicked = 1;
+                if (user.role != "DSA") {
+                    $scope.datasource = [];
+                    if ($scope.prev$value) {
                         var json = {
                             "oHeader": {
-                                "sAppID":null,
+                                "sAppID": null,
                                 "sInstID": user.institutionID,
                                 "sSourceID": "WEB",
                                 "sAppSource": "GNG_WEB",
                                 "sReqType": "JSON",
-                                "dtSubmit":"",
-                                "sDsaId":null,
-                                "sCroId":user.username,
-                                "sDealerId":null
+                                "dtSubmit": "",
+                                "sDsaId": null,
+                                "sCroId": user.username,
+                                "sDealerId": null
                             },
-                            "dtFrmDate":$scope.prev$value.category,
-                            "sStat":$scope.prev$value.series.name,
-                            'sInstID':user.institutionID,
-                            'iSkip': ($scope.itemPerPage * (($pageno || 1) -1)),
+                            "dtFrmDate": $scope.prev$value.category,
+                            "sStat": $scope.prev$value.series.name,
+                            'sInstID': user.institutionID,
+                            'iSkip': ($scope.itemPerPage * (($pageno || 1) - 1)),
                             'iLimit': $scope.itemPerPage,
-                            'oCriteria': { 
-                                "oHierarchy":user.hierarchy,
-                                "aProducts":user.getProductNames()
+                            'oCriteria': {
+                                "oHierarchy": user.hierarchy,
+                                "aProducts": user.getProductNames()
                             }
                         };
                     }
-                    RestService.saveToServer("table-view-new",json).then(function(data){
+                    RestService.saveToServer("table-view-new", json).then(function(data) {
                         $scope.datasource = data.stackTable;
                         $scope.total_count = data.totalCount;
                         $scope.isTableData = !$scope.isTableData;
-                    }).finally(function(){
+                    }).finally(function() {
                         $scope.ifSeriesClicked = 0;
                     });
                 }
@@ -251,29 +251,29 @@
             $scope.datasource = [];
             $scope.pageno = 1;
             $scope.itemPerPage = 50;
-            $scope.itemPerPageMeta = [50,100,150];
+            $scope.itemPerPageMeta = [50, 100, 150];
             $scope.search = {
                 query: ''
             }
-            $scope.fetchDataFromServer = function($pageno){
+            $scope.fetchDataFromServer = function($pageno) {
                 $scope.isLoadingAnalyticsData = 1;
                 $scope.datasource = [];
                 var json = {
                     "oHeader": {
-                        "sAppID":null,
+                        "sAppID": null,
                         "sInstID": user.institutionID,
                         "sSourceID": "WEB",
                         "sAppSource": "GNG_WEB",
                         "sReqType": "JSON",
-                        "dtSubmit":"",
-                        "sDsaId":null,
-                        "sCroId":user.username,
-                        "sDealerId":null
+                        "dtSubmit": "",
+                        "sDsaId": null,
+                        "sCroId": user.username,
+                        "sDealerId": null
                     },
-                    "dtFrmDate":moment().subtract('1','months'),
-                    "dtToDate" : moment(),
+                    "dtFrmDate": moment().subtract('1', 'months'),
+                    "dtToDate": moment(),
                     'sInstID': user.institutionID,
-                    'iSkip': ($scope.itemPerPage * ($pageno -1)),
+                    'iSkip': ($scope.itemPerPage * ($pageno - 1)),
                     'iLimit': $scope.itemPerPage,
                     'oCriteria': {
                         "oHierarchy": user.hierarchy,
@@ -281,20 +281,20 @@
                     }
                 };
 
-                RestService.saveToServer('table-view-new',json).then(function(response){
+                RestService.saveToServer('table-view-new', json).then(function(response) {
                     $scope.datasource = response.stackTable;
                     $scope.total_count = response.totalCount;
-                }).finally(function(){
+                }).finally(function() {
                     $scope.isLoadingAnalyticsData = 0;
                 });
                 sharedService.setAnalyticsServiceName("fetchDateFromServer");
                 sharedService.setAnalyticsServiceParm($pageno);
             }
-            
-            if(sharedService.getAnalyticsServiceName() && sharedService.getAnalyticsServiceParm()){
-                if(sharedService.getAnalyticsServiceName() === "onSeriesClicked"){
+
+            if (sharedService.getAnalyticsServiceName() && sharedService.getAnalyticsServiceParm()) {
+                if (sharedService.getAnalyticsServiceName() === "onSeriesClicked") {
                     $scope.onSeriesClicked(sharedService.getAnalyticsServiceParm());
-                }else{
+                } else {
                     $scope.isTableData = false;
                     $scope.appView = false;
                     $scope.fetchDateFromServer(sharedService.getAnalyticsServiceParm());
@@ -364,8 +364,8 @@
             $scope.toggleView = function() {
                 $scope.isTableData = !$scope.isTableData;
                 $scope.datasource = [];
-                if(!$scope.isTableData){
-                  $scope.fetchDataFromServer($scope.pageno);   
+                if (!$scope.isTableData) {
+                    $scope.fetchDataFromServer($scope.pageno);
                 }
             };
 
@@ -376,22 +376,22 @@
                 $scope.addr_type = $scope.addrType[1];
                 $scope.appView = true;
                 var URL = 'application-data';
-                var json = { 
-                     "oHeader":{
-                             "sInstID":user.institutionID,
-                             "sSourceID":"WEB",
-                             "sAppSource":"WEB",
-                             "sReqType":"JSON",
-                             "sCroId":user.username
-                        },
-                    'sRefID': CustID };
+                var json = {
+                    "oHeader": {
+                        "sInstID": user.institutionID,
+                        "sSourceID": "WEB",
+                        "sAppSource": "WEB",
+                        "sReqType": "JSON",
+                        "sCroId": user.username
+                    },
+                    'sRefID': CustID
+                };
                 RestService.saveToServer(URL, json).then(function(response) {
-                    if (response){
-                      //  $scope.objectSet = response;
+                    if (response) {
+                        //  $scope.objectSet = response;
                         sharedService.setApplicationData(response);
-                     }
-                    else{
-                         sharedService.setApplicationData(ObjectStore.analytics());
+                    } else {
+                        sharedService.setApplicationData(ObjectStore.analytics());
                         //$scope.objectSet = NotificationObject.dummy();
                     }
 
@@ -402,94 +402,95 @@
 
                     $scope.Picked = CustID;
 
-                  /*  if ($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob != "") {
-                        $scope.dob = $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0, 2) + "/" + $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2, 4) + "/" + $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4);
-                        var dateOfBirth = new Date();
-                        dateOfBirth.setFullYear(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4)));
-                        dateOfBirth.setDate(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0, 2)));
-                        dateOfBirth.setMonth((parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2, 4)) - 1));
+                    /*  if ($scope.objectSet.oAppReq.oReq.oApplicant.sDob && $scope.objectSet.oAppReq.oReq.oApplicant.sDob != "") {
+                          $scope.dob = $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0, 2) + "/" + $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2, 4) + "/" + $scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4);
+                          var dateOfBirth = new Date();
+                          dateOfBirth.setFullYear(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(4)));
+                          dateOfBirth.setDate(parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(0, 2)));
+                          dateOfBirth.setMonth((parseInt($scope.objectSet.oAppReq.oReq.oApplicant.sDob.slice(2, 4)) - 1));
 
-                        $scope.app_form = { pickerDob: dateOfBirth };
+                          $scope.app_form = { pickerDob: dateOfBirth };
 
-                    }*/
+                      }*/
 
                     $scope.showrefid = "true";
-/*                    $scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName + "  " + $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName + "  " + $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
-*/                    var data = $scope.dataSourceCol;
+                    /*                    $scope.name = $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName + "  " + $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName + "  " + $scope.objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName;
+                     */
+                    var data = $scope.dataSourceCol;
                     _.each(data, function(value, key) {
                         if (value.applicationId == $scope.objectSet.oAppReq.sRefID) {
                             $scope.applctnstatus = value.applicationStatus;
                         }
                     });
-                   /* $scope.croDecision = response.aCroDec;
+                    /* $scope.croDecision = response.aCroDec;
 
-                    try {
-                        $scope.pdfData = "data:application/pdf;base64," + $scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];
-                    } catch (e) {
-                        $scope.pdfData = '';
-                    }
+                     try {
+                         $scope.pdfData = "data:application/pdf;base64," + $scope.objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]["PDF REPORT"];
+                     } catch (e) {
+                         $scope.pdfData = '';
+                     }
 
-                    try {
-                        $scope.foirAmount = $scope.objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT'].toFixed(2);
-                    } catch (e) {
-                        $scope.foirAmount = '';
-                    }*/
+                     try {
+                         $scope.foirAmount = $scope.objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT'].toFixed(2);
+                     } catch (e) {
+                         $scope.foirAmount = '';
+                     }*/
                     return response;
 
                 }).then(function(data) {
 
-                   /* if (data) {
-                        var objArray = _.map(_.pluck(data.aAppImgDtl, 'aImgMap'), function(data) {
-                            return data;
-                        });
+                    /* if (data) {
+                         var objArray = _.map(_.pluck(data.aAppImgDtl, 'aImgMap'), function(data) {
+                             return data;
+                         });
 
-                        $scope.imageDataArray = [];
-                        var evidenceData = [];
-                        var maindata = [];
-                        _.each(_.flatten(objArray), function(val) {
-                            if (val.sImgType.indexOf("_EVIDENCE") > -1) {
-                                evidenceData.push(val);
-                            }
-                            maindata.push(val);
-                        });
+                         $scope.imageDataArray = [];
+                         var evidenceData = [];
+                         var maindata = [];
+                         _.each(_.flatten(objArray), function(val) {
+                             if (val.sImgType.indexOf("_EVIDENCE") > -1) {
+                                 evidenceData.push(val);
+                             }
+                             maindata.push(val);
+                         });
 
-                        _.each(evidenceData, function(val) {
-                            var whosEvdnc = val.sImgType.slice(0, -10);
-                            _.each(maindata, function(data) {
-                                if (data.sImgType == whosEvdnc) {
-                                    if (!data.evdncArray)
-                                        data.evdncArray = [];
-                                    data.evdncArray.push(val);
-                                }
-                            });
-                        });
+                         _.each(evidenceData, function(val) {
+                             var whosEvdnc = val.sImgType.slice(0, -10);
+                             _.each(maindata, function(data) {
+                                 if (data.sImgType == whosEvdnc) {
+                                     if (!data.evdncArray)
+                                         data.evdncArray = [];
+                                     data.evdncArray.push(val);
+                                 }
+                             });
+                         });
 
-                        _.each(maindata, function(val) {
-                            return RestService.saveToServer('get-image-by-id-base64', { 'sImgID': val.sImgID }).then(function(data) {
-                                if (!_.isUndefined(data) || !_.isNull(data)) {
-                                    if (!_.isEmpty(data.sByteCode)) {
-                                        val["sByteCode"] = "data:image/png;base64," + data.sByteCode;
-                                        $scope.imageDataArray.push(val);
-                                    }
-                                }
-                            });
-                        });
+                         _.each(maindata, function(val) {
+                             return RestService.saveToServer('get-image-by-id-base64', { 'sImgID': val.sImgID }).then(function(data) {
+                                 if (!_.isUndefined(data) || !_.isNull(data)) {
+                                     if (!_.isEmpty(data.sByteCode)) {
+                                         val["sByteCode"] = "data:image/png;base64," + data.sByteCode;
+                                         $scope.imageDataArray.push(val);
+                                     }
+                                 }
+                             });
+                         });
 
-                        var rejectImgFromServer = [];
-                        _.each($scope.imageDataArray, function(val) {
-                            if (val.sStat == "Reject") {
-                                rejectImgFromServer.push(val);
-                            }
-                        });
-                        $scope.rejectImgFromServer = rejectImgFromServer;
-                    }*/
+                         var rejectImgFromServer = [];
+                         _.each($scope.imageDataArray, function(val) {
+                             if (val.sStat == "Reject") {
+                                 rejectImgFromServer.push(val);
+                             }
+                         });
+                         $scope.rejectImgFromServer = rejectImgFromServer;
+                     }*/
                 });
             };
 
-           /* $scope.toggleForm = function() {
-                $scope.isTableData = false;
-                $scope.appView = !$scope.appView;
-            }*/
+            /* $scope.toggleForm = function() {
+                 $scope.isTableData = false;
+                 $scope.appView = !$scope.appView;
+             }*/
         }
     ]);
 
@@ -511,10 +512,12 @@
             }
 
             $scope.approveImg = function(index) {
-                return false; }
+                return false;
+            }
 
             $scope.rejectImg = function(index) {
-                return false; }
+                return false;
+            }
 
             $scope.closeModal = function() {
                 $uibModalInstance.dismiss($scope.slides);
@@ -732,7 +735,8 @@
         $scope.getSelectedItemsIncluding = function(list, item) {
             item.selected = true;
             return list.items.filter(function(item) {
-                return item.selected; });
+                return item.selected;
+            });
         };
 
         $scope.onDragstart = function(list, event) {
@@ -767,7 +771,8 @@
 
         $scope.onMoved = function(list) {
             list.items = list.items.filter(function(item) {
-                return !item.selected; });
+                return !item.selected;
+            });
         };
 
         $scope.saveConfiguration = function() {

@@ -1,104 +1,110 @@
-
-.inputMaterial 				{
-  font-size:18px;
-  padding:0px 0px 0px 5px;
-  display:block;
-  border:none;
-  border-bottom:1px solid #757575;
+.inputMaterial {
+    font-size: 18px;
+    padding: 0px 0px 0px 5px;
+    display: block;
+    border: none;
+    border-bottom: 1px solid #757575;
 }
 
-.inputMaterial:focus { outline:none;}
+.inputMaterial:focus {
+    outline: none;
+}
+
 
 /* LABEL ======================================= */
 
 .inputMaterial ~ label {
-  color:#999; 
-  font-size:14px;
-  font-weight:normal;
-  position:absolute;
-  pointer-events:none;
-  left:18px;
-  top:0px;
-  transition:0.2s ease all; 
-  -moz-transition:0.2s ease all; 
-  -webkit-transition:0.2s ease all;
+    color: #999;
+    font-size: 14px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 18px;
+    top: 0px;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
 }
+
 
 /* active state */
+
 .inputMaterial:focus ~ label,
-.inputMaterial.ng-touched.ng-valid ~ label, 
-.inputMaterial.ng-not-empty ~ label, 
+.inputMaterial.ng-touched.ng-valid ~ label,
+.inputMaterial.ng-not-empty ~ label,
 .inputMaterial:disabled ~ label,
-select.inputMaterial ~ label{
-  top:-22px;
-  font-size:14px;
-  color: #24a1ed;
-  font-weight:normal;
-  border:none;
+select.inputMaterial ~ label {
+    top: -22px;
+    font-size: 14px;
+    color: #24a1ed;
+    font-weight: normal;
+    border: none;
 }
 
-.cdl-form-control,.cdl-form-control:focus {
-  height:auto;
-  box-shadow: none;
-  padding-bottom: 0px;
-  border-radius: 0px;
-  font-size:16px;
-  width: 100%;
+.cdl-form-control,
+.cdl-form-control:focus {
+    height: auto;
+    box-shadow: none;
+    padding-bottom: 0px;
+    border-radius: 0px;
+    font-size: 16px;
+    width: 100%;
 }
 
-.has-error .form-control , .has-error .form-control:focus{
-  box-shadow: none;
-  -webkit-box-shadow: none;
+.has-error .form-control,
+.has-error .form-control:focus {
+    box-shadow: none;
+    -webkit-box-shadow: none;
 }
 
-.cdl-height{ height:70px; }
+.cdl-height {
+    height: 70px;
+}
 
 .form-group {
     margin-bottom: 25px;
 }
 
 .form-group.required .control-label:after {
-  content:"";
-  color:red;
+    content: "";
+    color: red;
 }
 
-.has-error .form-control{
-  box-shadow: none;
-  border-bottom: 1px solid red;
-  border-radius: 0px;
+.has-error .form-control {
+    box-shadow: none;
+    border-bottom: 1px solid red;
+    border-radius: 0px;
 }
 
 .has-error > label {
-  color:#a94442;
-  font-weight: bold;
+    color: #a94442;
+    font-weight: bold;
 }
 
-.errorMsg{
-  color:#a94442;
+.errorMsg {
+    color: #a94442;
 }
 
-.control-select{
-  /*for firefox*/
-  -moz-appearance: none;
-  
-  /*for chrome*/
-  -webkit-appearance:none;
-
-  padding-bottom: 0px;
-
-  background: url("../images/arrow_select.png") no-repeat right #FFFFFF;
-  border:0px;
-  border-bottom: 1px solid #004d82;
-  border-radius: 0px;
-  padding-top: 0px;
-  width: 100%;
-  color:black;
-  box-shadow: none;
-  max-width: 100%;
+.control-select {
+    /*for firefox*/
+    -moz-appearance: none;
+    /*for chrome*/
+    -webkit-appearance: none;
+    padding-bottom: 0px;
+    background: url("../images/arrow_select.png") no-repeat right #FFFFFF;
+    border: 0px;
+    border-bottom: 1px solid #004d82;
+    border-radius: 0px;
+    padding-top: 0px;
+    width: 100%;
+    color: black;
+    box-shadow: none;
+    max-width: 100%;
 }
 
-.control-select:hover,.control-select:focus{
-  box-shadow: none;
+.control-select:hover,
+.control-select:focus {
+    box-shadow: none;
 }
 
 .custom_symbol_rupee {
@@ -133,33 +139,33 @@ select.inputMaterial ~ label{
 }
 
 .remove_image {
-  display: none;
-  cursor: pointer;
-  color: red;
-} 
+    display: none;
+    cursor: pointer;
+    color: red;
+}
 
 input[type="file"] {
-  width: 80px;
-  height: 85px;
-  margin: 15px;
-  display: none;
-  opacity: 0.08;
+    width: 80px;
+    height: 85px;
+    margin: 15px;
+    display: none;
+    opacity: 0.08;
 }
 
 .upload-default {
-  height: 60px;
-  background-position: center;
-  text-align: center;
-  background-origin: border-box;
-  /*background-image: url("../images/camera-128.png");*/
-  background-repeat: no-repeat;
-  border: none;
-  background-size: 60px;
+    height: 60px;
+    background-position: center;
+    text-align: center;
+    background-origin: border-box;
+    /*background-image: url("../images/camera-128.png");*/
+    background-repeat: no-repeat;
+    border: none;
+    background-size: 60px;
 }
 
-.logo-gonogo{
-  background-size: contain;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 71px;
+.logo-gonogo {
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 71px;
 }

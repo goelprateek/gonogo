@@ -1,72 +1,73 @@
-;(function(){
-	'use strict';
+;
+(function() {
+    'use strict';
 
-	var app=angular.module('gonogo.utilities');
+    var app = angular.module('gonogo.utilities');
 
-	app.service('UploadImages', ["$q","RestService","$log",
-		function ($q,RestService,$log) {
-		var imageCountUploaded=0;
-		var imageCountToUpload=0;
-		var serviceHitCount=0;
-		
-		this.upload = function(pReferenceID,pImageArrayToUpload){
-			imageCountUploaded=0;
-			var defer = $q.defer();
+    app.service('UploadImages', ["$q", "RestService", "$log",
+        function($q, RestService, $log) {
+            var imageCountUploaded = 0;
+            var imageCountToUpload = 0;
+            var serviceHitCount = 0;
 
-			// console.log("upload Image array :"+array.length);
-			imageCountToUpload=pImageArrayToUpload.length;
+            this.upload = function(pReferenceID, pImageArrayToUpload) {
+                imageCountUploaded = 0;
+                var defer = $q.defer();
 
-			var promiseList = _.map(pImageArrayToUpload,function(value){
-				var json ={
-				  		"oHeader": {
-				  			"sCroId":"default",
-				  			"sAppSource":"WEB",
-					    	"sApplID":"APPLICANT_1",  // applicant id
-                			"sReqType":"JSON"
-					  	},
-					  	"sRefID": pReferenceID,
-				  		"oUpldDtl": {
-						    "sFileID": "1", // ask yogesh
-						    "sFileName": value.kyc_name,
-						    "sFileType": value.type,
-						    "sfileData": value.image,
-						    "sStat": value.state,
-						    "sReason": value.reason 
-					  	}
-					};
-				return RestService.saveToServer("upload-image",json);
+                // console.log("upload Image array :"+array.length);
+                imageCountToUpload = pImageArrayToUpload.length;
 
-			});
+                var promiseList = _.map(pImageArrayToUpload, function(value) {
+                    var json = {
+                        "oHeader": {
+                            "sCroId": "default",
+                            "sAppSource": "WEB",
+                            "sApplID": "APPLICANT_1", // applicant id
+                            "sReqType": "JSON"
+                        },
+                        "sRefID": pReferenceID,
+                        "oUpldDtl": {
+                            "sFileID": "1", // ask yogesh
+                            "sFileName": value.kyc_name,
+                            "sFileType": value.type,
+                            "sfileData": value.image,
+                            "sStat": value.state,
+                            "sReason": value.reason
+                        }
+                    };
+                    return RestService.saveToServer("upload-image", json);
 
-			return $q.all(promiseList);
+                });
 
-			/*for(var i=0 ; i<pImageArrayToUpload.length ; i++){
-				if(pImageArrayToUpload[i] != null){
-					var json ={
-				  		"oHeader": {
-				  			"sCroId":"default",
-				  			"sAppSource":"WEB",
-					    	"sApplID":"APPLICANT_1"  // applicant id
-					  	},
-					  	"sRefID": pReferenceID,
-				  		"oUpldDtl": {
-						    "sFileID": "1", // ask yogesh
-						    "sFileName": pImageArrayToUpload[i].kyc_name,
-						    "sFileType": pImageArrayToUpload[i].type,
-						    "sfileData": pImageArrayToUpload[i].image,
-						    "sStat": pImageArrayToUpload[i].state,
-						    "sReason": pImageArrayToUpload[i].reason 
-					  	}
-					};
-					//$log.debug("image JSon : "+JSON.stringify(json));
-					this.uploadImage(defer,json);
-				}
-			}*/
+                return $q.all(promiseList);
 
-			/*return defer.promise;*/
-		};
+                /*for(var i=0 ; i<pImageArrayToUpload.length ; i++){
+                	if(pImageArrayToUpload[i] != null){
+                		var json ={
+                	  		"oHeader": {
+                	  			"sCroId":"default",
+                	  			"sAppSource":"WEB",
+                		    	"sApplID":"APPLICANT_1"  // applicant id
+                		  	},
+                		  	"sRefID": pReferenceID,
+                	  		"oUpldDtl": {
+                			    "sFileID": "1", // ask yogesh
+                			    "sFileName": pImageArrayToUpload[i].kyc_name,
+                			    "sFileType": pImageArrayToUpload[i].type,
+                			    "sfileData": pImageArrayToUpload[i].image,
+                			    "sStat": pImageArrayToUpload[i].state,
+                			    "sReason": pImageArrayToUpload[i].reason
+                		  	}
+                		};
+                		//$log.debug("image JSon : "+JSON.stringify(json));
+                		this.uploadImage(defer,json);
+                	}
+                }*/
 
-		/*
+                /*return defer.promise;*/
+            };
+
+            /*
 		this.uploadImage=function(defer,json)
 		{
 			RestService.saveToServer("upload-image",json).then(function(data)
@@ -94,5 +95,6 @@
 				}
 			});
 		};*/
-	}]);
+        }
+    ]);
 }).call(this);

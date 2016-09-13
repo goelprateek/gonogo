@@ -1,86 +1,80 @@
 <fieldset id="additionalDoc" style="margin:20px">
-	<div class="getheight" id="kycHeight">
-		<div class="row clearfix ">
-			<div class="col-md-10 col-md-offset-1">
-				<div class="row clearfix" id="appImgRw">
-					<div class="col-md-12" style="border-top: 01px solid #24A1ED">
-						<div class="row clearfix alert-info">
-							<span class="info">Application Form</span>
-						</div>
-						<div class="row clearfix">
-							<div class="col-md-3" ng-repeat="item in applicationFormArr"  style="padding: 8px;">
-								<content-item item="item" imagearray="additnlDocArrayToUpload"></content-item>
-							</div>
-							<span class="Add-Icon same abs_rght_mdl"
-								ng-click="addNewElement('APPLICATION_FORM')"><b>+</b></span>
-						</div>
-					</div>
-				</div>
-
-				<div class="row clearfix" id="aggImgRw" ng-if="statusObject.sAppStat === 'Approved'">
-					<div class="col-md-12" style="border-top: 01px solid #24A1ED">
-						<div class="row clearfix alert-info">
-							<span class="info">Agreement</span>
-						</div>
-						<div class="row clearfix">
-							<div class="col-md-3" ng-repeat="item in agreementArr"  style="padding: 8px;">
-								<content-item item="item" imagearray="additnlDocArrayToUpload"></content-item>
-							</div>
-							<span class="Add-Icon same abs_rght_mdl" ng-click="addNewElement('AGREEMENT')"><b>+</b></span>
-						</div>
-					</div>
-				</div>
-
-				<div class="row clearfix" id="chkImgRw" ng-if="statusObject.sAppStat === 'Approved'">
-					<div class="col-md-12" style="border-top: 01px solid #24A1ED">
-						<div class="row clearfix alert-info">
-							<span class="info">ACH / ECS & Cancelled Cheque</span>
-						</div>
-						<div class="row clearfix">
-							<div class="col-md-3" ng-repeat="item in achArr"  style="padding: 8px;">
-								<content-item item="item" imagearray="additnlDocArrayToUpload"></content-item>
-							</div>
-							<span class="Add-Icon same abs_rght_mdl" ng-click="addNewElement('ACH')">
+    <div class="getheight" id="kycHeight">
+        <div class="row clearfix ">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="row clearfix" id="appImgRw">
+                    <div class="col-md-12" style="border-top: 01px solid #24A1ED">
+                        <div class="row clearfix alert-info">
+                            <span class="info">Application Form</span>
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-md-3" ng-repeat="item in applicationFormArr" style="padding: 8px;">
+                                <content-item item="item" imagearray="additnlDocArrayToUpload"></content-item>
+                            </div>
+                            <span class="Add-Icon same abs_rght_mdl" ng-click="addNewElement('APPLICATION_FORM')"><b>+</b></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row clearfix" id="aggImgRw" ng-if="statusObject.sAppStat === 'Approved'">
+                    <div class="col-md-12" style="border-top: 01px solid #24A1ED">
+                        <div class="row clearfix alert-info">
+                            <span class="info">Agreement</span>
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-md-3" ng-repeat="item in agreementArr" style="padding: 8px;">
+                                <content-item item="item" imagearray="additnlDocArrayToUpload"></content-item>
+                            </div>
+                            <span class="Add-Icon same abs_rght_mdl" ng-click="addNewElement('AGREEMENT')"><b>+</b></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row clearfix" id="chkImgRw" ng-if="statusObject.sAppStat === 'Approved'">
+                    <div class="col-md-12" style="border-top: 01px solid #24A1ED">
+                        <div class="row clearfix alert-info">
+                            <span class="info">ACH / ECS & Cancelled Cheque</span>
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-md-3" ng-repeat="item in achArr" style="padding: 8px;">
+                                <content-item item="item" imagearray="additnlDocArrayToUpload"></content-item>
+                            </div>
+                            <span class="Add-Icon same abs_rght_mdl" ng-click="addNewElement('ACH')">
 								<b>+</b>
 							</span>
-						</div>
-					</div>
-				</div>
-
-				<div class="row clearfix" id="disImgRw" ng-if="statusObject.sAppStat === 'Approved'">
-					<div class="col-md-12" style="border-top: 01px solid #24A1ED">
-						<div class="row clearfix alert-info">
-							<span class="info">Disbursement Kit</span>
-						</div>
-						<div class="row clearfix">
-							<div class="col-md-3" ng-repeat="item in disbursmentArr"  style="padding: 8px;">
-								<content-item item="item" imagearray="additnlDocArrayToUpload"></content-item>
-							</div>
-							<span class="Add-Icon same abs_rght_mdl" ng-click="addNewElement('DISBURSEMENT')"><b>+</b></span>
-						</div>
-					</div>
-				</div>
-
-				<div class="row clearfix" id="kycImgRw">
-					<div class="col-md-12" style="border-top: 01px solid #24A1ED">
-						<div class="row clearfix alert-info">
-							<span class="info">Additional_KYC</span>
-						</div>
-						<div class="row clearfix">
-							<div class="col-md-3" ng-repeat="item in addtnlKycArr" style="padding: 8px;">
-								<content-item item="item" imagearray="additnlDocArrayToUpload"></content-item>								
-							</div>
-						</div>
-						<span class="Add-Icon same abs_rght_mdl" ng-click="addNewElement('ADDITIONAL_KYC')"><b>+</b></span>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="row clearfix ">
-		<div class="col-md-10 col-md-offset-1" style="text-align: center">
-			<button class="customButton" id="dsubmit" ng-click="submitImages()">Submit</button>
-		</div>
-	</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row clearfix" id="disImgRw" ng-if="statusObject.sAppStat === 'Approved'">
+                    <div class="col-md-12" style="border-top: 01px solid #24A1ED">
+                        <div class="row clearfix alert-info">
+                            <span class="info">Disbursement Kit</span>
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-md-3" ng-repeat="item in disbursmentArr" style="padding: 8px;">
+                                <content-item item="item" imagearray="additnlDocArrayToUpload"></content-item>
+                            </div>
+                            <span class="Add-Icon same abs_rght_mdl" ng-click="addNewElement('DISBURSEMENT')"><b>+</b></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row clearfix" id="kycImgRw">
+                    <div class="col-md-12" style="border-top: 01px solid #24A1ED">
+                        <div class="row clearfix alert-info">
+                            <span class="info">Additional_KYC</span>
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-md-3" ng-repeat="item in addtnlKycArr" style="padding: 8px;">
+                                <content-item item="item" imagearray="additnlDocArrayToUpload"></content-item>
+                            </div>
+                        </div>
+                        <span class="Add-Icon same abs_rght_mdl" ng-click="addNewElement('ADDITIONAL_KYC')"><b>+</b></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row clearfix ">
+        <div class="col-md-10 col-md-offset-1" style="text-align: center">
+            <button class="customButton" id="dsubmit" ng-click="submitImages()">Submit</button>
+        </div>
+    </div>
 </fieldset>

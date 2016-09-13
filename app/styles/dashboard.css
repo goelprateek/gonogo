@@ -1,13 +1,14 @@
-.form-control :not(.otp),.form-control:focus :not(.otp) {
-  height:auto;
-  box-shadow: none;
-  padding-bottom: 0px;
-  border-radius: 0px;
-  font-size:16px;
+.form-control:not(.otp),
+.form-control:focus:not(.otp) {
+    height: auto;
+    box-shadow: none;
+    padding-bottom: 0px;
+    border-radius: 0px;
+    font-size: 16px;
 }
 
-.has-error .form-control , .has-error .form-control:focus{
-
-  box-shadow: none;
-  -webkit-box-shadow: none;
+.has-error .form-control,
+.has-error .form-control:focus {
+    box-shadow: none;
+    -webkit-box-shadow: none;
 }

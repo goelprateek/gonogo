@@ -1,143 +1,124 @@
 <style>
-	.timerimg {
-	    width: 182px;
-	    height: 184px;
-	    position: absolute;
-	    left: 20%;
-	    z-index: 0;
-	    top: 0%;
-	}
+.timerimg {
+    width: 182px;
+    height: 184px;
+    position: absolute;
+    left: 20%;
+    z-index: 0;
+    top: 0%;
+}
 
-	.startTimer {
-		/* position: relative;
+.startTimer {
+    /* position: relative;
 	left:-169px;
 	top: 9px;
 	z-index: 2; */
-		position: absolute;
-		z-index: 2;
-		margin-left: 3%;
-		top: 7%;
-		padding:10px;
-		display: inline-block;
-	}
+    position: absolute;
+    z-index: 2;
+    margin-left: 3%;
+    top: 7%;
+    padding: 10px;
+    display: inline-block;
+}
 
-	.progress-count{
-		top: 22%;
-	    bottom: auto;
-	    left: 29%;
-	    font-size: 60px;
-	    color: #24A1ED;
-	    display: inline-block;
-	    position: absolute;
-	}
-	.progress-wrapper {
-	    position: absolute;
-	    font-size: 40px;
-	    left: 21%;
-	    top: 84%;
-	}
-    .container{
-    }
+.progress-count {
+    top: 22%;
+    bottom: auto;
+    left: 29%;
+    font-size: 60px;
+    color: #24A1ED;
+    display: inline-block;
+    position: absolute;
+}
 
-	.resultInfo {
-		border: 1px solid #24A1ED;
-		border-radius: 54px;
-		position: relative;
-		text-align: center;
-		top: 50px;
-		height: 140px;
-	}
+.progress-wrapper {
+    position: absolute;
+    font-size: 40px;
+    left: 21%;
+    top: 84%;
+}
+
+.container {}
+
+.resultInfo {
+    border: 1px solid #24A1ED;
+    border-radius: 54px;
+    position: relative;
+    text-align: center;
+    top: 50px;
+    height: 140px;
+}
 </style>
-
 <div id="resultPanel" style="position: relative;">
-	<div class="container startTimer">
-		<img class="timerimg" src='images/timer.png'>
-	  	<div class="progress-wrapper">
-    		<div class="progress-count ng-cloak">{{ time }}</div>
-            <round-progress
-                max="59"
-                current="seconds"
-                color="#24A1ED"
-                bgcolor="transparent"
-                radius="77"
-                semi="false"
-                rounded="false"
-                clockwise="true"
-                responsive="false"
-                stroke="11"
-                animation="easeOutCubic"
-                animation-delay="0"
-                offset="inherit"></round-progress>
-        </div><!-- End of progress wrapper -->
+    <div class="container startTimer">
+        <img class="timerimg" src='images/timer.png'>
+        <div class="progress-wrapper">
+            <div class="progress-count ng-cloak">{{ time }}</div>
+            <round-progress max="59" current="seconds" color="#24A1ED" bgcolor="transparent" radius="77" semi="false" rounded="false" clockwise="true" responsive="false" stroke="11" animation="easeOutCubic" animation-delay="0" offset="inherit"></round-progress>
+        </div>
+        <!-- End of progress wrapper -->
     </div>
-	<div class="col-md-12">
-		<div class="col-md-8 col-md-offset-2 resultInfo">
-			<div class="col-md-7 col-sm-7 col-md-offset-4 col-sm-offset-4">
-				<h4>Please wait while CRO is analyzing your application.</h4>
-				<h5 style="color: #24A1ED">Your Reference ID is : {{referenceID}}</h5>
-				<h5>Your GoNoGo Query is successfully received</h5>
-			</div>
-		</div>
-		<div class="col-md-2"></div>
-	</div> 
-	<div class="col-md-7 col-md-offset-2"
-		style="border-bottom: 1px solid rgb(36, 161, 237); margin-left: 20%;margin-top: 120px;">
-		<div class="col-md-12">
-			<div class="col-sm-4 col-md-4" class="progElement"
-				style="border-left: 01px solid rgb(36, 161, 237); text-align: center; height: 140px;">
-				<div class="resultNode">
-					<span></span>
-				</div>
-				<div class="circle">
-					<span>1</span>
-				</div>
-				<span style="color: rgb(36, 161, 237); display: block;">KYC Verification Status</span>
-				<div id="vpc" class="animate-show" ng-show="pstatus">
-					<span id="ptext">PAN {{pstatus}}</span>
-				</div>
-			</div>
-			<div class="col-sm-4 col-md-4" class="progElement"
-				style="border-left: 01px solid rgb(36, 161, 237); text-align: center; height: 140px;">
-				<div class="resultNode">
-					<span></span>
-				</div>
-				<div class="circle">
-					<span>2</span>
-				</div>
-				<span style="color: rgb(36, 161, 237); display: block;">Bureau Score</span> <span id="cs" ng-show="Cstatus" class="animate-show">CIBIL
+    <div class="col-md-12">
+        <div class="col-md-8 col-md-offset-2 resultInfo">
+            <div class="col-md-7 col-sm-7 col-md-offset-4 col-sm-offset-4">
+                <h4>Please wait while CRO is analyzing your application.</h4>
+                <h5 style="color: #24A1ED">Your Reference ID is : {{referenceID}}</h5>
+                <h5>Your GoNoGo Query is successfully received</h5>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <div class="col-md-7 col-md-offset-2" style="border-bottom: 1px solid rgb(36, 161, 237); margin-left: 20%;margin-top: 120px;">
+        <div class="col-md-12">
+            <div class="col-sm-4 col-md-4" class="progElement" style="border-left: 01px solid rgb(36, 161, 237); text-align: center; height: 140px;">
+                <div class="resultNode">
+                    <span></span>
+                </div>
+                <div class="circle">
+                    <span>1</span>
+                </div>
+                <span style="color: rgb(36, 161, 237); display: block;">KYC Verification Status</span>
+                <div id="vpc" class="animate-show" ng-show="pstatus">
+                    <span id="ptext">PAN {{pstatus}}</span>
+                </div>
+            </div>
+            <div class="col-sm-4 col-md-4" class="progElement" style="border-left: 01px solid rgb(36, 161, 237); text-align: center; height: 140px;">
+                <div class="resultNode">
+                    <span></span>
+                </div>
+                <div class="circle">
+                    <span>2</span>
+                </div>
+                <span style="color: rgb(36, 161, 237); display: block;">Bureau Score</span> <span id="cs" ng-show="Cstatus" class="animate-show">CIBIL
 					{{Cstatus}}</span>
-			</div>
-			<!-- <div class="col-sm-3 col-md-3" class="progElement" style="border-left: 01px solid rgb(36,161,237);text-align:center;height:140px;">
+            </div>
+            <!-- <div class="col-sm-3 col-md-3" class="progElement" style="border-left: 01px solid rgb(36,161,237);text-align:center;height:140px;">
 				<div class="resultNode"><span></span></div>
 				<div class="circle"><span>3</span></div>
 				<span style="color: rgb(36,161,237);display: block;">Application Score</span>
 				<span id="as" style="display: none;">Completed</span>
 				</div> -->
-			<div class="col-sm-4 col-md-4" class="progElement"
-				style="border-left: 01px solid rgb(36, 161, 237); text-align: center; height: 140px;">
-				<div class="resultNode">
-					<span></span>
-				</div>
-				<div class="circle">
-					<span>3</span>
-				</div>
-				<span style="color: rgb(36, 161, 237); display: block;">Decision</span>
-				<span id="temp2">
+            <div class="col-sm-4 col-md-4" class="progElement" style="border-left: 01px solid rgb(36, 161, 237); text-align: center; height: 140px;">
+                <div class="resultNode">
+                    <span></span>
+                </div>
+                <div class="circle">
+                    <span>3</span>
+                </div>
+                <span style="color: rgb(36, 161, 237); display: block;">Decision</span>
+                <span id="temp2">
 					<img src="images/reject.png" id="dimg" class="dsnimg" ng-if="showRejectImg" />
 					<img src="images/approve.png" id="dimg" class="dsnimg" ng-if="showApprvImg" />
 					<img src="images/queue_status.png" id="dimg" class="dsnimg" ng-if="showQueImg" />
 					<img src="images/pending.png" id="dimg" class="dsnimg" ng-if="showPendingImg" />
 				</span>
-			</div>
-		</div>
-	</div>
-	
-	<div class="row clearfix ">
-		<div class="col-md-10 col-md-offset-1"
-			style="text-align: center; margin-top: 3%">
-			<!-- <button class="customButton previous">Previous</button> -->
-			<button class="customButton next" id="postIPA" ng-show="showNextBtn"
-				ng-click="nextOfResultPanel()" style="float: initial;">Next</button>
-		</div>
-	</div>
+            </div>
+        </div>
+    </div>
+    <div class="row clearfix ">
+        <div class="col-md-10 col-md-offset-1" style="text-align: center; margin-top: 3%">
+            <!-- <button class="customButton previous">Previous</button> -->
+            <button class="customButton next" id="postIPA" ng-show="showNextBtn" ng-click="nextOfResultPanel()" style="float: initial;">Next</button>
+        </div>
+    </div>
 </div>

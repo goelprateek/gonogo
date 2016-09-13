@@ -1,90 +1,80 @@
 <style>
-
 #rightbar span {
-	margin-left: 0px;
+    margin-left: 0px;
 }
 
 .employment {
-	display: none;
+    display: none;
 }
 
-
-
-#application-temp-container .input-group-addon{
+#application-temp-container .input-group-addon {
     padding: 0px 7px;
 }
-#application-temp-container .input-group.input-group-md, .input-group input {
+
+#application-temp-container .input-group.input-group-md,
+.input-group input {
     width: 100%;
 }
+
 #application-temp-container fieldset {
-	border: 1px solid #CFCFCF;
-	padding: 10px;
-	margin-bottom: 20px;
-	border-radius: 5px;
-	color: #777;
-	background-color: rgb(253, 249, 254);
+    border: 1px solid #CFCFCF;
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    color: #777;
+    background-color: rgb(253, 249, 254);
 }
+
 .processedBy {
-	display: block;
-	min-width: 100px;
-	position: absolute;
-	bottom: 4px;
-	left: 49px;
-	font-size: 13px;
+    display: block;
+    min-width: 100px;
+    position: absolute;
+    bottom: 4px;
+    left: 49px;
+    font-size: 13px;
 }
 
 .declinePanel {
-	position: absolute;
-	width: 46%; 
-	left: 30%; 
-	top: 28%;
-	background-color: white; 
-	border: 1px solid #C9D7E1;
+    position: absolute;
+    width: 46%;
+    left: 30%;
+    top: 28%;
+    background-color: white;
+    border: 1px solid #C9D7E1;
 }
 
 .dashedcontainer {
-	border: 1px dashed grey;
-	min-height: 40px; 
-	margin:4px 15px; 
-	padding: 10px; 
-	width: 95%; 
-	font-weight: bold
+    border: 1px dashed grey;
+    min-height: 40px;
+    margin: 4px 15px;
+    padding: 10px;
+    width: 95%;
+    font-weight: bold
 }
 </style>
-
-
 <div id="notification_tmp" data-ng-controller="NotifController" ng-cloak>
-	<div class="col-md-12" contextmenu="blur">
-		<div class="col-md-10 col-md-offset-1" style="padding-right: 0px;">
-			<div class="col-md-2" id="application_process" style="min-width: inherit;">
-				<label style="font-size: 20px; padding: 12px 0px 0px;" >Notifications</label>
-			</div>
-
-			<div class="col-md-10" style="padding: 0px; float: right;">
-				<div class="row clearfix">
-					<div class="col-md-6 text-left" style="padding-top: 10px">
-						<img src="images/loading.gif" class="LoaderSpinner" />
-					</div>
-					<div class="col-md-6">
-						<ul class="nav navbar-nav navbar-right nhr">
-
-							<li><span ng-show="showrefid"
-								style="margin-top: 13px; display: block;"> 
+    <div class="col-md-12" contextmenu="blur">
+        <div class="col-md-10 col-md-offset-1" style="padding-right: 0px;">
+            <div class="col-md-2" id="application_process" style="min-width: inherit;">
+                <label style="font-size: 20px; padding: 12px 0px 0px;">Notifications</label>
+            </div>
+            <div class="col-md-10" style="padding: 0px; float: right;">
+                <div class="row clearfix">
+                    <div class="col-md-6 text-left" style="padding-top: 10px">
+                        <img src="images/loading.gif" class="LoaderSpinner" />
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="nav navbar-nav navbar-right nhr">
+                            <li><span ng-show="showrefid" style="margin-top: 13px; display: block;">
 								<a ui-sref="/app-form">{{objectSet.oAppReq.sRefID}}</a></span></li>
-							<li><a id="dsa_chat" ng-if="can('NCHAT')">DSA Chat</a></li>
-							<li ><a id="onhold" title="{{objectSet.oAppReq.sRefID}}"
-								ng-if="can('NHOLD') && isDedupeSelected"  
-								ng-click='cro_action(objectSet.oAppReq.sRefID, "OnHold")'>OnHold</a>
-							</li>
-							<li ><a id="approve" title="{{objectSet.oAppReq.sRefID}}"
-								ng-if="can('NAPPROVE') && isDedupeSelected"
-								ng-click='cro_action(objectSet.oAppReq.sRefID, "Approved")'>Approve</a>
-							</li>
-							<li ><a id="decline" title="{{objectSet.oAppReq.sRefID}}"
-								ng-if="can('NDECLINE') && isDedupeSelected"
-								ng-click='cro_action(objectSet.oAppReq.sRefID, "Declined")'>Decline</a>
-							</li>
-							<!-- <li ><a id="accept" title="{{refID}}"
+                            <li><a id="dsa_chat" ng-if="can('NCHAT')">DSA Chat</a></li>
+                            <li><a id="onhold" title="{{objectSet.oAppReq.sRefID}}" ng-if="can('NHOLD') && isDedupeSelected" ng-click='cro_action(objectSet.oAppReq.sRefID, "OnHold")'>OnHold</a>
+                            </li>
+                            <li><a id="approve" title="{{objectSet.oAppReq.sRefID}}" ng-if="can('NAPPROVE') && isDedupeSelected" ng-click='cro_action(objectSet.oAppReq.sRefID, "Approved")'>Approve</a>
+                            </li>
+                            <li><a id="decline" title="{{objectSet.oAppReq.sRefID}}" ng-if="can('NDECLINE') && isDedupeSelected" ng-click='cro_action(objectSet.oAppReq.sRefID, "Declined")'>Decline</a>
+                            </li>
+                            <!-- <li ><a id="accept" title="{{refID}}"
 								ng-if="authenticate('NACCEPT')"
 								ng-click='cro_action(applicID, "Approved")'>Accept</a>
 							</li>
@@ -92,18 +82,17 @@
 								ng-if="authenticate('NREJECT')"
 								ng-click='cro_action(applicID, "Declined")'>Reject</a>
 							</li> -->
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-10 col-md-offset-1" contextmenu="blur" style="padding: 0px;">
-		<div class="col-md-12" id="notification-main-container" style="border-top: 1px solid #DADADB;padding: 0px;height: 600px;" data-ng-if="container">
-
-			<div class="col-lg-3 col-sm-12 col-xs-12" style="padding:0px; margin-top:5px;">
-			    <!-- <div class="widget">
-			        <div class="widget-body no-padding"> 
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10 col-md-offset-1" contextmenu="blur" style="padding: 0px;">
+        <div class="col-md-12" id="notification-main-container" style="border-top: 1px solid #DADADB;padding: 0px;height: 600px;" data-ng-if="container">
+            <div class="col-lg-3 col-sm-12 col-xs-12" style="padding:0px; margin-top:5px;">
+                <!-- <div class="widget">
+			        <div class="widget-body no-padding">
 			            <div class="task-container">
 			                <div class="task-search">
 			                    <span class="input-icon">
@@ -111,8 +100,8 @@
 			                        <i class="fa fa-search gray"></i>
 			                    </span>
 			                </div>
-			                
-			                
+
+
 			                <ul class="tasks-list" slimscroll="{height: 495,railVisible:true}"  when-scrolled="loadData()">
 
 			                    <li class="task-item"  ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search"  ng-class='{picked: user.sRefID==Picked}'>
@@ -132,71 +121,72 @@
 			            </div>
 			        </div>
 			    </div> -->
-			    <div class="widget">
-			        <div class="widget-body no-padding"> 
-			            <div class="task-container">
-			                <div class="task-search">
-			                    <span class="input-icon">
+                <div class="widget">
+                    <div class="widget-body no-padding">
+                        <div class="task-container">
+                            <div class="task-search">
+                                <span class="input-icon">
 			                        <input type="text" class="form-control" data-ng-keyup="searchNotification(search)" placeholder="Search" ng-model="search">
 			                        <i class="fa fa-search gray"></i>
 			                    </span>
-			                </div>
-			                <div class="orders-container">
-				                <ul class="orders-list" slimscroll="{height: 470,railVisible:true}"  when-scrolled="loadData()">
-				                	<!-- <li class="order-item" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search"  ng-click='load_details(user.sRefID,true,user.sRqTyp)' ng-class="{'active-queue': user.sRefID == Picked }"> -->
-				                	<li class="order-item" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" ng-click="load_details(user.sRefID,true,user.sRqTyp)" ng-class="{'active-queue': user.sRefID == Picked }">
-				                		<div class="row" >
-				                			<div class="col-lg-6 col-sm-6 col-md-6 col-xs-6 item-left">
-				                				<div class="item-booker" >
-				                					<h5>{{user.sDsaName.split("@")[0]}}</h5>
-				                				</div>
-				                				<div class="item-time"> 
-				                					<i class="fa fa-calendar"></i>
-				                					<span>{{user.dtDateTime |  dateFormat }}</span>
-				                				</div>
-				                			</div>	
-				                			<div class="col-lg-6 col-sm-6 col-md-6 col-xs-6 item-right">
-				                				<div class="item-price">
-				                					<span class="price">{{user.dloanAmt | currency:"&#x20B9; "}}</span>
-				                				</div>
-				                			</div>	
-				                		</div>
-				                		<a class="item-more badge" href="javascript:;" ng-model="user.sRefID" ng-class="{'bg-primary': user.sStat.toUpperCase() == 'ONHOLD', 'bg-success': user.sStat.toUpperCase() == 'APPROVED', 'bg-danger':user.sStat.toUpperCase() == 'DECLINED','bg-lightgray':user.sStat.toUpperCase() == 'QUEUE'} ">&nbsp;
-				                        </a>	
-				                	</li>	
-				                </ul>
-			                </div>	
-			               </div>
-			        	</div> 
-			        </div>
-			</div>
+                            </div>
+                            <div class="orders-container">
+                                <ul class="orders-list" slimscroll="{height: 470,railVisible:true}" when-scrolled="loadData()">
+                                    <!-- <li class="order-item" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search"  ng-click='load_details(user.sRefID,true,user.sRqTyp)' ng-class="{'active-queue': user.sRefID == Picked }"> -->
+                                    <div class="row text-center" ng-if="notifarray.length <= 0" style="margin-top:50px;">
+                                        <div class="loader-sm"></div>
+                                        <div>Loading...</div>
+                                    </div>
+                                    <li class="order-item" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" ng-click="load_details(user.sRefID,true,user.sRqTyp)" ng-class="{'active-queue': user.sRefID == Picked }">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-sm-6 col-md-6 col-xs-6 item-left">
+                                                <div class="item-booker">
+                                                    <h5>{{user.sDsaName.split("@")[0]}}</h5>
+                                                </div>
+                                                <div class="item-time">
+                                                    <i class="fa fa-calendar"></i>
+                                                    <span>{{user.dtDateTime |  dateFormat }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-sm-6 col-md-6 col-xs-6 item-right">
+                                                <div class="item-price">
+                                                    <span class="price">{{user.dloanAmt | currency:"&#x20B9; "}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a class="item-more badge" href="javascript:;" ng-model="user.sRefID" ng-class="{'bg-primary': user.sStat.toUpperCase() == 'ONHOLD', 'bg-success': user.sStat.toUpperCase() == 'APPROVED', 'bg-danger':user.sStat.toUpperCase() == 'DECLINED','bg-lightgray':user.sStat.toUpperCase() == 'QUEUE'} ">&nbsp;
+				                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="col-md-3 column" id="leftbar" style="padding: 7px 0px 0px 0px;height: 553px;margin-bottom: 55px;">
 
-
-			
-			<!-- <div class="col-md-3 column" id="leftbar" style="padding: 7px 0px 0px 0px;height: 553px;margin-bottom: 55px;"> 
-				
 				<div class="list-group" ng-init="names"
-					style="border: 1px solid rgb(218, 218, 219);overflow: hidden;margin-bottom: 0px ;border-radius: 5px;"> 
+					style="border: 1px solid rgb(218, 218, 219);overflow: hidden;margin-bottom: 0px ;border-radius: 5px;">
 					<form name="notification_search" autocomplete="off">
                 		<div class="icon-addon addon-lg">
 							<input id="search" class="form-control" type="text" ng-model="search"
 								placeholder="Search Notification..."
 								style="margin: 0px; max-width: none; background-color: white;" />
-							<label for="search" class="fa fa-search"></label>	
+							<label for="search" class="fa fa-search"></label>
 						</div>
-					</form>	
-					
+					</form>
+
 					<div slimscroll="{height: 512,railVisible:true}"  when-scrolled="loadData()">
 						<div class="list-group-item" ng-if="notifarray.length==0"
 								style="color: red; text-align: center;">Please wait while we are populating data</div>
-						
-						<div class="list-group-item" style="padding: 0px;border-bottom: 1px solid #ddd;margin-bottom: 0px;" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" > 
+
+						<div class="list-group-item" style="padding: 0px;border-bottom: 1px solid #ddd;margin-bottom: 0px;" ng-repeat=" user in notifarray | orderBy:'-dtDateTime' | filter:search" >
 							<div class="list-group-item" style="border-bottom: 1px solid #ddd;margin-bottom: 0px;border: 0px solid #ddd;"
 								ng-click='load_details(user.sRefID,true,user.sRqTyp)'
 								ng-class='{picked: user.sRefID==Picked}'>
 								<span class="img-circle dsa_profile_icon" style="box-shadow: 0px 0px 2px #888;" >
 									<h5><i class="fa fa-user"></i></h5>
-								</span>	
+								</span>
 
 								<div class="notify-name">{{user.sDsaName.split("@")[0]}}</div>
 								<div class="status" id="{{user.sRefID}}" ng-model="user.sRefID"
@@ -210,60 +200,60 @@
 				</div>
 				</div>
 			</div> -->
-			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden;padding-right: 0px; max-height: 640px;" ng-if="can('NCONTAINER')"> 
-				<ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;    height: 38px;   width:98%;">
- 				    <li  class="active" style=" margin-top: 7px;"><a id="applicant" style="padding: 6px 10px;font-weight: bold; font-size: 13px;">Applicant</a></li>
-					<select class="form-control" id="dedupe1" ng-if="objectSet.aDeDupe!=''" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
-	                	 ng-change="onchange(countSelected)">
-						<option ng-selected="true" value="Select">Default Ref</option>
-	                	<option ng-repeat="count in objectSet.aDeDupe">{{count.sRefID}}</option>
-					</select>
- 				</ul>
-				<div class="row clearfix"  id="applicant_panel" style=" width: 101%; margin-bottom: 36px;overflow-y:auto ">
-					<div class="col-md-4 column">
-						<div class="scroll-divs-outer">
-							<label class="div-heading customer">DEMOGRAPHICS</label>
-							<div id="customer" slimscroll="{height: 158,railVisible:true}">
-								<div class="list-group-item">
-									<span>Name : <span >{{objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"   "+objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"   "+objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName}}
+            <div class="col-md-9 column" id="rightbar" style="overflow:hidden;padding-right: 0px; max-height: 640px;" ng-if="can('NCONTAINER')">
+                <ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;    height: 38px;   width:98%;">
+                    <li class="active" style=" margin-top: 7px;"><a id="applicant" style="padding: 6px 10px;font-weight: bold; font-size: 13px;">Applicant</a></li>
+                    <select class="form-control" id="dedupe1" ng-if="objectSet.aDeDupe!=''" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" ng-change="onchange(countSelected)">
+                        <option ng-selected="true" value="Select">Default Ref</option>
+                        <option ng-repeat="count in objectSet.aDeDupe">{{count.sRefID}}</option>
+                    </select>
+                </ul>
+                <div class="row clearfix" id="applicant_panel" style=" width: 101%; margin-bottom: 36px;overflow-y:auto ">
+                    <div class="col-md-4 column">
+                        <div class="scroll-divs-outer">
+                            <label class="div-heading customer">DEMOGRAPHICS</label>
+                            <div id="customer" slimscroll="{height: 158,railVisible:true}">
+                                <div class="list-group-item">
+                                    <span>Name : <span >{{objectSet.oAppReq.oReq.oApplicant.oApplName.sFirstName+"   "+objectSet.oAppReq.oReq.oApplicant.oApplName.sMiddleName+"   "+objectSet.oAppReq.oReq.oApplicant.oApplName.sLastName}}
 
-									</span></span></div>
-								<div class="list-group-item"><span>D.O.B : {{objectSet.oAppReq.oReq.oApplicant.sDob | dateFormat }}</span></div>
-
-								<div class="list-group-item" ng-repeat="data in objectSet.oAppReq.oReq.oApplicant.aPhone" ng-if="data.sPhoneType=='PERSONAL_MOBILE' || data.sPhoneType=='Personal Mobile'">
-									<span >Mobile : {{data.sPhoneNumber}}
+									</span></span>
+                                </div>
+                                <div class="list-group-item"><span>D.O.B : {{objectSet.oAppReq.oReq.oApplicant.sDob | dateFormat }}</span></div>
+                                <div class="list-group-item" ng-repeat="data in objectSet.oAppReq.oReq.oApplicant.aPhone" ng-if="data.sPhoneType=='PERSONAL_MOBILE' || data.sPhoneType=='Personal Mobile'">
+                                    <span>Mobile : {{data.sPhoneNumber}}
 									</span>
-								</div>
-								<div class="list-group-item">
-									<span>City : {{objectSet.oAppReq.oReq.oApplicant.aAddr[0].sCity}}</span>
-								</div>
-								<div class="list-group-item">
-									<span>Address Line1 : {{objectSet.oAppReq.oReq.oApplicant.aAddr[0].sLine1}}</span>
-								</div>
-							 	<div class="list-group-item" ng-if="objectSet.oAppReq.oReq.oApplicant.aAddr[0].sLine2 !=''">
-									<span>Address Line2 : {{objectSet.oAppReq.oReq.oApplicant.aAddr[0].sLine2}}</span>
-								</div> 
-							</div>
-							<!-- slimscroll="{height: 54,railVisible:true}" -->
-							<div data-ng-if="imageDataArray.length!=0"  >
-								<div class="notify-scroll-container" slimscroll="{height: 54,railVisible:true}">
-									 <ul style="padding: 0px;"> 
-<!-- 									 	<slick infinite="true" slides-to-show="3" slides-to-scroll="3">
- -->										<li ng-repeat="d in imageDataArray">
-											<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index,true)"><img ng-src="{{d.sByteCode}}" title="{{d.sImgType}}"> </a>
-										</li>
-<!-- 										</slick>
- -->									 </ul> 
-								</div>
-							</div>
+                                </div>
+                                <div class="list-group-item">
+                                    <span>City : {{objectSet.oAppReq.oReq.oApplicant.aAddr[0].sCity}}</span>
+                                </div>
+                                <div class="list-group-item">
+                                    <span>Address Line1 : {{objectSet.oAppReq.oReq.oApplicant.aAddr[0].sLine1}}</span>
+                                </div>
+                                <div class="list-group-item" ng-if="objectSet.oAppReq.oReq.oApplicant.aAddr[0].sLine2 !=''">
+                                    <span>Address Line2 : {{objectSet.oAppReq.oReq.oApplicant.aAddr[0].sLine2}}</span>
+                                </div>
+                            </div>
+                            <!-- slimscroll="{height: 54,railVisible:true}" -->
+                            <div data-ng-if="imageDataArray.length!=0">
+                                <div class="notify-scroll-container" slimscroll="{height: 54,railVisible:true}">
+                                    <ul style="padding: 0px;">
+                                        <!-- 									 	<slick infinite="true" slides-to-show="3" slides-to-scroll="3">
+ -->
+                                        <li ng-repeat="d in imageDataArray">
+                                            <a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index,true)"><img ng-src="{{d.sByteCode}}" title="{{d.sImgType}}"> </a>
+                                        </li>
+                                        <!-- 										</slick>
+ -->
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- <div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">
 
-							<!-- <div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">
-								
 								<div class="col-md-4" ng-if="custPresent" style="padding: 0px">
 									<a>
 										<img alt="Preview Not Availeble"  id="custphoto" name="APPLICANT-PHOTO" data-toggle="modal" data-target="#myModalnew" class="custom_img_rounded" title="APPLICANT PHOTO"
 										ng-src="{{custimg}}" usermap="{{custimgId}}" style="float: left; margin: 3px;">
-									</a> 
+									</a>
 								</div>
 
 								<div class="col-md-4"  ng-if="panpresent" style="padding: 0px">
@@ -271,9 +261,9 @@
 										<img alt="Preview Not Availeble"  id="pan_card" name="PAN" data-toggle="modal"
 										data-target="#myModalnew" class="custom_img_rounded arrow" title="PAN"
 										ng-src="{{src_img}}" usermap="{{panimgID}}" style="float: left;margin:3px">
-									</a> 
+									</a>
 								</div>
-								<div class="col-md-4" ng-if="adharpresent" style="padding: 0px">	
+								<div class="col-md-4" ng-if="adharpresent" style="padding: 0px">
 									<a>
 										<img  alt="Preview Not Availeble" title="AADHAAR" id="aadhar_card" name="AADHAAR" data-toggle="modal" data-target="#myModalnew" class="custom_img_rounded arrow" usermap="{{adhrimgID}}" ng-src="{{aadhar}}" style="float:left;margin:3px">
 									</a>
@@ -283,265 +273,250 @@
 										 <img  alt="Preview Not Availeble" title="DRIVING LICENSE" id="driving-license" name="DRIVING-LICENSE" data-toggle="modal" data-target="#myModalnew" class="custom_img_rounded arrow" usermap="{{drvlimgID}}" ng-src="{{dlicense}}" style="float:left;margin:3px">
 									</a>
 								</div>
-									
+
 								<div class="col-md-4" ng-if="passportPresents" style="padding: 0px">
 									<a >
 										<img alt="Preview Not Availeble" title="PASSPORT" id="passport" name="PASSPORT" data-toggle="modal" data-target="#myModalnew" class="custom_img_rounded arrow" usermap="{{passimgID}}"
 										ng-src="{{passport}}" style="float:left;margin:3px">
 									</a>
-								</div>	
+								</div>
 							</div> -->
-						</div>
-					</div>
-					<div class="col-md-4 column">
-						<div class="scroll-divs-outer" >
-							<label class="div-heading income">ABILITY TO PAY <span class="badge">{{details.APPLICATION.IncomeScore}}</span></label>
-							<div id="income" class="scroll-divs" ng-repeat="emp in objectSet.oAppReq.oReq.oApplicant.aEmpl">
-								<!-- <div class="list-group-item" ng-if="emp.dGrossSal!=0">
+                        </div>
+                    </div>
+                    <div class="col-md-4 column">
+                        <div class="scroll-divs-outer">
+                            <label class="div-heading income">ABILITY TO PAY <span class="badge">{{details.APPLICATION.IncomeScore}}</span></label>
+                            <div id="income" class="scroll-divs" ng-repeat="emp in objectSet.oAppReq.oReq.oApplicant.aEmpl">
+                                <!-- <div class="list-group-item" ng-if="emp.dGrossSal!=0">
 									<span>Gross Annual : {{ emp.dGrossSal | rupee:"&#x20B9; "}}</span>
 								</div> -->
-
-								<div class="list-group-item">
-									<span>Emp Type : {{ emp.sEmplType}}</span> 	
-								</div>
-								<div class="list-group-item" ng-if="emp.sConst.toUpperCase()=='SELF-EMPLOYED'">
-									<span>ITR Amount : &nbsp{{emp.dItrAmt | currency:'&#8377;'}}</span> 
-								</div>
-								<div class="list-group-item" ng-if="emp.sConst.toUpperCase()!='SELF-EMPLOYED'">
-									<span ng-if="emp.dmonthSal != 0">Monthly Income :&nbsp{{emp.dmonthSal | currency:'&#8377;'}}</span>
-										<span ng-if="emp.dmonthSal == 0">Yearly Income :&nbsp{{emp.dGrossSal | currency:'&#8377;'}}</span>
-								</div>
-								<div class="list-group-item">
-									<span>Employer : {{ emp.sEmplName}}</span> 
-								</div>
-								<div class="list-group-item">
-									<span>Since : {{ emp.iTmWithEmplr }}
+                                <div class="list-group-item">
+                                    <span>Emp Type : {{ emp.sEmplType}}</span>
+                                </div>
+                                <div class="list-group-item" ng-if="emp.sConst.toUpperCase()=='SELF-EMPLOYED'">
+                                    <span>ITR Amount : &nbsp{{emp.dItrAmt | currency:'&#8377;'}}</span>
+                                </div>
+                                <div class="list-group-item" ng-if="emp.sConst.toUpperCase()!='SELF-EMPLOYED'">
+                                    <span ng-if="emp.dmonthSal != 0">Monthly Income :&nbsp{{emp.dmonthSal | currency:'&#8377;'}}</span>
+                                    <span ng-if="emp.dmonthSal == 0">Yearly Income :&nbsp{{emp.dGrossSal | currency:'&#8377;'}}</span>
+                                </div>
+                                <div class="list-group-item">
+                                    <span>Employer : {{ emp.sEmplName}}</span>
+                                </div>
+                                <div class="list-group-item">
+                                    <span>Since : {{ emp.iTmWithEmplr }}
 										(Months)</span>
-								</div>
-								</div>										
-							</div>
-						</div>
-					<div class="col-md-4 column">
-						<div class="scroll-divs-outer">
-							<label class="div-heading cir">SCORE <span
-								class="badge"></span></label>
-							<div slimscroll="{height: 158,railVisible:true}">
-							<div ng-repeat="bureauData in objectSet.aAppScoRslt" ng-if="objectSet.aAppScoRslt.length != 0">
-								
-								<div class="list-group-item" ng-if="bureauData.sFldName =='Application Score'" 
-								style="border-bottom: 1px solid #ddd;">
-									<span>Application Score : {{bureauData.sFldVal}}</span>
-								</div>
-								<div class="list-group-item" ng-if="bureauData.sFldName =='Residential Address Score'"	style="border-bottom: 1px solid #ddd;border: none;">
-									<span>Res Addr Score : {{bureauData.sFldVal}}</span>
-								</div> 
-								<div class="list-group-item" ng-if="bureauData.sFldName =='Office Address Score'"	style="border-bottom: 1px solid #ddd;">
-									<span>Off Addr Score : {{bureauData.sFldVal}}</span>
-								</div>
-							</div>
-							<div class="list-group-item" style="border: none;" ng-if="objectSet.oIntrmStat.oCibilResult.sFldVal">
-									<span>CIBIL Score : {{objectSet.oIntrmStat.oCibilResult.sFldVal}}</span>
-							</div>
-							<div class="list-group-item">
-									<span>Res Stability : {{objectSet.oIntrmStat.oResAddressResult.iAddrStblty == '-1' ?'':objectSet.oIntrmStat.oResAddressResult.iAddrStblty}}</span>
-							</div>
-							<div class="list-group-item">
-									<span>Off Stability : {{objectSet.oIntrmStat.oOffAddressResult.iAddrStblty== '-1' ?'':objectSet.oIntrmStat.oOffAddressResult.iAddrStblty}}</span>
-							</div>
-							<div class="list-group-item" ng-if=" objectSet.oIntrmStat.oPanResult.fNameScore">
-									<span >PAN :{{objectSet.oIntrmStat.oPanResult.sMsg}}<br>{{objectSet.oIntrmStat.oPanResult.sFldVal}}<br>{{objectSet.oIntrmStat.oPanResult.fNameScore}}</span>
-							</div>
-							<div class="list-group-item" ng-if="!objectSet.oIntrmStat.oPanResult.fNameScore">
-									<span >PAN :{{objectSet.oIntrmStat.oPanResult.sMsg}}<br>{{objectSet.oIntrmStat.oPanResult.sFldVal}}</span>
-							</div>
-							<div ng-if="bureau.length == 0">
-								<div class="list-group-item">
-									<span>Bureau :</span>
-								</div>
-								<div class="list-group-item">
-									<span>CIBIL Score :</span>
-								</div>
-								<div class="list-group-item">
-									<span>Application Score :</span>
-								</div>
-								<div class="list-group-item">
-									<span>Res Addr Score :</span>
-								</div>
-							</div>
-						</div>
-						<div style="position: absolute; background: #fff; width: 87%; margin: 2px; bottom: 8px;height: 50px;">
-							<a> <!-- ng-click="showimage()" -->
-								<img alt="CIBIL CIR" ng-if="objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]['PDF REPORT']" name="{{pdf}}" data-ng-click="showimage(pdfData,!isImg)"
-										class="custom_img_rounded Report-Icon"
-										src="images/cibil_logo.png"></a> 
-
-<!--  data-toggle="modal" data-target="#myModalnew"  -->
-							<a style="float: right;"><span ng-show="objectSet.oCompRes.scoringServiceResponse['SCORE-DATA'].STATUS != 'ERROR' && objectSet.oCompRes.scoringServiceResponse['SCORE-DATA'].STATUS != null"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 column">
+                        <div class="scroll-divs-outer">
+                            <label class="div-heading cir">SCORE <span class="badge"></span></label>
+                            <div slimscroll="{height: 158,railVisible:true}">
+                                <div ng-repeat="bureauData in objectSet.aAppScoRslt" ng-if="objectSet.aAppScoRslt.length != 0">
+                                    <div class="list-group-item" ng-if="bureauData.sFldName =='Application Score'" style="border-bottom: 1px solid #ddd;">
+                                        <span>Application Score : {{bureauData.sFldVal}}</span>
+                                    </div>
+                                    <div class="list-group-item" ng-if="bureauData.sFldName =='Residential Address Score'" style="border-bottom: 1px solid #ddd;border: none;">
+                                        <span>Res Addr Score : {{bureauData.sFldVal}}</span>
+                                    </div>
+                                    <div class="list-group-item" ng-if="bureauData.sFldName =='Office Address Score'" style="border-bottom: 1px solid #ddd;">
+                                        <span>Off Addr Score : {{bureauData.sFldVal}}</span>
+                                    </div>
+                                </div>
+                                <div class="list-group-item" style="border: none;" ng-if="objectSet.oIntrmStat.oCibilResult.sFldVal">
+                                    <span>CIBIL Score : {{objectSet.oIntrmStat.oCibilResult.sFldVal}}</span>
+                                </div>
+                                <div class="list-group-item">
+                                    <span>Res Stability : {{objectSet.oIntrmStat.oResAddressResult.iAddrStblty == '-1' ?'':objectSet.oIntrmStat.oResAddressResult.iAddrStblty}}</span>
+                                </div>
+                                <div class="list-group-item">
+                                    <span>Off Stability : {{objectSet.oIntrmStat.oOffAddressResult.iAddrStblty== '-1' ?'':objectSet.oIntrmStat.oOffAddressResult.iAddrStblty}}</span>
+                                </div>
+                                <div class="list-group-item" ng-if=" objectSet.oIntrmStat.oPanResult.fNameScore">
+                                    <span>PAN :{{objectSet.oIntrmStat.oPanResult.sMsg}}<br>{{objectSet.oIntrmStat.oPanResult.sFldVal}}<br>{{objectSet.oIntrmStat.oPanResult.fNameScore}}</span>
+                                </div>
+                                <div class="list-group-item" ng-if="!objectSet.oIntrmStat.oPanResult.fNameScore">
+                                    <span>PAN :{{objectSet.oIntrmStat.oPanResult.sMsg}}<br>{{objectSet.oIntrmStat.oPanResult.sFldVal}}</span>
+                                </div>
+                                <div ng-if="bureau.length == 0">
+                                    <div class="list-group-item">
+                                        <span>Bureau :</span>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <span>CIBIL Score :</span>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <span>Application Score :</span>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <span>Res Addr Score :</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="position: absolute; background: #fff; width: 87%; margin: 2px; bottom: 8px;height: 50px;">
+                                <a>
+                                    <!-- ng-click="showimage()" -->
+                                    <img alt="CIBIL CIR" ng-if="objectSet.oCompRes.multiBureauJsonRespose.FINISHED[0]['PDF REPORT']" name="{{pdf}}" data-ng-click="showimage(pdfData,!isImg)" class="custom_img_rounded Report-Icon" src="images/cibil_logo.png"></a>
+                                <!--  data-toggle="modal" data-target="#myModalnew"  -->
+                                <a style="float: right;"><span ng-show="objectSet.oCompRes.scoringServiceResponse['SCORE-DATA'].STATUS != 'ERROR' && objectSet.oCompRes.scoringServiceResponse['SCORE-DATA'].STATUS != null"
 										style="display: block; margin: 13px 8px;"
 										ng-click="scoreTree()">App Score :
 										{{objectSet.oCompRes.scoringServiceResponse.SCORE_TREE.AppScore}}</span></a>
-							</div>
-						</div>
-					</div>
-					<div class="row clearfix" style="margin-left: 0px; margin-right: 0px;">
-						<div class="col-md-4 column">
-							<div class="scroll-divs-outer">
-								<label class="div-heading property">ASSET </label>
-								<div id="property" slimscroll="{height: 210,railVisible:true}">
-								<div ng-repeat="asset in assetData">
-									<div class="list-group-item" style="border-top: 2px solid rgb(221, 221, 221);">
-										<span>Asset Category : {{asset.sAssetCtg}}</span>
-									</div>
-									<div class="list-group-item">
-										<span>Dealer Name : {{asset.sDlrName}}</span>
-									</div>
-									<div class="list-group-item">
-										<span>Manufacturer : {{asset.sAssetMake}}</span>
-									</div>
-									<div class="list-group-item">
-										<span>Model : {{asset.sModelNo}}</span>
-									</div>
-									<div class="list-group-item">
-										<span>Price : {{asset.sPrice}}</span>
-									</div>
-								</div>
-								<div ng-if="objectSet.oAppReq.oReq.oApplication.sLnPurp">
-									<div class="list-group-item" style="border-top: 2px solid rgb(221, 221, 221);">
-										<span>Purpose : {{objectSet.oAppReq.oReq.oApplication.sLnPurp}}</span>
-									</div>
-									<div class="list-group-item" ng-repeat="source in objectSet.oAppReq.oReq.oApplicant.oIncomeDetails.aOthrSrcInc">
-										<span>Other Income Source : {{source}}</span>
-									</div>
-									<div class="list-group-item" ng-if="objectSet.oAppReq.oReq.oApplicant.oIncomeDetails">
-										<span>Amnt Of Other Income Source : {{objectSet.oAppReq.oReq.oApplicant.oIncomeDetails.dOthrSrcIncAmt}}</span>
-									</div>
-
-								</div>
-								<div ng-if="!objectSet.oAppReq.oReq.oApplication.aAssetDetail && objectSet.oAppReq.oReq.oApplication.sLnPurp==null || objectSet.oAppReq.oReq.oApplication.aAssetDetail.length==0">
-									<div class="list-group-item" style="border-top: 2px solid rgb(221, 221, 221);">
-										<span>Asset Category : </span>
-									</div>
-									<div class="list-group-item">
-										<span>Dealer Name : </span>
-									</div>
-									<div class="list-group-item">
-										<span>Manufacturer : </span>
-									</div>
-									<div class="list-group-item">
-										<span>Model Number : </span>
-									</div>
-								</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-4 column">
-							<div class="scroll-divs-outer">
-								<label class="div-heading agent">SOURCING <span
-									class="badge"></span></label>
-								<div id="agent" slimscroll="{height: 210,railVisible:true}">
-									<div class="list-group-item">
-										<span>Sales Executive : {{objectSet.oAppReq.oHeader.sDsaId.split("@")[0]}}</span>
-									</div>
-									<div class="list-group-item" 
-									ng-repeat="asset in objectSet.oAppReq.oReq.oApplication.aAssetDetail" >
-										<span>Dealership : {{asset.sDlrName}}</span>
-									</div>
-									<div class="list-group-item">
-										<span>Location : {{}}</span>
-									</div>
-									<div class="list-group-item">
-										<span>IP Address : {{}}</span>
-									</div>
-									<div class="list-group-item">
-										<span>Browser : {{}}</span>
-									</div>
-									</div>
-									<!-- <div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row clearfix" style="margin-left: 0px; margin-right: 0px;">
+                        <div class="col-md-4 column">
+                            <div class="scroll-divs-outer">
+                                <label class="div-heading property">ASSET </label>
+                                <div id="property" slimscroll="{height: 210,railVisible:true}">
+                                    <div ng-repeat="asset in assetData">
+                                        <div class="list-group-item" style="border-top: 2px solid rgb(221, 221, 221);">
+                                            <span>Asset Category : {{asset.sAssetCtg}}</span>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <span>Dealer Name : {{asset.sDlrName}}</span>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <span>Manufacturer : {{asset.sAssetMake}}</span>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <span>Model : {{asset.sModelNo}}</span>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <span>Price : {{asset.sPrice}}</span>
+                                        </div>
+                                    </div>
+                                    <div ng-if="objectSet.oAppReq.oReq.oApplication.sLnPurp">
+                                        <div class="list-group-item" style="border-top: 2px solid rgb(221, 221, 221);">
+                                            <span>Purpose : {{objectSet.oAppReq.oReq.oApplication.sLnPurp}}</span>
+                                        </div>
+                                        <div class="list-group-item" ng-repeat="source in objectSet.oAppReq.oReq.oApplicant.oIncomeDetails.aOthrSrcInc">
+                                            <span>Other Income Source : {{source}}</span>
+                                        </div>
+                                        <div class="list-group-item" ng-if="objectSet.oAppReq.oReq.oApplicant.oIncomeDetails">
+                                            <span>Amnt Of Other Income Source : {{objectSet.oAppReq.oReq.oApplicant.oIncomeDetails.dOthrSrcIncAmt}}</span>
+                                        </div>
+                                    </div>
+                                    <div ng-if="!objectSet.oAppReq.oReq.oApplication.aAssetDetail && objectSet.oAppReq.oReq.oApplication.sLnPurp==null || objectSet.oAppReq.oReq.oApplication.aAssetDetail.length==0">
+                                        <div class="list-group-item" style="border-top: 2px solid rgb(221, 221, 221);">
+                                            <span>Asset Category : </span>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <span>Dealer Name : </span>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <span>Manufacturer : </span>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <span>Model Number : </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 column">
+                            <div class="scroll-divs-outer">
+                                <label class="div-heading agent">SOURCING <span class="badge"></span></label>
+                                <div id="agent" slimscroll="{height: 210,railVisible:true}">
+                                    <div class="list-group-item">
+                                        <span>Sales Executive : {{objectSet.oAppReq.oHeader.sDsaId.split("@")[0]}}</span>
+                                    </div>
+                                    <div class="list-group-item" ng-repeat="asset in objectSet.oAppReq.oReq.oApplication.aAssetDetail">
+                                        <span>Dealership : {{asset.sDlrName}}</span>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <span>Location : {{}}</span>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <span>IP Address : {{}}</span>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <span>Browser : {{}}</span>
+                                    </div>
+                                </div>
+                                <!-- <div class="row clearfix" style="position: absolute; background: #fff; width: 88%; margin: 1px; bottom: 8px;height: 47px;overflow-y:auto">
 										    <div class="col-md-4" ng-if="otherPresent" style="padding: 0px">
 											<a><img ng-if="otherPresent" alt="Preview Not Availeble"  id="other" name="OTHER" data-toggle="modal"
 											data-target="#myModalnew" class="custom_img_rounded" title="OTHER"
 											ng-src="{{others}}"  usermap="{{otherId}}" style="float: left;margin: 3px;"></a>
 											</div>
 									</div>	 -->
-								
-							</div>
-						</div>
-						<div class="col-md-4 column">
-							<div class="scroll-divs-outer">
-								<div class="div-heading kyc"><label>DECISION</label><a ng-if="objectSet && objectSet.iNoReTry>=1" style="float: right;padding-right: 10px;color: white;" ng-click="showReinitiatedDecisionData('lg',objectSet)">View Old</a></div>
-								<div id="KYC" style="width: 106.5%;" slimscroll="{height: 210,railVisible:true}">
-									<div class="list-group-item">
-										<span>Applied Amount :&nbsp{{objectSet.oAppReq.oReq.oApplication.dLoanAmt | currency:'&#8377;'}}</span>
-									</div>
-									<div ng-repeat="cro in objectSet.aCroDec">
-									 	<div class="list-group-item">
-											<span>Eligibility Amount :&nbsp{{cro.dEligibleAmt | currency:'&#8377;'}}</span>
-										</div>
-										<!-- ng-if="objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT" -->
-										<div class="list-group-item">
-											<span>FOIR :&nbsp{{foirAmount}}</span>
-										</div>
-										<div class="list-group-item">
-											<span>Approved Amount :&nbsp{{cro.dAmtAppr | currency:'&#8377;'}}</span>
-										</div>
-										<div class="list-group-item">
-											<span>Tenor : {{cro.iTenor}}</span>
-										</div>
-										<div class="list-group-item">
-											<span>EMI :&nbsp{{cro.dEmi | currency:'&#8377;'}}</span>
-										</div>
-									</div>
-									<!-- <div class="list-group-item" 
+                            </div>
+                        </div>
+                        <div class="col-md-4 column">
+                            <div class="scroll-divs-outer">
+                                <div class="div-heading kyc">
+                                    <label>DECISION</label><a ng-if="objectSet && objectSet.iNoReTry>=1" style="float: right;padding-right: 10px;color: white;" ng-click="showReinitiatedDecisionData('lg',objectSet)">View Old</a></div>
+                                <div id="KYC" style="width: 106.5%;" slimscroll="{height: 210,railVisible:true}">
+                                    <div class="list-group-item">
+                                        <span>Applied Amount :&nbsp{{objectSet.oAppReq.oReq.oApplication.dLoanAmt | currency:'&#8377;'}}</span>
+                                    </div>
+                                    <div ng-repeat="cro in objectSet.aCroDec">
+                                        <div class="list-group-item">
+                                            <span>Eligibility Amount :&nbsp{{cro.dEligibleAmt | currency:'&#8377;'}}</span>
+                                        </div>
+                                        <!-- ng-if="objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT" -->
+                                        <div class="list-group-item">
+                                            <span>FOIR :&nbsp{{foirAmount}}</span>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <span>Approved Amount :&nbsp{{cro.dAmtAppr | currency:'&#8377;'}}</span>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <span>Tenor : {{cro.iTenor}}</span>
+                                        </div>
+                                        <div class="list-group-item">
+                                            <span>EMI :&nbsp{{cro.dEmi | currency:'&#8377;'}}</span>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="list-group-item"
 									ng-if="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']">
 									    <span>FOIR : {{objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE']['FOIR_AMOUNT']}}</span>
 									</div> -->
-									<div class="list-group-item" 
-									ng-if="objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE">
-									    <span>Eligibility Grid : {{ElgbltyGrid}}</span>
-										<span ng-if="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE'].REMARK">Remark : {{objectSet.oCompRes.scoringServiceResponse["ELIGIBILITY_RESPONSE"].REMARK}}</span>
-									</div>
-									 <div class="list-group-item"  
-									 ng-repeat="dtls in objectSet.oCompRes.scoringServiceResponse['DECISION_RESPONSE'].Details" 
-									 ng-if="dtls.Outcome!=' '">
-										<span>Criteria {{dtls.CriteriaID}} , Outcome : <b>{{dtls.Outcome}}</b> </span>
-										<span ng-if="dtls.Remark">Remark : {{dtls.Remark}}</span>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-<!-- 			scroll form for cro2 -->
-			<div class="col-md-9 column" id="rightbar"  style="overflow:hidden; max-height: 640px;padding-right: 0px;" ng-if="!can('NCONTAINER')">
-				<ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;height: 38px;   width: 98%;">
- 				    <li  class="active" style=" margin-top: 7px;"><a id="applicant" style="padding: 6px 10px;font-weight: bold; font-size: 13px;">Applicant</a></li>
- 
-					<select class="form-control" id="dedupe" ng-if="objectSet.aDeDupe!=''" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" 
-	                	  ng-change="onchange(countSelected)">
-	<!--                 	 ng-options="count as count.ref for count in dedupeArray" -->
-						<option ng-selected="true" value="Select">Default Ref</option>
-	                	<option ng-repeat="count in objectSet.aDeDupe">{{count.sRefID}}</option>
-					</select>
- 				</ul>
- 				<div class="row clearfix" ng-init="applicant" id="applicant_panel" slimscroll="{height: 515,railVisible:true,alwaysVisible:false}" style=" width: 102%;margin-left: 14px;margin-right: -14px;">
-					<div id="application-temp-container" style="padding-top: 10px;width: 98%;">
-		<!-- ***************************  Common Form ***************************using ui-ref -->
-		 				 <!-- <div ng-include="'views/templates/app-form.html'" ></div>   -->
-
-		 				 <div ui-view ></div>  
-					</div>
-				</div>
-			</div>
-		</div>
-<!-- 	ng-if="authenticate('NRPRCS')" -->
-	<!-- 	<div class="row clearfix" id="application-main-container" data-ng-if="!container"
+                                    <div class="list-group-item" ng-if="objectSet.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE">
+                                        <span>Eligibility Grid : {{ElgbltyGrid}}</span>
+                                        <span ng-if="objectSet.oCompRes.scoringServiceResponse['ELIGIBILITY_RESPONSE'].REMARK">Remark : {{objectSet.oCompRes.scoringServiceResponse["ELIGIBILITY_RESPONSE"].REMARK}}</span>
+                                    </div>
+                                    <div class="list-group-item" ng-repeat="dtls in objectSet.oCompRes.scoringServiceResponse['DECISION_RESPONSE'].Details" ng-if="dtls.Outcome!=' '">
+                                        <span>Criteria {{dtls.CriteriaID}} , Outcome : <b>{{dtls.Outcome}}</b> </span>
+                                        <span ng-if="dtls.Remark">Remark : {{dtls.Remark}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 			scroll form for cro2 -->
+            <div class="col-md-9 column" id="rightbar" style="overflow:hidden; max-height: 640px;padding-right: 0px;" ng-if="!can('NCONTAINER')">
+                <ul class="nav nav-tabs" id="tabs" style="margin-left: 14px;height: 38px;   width: 98%;">
+                    <li class="active" style=" margin-top: 7px;"><a id="applicant" style="padding: 6px 10px;font-weight: bold; font-size: 13px;">Applicant</a></li>
+                    <select class="form-control" id="dedupe" ng-if="objectSet.aDeDupe!=''" style="max-width: 17%;float: right;margin-top: 7px;height: 28px;padding: 4px 6px;" ng-model="countSelected" ng-change="onchange(countSelected)">
+                        <!--                 	 ng-options="count as count.ref for count in dedupeArray" -->
+                        <option ng-selected="true" value="Select">Default Ref</option>
+                        <option ng-repeat="count in objectSet.aDeDupe">{{count.sRefID}}</option>
+                    </select>
+                </ul>
+                <div class="row clearfix" ng-init="applicant" id="applicant_panel" slimscroll="{height: 515,railVisible:true,alwaysVisible:false}" style=" width: 102%;margin-left: 14px;margin-right: -14px;">
+                    <div id="application-temp-container" style="padding-top: 10px;width: 98%;">
+                        <!-- ***************************  Common Form ***************************using ui-ref -->
+                        <!-- <div ng-include="'views/templates/app-form.html'" ></div>   -->
+                        <div ui-view></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 	ng-if="authenticate('NRPRCS')" -->
+        <!-- 	<div class="row clearfix" id="application-main-container" data-ng-if="!container"
 			style="border-top: 1px solid #DADADB; padding-top: 10px;">
-						<div ng-include="'views/templates/app-form.html'"></div> 
+						<div ng-include="'views/templates/app-form.html'"></div>
 		</div> -->
-	</div>
-		<!-- ****************Second Common Form ************************************** -->
-		</div>
-	</div>
+    </div>
+    <!-- ****************Second Common Form ************************************** -->
+</div>
+</div>
 </div>
 <!-- end of controller -->

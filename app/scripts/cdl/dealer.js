@@ -1,60 +1,62 @@
-;(function(){
+;
+(function() {
 
-	'use strict';
+    'use strict';
 
-	angular.module("gonogo.cdl",['gng.cdl.dealer','gonogo.directives']);
-	
-	var app = angular.module("gng.cdl.dealer",[]);
+    angular.module("gonogo.cdl", ['gng.cdl.dealer', 'gonogo.directives']);
 
-	app.controller("DealerController",["$rootScope","$scope",'UserService','APP_CONST','GNG_GA',"$state",'notifier',
-							function($rootScope,$scope,UserService,APP_CONST,GNG_GA,$state,notifier){
+    var app = angular.module("gng.cdl.dealer", []);
 
-		var user = UserService.getCurrentUser();
+    app.controller("DealerController", ["$rootScope", "$scope", 'UserService', 'APP_CONST', 'GNG_GA', "$state", 'notifier',
+        function($rootScope, $scope, UserService, APP_CONST, GNG_GA, $state, notifier) {
 
-		/*$rootScope.errHead="";
-		$rootScope.errorMsg="";*/
+            var user = UserService.getCurrentUser();
 
-	    if(user.id){
-	        $scope.$emit('onSuccessfulLogin');
-	    }
+            /*$rootScope.errHead="";
+            $rootScope.errorMsg="";*/
 
-		if(!_.isUndefined(user.id) ){
-			var currDealer  = user.dealer;
-			$scope.dealers = user.dealers;
+            if (user.id) {
+                $scope.$emit('onSuccessfulLogin');
+            }
 
-			if(currDealer){
-				if(currDealer.DEALER_NAME){
-					$state.go("/cdl/basic-de");
-				}
-			}else if($scope.dealers){
-				$state.go("/cdl/dealer");
-			}else{
-				$state.go(APP_CONST.getConst('APP_CONTEXT'));
-			}
-		}else{
-			$state.go(APP_CONST.getConst('APP_CONTEXT'));
-		}
+            if (!_.isUndefined(user.id)) {
+                var currDealer = user.dealer;
+                $scope.dealers = user.dealers;
 
-		$scope.onDealerSelected=function(dealerSelected){
-			if(!_.isUndefined(dealerSelected)) {
+                if (currDealer) {
+                    if (currDealer.DEALER_NAME) {
+                        $state.go("/cdl/basic-de");
+                    }
+                } else if ($scope.dealers) {
+                    $state.go("/cdl/dealer");
+                } else {
+                    $state.go(APP_CONST.getConst('APP_CONTEXT'));
+                }
+            } else {
+                $state.go(APP_CONST.getConst('APP_CONTEXT'));
+            }
 
-				GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_DEALER"),
-							 GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
-							 GNG_GA.getConstAction("ACTION_CLICK_VERIFY_OTP"),
-							 "Verify OTP Clicked",1);
+            $scope.onDealerSelected = function(dealerSelected) {
+                if (!_.isUndefined(dealerSelected)) {
 
-				var dealerObj = JSON.parse(dealerSelected);
+                    GNG_GA.sendEvent(GNG_GA.getConstScreen("SCRN_CDL_DEALER"),
+                        GNG_GA.getConstCategory("CAT_BUTTON_CLICK"),
+                        GNG_GA.getConstAction("ACTION_CLICK_VERIFY_OTP"),
+                        "Verify OTP Clicked", 1);
 
-				UserService.persistDataTolocalStorage('CURRENT_DEALER',btoa(dealerSelected));
+                    var dealerObj = JSON.parse(dealerSelected);
 
-				var dealerCode = dealerObj["DEALER_CODE"];
+                    UserService.persistDataTolocalStorage('CURRENT_DEALER', btoa(dealerSelected));
 
-				$rootScope.dealerName = dealerObj["DEALER_NAME"];
+                    var dealerCode = dealerObj["DEALER_CODE"];
 
-				$state.go("/cdl/basic-de");
-			}else {
-				notifier.logError("Please select Dealer");
-			}
-		}
-	}]);
+                    $rootScope.dealerName = dealerObj["DEALER_NAME"];
+
+                    $state.go("/cdl/basic-de");
+                } else {
+                    notifier.logError("Please select Dealer");
+                }
+            }
+        }
+    ]);
 }).call(this)

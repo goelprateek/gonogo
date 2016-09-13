@@ -1,8 +1,8 @@
 <form id="bankingInfo" name="KycDocForm" novalidate accessible-form>
-	<div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true}">
-		<div class="row clearfix ">
-			<div class="col-md-10 col-md-offset-1">
-			<!-- <div class="row clearfix">
+    <div class="getheight" id="kycHeight" slimscroll="{height:405,railVisible:true}">
+        <div class="row clearfix ">
+            <div class="col-md-10 col-md-offset-1">
+                <!-- <div class="row clearfix">
 					<div class="col-md-4">
 						<div class="row clearfix">
 							<help>Pan Number</help>
@@ -19,7 +19,7 @@
 								</label>
 							</div>
 							<img  id="panImg"  ng-if="panPresent" ng-src ="{{panData}}" class="preview">
-							
+
 							<a class="remove_image" ng-show="selectImg1 || panPresent"
 								ng-click="remove_file('PAN','1',selectImg1)">Remove</a>
 						</div>
@@ -126,7 +126,7 @@
 					</div>
 				</div>
 
-				<div class="row clearfix">						
+				<div class="row clearfix">
 					<div class="col-md-4">
 						<div class="row clearfix">
 							<help>Other</help><br/>
@@ -147,7 +147,7 @@
 								ng-click="remove_file('OTHER','8',selectImg8)">Remove</a>
 						</div>
 					</div>
-					
+
 					<div class="col-md-4">
 						<div class="row clearfix">
 							<help>Applicant Photo</help>
@@ -158,40 +158,39 @@
 								<div class="preview" ng-if="!profileImage" ng-style="{'background-image':'url('+selectImgInit+')'}" >
 									<input id="addrIP" type="file" ng-model="addrIP" ngf-select="onselectImg($files,'APPLICANT-PHOTO')">
 									<label for="addrIP" ng-hide="selectImgInit" style="display: block;">
-				     					<img id="selectImgInit" alt="" src="images/camera-128.png" class="img_icon" >    
+				     					<img id="selectImgInit" alt="" src="images/camera-128.png" class="img_icon" >
 				    				</label>
-		    					</div>	
-		    
+		    					</div>
+
 		    					<img ng-model="profileImg" id="selectImgInit" alt="" ng-src="{{profileData}}" ng-if="profileImage" style="width:100%;height: 113px;margin-left: 3%">
 							    <div style="height: 20px">
 									<small ng-show="image_url2" class="size">{{file_size2}}</small>
 									<a class="remove_image" ng-show="selectImgInit || profileImage" ng-click="remove_file('APPLICANT-PHOTO','0',selectImgInit)">Remove</a>
-								</div>	
+								</div>
 							</div>
 						</div>
-					</div>		
+					</div>
 				</div> -->
-				<div class="col-md-12">
-					<document-item ng-repeat="item in kycArray" item="item" imagearray="kycDocImages" remove-kyc-doc="removeKycDoc(index)"></document-item>
-				</div>
-				<div class="col-md-12">
-					<content-item class="col-md-4" item="applicantPhoto" imagearray="kycDocImages"></content-item>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="col-md-12" style="text-align:center;">
-		<span class="Add-Icon" ng-click="addNewDocElement('','')" title="Add new document">
+                <div class="col-md-12">
+                    <document-item ng-repeat="item in kycArray" item="item" imagearray="kycDocImages" remove-kyc-doc="removeKycDoc(index)"></document-item>
+                </div>
+                <div class="col-md-12">
+                    <content-item class="col-md-4" item="applicantPhoto" imagearray="kycDocImages"></content-item>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="text-align:center;">
+        <span class="Add-Icon" ng-click="addNewDocElement('','')" title="Add new document">
 			<b>+</b>
 		</span>
-	</div>
-	<div class="row clearfix ">
-		<div class="col-md-10 col-md-offset-1">
-			<button type="button" class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.asset')">Previous</button>
-			<button class="customButton cancel" id="cancel" ng-click="cancelApplication()">Cancel</button>
-			<button type="submit" class="customButton submit" id="submit" ng-click="KycDocForm.$valid ? submitApplication('step4') : fasle;">Submit</button>
-			
-			<button type="button" class="customButton save saveSubmit" id="save" ng-click="submitApplication('step3')">Save</button>
-		</div>
-	</div>
+    </div>
+    <div class="row clearfix ">
+        <div class="col-md-10 col-md-offset-1">
+            <button type="button" class="customButton previous" ng-click="onPreviousClicked('/cdl/apply.asset')">Previous</button>
+            <button class="customButton cancel" id="cancel" ng-click="cancelApplication()">Cancel</button>
+            <button type="submit" class="customButton submit" id="submit" ng-click="KycDocForm.$valid ? submitApplication('step4') : fasle;">Submit</button>
+            <button type="button" class="customButton save saveSubmit" id="save" ng-click="submitApplication('step3')">Save</button>
+        </div>
+    </div>
 </form>

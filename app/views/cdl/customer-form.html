@@ -1,364 +1,311 @@
 <div class="col-md-10 col-md-offset-1" style="margin-bottom: 15px;margin-top: 15px;">
-	<span style="font-size: 18px;padding: 5px;">{{refID}}</span>
-	<button class="customButton" style="float: right;" ng-click="gotoDashboard()">Back</button>
+    <span style="font-size: 18px;padding: 5px;">{{refID}}</span>
+    <button class="customButton" style="float: right;" ng-click="gotoDashboard()">Back</button>
 </div>
-
 <div class="col-md-10 col-md-offset-1">
-<form id="msform" slimscroll="{height: 430,railVisible:true}">
-	<div class="row clearfix" ng-if="applicantPhoto.length!=0" style="display: block;">
-		<div class="col-md-2" ng-repeat="kyc_doc in applicantPhoto">
-			<label class="control-label">{{kyc_doc.sImgType}}</label>
-			<a>
-			<img alt="Document Not available" title="{{kyc_doc.kyc_name}}" accesskey="{{kyc_doc.sByteCode}}" ng-src={{kyc_doc.sByteCode}} style="border: none;    height: 110px;" ng-click="showPreviewModal(applicantPhoto,true,$index,false)" />
-			</a>
-		</div>
-	</div>
-
-	<fieldset class="formfield" style="display: block;">
-		<legend>Personal Information</legend>
-		<div class="row clearfix">
-			<div class="col-md-3">
-				<label class="control-label">Applicant Name</label> <input
-					class="form-control" ng-model="name" type="text"
-					name="Applicant Name" disabled="disabled">
-			</div>
-			<div class="col-md-3">
-				<label class="control-label">Date of Birth</label>
-				<input id="dob" class="form-control" ng-model="dob" type="text"
-					name="Date Of Birth" disabled="disabled" >
-			</div>
-			<div class="col-md-3">
-				<label class="control-label">Gender</label><input
-					type="radio" name="Gender" checked="checked" value="Male"
-					ng-model="objectSet.oReq.oApplicant.sApplGndr" disabled="disabled" /> Male &nbsp; <input
-					type="radio" name="Gender" value="Female" ng-model="objectSet.oReq.oApplicant.sApplGndr"
-					disabled="disabled" /> Female
-			</div>
-			<div class="col-md-3">
-				<label class="control-label">Marital Status</label><input
-					type="radio" name="mstatus" checked="checked" value="Married"
-					ng-model="objectSet.oReq.oApplicant.sMarStat" disabled="disabled" /> Married &nbsp; <input
-					type="radio" value="Single" ng-model="objectSet.oReq.oApplicant.sMarStat" disabled="disabled" />
-				Single
-			</div>
-		</div>
-			<div class="col-md-3">
-				<label class="control-label">Credit Card No</label><input
-					class="form-control" ng-model="objectSet.oReq.oApplicant.sCreditCardNum" type="text" name="PinCode"
-					maxlength="6" disabled="disabled">
-			</div>
-			<div class="col-md-3">
-				<label class="control-label">Loan Amount</label> <input
-					 ng-model="objectSet.oReq.oApplication.dLoanAmt" class="form-control" type="text"
-					name="Dealername" disabled="disabled">
-			</div>
-			<div class="col-md-3">
-				<label class="control-label">Tenor Applied</label><input
-					class="form-control" ng-model="objectSet.oReq.oApplication.iLoanTenor" type="text" name="PinCode"
-					maxlength="6" disabled="disabled">
-			</div>
-			<div class="col-md-3">
-				<label class="control-label">Constitution</label><input
-					class="form-control" type="text" name="" ng-model="constitution"
-					maxlength="6" disabled="disabled">
-			</div>
-			<div class="col-md-3">
-				<label class="control-label">Education</label><input
-					class="form-control" type="text" ng-model="objectSet.oReq.oApplicant.sEdu"
-					disabled="disabled">
-			</div>
-			<div class="col-md-3">
-				<label class="control-label">Age</label><input class="form-control"
-					type="text" ng-model="objectSet.oReq.oApplicant.iAge" disabled="disabled">
-			</div>
-			<div class="col-md-3">
-				<label class="control-label">Refer To Credit</label><input
-					class="form-control" type="text" ng-model="objectSet.oReq.sSuspAct"
-					disabled="disabled">
-			</div>
-	</fieldset>
-	<fieldset class="formfield" style="display: block;">
-		<legend>Email Information</legend>
-		<div class="row clearfix">
-			<div class="col-md-3" ng-repeat="id in objectSet.oReq.oApplicant.aEmail">
-				<label class="control-label">{{id.sEmailType.charAt(0).toUpperCase()+id.sEmailType.slice(1).toLowerCase()}}
-					Email</label> <input class="form-control" ng-model="id.sEmailAddr"
-					type="text" name="Email" disabled="disabled">
-			</div>
-		</div>
-	</fieldset>
-	<fieldset class="formfield" style="display: block;">
-			<legend>Contact Information</legend>
-			<div  ng-repeat="phone in objectSet.oReq.oApplicant.aPhone">
-				<div class="col-md-3" ng-if="phone.sPhoneType=='PERSONAL_MOBILE'">
-					<label class="control-label">Personal Mobile</label><input  ng-if="phone.sAreaCode"
-						class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
-						<input ng-if="!phone.sAreaCode"
-						class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
-					
-				</div>
-				<div class="col-md-3" ng-if="phone.sPhoneType=='PERSONAL_PHONE'">
-					<label class="control-label">Personal Phone</label><input  ng-if="phone.sAreaCode"
-						class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
-						<input ng-if="!phone.sAreaCode"
-						class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
-					
-				</div>
-				<div class="col-md-3" ng-if="phone.sPhoneType=='RESIDENCE_MOBILE'">
-					<label class="control-label">Residence Mobile</label><input  ng-if="phone.sAreaCode"
-						class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
-						<input ng-if="!phone.sAreaCode"
-						class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
-					
-				</div>
-				<div class="col-md-3" ng-if="phone.sPhoneType=='RESIDENCE_PHONE'">
-					<label class="control-label">Residence Phone</label><input  ng-if="phone.sAreaCode"
-						class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
-						<input ng-if="!phone.sAreaCode"
-						class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
-					
-				</div>
-				<div class="col-md-3" ng-if="phone.sPhoneType=='OFFICE_PHONE'">
-					<label class="control-label">Office Phone</label><input  ng-if="phone.sAreaCode"
-						class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
-						<input ng-if="!phone.sAreaCode"
-						class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
-					
-				</div>
-				<div class="col-md-3" ng-if="phone.sPhoneType=='OFFICE_MOBILE'">
-					<label class="control-label">Office Mobile</label><input  ng-if="phone.sAreaCode"
-						class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
-						<input ng-if="!phone.sAreaCode"
-						class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
-					
-				</div>
-				</div>
-		</fieldset>
-
-
-	<fieldset class="formfield" style="display: block;">
-		<legend>Address Details</legend>
-		<div class="row clearfix">
-			<div class="col-md-3 column">
-				<label class="control-label">Select Address Type</label>
-			</div>
-			<div class="col-md-3 column">
-				<select class="form-control" name="ResiAddrType" ng-model="addr_type"
-					ng-options="addr.name for addr in addrType track by addr.name"></select>
-			</div>
-		</div>
-		<div id="addr_detail" data-ng-repeat="address in objectSet.oReq.oApplicant.aAddr">
-				<div  ng-if="addr_type.value == 'Residence' && findAddressType(addr_type.value,address.sAddrType)" style="display: block;">
-						<div class="col-md-3">
-							<label class="control-label">Address Line 1</label> <input
-								class="form-control" ng-model="address.sLine1" type="text"
-								disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label class="control-label">Address Line 2</label>
-							<input class="form-control" ng-model="address.sLine2" type="text" disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label class="control-label">Address Line 3</label>
-							<input class="form-control" ng-model="address.sLine3" type="text" disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label  id="CurrentPincode" class="control-label">Pincode</label> <input
-								class="form-control" ng-model="address.iPinCode" type="text" disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label class="control-label" style="float: none;">State </label>
-						 	<input
-								id="statelist" class="form-control" ng-model="address.sState" type="text" disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label class="control-label">City</label> <input
-								class="form-control" ng-model="address.sCity" type="text" disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label class="control-label">Residence Addr Type</label>
-							<input
-								class="form-control" ng-model="address.sResAddrType" type="text" disabled="disabled">
-						</div>					
-						<div class="col-md-3" ng-if="address.sResAddrType.indexOf('RENTED') != -1">
-							<label class="control-label">Monthly Rent</label>
-							<input
-								class="form-control" ng-model="address.dRentAmt" type="text" disabled="disabled">
-						</div>					
-						<div class="col-md-3">
-							<label class="control-label">Month at city</label>
-							<input
-								class="form-control" name="perCityPeriod" ng-model="address.iMonthAtCity" type="text" disabled="disabled"/>
-						</div>
-						<div class="col-md-3">
-							<label class="control-label">Month at addr</label>
-							<input class="form-control" name="perResidencePeriod" ng-model="address.iMonthAtAddr" type="text"
-							disabled="disabled">
-						</div>
-				</div>
-				<div ng-if="addr_type.value == 'Office' && findAddressType(addr_type.value,address.sAddrType)">
-						<div class="col-md-3">
-							<label class="control-label">Address Line 1</label> <input
-								class="form-control" ng-model="address.sLine1" type="text"
-								disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label class="control-label">Address Line 2</label> <input
-								class="form-control" ng-model="address.sLine2" type="text"
-								disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label class="control-label">Address Line 3</label> <input
-								class="form-control" ng-model="address.sLine3" type="text"
-								disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label class="control-label">Pincode</label>
-							<input class="form-control" id="OfficePincode" ng-model="address.iPinCode" type="text" 
-								disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label class="control-label" style="float: none;">State </label>
-							 <input
-								id="statelist" class="form-control" ng-model="address.sState" type="text"
-								disabled="disabled">
-						</div>							
-						<div class="col-md-3">
-							<label class="control-label">City</label> <input
-								class="form-control" ng-model="address.sCity" type="text" disabled="disabled">
-						</div>
-				</div>
-				<div ng-if="addr_type.value == 'Permanent' && findAddressType(addr_type.value,address.sAddrType)">
-						<div class="col-md-3">
-							<label class="control-label">Address Line 1</label> <input
-								class="form-control" ng-model="address.sLine1" type="text"
-								disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label class="control-label">Address Line 2</label>
-							<input class="form-control" ng-model="address.sLine2" type="text" disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label class="control-label">Address Line 3</label>
-							<input class="form-control" ng-model="address.sLine3" type="text" disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label  id="CurrentPincode" class="control-label">Pincode</label> <input
-								class="form-control" ng-model="address.iPinCode" type="text" disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label class="control-label" style="float: none;">State </label>
-						 	<input
-								id="statelist" class="form-control" ng-model="address.sState" type="text" name="State" ng-disabled="true">
-						</div>
-						<div class="col-md-3">
-							<label class="control-label">City</label> <input
-								class="form-control" ng-model="address.sCity" type="text" disabled="disabled">
-						</div>
-						<div class="col-md-3">
-							<label class="control-label">Residence Address Type</label>
-							<input
-								class="form-control" ng-model="address.sResAddrType" type="text" disabled="disabled">
-						</div>					
-						<div class="col-md-3" ng-if="address.sResAddrType.indexOf('RENTED') != -1">
-							<label class="control-label">Monthly Rent</label>
-							<input class="form-control" ng-model="address.dRentAmt" type="text" disabled="disabled">
-						</div>					
-						<div class="col-md-3">
-							<label class="control-label">Month at city</label>
-							<input
-								class="form-control" name="currentCityPeriod" ng-model="address.iMonthAtCity" type="text" disabled="disabled"/>
-						</div>
-						<div class="col-md-3">
-							<label class="control-label">Month at addr</label>
-							<input class="form-control" ng-model="address.iMonthAtAddr" type="text" disabled="disabled">
-						</div>
-				</div>
-			</div>
-
-	</fieldset>
-	<fieldset class="formfield" style="display: block;">
-		<legend>Professional Information</legend>
-		<div id="employer_detail">
-			<div id="Job">
-				<div class="row clearfix">
-					<div class="col-md-3 column">
-						<label class="control-label">Employment Type</label> <input
-							class="form-control" ng-model="objectSet.oReq.oApplicant.aEmpl[0].sEmplType" type="text"
-							disabled="disabled">
-					</div>
-					<div class="col-md-3 column">
-						<label class="control-label">Employer</label> <input
-							id="job_compnay_name" class="form-control" ng-model="objectSet.oReq.oApplicant.aEmpl[0].sEmplName"
-							type="text" disabled="disabled">
-					</div>
-					<div class="col-md-3 column">
-						<label class="control-label">Time with this Employer</label> <input
-							class="form-control" ng-model="objectSet.oReq.oApplicant.aEmpl[0].iTmWithEmplr" type="text" disabled="disabled">
-					</div>
-					<div class="col-md-3"
-						ng-if="constitution.toUpperCase()!='SELF-EMPLOYED'">
-						<label class="control-label">Last Month Salary</label> <input
-							class="form-control" ng-model="objectSet.oReq.oApplicant.aEmpl[0].dmonthSal" type="text"
-							disabled="disabled">
-					</div>
-					<div class="col-md-3"
-						ng-if="constitution.toUpperCase()=='SELF-EMPLOYED'">
-						<label class="control-label">Last Year IT Amount</label> <input
-							class="form-control" ng-model="objectSet.oReq.oApplicant.aEmpl[0].dItrAmt" type="text"
-							disabled="disabled">
-					</div>
-				</div>
-			</div>
-		</diV>
-	</fieldset>
-	<fieldset class="formfield" style="display: block;">
-		<legend> Product Information</legend>
-		<div class="row clearfix">
-			<div class="col-md-3">
-				<label class="control-label">Dealer Name</label> <input
-					id="dealerName" ng-model="objectSet.oReq.oApplication.aAssetDetail[0].sDlrName" class="form-control" type="text" disabled="disabled">
-			</div>
-			<div class="col-md-3">
-				<label class="control-label">Asset Category</label> <input
-					id="newcity" ng-model="objectSet.oReq.oApplication.aAssetDetail[0].sAssetCtg" class="form-control" type="text"
-					disabled="disabled">
-			</div>
-			<div class="col-md-3">
-				<label class="control-label">Make</label> <input ng-model="objectSet.oReq.oApplication.aAssetDetail[0].sAssetMake" class="form-control" type="text" disabled="disabled">
-			</div>
-			<div class="col-md-3">
-				<label class="control-label">Model</label> <input ng-model="objectSet.oReq.oApplication.aAssetDetail[0].sModelNo"
-					class="form-control" type="text" disabled="disabled">
-			</div>
-		</div>
-	</fieldset>
-	<fieldset class="formfield" id="kyc_fielset" style="display: block;">
-		<legend>KYC Document</legend>
-		<div class="col-md-4" ng-repeat="kyc_doc in imageDataArray">
-			<label class="control-label">{{kyc_doc.sImgType}}</label> 
-			<label class="control-label"><span ng-if="kyc_doc.sImgVal">Number :</span> {{kyc_doc.sImgVal}}
-			</label>
-			<a>
-			<img alt="Document Not available" title="{{kyc_doc.kyc_name}}" accesskey="{{kyc_doc.sByteCode}}" ng-src="{{kyc_doc.sByteCode}}" style="border: none;width: 170px;" ng-click="showPreviewModal(imageDataArray,true,$index,false)" />
-			</a>
-		</div>
-<!-- 
+    <form id="msform" slimscroll="{height: 430,railVisible:true}">
+        <div class="row clearfix" ng-if="applicantPhoto.length!=0" style="display: block;">
+            <div class="col-md-2" ng-repeat="kyc_doc in applicantPhoto">
+                <label class="control-label">{{kyc_doc.sImgType}}</label>
+                <a>
+                    <img alt="Document Not available" title="{{kyc_doc.kyc_name}}" accesskey="{{kyc_doc.sByteCode}}" ng-src={{kyc_doc.sByteCode}} style="border: none;    height: 110px;" ng-click="showPreviewModal(applicantPhoto,true,$index,false)" />
+                </a>
+            </div>
+        </div>
+        <fieldset class="formfield" style="display: block;">
+            <legend>Personal Information</legend>
+            <div class="row clearfix">
+                <div class="col-md-3">
+                    <label class="control-label">Applicant Name</label>
+                    <input class="form-control" ng-model="name" type="text" name="Applicant Name" disabled="disabled">
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label">Date of Birth</label>
+                    <input id="dob" class="form-control" ng-model="dob" type="text" name="Date Of Birth" disabled="disabled">
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label">Gender</label>
+                    <input type="radio" name="Gender" checked="checked" value="Male" ng-model="objectSet.oReq.oApplicant.sApplGndr" disabled="disabled" /> Male &nbsp;
+                    <input type="radio" name="Gender" value="Female" ng-model="objectSet.oReq.oApplicant.sApplGndr" disabled="disabled" /> Female
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label">Marital Status</label>
+                    <input type="radio" name="mstatus" checked="checked" value="Married" ng-model="objectSet.oReq.oApplicant.sMarStat" disabled="disabled" /> Married &nbsp;
+                    <input type="radio" value="Single" ng-model="objectSet.oReq.oApplicant.sMarStat" disabled="disabled" /> Single
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="control-label">Credit Card No</label>
+                <input class="form-control" ng-model="objectSet.oReq.oApplicant.sCreditCardNum" type="text" name="PinCode" maxlength="6" disabled="disabled">
+            </div>
+            <div class="col-md-3">
+                <label class="control-label">Loan Amount</label>
+                <input ng-model="objectSet.oReq.oApplication.dLoanAmt" class="form-control" type="text" name="Dealername" disabled="disabled">
+            </div>
+            <div class="col-md-3">
+                <label class="control-label">Tenor Applied</label>
+                <input class="form-control" ng-model="objectSet.oReq.oApplication.iLoanTenor" type="text" name="PinCode" maxlength="6" disabled="disabled">
+            </div>
+            <div class="col-md-3">
+                <label class="control-label">Constitution</label>
+                <input class="form-control" type="text" name="" ng-model="constitution" maxlength="6" disabled="disabled">
+            </div>
+            <div class="col-md-3">
+                <label class="control-label">Education</label>
+                <input class="form-control" type="text" ng-model="objectSet.oReq.oApplicant.sEdu" disabled="disabled">
+            </div>
+            <div class="col-md-3">
+                <label class="control-label">Age</label>
+                <input class="form-control" type="text" ng-model="objectSet.oReq.oApplicant.iAge" disabled="disabled">
+            </div>
+            <div class="col-md-3">
+                <label class="control-label">Refer To Credit</label>
+                <input class="form-control" type="text" ng-model="objectSet.oReq.sSuspAct" disabled="disabled">
+            </div>
+        </fieldset>
+        <fieldset class="formfield" style="display: block;">
+            <legend>Email Information</legend>
+            <div class="row clearfix">
+                <div class="col-md-3" ng-repeat="id in objectSet.oReq.oApplicant.aEmail">
+                    <label class="control-label">{{id.sEmailType.charAt(0).toUpperCase()+id.sEmailType.slice(1).toLowerCase()}} Email
+                    </label>
+                    <input class="form-control" ng-model="id.sEmailAddr" type="text" name="Email" disabled="disabled">
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="formfield" style="display: block;">
+            <legend>Contact Information</legend>
+            <div ng-repeat="phone in objectSet.oReq.oApplicant.aPhone">
+                <div class="col-md-3" ng-if="phone.sPhoneType=='PERSONAL_MOBILE'">
+                    <label class="control-label">Personal Mobile</label>
+                    <input ng-if="phone.sAreaCode" class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+                    <input ng-if="!phone.sAreaCode" class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+                </div>
+                <div class="col-md-3" ng-if="phone.sPhoneType=='PERSONAL_PHONE'">
+                    <label class="control-label">Personal Phone</label>
+                    <input ng-if="phone.sAreaCode" class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+                    <input ng-if="!phone.sAreaCode" class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+                </div>
+                <div class="col-md-3" ng-if="phone.sPhoneType=='RESIDENCE_MOBILE'">
+                    <label class="control-label">Residence Mobile</label>
+                    <input ng-if="phone.sAreaCode" class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+                    <input ng-if="!phone.sAreaCode" class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+                </div>
+                <div class="col-md-3" ng-if="phone.sPhoneType=='RESIDENCE_PHONE'">
+                    <label class="control-label">Residence Phone</label>
+                    <input ng-if="phone.sAreaCode" class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+                    <input ng-if="!phone.sAreaCode" class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+                </div>
+                <div class="col-md-3" ng-if="phone.sPhoneType=='OFFICE_PHONE'">
+                    <label class="control-label">Office Phone</label>
+                    <input ng-if="phone.sAreaCode" class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+                    <input ng-if="!phone.sAreaCode" class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+                </div>
+                <div class="col-md-3" ng-if="phone.sPhoneType=='OFFICE_MOBILE'">
+                    <label class="control-label">Office Mobile</label>
+                    <input ng-if="phone.sAreaCode" class="form-control" type="text" value="{{phone.sAreaCode}} - {{phone.sPhoneNumber}}" disabled="disabled">
+                    <input ng-if="!phone.sAreaCode" class="form-control" type="text" value="{{phone.sPhoneNumber}}" disabled="disabled">
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="formfield" style="display: block;">
+            <legend>Address Details</legend>
+            <div class="row clearfix">
+                <div class="col-md-3 column">
+                    <label class="control-label">Select Address Type</label>
+                </div>
+                <div class="col-md-3 column">
+                    <select class="form-control" name="ResiAddrType" ng-model="addr_type" ng-options="addr.name for addr in addrType track by addr.name"></select>
+                </div>
+            </div>
+            <div id="addr_detail" data-ng-repeat="address in objectSet.oReq.oApplicant.aAddr">
+                <div ng-if="addr_type.value == 'Residence' && findAddressType(addr_type.value,address.sAddrType)" style="display: block;">
+                    <div class="col-md-3">
+                        <label class="control-label">Address Line 1</label>
+                        <input class="form-control" ng-model="address.sLine1" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Address Line 2</label>
+                        <input class="form-control" ng-model="address.sLine2" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Address Line 3</label>
+                        <input class="form-control" ng-model="address.sLine3" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label id="CurrentPincode" class="control-label">Pincode</label>
+                        <input class="form-control" ng-model="address.iPinCode" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" style="float: none;">State </label>
+                        <input id="statelist" class="form-control" ng-model="address.sState" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">City</label>
+                        <input class="form-control" ng-model="address.sCity" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Residence Addr Type</label>
+                        <input class="form-control" ng-model="address.sResAddrType" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3" ng-if="address.sResAddrType.indexOf('RENTED') != -1">
+                        <label class="control-label">Monthly Rent</label>
+                        <input class="form-control" ng-model="address.dRentAmt" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Month at city</label>
+                        <input class="form-control" name="perCityPeriod" ng-model="address.iMonthAtCity" type="text" disabled="disabled" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Month at addr</label>
+                        <input class="form-control" name="perResidencePeriod" ng-model="address.iMonthAtAddr" type="text" disabled="disabled">
+                    </div>
+                </div>
+                <div ng-if="addr_type.value == 'Office' && findAddressType(addr_type.value,address.sAddrType)">
+                    <div class="col-md-3">
+                        <label class="control-label">Address Line 1</label>
+                        <input class="form-control" ng-model="address.sLine1" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Address Line 2</label>
+                        <input class="form-control" ng-model="address.sLine2" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Address Line 3</label>
+                        <input class="form-control" ng-model="address.sLine3" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Pincode</label>
+                        <input class="form-control" id="OfficePincode" ng-model="address.iPinCode" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" style="float: none;">State </label>
+                        <input id="statelist" class="form-control" ng-model="address.sState" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">City</label>
+                        <input class="form-control" ng-model="address.sCity" type="text" disabled="disabled">
+                    </div>
+                </div>
+                <div ng-if="addr_type.value == 'Permanent' && findAddressType(addr_type.value,address.sAddrType)">
+                    <div class="col-md-3">
+                        <label class="control-label">Address Line 1</label>
+                        <input class="form-control" ng-model="address.sLine1" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Address Line 2</label>
+                        <input class="form-control" ng-model="address.sLine2" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Address Line 3</label>
+                        <input class="form-control" ng-model="address.sLine3" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label id="CurrentPincode" class="control-label">Pincode</label>
+                        <input class="form-control" ng-model="address.iPinCode" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label" style="float: none;">State </label>
+                        <input id="statelist" class="form-control" ng-model="address.sState" type="text" name="State" ng-disabled="true">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">City</label>
+                        <input class="form-control" ng-model="address.sCity" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Residence Address Type</label>
+                        <input class="form-control" ng-model="address.sResAddrType" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3" ng-if="address.sResAddrType.indexOf('RENTED') != -1">
+                        <label class="control-label">Monthly Rent</label>
+                        <input class="form-control" ng-model="address.dRentAmt" type="text" disabled="disabled">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Month at city</label>
+                        <input class="form-control" name="currentCityPeriod" ng-model="address.iMonthAtCity" type="text" disabled="disabled" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="control-label">Month at addr</label>
+                        <input class="form-control" ng-model="address.iMonthAtAddr" type="text" disabled="disabled">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="formfield" style="display: block;">
+            <legend>Professional Information</legend>
+            <div id="employer_detail">
+                <div id="Job">
+                    <div class="row clearfix">
+                        <div class="col-md-3 column">
+                            <label class="control-label">Employment Type</label>
+                            <input class="form-control" ng-model="objectSet.oReq.oApplicant.aEmpl[0].sEmplType" type="text" disabled="disabled">
+                        </div>
+                        <div class="col-md-3 column">
+                            <label class="control-label">Employer</label>
+                            <input id="job_compnay_name" class="form-control" ng-model="objectSet.oReq.oApplicant.aEmpl[0].sEmplName" type="text" disabled="disabled">
+                        </div>
+                        <div class="col-md-3 column">
+                            <label class="control-label">Time with this Employer</label>
+                            <input class="form-control" ng-model="objectSet.oReq.oApplicant.aEmpl[0].iTmWithEmplr" type="text" disabled="disabled">
+                        </div>
+                        <div class="col-md-3" ng-if="constitution.toUpperCase()!='SELF-EMPLOYED'">
+                            <label class="control-label">Last Month Salary</label>
+                            <input class="form-control" ng-model="objectSet.oReq.oApplicant.aEmpl[0].dmonthSal" type="text" disabled="disabled">
+                        </div>
+                        <div class="col-md-3" ng-if="constitution.toUpperCase()=='SELF-EMPLOYED'">
+                            <label class="control-label">Last Year IT Amount</label>
+                            <input class="form-control" ng-model="objectSet.oReq.oApplicant.aEmpl[0].dItrAmt" type="text" disabled="disabled">
+                        </div>
+                    </div>
+                </div>
+            </diV>
+        </fieldset>
+        <fieldset class="formfield" style="display: block;">
+            <legend> Product Information</legend>
+            <div class="row clearfix">
+                <div class="col-md-3">
+                    <label class="control-label">Dealer Name</label>
+                    <input id="dealerName" ng-model="objectSet.oReq.oApplication.aAssetDetail[0].sDlrName" class="form-control" type="text" disabled="disabled">
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label">Asset Category</label>
+                    <input id="newcity" ng-model="objectSet.oReq.oApplication.aAssetDetail[0].sAssetCtg" class="form-control" type="text" disabled="disabled">
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label">Make</label>
+                    <input ng-model="objectSet.oReq.oApplication.aAssetDetail[0].sAssetMake" class="form-control" type="text" disabled="disabled">
+                </div>
+                <div class="col-md-3">
+                    <label class="control-label">Model</label>
+                    <input ng-model="objectSet.oReq.oApplication.aAssetDetail[0].sModelNo" class="form-control" type="text" disabled="disabled">
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="formfield" id="kyc_fielset" style="display: block;">
+            <legend>KYC Document</legend>
+            <div class="col-md-4" ng-repeat="kyc_doc in imageDataArray">
+                <label class="control-label">{{kyc_doc.sImgType}}</label>
+                <label class="control-label"><span ng-if="kyc_doc.sImgVal">Number :</span> {{kyc_doc.sImgVal}}
+                </label>
+                <a>
+                    <img alt="Document Not available" title="{{kyc_doc.kyc_name}}" accesskey="{{kyc_doc.sByteCode}}" ng-src="{{kyc_doc.sByteCode}}" style="border: none;width: 170px;" ng-click="showPreviewModal(imageDataArray,true,$index,false)" />
+                </a>
+            </div>
+            <!--
 		<div data-ng-if="imageDataArray.length!=0"  slimscroll="{height: 54,railVisible:true}">
 							<div class="notify-scroll-container" >
-								 <ul style="padding: 0px;"> 
+								 <ul style="padding: 0px;">
 									<li ng-repeat="d in imageDataArray">
 										<a href="javascript:;" data-ng-click="showimage(imageDataArray,isImg,$index,true)"><img ng-src="{{d.sByteCode}}"> </a>
 									</li>
-								 </ul> 
+								 </ul>
 							</div>
 		</div> -->
-	</fieldset>
-</form>
+        </fieldset>
+    </form>
 </div>
-<div class="col-md-offset-1 col-md-10" style="text-align: center"
-	ng-if="objectSet.sCurrentStageId!='BRE'">
-	<button style="text-align: center" ng-click="restartClicked()" class="customButton" ng-disabled="!isApplicationDataLoaded">
-		Restart
-	</button>
+<div class="col-md-offset-1 col-md-10" style="text-align: center" ng-if="objectSet.sCurrentStageId!='BRE'">
+    <button style="text-align: center" ng-click="restartClicked()" class="customButton" ng-disabled="!isApplicationDataLoaded">
+        Restart
+    </button>
 </div>

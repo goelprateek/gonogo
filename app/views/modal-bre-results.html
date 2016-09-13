@@ -1,7 +1,7 @@
 <!-- <div ng-repeat="result in breresults"> -->
 <style>
 .headerDivider {
-	border-left: 1px solid #38546d;
+    border-left: 1px solid #38546d;
     border-right: 1px solid #16222c;
     height: 100%;
     display: inline-block;
@@ -9,122 +9,122 @@
     margin: 10px;
 }
 
-.bre-result-header{
-	width: 270px;
+.bre-result-header {
+    width: 270px;
     border: 1px solid #000000;
     padding: 10px;
     display: inline-block;
     float: left;
     margin-top: 20px;
     margin-bottom: 10px;
-   	margin-right: 10px;
+    margin-right: 10px;
 }
-.bre-result-div{
-	width: 270px;
+
+.bre-result-div {
+    width: 270px;
     border: 1px solid #000000;
     padding: 10px;
     display: inline-block;
     float: left;
     margin-bottom: 20px;
-   	margin-right: 10px;
+    margin-right: 10px;
 }
 
-.modal-lg{
-	width:900px;
+.modal-lg {
+    width: 900px;
 }
 
-.list-group-item{
-	height:62px;
+.list-group-item {
+    height: 62px;
 }
 </style>
-
-	<div class="modal-header">
-		<button type="button" class="close"  ng-click="closeModal()" aria-hidden="true">&times;</button>
-		<h4 class="modal-title">Score Preview</h4>
-	</div>
-	<div style="overflow:auto;margin-left: 10px;">
-		<div class="bre-result-header" ng-repeat="appform in appForms">
-			<label>Application : {{($index+1)}}</label>
-		</div>
-	</div>
-	<div style="margin-left: 10px;height: 470px;"  slimscroll="{height: 450,railVisible:true}">
-	<div class="bre-result-div" ng-repeat="appform in appForms">
-		<div ng-repeat="bureauData in appform.aAppScoRslt" ng-if="bureau.length != 0">
-			<!-- <div class="list-group-item">
+<div class="modal-header">
+    <button type="button" class="close" ng-click="closeModal()" aria-hidden="true">&times;</button>
+    <h4 class="modal-title">Score Preview</h4>
+</div>
+<div style="overflow:auto;margin-left: 10px;">
+    <div class="bre-result-header" ng-repeat="appform in appForms">
+        <label>Application : {{($index+1)}}</label>
+    </div>
+</div>
+<div style="margin-left: 10px;height: 470px;" slimscroll="{height: 450,railVisible:true}">
+    <div class="bre-result-div" ng-repeat="appform in appForms">
+        <div ng-repeat="bureauData in appform.aAppScoRslt" ng-if="bureau.length != 0">
+            <!-- <div class="list-group-item">
 				<span ng-if="bureauData.sFldName == 'PAN Verification'">{{bureauData.sFldName}}:{{bureauData.sMsg}}<br>{{bureauData.sFldVal}}</span>
 				<span ng-if="bureauData.sFldName !='PAN Verification'">{{bureauData.sFldName}}:{{bureauData.sFldVal}}</span>
 			</div> -->
-			<div class="list-group-item" ng-if="bureauData.sFldName =='Application Score'">
-				<span>Application Score : {{bureauData.sFldVal}}</span>
-			</div>
-			<!-- <div class="list-group-item" ng-if="bureauData.sFldName =='CIBIL Score'">
+            <div class="list-group-item" ng-if="bureauData.sFldName =='Application Score'">
+                <span>Application Score : {{bureauData.sFldVal}}</span>
+            </div>
+            <!-- <div class="list-group-item" ng-if="bureauData.sFldName =='CIBIL Score'">
 				<span>CIBIL Score : {{bureauData.sFldVal}}</span>
 			</div> -->
-			<div class="list-group-item" ng-if="bureauData.sFldName =='Residential Address Score'">
-				<span>Res Addr Score : {{bureauData.sFldVal}}</span>
-			</div> 
-				<div class="list-group-item" ng-if="bureauData.sFldName =='Office Address Score'">
-				<span>Off Addr Score : {{bureauData.sFldVal}}</span>
-			</div>
-		</div>
-		<div class="list-group-item" ng-if="appform.oIntrmStat.oCibilResult.sFldVal">
-				<span>CIBIL Score : {{appform.oIntrmStat.oCibilResult.sFldVal}}</span>
-		</div>
-		<div class="list-group-item">
-				<span>Res Stability : {{appform.oIntrmStat.oResAddressResult.iAddrStblty == '-1' ?'':appform.oIntrmStat.oResAddressResult.iAddrStblty}}</span>
-		</div>
-		<div class="list-group-item">
-				<span>Off Stability : {{appform.oIntrmStat.oOffAddressResult.iAddrStblty== '-1' ?'' : appform.oIntrmStat.oOffAddressResult.iAddrStblty}}</span>
-		</div>
-		<div class="list-group-item" ng-if="appform.oIntrmStat.oPanResult.fNameScore">
-				<span >PAN :{{appform.oIntrmStat.oPanResultsMsg}}<br>{{appform.oIntrmStat.oPanResult.sFldVal}}<br>{{appform.oIntrmStat.oPanResult.fNameScore}}</span>
-		</div>
-		<div class="list-group-item" ng-if="!appform.oIntrmStat.oPanResult.fNameScore">
-				<span >PAN :{{appform.oIntrmStat.oPanResult.sMsg}}<br>{{appform.oIntrmStat.oPanResult.sFldVal}}</span>
-		</div>
-		<div ng-if="bureau.length == 0">
-			<div class="list-group-item">
-				<span>Bureau :</span>
-			</div>
-			<div class="list-group-item">
-				<span>CIBIL Score :</span>
-			</div>
-			<div class="list-group-item">
-				<span>Application Score :</span>
-			</div>
-			<div class="list-group-item">
-				<span>Res Addr Score :</span>
-			</div>
-		</div>
-		<div class="list-group-item">
-			<span>Applied Amount : {{appform.oAppReq.oReq.oApplication.dLoanAmt}}</span>
-		</div>
-		<div class="list-group-item">
-			<span>Eligibility Amount : {{appform.aCroDec[0].dEligibleAmt}}</span>
-		</div>
-		<div class="list-group-item" ng-if="appform.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT">
-			<span>FOIR :{{appform.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT}}</span>
-		</div>
-		<div class="list-group-item">
-			<span>Approved Amount : {{appform.aCroDec[0].dAmtAppr}}</span>
-		</div>
-		<div class="list-group-item">
-			<span>Tenor : {{appform.aCroDec[0].iTenor}}</span>
-		</div>
-		<div class="list-group-item">
-			<span>EMI :{{appform.aCroDec[0].dEmi}}</span>
-		</div>
-		<div class="list-group-item" ng-if="appform.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE">
-		    <span>Eligibility Grid : {{appform.elgbltyGrid}}</span>
-			<span ng-if="appform.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.REMARK">Remark : {{appform.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.REMARK}}</span>
-		</div>
-		 <div class="list-group-item"  ng-repeat="dtls in appform.oCompRes.scoringServiceResponse.DECISION_RESPONSE.Details" ng-if="dtls.Outcome!=' '">
-			<span>Criteria {{dtls.CriteriaID}} , Outcome : <b>{{dtls.Outcome}}</b> </span>
-			<span ng-if="dtls.Remark">Remark : {{dtls.Remark}}</span>
-		</div>
-	</div>
-	<!-- <div class="headerDivider"></div> -->
-	<!-- <div class="bre-result-div">
+            <div class="list-group-item" ng-if="bureauData.sFldName =='Residential Address Score'">
+                <span>Res Addr Score : {{bureauData.sFldVal}}</span>
+            </div>
+            <div class="list-group-item" ng-if="bureauData.sFldName =='Office Address Score'">
+                <span>Off Addr Score : {{bureauData.sFldVal}}</span>
+            </div>
+        </div>
+        <div class="list-group-item" ng-if="appform.oIntrmStat.oCibilResult.sFldVal">
+            <span>CIBIL Score : {{appform.oIntrmStat.oCibilResult.sFldVal}}</span>
+        </div>
+        <div class="list-group-item">
+            <span>Res Stability : {{appform.oIntrmStat.oResAddressResult.iAddrStblty == '-1' ?'':appform.oIntrmStat.oResAddressResult.iAddrStblty}}</span>
+        </div>
+        <div class="list-group-item">
+            <span>Off Stability : {{appform.oIntrmStat.oOffAddressResult.iAddrStblty== '-1' ?'' : appform.oIntrmStat.oOffAddressResult.iAddrStblty}}</span>
+        </div>
+        <div class="list-group-item" ng-if="appform.oIntrmStat.oPanResult.fNameScore">
+            <span>PAN :{{appform.oIntrmStat.oPanResultsMsg}}<br>{{appform.oIntrmStat.oPanResult.sFldVal}}<br>{{appform.oIntrmStat.oPanResult.fNameScore}}</span>
+        </div>
+        <div class="list-group-item" ng-if="!appform.oIntrmStat.oPanResult.fNameScore">
+            <span>PAN :{{appform.oIntrmStat.oPanResult.sMsg}}<br>{{appform.oIntrmStat.oPanResult.sFldVal}}</span>
+        </div>
+        <div ng-if="bureau.length == 0">
+            <div class="list-group-item">
+                <span>Bureau :</span>
+            </div>
+            <div class="list-group-item">
+                <span>CIBIL Score :</span>
+            </div>
+            <div class="list-group-item">
+                <span>Application Score :</span>
+            </div>
+            <div class="list-group-item">
+                <span>Res Addr Score :</span>
+            </div>
+        </div>
+        <div class="list-group-item">
+            <span>Applied Amount : {{appform.oAppReq.oReq.oApplication.dLoanAmt}}</span>
+        </div>
+        <div class="list-group-item">
+            <span>Eligibility Amount : {{appform.aCroDec[0].dEligibleAmt}}</span>
+        </div>
+        <div class="list-group-item" ng-if="appform.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT">
+            <span>FOIR :{{appform.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.FOIR_AMOUNT}}</span>
+        </div>
+        <div class="list-group-item">
+            <span>Approved Amount : {{appform.aCroDec[0].dAmtAppr}}</span>
+        </div>
+        <div class="list-group-item">
+            <span>Tenor : {{appform.aCroDec[0].iTenor}}</span>
+        </div>
+        <div class="list-group-item">
+            <span>EMI :{{appform.aCroDec[0].dEmi}}</span>
+        </div>
+        <div class="list-group-item" ng-if="appform.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE">
+            <span>Eligibility Grid : {{appform.elgbltyGrid}}</span>
+            <span ng-if="appform.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.REMARK">Remark : {{appform.oCompRes.scoringServiceResponse.ELIGIBILITY_RESPONSE.REMARK}}</span>
+        </div>
+        <div class="list-group-item" ng-repeat="dtls in appform.oCompRes.scoringServiceResponse.DECISION_RESPONSE.Details" ng-if="dtls.Outcome!=' '">
+            <span>Criteria {{dtls.CriteriaID}} , Outcome : <b>{{dtls.Outcome}}</b> </span>
+            <span ng-if="dtls.Remark">Remark : {{dtls.Remark}}</span>
+        </div>
+    </div>
+    <!-- <div class="headerDivider"></div> -->
+    <!-- <div class="bre-result-div">
 		<div ng-repeat="bureauData in bureau" ng-if="bureau.length != 0">
 			<div class="list-group-item">
 				<span ng-if="bureauData.sFldName == 'PAN Verification'">{{bureauData.sFldName}}:{{bureauData.sMsg}}<br>{{bureauData.sFldVal}}</span>
@@ -138,7 +138,7 @@
 			</div>
 			<div class="list-group-item" ng-if="bureauData.sFldName =='Residential Address Score'">
 				<span>Res Addr Score : {{bureauData.sFldVal}}</span>
-			</div> 
+			</div>
 				<div class="list-group-item" ng-if="bureauData.sFldName =='Office Address Score'">
 				<span>Off Addr Score : {{bureauData.sFldVal}}</span>
 			</div>
@@ -214,7 +214,7 @@
 			</div>
 			<div class="list-group-item" ng-if="bureauData.sFldName =='Residential Address Score'">
 				<span>Res Addr Score : {{bureauData.sFldVal}}</span>
-			</div> 
+			</div>
 				<div class="list-group-item" ng-if="bureauData.sFldName =='Office Address Score'">
 				<span>Off Addr Score : {{bureauData.sFldVal}}</span>
 			</div>

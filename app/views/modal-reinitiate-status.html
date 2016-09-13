@@ -1,15 +1,15 @@
 <style>
-.image-check{
-	width: 47px;
+.image-check {
+    width: 47px;
     height: 47px;
-    background: url("images/check_uncheck.png") 0px -47px;    
+    background: url("images/check_uncheck.png") 0px -47px;
     display: inline-block;
     position: absolute;
     z-index: 1;
 }
 
-.image-reject{
-	width: 47px;
+.image-reject {
+    width: 47px;
     height: 47px;
     background: url("images/check_uncheck.png") 46px -47px;
     top: 0px;
@@ -17,7 +17,7 @@
     z-index: 1;
 }
 
-.label-check_uncheck{
+.label-check_uncheck {
     position: absolute;
     background-color: #353534;
     border-radius: 10px;
@@ -30,52 +30,53 @@
     padding-top: 3px;
     padding-bottom: 3px;
 }
-.modal-lg{
-	width:900px;
+
+.modal-lg {
+    width: 900px;
 }
 </style>
 <div style="overflow: hidden;">
-	<div style="text-align: center;margin-top:20px;" ng-if="showProgress">
-		<div class="loader">Loading...</div>
-	</div>
-	<div class="col-md-12" style="overflow: hidden;padding-top:30px;padding-bottom:10px;">
-		
-		<div class="col-md-2 col-sm-2" ng-show="showPanStatus">
-			<div class="image-check" ng-show="panVerified"></div>
-			<div class="image-reject" ng-show="!panVerified"></div>
-			<label class="label-check_uncheck">PAN</label>
-		</div>
-		<div class="col-md-2 col-sm-2" ng-show="showCibilStatus">
-			<div class="image-check" ng-show="cibilVerified"></div>
-			<div class="image-reject" ng-show="!cibilVerified"></div>
-			<label class="label-check_uncheck">Cibil</label>
-		</div>
-		<div class="col-md-2 col-sm-2" ng-show="showAadhaarStatus">
-			<div class="image-check" ng-show="aadhaarVerified"></div>
-			<div class="image-reject" ng-show="!aadhaarVerified"></div>
-			<label class="label-check_uncheck">Aadhaar</label>
-		</div>
-		<div class="col-md-2 col-sm-2" ng-show="showDedupeStatus">
-			<div class="image-check" ng-show="dedupeVerified"></div>
-			<div class="image-reject" ng-show="!dedupeVerified"></div>
-			<label class="label-check_uncheck">Dedupe</label>
-		</div>
-		<div class="col-md-3 col-sm-3" ng-show="showAppScoreStatus">
-			<div class="image-check" ng-show="appScoreVerified"></div>
-			<div class="image-reject" ng-show="!appScoreVerified"></div>
-			<label class="label-check_uncheck">Application Scoring</label>
-		</div>
-		<div class="col-md-3 col-sm-3" ng-show="showVeriScoreStatus">
-			<div class="image-check" ng-show="verifScoreVerified"></div>
-			<div class="image-reject" ng-show="!verifScoreVerified"></div>
-			<label class="label-check_uncheck">Verification Scoring</label>
-		</div>
-		<div class="col-md-3 col-sm-4" ng-show="showNegPinStatus">
-			<div class="image-check" ng-show="negPinVerified"></div>
-			<div class="image-reject" ng-show="!negPinVerified"></div>
-			<label class="label-check_uncheck">Negative Pin Code</label>
-		</div>		
-	</div>
-	
-	<div class="col-md-12" style="text-align:center;padding-top:20px;padding-bottom:50px;"><button ng-click="onProceedClicked()" class="btn btn-primary">Proceed</button></div>
+    <div style="text-align: center;margin-top:20px;" ng-if="showProgress">
+        <div class="loader">Loading...</div>
+    </div>
+    <div class="col-md-12" style="overflow: hidden;padding-top:30px;padding-bottom:10px;">
+        <div class="col-md-2 col-sm-2" ng-show="showPanStatus">
+            <div class="image-check" ng-show="panVerified"></div>
+            <div class="image-reject" ng-show="!panVerified"></div>
+            <label class="label-check_uncheck">PAN</label>
+        </div>
+        <div class="col-md-2 col-sm-2" ng-show="showCibilStatus">
+            <div class="image-check" ng-show="cibilVerified"></div>
+            <div class="image-reject" ng-show="!cibilVerified"></div>
+            <label class="label-check_uncheck">Cibil</label>
+        </div>
+        <div class="col-md-2 col-sm-2" ng-show="showAadhaarStatus">
+            <div class="image-check" ng-show="aadhaarVerified"></div>
+            <div class="image-reject" ng-show="!aadhaarVerified"></div>
+            <label class="label-check_uncheck">Aadhaar</label>
+        </div>
+        <div class="col-md-2 col-sm-2" ng-show="showDedupeStatus">
+            <div class="image-check" ng-show="dedupeVerified"></div>
+            <div class="image-reject" ng-show="!dedupeVerified"></div>
+            <label class="label-check_uncheck">Dedupe</label>
+        </div>
+        <div class="col-md-3 col-sm-3" ng-show="showAppScoreStatus">
+            <div class="image-check" ng-show="appScoreVerified"></div>
+            <div class="image-reject" ng-show="!appScoreVerified"></div>
+            <label class="label-check_uncheck">Application Scoring</label>
+        </div>
+        <div class="col-md-3 col-sm-3" ng-show="showVeriScoreStatus">
+            <div class="image-check" ng-show="verifScoreVerified"></div>
+            <div class="image-reject" ng-show="!verifScoreVerified"></div>
+            <label class="label-check_uncheck">Verification Scoring</label>
+        </div>
+        <div class="col-md-3 col-sm-4" ng-show="showNegPinStatus">
+            <div class="image-check" ng-show="negPinVerified"></div>
+            <div class="image-reject" ng-show="!negPinVerified"></div>
+            <label class="label-check_uncheck">Negative Pin Code</label>
+        </div>
+    </div>
+    <div class="col-md-12" style="text-align:center;padding-top:20px;padding-bottom:50px;">
+        <button ng-click="onProceedClicked()" class="btn btn-primary">Proceed</button>
+    </div>
 </div>

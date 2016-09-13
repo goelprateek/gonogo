@@ -1,33 +1,31 @@
 <!-- data-ng-show="toggleDclnPanel" -->
-<div class="row clearfix" id="declinereason" >
-		<div class="panel_heading"><label>Description </label><span class="text-danger" id="errorheading" style="float:right ;margin-top: 3px"> </span></div>
-		<div class="panel_body">
-		 <!--  <div class="row clearfix">
+<div class="row clearfix" id="declinereason">
+    <div class="panel_heading">
+        <label>Description </label><span class="text-danger" id="errorheading" style="float:right ;margin-top: 3px"> </span></div>
+    <div class="panel_body">
+        <!--  <div class="row clearfix">
 		   <div style="border: 1px dashed grey; min-height: 40px; margin:4px 15px;
-			  padding: 10px; font-weight: bold" id="reasoncontainer" contenteditable="true"spellcheck="false"> 
+			  padding: 10px; font-weight: bold" id="reasoncontainer" contenteditable="true"spellcheck="false">
 			  </div>
 		  </div> -->
-		  <div class="row clearfix">
-		  <label style="margin-left: 15px">Remark :</label>
-			  <input type="text" class="dashedcontainer" ng-model="dclnModelFeed.dclnRemark" >
-		  </div>
-		   <div class="row clearfix">
-		   <label style="margin-left: 15px">Subject to  :</label>
-			   <input type="text" class="dashedcontainer" ng-model="dclnModelFeed.dclnSubTo" >
-		  </div>
-		</div>
-		<div class="panel_footer" style="height: 40px;">	
-			<span id="declinemsg" class="text-danger" style="text-align: left;"></span>
-			<div class="text-right" style=" display: inline; float: right;padding:3px">
-		   		<a class="btn btn-primary btn-sm" ng-click="saveDclnPanel()">
-	            	<span class="fa fa-save"></span>
-	            	Submit
-	           </a>
-	           <a class="btn btn-primary btn-sm" ng-click="closeDclnPanel()" >
-	            	<span class="fa fa-close"></span>
-	            	Close
-	           </a>	
-		   </div>												
-		</div>
-	</div>
-	
+        <div class="row clearfix">
+            <label style="margin-left: 15px">Remark :</label>
+            <input type="text" class="dashedcontainer" ng-model="dclnModelFeed.dclnRemark">
+        </div>
+        <div class="row clearfix">
+            <label style="margin-left: 15px">Subject to :</label>
+            <input type="text" class="dashedcontainer" ng-model="dclnModelFeed.dclnSubTo">
+        </div>
+    </div>
+    <div class="panel_footer" style="height: 40px;">
+        <span id="declinemsg" class="text-danger" style="text-align: left;"></span>
+        <div class="text-right" style=" display: inline; float: right;padding:3px">
+            <a class="btn btn-primary btn-sm" ng-click="saveDclnPanel()">
+                <span class="fa fa-save"></span> Submit
+            </a>
+            <a class="btn btn-primary btn-sm" ng-click="closeDclnPanel()">
+                <span class="fa fa-close"></span> Close
+            </a>
+        </div>
+    </div>
+</div>

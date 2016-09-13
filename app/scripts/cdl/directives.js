@@ -1,148 +1,145 @@
-;(function(){
-	
-	'use strict';	
-	
-	var app=angular.module("gonogo.cdl");
+;
+(function() {
 
-	app.directive("assetSelector",function(){
-		return {
-			require: '^form',
-			scope:{
-				asset:"=",
+    'use strict';
 
-			},
-			restrict: 'E',
-			templateUrl: 'views/cdl/template-asset.html',
-       		controller:["$scope","RestService","UserService",function($scope,RestService,UserService){
+    var app = angular.module("gonogo.cdl");
 
-       			var user=UserService.getCurrentUser();
+    app.directive("assetSelector", function() {
+        return {
+            require: '^form',
+            scope: {
+                asset: "=",
 
-				//	 get all asset category from master
-				$scope.fetchAssetCategory = function(){
-					$scope.assetJson = {"oHeader":{"sInstID":user.institutionID},"sQuery":""};
-					
-					RestService.saveToServer("asset-category-web", $scope.assetJson).then(function(successResponse){
-						if(successResponse){
-							
-							$scope.assetArray = successResponse;
+            },
+            restrict: 'E',
+            templateUrl: 'views/cdl/template-asset.html',
+            controller: ["$scope", "RestService", "UserService", function($scope, RestService, UserService) {
 
-							if($scope.asset && $scope.asset.category){
-								$scope.fetchAssetMake($scope.asset.category);
-							}
-						}
-					},function(failedResponse){
-						$scope.serviceHitCount=$scope.serviceHitCount+1;
-						
-						if($scope.serviceHitCount<=3){
-						
-							$scope.fetchAssetCategory();
-						
-						}else{
-							$scope.serviceHitCount=1;
-							$scope.error="Sorry we can not process your Asset request";
-							notifier.logError("Some error occured at server, we can not process your Asset request");
-						}
-					});
-				};
+                var user = UserService.getCurrentUser();
 
-				$scope.fetchAssetCategory();
+                //	 get all asset category from master
+                $scope.fetchAssetCategory = function() {
+                    $scope.assetJson = { "oHeader": { "sInstID": user.institutionID }, "sQuery": "" };
 
-				$scope.fetchAssetMake = function(val1){
-					if(val1 == '') return ;
+                    RestService.saveToServer("asset-category-web", $scope.assetJson).then(function(successResponse) {
+                        if (successResponse) {
 
-					$scope.makeJson ={"oHeader":{"sInstID":user.institutionID},"sQuery":val1};
+                            $scope.assetArray = successResponse;
 
-					RestService.saveToServer('asset-model-make-web', $scope.makeJson).then(function(successResponse){
-						if(successResponse){
-							$scope.makeTags = successResponse;
+                            if ($scope.asset && $scope.asset.category) {
+                                $scope.fetchAssetMake($scope.asset.category);
+                            }
+                        }
+                    }, function(failedResponse) {
+                        $scope.serviceHitCount = $scope.serviceHitCount + 1;
 
-							if($scope.asset && $scope.asset.make){
-								$scope.fetchAssetModel($scope.asset.category,$scope.asset.make);
-							}
-						}
-					},function(failedResponse){
-						$scope.serviceHitCount=$scope.serviceHitCount+1;
-						if($scope.serviceHitCount<=3)
-							{
-								$scope.fetchAssetMake(val1);
-							}
-						else{
-							$scope.serviceHitCount=1;
-							$scope.error="Sorry we can not process your Asset request";
-							notifier.logError("Some error occured at server, we can not process your Asset request");
-						}
-					});
-				};
+                        if ($scope.serviceHitCount <= 3) {
 
-				/*if($scope.asset && $scope.asset.make){
-					$scope.fetchAssetMake($scope.asset.category);
-				}*/
+                            $scope.fetchAssetCategory();
 
-				$scope.fetchAssetModel = function(val1,val2){
+                        } else {
+                            $scope.serviceHitCount = 1;
+                            $scope.error = "Sorry we can not process your Asset request";
+                            notifier.logError("Some error occured at server, we can not process your Asset request");
+                        }
+                    });
+                };
 
-					if(val1 == '' && val2 == '') return ;
+                $scope.fetchAssetCategory();
 
-					$scope.mdlJson ={"oHeader":{"sInstID":user.institutionID},"sQuery":val1,"sQuery2":val2}; 
+                $scope.fetchAssetMake = function(val1) {
+                    if (val1 == '') return;
 
-					RestService.saveToServer("asset-model-all-web", $scope.mdlJson).then(function(successResponse){
-						if(successResponse){
-							$scope.modelTags=[];
-							for(var i in successResponse){
+                    $scope.makeJson = { "oHeader": { "sInstID": user.institutionID }, "sQuery": val1 };
 
-								if(successResponse[i].sMdlNo !== ""){	
+                    RestService.saveToServer('asset-model-make-web', $scope.makeJson).then(function(successResponse) {
+                        if (successResponse) {
+                            $scope.makeTags = successResponse;
 
-									$scope.modelTags.push(successResponse[i].sMdlNo);
-								}					
-							}
-						}
-					},function(failedResponse){
-						$scope.serviceHitCount=$scope.serviceHitCount+1;
-						if($scope.serviceHitCount<=3)
-						{
-							$scope.fetchAssetMake(val1);
-						}
-						else{
-							$scope.serviceHitCount=1;
-							$scope.error="Sorry we can not process your Asset request";
-							notifier.logError("Some error occured at server, we can not process your Asset request");
-						}
-					});
-				};
+                            if ($scope.asset && $scope.asset.make) {
+                                $scope.fetchAssetModel($scope.asset.category, $scope.asset.make);
+                            }
+                        }
+                    }, function(failedResponse) {
+                        $scope.serviceHitCount = $scope.serviceHitCount + 1;
+                        if ($scope.serviceHitCount <= 3) {
+                            $scope.fetchAssetMake(val1);
+                        } else {
+                            $scope.serviceHitCount = 1;
+                            $scope.error = "Sorry we can not process your Asset request";
+                            notifier.logError("Some error occured at server, we can not process your Asset request");
+                        }
+                    });
+                };
 
-				/*if($scope.asset && $scope.asset.model){
-					$scope.fetchAssetModel($scope.asset.category,$scope.asset.make);
-				}*/
+                /*if($scope.asset && $scope.asset.make){
+                	$scope.fetchAssetMake($scope.asset.category);
+                }*/
 
-				$scope.assetArray  = [],
-       			$scope.makeTags  = [],
-       			$scope.modelTags = [];
+                $scope.fetchAssetModel = function(val1, val2) {
 
-       			$scope.onCategoryChanged=function(){
-       				$scope.makeTags=[];
-					$scope.modelTags=[];
+                    if (val1 == '' && val2 == '') return;
 
-					$scope.asset.make="";
-					$scope.asset.model="";
+                    $scope.mdlJson = { "oHeader": { "sInstID": user.institutionID }, "sQuery": val1, "sQuery2": val2 };
 
-					$scope.fetchAssetMake($scope.asset.category);
-       			};
+                    RestService.saveToServer("asset-model-all-web", $scope.mdlJson).then(function(successResponse) {
+                        if (successResponse) {
+                            $scope.modelTags = [];
+                            for (var i in successResponse) {
 
-       			$scope.onMakeChanged=function(){
-       				$scope.modelTags=[];
+                                if (successResponse[i].sMdlNo !== "") {
 
-					$scope.asset.model="";
+                                    $scope.modelTags.push(successResponse[i].sMdlNo);
+                                }
+                            }
+                        }
+                    }, function(failedResponse) {
+                        $scope.serviceHitCount = $scope.serviceHitCount + 1;
+                        if ($scope.serviceHitCount <= 3) {
+                            $scope.fetchAssetMake(val1);
+                        } else {
+                            $scope.serviceHitCount = 1;
+                            $scope.error = "Sorry we can not process your Asset request";
+                            notifier.logError("Some error occured at server, we can not process your Asset request");
+                        }
+                    });
+                };
 
-					$scope.fetchAssetModel($scope.asset.category,$scope.asset.make);
-       			};
+                /*if($scope.asset && $scope.asset.model){
+                	$scope.fetchAssetModel($scope.asset.category,$scope.asset.make);
+                }*/
 
-       			$scope.onModelChanged=function(){
+                $scope.assetArray = [],
+                    $scope.makeTags = [],
+                    $scope.modelTags = [];
 
-       			};
-       		}],
-       		link: function(scope, element, attrs, ctrls) {
-       			
-       		}
+                $scope.onCategoryChanged = function() {
+                    $scope.makeTags = [];
+                    $scope.modelTags = [];
 
-		}
-	});
+                    $scope.asset.make = "";
+                    $scope.asset.model = "";
+
+                    $scope.fetchAssetMake($scope.asset.category);
+                };
+
+                $scope.onMakeChanged = function() {
+                    $scope.modelTags = [];
+
+                    $scope.asset.model = "";
+
+                    $scope.fetchAssetModel($scope.asset.category, $scope.asset.make);
+                };
+
+                $scope.onModelChanged = function() {
+
+                };
+            }],
+            link: function(scope, element, attrs, ctrls) {
+
+            }
+
+        }
+    });
 }).call(this);

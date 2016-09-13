@@ -1,38 +1,42 @@
- <form name="approve" class="form-horizontal form-validation">
- <div class="row clearfix" id="approveReason">
- <!-- data-ng-show="toggleApprvPanel" -->
-		<div class="panel_heading"><label>Description</label></div>
-		<div class="panel_body">
-		 <div class="row clearfix" id="enterAmount" style=" margin-top: 5px;">
-		 	<div class="col-md-4"><label>Approve Amount :</label>
-		 <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.approveAmt" style="width: 100%;" required only-digits/>
-		 </div>
-		 	<div class="col-md-4"><label>EMI :</label>
-		 <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.emi" required only-digits style="width: 100%;"/></div>
-		 	<div class="col-md-4"><label>Tenor :</label>
-		 <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.tenor" required only-digits style="width: 100%;"/></div>
-		 
-		 </div>
-		  <div class="row clearfix">
-		  <label style="margin-left: 15px; margin-top: 5px;">Remark :</label>
-			  <input type="text" class="dashedcontainer" ng-model="modalFeed.apprvRemark" >
-		  </div>
-		   <div class="row clearfix">
-		   <label style="margin-left: 15px">Subject to  :</label>
-			   <input type="text" class="dashedcontainer" ng-model="modalFeed.apprvSubTo" >
-		  </div>
-		</div>
-		<div class="panel_footer" style="height: 38px;">
-			<div class="text-right" style=" display: inline; float: right;padding: 2px;">
-		    <a class="btn btn-primary btn-sm" ng-click="saveApprvPanel()" >
-            	<span class="fa fa-save"></span>
-            	Submit
-           </a>
-           <a class="btn btn-primary btn-sm" ng-click="closeApprvPanel()" >
-            	<span class="fa fa-close"></span>
-            	Close
-           </a>
-		   </div>							
-		</div>
-	</div>
+<form name="approve" class="form-horizontal form-validation">
+    <div class="row clearfix" id="approveReason">
+        <!-- data-ng-show="toggleApprvPanel" -->
+        <div class="panel_heading">
+            <label>Description</label>
+        </div>
+        <div class="panel_body">
+            <div class="row clearfix" id="enterAmount" style=" margin-top: 5px;">
+                <div class="col-md-4">
+                    <label>Approve Amount :</label>
+                    <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.approveAmt" style="width: 100%;" required only-digits/>
+                </div>
+                <div class="col-md-4">
+                    <label>EMI :</label>
+                    <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.emi" required only-digits style="width: 100%;" />
+                </div>
+                <div class="col-md-4">
+                    <label>Tenor :</label>
+                    <input type="text" class="checkVisible" maxlength="20" ng-model="modalFeed.tenor" required only-digits style="width: 100%;" />
+                </div>
+            </div>
+            <div class="row clearfix">
+                <label style="margin-left: 15px; margin-top: 5px;">Remark :</label>
+                <input type="text" class="dashedcontainer" ng-model="modalFeed.apprvRemark">
+            </div>
+            <div class="row clearfix">
+                <label style="margin-left: 15px">Subject to :</label>
+                <input type="text" class="dashedcontainer" ng-model="modalFeed.apprvSubTo">
+            </div>
+        </div>
+        <div class="panel_footer" style="height: 38px;">
+            <div class="text-right" style=" display: inline; float: right;padding: 2px;">
+                <a class="btn btn-primary btn-sm" ng-click="saveApprvPanel()">
+                    <span class="fa fa-save"></span> Submit
+                </a>
+                <a class="btn btn-primary btn-sm" ng-click="closeApprvPanel()">
+                    <span class="fa fa-close"></span> Close
+                </a>
+            </div>
+        </div>
+    </div>
 </form>
